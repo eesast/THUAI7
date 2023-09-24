@@ -23,7 +23,7 @@ jobs:
     - name: Mirror to GitLink
       uses: wearerequired/git-mirror-action@master
       env:
-        SSH_PRIVATE_KEY: ${{ secrets.GITEE_SSH_PRIVATE_KEY }}
+        SSH_PRIVATE_KEY: ${{ secrets.GITEE_PRIVATE_SSH_KEY }}
       with:
         source-repo: "git@github.com:eesast/THUAI7.git"
         destination-repo: "git@code.gitlink.org.cn:EESAST/THUAI7.git"
