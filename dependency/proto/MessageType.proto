@@ -1,0 +1,107 @@
+// MessageType
+syntax = "proto3";
+package protobuf;
+
+
+
+enum PlaceType // 地图中的所有建筑/地点类型
+{
+    NULL_PLACE_TYPE = 0;
+    HOME = 1;
+    SPACE = 2;
+    RUIN = 3;
+    SHADOW = 4;
+    ASTEROID = 5;
+    RESOURCE = 6;
+    BUILDING = 7;
+}
+
+enum CollectorType
+{
+    NULL_COLLECTOR_TYPE = 0;
+    BASIC_COLLECTOR= 1;
+    ADVANCED_COLLECTOR = 2;
+    ULTIMATE_COLLECTOR = 3;
+}
+
+enum ArmorType
+{
+    NULL_ARMOR_TYPE = 0;
+    BASIC_ARMOR = 1;
+    ADVANCED_ARMOR = 2;
+    ULTIMATE_ARMOR = 3;
+}
+
+enum ShieldType
+{
+    NULL_SHIELD_TYPE = 0;
+    BASIC_SHIELD = 1;
+    ADVANCED_SHIELD = 2;
+    ULTIMATE_SHIELD = 3;
+}
+
+enum BuilderType
+{
+    NULL_BUILDER_TYPE = 0;
+    BASIC_BUILDER = 1;
+    ADVANCED_BUILDER = 2;
+    ULTIMATE_BUILDER = 3;
+}
+
+enum BulletType
+{
+    NULL_BULLET_TYPE = 0;
+    LASER = 1;
+    PLASMA = 2;
+    SHELL = 3;
+    MISSILE = 4;
+    ELECTRIC_ARC = 5;
+}
+
+
+enum ShipState
+{
+    NULL_STATUS = 0;
+    IDLE = 1;
+    PRODUCING=2;
+    CONSTRUCTING=3;
+    RECOVERING=4;
+    RECYCLING=5;
+    ATTACKING=6;
+    SWINGING=7;
+    STUNNED=8;
+}
+
+enum BuildingType
+{
+    NULL_BUILDING_TYPE = 0;
+    FACTORY = 1;
+    COMMUNITY = 2;
+    FORTRESS = 3;
+    WORMHOLE = 4;
+}
+
+enum ShipType
+{
+    NULL_SHIP_TYPE = 0;
+    CIVILIAN_SHIP = 1;
+    MILITARY_SHIP = 2;
+    FLAG_SHIP = 3;
+}
+
+enum PlayerTeam
+{
+    NULL_TEAM = 0;
+    UP=1;
+    DOWN=2;
+}
+
+
+// 游戏进行状态
+enum GameState
+{
+    NULL_GAME_STATE = 0;
+    GAME_START = 1;
+    GAME_RUNNING = 2;
+    GAME_END = 3;
+}

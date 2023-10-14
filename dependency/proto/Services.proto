@@ -1,0 +1,33 @@
+syntax = "proto3";
+package protobuf;
+
+import "Message2Clients.proto";
+import "Message2Server.proto";
+
+service AvailableService
+{
+    rpc TryConnection (IDMsg) returns(BoolRes);
+    // 游戏开局调用一次的服务
+    rpc AddBasicShip (ShipMsg) returns(stream MessageToClient); // 连接上后等待游戏开始，server会定时通过该服务向所有client发送消息。
+    rpc AddHome (HomeMsg) returns (stream MessageToClient);
+    rpc AddBuilding(BuildingMsg) returns (stream MessageToClient);
+    // 游戏过程中玩家执行操作的服务   
+    //船动作
+    rpc Move (MoveMsg) returns (MoveRes);
+    rpc InstallCollectorModule (CollectorMsg) returns (BoolRes);
+    rpc InstallArmorModule (ArmorMsg) returns (BoolRes);
+    rpc InstallShieldModule (ShieldMsg) returns (BoolRes);
+    rpc InstallBuilderModule (BuilderMsg) returns (BoolRes);
+    rpc InstallBulletModule (BulleterMsg) returns (BoolRes);
+    rpc SendMessage (SendMsg) returns (BoolRes);
+    // rpc GetMessage (IDMsg) returns (stream MsgRes);
+    rpc StartRecovering (IDMsg) returns (BoolRes); 
+    rpc StartProducing (IDMsg) returns (BoolRes); 
+    rpc StartRecycling (IDMsg) returns (BoolRes); 
+    rpc StartBuilding (BuildMsg) returns (BoolRes); 
+    rpc Attack (AttackMsg) returns (BoolRes); // 攻击
+
+    //建筑动作
+    rpc BuildShip (BuildMsg) returns (BoolRes); // 造船
+    rpc EndAllAction (IDMsg) returns (BoolRes); // 结束所有动作
+}
