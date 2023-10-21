@@ -1,0 +1,127 @@
+// Message2Client
+syntax = "proto3";
+package protobuf;
+
+import "MessageType.proto";
+
+message MessageOfShip
+{
+    int32 x = 1;
+    int32 y = 2;
+    int32 speed = 3;
+    int32 hp = 4; 
+    int32 armor = 5; 
+    int32 shield = 6; 
+    PlaceType place = 7;
+    ShipState ship_state = 8;
+    PlayerTeam team = 9;
+    int64 ship_id = 10;
+    int32 Recover_speed = 11; 
+    int32 economy = 12;
+    CollectorType collector_type = 13;
+    ArmorType armor_type = 14;
+    ShieldType shield_type = 15;
+    BuilderType builder_type = 16;
+    BulletType bullet_type = 17;
+    ShipType ship_type = 18;
+    double facing_direction = 19;
+}
+
+message MessageOfBuilding
+{
+    int32 x = 1;
+    int32 y = 2;
+    int32 hp = 3; // 剩余的血量
+    BuildingType building_type = 4;
+    PlayerTeam team = 5;
+    int64 building_id = 6;
+}
+
+message MessageOfBullet
+{
+    BulletType type = 1;
+    int32 x = 2;
+    int32 y = 3;
+    double facing_direction = 4;
+    int64 guid = 5;
+    double armor_rate = 6;
+    double shield_rate = 7;
+    int32 damage = 8;
+    PlayerTeam team = 9;
+    // PlaceType place = 7;
+    double bomb_range = 10;
+    int32 speed = 11;
+}
+
+
+
+
+message MessageOfResource
+{
+    int32 x = 1;
+    int32 y = 2;
+    int32 progress=3; // 采集进度
+}
+
+message MessageOfHome
+{
+    int32 x = 1;
+    int32 y = 2;
+    int32 economy = 3;
+    int32 hp = 4;
+    PlayerTeam team = 5;
+}
+
+
+message MessageOfMap
+{
+    message Row
+    {
+        repeated PlaceType col = 1;
+    }
+    repeated Row row = 2;
+}
+
+message MessageOfObj
+{
+    oneof message_of_obj
+    {
+        MessageOfShip ship_message = 1;
+        MessageOfBuilding Building_message = 2;
+        MessageOfBullet bullet_message = 3;
+        MessageOfHome home_message = 4;
+        MessageOfResource resource_message = 5;
+        MessageOfMap map_message = 6;
+    }
+}
+
+message MessageOfAll
+{
+    int32 game_time = 1;
+}
+
+message MessageToClient
+{
+    repeated MessageOfObj obj_message = 1;
+    GameState game_state = 2;
+    MessageOfAll all_message = 3;
+}
+
+message MoveRes // 如果打算设计撞墙保留平行速度分量，且需要返回值则可用这个（大概没啥用）
+{
+    int64 actual_speed = 1;
+    double actual_angle = 2;
+    bool act_success = 3;
+}
+
+message BoolRes
+{
+    bool act_success = 1;
+}
+
+// message MsgRes // 用于获取队友发来的消息
+// {
+//     bool have_message = 1; // 是否有待接收的消息
+//     int64 from_player_id = 2;
+//     string message_received = 3;
+// }
