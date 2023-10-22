@@ -25,7 +25,7 @@ namespace GameClass.GameObj
         }
         public bool AddShip(Ship ship)
         {
-            switch(ship.ShipType)
+            switch (ship.ShipType)
             {
                 case ShipType.CivilShip:
                     if (GetCivilShipNum() >= GameData.MaxCivilShipNum)

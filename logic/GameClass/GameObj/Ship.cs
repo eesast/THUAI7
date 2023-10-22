@@ -106,7 +106,7 @@ namespace GameClass.GameObj
         }
         public long SetShipStateNaturally()
         {
-            lock(actionLock)
+            lock (actionLock)
             {
                 runningState = RunningStateType.Null;
                 whatInteractingWith = null;
