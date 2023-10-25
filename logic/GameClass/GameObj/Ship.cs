@@ -1,6 +1,7 @@
 ﻿using Preparation.Interface;
 using Preparation.Utility;
 using GameClass.GameObj.Modules;
+using GameClass.GameObj.Occupations;
 
 namespace GameClass.GameObj;
 
