@@ -9,19 +9,18 @@ namespace GameClass.GameObj
     /// </summary>
     public abstract class ObjOfShip : Movable, IObjOfShip
     {
-        private ReaderWriterLockSlim objOfShipReaderWriterLock = new();
-        public ReaderWriterLockSlim ObjOfShipReaderWriterLock => objOfShipReaderWriterLock;
+        public object ObjOfShipLock { get; } = new();
         private IShip? parent = null;
         public IShip? Parent
         {
             get
             {
-                lock (objOfShipReaderWriterLock)
+                lock (ObjOfShipLock)
                     return parent;
             }
             set
             {
-                lock (objOfShipReaderWriterLock)
+                lock (ObjOfShipLock)
                     parent = value;
             }
         }

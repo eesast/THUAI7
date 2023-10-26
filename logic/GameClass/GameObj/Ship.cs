@@ -138,7 +138,7 @@ public class Ship : Movable, IShip
     }
     public bool StartThread(long stateNum, RunningStateType runningState)
     {
-        lock (ActionLock)
+        lock (actionLock)
         {
             if (this.StateNum == stateNum)
             {
