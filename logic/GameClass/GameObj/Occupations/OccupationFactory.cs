@@ -5,14 +5,11 @@ namespace GameClass.GameObj.Occupations;
 
 public static class OccupationFactory
 {
-    public static IOccupation FindIOccupation(ShipType shipType)
+    public static IOccupation FindIOccupation(ShipType shipType) => shipType switch
     {
-        return shipType switch
-        {
-            ShipType.CivilShip => new CivilShip(),
-            ShipType.WarShip => new WarShip(),
-            ShipType.FlagShip => new FlagShip(),
-            _ => new CivilShip(),
-        };
-    }
+        ShipType.CivilShip => new CivilShip(),
+        ShipType.WarShip => new WarShip(),
+        ShipType.FlagShip => new FlagShip(),
+        _ => throw new System.NotImplementedException(),
+    };
 }

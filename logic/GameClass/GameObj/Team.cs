@@ -1,4 +1,5 @@
-﻿using Preparation.Utility;
+﻿using GameClass.GameObj.Areas;
+using Preparation.Utility;
 using System.Collections.Generic;
 
 namespace GameClass.GameObj
@@ -12,7 +13,7 @@ namespace GameClass.GameObj
         public const long invalidTeamID = long.MaxValue;
         public const long noneTeamID = long.MinValue;
         private readonly List<Ship> shipList;
-        private Home home = new Home();
+        private Home home = new();
         public int Score { get; private set; } = 0;
         public Ship? GetShip(long shipID)
         {
