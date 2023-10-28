@@ -113,8 +113,8 @@ namespace Server
             if (communicationToGameID[request.ShipId] != GameObj.invalidID)  //是否已经添加了该玩家
                 return;
 
-             Preparation.Utility.CharacterType characterType = Preparation.Utility.CharacterType.Null;
-             characterType=Transformation.ToShipType(request.ShipType);
+            Preparation.Utility.CharacterType characterType = Preparation.Utility.CharacterType.Null;
+            characterType = Transformation.ToShipType(request.ShipType);
             // if (request.PlayerType == PlayerType.StudentPlayer)
             //     characterType = Transformation.ToStudentType(request.StudentType);
             // else if (request.PlayerType == PlayerType.TrickerPlayer)
@@ -167,7 +167,7 @@ namespace Server
             } while (game.GameMap.Timer.IsGaming);
         }
 
-       
+
         public override Task<BoolRes> Attack(AttackMsg request, ServerCallContext context)
         {
 #if DEBUG
@@ -288,7 +288,7 @@ namespace Server
 
 
         }
-       
+
         public override Task<BoolRes> StartRecovering(IDMsg request, ServerCallContext context)
         {
 #if DEBUG
@@ -377,7 +377,7 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             var gameID = communicationToGameID[request.ShipId];
-            boolRes.ActSuccess = game.InstallCollectorModule(gameID,request.CollectorID,request.CollectorType);
+            boolRes.ActSuccess = game.InstallCollectorModule(gameID, request.CollectorID, request.CollectorType);
             return Task.FromResult(boolRes);
         }
         public override Task<BoolRes> InstallArmorModule(ArmorMsg request, ServerCallContext context)
@@ -392,7 +392,7 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             var gameID = communicationToGameID[request.ShipId];
-            boolRes.ActSuccess = game.InstallArmorModule(gameID,request.ArmorID,request.ArmorType);
+            boolRes.ActSuccess = game.InstallArmorModule(gameID, request.ArmorID, request.ArmorType);
             return Task.FromResult(boolRes);
         }
         public override Task<BoolRes> InstallShieldModule(ShieldMsg request, ServerCallContext context)
@@ -407,7 +407,7 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             var gameID = communicationToGameID[request.ShipId];
-            boolRes.ActSuccess = game.InstallShieldModule(gameID,request.ShieldID,request.ShieldType);
+            boolRes.ActSuccess = game.InstallShieldModule(gameID, request.ShieldID, request.ShieldType);
             return Task.FromResult(boolRes);
         }
         public override Task<BoolRes> InstallBuilderModule(BuilderMsg request, ServerCallContext context)
@@ -422,10 +422,10 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             var gameID = communicationToGameID[request.ShipId];
-            boolRes.ActSuccess = game.InstallBuilderModule(gameID,request.BuilderID,request.BuilderType);
+            boolRes.ActSuccess = game.InstallBuilderModule(gameID, request.BuilderID, request.BuilderType);
             return Task.FromResult(boolRes);
         }
-       
+
         public override Task<BoolRes> EndAllAction(IDMsg request, ServerCallContext context)
         {
 #if DEBUG
