@@ -2,8 +2,8 @@
 //using Grpc.Core;
 //using Protobuf;
 
-//namespace Server
-//{
+namespace Server
+{
 //    public class Program
 //    {
 //        const string welcome =
@@ -20,8 +20,8 @@
 //            return new PlaybackServer(options);
 //        }
 
-//        static int Main(string[] args)
-//        {
+       static int Main(string[] args)
+       {
 //            foreach (var arg in args)
 //            {
 //                Console.Write($"{arg} ");
@@ -69,6 +69,6 @@
 //                Console.WriteLine(ex.StackTrace);
 //            }
 //            return 0;
-//        }
+       }
 //    }
-//}
+}
