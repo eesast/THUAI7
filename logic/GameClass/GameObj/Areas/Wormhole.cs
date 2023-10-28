@@ -7,7 +7,7 @@ namespace GameClass.GameObj.Areas;
 
 public class Wormhole : Immovable, IWormhole
 {
-    public LongWithVariableRange HP => throw new NotImplementedException();
+    public LongInTheVariableRange HP => throw new NotImplementedException();
     public List<XY> Entrance => throw new NotImplementedException();
     public List<XY> Content => throw new NotImplementedException();
     public override bool IsRigid => HP > GameData.WormholeHP / 2;
