@@ -21,16 +21,16 @@ public class Ship : Movable, IShip
             return true;
         return false;
     }
-    public LongWithVariableRange HP { get; }
-    public LongWithVariableRange Armor { get; }
-    public LongWithVariableRange Shield { get; }
+    public LongInTheVariableRange HP { get; }
+    public LongInTheVariableRange Armor { get; }
+    public LongInTheVariableRange Shield { get; }
     private ShipType shipType = ShipType.Null;
     public ShipType ShipType => shipType;
     private ShipStateType shipState = ShipStateType.Null;
     public ShipStateType ShipState => shipState;
     private readonly IOccupation occupation;
     public IOccupation Occupation => occupation;
-    public IntNumUpdateByCD BulletNum { get; }
+    public IntNumUpdateEachCD BulletNum { get; }
     private IProducer? producer = null;
     public IProducer? ProducerModule => producer;
     private IConstructor? constructor = null;
