@@ -4,8 +4,8 @@
 
 namespace Server
 {
-//    public class Program
-//    {
+   public class Program
+   {
 //        const string welcome =
 //@"
 //     _____ _   _ _   _   _    ___ _____ 
@@ -68,7 +68,7 @@ namespace Server
 //                Console.WriteLine(ex.ToString());
 //                Console.WriteLine(ex.StackTrace);
 //            }
-//            return 0;
+           return 0;
        }
-//    }
+   }
 }
