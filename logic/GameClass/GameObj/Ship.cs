@@ -159,6 +159,15 @@ public class Ship : Movable, IShip
         }
         return true;
     }
+    public bool Commandable()
+    {
+        lock (ActionLock)
+        {
+            return (shipState != ShipStateType.Stunned
+                && shipState != ShipStateType.Swinging
+                && shipState != ShipStateType.Attacking);
+        }
+    }
     public Ship(XY initPos, int initRadius, ShipType shipType) :
         base(initPos, initRadius, GameObjType.Ship)
     {

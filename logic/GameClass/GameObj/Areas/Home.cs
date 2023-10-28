@@ -9,7 +9,7 @@ public class Home : Immovable, IHome
     public AtomicLong TeamID => throw new NotImplementedException();
     public LongWithVariableRange HP => throw new NotImplementedException();
     public long Score => throw new NotImplementedException();
-    public override bool IsRigid => true;
+    public override bool IsRigid => false;
     public override ShapeType Shape => ShapeType.Square;
     public void AddScore(long add)
     {

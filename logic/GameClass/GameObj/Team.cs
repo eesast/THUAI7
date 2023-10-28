@@ -13,6 +13,8 @@ namespace GameClass.GameObj
         public const long invalidTeamID = long.MaxValue;
         public const long noneTeamID = long.MinValue;
         private readonly List<Ship> shipList;
+        private readonly Dictionary<uint, XY> birthPointList;
+        public Dictionary<uint, XY> BirthPointList => birthPointList;
         private Home home;
         public int Score { get; private set; } = 0;
         public Ship? GetShip(long shipID)
@@ -109,6 +111,8 @@ namespace GameClass.GameObj
         {
             return teamID < currentMaxTeamID;
         }
+        public void UpdateBirthPoint()
+        { }
         public Team()
         {
             teamID = currentMaxTeamID++;

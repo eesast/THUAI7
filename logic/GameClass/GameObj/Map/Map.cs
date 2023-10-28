@@ -52,7 +52,28 @@ namespace GameClass.GameObj
             {
                 foreach (Ship s in gameObjDict[GameObjType.Ship])
                 {
-                    if (s.ShipID == ID)
+                    if (s.ID == ID)
+                    {
+                        ship = s;
+                        break;
+                    }
+                }
+            }
+            finally
+            {
+                gameObjLockDict[GameObjType.Ship].ExitReadLock();
+            }
+            return ship;
+        }
+        public Ship? FindShipInShipID(long shipID)
+        {
+            Ship? ship = null;
+            gameObjLockDict[GameObjType.Ship].EnterReadLock();
+            try
+            {
+                foreach (Ship s in gameObjDict[GameObjType.Ship])
+                {
+                    if (s.ShipID == shipID)
                     {
                         ship = s;
                         break;
