@@ -69,7 +69,7 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInShipID(shipID);
-            if(ship!=null)
+            if (ship != null)
             {
                 return actionManager.MoveShip(ship, moveTimeInMilliseconds, angle);
             }

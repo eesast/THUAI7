@@ -47,7 +47,7 @@ namespace Gaming
             {
                 lock (ship.ActionLock)
                 {
-                    if(ship.Commandable())
+                    if (ship.Commandable())
                     {
                         ship.SetShipState(RunningStateType.Null);
                         return true;
@@ -55,6 +55,15 @@ namespace Gaming
                 }
                 return false;
             }
+            public bool Produce(Ship ship)
+            {
+                return false;
+            }
+            public bool Construct(Ship ship)
+            {
+                return false;
+            }
+
         }
     }
 }
