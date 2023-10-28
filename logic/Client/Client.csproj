@@ -55,41 +55,41 @@
 		<PackageReference Include="Google.Protobuf" Version="3.24.4" />
 		<PackageReference Include="Grpc" Version="2.46.6" />
 		<PackageReference Include="Grpc.Tools" Version="2.54.0">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 	</ItemGroup>
 
 
 	<ItemGroup>
-	  <Compile Update="MainPage.xaml.cs">
-	    <DependentUpon>MainPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Map.xaml.cs">
-	    <DependentUpon>Map.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="GameStatusBar.xaml.cs">
-	    <DependentUpon>GameStatusBar.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="PlayerStatusBar.xaml.cs">
-	    <DependentUpon>PlayerStatusBar.xaml</DependentUpon>
-	  </Compile>
+		<Compile Update="MainPage.xaml.cs">
+			<DependentUpon>MainPage.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Map.xaml.cs">
+			<DependentUpon>Map.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="GameStatusBar.xaml.cs">
+			<DependentUpon>GameStatusBar.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="PlayerStatusBar.xaml.cs">
+			<DependentUpon>PlayerStatusBar.xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 
 	<ItemGroup>
-	  <MauiXaml Update="Map.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="GameStatusBar.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="PlayerStatusBar.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+		<MauiXaml Update="Map.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="GameStatusBar.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="PlayerStatusBar.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<ProjectReference Include="..\..\dependency\proto\Protos.csproj" />
 	</ItemGroup>

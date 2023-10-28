@@ -95,7 +95,7 @@ namespace Client
                 ShipAllAttributesGrid.SetColumn(shipLabels[shipCounter].armor, 3);
                 ShipAllAttributesGrid.SetColumn(shipLabels[shipCounter].shield, 4);
                 ShipAllAttributesGrid.SetColumn(shipLabels[shipCounter].weapon, 5);
-                ShipAllAttributesGrid.SetColumn(shipStatusGrid, 5);
+                ShipAllAttributesGrid.SetColumn(shipStatusGrid, 6);
                 //ShipAllAttributesGrid.SetColumn(shipLabels[shipCounter].status, 6);
             }
         }
