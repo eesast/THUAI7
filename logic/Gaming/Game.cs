@@ -23,5 +23,14 @@ namespace Gaming
         public List<Team> TeamList => teamList;
         private readonly Map gameMap;
         public Map GameMap => gameMap;
+        public Game(uint[,] mapResource, int numOfTeam)
+        {
+            gameMap = new Map(mapResource);
+            teamList = new List<Team>();
+            for (int i = 0; i < numOfTeam; i++)
+            {
+                teamList.Add(new Team());
+            }
+        }
     }
 }

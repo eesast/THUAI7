@@ -42,7 +42,7 @@ namespace GameClass.GameObj
         }
         public IOutOfBound GetOutOfBound(XY pos)
         {
-            return new OutOfBoundBlock(pos);
+            return new Areas.OutOfBoundBlock(pos);
         }
         public Ship? FindShipInID(long ID)
         {
@@ -249,6 +249,51 @@ namespace GameClass.GameObj
             finally
             {
                 GameObjLockDict[gameObj.Type].ExitWriteLock();
+            }
+        }
+        public Map(uint[,] mapResource)
+        {
+            gameObjDict = new Dictionary<GameObjType, IList<IGameObj>>();
+            gameObjLockDict = new Dictionary<GameObjType, ReaderWriterLockSlim>();
+            foreach (GameObjType idx in Enum.GetValues(typeof(GameObjType)))
+            {
+                if (idx != GameObjType.Null)
+                {
+                    gameObjDict.Add(idx, new List<IGameObj>());
+                    gameObjLockDict.Add(idx, new ReaderWriterLockSlim());
+                }
+            }
+            protoGameMap = new uint[mapResource.GetLength(0), mapResource.GetLength(1)];
+            Array.Copy(mapResource, protoGameMap, mapResource.Length);
+            for (int i = 0; i < GameData.MapRows; ++i)
+            {
+                for (int j = 0; j < GameData.MapCols; ++j)
+                {
+                    switch (mapResource[i, j])
+                    {
+                        case (uint)PlaceType.Asteroid:
+                            Add(new Areas.Asteroid(GameData.GetCellCenterPos(i, j)));
+                            break;
+                        case (uint)PlaceType.Construction:
+                            Add(new Areas.Construction(GameData.GetCellCenterPos(i, j)));
+                            break;
+                        case (uint)PlaceType.Home:
+                            Add(new Areas.Home(GameData.GetCellCenterPos(i, j)));
+                            break;
+                        case (uint)PlaceType.Resource:
+                            Add(new Areas.Resource(GameData.GetCellCenterPos(i, j)));
+                            break;
+                        case (uint)PlaceType.Ruin:
+                            Add(new Areas.Ruin(GameData.GetCellCenterPos(i, j)));
+                            break;
+                        case (uint)PlaceType.Shadow:
+                            Add(new Areas.Shadow(GameData.GetCellCenterPos(i, j)));
+                            break;
+                        case (uint)PlaceType.Wormhole:
+                            Add(new Areas.Wormhole(GameData.GetCellCenterPos(i, j)));
+                            break;
+                    }
+                }
             }
         }
     }

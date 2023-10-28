@@ -60,8 +60,8 @@ namespace Server
                 Thread.Sleep(50);
                 Console.WriteLine("");
                 Console.WriteLine("===================  Final Score  ====================");
-                Console.WriteLine($"Studnet: {server.GetScore()[0]}");
-                Console.WriteLine($"Tricker: {server.GetScore()[1]}");
+                Console.WriteLine($"Team0: {server.GetScore()[0]}");
+                Console.WriteLine($"Team1: {server.GetScore()[1]}");
             }
             catch (Exception ex)
             {

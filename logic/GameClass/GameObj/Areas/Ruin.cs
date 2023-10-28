@@ -5,10 +5,10 @@ namespace GameClass.GameObj.Areas;
 
 public class Ruin : Immovable
 {
-    public override bool IsRigid => throw new NotImplementedException();
+    public override bool IsRigid => true;
     public override ShapeType Shape => ShapeType.Square;
-    public Ruin(XY initPos, GameObjType initType)
-        : base(initPos, int.MaxValue, initType)
+    public Ruin(XY initPos)
+        : base(initPos, GameData.NumOfPosGridPerCell / 2, GameObjType.Ruin)
     {
     }
 }

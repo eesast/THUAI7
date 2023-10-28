@@ -23,6 +23,16 @@
         Arc = 5,
     }
     /// <summary>
+    /// 建筑类型
+    /// </summary>
+    public enum ConstructionType
+    {
+        Null = 0,
+        Factory = 1,
+        Community = 2,
+        Fort = 3,
+    }
+    /// <summary>
     /// 建造器类型
     /// </summary>
     public enum ConstructorType
@@ -63,6 +73,9 @@
         MissileGun = 4,
         ArcGun = 5,
     }
+    /// <summary>
+    /// PlaceType
+    /// </summary>
     public enum PlaceType
     {
         Null = 0,

@@ -13,7 +13,7 @@ namespace GameClass.GameObj
         public const long invalidTeamID = long.MaxValue;
         public const long noneTeamID = long.MinValue;
         private readonly List<Ship> shipList;
-        private Home home = new();
+        private Home home;
         public int Score { get; private set; } = 0;
         public Ship? GetShip(long shipID)
         {
@@ -45,6 +45,10 @@ namespace GameClass.GameObj
             }
             shipList.Add(ship);
             return true;
+        }
+        public void SetHome(Home home)
+        {
+            this.home = home;
         }
         public int GetShipNum()
         {

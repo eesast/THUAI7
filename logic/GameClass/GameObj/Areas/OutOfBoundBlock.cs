@@ -8,11 +8,10 @@ namespace GameClass.GameObj.Areas;
 /// </summary>
 public class OutOfBoundBlock : Immovable, IOutOfBound
 {
-    public OutOfBoundBlock(XY initPos)
-        : base(initPos, int.MaxValue, GameObjType.OutOfBoundBlock)
-    {
-    }
-
     public override bool IsRigid => true;
     public override ShapeType Shape => ShapeType.Square;
+    public OutOfBoundBlock(XY initPos)
+    : base(initPos, int.MaxValue, GameObjType.OutOfBoundBlock)
+    {
+    }
 }

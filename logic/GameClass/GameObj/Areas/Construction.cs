@@ -5,10 +5,13 @@ namespace GameClass.GameObj.Areas;
 
 public class Construction : Immovable
 {
-    public override bool IsRigid => throw new NotImplementedException();
+    public LongWithVariableRange HP => throw new NotImplementedException();
+    public override bool IsRigid => true;
     public override ShapeType Shape => ShapeType.Square;
-    public Construction(XY initPos, GameObjType initType)
-        : base(initPos, int.MaxValue, initType)
+    private ConstructionType constructionType = ConstructionType.Null;
+    public ConstructionType ConstructionType => constructionType;
+    public Construction(XY initPos)
+        : base(initPos, GameData.NumOfPosGridPerCell / 2, GameObjType.Construction)
     {
     }
 }
