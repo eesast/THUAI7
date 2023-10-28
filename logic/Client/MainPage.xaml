@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Client.MainPage">
+
+    <ContentPage.Resources>
+        <Style x:Key="littleAttributes"
+TargetType="Label">
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="HorizontalOptions" Value="Start" />
+            <Setter Property="FontSize" Value="Micro" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid>
+        <VerticalStackLayout x:Name="verticalStackLayout">
+            <HorizontalStackLayout x:Name="taskBar" Spacing="0" HeightRequest="45" VerticalOptions="Start">
+                <Image Source="eesast_software_trans_enlarged_256x256.png" VerticalOptions="FillAndExpand"  HorizontalOptions="Start" WidthRequest="80"/>
+                <Label Text="THUAI6 Client For Players" FontSize="Micro" VerticalOptions="Center" WidthRequest="200"/>
+                <Button Text="天梯信息(L)" VerticalOptions="Start" HorizontalOptions="FillAndExpand" BorderWidth="1" CornerRadius="0" FontAutoScalingEnabled="True" FontSize="Micro" Background="White" MaximumHeightRequest="45" TextColor="Black" BorderColor="White" />
+                <Button Text="获取更新(U)" VerticalOptions="Start" HorizontalOptions="FillAndExpand" BorderWidth="1" CornerRadius="0" FontAutoScalingEnabled="True" FontSize="Micro" Background="White" MaximumHeightRequest="45" TextColor="Black" BorderColor="White" />
+                <Button Text="我的AI(M)" VerticalOptions="Start" HorizontalOptions="FillAndExpand" BorderWidth="1" CornerRadius="0" FontAutoScalingEnabled="True" Background="White" FontSize="Micro" MaximumHeightRequest="45" TextColor="Black" BorderColor="White" />
+                <Button Text="配置链接(C)" VerticalOptions="Start" HorizontalOptions="FillAndExpand" BorderWidth="1" CornerRadius="0" FontAutoScalingEnabled="True" FontSize="Micro" Background="White" MaximumHeightRequest="45" TextColor="Black" BorderColor="White" />
+            </HorizontalStackLayout>
+            <Grid x:Name="MainGrid" HeightRequest="{Binding Source={x:Reference verticalStackLayout}, Path=Height}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="27*" />
+                    <ColumnDefinition Width="530"/>
+                    <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="6*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="265" />
+                    <RowDefinition Height="265" />
+                    <RowDefinition Height="20" />
+                </Grid.RowDefinitions>
+
+                <Grid x:Name="MapGrid" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" >
+                    <!--<Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <BoxView Grid.Column="0" Grid.Row="0" Color="Blue" />
+                    <BoxView Grid.Column="0" Grid.Row="25" Color="Blue" />
+                    <BoxView Grid.Column="50" Grid.Row="50" Color="Blue" />-->
+                </Grid>
+            </Grid>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>
