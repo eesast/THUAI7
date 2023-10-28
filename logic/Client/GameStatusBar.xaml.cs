@@ -16,7 +16,6 @@ public partial class GameStatusBar : ContentView
         parent.SetRow(this, Row);
         parent.SetRowSpan(this, 2);
     }
-
     public void SetWormHoleValue(MessageOfBuilding wormholeMsg)
     {
         if (wormholeMsg.BuildingType != BuildingType.Wormhole)

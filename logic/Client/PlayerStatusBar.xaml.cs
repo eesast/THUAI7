@@ -129,11 +129,11 @@ namespace Client
     public class ShipLabel
     {
         public Label name = new Label() { Text = "name" };
-        public Label producer = new Label(){ Text = "producer" };
-        public Label constructor = new Label(){ Text = "constructor"};
-        public Label armor = new Label(){ Text = "armor"};
-        public Label shield = new Label(){ Text = "shield"};
-        public Label weapon = new Label(){ Text = "weapon"};
+        public Label producer = new Label() { Text = "producer" };
+        public Label constructor = new Label() { Text = "constructor" };
+        public Label armor = new Label() { Text = "armor" };
+        public Label shield = new Label() { Text = "shield" };
+        public Label weapon = new Label() { Text = "weapon" };
         public Label status = new Label() { Text = "IDLE" };
         public BoxView hpSlide = new BoxView() { Color = Colors.Red, WidthRequest = 80, HeightRequest = 3, HorizontalOptions = LayoutOptions.Start, VerticalOptions = LayoutOptions.End };
     };

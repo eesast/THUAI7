@@ -11,7 +11,7 @@ TargetType="Label">
             <Setter Property="FontSize" Value="Micro" />
         </Style>
     </ContentPage.Resources>
-    
+
     <Grid>
         <VerticalStackLayout x:Name="verticalStackLayout">
             <HorizontalStackLayout x:Name="taskBar" Spacing="0" HeightRequest="45" VerticalOptions="Start">
