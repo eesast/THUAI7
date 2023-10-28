@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Client.GameStatusBar">
+    <Grid x:Name="GameStatusGrid" Grid.Row="0" Grid.Column="4" Grid.RowSpan="2">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="50*" />
+        </Grid.RowDefinitions>
+
+        <Label x:Name="GameTime" Text="时间：00:00" Grid.Row="1" HorizontalOptions="Start" VerticalOptions="Start"/>
+        <Label x:Name="WormHole1HP" Text="虫洞1生命值" Grid.Row="2" HorizontalOptions="Start" VerticalOptions="End"/>
+        <BoxView x:Name="WormHole1HpSlide" Color="Green" HeightRequest="3" WidthRequest="80"  Grid.Row="3" HorizontalOptions="Start" VerticalOptions="End"/>
+        <Label x:Name="WormHole2Hp"  Text="虫洞2生命值" Grid.Row="4" HorizontalOptions="Start" VerticalOptions="End"/>
+        <BoxView x:Name="WormHole2HpSlide" Color="Green" HeightRequest="3" WidthRequest="80"  Grid.Row="5" HorizontalOptions="Start" VerticalOptions="End"/>
+        <Label x:Name="WormHole3Hp" Text="虫洞3生命值" Grid.Row="6" HorizontalOptions="Start" VerticalOptions="End"/>
+        <BoxView x:Name="WormHole3HpSlide" Color="Green" HeightRequest="3" WidthRequest="80"  Grid.Row="7" HorizontalOptions="Start" VerticalOptions="End"/>
+    </Grid>
+</ContentView>
