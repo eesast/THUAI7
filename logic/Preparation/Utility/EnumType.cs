@@ -79,14 +79,13 @@
     public enum PlaceType
     {
         Null = 0,
-        BirthPoint = 1,
-        Home = 2,
-        Ruin = 3,
-        Shadow = 4,
-        Asteroid = 5,
-        Resource = 6,
-        Construction = 7,
-        Wormhole = 8,
+        Ruin = 1,
+        Shadow = 2,
+        Asteroid = 3,
+        Resource = 4,
+        Construction = 5,
+        Wormhole = 6,
+        Home = 7,
     }
     /// <summary>
     /// 采集器类型
