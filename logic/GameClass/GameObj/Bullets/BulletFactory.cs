@@ -11,6 +11,6 @@ public static class BulletFactory
         BulletType.Shell => new Shell(ship, pos),
         BulletType.Missile => new Missile(ship, pos),
         BulletType.Arc => new Arc(ship, pos),
-        _ => throw new System.NotImplementedException()
+        _ => new NullBullet(ship, pos)
     };
 }
