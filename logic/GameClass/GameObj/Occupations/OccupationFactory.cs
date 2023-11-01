@@ -10,6 +10,6 @@ public static class OccupationFactory
         ShipType.CivilShip => new CivilShip(),
         ShipType.WarShip => new WarShip(),
         ShipType.FlagShip => new FlagShip(),
-        _ => throw new System.NotImplementedException(),
+        _ => new NullOccupation()
     };
 }
