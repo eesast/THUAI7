@@ -13,7 +13,7 @@ namespace Gaming
             readonly Map gameMap;
             public Ship? AddShip(XY pos, long teamID, long shipID, ShipType shipType)
             {
-                Ship newShip = new Ship(pos, GameData.ShipRadius, shipType);
+                Ship newShip = new(pos, GameData.ShipRadius, shipType);
                 gameMap.Add(newShip);
                 newShip.TeamID.SetReturnOri(teamID);
                 newShip.ShipID.SetReturnOri(shipID);

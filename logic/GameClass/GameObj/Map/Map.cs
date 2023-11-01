@@ -260,7 +260,7 @@ namespace GameClass.GameObj
                 GameObjLockDict[gameObj.Type].ExitWriteLock();
             }
         }
-        public void Add(GameObj gameObj)
+        public void Add(IGameObj gameObj)
         {
             GameObjLockDict[gameObj.Type].EnterWriteLock();
             try
@@ -290,30 +290,7 @@ namespace GameClass.GameObj
             {
                 for (int j = 0; j < GameData.MapCols; ++j)
                 {
-                    switch (mapResource[i, j])
-                    {
-                        case (uint)PlaceType.Asteroid:
-                            Add(new Areas.Asteroid(GameData.GetCellCenterPos(i, j)));
-                            break;
-                        case (uint)PlaceType.Construction:
-                            Add(new Areas.Construction(GameData.GetCellCenterPos(i, j)));
-                            break;
-                        case (uint)PlaceType.Home:
-                            Add(new Areas.Home(GameData.GetCellCenterPos(i, j)));
-                            break;
-                        case (uint)PlaceType.Resource:
-                            Add(new Areas.Resource(GameData.GetCellCenterPos(i, j)));
-                            break;
-                        case (uint)PlaceType.Ruin:
-                            Add(new Areas.Ruin(GameData.GetCellCenterPos(i, j)));
-                            break;
-                        case (uint)PlaceType.Shadow:
-                            Add(new Areas.Shadow(GameData.GetCellCenterPos(i, j)));
-                            break;
-                        case (uint)PlaceType.Wormhole:
-                            Add(new Areas.Wormhole(GameData.GetCellCenterPos(i, j)));
-                            break;
-                    }
+                    Add(Areas.AreaFactory.GetArea(GameData.GetCellCenterPos(i, j), (PlaceType)mapResource[i, j]));
                 }
             }
         }
