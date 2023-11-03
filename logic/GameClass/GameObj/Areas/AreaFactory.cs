@@ -13,7 +13,7 @@ public static class AreaFactory
         PlaceType.Resource => new Resource(pos),
         PlaceType.Construction => new Construction(pos),
         PlaceType.Wormhole => new Wormhole(pos),
-        _ => throw new System.NotImplementedException()
+        _ => new NullArea(pos)
     };
     public static OutOfBoundBlock GetOutOfBoundBlock(XY pos) => new(pos);
 }
