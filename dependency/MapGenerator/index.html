@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>THUAI7 地图生成器</title>
+    <link rel="shortcut icon" href="assets/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="assets/img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/map.css">
+</head>
+
+<body>
+    <header class="clearfix">
+        <div class="logo">
+            <a href="#">
+                <img src="assets/img/favicon.ico" alt="THUAI7 Tools">
+            </a>
+        </div>
+    </header>
+    <main>
+        <h1>地图生成器</h1>
+        <div id="paint">
+            <canvas id="map" width="500" height="500">
+                <p>请使用支持 HTML5 的浏览器！</p>
+            </canvas>
+        </div>
+        <div id="color-picker">
+            <div id="space" style="background-color: #FFFFFF;">
+                <p style="color: #000000;">Space</p>
+            </div>
+            <div id="ruin" style="background-color: #B97A57;">
+                <p style="color: #FFFFFF;">Ruin</p>
+            </div>
+            <div id="shadow" style="background-color: #22B14C;">
+                <p style="color: #FFFFFF;">Shadow</p>
+            </div>
+            <div id="asteroid" style="background-color: #99D9EA;">
+                <p style="color: #FFFFFF;">Asteroid</p>
+            </div>
+            <div id="resource" style="background-color: #A349A4;">
+                <p style="color: #FFFFFF;">Resource</p>
+            </div>
+            <div id="construction" style="background-color: #FF7F27;">
+                <p style="color: #FFFFFF;">Construction</p>
+            </div>
+            <div id="wormhole" style="background-color: #880015;">
+                <p style="color: #FFFFFF;">Wormhole</p>
+            </div>
+            <div id="home" style="background-color: #ED1C24;">
+                <p style="color: #FFFFFF;">Home</p>
+            </div>
+            <p id="current" style="margin-left: 20px;">当前：Space</p>
+        </div>
+        <div id="random-settings">
+            <fieldset>
+                <legend>随机参数设置</legend>
+                <p>⚠ 请谨慎修改参数！</p>
+                <p>Asteroid 宽度：<input type="number" id="asteroid-width" value="2" min="1" max="4"></p>
+                <p>Resource 数量：<input type="number" id="resource-num" value="7" min="1" max="10"></p>
+                <p>Construction 数量：<input type="number" id="construction-num" value="6" min="1" max="10"></p>
+                <p>Shadow 生成概率：<input type="number" id="shadow-prob" value="0.015" min="0" max="0.1" step="0.001"></p>
+                <p>Shadow 蔓延加成：<input type="number" id="shadow-cross-bonus" value="23" min="0" max="50"></p>
+                <p>Ruin 生成概率：<input type="number" id="ruin-prob" value="0.01" min="0" max="0.1" step="0.001"></p>
+                <p>Ruin 蔓延加成：<input type="number" id="ruin-cross-bonus" value="40" min="0" max="50"></p>
+            </fieldset>
+        </div>
+        <div id="operate">
+            <button class="outline" onclick="saveAsTxt()">保存为 TXT</button>
+            <button onclick="saveAsCs()">保存为 C#</button>
+            <button onclick="saveAsPng()">保存为 PNG</button>
+            <button onclick="clearCanvas()">清空地图</button>
+            <button onclick="random()">随机生成</button>
+        </div>
+    </main>
+</body>
+
+<script src="assets/js/map.js"></script>
+
+</html>
