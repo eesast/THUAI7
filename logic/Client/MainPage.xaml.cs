@@ -19,7 +19,7 @@ namespace Client
         {
             Console.WriteLine("Hello World");
             timer = Dispatcher.CreateTimer();
-            timer.Interval = TimeSpan.FromMicroseconds(50);
+            timer.Interval = TimeSpan.FromMilliseconds(50);
             timer.Tick += new EventHandler(Refresh);
             timer.Start();
             Application.Current.UserAppTheme = AppTheme.Light;  //Light Theme Mode
