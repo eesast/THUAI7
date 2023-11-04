@@ -25,7 +25,7 @@ namespace installer.ViewModel
         public double Slider
         {
             get => slider;
-            set { slider = value; Slider_Txt = $"{slider}";  OnPropertyChanged(); }
+            set { slider = value; Slider_Txt = $"{slider}"; OnPropertyChanged(); }
         }
 
         public string Slider_Txt

@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using System.Collections.Concurrent;
 using COSXML.Common;
 using COSXML.Transfer;
-using CoreGraphics;
 
 namespace installer.Model
 {
