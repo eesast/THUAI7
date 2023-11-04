@@ -1,0 +1,62 @@
+#paint {
+    float: left;
+}
+
+#paint canvas {
+    border: 1px solid #333;
+    border-radius: 10px;
+    cursor: crosshair;
+    margin: 0 20px 20px 0;
+}
+
+#color-picker {
+    float: left;
+}
+
+#color-picker div {
+    width: 120px;
+    height: 40px;
+    text-align: center;
+    cursor: pointer;
+    margin: 14px;
+    border-radius: 10px;
+    border: 1px solid #000;
+}
+
+#color-picker div:hover {
+    border: 1px solid #333;
+    box-shadow: 0 0 5px #333;
+    text-shadow: 0 0 5px #333;
+}
+
+#color-picker div p {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 40px;
+    margin: 0;
+}
+
+#random-settings {
+    float: left;
+}
+
+#random-settings p {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0 0 10px;
+    text-align: right;
+}
+
+#random-settings p:hover {
+    color: #025b9e;
+}
+
+#random-settings input {
+    border-radius: 5px;
+    border: 1px solid #333;
+    width: 64px;
+}
+
+#operate {
+    clear: both;
+}
