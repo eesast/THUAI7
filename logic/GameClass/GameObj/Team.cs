@@ -1,6 +1,7 @@
 ﻿using GameClass.GameObj.Areas;
 using Preparation.Utility;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace GameClass.GameObj
 {
@@ -16,7 +17,16 @@ namespace GameClass.GameObj
         private readonly Dictionary<uint, XY> birthPointList;
         public Dictionary<uint, XY> BirthPointList => birthPointList;
         private Home home;
-        public int Score { get; private set; } = 0;
+        private long score = 0;
+        public long Score
+        {
+            get => Interlocked.Read(ref score);
+        }
+        private long totalScore;
+        public long TotalScore
+        {
+            get => Interlocked.Read(ref totalScore);
+        }
         public Ship? GetShip(long shipID)
         {
             foreach (Ship ship in shipList)
@@ -47,6 +57,15 @@ namespace GameClass.GameObj
             }
             shipList.Add(ship);
             return true;
+        }
+        public void AddScore(long add)
+        {
+            Interlocked.Add(ref score, add);
+            Interlocked.Add(ref totalScore, add);
+        }
+        public void SubScore(long sub)
+        {
+            Interlocked.Add(ref score, -sub);
         }
         public void SetHome(Home home)
         {
