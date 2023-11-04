@@ -32,7 +32,7 @@ namespace installer.Model
         {
             MD5Update = new ConcurrentBag<string>();
             ConfigPath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), 
+                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 "THUAI7.json");
             if (File.Exists(ConfigPath))
             {
@@ -147,9 +147,9 @@ namespace installer.Model
                     newMD5Data = Helper.TryDeserializeJson<Dictionary<string, string>>(json) ?? new Dictionary<string, string>();
                 }
             }
-            foreach(var item in newMD5Data)
+            foreach (var item in newMD5Data)
             {
-                if(MD5Data.ContainsKey(item.Key))
+                if (MD5Data.ContainsKey(item.Key))
                 {
                     if (MD5Data[item.Key] != newMD5Data[item.Value])
                     {
@@ -175,11 +175,11 @@ namespace installer.Model
         }
 
         public void ScanDir() => ScanDir(InstallPath);
-        
+
         public void ScanDir(string dir)
         {
             var d = new DirectoryInfo(dir);
-            foreach(var file in d.GetFiles()) 
+            foreach (var file in d.GetFiles())
             {
                 var relFile = Helper.ConvertAbsToRel(InstallPath, file.FullName);
                 // 用户自己的文件不会被计入更新hash数据中
@@ -200,7 +200,7 @@ namespace installer.Model
                     MD5Update.Add(file.FullName);
                 }
             }
-            foreach(var d1 in d.GetDirectories()) { ScanDir(d1.FullName); }
+            foreach (var d1 in d.GetDirectories()) { ScanDir(d1.FullName); }
         }
     }
 }

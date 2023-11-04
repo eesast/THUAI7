@@ -22,7 +22,9 @@ namespace installer.Model
     {
         public enum language { cpp, py };
         private string token;
-        public string Token { get => token; protected set
+        public string Token
+        {
+            get => token; protected set
             {
                 if (token != value)
                     Token_Changed.Invoke(this, new EventArgs());
