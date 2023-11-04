@@ -21,7 +21,7 @@ namespace installer.Model
     class EEsast
     {
         public enum language { cpp, py };
-        private string token;
+        private string token = string.Empty;
         public string Token
         {
             get => token; protected set

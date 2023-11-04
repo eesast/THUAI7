@@ -25,7 +25,7 @@ jobs:
         dotnet-version: 7.0.x
 
     - name: Build Installer
-      run: dotnet build "./installer/installer.sln" -c Release
+      run: dotnet build "./installer/installer.sln" -c Release -f net7.0-windows10.0.19041.0
       
   dotnet-build-launcher:
     if: true
