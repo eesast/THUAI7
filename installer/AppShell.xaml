@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="installer.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:installer"
+    Shell.FlyoutBehavior="Disabled">
+
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
+        <Tab Title="首页">
+            <ShellContent
+                Title="首页"
+                ContentTemplate="{DataTemplate local:MainPage}"
+                Route="MainPage" />
+        </Tab>
+
+        <ShellContent
+            Title="比赛"
+            ContentTemplate="{DataTemplate local:CompetitionPage}"
+            Route="CompetitionPage" />
+
+        <ShellContent
+            Title="登录"
+            ContentTemplate="{DataTemplate local:LoginPage}"
+            Route="LoginPage" />
+
+    </FlyoutItem>
+    
+                
+
+</Shell>
