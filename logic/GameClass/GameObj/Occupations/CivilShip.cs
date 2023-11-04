@@ -5,10 +5,10 @@ namespace GameClass.GameObj.Occupations;
 
 public class CivilShip : IOccupation
 {
-    private const int moveSpeed = GameData.CivilShipMoveSpeed;
-    public int MoveSpeed => moveSpeed;
-    private const int maxHp = GameData.CivilShipMaxHP;
-    public int MaxHp => maxHp;
-    private const int viewRange = GameData.CivilShipViewRange;
-    public int ViewRange => viewRange;
+    public int MoveSpeed { get; } = GameData.CivilShipMoveSpeed;
+    public int MaxHp { get; } = GameData.CivilShipMaxHP;
+    public int ViewRange { get; } = GameData.CivilShipViewRange;
+    public int Cost { get; } = GameData.CivilShipCost;
+    public int BaseArmor { get; } = GameData.CivilShipBaseArmor;
+    public int BaseShield { get; } = GameData.CivilShipBaseShield;
 }

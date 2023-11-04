@@ -7,12 +7,11 @@ namespace GameClass.GameObj;
 
 public class Ship : Movable, IShip
 {
-    public AtomicLong TeamID { get; } = new AtomicLong(long.MaxValue);
-    public AtomicLong ShipID { get; } = new AtomicLong(long.MaxValue);
+    public AtomicLong TeamID { get; } = new(long.MaxValue);
+    public AtomicLong ShipID { get; } = new(long.MaxValue);
     public override bool IsRigid => true;
     public override ShapeType Shape => ShapeType.Circle;
-    private readonly int viewRange;
-    public int ViewRange => viewRange;
+    public int ViewRange { get; }
     public override bool IgnoreCollideExecutor(IGameObj targetObj)
     {
         if (IsRemoved)
@@ -21,26 +20,51 @@ public class Ship : Movable, IShip
             return true;
         return false;
     }
+    // 属性值
     public LongInTheVariableRange HP { get; }
     public LongInTheVariableRange Armor { get; }
     public LongInTheVariableRange Shield { get; }
-    private ShipType shipType = ShipType.Null;
-    public ShipType ShipType => shipType;
+    public ShipType ShipType { get; }
     private ShipStateType shipState = ShipStateType.Null;
     public ShipStateType ShipState => shipState;
-    private readonly IOccupation occupation;
-    public IOccupation Occupation => occupation;
+    public IOccupation Occupation { get; }
     public IntNumUpdateEachCD BulletNum { get; }
-    private IProducer? producer = null;
-    public IProducer? ProducerModule => producer;
-    private IConstructor? constructor = null;
-    public IConstructor? ConstructorModule => constructor;
-    private IArmor? armor = null;
-    public IArmor? ArmorModule => armor;
-    private IShield? shield = null;
-    public IShield? ShieldModule => shield;
-    private IWeapon? weapon = null;
-    public IWeapon? WeaponModule => weapon;
+
+    #region Producer
+    private ProducerType producerType = ProducerType.Null;
+    public ProducerType ProducerModuleType => producerType;
+    private IProducer producer;
+    public IProducer ProducerModule => producer;
+    #endregion
+
+    #region Constructor
+    private ConstructorType constructorType = ConstructorType.Null;
+    public ConstructorType ConstructorModuleType => constructorType;
+    private IConstructor constructor;
+    public IConstructor ConstructorModule => constructor;
+    #endregion
+
+    #region Armor
+    private ArmorType armorType = ArmorType.Null;
+    public ArmorType ArmorModuleType => armorType;
+    private IArmor armor;
+    public IArmor ArmorModule;
+    #endregion
+
+    #region Shield
+    private ShieldType shieldType = ShieldType.Null;
+    public ShieldType ShieldModuleType => shieldType;
+    private IShield shield;
+    public IShield ShieldModule => shield;
+    #endregion
+
+    #region Weapon
+    private WeaponType weaponType = WeaponType.Null;
+    public WeaponType WeaponModuleType => weaponType;
+    private IWeapon weapon;
+    public IWeapon WeaponModule => weapon;
+    #endregion
+
     private GameObj? whatInteractingWith = null;
     public GameObj? WhatInteractingWith
     {
@@ -172,34 +196,43 @@ public class Ship : Movable, IShip
         base(initPos, initRadius, GameObjType.Ship)
     {
         this.CanMove.SetReturnOri(true);
-        this.occupation = OccupationFactory.FindIOccupation(shipType);
-        this.viewRange = occupation.ViewRange;
-        this.HP = new(Occupation.MaxHp);
+        this.Occupation = OccupationFactory.FindIOccupation(this.ShipType = shipType);
+        this.ViewRange = this.Occupation.ViewRange;
+        this.HP = new(this.Occupation.MaxHp);
+        this.Armor = new(this.Occupation.BaseArmor);
+        this.Shield = new(this.Occupation.BaseShield);
         this.MoveSpeed.SetReturnOri(this.orgMoveSpeed = Occupation.MoveSpeed);
-        this.shipType = shipType;
-        switch (shipType)
+        (this.producerType, this.constructorType, this.armorType, this.shieldType, this.weaponType) = this.ShipType switch
         {
-            case ShipType.CivilShip:
-                this.producer = new CivilProducer1();
-                this.constructor = new CivilConstructor1();
-                this.armor = null;
-                this.shield = null;
-                this.weapon = null;
-                break;
-            case ShipType.WarShip:
-                this.producer = null;
-                this.constructor = null;
-                this.armor = null;
-                this.shield = null;
-                this.weapon = new WarLaserGun();
-                break;
-            case ShipType.FlagShip:
-                this.producer = null;
-                this.constructor = null;
-                this.armor = null;
-                this.shield = null;
-                this.weapon = new FlagLaserGun();
-                break;
-        }
+            ShipType.CivilShip => (
+                ProducerType.Producer1,
+                ConstructorType.Constructor1,
+                ArmorType.Null,
+                ShieldType.Null,
+                WeaponType.Null
+            ),
+            ShipType.WarShip => (
+                ProducerType.Null,
+                ConstructorType.Null,
+                ArmorType.Null,
+                ShieldType.Null,
+                WeaponType.LaserGun
+            ),
+            ShipType.FlagShip => (
+                ProducerType.Null,
+                ConstructorType.Null,
+                ArmorType.Null,
+                ShieldType.Null,
+                WeaponType.LaserGun
+            ),
+            _ => (ProducerType.Null, ConstructorType.Null, ArmorType.Null, ShieldType.Null, WeaponType.Null)
+        };
+        (this.producer, this.constructor, this.armor, this.shield, this.weapon) = (
+            ModuleFactory.FindIProducer(this.ShipType, this.producerType),
+            ModuleFactory.FindIConstructor(this.ShipType, this.constructorType),
+            ModuleFactory.FindIArmor(this.ShipType, this.armorType),
+            ModuleFactory.FindIShield(this.ShipType, this.shieldType),
+            ModuleFactory.FindIWeapon(this.ShipType, this.weaponType)
+        );
     }
 }
