@@ -7,9 +7,8 @@ namespace GameClass.GameObj.Areas;
 
 public class Wormhole : Immovable, IWormhole
 {
-    public LongInTheVariableRange HP => throw new NotImplementedException();
-    public List<XY> Entrance => throw new NotImplementedException();
-    public List<XY> Content => throw new NotImplementedException();
+    public LongInTheVariableRange HP = new LongInTheVariableRange(GameData.WormholeHP);
+    public List<XY> Grids => throw new NotImplementedException();
     public override bool IsRigid => HP > GameData.WormholeHP / 2;
     public override ShapeType Shape => ShapeType.Square;
     public Wormhole(XY initPos)
