@@ -5,10 +5,10 @@ namespace GameClass.GameObj.Occupations;
 
 public class WarShip : IOccupation
 {
-    private const int moveSpeed = GameData.WarShipMoveSpeed;
-    public int MoveSpeed => moveSpeed;
-    private const int maxHp = GameData.WarShipMaxHP;
-    public int MaxHp => maxHp;
-    private const int viewRange = GameData.WarShipViewRange;
-    public int ViewRange => viewRange;
+    public int MoveSpeed { get; } = GameData.WarShipMoveSpeed;
+    public int MaxHp { get; } = GameData.WarShipMaxHP;
+    public int ViewRange { get; } = GameData.WarShipViewRange;
+    public int Cost { get; } = GameData.WarShipCost;
+    public int BaseArmor { get; } = GameData.WarShipBaseArmor;
+    public int BaseShield { get; } = GameData.WarShipBaseShield;
 }
