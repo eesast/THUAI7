@@ -13,7 +13,7 @@ jobs:
         exclude: './players'
         inplace: False
  
-  dotnet-format-checking:
+  dotnet-format-checking-logic:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
@@ -26,17 +26,44 @@ jobs:
       run: |
         dotnet restore "./logic/logic.sln"
         dotnet format "./logic/logic.sln" --severity error --no-restore --verify-no-changes
-      
+
+  dotnet-format-checking-installer:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+
     - name: Check Installer
       run: |
         dotnet restore "./installer/installer.sln"
         dotnet format "./installer/installer.sln" --severity error --no-restore --verify-no-changes
-      
+
+  dotnet-format-checking-launcher:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+
     - name: Check Launcher
       run: |
         dotnet restore "./launcher/launcher.sln"
         dotnet format "./launcher/launcher.sln" --severity error --no-restore --verify-no-changes
       
+  dotnet-format-checking-playback:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+
     - name: Check Playback
       run: |
         dotnet restore "./playback/playback.sln"
