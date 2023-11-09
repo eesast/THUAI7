@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
+from matplotlib.patches import Rectangle
 import matplotlib.pyplot as plt
 import matplotlib.backend_bases as bebs
 
@@ -15,6 +16,7 @@ class MapRenderer:
     mapf: str
     fig: Figure
     ax: Axes
+    rects: list[list[Rectangle]]
 
     __curMax: int
     __cur: int
@@ -36,6 +38,9 @@ class MapRenderer:
         self.areaRender = _areas
         self.mapf = _mapf
         self.fig, self.ax = plt.subplots()
+        self.rects = [[Rectangle((j, i), 1, 1, facecolor=self.areaRender.areas[self.map[i, j]].color)
+                       for j in range(self.map.width)]
+                      for i in range(self.map.height)]
         self.__curMax = len(self.areaRender.areas)
         self.__cur = 0
 
@@ -48,8 +53,7 @@ class MapRenderer:
         self.ax.set_aspect(1)
         for i in range(self.map.height):
             for j in range(self.map.width):
-                self.ax.add_patch(plt.Rectangle(
-                    (j, i), 1, 1, facecolor=self.areaRender.areas[self.map[i, j]].color))
+                self.ax.add_patch(self.rects[i][j])
         plt.hlines(range(self.map.height+1), 0, self.map.width)
         plt.vlines(range(self.map.width+1), 0, self.map.height)
         self.fig.canvas.mpl_connect('button_press_event', self.on_click)
@@ -77,5 +81,6 @@ class MapRenderer:
                 self.map.ToFile(self.mapf)
 
     def _render(self, r: int, c: int) -> None:
-        self.ax.add_patch(plt.Rectangle((c, r), 1, 1, facecolor=self.cur))
-        plt.draw()
+        self.rects[r][c].set_color(self.cur)
+        self.ax.draw_artist(self.rects[r][c])
+        plt.show(block=False)
