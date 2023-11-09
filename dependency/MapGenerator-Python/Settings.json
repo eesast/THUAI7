@@ -1,0 +1,46 @@
+{
+    "title": "MapGenerator",
+    "file_suffix": ".map",
+    "areas": [
+        [
+            "Space",
+            0,
+            "#FFFFFF"
+        ],
+        [
+            "Ruin",
+            1,
+            "#B97A57"
+        ],
+        [
+            "Shadow",
+            2,
+            "#22B14C"
+        ],
+        [
+            "Asteroid",
+            3,
+            "#99D9EA"
+        ],
+        [
+            "Resource",
+            4,
+            "#A349A4"
+        ],
+        [
+            "Construction",
+            5,
+            "#FF7F27"
+        ],
+        [
+            "Wormhole",
+            6,
+            "#880015"
+        ],
+        [
+            "Home",
+            7,
+            "#ED1C24"
+        ]
+    ]
+}
