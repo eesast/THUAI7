@@ -1,7 +1,7 @@
 from __future__ import annotations
 from functools import cached_property
 from io import TextIOWrapper
-from typing import overload
+from typing import Literal, overload
 from array import array
 
 
@@ -17,9 +17,6 @@ class MapStruct:
         return self.__arrAlloc[0]
 
     @property
-    def ArrayView(self) -> list[list[int]]: ...
-
-    @ArrayView.getter
     def ArrayView(self) -> list[list[int]]:
         return [[self[i, j] for j in range(self.width)]for i in range(self.height)]
 
@@ -30,13 +27,16 @@ class MapStruct:
         self.__arrAlloc[2+rowcol[1]+rowcol[0]*self.width] = val
 
     @overload
-    def __init__(self, height: int, width: int) -> None: ...
+    def __init__(self, dtype: Literal['b', 'B', 'u', 'h', 'H', 'i', 'I', 'l', 'L', 'q', 'Q', 'f', 'd'],
+                 height: int, width: int) -> None: ...
 
     @overload
-    def __init__(self, mapFile: TextIOWrapper) -> None: ...
+    def __init__(self, dtype: Literal['b', 'B', 'u', 'h', 'H', 'i', 'I', 'l', 'L', 'q', 'Q', 'f', 'd'],
+                 mapFile: TextIOWrapper) -> None: ...
 
-    def __init__(self, *args) -> None:
-        self.__arrAlloc = array('I')
+    def __init__(self, dtype: Literal['b', 'B', 'u', 'h', 'H', 'i', 'I', 'l', 'L', 'q', 'Q', 'f', 'd'],
+                 *args) -> None:
+        self.__arrAlloc = array(dtype)
         if len(args) == 1:
             mapFile = args[0]
             self.__arrAlloc.fromfile(mapFile, 2)

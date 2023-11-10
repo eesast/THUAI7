@@ -1,6 +1,7 @@
 {
     "title": "MapGenerator",
     "file_suffix": ".map",
+    "dtype": "B",
     "areas": [
         [
             "Space",
