@@ -1,7 +1,7 @@
 name: build
 on: [push, pull_request]
 jobs:
-  dotnet-build:
+  dotnet-build-logic:
     if: true
     runs-on: windows-latest
     steps:
@@ -14,11 +14,41 @@ jobs:
     - name: Build Logic
       run: dotnet build "./logic/logic.sln" -c Release
       
+  dotnet-build-install:
+    if: true
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+
     - name: Build Installer
-      run: dotnet build "./installer/installer.sln" -c Release
+      run: dotnet build "./installer/installer.sln" -c Release -f net7.0-windows10.0.19041.0
       
+  dotnet-build-launcher:
+    if: true
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+        
     - name: Build Launcher
       run: dotnet build "./launcher/launcher.sln" -c Release
-      
+
+  dotnet-build-playback:
+    if: true
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+        
     - name: Build Playback
       run: dotnet build "./playback/playback.sln" -c Release

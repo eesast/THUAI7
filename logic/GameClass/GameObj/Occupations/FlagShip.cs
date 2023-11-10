@@ -5,10 +5,10 @@ namespace GameClass.GameObj.Occupations;
 
 public class FlagShip : IOccupation
 {
-    private const int moveSpeed = GameData.FlagShipMoveSpeed;
-    public int MoveSpeed => moveSpeed;
-    private const int maxHp = GameData.FlagShipMaxHP;
-    public int MaxHp => maxHp;
-    private const int viewRange = GameData.FlagShipViewRange;
-    public int ViewRange => viewRange;
+    public int MoveSpeed { get; } = GameData.FlagShipMoveSpeed;
+    public int MaxHp { get; } = GameData.FlagShipMaxHP;
+    public int ViewRange { get; } = GameData.FlagShipViewRange;
+    public int Cost { get; } = GameData.FlagShipCost;
+    public int BaseArmor { get; } = GameData.FlagShipBaseArmor;
+    public int BaseShield { get; } = GameData.FlagShipBaseShield;
 }
