@@ -1,6 +1,7 @@
 from __future__ import annotations
 from io import TextIOWrapper
 import json
+import os
 import os.path
 
 import easygui as eg
@@ -10,8 +11,16 @@ from MapStruct import MapStruct
 from MapRenderer import MapRenderer
 
 
+# 查找设置
+SETTINGS_PATH = ''
+TARGET_SETTINGS_PATH = 'Settings.json'
+for root, _, files in os.walk('.'):
+    if TARGET_SETTINGS_PATH in files:
+        SETTINGS_PATH = os.path.join(root, TARGET_SETTINGS_PATH)
+if SETTINGS_PATH == '':
+    raise FileNotFoundError('未找到设置文件')
 # 加载设置
-with open('./Settings.json', 'r', encoding='utf-8') as jsonfp:
+with open(SETTINGS_PATH, 'r', encoding='utf-8') as jsonfp:
     SETTINGS = json.load(jsonfp)
     TITLE: str = SETTINGS['title']
     FILE_SUFFIX: str = SETTINGS['file_suffix']
