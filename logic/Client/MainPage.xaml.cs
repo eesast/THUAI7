@@ -14,7 +14,7 @@ namespace Client
 {
     public partial class MainPage : ContentPage
     {
-
+        private bool UIinitiated = false;
         public MainPage()
         {
             Console.WriteLine("Hello World");
@@ -27,6 +27,7 @@ namespace Client
             SetStatusBars();
             InitiateObjects();
             Map map = new Map(MainGrid, 0, 2, 2);
+            UIinitiated = true;
         }
 
         /* Set the StatusBars */
@@ -36,7 +37,6 @@ namespace Client
             bluePlayer = new PlayerStatusBar(MainGrid, 1, 1, 1);
             gameStatusBar = new GameStatusBar(MainGrid, 0, 4);
         }
-
         /* initiate the Lists of Objects and CountList */
         private void InitiateObjects()
         {
@@ -410,9 +410,18 @@ namespace Client
             {
                 lock (drawPicLock)
                 {
+                    if (UIinitiated)
+                    {
+                        redPlayer.SlideLengthSet();
+                        bluePlayer.SlideLengthSet();
+                        gameStatusBar.SlideLengthSet();
+                    }
                     if (!isClientStocked)
                     {
-                        MapGrid.Children.Clear();
+                        if (MapGrid.Children.Count() > 0)
+                        {
+                            MapGrid.Children.Clear();
+                        }
                         foreach (var data in listOfAll)
                         {
                             gameStatusBar.SetGameTimeValue(data);
