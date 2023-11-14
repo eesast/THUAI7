@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
 from matplotlib.patches import Rectangle
-import matplotlib.pyplot as plt
-import matplotlib.backend_bases as bebs
+from matplotlib.ticker import MultipleLocator
+from matplotlib.backend_bases import MouseEvent, KeyEvent
 
-from AreaRenderDict import AreaRenderDict
+from Classes.AreaRenderDict import AreaRenderDict
 from MapStruct import MapStruct
 
 
@@ -48,19 +49,19 @@ class MapRenderer:
         self.fig.set_size_inches(self.map.width, self.map.height)
         self.ax.set_xlim(0, self.map.width)
         self.ax.set_ylim(self.map.height, 0)
-        self.ax.xaxis.set_major_locator(plt.MultipleLocator(1))
-        self.ax.yaxis.set_major_locator(plt.MultipleLocator(1))
+        self.ax.xaxis.set_major_locator(MultipleLocator(1))
+        self.ax.yaxis.set_major_locator(MultipleLocator(1))
         self.ax.set_aspect(1)
         for i in range(self.map.height):
             for j in range(self.map.width):
                 self.ax.add_patch(self.rects[i][j])
-        plt.hlines(range(self.map.height+1), 0, self.map.width)
-        plt.vlines(range(self.map.width+1), 0, self.map.height)
+        plt.hlines(range(self.map.height + 1), 0, self.map.width)
+        plt.vlines(range(self.map.width + 1), 0, self.map.height)
         self.fig.canvas.mpl_connect('button_press_event', self.on_click)
         self.fig.canvas.mpl_connect('key_press_event', self.on_press)
         plt.show()
 
-    def on_click(self, event: bebs.MouseEvent) -> None:
+    def on_click(self, event: MouseEvent) -> None:
         if not event.button:
             return
         match event.button:
@@ -73,7 +74,7 @@ class MapRenderer:
             case _:
                 return
 
-    def on_press(self, event: bebs.KeyEvent) -> None:
+    def on_press(self, event: KeyEvent) -> None:
         if not event.key:
             return
         match event.key:

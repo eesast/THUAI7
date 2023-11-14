@@ -6,9 +6,9 @@ import os.path
 
 import easygui as eg
 
-from AreaRenderDict import AreaRenderDict
-from MapStruct import MapStruct
-from MapRenderer import MapRenderer
+from Classes.AreaRenderDict import AreaRenderDict
+from Classes.MapStruct import MapStruct
+from Classes.MapRenderer import MapRenderer
 
 
 # 查找设置
