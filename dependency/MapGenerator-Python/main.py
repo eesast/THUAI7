@@ -9,6 +9,8 @@ import easygui as eg
 from Classes.AreaRenderDict import AreaRenderDict
 from Classes.MapStruct import MapStruct
 from Classes.MapRenderer import MapRenderer
+from Classes.RandomCores.PerlinRandomCore import PerlinRandomCore
+from Classes.RandomCores.СюйЧэнRandomCore import СюйЧэнRandomCore
 
 
 # 查找设置
@@ -43,6 +45,8 @@ else:
     mapfile = open(path, 'r+b')
     mapStruct = MapStruct(DTYPE, mapfile)
     mapfile.close()
+# 随机核加载
+randomCores = [СюйЧэнRandomCore(TITLE), PerlinRandomCore(TITLE)]
 # 地图渲染
-mapRenderer = MapRenderer(mapStruct, AREAS, path)
+mapRenderer = MapRenderer(TITLE, mapStruct, AREAS, path, randomCores)
 mapRenderer.MainFrame()
