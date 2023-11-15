@@ -5,18 +5,19 @@ namespace Client
 {
     public partial class PlayerStatusBar : ContentView
     {
+        private bool haveSetSlideLength = false;
         enum PlayerRole
         {
             Red,    //the down player
             Blue    //the up player
         };
         PlayerRole myRole;
-        private readonly int lengthOfHpSlide = 240;
-
+        private double lengthOfHpSlide = 240;
         List<ShipLabel> shipLabels = new List<ShipLabel>();
         public PlayerStatusBar(Grid parent, int Row, int Column, int role)
         {
             InitializeComponent();
+            MyHpSlide.WidthRequest = lengthOfHpSlide;
             if (role == 0)
             {
                 myRole = PlayerRole.Red;
@@ -37,6 +38,7 @@ namespace Client
 
         private void DrawSelfInfo()
         {
+            MyHpSlide.WidthRequest = lengthOfHpSlide;
             if (myRole == PlayerRole.Red)
             {
                 MyName.Text = "Red Player";
@@ -63,13 +65,12 @@ namespace Client
                 {
                     shipLabels[shipCounter].hpSlide.Color = Colors.Blue;
                 }
-                Grid shipStatusGrid = new Grid();
-                shipStatusGrid.RowDefinitions.Add(new RowDefinition());
-                shipStatusGrid.RowDefinitions.Add(new RowDefinition(10));
-                shipStatusGrid.Add(shipLabels[shipCounter].status);
-                shipStatusGrid.Add(shipLabels[shipCounter].hpSlide);
-                shipStatusGrid.SetRow(shipLabels[shipCounter].status, 0);
-                shipStatusGrid.SetRow(shipLabels[shipCounter].hpSlide, 1);
+                shipLabels[shipCounter].shipStatusGrid.RowDefinitions.Add(new RowDefinition());
+                shipLabels[shipCounter].shipStatusGrid.RowDefinitions.Add(new RowDefinition(10));
+                shipLabels[shipCounter].shipStatusGrid.Add(shipLabels[shipCounter].status);
+                shipLabels[shipCounter].shipStatusGrid.Add(shipLabels[shipCounter].hpSlide);
+                shipLabels[shipCounter].shipStatusGrid.SetRow(shipLabels[shipCounter].status, 0);
+                shipLabels[shipCounter].shipStatusGrid.SetRow(shipLabels[shipCounter].hpSlide, 1);
 
                 ShipAllAttributesGrid.Children.Add(shipLabels[shipCounter].name);
                 ShipAllAttributesGrid.Children.Add(shipLabels[shipCounter].producer);
@@ -77,7 +78,7 @@ namespace Client
                 ShipAllAttributesGrid.Children.Add(shipLabels[shipCounter].armor);
                 ShipAllAttributesGrid.Children.Add(shipLabels[shipCounter].shield);
                 ShipAllAttributesGrid.Children.Add(shipLabels[shipCounter].weapon);
-                ShipAllAttributesGrid.Children.Add(shipStatusGrid);
+                ShipAllAttributesGrid.Children.Add(shipLabels[shipCounter].shipStatusGrid);
                 //ShipAllAttributesGrid.Children.Add(shipLabels[shipCounter].status);
 
                 ShipAllAttributesGrid.SetRow(shipLabels[shipCounter].name, shipCounter);
@@ -86,7 +87,7 @@ namespace Client
                 ShipAllAttributesGrid.SetRow(shipLabels[shipCounter].armor, shipCounter);
                 ShipAllAttributesGrid.SetRow(shipLabels[shipCounter].shield, shipCounter);
                 ShipAllAttributesGrid.SetRow(shipLabels[shipCounter].weapon, shipCounter);
-                ShipAllAttributesGrid.SetRow(shipStatusGrid, shipCounter);
+                ShipAllAttributesGrid.SetRow(shipLabels[shipCounter].shipStatusGrid, shipCounter);
                 //ShipAllAttributesGrid.SetRow(shipLabels[shipCounter].status, shipCounter);
 
                 ShipAllAttributesGrid.SetColumn(shipLabels[shipCounter].name, 0);
@@ -95,7 +96,7 @@ namespace Client
                 ShipAllAttributesGrid.SetColumn(shipLabels[shipCounter].armor, 3);
                 ShipAllAttributesGrid.SetColumn(shipLabels[shipCounter].shield, 4);
                 ShipAllAttributesGrid.SetColumn(shipLabels[shipCounter].weapon, 5);
-                ShipAllAttributesGrid.SetColumn(shipStatusGrid, 6);
+                ShipAllAttributesGrid.SetColumn(shipLabels[shipCounter].shipStatusGrid, 6);
                 //ShipAllAttributesGrid.SetColumn(shipLabels[shipCounter].status, 6);
             }
         }
@@ -125,6 +126,16 @@ namespace Client
             }
             //TODO: Dynamic change the ships
         }
+
+        public void SlideLengthSet()
+        {
+            UtilFunctions.SlideLengthSet(MyHpSlide, ref haveSetSlideLength, ref lengthOfHpSlide, PlayerRoleInfoGrid.Width);
+            foreach (ShipLabel shiplabel in shipLabels)
+            {
+                UtilFunctions.SlideLengthSet(shiplabel.hpSlide, ref haveSetSlideLength, ref shiplabel.lengthOfShipHpSlide, shiplabel.shipStatusGrid.Width);
+            }
+            haveSetSlideLength = true;
+        }
     }
     public class ShipLabel
     {
@@ -135,6 +146,8 @@ namespace Client
         public Label shield = new Label() { Text = "shield" };
         public Label weapon = new Label() { Text = "weapon" };
         public Label status = new Label() { Text = "IDLE" };
+        public double lengthOfShipHpSlide = 80;
         public BoxView hpSlide = new BoxView() { Color = Colors.Red, WidthRequest = 80, HeightRequest = 3, HorizontalOptions = LayoutOptions.Start, VerticalOptions = LayoutOptions.End };
+        public Grid shipStatusGrid = new Grid();
     };
 }

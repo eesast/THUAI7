@@ -4,9 +4,11 @@ namespace Client;
 
 public partial class GameStatusBar : ContentView
 {
-    private readonly int lengthOfHp1Slide;
-    private readonly int lengthOfHp2Slide;
-    private readonly int lengthOfHp3Slide;
+    private bool haveSetSlideLength = false;
+    double lengthOfWormHole1HpSlide = 80;
+    double lengthOfWormHole2HpSlide = 80;
+    double lengthOfWormHole3HpSlide = 80;
+
     private readonly int WormHoleFullHp = 18000;
     public GameStatusBar(Grid parent, int Row, int Column)
     {
@@ -25,13 +27,13 @@ public partial class GameStatusBar : ContentView
         switch (wormholeMsg.BuildingId)
         {
             case 0:
-                WormHole1HpSlide.WidthRequest = wormholeMsg.Hp / WormHoleFullHp * lengthOfHp1Slide;
+                WormHole1HpSlide.WidthRequest = wormholeMsg.Hp / WormHoleFullHp * lengthOfWormHole1HpSlide;
                 break;
             case 1:
-                WormHole2HpSlide.WidthRequest = wormholeMsg.Hp / WormHoleFullHp * lengthOfHp2Slide;
+                WormHole2HpSlide.WidthRequest = wormholeMsg.Hp / WormHoleFullHp * lengthOfWormHole2HpSlide;
                 break;
             case 2:
-                WormHole3HpSlide.WidthRequest = wormholeMsg.Hp / WormHoleFullHp * lengthOfHp3Slide;
+                WormHole3HpSlide.WidthRequest = wormholeMsg.Hp / WormHoleFullHp * lengthOfWormHole3HpSlide;
                 break;
         }
     }
@@ -55,4 +57,11 @@ public partial class GameStatusBar : ContentView
         GameTime.Text += sec.ToString();
     }
 
+    public void SlideLengthSet()
+    {
+        UtilFunctions.SlideLengthSet(WormHole1HpSlide, ref haveSetSlideLength, ref lengthOfWormHole1HpSlide, GameStatusGrid.Width);
+        UtilFunctions.SlideLengthSet(WormHole2HpSlide, ref haveSetSlideLength, ref lengthOfWormHole2HpSlide, GameStatusGrid.Width);
+        UtilFunctions.SlideLengthSet(WormHole3HpSlide, ref haveSetSlideLength, ref lengthOfWormHole3HpSlide, GameStatusGrid.Width);
+        haveSetSlideLength = true;
+    }
 }

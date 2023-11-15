@@ -29,6 +29,7 @@ TargetType="Label">
                     <ColumnDefinition Width="530"/>
                     <ColumnDefinition Width="0.5*" />
                     <ColumnDefinition Width="6*" />
+                    <ColumnDefinition Width="0.5*" />
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
