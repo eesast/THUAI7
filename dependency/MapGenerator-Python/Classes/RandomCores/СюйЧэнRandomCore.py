@@ -2,7 +2,7 @@ from __future__ import annotations
 from math import floor
 from random import random
 
-import easygui as eg
+from easygui import multenterbox
 
 from Classes.MapStruct import MapStruct
 from Classes.RandomCore import RandomCore
@@ -136,7 +136,7 @@ class СюйЧэнRandomCore(RandomCore):
              self.ShadowCrossBonus,
              self.RuinProb,
              self.RuinCrossBonus) = (lambda i1, i2, i3, f4, i5, f6, i7:
-                                     (int(i1), int(i2), int(i3), float(f4), int(i5), float(f6), int(i7)))(*eg.multenterbox(
+                                     (int(i1), int(i2), int(i3), float(f4), int(i5), float(f6), int(i7)))(*multenterbox(
                                          msg='Random settings',
                                          title=self.title,
                                          fields=[
@@ -239,8 +239,8 @@ class СюйЧэнRandomCore(RandomCore):
 
     @staticmethod
     def generateConstruction(mp: MapStruct, num: int = DefaultСюйЧэнRandomSettings.constructionNum) -> None:
-        i=0
-        while i<num:
+        i = 0
+        while i < num:
             x = floor(random() * 48) + 1
             y = floor(random() * 23) + 1
             if СюйЧэнRandomCore.isEmptyNearby(mp, x, y, 1):
@@ -248,7 +248,7 @@ class СюйЧэнRandomCore(RandomCore):
                 mp[49 - x, 49 - y] = 5
             else:
                 i -= 1
-            i+=1
+            i += 1
 
     @staticmethod
     def generateShadow(mp: MapStruct, prob: float = DefaultСюйЧэнRandomSettings.shadowProb,

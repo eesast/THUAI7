@@ -4,7 +4,7 @@ import json
 import os
 import os.path
 
-import easygui as eg
+from easygui import multenterbox
 
 from Classes.AreaRenderDict import AreaRenderDict
 from Classes.MapStruct import MapStruct
@@ -29,16 +29,14 @@ with open(SETTINGS_PATH, 'r', encoding='utf-8') as jsonfp:
     DTYPE: str = SETTINGS['dtype']
     AREAS: AreaRenderDict = AreaRenderDict(SETTINGS['areas'])
 # 获取路径
-path: str = eg.multenterbox(msg='', title=TITLE,
-                            fields=[f'Path(*{FILE_SUFFIX})'])[0]
+path: str = multenterbox(msg='', title=TITLE, fields=[f'Path(*{FILE_SUFFIX})'])[0]
 if path[-len(FILE_SUFFIX):] != FILE_SUFFIX:
     path += FILE_SUFFIX
 # 地图加载
 mapfile: TextIOWrapper
 mapStruct: MapStruct
 if not os.path.exists(path):
-    height, width = [int(x) for x in eg.multenterbox(
-        msg='Create new map', title=TITLE, fields=['Height', 'Width'])]
+    height, width = [int(x) for x in multenterbox(msg='Create new map', title=TITLE, fields=['Height', 'Width'])]
     mapStruct = MapStruct(DTYPE, height, width)
     mapStruct.ToFile(path)
 else:

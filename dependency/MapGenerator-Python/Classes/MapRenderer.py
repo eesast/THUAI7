@@ -1,7 +1,7 @@
 from __future__ import annotations
 from queue import Queue
 
-import easygui as eg
+from easygui import choicebox
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
@@ -35,17 +35,28 @@ class MapRenderer:
     queue_render: Queue[RenderUnit]
     randomCores: list[RandomCore]
 
+    isCursorLift: int  # 0: 未提起; 1: 提起未选定; 2: 提起并选定
+    cursorLift: tuple[int]  # 提起坐标
+
     __curMax: int
     __cur: int
 
     @property
-    def cur(self) -> str:
+    def Cur(self) -> str:
         return self.areaRender.areas[self.__cur].color
 
-    @cur.setter
-    def cur(self, _) -> None:
+    @Cur.setter
+    def Cur(self, _) -> None:
         self.__cur += 1
         self.__cur %= self.__curMax
+
+    @property
+    def Queue_Render(self) -> RenderUnit:
+        return self.queue_render.get(timeout=0.1)
+
+    @Queue_Render.setter
+    def Queue_Render(self, value: RenderUnit) -> None:
+        self.queue_render.put(value, timeout=0.1)
 
     def __init__(self, _title, _mapStruct: MapStruct, _areas: AreaRenderDict,
                  _mapf: str, _randoms: list[RandomCore]) -> None:
@@ -59,6 +70,8 @@ class MapRenderer:
                        for j in range(self.map.width)]
                       for i in range(self.map.height)]
         self.queue_render = Queue()
+        self.isCursorLift = 0
+        self.cursorLift = None
         self.__curMax = len(self.areaRender.areas)
         self.__cur = 0
 
@@ -84,12 +97,24 @@ class MapRenderer:
         match event.button:
             case 1:
                 r, c = int(event.ydata), int(event.xdata)
-                self.map[r, c] = self.areaRender.areas[self.__cur].value
-                self.queue_render.put(MapRenderer.RenderUnit(
-                    r, c, self.areaRender.areas[self.__cur].color), timeout=0.1)
-                self.Render()
+                match self.isCursorLift:
+                    case 0:
+                        self.map[r, c] = self.areaRender.areas[self.__cur].value
+                        self.Queue_Render = MapRenderer.RenderUnit(r, c, self.Cur)
+                        self.Render()
+                    case 1:
+                        self.cursorLift = (r, c)
+                        self.isCursorLift = 2
+                    case 2:
+                        liftr, liftc = self.cursorLift
+                        dir_r, dir_c = (1 if liftr <= r else -1), (1 if liftc <= c else -1)
+                        for i in range(liftr, r + dir_r, dir_r):
+                            for j in range(liftc, c + dir_c, dir_c):
+                                self.Queue_Render = MapRenderer.RenderUnit(i, j, self.Cur)
+                        self.Render()
+                        self.isCursorLift = 0
             case 3:
-                self.cur = 0
+                self.Cur = 0
             case _:
                 return
 
@@ -97,10 +122,12 @@ class MapRenderer:
         if not event.key:
             return
         match event.key:
+            case 'z':
+                self.isCursorLift = 1
             case 'c':
                 self.map.ToFile(self.mapf)
             case 'p':
-                opt = eg.choicebox(msg='Choose random', title=self.title, choices=[x.Name for x in self.randomCores])
+                opt = choicebox(msg='Choose random', title=self.title, choices=[x.Name for x in self.randomCores])
                 if opt is None:
                     return
                 for x in self.randomCores:
@@ -109,14 +136,16 @@ class MapRenderer:
                             x.Random(self.map)
                             for r in range(self.map.height):
                                 for c in range(self.map.width):
-                                    self.queue_render.put(MapRenderer.RenderUnit(
-                                        r, c, self.areaRender.Value2Color[self.map[r, c]]), timeout=0.1)
+                                    self.Queue_Render = MapRenderer.RenderUnit(
+                                        r, c, self.areaRender.Value2Color[self.map[r, c]])
                             self.Render()
                             plt.show(block=False)
+            case _:
+                return
 
     def Render(self) -> None:
         while not self.queue_render.empty():
-            cur = self.queue_render.get(timeout=0.1)
+            cur = self.Queue_Render
             self._render(cur.r, cur.c, cur.tp)
 
     def _render(self, r: int, c: int, tp: str) -> None:

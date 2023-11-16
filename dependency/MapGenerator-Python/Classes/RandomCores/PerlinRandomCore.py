@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Any
 
-import easygui as eg
+from easygui import multenterbox
 from perlin_noise import PerlinNoise
 
 from Classes.MapStruct import MapStruct
@@ -28,7 +28,7 @@ class PerlinRandomCore(RandomCore):
         if value > 0:
             self.octaves = value
         else:
-            self.octaves = 1
+            self.octaves = 10
 
     @property
     def Seed(self) -> int | None:
@@ -41,7 +41,7 @@ class PerlinRandomCore(RandomCore):
         else:
             self.seed = None
 
-    def __init__(self, title: str, octaves: float = 1) -> None:
+    def __init__(self, title: str, octaves: float = 10) -> None:
         self.title = title
         self.Octaves = octaves
         self.Seed = None
@@ -53,7 +53,7 @@ class PerlinRandomCore(RandomCore):
     def Menu(self) -> bool:
         try:
             (self.Octaves,
-             self.Seed) = (lambda f1, i2: (float(f1), int(i2) if i2 else i2))(*eg.multenterbox(
+             self.Seed) = (lambda f1, i2: (float(f1), int(i2) if i2 else i2))(*multenterbox(
                  msg='Random settings',
                  title=self.title,
                  fields=[
