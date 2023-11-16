@@ -23,30 +23,35 @@ message CollectorMsg
 {
     int64 collector_id = 1;
     CollectorType collector_type = 2;
+    int64 ship_id=3;
 }
 
 message ArmorMsg
 {
     int64 armor_id = 1;
     ArmorType armor_type = 2;
+    int64 ship_id=3;
 }
 
 message ShieldMsg
 {
     int64 shield_id = 1;
     ShieldType shield_type = 2;
+    int64 ship_id=3;
 }
 
 message BuilderMsg
 {
     int64 builder_id = 1;
     BuilderType builder_type = 2;
+    int64 ship_id=3;
 }
 
 message BulleterMsg
 {
     int64 bullet_id = 1;
     BulletType bullet_type = 2;
+    int64 ship_id=3;
 }
 
 message MoveMsg
