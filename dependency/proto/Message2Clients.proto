@@ -119,16 +119,6 @@ message BoolRes
     bool act_success = 1;
 }
 
-message MessageOfNews
-{
-    oneof news // 一条新闻
-    {
-        string text_message = 1;
-        bytes binary_message = 4;
-    }
-    int64 from_id = 2;
-    int64 to_id = 3;
-}
 // message MsgRes // 用于获取队友发来的消息
 // {
 //     bool have_message = 1; // 是否有待接收的消息
