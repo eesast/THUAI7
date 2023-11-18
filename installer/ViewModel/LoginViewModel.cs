@@ -23,10 +23,10 @@ namespace installer.ViewModel
 
         public LoginViewModel()
         {
-            BtnClickedCommand = new AsyncRelayCommand(BtnClicked);
+            BtnClickedCommand = new RelayCommand(BtnClicked);
         }
 
-        private async Task BtnClicked()
+        private void BtnClicked()
         {
             enabled = !enabled;
             Txt1 = enabled.ToString();

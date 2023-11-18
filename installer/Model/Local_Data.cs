@@ -17,11 +17,11 @@ namespace installer.Model
         public Dictionary<string, string> Config
         {
             get; protected set;
-        }
+        } = new Dictionary<string, string>();
         public Dictionary<string, string> MD5Data
         {
             get; protected set;
-        }// 路径为尽可能相对路径
+        } = new Dictionary<string, string>();   // 路径为尽可能相对路径
         public ConcurrentBag<string> MD5Update
         {
             get; set;
@@ -84,9 +84,14 @@ namespace installer.Model
 
         public void ResetInstallPath(string newPath)
         {
-            if (!Directory.Exists(Path.GetDirectoryName(newPath)))
+            string? dirName = Path.GetDirectoryName(newPath);
+            if (dirName is null)
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(newPath));
+                return;
+            }
+            if (!Directory.Exists(dirName))
+            {
+                Directory.CreateDirectory(dirName);
             }
             if (Installed)
             {

@@ -54,7 +54,7 @@ namespace installer.Model
             downloadFailed.Clear();
         }
 
-        private int filenum = 0;                                   // 总文件个数
+        //private int filenum = 0;                                   总文件个数
 
         public string Route { get; set; }
         public string Username { get; set; } = string.Empty;
@@ -70,7 +70,7 @@ namespace installer.Model
         public UsingOS usingOS { get; set; }
         public class Updater
         {
-            public string Message;
+            public string Message = string.Empty;
             public bool Working { get; set; }
             public bool CombatCompleted { get => false; }
             public bool UploadReady { get; set; } = false;
@@ -88,7 +88,7 @@ namespace installer.Model
             Route = Data.InstallPath;
             Cloud = new Tencent_Cos("1314234950", "ap-beijing", "thuai6");
             Web.Token_Changed += SaveToken;
-            string temp;
+            string? temp;
             if (Data.Config.TryGetValue("Remembered", out temp))
             {
                 if (Convert.ToBoolean(temp))
