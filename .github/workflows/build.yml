@@ -9,8 +9,10 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 8.0.x
         
+    - name: Install Workloads
+      run: dotnet workload restore "./logic/logic.sln"
     - name: Build Logic
       run: dotnet build "./logic/logic.sln" -c Release
       
@@ -23,10 +25,10 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0.x
-
-    - name: Build Installer
+    - name: Install Workloads
       run: dotnet workload restore "./installer/installer.sln"
-    - run: dotnet build "./installer/installer.sln" -c Release -f net8.0-windows10.0.19041.0
+    - name: Build Installer
+      run: dotnet build "./installer/installer.sln" -c Release -f net8.0-windows10.0.19041.0
       
   dotnet-build-launcher:
     if: true
@@ -36,7 +38,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 8.0.x
         
     - name: Build Launcher
       run: dotnet build "./launcher/launcher.sln" -c Release
@@ -49,7 +51,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 8.0.x
         
     - name: Build Playback
       run: dotnet build "./playback/playback.sln" -c Release

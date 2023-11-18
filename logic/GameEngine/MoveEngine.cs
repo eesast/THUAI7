@@ -3,6 +3,7 @@ using System.Threading;
 using Preparation.Interface;
 using Preparation.Utility;
 using Timothy.FrameRateTask;
+using ITimer = Preparation.Interface.ITimer;
 
 namespace GameEngine
 {
