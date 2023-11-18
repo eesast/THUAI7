@@ -6,7 +6,7 @@ public static class AreaFactory
 {
     public static Immovable GetArea(XY pos, PlaceType placeType) => placeType switch
     {
-        PlaceType.Home => new Home(pos),
+        PlaceType.Home => new Home(pos, pos.y > GameData.MapRows / 2 ? 1 : 0),
         PlaceType.Ruin => new Ruin(pos),
         PlaceType.Shadow => new Shadow(pos),
         PlaceType.Asteroid => new Asteroid(pos),
