@@ -3,6 +3,8 @@ using System.Threading;
 using Preparation.Interface;
 using Preparation.Utility;
 using System;
+using GameClass.GameObj.Areas;
+using System.Linq;
 
 namespace GameClass.GameObj
 {
@@ -286,11 +288,56 @@ namespace GameClass.GameObj
             }
             protoGameMap = new uint[mapResource.GetLength(0), mapResource.GetLength(1)];
             Array.Copy(mapResource, protoGameMap, mapResource.Length);
+            long teamID = 0;
             for (int i = 0; i < GameData.MapRows; ++i)
             {
                 for (int j = 0; j < GameData.MapCols; ++j)
                 {
-                    Add(Areas.AreaFactory.GetArea(GameData.GetCellCenterPos(i, j), (PlaceType)mapResource[i, j]));
+                    bool hasWormhole = false;
+                    switch (mapResource[i, j])
+                    {
+                        case (uint)PlaceType.Resource:
+                            Add(new Resource(GameData.GetCellCenterPos(i, j)));
+                            break;
+                        case (uint)PlaceType.Construction:
+                            Add(new Construction(GameData.GetCellCenterPos(i, j)));
+                            break;
+                        case (uint)PlaceType.Wormhole:
+                            foreach (Wormhole wormhole in GameObjDict[GameObjType.Wormhole].Cast<Wormhole>())
+                            {
+                                if (wormhole.Grids.Contains(new XY(i, j)))
+                                {
+                                    hasWormhole = true;
+                                    break;
+                                }
+                                else
+                                {
+                                    foreach (XY xy in wormhole.Grids)
+                                    {
+                                        if (Math.Abs(xy.x - i) <= 1 && Math.Abs(xy.y - j) <= 1)
+                                        {
+                                            wormhole.Grids.Add(new XY(i, j));
+                                            hasWormhole = true;
+                                            break;
+                                        }
+                                    }
+                                    if (hasWormhole)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                            if (!hasWormhole)
+                            {
+                                List<XY> grids = new();
+                                grids.Add(new XY(i, j));
+                                Add(new Wormhole(GameData.GetCellCenterPos(i, j), grids));
+                            }
+                            break;
+                        case (uint)PlaceType.Home:
+                            Add(new Home(GameData.GetCellCenterPos(i, j), teamID++));
+                            break;
+                    }
                 }
             }
         }
