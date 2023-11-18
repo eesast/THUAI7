@@ -25,6 +25,7 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Build Installer
+      run: dotnet workload restore
       run: dotnet build "./installer/installer.sln" -c Release -f net8.0-windows10.0.19041.0
       
   dotnet-build-launcher:
@@ -48,7 +49,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 6.0.x
         
     - name: Build Playback
       run: dotnet build "./playback/playback.sln" -c Release
