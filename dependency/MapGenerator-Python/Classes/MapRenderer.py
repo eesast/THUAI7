@@ -99,7 +99,7 @@ class MapRenderer:
                 r, c = int(event.ydata), int(event.xdata)
                 match self.isCursorLift:
                     case 0:
-                        self.map[r, c] = self.areaRender.areas[self.__cur].value
+                        self.map[r, c] = self.areaRender.Color2Unit[self.Cur].value
                         self.Queue_Render = MapRenderer.RenderUnit(r, c, self.Cur)
                         self.Render()
                     case 1:
@@ -110,6 +110,7 @@ class MapRenderer:
                         dir_r, dir_c = (1 if liftr <= r else -1), (1 if liftc <= c else -1)
                         for i in range(liftr, r + dir_r, dir_r):
                             for j in range(liftc, c + dir_c, dir_c):
+                                self.map[i, j] = self.areaRender.Color2Unit[self.Cur].value
                                 self.Queue_Render = MapRenderer.RenderUnit(i, j, self.Cur)
                         self.Render()
                         self.isCursorLift = 0

@@ -1,6 +1,6 @@
 {
-    "title": "MapGenerator",
-    "file_suffix": ".map",
+    "title": "THUAI7-MapGenerator",
+    "file_suffix": ".thuai7.map",
     "dtype": "B",
     "areas": [
         [
