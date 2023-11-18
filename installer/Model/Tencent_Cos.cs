@@ -2,13 +2,15 @@
 using COSXML.Auth;
 using COSXML.CosException;
 using COSXML.Model.Object;
-using ICSharpCode.SharpZipLib;
-using ICSharpCode.SharpZipLib.Tar;
-using ICSharpCode.SharpZipLib.GZip;
 using Newtonsoft.Json;
 using System.Collections.Concurrent;
+using System.IO.Compression;
+using System.Formats.Tar;
 using COSXML.Common;
 using COSXML.Transfer;
+
+// 禁用对没有调用异步API的异步函数的警告
+#pragma warning disable CS1998
 
 namespace installer.Model
 {
@@ -51,7 +53,7 @@ namespace installer.Model
             cosXml = new CosXmlServer(config, credential);
         }
 
-        public async Task DownloadFileAsync(string savePath, string remotePath = null)
+        public async Task DownloadFileAsync(string savePath, string? remotePath = null)
         {
             // download_dir标记根文件夹路径，key为相对根文件夹的路径（不带./）
             // 创建存储桶
@@ -88,8 +90,10 @@ namespace installer.Model
             ThreadPool.SetMaxThreads(20, 20);
             for (int i = 0; i < queue.Count; i++)
             {
-                string item;
+                string? item;
                 queue.TryDequeue(out item);
+                if (item == null)
+                    continue;
                 ThreadPool.QueueUserWorkItem(async _ =>
                 {
                     try
@@ -98,6 +102,7 @@ namespace installer.Model
                     }
                     catch (Exception ex)
                     {
+                        Exceptions.Push(ex);
                         downloadFailed.Enqueue(item);
                     }
                 });
@@ -108,16 +113,14 @@ namespace installer.Model
         {
             Stream? inStream = null;
             Stream? gzipStream = null;
-            TarArchive? tarArchive = null;
             try
             {
                 using (inStream = File.OpenRead(zipPath))
                 {
-                    using (gzipStream = new GZipInputStream(inStream))
+
+                    using (gzipStream = new GZipStream(inStream, CompressionMode.Decompress))
                     {
-                        tarArchive = TarArchive.CreateInputTarArchive(gzipStream);
-                        tarArchive.ExtractContents(targetDir);
-                        tarArchive.Close();
+                        TarFile.ExtractToDirectory(gzipStream, targetDir, true);
                     }
                 }
             }
@@ -127,7 +130,6 @@ namespace installer.Model
             }
             finally
             {
-                if (tarArchive != null) tarArchive.Close();
                 if (gzipStream != null) gzipStream.Close();
                 if (inStream != null) inStream.Close();
             }

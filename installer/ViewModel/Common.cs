@@ -15,18 +15,18 @@ namespace installer.ViewModel
     public abstract class NotificationObject : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-        ///< summary>
-        /// announce notification
-        ///  </summary>
-        ///< param name="propertyName">property name</param>
+        ///<summary>
+        ///announce notification
+        ///</summary>
+        ///<param name="propertyName">property name</param>
         public void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-    ///< summary>
-    /// BaseCommand
-    ///  </summary>
+    ///<summary>
+    ///BaseCommand
+    ///</summary>
     public class BaseCommand : ICommand
     {
         private Func<object?, bool>? _canExecute;
@@ -78,7 +78,7 @@ namespace installer.ViewModel
 
     public class RadioConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value == null || parameter == null)
             {
@@ -105,10 +105,10 @@ namespace installer.ViewModel
         }
     }
 
+    /*
     /// <summary>
     /// Password 附加属性，来自https://blog.csdn.net/qq_43562262/article/details/121786337
     /// </summary>
-    /*
     public class PasswordHelper
     {
         public static readonly DependencyProperty PasswordProperty = DependencyProperty.RegisterAttached("Password", typeof(string), typeof(PasswordHelper),
