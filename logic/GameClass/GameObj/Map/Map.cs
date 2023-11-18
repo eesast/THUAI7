@@ -96,10 +96,30 @@ namespace GameClass.GameObj
             {
                 foreach (GameObj gameObj in GameObjDict[gameObjType])
                 {
-                    if (GameData.ApproachToInteract(gameObj.Position, Pos))
+                    if (gameObjType == GameObjType.Wormhole)
                     {
-                        GameObjForInteract = gameObj;
-                        break;
+                        bool flag = false;
+                        foreach (XY xy in ((Wormhole)gameObj).Grids)
+                        {
+                            if (GameData.ApproachToInteract(xy, Pos))
+                            {
+                                GameObjForInteract = gameObj;
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if (flag)
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        if (GameData.ApproachToInteract(gameObj.Position, Pos))
+                        {
+                            GameObjForInteract = gameObj;
+                            break;
+                        }
                     }
                 }
             }
