@@ -114,7 +114,7 @@ namespace Gaming
                             ship.ThreadNum.Release();
                             return;
                         }
-                        resource.AddProducingNum();
+                        resource.AddProduceNum();
                         Thread.Sleep(GameData.CheckInterval);
                         new FrameRateTaskExecutor<int>
                         (
@@ -132,7 +132,7 @@ namespace Gaming
                             finallyReturn: () => 0
                         ).Start();
                         ship.ThreadNum.Release();
-                        resource.SubProducingNum();
+                        resource.SubProduceNum();
                     }
                 )
                 { IsBackground = true }.Start();

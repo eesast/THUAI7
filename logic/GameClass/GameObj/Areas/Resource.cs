@@ -15,6 +15,14 @@ public class Resource : Immovable
         // TODO: Add Money
         return HP.SubV(produceSpeed) > 0;
     }
+    public void AddProduceNum(int add = 1)
+    {
+        ProduceNum.Add(add);
+    }
+    public void SubProduceNum(int sub = 1)
+    {
+        ProduceNum.Sub(sub);
+    }
     public Resource(XY initPos)
         : base(initPos, GameData.NumOfPosGridPerCell / 2, GameObjType.Resource)
     {

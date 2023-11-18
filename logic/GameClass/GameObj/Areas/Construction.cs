@@ -41,6 +41,14 @@ public class Construction : Immovable
         }
         return HP.AddV(constructSpeed) > 0;
     }
+    public void AddConstructNum(int add = 1)
+    {
+        ConstructNum.Add(add);
+    }
+    public void SubConstructNum(int sub = 1)
+    {
+        ConstructNum.Sub(sub);
+    }
     public Construction(XY initPos)
         : base(initPos, GameData.NumOfPosGridPerCell / 2, GameObjType.Construction)
     {
