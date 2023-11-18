@@ -140,9 +140,54 @@ namespace Gaming
             }
             public bool Construct(Ship ship)
             {
+                Construction? construction = (Construction?)gameMap.OneForInteract(ship.Position, GameObjType.Construction);
+                if (construction == null)
+                {
+                    return false;
+                }
+                if (construction.HP == construction.HP.GetMaxV())
+                {
+                    return false;
+                }
+                long stateNum = ship.SetShipState(RunningStateType.Waiting, ShipStateType.Constructing);
+                if (stateNum == -1)
+                {
+                    return false;
+                }
+                new Thread
+                (
+                    () =>
+                    {
+                        ship.ThreadNum.WaitOne();
+                        if (!ship.StartThread(stateNum, RunningStateType.RunningActively))
+                        {
+                            ship.ThreadNum.Release();
+                            return;
+                        }
+                        construction.AddConstructNum();
+                        Thread.Sleep(GameData.CheckInterval);
+                        new FrameRateTaskExecutor<int>
+                        (
+                            loopCondition: () => stateNum == ship.StateNum && gameMap.Timer.IsGaming,
+                            loopToDo: () =>
+                            {
+                                if (construction.HP == construction.HP.GetMaxV())
+                                {
+                                    ship.ResetShipState(stateNum);
+                                    return false;
+                                }
+                                return true;
+                            },
+                            timeInterval: GameData.CheckInterval,
+                            finallyReturn: () => 0
+                        ).Start();
+                        ship.ThreadNum.Release();
+                        construction.SubConstructNum();
+                    }
+                )
+                { IsBackground = true }.Start();
                 return false;
             }
-
         }
     }
 }

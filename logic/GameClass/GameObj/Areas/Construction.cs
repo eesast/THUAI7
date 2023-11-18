@@ -5,7 +5,7 @@ namespace GameClass.GameObj.Areas;
 
 public class Construction : Immovable
 {
-    public LongInTheVariableRange HP { get; } = new LongInTheVariableRange(0);
+    public LongInTheVariableRange HP { get; } = new LongInTheVariableRange(0, GameData.CommunityHP);
     public override bool IsRigid => constructionType == ConstructionType.Community;
     public override ShapeType Shape => ShapeType.Square;
     private ConstructionType constructionType = ConstructionType.Null;
