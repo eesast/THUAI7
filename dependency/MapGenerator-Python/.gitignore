@@ -1,0 +1,4 @@
+.vscode/
+*.map
+build/
+dist/
