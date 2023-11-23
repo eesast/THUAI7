@@ -6,17 +6,19 @@ namespace GameClass.GameObj.Areas;
 
 public class Home : Immovable, IHome
 {
-    public AtomicLong TeamID => throw new NotImplementedException();
-    public LongInTheVariableRange HP => throw new NotImplementedException();
-    public long Score => throw new NotImplementedException();
+    private long teamID;
+    public long TeamID => teamID;
+    public LongInTheVariableRange HP => new LongInTheVariableRange(GameData.HomeHP);
+    public AtomicLong Score => new AtomicLong(0);
     public override bool IsRigid => false;
     public override ShapeType Shape => ShapeType.Square;
     public void AddScore(long add)
     {
-        throw new NotImplementedException();
+        Score.Add(add);
     }
-    public Home(XY initPos)
+    public Home(XY initPos, long teamID)
         : base(initPos, GameData.NumOfPosGridPerCell / 2, GameObjType.Home)
     {
+        this.teamID = teamID;
     }
 }

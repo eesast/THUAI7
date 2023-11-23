@@ -65,6 +65,9 @@ public class Ship : Movable, IShip
     public IWeapon WeaponModule => weapon;
     #endregion
 
+    public int ProduceSpeed => producer.ProduceSpeed;
+    public int ConstructSpeed => constructor.ConstructSpeed;
+
     private GameObj? whatInteractingWith = null;
     public GameObj? WhatInteractingWith
     {
