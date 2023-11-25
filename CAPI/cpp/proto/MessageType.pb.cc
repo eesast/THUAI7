@@ -4,65 +4,67 @@
 #include "MessageType.pb.h"
 
 #include <algorithm>
-
-#include <google/protobuf/io/coded_stream.h>
-#include <google/protobuf/extension_set.h>
-#include <google/protobuf/wire_format_lite.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/generated_message_reflection.h>
-#include <google/protobuf/reflection_ops.h>
-#include <google/protobuf/wire_format.h>
+#include "google/protobuf/io/coded_stream.h"
+#include "google/protobuf/extension_set.h"
+#include "google/protobuf/wire_format_lite.h"
+#include "google/protobuf/descriptor.h"
+#include "google/protobuf/generated_message_reflection.h"
+#include "google/protobuf/reflection_ops.h"
+#include "google/protobuf/wire_format.h"
 // @@protoc_insertion_point(includes)
-#include <google/protobuf/port_def.inc>
 
+// Must be included last.
+#include "google/protobuf/port_def.inc"
 PROTOBUF_PRAGMA_INIT_SEG
-
 namespace _pb = ::PROTOBUF_NAMESPACE_ID;
-namespace _pbi = _pb::internal;
-
+namespace _pbi = ::PROTOBUF_NAMESPACE_ID::internal;
 namespace protobuf
 {
 }  // namespace protobuf
-static const ::_pb::EnumDescriptor* file_level_enum_descriptors_MessageType_2eproto[11];
-static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_MessageType_2eproto = nullptr;
-const uint32_t TableStruct_MessageType_2eproto::offsets[1] = {};
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_MessageType_2eproto[14];
+static constexpr const ::_pb::ServiceDescriptor**
+    file_level_service_descriptors_MessageType_2eproto = nullptr;
+const ::uint32_t TableStruct_MessageType_2eproto::offsets[1] = {};
 static constexpr ::_pbi::MigrationSchema* schemas = nullptr;
 static constexpr ::_pb::Message* const* file_default_instances = nullptr;
-
-const char descriptor_table_protodef_MessageType_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-    "\n\021MessageType.proto\022\010protobuf*u\n\tPlaceTy"
-    "pe\022\023\n\017NULL_PLACE_TYPE\020\000\022\010\n\004HOME\020\001\022\t\n\005SPA"
-    "CE\020\002\022\010\n\004RUIN\020\003\022\n\n\006SHADOW\020\004\022\014\n\010ASTEROID\020\005"
-    "\022\014\n\010RESOURCE\020\006\022\014\n\010BUILDING\020\007*m\n\rCollecto"
-    "rType\022\027\n\023NULL_COLLECTOR_TYPE\020\000\022\023\n\017BASIC_"
-    "COLLECTOR\020\001\022\026\n\022ADVANCED_COLLECTOR\020\002\022\026\n\022U"
-    "LTIMATE_COLLECTOR\020\003*Y\n\tArmorType\022\023\n\017NULL"
-    "_ARMOR_TYPE\020\000\022\017\n\013BASIC_ARMOR\020\001\022\022\n\016ADVANC"
-    "ED_ARMOR\020\002\022\022\n\016ULTIMATE_ARMOR\020\003*^\n\nShield"
-    "Type\022\024\n\020NULL_SHIELD_TYPE\020\000\022\020\n\014BASIC_SHIE"
-    "LD\020\001\022\023\n\017ADVANCED_SHIELD\020\002\022\023\n\017ULTIMATE_SH"
-    "IELD\020\003*c\n\013BuilderType\022\025\n\021NULL_BUILDER_TY"
-    "PE\020\000\022\021\n\rBASIC_BUILDER\020\001\022\024\n\020ADVANCED_BUIL"
-    "DER\020\002\022\024\n\020ULTIMATE_BUILDER\020\003*c\n\nBulletTyp"
-    "e\022\024\n\020NULL_BULLET_TYPE\020\000\022\t\n\005LASER\020\001\022\n\n\006PL"
-    "ASMA\020\002\022\t\n\005SHELL\020\003\022\013\n\007MISSILE\020\004\022\020\n\014ELECTR"
-    "IC_ARC\020\005*\220\001\n\tShipState\022\017\n\013NULL_STATUS\020\000\022"
-    "\010\n\004IDLE\020\001\022\r\n\tPRODUCING\020\002\022\020\n\014CONSTRUCTING"
-    "\020\003\022\016\n\nRECOVERING\020\004\022\r\n\tRECYCLING\020\005\022\r\n\tATT"
-    "ACKING\020\006\022\014\n\010SWINGING\020\007\022\013\n\007STUNNED\020\010*^\n\014B"
-    "uildingType\022\026\n\022NULL_BUILDING_TYPE\020\000\022\013\n\007F"
-    "ACTORY\020\001\022\r\n\tCOMMUNITY\020\002\022\014\n\010FORTRESS\020\003\022\014\n"
-    "\010WORMHOLE\020\004*S\n\010ShipType\022\022\n\016NULL_SHIP_TYP"
-    "E\020\000\022\021\n\rCIVILIAN_SHIP\020\001\022\021\n\rMILITARY_SHIP\020"
-    "\002\022\r\n\tFLAG_SHIP\020\003*-\n\nPlayerTeam\022\r\n\tNULL_T"
-    "EAM\020\000\022\006\n\002UP\020\001\022\010\n\004DOWN\020\002*P\n\tGameState\022\023\n\017"
-    "NULL_GAME_STATE\020\000\022\016\n\nGAME_START\020\001\022\020\n\014GAM"
-    "E_RUNNING\020\002\022\014\n\010GAME_END\020\003b\006proto3";
-static ::_pbi::once_flag descriptor_table_MessageType_2eproto_once;
+const char descriptor_table_protodef_MessageType_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+    "\n\021MessageType.proto\022\010protobuf*P\n\tGameSta"
+    "te\022\023\n\017NULL_GAME_STATE\020\000\022\016\n\nGAME_START\020\001\022"
+    "\020\n\014GAME_RUNNING\020\002\022\014\n\010GAME_END\020\003*\215\001\n\tPlac"
+    "eType\022\023\n\017NULL_PLACE_TYPE\020\000\022\016\n\nHOME_PLACE"
+    "\020\001\022\t\n\005SPACE\020\002\022\010\n\004RUIN\020\003\022\n\n\006SHADOW\020\004\022\014\n\010A"
+    "STEROID\020\005\022\014\n\010RESOURCE\020\006\022\020\n\014CONSTRUCTION\020"
+    "\007\022\014\n\010WORMHOLE\020\010*8\n\tShapeType\022\023\n\017NULL_SHA"
+    "PE_TYPE\020\000\022\n\n\006CIRCLE\020\001\022\n\n\006SQUARE\020\002*6\n\nPla"
+    "yerType\022\024\n\020NULL_PLAYER_TYPE\020\000\022\010\n\004SHIP\020\001\022"
+    "\010\n\004HOME\020\002*S\n\010ShipType\022\022\n\016NULL_SHIP_TYPE\020"
+    "\000\022\021\n\rCIVILIAN_SHIP\020\001\022\021\n\rMILITARY_SHIP\020\002\022"
+    "\r\n\tFLAG_SHIP\020\003*\220\001\n\tShipState\022\017\n\013NULL_STA"
+    "TUS\020\000\022\010\n\004IDLE\020\001\022\r\n\tPRODUCING\020\002\022\020\n\014CONSTR"
+    "UCTING\020\003\022\016\n\nRECOVERING\020\004\022\r\n\tRECYCLING\020\005\022"
+    "\r\n\tATTACKING\020\006\022\014\n\010SWINGING\020\007\022\013\n\007STUNNED\020"
+    "\010*i\n\nWeaponType\022\024\n\020NULL_WEAPON_TYPE\020\000\022\014\n"
+    "\010LASERGUN\020\001\022\r\n\tPLASMAGUN\020\002\022\014\n\010SHELLGUN\020\003"
+    "\022\016\n\nMISSILEGUN\020\004\022\n\n\006ARCGUN\020\005*b\n\017Construc"
+    "torType\022\031\n\025NULL_CONSTRUCTOR_TYPE\020\000\022\020\n\014CO"
+    "NSTRUCTOR1\020\001\022\020\n\014CONSTRUCTOR2\020\002\022\020\n\014CONSTR"
+    "UCTOR3\020\003*D\n\tArmorType\022\023\n\017NULL_ARMOR_TYPE"
+    "\020\000\022\n\n\006ARMOR1\020\001\022\n\n\006ARMOR2\020\002\022\n\n\006ARMOR3\020\003*I"
+    "\n\nShieldType\022\024\n\020NULL_SHIELD_TYPE\020\000\022\013\n\007SH"
+    "IELD1\020\001\022\013\n\007SHIELD2\020\002\022\013\n\007SHIELD3\020\003*S\n\014Pro"
+    "ducerType\022\026\n\022NULL_PRODUCER_TYPE\020\000\022\r\n\tPRO"
+    "DUCER1\020\001\022\r\n\tPRODUCER2\020\002\022\r\n\tPRODUCER3\020\003*Z"
+    "\n\nBulletType\022\024\n\020NULL_BULLET_TYPE\020\000\022\t\n\005LA"
+    "SER\020\001\022\n\n\006PLASMA\020\002\022\t\n\005SHELL\020\003\022\013\n\007MISSILE\020"
+    "\004\022\007\n\003ARC\020\005*T\n\020ConstructionType\022\032\n\026NULL_C"
+    "ONSTRUCTION_TYPE\020\000\022\013\n\007FACTORY\020\001\022\r\n\tCOMMU"
+    "NITY\020\002\022\010\n\004FORT\020\003*4\n\010NewsType\022\022\n\016NULL_NEW"
+    "S_TYPE\020\000\022\010\n\004TEXT\020\001\022\n\n\006BINARY\020\002b\006proto3"};
+static ::absl::once_flag descriptor_table_MessageType_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_MessageType_2eproto = {
     false,
     false,
-    1113,
+    1278,
     descriptor_table_protodef_MessageType_2eproto,
     "MessageType.proto",
     &descriptor_table_MessageType_2eproto_once,
@@ -76,19 +78,49 @@ const ::_pbi::DescriptorTable descriptor_table_MessageType_2eproto = {
     file_level_enum_descriptors_MessageType_2eproto,
     file_level_service_descriptors_MessageType_2eproto,
 };
+
+// This function exists to be marked as weak.
+// It can significantly speed up compilation by breaking up LLVM's SCC
+// in the .pb.cc translation units. Large translation units see a
+// reduction of more than 35% of walltime for optimized builds. Without
+// the weak attribute all the messages in the file, including all the
+// vtables and everything they use become part of the same SCC through
+// a cycle like:
+// GetMetadata -> descriptor table -> default instances ->
+//   vtables -> GetMetadata
+// By adding a weak function here we break the connection from the
+// individual vtables back into the descriptor table.
 PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_MessageType_2eproto_getter()
 {
     return &descriptor_table_MessageType_2eproto;
 }
-
 // Force running AddDescriptors() at dynamic initialization time.
-PROTOBUF_ATTRIBUTE_INIT_PRIORITY2 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_MessageType_2eproto(&descriptor_table_MessageType_2eproto);
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY2
+static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_MessageType_2eproto(&descriptor_table_MessageType_2eproto);
 namespace protobuf
 {
-    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* PlaceType_descriptor()
+    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* GameState_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
         return file_level_enum_descriptors_MessageType_2eproto[0];
+    }
+    bool GameState_IsValid(int value)
+    {
+        switch (value)
+        {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                return true;
+            default:
+                return false;
+        }
+    }
+    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* PlaceType_descriptor()
+    {
+        ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
+        return file_level_enum_descriptors_MessageType_2eproto[1];
     }
     bool PlaceType_IsValid(int value)
     {
@@ -102,75 +134,52 @@ namespace protobuf
             case 5:
             case 6:
             case 7:
+            case 8:
                 return true;
             default:
                 return false;
         }
     }
-
-    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* CollectorType_descriptor()
-    {
-        ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
-        return file_level_enum_descriptors_MessageType_2eproto[1];
-    }
-    bool CollectorType_IsValid(int value)
-    {
-        switch (value)
-        {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ArmorType_descriptor()
+    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ShapeType_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
         return file_level_enum_descriptors_MessageType_2eproto[2];
     }
-    bool ArmorType_IsValid(int value)
+    bool ShapeType_IsValid(int value)
     {
         switch (value)
         {
             case 0:
             case 1:
             case 2:
-            case 3:
                 return true;
             default:
                 return false;
         }
     }
-
-    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ShieldType_descriptor()
+    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* PlayerType_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
         return file_level_enum_descriptors_MessageType_2eproto[3];
     }
-    bool ShieldType_IsValid(int value)
+    bool PlayerType_IsValid(int value)
     {
         switch (value)
         {
             case 0:
             case 1:
             case 2:
-            case 3:
                 return true;
             default:
                 return false;
         }
     }
-
-    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* BuilderType_descriptor()
+    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ShipType_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
         return file_level_enum_descriptors_MessageType_2eproto[4];
     }
-    bool BuilderType_IsValid(int value)
+    bool ShipType_IsValid(int value)
     {
         switch (value)
         {
@@ -183,32 +192,10 @@ namespace protobuf
                 return false;
         }
     }
-
-    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* BulletType_descriptor()
-    {
-        ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
-        return file_level_enum_descriptors_MessageType_2eproto[5];
-    }
-    bool BulletType_IsValid(int value)
-    {
-        switch (value)
-        {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-                return true;
-            default:
-                return false;
-        }
-    }
-
     const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ShipState_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
-        return file_level_enum_descriptors_MessageType_2eproto[6];
+        return file_level_enum_descriptors_MessageType_2eproto[5];
     }
     bool ShipState_IsValid(int value)
     {
@@ -228,13 +215,12 @@ namespace protobuf
                 return false;
         }
     }
-
-    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* BuildingType_descriptor()
+    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* WeaponType_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
-        return file_level_enum_descriptors_MessageType_2eproto[7];
+        return file_level_enum_descriptors_MessageType_2eproto[6];
     }
-    bool BuildingType_IsValid(int value)
+    bool WeaponType_IsValid(int value)
     {
         switch (value)
         {
@@ -243,18 +229,36 @@ namespace protobuf
             case 2:
             case 3:
             case 4:
+            case 5:
                 return true;
             default:
                 return false;
         }
     }
-
-    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ShipType_descriptor()
+    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ConstructorType_descriptor()
+    {
+        ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
+        return file_level_enum_descriptors_MessageType_2eproto[7];
+    }
+    bool ConstructorType_IsValid(int value)
+    {
+        switch (value)
+        {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                return true;
+            default:
+                return false;
+        }
+    }
+    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ArmorType_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
         return file_level_enum_descriptors_MessageType_2eproto[8];
     }
-    bool ShipType_IsValid(int value)
+    bool ArmorType_IsValid(int value)
     {
         switch (value)
         {
@@ -267,31 +271,12 @@ namespace protobuf
                 return false;
         }
     }
-
-    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* PlayerTeam_descriptor()
+    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ShieldType_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
         return file_level_enum_descriptors_MessageType_2eproto[9];
     }
-    bool PlayerTeam_IsValid(int value)
-    {
-        switch (value)
-        {
-            case 0:
-            case 1:
-            case 2:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* GameState_descriptor()
-    {
-        ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
-        return file_level_enum_descriptors_MessageType_2eproto[10];
-    }
-    bool GameState_IsValid(int value)
+    bool ShieldType_IsValid(int value)
     {
         switch (value)
         {
@@ -304,11 +289,82 @@ namespace protobuf
                 return false;
         }
     }
-
+    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ProducerType_descriptor()
+    {
+        ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
+        return file_level_enum_descriptors_MessageType_2eproto[10];
+    }
+    bool ProducerType_IsValid(int value)
+    {
+        switch (value)
+        {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                return true;
+            default:
+                return false;
+        }
+    }
+    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* BulletType_descriptor()
+    {
+        ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
+        return file_level_enum_descriptors_MessageType_2eproto[11];
+    }
+    bool BulletType_IsValid(int value)
+    {
+        switch (value)
+        {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                return true;
+            default:
+                return false;
+        }
+    }
+    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ConstructionType_descriptor()
+    {
+        ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
+        return file_level_enum_descriptors_MessageType_2eproto[12];
+    }
+    bool ConstructionType_IsValid(int value)
+    {
+        switch (value)
+        {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                return true;
+            default:
+                return false;
+        }
+    }
+    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* NewsType_descriptor()
+    {
+        ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
+        return file_level_enum_descriptors_MessageType_2eproto[13];
+    }
+    bool NewsType_IsValid(int value)
+    {
+        switch (value)
+        {
+            case 0:
+            case 1:
+            case 2:
+                return true;
+            default:
+                return false;
+        }
+    }
     // @@protoc_insertion_point(namespace_scope)
 }  // namespace protobuf
 PROTOBUF_NAMESPACE_OPEN
 PROTOBUF_NAMESPACE_CLOSE
-
 // @@protoc_insertion_point(global_scope)
-#include <google/protobuf/port_undef.inc>
+#include "google/protobuf/port_undef.inc"

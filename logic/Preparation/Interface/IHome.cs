@@ -4,9 +4,9 @@ namespace Preparation.Interface
 {
     public interface IHome
     {
-        public long TeamID { get; }
+        public AtomicLong TeamID { get; }
         public LongInTheVariableRange HP { get; }
-        public AtomicLong Score { get; }
+        public long Score { get; }
         public void AddScore(long add);
     }
 }

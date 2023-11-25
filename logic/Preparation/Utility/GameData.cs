@@ -105,7 +105,6 @@ namespace Preparation.Utility
         public const int ArcCastTime = 600;             // 电弧前摇时间
         public const int ArcSwingTime = 600;            // 电弧后摇时间
 
-        public const int CivilShipCost = 40;
         public const int CivilShipMaxHP = 3000;
         public const int CivilShipMoveSpeed = 3000;
         public const int CivilShipViewRange = 8000;
@@ -121,7 +120,6 @@ namespace Preparation.Utility
         public const int CivilShipShield1Cost = 60;
         public const int CivilShipLaserGunCost = 100;
 
-        public const int WarShipCost = 120;
         public const int WarShipMaxHP = 4000;
         public const int WarShipMoveSpeed = 2800;
         public const int WarShipViewRange = 8000;
@@ -139,7 +137,6 @@ namespace Preparation.Utility
         public const int WarShipMissileGunCost = 180;
         public const int WarShipArcGunCost = 240;
 
-        public const int FlagShipCost = 500;
         public const int FlagShipMaxHP = 12000;
         public const int FlagShipMoveSpeed = 2700;
         public const int FlagShipViewRange = 8000;

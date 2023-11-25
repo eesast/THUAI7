@@ -2,14 +2,48 @@
 
 namespace Server
 {
+    public class DefaultArgumentOptions
+    {
+        public static string FileName = "xxxxxxxxxx";//
+        public static string Token="xxxxxxxxxx";//
+        public static string Url="xxxxxxxxxx";//
+        public static string MapResource="xxxxxxxxxx"; //
+    }
     public class ArgumentOptions
     {
         [Option("ip", Required = false, HelpText = "Server listening ip")]
         public string ServerIP { get; set; } = "0.0.0.0";
+
         [Option('p', "port", Required = true, HelpText = "Server listening port")]
         public ushort ServerPort { get; set; } = 8888;
+
         [Option("teamCount", Required = false, HelpText = "The number of teams, 2 by defualt")]
         public ushort TeamCount { get; set; } = 2;
+
+        [Option("civilShipNum", Required = false, HelpText = "The number of civil ship num, 1 by default")]
+        public ushort CivilShipCount { get; set; } = 1;
+
+        [Option("MaxCivilShipNum", Required = false, HelpText = "The number of max civil ship num, 3 by default")]
+        public ushort MaxCivilShipCount { get; set; } = 3;
+
+        [Option("warShipNum", Required = false, HelpText = "The number of civil ship num, 0 by default")]
+        public ushort WarShipCount { get; set; } = 0;
+
+        [Option("MaxWarShipNum", Required = false, HelpText = "The number of civil ship num, 4 by default")]
+        public ushort MaxWarShipCount { get; set; } = 4;
+
+        [Option("flagShipNum", Required = false, HelpText = "The number of civil ship num, 0 by default")]
+        public ushort FlagShipCount { get; set; } = 0;
+
+        [Option("MaxFlagShipNum", Required = false, HelpText = "The number of civil ship num, 1 by default")]
+        public ushort MaxFlagShipCount { get; set; } = 1;
+
+        [Option("MaxShipNum", Required = false, HelpText = "The max number of Ship, 8 by default")]
+        public ushort MaxShipCount { get; set; } = 8;
+
+        [Option("homeNum",Required = false,HelpText = "The number of Home , 1 by default")]
+        public ushort HomeCount { get; set; } = 1;
+
         [Option('g', "gameTimeInSecond", Required = false, HelpText = "The time of the game in second, 10 minutes by default")]
         public uint GameTimeInSecond { get; set; } = 10 * 60;
         [Option('f', "fileName", Required = false, HelpText = "The file to store playback file or to read file.")]
@@ -40,5 +74,6 @@ namespace Server
         public string StartLockFile { get; set; } = "114514";
         [Option("mode", Required = false, HelpText = "Whether to run final competition")]
         public int Mode { get; set; } = 0;
+        public ushort ShipCount => (ushort)(CivilShipCount + WarShipCount + FlagShipCount);
     }
 }
