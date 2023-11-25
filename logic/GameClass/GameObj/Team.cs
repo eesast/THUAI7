@@ -17,16 +17,8 @@ namespace GameClass.GameObj
         private readonly Dictionary<uint, XY> birthPointList;
         public Dictionary<uint, XY> BirthPointList => birthPointList;
         private Home home;
-        private long score = 0;
-        public long Score
-        {
-            get => Interlocked.Read(ref score);
-        }
-        private long totalScore;
-        public long TotalScore
-        {
-            get => Interlocked.Read(ref totalScore);
-        }
+        public AtomicLong Money { get; } = new AtomicLong(0);
+        public AtomicLong Score { get; } = new AtomicLong(0);
         public Ship? GetShip(long shipID)
         {
             foreach (Ship ship in shipList)
@@ -58,14 +50,14 @@ namespace GameClass.GameObj
             shipList.Add(ship);
             return true;
         }
-        public void AddScore(long add)
+        public void AddMoney(long add)
         {
-            Interlocked.Add(ref score, add);
-            Interlocked.Add(ref totalScore, add);
+            Money.Add(add);
+            Score.Add(add);
         }
-        public void SubScore(long sub)
+        public void SubMoney(long sub)
         {
-            Interlocked.Add(ref score, -sub);
+            Money.Sub(sub);
         }
         public void SetHome(Home home)
         {

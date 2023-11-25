@@ -42,16 +42,3 @@ jobs:
         
     - name: Build Launcher
       run: dotnet build "./launcher/launcher.sln" -c Release
-
-  dotnet-build-playback:
-    if: true
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 8.0.x
-        
-    - name: Build Playback
-      run: dotnet build "./playback/playback.sln" -c Release

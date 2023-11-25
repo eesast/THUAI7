@@ -48,7 +48,7 @@ public class Ship : Movable, IShip
     private ArmorType armorType = ArmorType.Null;
     public ArmorType ArmorModuleType => armorType;
     private IArmor armor;
-    public IArmor ArmorModule;
+    public IArmor ArmorModule => armor;
     #endregion
 
     #region Shield
@@ -64,6 +64,9 @@ public class Ship : Movable, IShip
     private IWeapon weapon;
     public IWeapon WeaponModule => weapon;
     #endregion
+
+    public int ProduceSpeed => producer.ProduceSpeed;
+    public int ConstructSpeed => constructor.ConstructSpeed;
 
     private GameObj? whatInteractingWith = null;
     public GameObj? WhatInteractingWith
