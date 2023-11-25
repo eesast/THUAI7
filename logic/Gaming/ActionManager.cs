@@ -4,7 +4,6 @@ using GameClass.GameObj;
 using GameClass.GameObj.Areas;
 using GameEngine;
 using Preparation.Utility;
-using Protobuf;
 using Timothy.FrameRateTask;
 
 namespace Gaming
