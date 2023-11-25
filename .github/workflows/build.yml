@@ -11,8 +11,6 @@ jobs:
       with:
         dotnet-version: 8.0.x
         
-    - name: Install Workloads
-      run: dotnet workload restore "./logic/logic.sln"
     - name: Build Logic
       run: dotnet build "./logic/logic.sln" -c Release
       
