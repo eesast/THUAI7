@@ -109,12 +109,18 @@ namespace Gaming
                     () =>
                     {
                         ship.ThreadNum.WaitOne();
+                        if (!resource.Produce(ship.ProduceSpeed, ship))
+                        {
+                            ship.ThreadNum.Release();
+                            ship.ResetShipState(stateNum);
+                            return;
+                        }
                         if (!ship.StartThread(stateNum, RunningStateType.RunningActively))
                         {
                             ship.ThreadNum.Release();
                             return;
                         }
-                        resource.AddProducingNum();
+                        resource.AddProduceNum();
                         Thread.Sleep(GameData.CheckInterval);
                         new FrameRateTaskExecutor<int>
                         (
@@ -132,17 +138,124 @@ namespace Gaming
                             finallyReturn: () => 0
                         ).Start();
                         ship.ThreadNum.Release();
-                        resource.SubProducingNum();
+                        resource.SubProduceNum();
                     }
                 )
                 { IsBackground = true }.Start();
                 return false;
             }
-            public bool Construct(Ship ship)
+            public bool Construct(Ship ship, ConstructionType constructionType)
             {
+                Construction? construction = (Construction?)gameMap.OneForInteract(ship.Position, GameObjType.Construction);
+                if (construction == null)
+                {
+                    return false;
+                }
+                if (construction.HP == construction.HP.GetMaxV())
+                {
+                    return false;
+                }
+                long stateNum = ship.SetShipState(RunningStateType.Waiting, ShipStateType.Constructing);
+                if (stateNum == -1)
+                {
+                    return false;
+                }
+                new Thread
+                (
+                    () =>
+                    {
+                        ship.ThreadNum.WaitOne();
+                        if (!construction.Construct(ship.ConstructSpeed, constructionType, ship))
+                        {
+                            ship.ThreadNum.Release();
+                            ship.ResetShipState(stateNum);
+                            return;
+                        }
+                        if (!ship.StartThread(stateNum, RunningStateType.RunningActively))
+                        {
+                            ship.ThreadNum.Release();
+                            return;
+                        }
+                        construction.AddConstructNum();
+                        Thread.Sleep(GameData.CheckInterval);
+                        new FrameRateTaskExecutor<int>
+                        (
+                            loopCondition: () => stateNum == ship.StateNum && gameMap.Timer.IsGaming,
+                            loopToDo: () =>
+                            {
+                                if (construction.HP == construction.HP.GetMaxV())
+                                {
+                                    ship.ResetShipState(stateNum);
+                                    return false;
+                                }
+                                return true;
+                            },
+                            timeInterval: GameData.CheckInterval,
+                            finallyReturn: () => 0
+                        ).Start();
+                        ship.ThreadNum.Release();
+                        construction.SubConstructNum();
+                    }
+                )
+                { IsBackground = true }.Start();
                 return false;
             }
-
+            public bool Repair(Ship ship)
+            {
+                Wormhole? wormhole = (Wormhole?)gameMap.OneForInteract(ship.Position, GameObjType.Wormhole);
+                if (wormhole == null)
+                {
+                    return false;
+                }
+                if (wormhole.HP == wormhole.HP.GetMaxV())
+                {
+                    return false;
+                }
+                long stateNum = ship.SetShipState(RunningStateType.Waiting, ShipStateType.Constructing);
+                if (stateNum == -1)
+                {
+                    return false;
+                }
+                new Thread
+                (
+                    () =>
+                    {
+                        ship.ThreadNum.WaitOne();
+                        if (!wormhole.Repair(ship.ConstructSpeed, ship))
+                        {
+                            ship.ThreadNum.Release();
+                            ship.ResetShipState(stateNum);
+                            return;
+                        }
+                        if (!ship.StartThread(stateNum, RunningStateType.RunningActively))
+                        {
+                            ship.ThreadNum.Release();
+                            return;
+                        }
+                        wormhole.AddRepairNum();
+                        Thread.Sleep(GameData.CheckInterval);
+                        new FrameRateTaskExecutor<int>
+                        (
+                            loopCondition: () => stateNum == ship.StateNum && gameMap.Timer.IsGaming,
+                            loopToDo: () =>
+                            {
+                                if (wormhole.HP == wormhole.HP.GetMaxV())
+                                {
+                                    ship.ResetShipState(stateNum);
+                                    return false;
+                                }
+                                return true;
+                            },
+                            timeInterval: GameData.CheckInterval,
+                            finallyReturn: () => 0
+                        ).Start();
+                        ship.ThreadNum.Release();
+                        wormhole.SubRepairNum();
+                    }
+                )
+                { IsBackground = true }.Start();
+                return false;
+            }
         }
     }
 }
