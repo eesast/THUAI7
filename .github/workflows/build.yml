@@ -3,7 +3,7 @@ on: [push, pull_request]
 jobs:
   dotnet-build-logic:
     if: true
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET Core
