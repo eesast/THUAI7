@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protos", "..\dependency\pro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameEngine", "GameEngine\GameEngine.csproj", "{1D1D07F3-C332-4407-AC1B-EAD73F8BB3F3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playback", "..\playback\Playback\Playback.csproj", "{FF22960A-6BD9-4C80-A029-9A39FB8F64C4}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{14C1A4DC-3F6C-4A3E-8CD0-2E595C99F1C6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Client\Client.csproj", "{F8CD6F8B-0EEE-43B6-BEDF-240E1DBB013D}"
