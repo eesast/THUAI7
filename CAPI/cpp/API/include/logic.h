@@ -88,25 +88,24 @@ private:
 
     // 提供给API使用的函数
 
-    [[nodiscard]]  std::vector<std::shared_ptr<const THUAI7::Ship>> GetShips() const override;
-    [[nodiscard]]  std::vector<std::shared_ptr<const THUAI7::Ship>> GetEnemyShip() const override;
-    [[nodiscard]]  std::vector<std::shared_ptr<const THUAI7::Bullet>> GetBullets() const override;
-    [[nodiscard]]  std::shared_ptr<const THUAI7::Ship> GetSelfInfo() const override;
-    [[nodiscard]]  std::shared_ptr<const THUAI7::Home> GetSelfInfo() const override;
-    [[nodiscard]]  std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const override;
-    [[nodiscard]]  THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const override;
-    [[nodiscard]]  int32_t GetBuildingHp(int32_t cellX, int32_t cellY) const override; 
-    [[nodiscard]]  int32_t GetWormHp(int32_t cellX, int32_t cellY) const override; 
-    [[nodiscard]]  int32_t GetResourceState(int32_t cellX, int32_t cellY) const override; 
-    [[nodiscard]]  std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const override;
-    [[nodiscard]]  int32_t GetEconomy() const override;
+    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Ship>> GetShips() const override;
+    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Ship>> GetEnemyShip() const override;
+    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Bullet>> GetBullets() const override;
+    [[nodiscard]] std::shared_ptr<const THUAI7::Ship> GetSelfInfo() const override;
+    [[nodiscard]] std::shared_ptr<const THUAI7::Home> GetSelfInfo() const override;
+    [[nodiscard]] std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const override;
+    [[nodiscard]] THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const override;
+    [[nodiscard]] int32_t GetBuildingHp(int32_t cellX, int32_t cellY) const override;
+    [[nodiscard]] int32_t GetWormHp(int32_t cellX, int32_t cellY) const override;
+    [[nodiscard]] int32_t GetResourceState(int32_t cellX, int32_t cellY) const override;
+    [[nodiscard]] std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const override;
+    [[nodiscard]] int32_t GetEconomy() const override;
 
     // 供IAPI使用的操作相关的部分
     bool Move(int64_t time, double angle) override;
     bool SendMessage(int64_t toID, std::string message, bool binary) override;
     bool HaveMessage() override;
     std::pair<int64_t, std::string> GetMessage() override;
-
 
     int32_t GetCounter() const override;
 
@@ -119,7 +118,7 @@ private:
     bool EndAllAction() override;
     bool Attack(double angle) override;
     std::vector<int64_t> GetShipGUIDs() const override;
-    [[nodiscard]]  bool HaveView(int32_t gridX, int32_t gridY, int32_t selfX, int32_t selfY, int32_t viewRange) const override;
+    [[nodiscard]] bool HaveView(int32_t gridX, int32_t gridY, int32_t selfX, int32_t selfY, int32_t viewRange) const override;
 
     bool WaitThread() override;
     bool TryConnection();
@@ -141,7 +140,7 @@ private:
 
 public:
     // 构造函数还需要传更多参数，有待补充
-    Logic( int64_t playerID,THUAI7::PlayerType player_type, THUAI7::ShipType shipType);
+    Logic(int64_t playerID, THUAI7::PlayerType player_type, THUAI7::ShipType shipType);
 
     ~Logic()
     {

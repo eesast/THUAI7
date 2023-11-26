@@ -14,12 +14,12 @@ namespace Constants
 {
     SCCI int32_t frameDuration = 50;  // 每帧毫秒数
     // 地图相关
-    SCCI int32_t numOfGridPerCell = 1000;  // 单位坐标数
-    SCCI int32_t rows = 50;                // 地图行数
-    SCCI int32_t cols = 50;                // 地图列数
-    SCCI int32_t maxResourceProgress = 200;          // 大门最大进度
+    SCCI int32_t numOfGridPerCell = 1000;    // 单位坐标数
+    SCCI int32_t rows = 50;                  // 地图行数
+    SCCI int32_t cols = 50;                  // 地图列数
+    SCCI int32_t maxResourceProgress = 200;  // 大门最大进度
     SCCI int32_t maxWormholeHp = 18000;
-    SCCI double robPercent = 0.2    //击杀获得经济比率
+    SCCI double robPercent = 0.2;  // 击杀获得经济比率
     SCCI int32_t DestroyBuildingBonus = 200;
     SCCI double recoverMultiplier = 1.2;
     SCCI double recycleMultiplier = 0.5;
@@ -71,7 +71,7 @@ namespace Constants
         SCCI int32_t Cost = 500;
     };
 
-    //模块
+    // 模块
     struct Collector
     {
         SCCI int32_t basicEconomy = 5;
@@ -117,7 +117,7 @@ namespace Constants
         SCCI int32_t ElectricArc = 240;
     };
 
-    //子弹
+    // 子弹
     struct Laser
     {
         SCCI int32_t Damage = 1200;
@@ -125,7 +125,7 @@ namespace Constants
         SCCI double ArmorDamageMultiplier = 1.5;
         SCCI double ShieldDamageMultiplier = 0.6;
         SCCI int32_t Speed = 20000;
-        SCCI int32_t CastTime = 300;//ms
+        SCCI int32_t CastTime = 300;  // ms
         SCCI int32_t BackSwing = 300;
     };
     struct Plasma
@@ -135,7 +135,7 @@ namespace Constants
         SCCI double ArmorDamageMultiplier = 2.0;
         SCCI double ShieldDamageMultiplier = 0.4;
         SCCI int32_t Speed = 10000;
-        SCCI int32_t CastTime = 400;//ms
+        SCCI int32_t CastTime = 400;  // ms
         SCCI int32_t BackSwing = 400;
     };
     struct Shell
@@ -145,7 +145,7 @@ namespace Constants
         SCCI double ArmorDamageMultiplier = 0.4;
         SCCI double ShieldDamageMultiplier = 1.5;
         SCCI int32_t Speed = 8000;
-        SCCI int32_t CastTime = 200;//ms
+        SCCI int32_t CastTime = 200;  // ms
         SCCI int32_t BackSwing = 200;
     };
     struct Missile
@@ -154,19 +154,19 @@ namespace Constants
         SCCI int32_t AttackRange = 8000;
         SCCI int32_t ExplodeRange = 1600;
         SCCI double ArmorDamageMultiplier = 1.0;
-        //SCCI double ShieldDamageMultiplier = 0.4;
+        // SCCI double ShieldDamageMultiplier = 0.4;
         SCCI int32_t Speed = 6000;
-        SCCI int32_t CastTime = 600;//ms
+        SCCI int32_t CastTime = 600;  // ms
         SCCI int32_t BackSwing = 600;
     };
     struct ElectricArc
     {
-        SCCI int32_t Damage = 3200;//100-3200
+        SCCI int32_t Damage = 3200;  // 100-3200
         SCCI int32_t AttackRange = 8000;
         SCCI double ArmorDamageMultiplier = 2.0;
         SCCI double ShieldDamageMultiplier = 2.0;
         SCCI int32_t Speed = 8000;
-        SCCI int32_t CastTime = 600;//ms
+        SCCI int32_t CastTime = 600;  // ms
         SCCI int32_t BackSwing = 600;
     };
 

@@ -46,7 +46,7 @@ namespace THUAI7
         Circle = 1,
         Square = 2,
     };
-    
+
     enum class PlayerTeam : unsigned char
     {
         NullTeam = 0,
@@ -59,7 +59,7 @@ namespace THUAI7
         NullShipType = 0,
         CivilianShip = 1,
         MilitaryShip = 2,
-        FlagShip = 3,  
+        FlagShip = 3,
     };
 
     enum class ShipState : unsigned char
@@ -75,7 +75,7 @@ namespace THUAI7
         Stunned = 8,
     };
 
-   enum class ModuleType : unsigned char
+    enum class ModuleType : unsigned char
     {
         NullModuleType = 0,
         Collector = 1,
@@ -88,9 +88,9 @@ namespace THUAI7
     enum class ModuleLevel : unsigned char
     {
         NullModuleLevel = 0,
-        Basic = 1,        //laser
-        Advanced = 2,     //plasma
-        Ultimate = 3,     //shell
+        Basic = 1,     // laser
+        Advanced = 2,  // plasma
+        Ultimate = 3,  // shell
         Missile = 4,
         ElectricArc = 5,
     };
@@ -140,21 +140,21 @@ namespace THUAI7
     };
     struct Ship
     {
-        int32_t x;          // x坐标
-        int32_t y;          // y坐标
-        int32_t speed;      // 移动速度
-        int32_t hp;  // 血量
+        int32_t x;       // x坐标
+        int32_t y;       // y坐标
+        int32_t speed;   // 移动速度
+        int32_t hp;      // 血量
         int32_t armor;   // 装甲
-        int32_t shield; //护盾
-        //PlaceType place; //所处位置
-        ShipState shipState; //船所处状态
+        int32_t shield;  // 护盾
+        // PlaceType place; //所处位置
+        ShipState shipState;  // 船所处状态
         ShipType shipType;
-        PlayerTeam team;    //船的阵营
-        std::vector<std::shared_ptr<Module>> module;     //模块   
-        int32_t shipID;      //船的id
-        int64_t guid;       // 全局唯一ID
-        int32_t economy;    //船获得的经济
-        double facingDirection;         // 朝向
+        PlayerTeam team;                              // 船的阵营
+        std::vector<std::shared_ptr<Module>> module;  // 模块
+        int32_t shipID;                               // 船的id
+        int64_t guid;                                 // 全局唯一ID
+        int32_t economy;                              // 船获得的经济
+        double facingDirection;                       // 朝向
     };
 
     struct Home
@@ -174,9 +174,9 @@ namespace THUAI7
         int32_t y;               // y坐标
         double facingDirection;  // 朝向
         int64_t guid;            // 全局唯一ID
-        double armorRate;       //装甲穿透
-        double shieldRate;      //护盾穿透
-        int32_t damage;         //伤害值
+        double armorRate;        // 装甲穿透
+        double shieldRate;       // 护盾穿透
+        int32_t damage;          // 伤害值
         PlayerTeam team;         // 子弹所属队伍
         // PlaceType place;         // 所处格子的类型
         double bombRange;  // 炸弹爆炸范围
@@ -195,10 +195,10 @@ namespace THUAI7
 
     struct GameMap
     {
-        std::map<std::pair<int32_t, int32_t>, std::pair<int32_t,PlayerTeam>> factoryState;   
-        std::map<std::pair<int32_t, int32_t>, std::pair<int32_t,PlayerTeam>> communityState;
-        std::map<std::pair<int32_t, int32_t>, std::pair<int32_t,PlayerTeam>> fortressState;
-        std::map<std::pair<int32_t, int32_t>, std::pair<int32_t,PlayerTeam>> HomeState;
+        std::map<std::pair<int32_t, int32_t>, std::pair<int32_t, PlayerTeam>> factoryState;
+        std::map<std::pair<int32_t, int32_t>, std::pair<int32_t, PlayerTeam>> communityState;
+        std::map<std::pair<int32_t, int32_t>, std::pair<int32_t, PlayerTeam>> fortressState;
+        std::map<std::pair<int32_t, int32_t>, std::pair<int32_t, PlayerTeam>> HomeState;
         std::map<std::pair<int32_t, int32_t>, int32_t> wormholeState;
         std::map<std::pair<int32_t, int32_t>, int32_t> resourceState;
     };
@@ -210,8 +210,6 @@ namespace THUAI7
         int64_t downEconomy;
     };
 
-
-
     // 仅供DEBUG使用，名称可改动
     // 还没写完，后面待续
 
@@ -219,14 +217,14 @@ namespace THUAI7
         {GameState::NullGameState, "NullGameState"},
         {GameState::GameStart, "GameStart"},
         {GameState::GameRunning, "GameRunning"},
-        {GameState::GameEnd, "GameEnd"}
+        {GameState::GameEnd, "GameEnd"},
     };
 
     inline std::map<ShipType, std::string> shipTypeDict{
         {ShipType::NullShipType, "NullShipType"},
         {ShipType::CivilianShip, "CivilianShip"},
         {ShipType::MilitaryShip, "MilitaryShip"},
-        {ShipType::FlagShip, "FlagShip"}
+        {ShipType::FlagShip, "FlagShip"},
     };
 
     inline std::map<ShipState, std::string> shipStateDict{
@@ -239,7 +237,7 @@ namespace THUAI7
         {ShipState::Attacking, "Attacking"},
         {ShipState::Swinging, "Swinging"},
         {ShipState::Stunned, "Stunned"},
-        };
+    };
 
     inline std::map<PlayerTeam, std::string> playerTeamDict{
         {PlayerTeam::NullTeam, "NullTeam"},

@@ -29,17 +29,17 @@ public:
     }
     bool TryConnection(int64_t playerID);
     protobuf::MessageToClient GetMessage2Client();
-    void AddPlayer(int64_t playerID,THUAI7::PlayerType playerType,THUAI7::ShipType shipType);
+    void AddPlayer(int64_t playerID, THUAI7::PlayerType playerType, THUAI7::ShipType shipType);
     bool EndAllAction(int64_t playerID);
-    //船
+    // 船
     bool Move(int64_t time, double angle, int64_t playerID);
     bool Recover(int64_t playerID);
     bool Produce(int64_t playerID, int32_t x, int32_t y);
     bool Rebuild(int64_t playerID, int32_t x, int32_t y);
-    bool Construct(int64_t playerID,THUAI7::BuildingType buidingType,int32_t x, int32_t y);
+    bool Construct(int64_t playerID, THUAI7::BuildingType buidingType, int32_t x, int32_t y);
     bool Attack(double angle, int64_t playerID);
 
-    //大本营
+    // 大本营
     bool InstallModule(THUAI7::Module module, int64_t playerID);
     bool BuildShip(THUAI7::ShipType shipType, int32_t x, int32_t y);
     bool Recycle(int64_t playerID);

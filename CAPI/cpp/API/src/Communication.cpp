@@ -37,8 +37,6 @@ bool Communication::Move(int64_t time, double angle, int64_t shipID)
         return false;
 }
 
-
-
 bool Communication::SendMessage(int64_t toID, std::string message, bool binary, int64_t shipID)
 {
     {
@@ -56,8 +54,6 @@ bool Communication::SendMessage(int64_t toID, std::string message, bool binary, 
     else
         return false;
 }
-
-
 
 bool Communication::EndAllAction(int64_t playerID)
 {
@@ -108,7 +104,7 @@ bool Communication::Produce(int64_t shipID, int32_t x, int32_t y)
     }
     protobuf::BoolRes produceResult;
     ClientContext context;
-    auto request = THUAI72Proto::THUAI72ProtobufTarget(shipID,x,y);
+    auto request = THUAI72Proto::THUAI72ProtobufTarget(shipID, x, y);
     auto status = THUAI7Stub->Produce(&context, request, &produceResult);
     if (status.ok())
         return produceResult.act_success();
@@ -127,7 +123,7 @@ bool Communication::Rebuild(int64_t shipID, int32_t x, int32_t y)
     }
     protobuf::BoolRes rebuildResult;
     ClientContext context;
-    auto request = THUAI72Proto::THUAI72ProtobufTarget(shipID,x,y);
+    auto request = THUAI72Proto::THUAI72ProtobufTarget(shipID, x, y);
     auto status = THUAI7Stub->Rebuild(&context, request, &rebuildResult);
     if (status.ok())
         return rebuildResult.act_success();
@@ -146,7 +142,7 @@ bool Communication::Construct(int64_t buildingID, int32_t x, int32_t y)
     }
     protobuf::BoolRes constructResult;
     ClientContext context;
-    auto request = THUAI72Proto::THUAI72ProtobufTarget(buildingID,x,y);
+    auto request = THUAI72Proto::THUAI72ProtobufTarget(buildingID, x, y);
     auto status = THUAI7Stub->Construct(&context, request, &constructResult);
     if (status.ok())
         return constructResult.act_success();
@@ -212,7 +208,7 @@ protobuf::MessageToClient Communication::GetMessage2Client()
     return message2Client;
 }
 
-void Communication::AddShip(int64_t shipID, THUAI7::ShipType shipType,  THUAI7::PlayerTeam playerTeam)
+void Communication::AddShip(int64_t shipID, THUAI7::ShipType shipType, THUAI7::PlayerTeam playerTeam)
 {
     auto tMessage = [=]()
     {

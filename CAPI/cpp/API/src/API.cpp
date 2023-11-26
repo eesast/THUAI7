@@ -44,12 +44,10 @@ std::future<bool> ShipAPI::MoveLeft(int64_t timeInMilliseconds)
     return Move(timeInMilliseconds, PI * 1.5);
 }
 
-
-
-std::future<bool> StudentAPI::InstallModule(const THUAI7::ModuleType type,const THUAI7::ModuleLevel level)
+std::future<bool> StudentAPI::InstallModule(const THUAI7::ModuleType type, const THUAI7::ModuleLevel level)
 {
     return std::async(std::launch::async, [=]()
-                      { return logic.InstallModule(const THUAI7::ModuleType type,const THUAI7::ModuleLevel level); });
+                      { return logic.InstallModule(const THUAI7::ModuleType type, const THUAI7::ModuleLevel level); });
 }
 
 int32_t StudentAPI::GetBuildingHp(int32_t cellX, int32_t cellY)
@@ -67,8 +65,6 @@ std::future<bool> ShipAPI::EndAllAction()
     return std::async(std::launch::async, [this]()
                       { return logic.EndAllAction(); });
 }
-
-
 
 std::future<bool> ShipAPI::SendTextMessage(int64_t toID, std::string message)
 {
@@ -135,8 +131,6 @@ std::vector<std::shared_ptr<const THUAI7::Ship>> ShipAPI::GetEnemyShip() const
     return logic.GetEnemyShip();
 }
 
-
-
 std::vector<std::shared_ptr<const THUAI7::Ship>> GetShips()
 {
     return logic.GetShips();
@@ -151,8 +145,6 @@ std::shared_ptr<const THUAI7::Ship> ShipGetSelfInfo()
 {
     return logic.ShipGetSelfInfo();
 }
-
-
 
 std::vector<std::vector<THUAI7::PlaceType>> ShipAPI::GetFullMap() const
 {
@@ -169,14 +161,10 @@ THUIAI7::PlaceType HomeAPI::GetPlaceType(int32_t cellX, int32_t cellY) const
     return logic.GetPlaceType(cellX, cellY);
 }
 
-
 std::vector<std::vector<THUAI7::PlaceType>> HomeAPI::GetFullMap() const
 {
     return logic.GetFullMap();
 }
-
-
-
 
 std::shared_ptr<const THUAI7::GameInfo> ShipAPI::GetGameInfo() const
 {
@@ -188,13 +176,11 @@ std::shared_ptr<const THUAI7::GameInfo> HomeAPI::GetGameInfo() const
     return logic.GetGameInfo();
 }
 
-
 std::future<bool> ShipAPI::Attack(double angleInRadian)
 {
     return std::async(std::launch::async, [=]()
                       { return logic.Attack(angleInRadian); });
 }
-
 
 bool StudentAPI::HaveView(int32_t gridX, int32_t gridY) const
 {
@@ -217,4 +203,3 @@ void ShipAPI::Play(IAI& ai)
 {
     ai.play(*this);
 }
-

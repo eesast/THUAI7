@@ -42,9 +42,7 @@ std::vector<std::shared_ptr<const THUAI7::Ship>> Logic::GetEnemyShip()
     std::vector<std::shared_ptr<const THUAI7::Ship>> temp(currentState->enemyships.begin(), currentState->enemyships.end());
     logger->debug("Called GetEnemyShip");
     return temp;
-
 }
-
 
 std::vector<std::shared_ptr<const THUAI7::Bullet>> Logic::GetBullets() const
 {
@@ -92,16 +90,16 @@ int32_t Logic::GetBuildingHp(int32_t cellX, int32_t cellY) const
     std::unique_lock<std::mutex> lock(mtxState);
     logger->debug("Called GetBuildingHp");
     auto pos = std::make_pair(cellX, cellY);
-    auto it=currentState->mapInfo->factoryState.find(pos);
-    auto it2=currentState->mapInfo->communityState.find(pos);
-    auto it3=currentState->mapInfo->fortressState.find(pos);
-    if(it!=currentState->mapInfo->factoryState.end())
+    auto it = currentState->mapInfo->factoryState.find(pos);
+    auto it2 = currentState->mapInfo->communityState.find(pos);
+    auto it3 = currentState->mapInfo->fortressState.find(pos);
+    if (it != currentState->mapInfo->factoryState.end())
     {
         return currentState->mapInfo->factoryState[pos];
     }
-    else if(it2!=currentState->mapInfo->communityState.end())
+    else if (it2 != currentState->mapInfo->communityState.end())
         return currentState->mapInfo->communityState[pos];
-    else if(it3!=currentState->mapInfo->fortressState.end())
+    else if (it3 != currentState->mapInfo->fortressState.end())
         return currentState->mapInfo->fortressState[pos];
     else
     {
@@ -110,13 +108,13 @@ int32_t Logic::GetBuildingHp(int32_t cellX, int32_t cellY) const
     }
 }
 
-int32_t Logic::GetWormHp(int32_t cellX, int32_t cellY) 
+int32_t Logic::GetWormHp(int32_t cellX, int32_t cellY)
 {
     std::unique_lock<std::mutex> lock(mtxState);
     logger->debug("Called GetWormHp");
     auto pos = std::make_pair(cellX, cellY);
-    auto it=currentState->mapInfo->wormState.find(pos);
-    if(it!=currentState->mapInfo->wormState.end())
+    auto it = currentState->mapInfo->wormState.find(pos);
+    if (it != currentState->mapInfo->wormState.end())
     {
         return currentState->mapInfo->wormState[pos];
     }
@@ -132,8 +130,8 @@ int32_t GetResourceState(int32_t cellX, int32_t cellY)
     std::unique_lock<std::mutex> lock(mtxState);
     logger->debug("Called GetResourceState");
     auto pos = std::make_pair(cellX, cellY);
-    auto it=currentState->mapInfo->resourceState.find(pos);
-    if(it!=currentState->mapInfo->resourceState.end())
+    auto it = currentState->mapInfo->resourceState.find(pos);
+    if (it != currentState->mapInfo->resourceState.end())
     {
         return currentState->mapInfo->resourceState[pos];
     }
@@ -148,9 +146,9 @@ int32_t Logic::GetEconomy()
 {
     std::unique_lock<std::mutex> lock(mtxState);
     logger->debug("Called GetEconomy");
-    if(playerTeam == THUAI7::PlayerTeam::Up)
+    if (playerTeam == THUAI7::PlayerTeam::Up)
         return currentState->gameInfo->upEconomy;
-    else if(playerTeam ==THUAI7::PlayerTeam::Down)
+    else if (playerTeam == THUAI7::PlayerTeam::Down)
         return currentState->gameInfo->downEconomy;
     else
     {
@@ -197,13 +195,11 @@ std::pair<int64_t, std::string> Logic::GetMessage()
     }
 }
 
-
 bool Logic::Attack(double angle)
 {
     logger->debug("Called Attack");
     return pComm->Attack(angle, playerID);
 }
-
 
 bool Logic::Recover()
 {
@@ -211,7 +207,7 @@ bool Logic::Recover()
     return pComm->Recover(APIid);
 }
 
-//等待完成
+// 等待完成
 bool Logic::Recycle()
 {
     // logger->debug("Called Recycle");
@@ -220,8 +216,8 @@ bool Logic::Recycle()
 
 bool Logic::Produce(int32_t x, int32_t y);
 {
-     logger->debug("Called Produce");
-     return pComm->Produce(APIid,x,y);
+    logger->debug("Called Produce");
+    return pComm->Produce(APIid, x, y);
 }
 
 bool Logic::Rebuild(int32_t cellX, int32_t cellY)
@@ -335,7 +331,7 @@ void Logic::ProcessMessage()
 
 void Logic::LoadBufferSelf(const protobuf::MessageToClient& message)
 {
-    if(isShip)//本身是船
+    if (isShip)  // 本身是船
     {
         for (const auto& item : message.obj_message())
         {
@@ -348,15 +344,15 @@ void Logic::LoadBufferSelf(const protobuf::MessageToClient& message)
                 }
                 else
                 {
-                    std::shared_ptr<THUAI7::Ship> ship=Proto2THUAI7::Protobuf2THUAI7Ship(item.ship_message());
-                    if(ship->team==playerTeam)
+                    std::shared_ptr<THUAI7::Ship> ship = Proto2THUAI7::Protobuf2THUAI7Ship(item.ship_message());
+                    if (ship->team == playerTeam)
                         bufferState->ships.push_back(ship);
                 }
                 logger->debug("Add Ship!");
             }
         }
     }
-    else//本身是大本营
+    else  // 本身是大本营
     {
         for (const auto& item : message.obj_message())
         {
@@ -369,6 +365,7 @@ void Logic::LoadBufferSelf(const protobuf::MessageToClient& message)
                 }
                 logger->debug("Add Home!");
             }
+        }
     }
 }
 
@@ -382,9 +379,9 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
 
     if (isShip && Proto2THUAI7::messageOfObjDict[item.message_of_obj_case()] == THUAI7::MessageOfObj::ShipMessage)
     {
-        if(playerTeam != item.ship_message().team())
+        if (playerTeam != item.ship_message().team())
         {
-            if (AssistFunction::HaveView( x, y, item.ship_message().x(), item.ship_message().y(), bufferState->gameMap))
+            if (AssistFunction::HaveView(x, y, item.ship_message().x(), item.ship_message().y(), bufferState->gameMap))
             {
                 bufferState->enemyships.push_back(Proto2THUAI7::Protobuf2THUAI7Ship(item.ship_message()));
                 logger->debug("Add Enemyship!");
@@ -405,10 +402,10 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
         case THUAI7::MessageOfObj::FactoryMessage:
             if (AssistFunction::HaveView(x, y, item.factory_message().x(), item.factory_message().y(), bufferState->gameMap))
             {
-                auto pos=std::make_pair(AssistFunction::GridToCell(item.factory_message().x()),AssistFunction::GridToCell(item.factory_message().y()));
+                auto pos = std::make_pair(AssistFunction::GridToCell(item.factory_message().x()), AssistFunction::GridToCell(item.factory_message().y()));
                 if (bufferState->mapInfo->factoryState.count(pos) == 0)
                 {
-                    bufferState->mapInfo->factoryState.emplace(pos, {item.factory_message().hp(),item.factory_message().team()});
+                    bufferState->mapInfo->factoryState.emplace(pos, {item.factory_message().hp(), item.factory_message().team()});
                     logger->debug("Add Factory!");
                 }
                 else
@@ -421,10 +418,10 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
         case THUAI7::MessageOfObj::CommunityMessage:
             if (AssistFunction::HaveView(x, y, item.community_message().x(), item.community_message().y(), bufferState->gameMap))
             {
-                auto pos=std::make_pair(AssistFunction::GridToCell(item.community_message().x()),AssistFunction::GridToCell(item.community_message().y()));
+                auto pos = std::make_pair(AssistFunction::GridToCell(item.community_message().x()), AssistFunction::GridToCell(item.community_message().y()));
                 if (bufferState->mapInfo->communityState.count(pos) == 0)
                 {
-                    bufferState->mapInfo->communityState.emplace(pos, {item.community_message().hp(),item.community_message().team()});
+                    bufferState->mapInfo->communityState.emplace(pos, {item.community_message().hp(), item.community_message().team()});
                     logger->debug("Add Community!");
                 }
                 else
@@ -437,10 +434,10 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
         case THUAI7::MessageOfObj::FortressMessage:
             if (AssistFunction::HaveView(x, y, item.fortress_message().x(), item.fortress_message().y(), bufferState->gameMap))
             {
-                auto pos=std::make_pair(AssistFunction::GridToCell(item.fortress_message().x()),AssistFunction::GridToCell(item.fortress_message().y()));
+                auto pos = std::make_pair(AssistFunction::GridToCell(item.fortress_message().x()), AssistFunction::GridToCell(item.fortress_message().y()));
                 if (bufferState->mapInfo->fortressState.count(pos) == 0)
                 {
-                    bufferState->mapInfo->fortressState.emplace(pos, {item.fortress_message().hp(),item.fortress_message().team()});
+                    bufferState->mapInfo->fortressState.emplace(pos, {item.fortress_message().hp(), item.fortress_message().team()});
                     logger->debug("Add Fortress!");
                 }
                 else
@@ -453,7 +450,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
         case THUAI7::MessageOfObj::WormholeMessage:
             if (AssistFunction::HaveView(x, y, item.wormhole_message().x(), item.wormhole_message().y(), bufferState->gameMap))
             {
-                auto pos=std::make_pair(AssistFunction::GridToCell(item.wormhole_message().x()),AssistFunction::GridToCell(item.wormhole_message().y()));
+                auto pos = std::make_pair(AssistFunction::GridToCell(item.wormhole_message().x()), AssistFunction::GridToCell(item.wormhole_message().y()));
                 if (bufferState->mapInfo->wormholeState.count(pos) == 0)
                 {
                     bufferState->mapInfo->wormholeState.emplace(pos, item.wormhole_message().hp());
@@ -469,7 +466,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
         case THUAI7::MessageOfObj::ResourceMessage:
             if (AssistFunction::HaveView(x, y, item.resource_message().x(), item.resource_message().y(), bufferState->gameMap))
             {
-                auto pos=std::make_pair(AssistFunction::GridToCell(item.resource_message().x()),AssistFunction::GridToCell(item.resource_message().y()));
+                auto pos = std::make_pair(AssistFunction::GridToCell(item.resource_message().x()), AssistFunction::GridToCell(item.resource_message().y()));
                 if (bufferState->mapInfo->resourceState.count(pos) == 0)
                 {
                     bufferState->mapInfo->resourceState.emplace(pos, item.resource_message().progress());
@@ -502,7 +499,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                 }
                 break;
             }
-        case THUAI6::MessageOfObj::NullMessageOfObj:
+        case THUAI7::MessageOfObj::NullMessageOfObj:
         default:
             break;
     }
@@ -637,7 +634,7 @@ void Logic::Main(CreateAIFunc createAI, std::string IP, std::string port, bool f
     logger->info("*********Basic Info*********");
     logger->info("asynchronous: {}", asynchronous);
     logger->info("server: {}:{}", IP, port);
-    if(isShip)
+    if (isShip)
         logger->info("ship ID: {}", APIid);
     else
         logger->info("home ID: {}", APIid);
@@ -648,9 +645,9 @@ void Logic::Main(CreateAIFunc createAI, std::string IP, std::string port, bool f
     pComm = std::make_unique<Communication>(IP, port);
 
     // 构造timer
-    if (playerTeam==THUAI7::PlayerTeam::Up)
+    if (playerTeam == THUAI7::PlayerTeam::Up)
     {
-        if(isShip)
+        if (isShip)
         {
             if (!file && !print)
                 timer = std::make_unique<ShipAPI>(*this);
@@ -665,9 +662,9 @@ void Logic::Main(CreateAIFunc createAI, std::string IP, std::string port, bool f
                 timer = std::make_unique<HomeDebugAPI>(*this, file, print, warnOnly, APIid);
         }
     }
-    else if (playerTeam==THUAI7::PlayerTeam::Down)
+    else if (playerTeam == THUAI7::PlayerTeam::Down)
     {
-        if(isShip)
+        if (isShip)
         {
             if (!file && !print)
                 timer = std::make_unique<ShipAPI>(*this);

@@ -46,10 +46,10 @@ public:
     [[nodiscard]] virtual THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const = 0;
 
     [[nodiscard]] virtual int32_t GetBuildingHp(int32_t cellX, int32_t cellY) const = 0;
-    [[nodiscard]] virtual int32_t GetWormHp(int32_t cellX, int32_t cellY)=0; 
-    [[nodiscard]] virtual int32_t GetResourceState(int32_t cellX, int32_t cellY)=0; 
-    [[nodiscard]] virtual int32_t GetHomeHp()=0;
-    [[nodiscard]] virtual int32_t GetEconomy() const = 0; 
+    [[nodiscard]] virtual int32_t GetWormHp(int32_t cellX, int32_t cellY) = 0;
+    [[nodiscard]] virtual int32_t GetResourceState(int32_t cellX, int32_t cellY) = 0;
+    [[nodiscard]] virtual int32_t GetHomeHp() = 0;
+    [[nodiscard]] virtual int32_t GetEconomy() const = 0;
 
     [[nodiscard]] virtual std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const = 0;
     // 供IAPI使用的操作相关的部分
@@ -64,15 +64,15 @@ public:
     virtual bool Recover() = 0;
     virtual bool Produce(int32_t cellX, int32_t cellY) = 0;
     virtual bool ReBuild(int32_t cellX, int32_t cellY) = 0;
-    virtual bool Construct(int32_t building_id,int32_t cellX,int32_t cellY) = 0;
+    virtual bool Construct(int32_t building_id, int32_t cellX, int32_t cellY) = 0;
     virtual bool Attack(double angle) = 0;
     virtual bool EndAllAction() = 0;
     [[nodiscard]] virtual std::shared_ptr<THUAI7::Ship> GetSelfInfo() const = 0;
 
-    //大本营使用的部分
+    // 大本营使用的部分
     virtual bool Recycle(std::shared_ptr<THUAI7::Ship> ship) = 0;
-    virtual bool InstallModule(const std::shared_ptr<THUAI7::Ship> ship,const THUAI7::ModuleType type,const THUAI7::ModuleLevel level) = 0;
-    virtual bool BuildShip(THUAI7::ShipType shipType,int32_t player_id,int32_t cellX, int32_t cellY) = 0;
+    virtual bool InstallModule(const std::shared_ptr<THUAI7::Ship> ship, const THUAI7::ModuleType type, const THUAI7::ModuleLevel level) = 0;
+    virtual bool BuildShip(THUAI7::ShipType shipType, int32_t player_id, int32_t cellX, int32_t cellY) = 0;
 };
 
 class IAPI
@@ -98,10 +98,10 @@ public:
     [[nodiscard]] virtual std::vector<std::shared_ptr<const THUAI7::Bullet>> GetBullets() const = 0;
     [[nodiscard]] virtual std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const = 0;
     [[nodiscard]] virtual THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const = 0;
-    [[nodiscard]] virtual int32_t GetBuildingHp(int32_t cellX, int32_t cellY) const = 0; 
-    [[nodiscard]] virtual int32_t GetWormHp(int32_t cellX, int32_t cellY)=0; 
-    [[nodiscard]] virtual int32_t GetResourceState(int32_t cellX, int32_t cellY)=0; 
-    [[nodiscard]] virtual int32_t GetHomeHp()=0;
+    [[nodiscard]] virtual int32_t GetBuildingHp(int32_t cellX, int32_t cellY) const = 0;
+    [[nodiscard]] virtual int32_t GetWormHp(int32_t cellX, int32_t cellY) = 0;
+    [[nodiscard]] virtual int32_t GetResourceState(int32_t cellX, int32_t cellY) = 0;
+    [[nodiscard]] virtual int32_t GetHomeHp() = 0;
     [[nodiscard]] virtual std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const = 0;
 
     // 获取所有船的GUID
@@ -131,11 +131,9 @@ public:
     virtual void PrintSelfInfo() const = 0;
 };
 
-
-
-class IShipAPI: public IAPI
+class IShipAPI : public IAPI
 {
-    public:
+public:
     virtual std::future<bool> Move(int64_t timeInMilliseconds, double angleInRadian) = 0;
 
     // 向特定方向移动
@@ -146,23 +144,21 @@ class IShipAPI: public IAPI
 
     virtual std::future<bool> Attack(double angleInRadian) = 0;
     virtual std::future<bool> Recover() = 0;
-    virtual std::future<bool> Produce(int32_t cellX,int32_t cellY) = 0;
+    virtual std::future<bool> Produce(int32_t cellX, int32_t cellY) = 0;
     virtual std::future<bool> ReBuild(int32_t cellX, int32_t cellY) = 0;
-    virtual std::future<bool> Construct(THUAI7::BuildingType buildingType,int32_t building_id,int32_t cellX,int32_t cellY) = 0;
+    virtual std::future<bool> Construct(THUAI7::BuildingType buildingType, int32_t building_id, int32_t cellX, int32_t cellY) = 0;
     [[nodiscard]] virtual std::shared_ptr<const THUAI7::Ship> GetSelfInfo() const = 0;
-}
+};
 
-class IHomeAPI: public IAPI
+class IHomeAPI : public IAPI
 {
-    public:
+public:
     [[nodiscard]] virtual int64_t CurrentEconomic() const = 0;
     [[nodiscard]] virtual std::shared_ptr<const THUAI7::Home> GetSelfInfo() const = 0;
-    virtual std::future<bool> InstallModule(std::shared_ptr<THUAI7::Ship> ship,const THUAI7::ModuleType type, const THUAI7::ModuleLevel level) = 0;
+    virtual std::future<bool> InstallModule(std::shared_ptr<THUAI7::Ship> ship, const THUAI7::ModuleType type, const THUAI7::ModuleLevel level) = 0;
     virtual std::future<bool> Recycle(std::shared_ptr<THUAI7::Ship> ship) = 0;
-    virtual std::future<bool> BuildShip(THUAI7::ShipType shipType,int64_t player_id,int32_t cellX, int32_t cellY) = 0;
-}
-
-
+    virtual std::future<bool> BuildShip(THUAI7::ShipType shipType, int64_t player_id, int32_t cellX, int32_t cellY) = 0;
+};
 
 class IGameTimer
 {
@@ -173,14 +169,18 @@ public:
     virtual void Play(IAI& ai) = 0;
 };
 
-class ShipAPI: public IShipAPI, public IGameTimer
+class ShipAPI : public IShipAPI, public IGameTimer
 {
     ShipAPI(ILogic& logic) :
         logic(logic)
     {
     }
-    void StartTimer() override    {}
-    void EndTimer() override      {}
+    void StartTimer() override
+    {
+    }
+    void EndTimer() override
+    {
+    }
     void Play(IAI& ai) override;
 
     std::future<bool> SendTextMessage(int64_t, std::string) override;
@@ -198,7 +198,6 @@ class ShipAPI: public IShipAPI, public IGameTimer
     std::future<bool> MoveLeft(int64_t timeInMilliseconds) override;
     std::future<bool> MoveDown(int64_t timeInMilliseconds) override;
 
-
     [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Ship>> GetShips() const override;
     [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Ship>> GetEnemyShips() const override;
     [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Bullet>> GetBullets() const override;
@@ -206,29 +205,39 @@ class ShipAPI: public IShipAPI, public IGameTimer
     [[nodiscard]] THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] int32_t GetBuildingHp(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] int32_t GetWormHp(int32_t x, int32_t y) const override;
-    [[nodiscard]] int32_t GetResourceState(int32_t cellX, int32_t cellY) const override; 
+    [[nodiscard]] int32_t GetResourceState(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] int32_t GetHomeHp() const override;
     [[nodiscard]] std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const override;
     [[nodiscard]] std::vector<int64_t> GetShipGUIDs() const override;
     [[nodiscard]] std::shared_ptr<const THUAI7::Ship> GetSelfInfo() const override;
     [[nodiscard]] std::future<bool> HaveView(int32_t gridX, int32_t gridY) const override;
 
-    void Print(std::string str) const override    {}
-    void PrintShip() const override    {}
-    void PrintSelfInfo() const override    {}
+    void Print(std::string str) const override
+    {
+    }
+    void PrintShip() const override
+    {
+    }
+    void PrintSelfInfo() const override
+    {
+    }
 
 private:
     ILogic& logic;
-}
+};
 
-class HomeAPI:public IHomeAPI,public IGameTimer
+class HomeAPI : public IHomeAPI, public IGameTimer
 {
     HomeAPI(ILogic& logic) :
         logic(logic)
     {
     }
-    void StartTimer() override    {}
-    void EndTimer() override      {}
+    void StartTimer() override
+    {
+    }
+    void EndTimer() override
+    {
+    }
     void Play(IAI& ai) override;
 
     [[nodiscard]] int32_t GetFrameCount() const override;
@@ -242,7 +251,7 @@ class HomeAPI:public IHomeAPI,public IGameTimer
     [[nodiscard]] THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] int32_t GetBuildingHp(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] int32_t GetWormHp(int32_t x, int32_t y) const override;
-    [[nodiscard]] int32_t GetResourceState(int32_t cellX, int32_t cellY) const override; 
+    [[nodiscard]] int32_t GetResourceState(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] int32_t GetHomeHp() const override;
     [[nodiscard]] std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const override;
     [[nodiscard]] std::vector<int64_t> GetShipGUIDs() const override;
@@ -250,32 +259,39 @@ class HomeAPI:public IHomeAPI,public IGameTimer
     [[nodiscard]] std::future<bool> HaveView(int32_t gridX, int32_t gridY) const override;
 
     [[nodiscard]] int32_t CurrentEconomic() const override;
-    std::future<bool> InstallModule(std::shared_ptr<THUAI7::Ship> ship,const THUAI7::ModuleType type, const THUAI7::ModuleLevel level) override;
+    std::future<bool> InstallModule(std::shared_ptr<THUAI7::Ship> ship, const THUAI7::ModuleType type, const THUAI7::ModuleLevel level) override;
     std::future<bool> Recycle(std::shared_ptr<THUAI7::Ship> ship) override;
-    std::future<bool> BuildShip(THUAI7::ShipType shipType,int64_t player_id,int32_t cellX, int32_t cellY) override;
+    std::future<bool> BuildShip(THUAI7::ShipType shipType, int64_t player_id, int32_t cellX, int32_t cellY) override;
 
+    void Print(std::string str) const override
+    {
+    }
+    void PrintHome() const override
+    {
+    }
+    void PrintSelfInfo() const override
+    {
+    }
+};
 
-    void Print(std::string str) const override    {}
-    void PrintHome() const override    {}
-    void PrintSelfInfo() const override    {}
-}
-
-
-class ShipDebugAPI: public IShipAPI, public IGameTimer
+class ShipDebugAPI : public IShipAPI, public IGameTimer
 {
     ShipDebugAPI(ILogic& logic, bool file, bool print, bool warnOnly, int64_t shipID);
-    void StartTimer() override    {}
-    void EndTimer() override      {}
+    void StartTimer() override
+    {
+    }
+    void EndTimer() override
+    {
+    }
     void Play(IAI& ai) override;
     [[nodiscard]] int32_t GetFrameCount() const override;
-
 
     std::future<bool> Move(int64_t timeInMilliseconds, double angleInRadian) override;
     std::future<bool> MoveRight(int64_t timeInMilliseconds) override;
     std::future<bool> MoveUp(int64_t timeInMilliseconds) override;
     std::future<bool> MoveLeft(int64_t timeInMilliseconds) override;
     std::future<bool> MoveDown(int64_t timeInMilliseconds) override;
-    virtual bool InstallModule(const THUAI7::ModuleType type,const THUAI7::ModuleLevel level) override;
+    virtual bool InstallModule(const THUAI7::ModuleType type, const THUAI7::ModuleLevel level) override;
     std::future<bool> Attack(double angleInRadian) override;
     std::future<bool> EndAllAction() override;
 
@@ -291,30 +307,40 @@ class ShipDebugAPI: public IShipAPI, public IGameTimer
     [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Bullet>> GetBullets() const override;
     [[nodiscard]] virtual std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const override;
     [[nodiscard]] virtual THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const override;
-    [[nodiscard]] virtual int32_t GetBuildingHp(int32_t cellX, int32_t cellY) const override; 
+    [[nodiscard]] virtual int32_t GetBuildingHp(int32_t cellX, int32_t cellY) const override;
 
-    [[nodiscard]] virtual std::shared_ptr<const THUAI7:GameInfo> GetGameInfo() const override;
+    [[nodiscard]] virtual std::shared_ptr<const THUAI7 ::GameInfo> GetGameInfo() const override;
 
     [[nodiscard]] virtual std::vector<int64_t> GetShipGUIDs() const override;
     [[nodiscard]] virtual std::shared_ptr<const THUAI7::Ship> GetSelfInfo() const override;
 
-     [[nodiscard]] bool HaveView(int32_t gridX, int32_t gridY) const override;
+    [[nodiscard]] bool HaveView(int32_t gridX, int32_t gridY) const override;
 
-    void Print(std::string str) const override    {}
-    void PrintShip() const override    {}
-    void PrintSelfInfo() const override    {}
+    void Print(std::string str) const override
+    {
+    }
+    void PrintShip() const override
+    {
+    }
+    void PrintSelfInfo() const override
+    {
+    }
 
 private:
     std::chrono::system_clock::time_point startPoint;
     std::unique_ptr<spdlog::logger> logger;
     ILogic& logic;
-}
+};
 
-class HomeDebugAPI:public IHomeAPI,public IGameTimer
+class HomeDebugAPI : public IHomeAPI, public IGameTimer
 {
     HomeDebugAPI(ILogic& logic, bool file, bool print, bool warnOnly, int64_t homeID);
-    void StartTimer() override    {}
-    void EndTimer() override      {}
+    void StartTimer() override
+    {
+    }
+    void EndTimer() override
+    {
+    }
     void Play(IAI& ai) override;
     [[nodiscard]] int32_t GetFrameCount() const override;
     [[nodiscard]] virtual std::vector<std::shared_ptr<const THUAI7::Ship>> GetShips() const override;
@@ -322,22 +348,25 @@ class HomeDebugAPI:public IHomeAPI,public IGameTimer
     [[nodiscard]] virtual int32_t GetEconomy() const override;
     [[nodiscard]] virtual std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const override;
     [[nodiscard]] virtual THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const override;
-    [[nodiscard]] virtual int32_t GetBuildingHp(int32_t cellX, int32_t cellY) const     override;
+    [[nodiscard]] virtual int32_t GetBuildingHp(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] virtual std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const override;
     [[nodiscard]] virtual std::shared_ptr<const THUAI7::Home> GetSelfInfo() const override;
     [[nodiscard]] bool HaveView(int32_t gridX, int32_t gridY) const override;
     virtual bool SendMessage(int64_t toID, std::string message, bool binary) override;
     virtual bool HaveMessage() override;
-    virtual std::pair<int64_t, std::string> GetMessage()   override;
+    virtual std::pair<int64_t, std::string> GetMessage() override;
     bool Wait() override;
-    void Print(std::string str) const override    {}
-    void PrintSelfInfo() const override    {}
+    void Print(std::string str) const override
+    {
+    }
+    void PrintSelfInfo() const override
+    {
+    }
+
 private:
     std::chrono::system_clock::time_point startPoint;
     std::unique_ptr<spdlog::logger> logger;
     ILogic& logic;
-}
-
-
+};
 
 #endif

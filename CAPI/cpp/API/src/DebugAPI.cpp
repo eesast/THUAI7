@@ -160,7 +160,6 @@ std::pair<int64_t, std::string> ShipDebugAPI::GetMessage()
     return result;
 }
 
-
 bool ShipDebugAPI::Wait()
 {
     logger->info("Wait: called at {}ms", Time::TimeSinceStart(startPoint));
@@ -181,7 +180,7 @@ bool HomeDebugAPI::Wait()
 
 std::future<bool> ShipDebugAPI::InstallModule(const THUAI7::ModuleType type, const THUAI7::ModuleLevel level) const
 {
-    logger->info("Installmodule: ModuleType:{} ModuleLevel:{}, called at {}ms", type,level, Time::TimeSinceStart(startPoint));
+    logger->info("Installmodule: ModuleType:{} ModuleLevel:{}, called at {}ms", type, level, Time::TimeSinceStart(startPoint));
     return std::async(std::launch::async, [=]()
                       { auto result = logic.StartRouseMate(mateID);
                         if (!result)

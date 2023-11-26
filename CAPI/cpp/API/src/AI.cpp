@@ -19,11 +19,11 @@ extern const std::array<THUAI7::ShipType, 8> shipType = {
     THUAI7::ShipType::MilitaryShip,
     THUAI7::ShipType::MilitaryShip,
     THUAI7::ShipType::FlagShip,
-    };
+};
 
 // 可以在AI.cpp内部声明变量与函数
 
-void AI::play(IShipAPI& api)  
+void AI::play(IShipAPI& api)
 {
     //  0,1,2为民用舰船
     if (this->playerID == 0)
@@ -61,12 +61,12 @@ void AI::play(IShipAPI& api)
     else if (this->playerID == 7)
     {
         // 玩家7执行操作
-    }   
+    }
 }
 
 void AI::play(IHomeAPI& api)
 {
-    //执行大本营操作
+    // 执行大本营操作
     auto self = api.GetSelfInfo();
     api.PrintSelfInfo();
 }

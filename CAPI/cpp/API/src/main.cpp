@@ -58,7 +58,7 @@ int THUAI6Main(int argc, char** argv, CreateAIFunc AIBuilder)
         TCLAP::ValueArg<std::string> serverPort("P", "serverPort", "Port the server listens to 7777 in default", false, "7777", "USORT");
         cmd.add(serverPort);
 
-        std::vector<int> validPlayerIDs{0, 1}; 
+        std::vector<int> validPlayerIDs{0, 1};
         TCLAP::ValuesConstraint<int> playerIdConstraint(validPlayerIDs);
         TCLAP::ValueArg<int> playerID("p", "playerID", "Player ID 0,1 valid only", true, -1, &playerIdConstraint);
         cmd.add(playerID);

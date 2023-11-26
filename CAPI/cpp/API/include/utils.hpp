@@ -39,7 +39,7 @@ namespace AssistFunction
         double distance = deltaX * deltaX + deltaY * deltaY;
         THUAI7::PlaceType myPlace = map[GridToCell(x)][GridToCell(y)];
         THUAI7::PlaceType newPlace = map[GridToCell(newX)][GridToCell(newY)];
-        if (newPlace == THUAI7::PlaceType::Shadow && myPlace != THUAI6::PlaceType::Shadow)  
+        if (newPlace == THUAI7::PlaceType::Shadow && myPlace != THUAI6::PlaceType::Shadow)
             return false;
         int32_t divide = std::max(std::abs(deltaX), std::abs(deltaY)) / 100;
         if (divide == 0)
@@ -48,7 +48,7 @@ namespace AssistFunction
         double dy = deltaY / divide;
         double myX = double(x);
         double myY = double(y);
-        if (newPlace == THUAI7::PlaceType::Shadow && myPlace == THUAI7::PlaceType::Shadow)  
+        if (newPlace == THUAI7::PlaceType::Shadow && myPlace == THUAI7::PlaceType::Shadow)
             for (int32_t i = 0; i < divide; i++)
             {
                 myX += dx;
@@ -56,7 +56,7 @@ namespace AssistFunction
                 if (map[GridToCell(myX)][GridToCell(myY)] != THUAI7::PlaceType::Shadow)
                     return false;
             }
-        else  
+        else
             for (int32_t i = 0; i < divide; i++)
             {
                 myX += dx;
@@ -65,12 +65,10 @@ namespace AssistFunction
                     return false;
             }
         return true;
-
     }
 }  // namespace AssistFunction
 
-
-//需要修改
+// 需要修改
 namespace Proto2THUAI7
 {
     // 用于将Protobuf中的枚举转换为THUAI7的枚举
@@ -165,8 +163,8 @@ namespace Proto2THUAI7
         ship->shipType = shipTypeDict[shipMsg.ship_type()];
         ship->guid = shipMsg.guid();
         ship->playerTeam = playerTeamDict[shipMsg.player_team()];
-        ship->economy=shipMsg.economy();
-        for(int32_t i=0;i<=shipMsg.module_size();i++)
+        ship->economy = shipMsg.economy();
+        for (int32_t i = 0; i <= shipMsg.module_size(); i++)
         {
             ship->module.push_back(Protobuf2THUAI7Module(shipMsg.module(i)));
         }
@@ -184,20 +182,20 @@ namespace Proto2THUAI7
     inline std::shared_ptr<THUAI7::Bullet> Protobuf2THUAI7Bullet(const protobuf::MessageOfBullet& bulletMsg)
     {
         auto bullet = std::make_shared<THUAI7::Bullet>();
-        bullet->bulletType=bulletTypeDict[bulletMsg.bullet_type()];
+        bullet->bulletType = bulletTypeDict[bulletMsg.bullet_type()];
         bullet->x = bulletMsg.x();
         bullet->y = bulletMsg.y();
         bullet->speed = bulletMsg.speed();
         bullet->facingDirection = bulletMsg.facing_direction();
         bullet->guid = bulletMsg.guid();
-        bullet->armorRate= bulletMsg.armor_rate();
+        bullet->armorRate = bulletMsg.armor_rate();
         bullet->team = playerTeamDict[bulletMsg.team()];
         bullet->shieldRate = bulletMsg.shield_rate();
         bullet->bombRange = bulletMsg.bomb_range();
         bullet->radius = bulletMsg.radius();
         return bullet;
     }
-    
+
     inline std::shared_ptr<THUAI7::Home> Protobuf2THUAI7Home(const protobuf::MessageOfHome& homeMsg)
     {
         auto home = std::make_shared<THUAI7::Home>();
@@ -209,8 +207,7 @@ namespace Proto2THUAI7
         home->economy = homeMsg.economy();
         return home;
     }
-    
-    
+
     inline std::shared_ptr<THUAI7::Map> Protobuf2THUAI7Map(const protobuf::MessageOfMap& mapMsg)
     {
         auto map = std::make_shared<THUAI7::Map>();
@@ -234,15 +231,12 @@ namespace Proto2THUAI7
         return news;
     }
 
-  
-    
-
     inline std::shared_ptr<THUAI7::GameInfo> Protobuf2THUAI7GameInfo(const protobuf::MessageOfAll& allMsg)
     {
         auto gameInfo = std::make_shared<THUAI7::GameInfo>();
         gameInfo->gameTime = gameInfoMsg.game_time();
-        gameInfo->upEconomy=gameInfoMsg.up_economy();
-        gameInfo->downEconomy=gameInfoMsg.down_economy();
+        gameInfo->upEconomy = gameInfoMsg.up_economy();
+        gameInfo->downEconomy = gameInfoMsg.down_economy();
     }
 
     inline std::shared_ptr<THUAI7::Message2Clients> Protobuf2THUAI7Message2Clients(const protobuf::Message2Clients& message2Clients)
@@ -268,11 +262,7 @@ namespace Proto2THUAI7
         return Protobuf2THUAI7Message2Clients(message2ClientsMsg);
     }
 
-
-
-
-
-}
+}  // namespace Proto2THUAI7
 // 辅助函数，用于将proto信息转换为THUAI6信息
 namespace THUAI72Proto
 {
@@ -318,7 +308,7 @@ namespace THUAI72Proto
         {THUAI7::ShipState::Attacking, protobuf::ShipState::ATTACKING},
         {THUAI7::ShipState::Swinging, protobuf::ShipState::SWINGING},
         {THUAI7::ShipState::Stunned, protobuf::ShipState::STUNNED},
- 
+
     };
 
     inline std::map<THUAI7::GameState, protobuf::GameState> gameStateDict{
@@ -434,8 +424,6 @@ namespace THUAI72Proto
     }
 
     // 用于将THUAI7的类转换为Protobuf的类
-}
-
-
+}  // namespace THUAI72Proto
 
 #endif
