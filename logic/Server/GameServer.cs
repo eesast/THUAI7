@@ -37,9 +37,9 @@ namespace Server
         public void StartGame()
         {
             if (game.GameMap.Timer.IsGaming) return;
-            foreach(var team in communicationToGameID)
+            foreach (var team in communicationToGameID)
             {
-                foreach(var id in team)
+                foreach (var id in team)
                 {
                     if (id == GameObj.invalidID) return;//如果有未初始化的玩家，不开始游戏
                 }
@@ -176,19 +176,19 @@ namespace Server
         }
         private bool playerDeceased(int playerID)    //这里需要判断大本营deceased吗？
         {
-                game.GameMap.GameObjLockDict[GameObjType.Ship].EnterReadLock();
-                try
+            game.GameMap.GameObjLockDict[GameObjType.Ship].EnterReadLock();
+            try
+            {
+                foreach (Ship ship in game.GameMap.GameObjDict[GameObjType.Ship])
                 {
-                    foreach (Ship ship in game.GameMap.GameObjDict[GameObjType.Ship])
-                    {
-                        if (ship.PlayerID == playerID && ship.PlayerState == PlayerStateType.Deceased) return true;
-                    }
+                    if (ship.PlayerID == playerID && ship.PlayerState == PlayerStateType.Deceased) return true;
                 }
-                finally
-                {
-                    game.GameMap.GameObjLockDict[GameObjType.Ship].ExitReadLock();
-                }
-            
+            }
+            finally
+            {
+                game.GameMap.GameObjLockDict[GameObjType.Ship].ExitReadLock();
+            }
+
             return false;
         }
 
@@ -239,11 +239,11 @@ namespace Server
             switch (n)
             {
                 case 0:
-                case 1:return Protobuf.PlaceType.Ruin;
-                case 2:return Protobuf.PlaceType.Shadow;
-                case 3:return Protobuf.PlaceType.Asteroid;
-                case 4:return Protobuf.PlaceType.Resource;
-                case 5:return Protobuf.PlaceType.Construction;
+                case 1: return Protobuf.PlaceType.Ruin;
+                case 2: return Protobuf.PlaceType.Shadow;
+                case 3: return Protobuf.PlaceType.Asteroid;
+                case 4: return Protobuf.PlaceType.Resource;
+                case 5: return Protobuf.PlaceType.Construction;
                 case 6: return Protobuf.PlaceType.Wormhole;
                 case 7: return Protobuf.PlaceType.Home;
                 default: return Protobuf.PlaceType.NullPlaceType;
@@ -315,7 +315,7 @@ namespace Server
             currentMapMsg = MapMsg(game.GameMap.ProtoGameMap);
             playerNum = options.ShipCount + options.HomeCount;
             communicationToGameID = new long[TeamCount][];
-            for(int i=0;i<TeamCount; i++) 
+            for (int i = 0; i < TeamCount; i++)
             {
                 communicationToGameID[i] = new long[options.ShipCount + options.HomeCount];
             }

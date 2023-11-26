@@ -26,11 +26,11 @@ namespace Server
                     return Resource((GameClass.GameObj.Areas.Resource)gameObj);
                 case Preparation.Utility.GameObjType.Construction:
                     GameClass.GameObj.Areas.Construction construction = (GameClass.GameObj.Areas.Construction)gameObj;
-                    if (construction.ConstructionType==Preparation.Utility.ConstructionType.Factory)
+                    if (construction.ConstructionType == Preparation.Utility.ConstructionType.Factory)
                         return Factory(construction);
-                    else if (construction.ConstructionType==Preparation.Utility.ConstructionType.Community)
+                    else if (construction.ConstructionType == Preparation.Utility.ConstructionType.Community)
                         return Community(construction);
-                    else if (construction.ConstructionType==Preparation.Utility.ConstructionType.Fort)
+                    else if (construction.ConstructionType == Preparation.Utility.ConstructionType.Fort)
                         return Fort(construction);
                     return null;
                 case Preparation.Utility.GameObjType.Wormhole:
@@ -60,12 +60,12 @@ namespace Server
                     Armor = (int)player.Armor,
                     Shield = (int)player.Shield,
                     TeamId = player.TeamID,
-                    PlayerId = player.ShipID, 
+                    PlayerId = player.ShipID,
                     Guid = player.ID,
                     ShipState = Transformation.ToShipState(player.ShipState),
                     ShipType = Transformation.ToShipType(player.ShipType),
                     ViewRange = player.ViewRange,
-                    ConstructorType=Transformation.ToModuleType(player.ConstructorModuleType),
+                    ConstructorType = Transformation.ToModuleType(player.ConstructorModuleType),
                     ArmorType = Transformation.ToModuleType(player.ArmorModuleType),
                     ShieldType = Transformation.ToModuleType(player.ShieldModuleType),
                     WeaponType = Transformation.ToModuleType(player.WeaponModuleType),

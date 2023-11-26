@@ -28,14 +28,14 @@ namespace Server
         }
         public override Task<BoolRes> TryConnection(IDMsg request, ServerCallContext context)
         {
-            
+
 #if DEBUG
             Console.WriteLine($"TryConnection ID: {request.PlayerId} from Team {request.TeamId}");
 #endif 
             var onConnection = new BoolRes();
             lock (gameLock)
             {
-                if (0 <= request.PlayerId && request.PlayerId < playerNum)  
+                if (0 <= request.PlayerId && request.PlayerId < playerNum)
                 {
                     onConnection.ActSuccess = true;
                     Console.WriteLine(onConnection.ActSuccess);
@@ -49,7 +49,7 @@ namespace Server
         protected readonly object addPlayerLock = new();
         public override async Task AddPlayer(PlayerMsg request, IServerStreamWriter<MessageToClient> responseStream, ServerCallContext context)
         {
-            
+
             Console.WriteLine($"AddPlayer: {request.PlayerId} from Team{request.TeamId}");
             if (request.PlayerId >= spectatorMinPlayerID && options.NotAllowSpectator == false)
             {
@@ -228,7 +228,7 @@ namespace Server
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
             }
-           
+
             switch (request.MessageCase)
             {
                 case SendMsg.MessageOneofCase.TextMessage:
@@ -290,7 +290,7 @@ namespace Server
 
 
         }
-        
+
         public override Task<BoolRes> Recover(IDMsg request, ServerCallContext context)
         {
 #if DEBUG
@@ -319,7 +319,7 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Produce(gameID,request.TeamId);
+            boolRes.ActSuccess = game.Produce(gameID, request.TeamId);
             return Task.FromResult(boolRes);
         }
 
@@ -361,8 +361,8 @@ namespace Server
             Console.WriteLine($"BuildShip");
 #endif 
             BoolRes boolRes = new();
-            
-            boolRes.ActSuccess = game.BuildShip(request.TeamId,request.ShipType);
+
+            boolRes.ActSuccess = game.BuildShip(request.TeamId, request.ShipType);
             return Task.FromResult(boolRes);
         }
 
@@ -378,7 +378,7 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.InstallModule(gameID,request.ModuleTypeCase);
+            boolRes.ActSuccess = game.InstallModule(gameID, request.ModuleTypeCase);
             return Task.FromResult(boolRes);
         }
 
@@ -394,7 +394,7 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Construct(gameID,request.ConstructionType);
+            boolRes.ActSuccess = game.Construct(gameID, request.ConstructionType);
             return Task.FromResult(boolRes);
         }
 
@@ -415,6 +415,6 @@ namespace Server
         }
 
 
-        
+
     }
 }

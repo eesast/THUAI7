@@ -5,9 +5,9 @@ namespace Server
     public class DefaultArgumentOptions
     {
         public static string FileName = "xxxxxxxxxx";//
-        public static string Token="xxxxxxxxxx";//
-        public static string Url="xxxxxxxxxx";//
-        public static string MapResource="xxxxxxxxxx"; //
+        public static string Token = "xxxxxxxxxx";//
+        public static string Url = "xxxxxxxxxx";//
+        public static string MapResource = "xxxxxxxxxx"; //
     }
     public class ArgumentOptions
     {
@@ -41,7 +41,7 @@ namespace Server
         [Option("MaxShipNum", Required = false, HelpText = "The max number of Ship, 8 by default")]
         public ushort MaxShipCount { get; set; } = 8;
 
-        [Option("homeNum",Required = false,HelpText = "The number of Home , 1 by default")]
+        [Option("homeNum", Required = false, HelpText = "The number of Home , 1 by default")]
         public ushort HomeCount { get; set; } = 1;
 
         [Option('g', "gameTimeInSecond", Required = false, HelpText = "The time of the game in second, 10 minutes by default")]
