@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Preparation.Interface;
+using ITimer = Preparation.Interface.ITimer;
 
 namespace GameClass.GameObj
 {

@@ -38,10 +38,10 @@ namespace installer.ViewModel
 
         public MainViewModel()
         {
-            CounterClickedCommand = new AsyncRelayCommand(CounterClicked);
+            CounterClickedCommand = new RelayCommand(CounterClicked);
         }
 
-        private async Task CounterClicked()
+        private void CounterClicked()
         {
             count++;
 

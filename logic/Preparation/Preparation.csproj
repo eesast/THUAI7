@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ApplicationIcon />
     <StartupObject />
     <Nullable>enable</Nullable>
@@ -13,7 +13,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\dependency\proto\Protos.csproj" />
+		<!--ProjectReference Include="..\..\dependency\proto\Protos.csproj" /-->
 	</ItemGroup>
 	
 </Project>

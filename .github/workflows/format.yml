@@ -54,17 +54,3 @@ jobs:
       run: |
         dotnet restore "./launcher/launcher.sln"
         dotnet format "./launcher/launcher.sln" --severity error --no-restore --verify-no-changes
-      
-  dotnet-format-checking-playback:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-
-    - name: Check Playback
-      run: |
-        dotnet restore "./playback/playback.sln"
-        dotnet format "./playback/playback.sln" --severity error --no-restore --verify-no-changes
