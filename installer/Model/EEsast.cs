@@ -20,20 +20,20 @@ namespace installer.Model
 
     class EEsast
     {
-        public enum language { cpp, py };
+        public enum LangUsed { cpp, py };
         private string token = string.Empty;
         public string Token
         {
             get => token; protected set
             {
                 if (token != value)
-                    Token_Changed.Invoke(this, new EventArgs());
+                    Token_Changed?.Invoke(this, new EventArgs());
                 token = value;
             }
         }
-        public event EventHandler Token_Changed;
-        public string ID { get; protected set; }
-        public string Email { get; protected set; }
+        public event EventHandler? Token_Changed;
+        public string ID { get; protected set; } = string.Empty;
+        public string Email { get; protected set; } = string.Empty;
 
         public ConcurrentQueue<Exception> Exceptions = new ConcurrentQueue<Exception>();
         public enum WebStatus
@@ -41,10 +41,9 @@ namespace installer.Model
             disconnected, offline, logined
         }
         public WebStatus Status = WebStatus.disconnected;
-        public Tencent_Cos EEsast_Cos { get; protected set; }
+        public Tencent_Cos EEsast_Cos { get; protected set; } = new Tencent_Cos("1255334966", "ap-beijing", "eesast");
         public async Task LoginToEEsast(HttpClient client, string useremail, string userpassword)
         {
-            EEsast_Cos = new Tencent_Cos("1255334966", "ap-beijing", "eesast");
             try
             {
                 using (var response = await client.PostAsync("https://api.eesast.com/users/login", JsonContent.Create(new
