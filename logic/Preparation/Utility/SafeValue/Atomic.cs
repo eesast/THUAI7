@@ -51,9 +51,9 @@ namespace Preparation.Utility
             this.Score = Score;
             this.speed = new(speed);
         }
-        private int DealWithRemainder(double v)
+        private int DealWithRemainder(int v)
         {
-            double q = v + remainder;
+            double q = speed * v + remainder;
             int ans = (int)(q);
             remainder.SetReturnOri(q - ans);
             return ans;
@@ -63,12 +63,21 @@ namespace Preparation.Utility
         {
             int previousV = Interlocked.Exchange(ref v, value);
             if (value - previousV > 0)
-                Score.AddPositive((DealWithRemainder(speed * (value - previousV))));
+                Score.AddPositive((DealWithRemainder(value - previousV)));
             return previousV;
+        }
+        /// <returns>返回操作前的值</returns>
+        public int SetReturnOriNotAddScore(int value)
+        {
+            return Interlocked.Exchange(ref v, value);
         }
         public override int Add(int x)
         {
-            if (x > 0) Score.AddPositive(DealWithRemainder(speed * x));
+            if (x > 0) Score.AddPositive(DealWithRemainder(x));
+            return Interlocked.Add(ref v, x);
+        }
+        public int AddNotAddScore(int x)
+        {
             return Interlocked.Add(ref v, x);
         }
         /// <summary>
@@ -76,12 +85,16 @@ namespace Preparation.Utility
         /// </summary>
         public override int AddPositive(int x)
         {
-            Score.AddPositive(DealWithRemainder(speed * x));
+            Score.AddPositive(DealWithRemainder(x));
             return Interlocked.Add(ref v, x);
         }
         public override int Sub(int x)
         {
-            if (x < 0) Score.AddPositive(DealWithRemainder(speed * -x));
+            if (x < 0) Score.AddPositive(DealWithRemainder(-x));
+            return Interlocked.Add(ref v, -x);
+        }
+        public int SubNotAddScore(int x)
+        {
             return Interlocked.Add(ref v, -x);
         }
         /// <summary>
@@ -93,7 +106,11 @@ namespace Preparation.Utility
         }
         public override int Inc()
         {
-            Score.AddPositive(DealWithRemainder(speed));
+            Score.AddPositive(DealWithRemainder(1));
+            return Interlocked.Increment(ref v);
+        }
+        public int IncNotAddScore()
+        {
             return Interlocked.Increment(ref v);
         }
         /// <returns>返回操作前的值</returns>
@@ -101,8 +118,13 @@ namespace Preparation.Utility
         {
             int previousV = Interlocked.CompareExchange(ref v, newV, compareTo);
             if (newV - previousV > 0)
-                Score.AddPositive(DealWithRemainder(speed * (newV - previousV)));
+                Score.AddPositive(DealWithRemainder(newV - previousV));
             return previousV;
+        }
+        /// <returns>返回操作前的值</returns>
+        public int CompareExReturnOriNotAddScore(int newV, int compareTo)
+        {
+            return Interlocked.CompareExchange(ref v, newV, compareTo);
         }
     }
 
@@ -120,9 +142,9 @@ namespace Preparation.Utility
             this.Score = Score;
             this.speed = new(speed);
         }
-        private long DealWithRemainder(double v)
+        private long DealWithRemainder(int v)
         {
-            double q = v + remainder;
+            double q = speed * v + remainder;
             long ans = (long)(q);
             remainder.SetReturnOri(q - ans);
             return ans;
@@ -132,12 +154,21 @@ namespace Preparation.Utility
         {
             int previousV = Interlocked.Exchange(ref v, value);
             if (value - previousV > 0)
-                Score.AddPositive((DealWithRemainder(speed * (value - previousV))));
+                Score.AddPositive((DealWithRemainder(value - previousV)));
             return previousV;
+        }
+        /// <returns>返回操作前的值</returns>
+        public int SetReturnOriNotAddScore(int value)
+        {
+            return Interlocked.Exchange(ref v, value);
         }
         public override int Add(int x)
         {
-            if (x > 0) Score.AddPositive(DealWithRemainder(speed * x));
+            if (x > 0) Score.AddPositive(DealWithRemainder(x));
+            return Interlocked.Add(ref v, x);
+        }
+        public int AddNotAddScore(int x)
+        {
             return Interlocked.Add(ref v, x);
         }
         /// <summary>
@@ -145,24 +176,25 @@ namespace Preparation.Utility
         /// </summary>
         public override int AddPositive(int x)
         {
-            Score.AddPositive(DealWithRemainder(speed * x));
+            Score.AddPositive(DealWithRemainder(x));
             return Interlocked.Add(ref v, x);
         }
         public override int Sub(int x)
         {
-            if (x < 0) Score.AddPositive(DealWithRemainder(speed * -x));
+            if (x < 0) Score.AddPositive(DealWithRemainder(-x));
             return Interlocked.Add(ref v, -x);
         }
-        /// <summary>
-        /// 注意：确保参数为非负数
-        /// </summary>
-        public override int SubPositive(int x)
+        public int SubNotAddScore(int x)
         {
             return Interlocked.Add(ref v, -x);
         }
         public override int Inc()
         {
-            Score.AddPositive(DealWithRemainder(speed));
+            Score.AddPositive(DealWithRemainder(1));
+            return Interlocked.Increment(ref v);
+        }
+        public int IncNotAddScore()
+        {
             return Interlocked.Increment(ref v);
         }
         /// <returns>返回操作前的值</returns>
@@ -170,8 +202,13 @@ namespace Preparation.Utility
         {
             int previousV = Interlocked.CompareExchange(ref v, newV, compareTo);
             if (newV - previousV > 0)
-                Score.AddPositive(DealWithRemainder(speed * (newV - previousV)));
+                Score.AddPositive(DealWithRemainder(newV - previousV));
             return previousV;
+        }
+        /// <returns>返回操作前的值</returns>
+        public int CompareExReturnOriNotAddScore(int newV, int compareTo)
+        {
+            return Interlocked.CompareExchange(ref v, newV, compareTo);
         }
     }
 
@@ -190,9 +227,9 @@ namespace Preparation.Utility
             this.Score = Score;
             this.speed = new(speed);
         }
-        private int DealWithRemainder(double v)
+        private int DealWithRemainder(int v)
         {
-            double q = v + remainder;
+            double q = speed * v + remainder;
             int ans = (int)(q);
             remainder.SetReturnOri(q - ans);
             return ans;
@@ -201,12 +238,21 @@ namespace Preparation.Utility
         public override int SetReturnOri(int value)
         {
             int previousV = Interlocked.Exchange(ref v, value);
-            Score.Add(DealWithRemainder(speed * (value - previousV)));
+            Score.Add(DealWithRemainder(value - previousV));
             return previousV;
+        }
+        /// <returns>返回操作前的值</returns>
+        public int SetReturnOriNotAddScore(int value)
+        {
+            return Interlocked.Exchange(ref v, value);
         }
         public override int Add(int x)
         {
-            Score.Add(DealWithRemainder(speed * x));
+            Score.Add(DealWithRemainder(x));
+            return Interlocked.Add(ref v, x);
+        }
+        public int AddNotAddScore(int x)
+        {
             return Interlocked.Add(ref v, x);
         }
         /// <summary>
@@ -214,12 +260,16 @@ namespace Preparation.Utility
         /// </summary>
         public override int AddPositive(int x)
         {
-            Score.AddPositive(DealWithRemainder(speed * x));
+            Score.AddPositive(DealWithRemainder(x));
             return Interlocked.Add(ref v, x);
         }
         public override int Sub(int x)
         {
-            Score.Sub(DealWithRemainder(speed * x));
+            Score.Sub(DealWithRemainder(x));
+            return Interlocked.Add(ref v, -x);
+        }
+        public int SubNotAddScore(int x)
+        {
             return Interlocked.Add(ref v, -x);
         }
         /// <summary>
@@ -227,25 +277,38 @@ namespace Preparation.Utility
         /// </summary>
         public override int SubPositive(int x)
         {
-            Score.SubPositive(DealWithRemainder(speed * x));
+            Score.SubPositive(DealWithRemainder(x));
             return Interlocked.Add(ref v, -x);
         }
         public override int Inc()
         {
-            Score.AddPositive(DealWithRemainder(speed));
+            Score.AddPositive(DealWithRemainder(1));
+            return Interlocked.Increment(ref v);
+        }
+        public int IncNotAddScore()
+        {
             return Interlocked.Increment(ref v);
         }
         public override int Dec()
         {
-            Score.SubPositive(DealWithRemainder(speed));
+            Score.SubPositive(DealWithRemainder(1));
+            return Interlocked.Decrement(ref v);
+        }
+        public int DecNotAddScore()
+        {
             return Interlocked.Decrement(ref v);
         }
         /// <returns>返回操作前的值</returns>
         public override int CompareExReturnOri(int newV, int compareTo)
         {
             int previousV = Interlocked.CompareExchange(ref v, newV, compareTo);
-            Score.Add(DealWithRemainder(speed * (newV - previousV)));
+            Score.Add(DealWithRemainder(newV - previousV));
             return previousV;
+        }
+        /// <returns>返回操作前的值</returns>
+        public int CompareExReturnOriNotAddScore(int newV, int compareTo)
+        {
+            return Interlocked.CompareExchange(ref v, newV, compareTo);
         }
     }
 
@@ -286,15 +349,15 @@ namespace Preparation.Utility
     {
         public AtomicLong Score { get; set; }
         public AtomicDouble speed;
-        public AtomicDouble remainder;
+        public AtomicDouble remainder = new(0);
         public AtomicLongOnlyAddScore(long x, AtomicLong score, double speed = 1.0) : base(x)
         {
             this.Score = score;
             this.speed = new(speed);
         }
-        private long DealWithRemainder(double v)
+        private long DealWithRemainder(long v)
         {
-            double q = v + remainder;
+            double q = speed * v + remainder;
             long ans = (long)(q);
             remainder.SetReturnOri(q - ans);
             return ans;
@@ -305,12 +368,21 @@ namespace Preparation.Utility
         {
             long previousV = Interlocked.Exchange(ref v, value);
             if (value - previousV > 0)
-                Score.AddPositive(DealWithRemainder(speed * (value - previousV)));
+                Score.AddPositive(DealWithRemainder(value - previousV));
             return previousV;
+        }
+        /// <returns>返回操作前的值</returns>
+        public long SetReturnOriNotAddScore(long value)
+        {
+            return Interlocked.Exchange(ref v, value);
         }
         public override long Add(long x)
         {
-            if (x > 0) Score.AddPositive(DealWithRemainder(speed * x));
+            if (x > 0) Score.AddPositive(DealWithRemainder(x));
+            return Interlocked.Add(ref v, x);
+        }
+        public long AddNotAddScore(long x)
+        {
             return Interlocked.Add(ref v, x);
         }
         /// <summary>
@@ -318,24 +390,25 @@ namespace Preparation.Utility
         /// </summary>
         public override long AddPositive(long x)
         {
-            Score.AddPositive(DealWithRemainder(speed * x));
+            Score.AddPositive(DealWithRemainder(x));
             return Interlocked.Add(ref v, x);
         }
         public override long Sub(long x)
         {
-            if (x < 0) Score.AddPositive(DealWithRemainder(speed * -x));
+            if (x < 0) Score.AddPositive(DealWithRemainder(-x));
             return Interlocked.Add(ref v, -x);
         }
-        /// <summary>
-        /// 注意：确保参数为非负数
-        /// </summary>
-        public override long SubPositive(long x)
+        public long SubNotAddScore(long x)
         {
             return Interlocked.Add(ref v, -x);
         }
         public override long Inc()
         {
-            Score.AddPositive(DealWithRemainder(speed));
+            Score.AddPositive(DealWithRemainder(1));
+            return Interlocked.Increment(ref v);
+        }
+        public long IncNotAddScore()
+        {
             return Interlocked.Increment(ref v);
         }
         /// <returns>返回操作前的值</returns>
@@ -343,8 +416,13 @@ namespace Preparation.Utility
         {
             long previousV = Interlocked.CompareExchange(ref v, newV, compareTo);
             if (newV - previousV > 0)
-                Score.AddPositive(DealWithRemainder(speed * (newV - previousV)));
+                Score.AddPositive(DealWithRemainder(newV - previousV));
             return previousV;
+        }
+        /// <returns>返回操作前的值</returns>
+        public long CompareExReturnOriNotAddScore(long newV, long compareTo)
+        {
+            return Interlocked.CompareExchange(ref v, newV, compareTo);
         }
     }
 
