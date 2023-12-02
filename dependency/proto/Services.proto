@@ -17,7 +17,7 @@ service AvailableService
     rpc Rebuild(TargetMsg) returns (BoolRes);       //给建筑回血     
     rpc Construct(ConstructMsg) returns (BoolRes);  //修建建筑
     rpc Attack(AttackMsg) returns (BoolRes);        // 攻击
-
+    rpc Send(SendMsg) returns (BoolRes);            // 传递信息
     // 大本营
     rpc InstallModule(InstallMsg) returns (BoolRes);
     rpc BuildShip(BuildShipMsg) returns (BoolRes);
