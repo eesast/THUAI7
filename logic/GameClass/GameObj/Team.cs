@@ -17,8 +17,6 @@ namespace GameClass.GameObj
         private readonly Dictionary<uint, XY> birthPointList;
         public Dictionary<uint, XY> BirthPointList => birthPointList;
         private Home home;
-        public AtomicLong Money { get; } = new AtomicLong(0);
-        public AtomicLong Score { get; } = new AtomicLong(0);
         public Ship? GetShip(long shipID)
         {
             foreach (Ship ship in shipList)
@@ -47,17 +45,29 @@ namespace GameClass.GameObj
                 default:
                     return false;
             }
-            shipList.Add(ship);
+            //shipList.Add(ship);
             return true;
         }
-        public void AddMoney(long add)
+        public void AddMoney(long shipID, long add)
         {
-            Money.Add(add);
-            Score.Add(add);
+            foreach (Ship ship in shipList)
+            {
+                if (ship.ShipID == shipID)
+                {
+                    ship.Money.Add(add);
+                    ship.Score.Add(add);
+                }
+            }
         }
-        public void SubMoney(long sub)
+        public void SubMoney(long shipID, long sub)
         {
-            Money.Sub(sub);
+            foreach (Ship ship in shipList)
+            {
+                if (ship.ShipID == shipID)
+                {
+                    ship.Money.Sub(sub);
+                }
+            }
         }
         public void SetHome(Home home)
         {
@@ -124,10 +134,12 @@ namespace GameClass.GameObj
         }
         public void UpdateBirthPoint()
         { }
-        public Team()
+        public Team(Home home)
         {
-            teamID = currentMaxTeamID++;
-            shipList = new List<Ship>();
+            this.teamID = currentMaxTeamID++;
+            this.shipList = new List<Ship>(GameData.MaxShipNum);
+            this.home = home;
+            this.home.TeamID.SetReturnOri(teamID);
         }
     }
 }
