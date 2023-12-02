@@ -48,7 +48,7 @@ namespace GameClass.GameObj
             //shipList.Add(ship);
             return true;
         }
-        public void AddMoney(long shipID, long add)
+        public bool AddMoney(long shipID, long add)
         {
             foreach (Ship ship in shipList)
             {
@@ -56,18 +56,46 @@ namespace GameClass.GameObj
                 {
                     ship.Money.Add(add);
                     ship.Score.Add(add);
+                    return true;
                 }
             }
+            return false;
         }
-        public void SubMoney(long shipID, long sub)
+        public bool SubMoney(long shipID, long sub)
         {
             foreach (Ship ship in shipList)
             {
-                if (ship.ShipID == shipID)
+                if (ship.ShipID == shipID && ship.Money >= sub)
                 {
                     ship.Money.Sub(sub);
+                    return true;
                 }
             }
+            return false;
+        }
+
+        public bool MoveMoney(long srcShipID, long dstShipID, long move)
+        {
+            Ship? srcShip = null;
+            Ship? dstShip = null;
+            foreach (Ship ship in shipList)
+            {
+                if (ship.ShipID == srcShipID)
+                {
+                    srcShip = ship;
+                }
+                if (ship.ShipID == dstShipID)
+                {
+                    dstShip = ship;
+                }
+            }
+            if (srcShip != null && dstShip != null && srcShip.Money >= move)
+            {
+                srcShip.Money.Sub(move);
+                dstShip.Money.Add(move);
+                return true;
+            }
+            return false;
         }
         public void SetHome(Home home)
         {
