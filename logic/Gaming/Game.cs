@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Preparation.Utility;
 using Preparation.Interface;
 using GameClass.GameObj;
+using GameClass.GameObj.Areas;
 
 namespace Gaming
 {
@@ -82,9 +83,16 @@ namespace Gaming
         {
             gameMap = new Map(mapResource);
             teamList = new List<Team>();
-            for (int i = 0; i < numOfTeam; i++)
+            foreach (GameObj gameObj in gameMap.GameObjDict[GameObjType.Home])
             {
-                teamList.Add(new Team());
+                if (gameObj.Type == GameObjType.Home)
+                {
+                    teamList.Add(new Team((Home)gameObj));
+                }
+                if (teamList.Count == numOfTeam)
+                {
+                    break;
+                }
             }
         }
     }

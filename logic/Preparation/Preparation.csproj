@@ -2,18 +2,18 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ApplicationIcon />
     <StartupObject />
     <Nullable>enable</Nullable>
   </PropertyGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="Google.Protobuf" Version="3.23.3" />
+		<PackageReference Include="Google.Protobuf" Version="3.25.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\dependency\proto\Protos.csproj" />
+		<!--ProjectReference Include="..\..\dependency\proto\Protos.csproj" /-->
 	</ItemGroup>
 	
 </Project>

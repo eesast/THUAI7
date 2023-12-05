@@ -29,6 +29,8 @@ public class Ship : Movable, IShip
     public ShipStateType ShipState => shipState;
     public IOccupation Occupation { get; }
     public IntNumUpdateEachCD BulletNum { get; }
+    public AtomicLong Money { get; } = new(0);
+    public AtomicLong Score { get; } = new(0);
 
     #region Producer
     private ProducerType producerType = ProducerType.Null;
@@ -48,7 +50,7 @@ public class Ship : Movable, IShip
     private ArmorType armorType = ArmorType.Null;
     public ArmorType ArmorModuleType => armorType;
     private IArmor armor;
-    public IArmor ArmorModule;
+    public IArmor ArmorModule => armor;
     #endregion
 
     #region Shield
@@ -64,6 +66,9 @@ public class Ship : Movable, IShip
     private IWeapon weapon;
     public IWeapon WeaponModule => weapon;
     #endregion
+
+    public int ProduceSpeed => producer.ProduceSpeed;
+    public int ConstructSpeed => constructor.ConstructSpeed;
 
     private GameObj? whatInteractingWith = null;
     public GameObj? WhatInteractingWith

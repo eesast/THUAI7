@@ -17,16 +17,6 @@ namespace GameClass.GameObj
         private readonly Dictionary<uint, XY> birthPointList;
         public Dictionary<uint, XY> BirthPointList => birthPointList;
         private Home home;
-        private long score = 0;
-        public long Score
-        {
-            get => Interlocked.Read(ref score);
-        }
-        private long totalScore;
-        public long TotalScore
-        {
-            get => Interlocked.Read(ref totalScore);
-        }
         public Ship? GetShip(long shipID)
         {
             foreach (Ship ship in shipList)
@@ -55,17 +45,57 @@ namespace GameClass.GameObj
                 default:
                     return false;
             }
-            shipList.Add(ship);
+            //shipList.Add(ship);
             return true;
         }
-        public void AddScore(long add)
+        public bool AddMoney(long shipID, long add)
         {
-            Interlocked.Add(ref score, add);
-            Interlocked.Add(ref totalScore, add);
+            foreach (Ship ship in shipList)
+            {
+                if (ship.ShipID == shipID)
+                {
+                    ship.Money.Add(add);
+                    ship.Score.Add(add);
+                    return true;
+                }
+            }
+            return false;
         }
-        public void SubScore(long sub)
+        public bool SubMoney(long shipID, long sub)
         {
-            Interlocked.Add(ref score, -sub);
+            foreach (Ship ship in shipList)
+            {
+                if (ship.ShipID == shipID && ship.Money >= sub)
+                {
+                    ship.Money.Sub(sub);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool MoveMoney(long srcShipID, long dstShipID, long move)
+        {
+            Ship? srcShip = null;
+            Ship? dstShip = null;
+            foreach (Ship ship in shipList)
+            {
+                if (ship.ShipID == srcShipID)
+                {
+                    srcShip = ship;
+                }
+                if (ship.ShipID == dstShipID)
+                {
+                    dstShip = ship;
+                }
+            }
+            if (srcShip != null && dstShip != null && srcShip.Money >= move)
+            {
+                srcShip.Money.Sub(move);
+                dstShip.Money.Add(move);
+                return true;
+            }
+            return false;
         }
         public void SetHome(Home home)
         {
@@ -132,10 +162,12 @@ namespace GameClass.GameObj
         }
         public void UpdateBirthPoint()
         { }
-        public Team()
+        public Team(Home home)
         {
-            teamID = currentMaxTeamID++;
-            shipList = new List<Ship>();
+            this.teamID = currentMaxTeamID++;
+            this.shipList = new List<Ship>(GameData.MaxShipNum);
+            this.home = home;
+            this.home.TeamID.SetReturnOri(teamID);
         }
     }
 }
