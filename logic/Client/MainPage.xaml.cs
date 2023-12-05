@@ -26,7 +26,7 @@ namespace Client
             InitializeComponent();
             SetStatusBars();
             InitiateObjects();
-            Map map = new Map(MainGrid, 0, 2, 2);
+            PureDrawMap();
             UIinitiated = true;
         }
 
@@ -74,29 +74,59 @@ namespace Client
             }
         }
 
+        private void PureDrawMap()
+        {
+            for (int i = 0; i < 50; i++)
+            {
+                for (int j = 0; j < 50; j++)
+                {
+                    mapPatches[i, j] = new()
+                    {
+                        WidthRequest = unitWidth,
+                        HeightRequest = unitHeight,
+                        HorizontalOptions = LayoutOptions.Start,
+                        VerticalOptions = LayoutOptions.Start,
+                        Margin = new Thickness(unitWidth * j, unitHeight * i, 0, 0)
+                    };
+                    switch ((MapPatchType)GameMap.GameMapArray[i, j])
+                    {
+                        case MapPatchType.RedHome:
+                            mapPatches[i, j].Color = Colors.Red; break;  //Red Home
+                        case MapPatchType.BlueHome:
+                            mapPatches[i, j].Color = Colors.Blue; break; //Blue Home
+                        case MapPatchType.Ruin:
+                            mapPatches[i, j].Color = Colors.Black; break; // Ruin
+                        case MapPatchType.Shadow:
+                            mapPatches[i, j].Color = Colors.Gray; break; // Shadow
+                        case MapPatchType.Asteroid:
+                            mapPatches[i, j].Color = Colors.Brown; break; // Asteroid
+                        case MapPatchType.Resource:
+                            mapPatches[i, j].Color = Colors.Yellow; break; //Resource
+                        case MapPatchType.Building:
+                            mapPatches[i, j].Color = Colors.Orange; break; //Building
+                        default:
+                            break;
+                    }
+                    MapGrid.Children.Add(mapPatches[i, j]);
+                }
+            }
+        }
+
         private void DrawMap()
         {
             resourceArray = new Label[countMap[(int)MapPatchType.Resource]];
             resourcePositionIndex = new (int x, int y)[countMap[(int)MapPatchType.Resource]];
             buildingArray = new Label[countMap[(int)MapPatchType.Building]];
             buildingPositionIndex = new (int x, int y)[countMap[(int)MapPatchType.Building]];
-            // factoryArray = new Label[countMap[(int)MapPatchType.Factory]];
-            // factoryPositionIndex = new int[countMap[(int)MapPatchType.Factory]];
-            // communityArray = new Label[countMap[(int)MapPatchType.Community]];
-            // communityPositionIndex = new int[countMap[(int)MapPatchType.Community]];
-            // fortressArray = new Label[countMap[(int)MapPatchType.Fortress]];
-            // fortressPositionIndex = new int[countMap[(int)MapPatchType.Fortress]];
-            // wormHoleArray = new Label[countMap[(int)MapPatchType.WormHole]];
-            // wormHolePositionIndex = new int[countMap[(int)MapPatchType.WormHole]];
+
             int counterOfResource = 0;
             int counterOfBuilding = 0;
-            // int counterOfFactory = 0;
-            // int counterOfCommunity = 0;
-            // int counterOfFortress = 0;
-            // int counterOfWormHole = 0;
-            for (int i = 0; i < defaultMap.GetLength(0); i++)
+
+            int[,] todrawMap;
+            todrawMap = defaultMap;
+            for (int i = 0; i < todrawMap.GetLength(0); i++)
             {
-                for (int j = 0; j < defaultMap.GetLength(1); j++)
+                for (int j = 0; j < todrawMap.GetLength(1); j++)
                 {
                     mapPatches[i, j] = new()
                     {
@@ -107,7 +137,7 @@ namespace Client
                         Margin = new Thickness(unitWidth * j, unitHeight * i, 0, 0)
                     };
                     MapPatchType mapPatchType = new MapPatchType();
-                    mapPatchType = (MapPatchType)defaultMap[i, j];
+                    mapPatchType = (MapPatchType)todrawMap[i, j];
                     switch (mapPatchType)
                     {
                         case MapPatchType.RedHome:
@@ -156,74 +186,7 @@ namespace Client
                             counterOfBuilding++;
                             break;
 
-                        // case MapPatchType.Factory:
-                        //     mapPatches[i, j].Color = Colors.Orange; //Factory
-                        //     factoryPositionIndex[counterOfFactory] = 50 * i + j;
-                        //     resourceArray[counterOfResource] = new Label()
-                        //     {
-                        //         FontSize = unitFontSize,
-                        //         WidthRequest = unitWidth,
-                        //         HeightRequest = unitHeight,
-                        //         Text = Convert.ToString(-1),
-                        //         HorizontalOptions = LayoutOptions.Start,
-                        //         VerticalOptions = LayoutOptions.Start,
-                        //         HorizontalTextAlignment = TextAlignment.Center,
-                        //         VerticalTextAlignment = TextAlignment.Center,
-                        //         BackgroundColor = Colors.Transparent
-                        //     };
-                        //     counterOfFactory++;
-                        //     break;
-                        // case MapPatchType.Community:
-                        //     mapPatches[i, j].Color = Colors.Green; //Community
-                        //     communityPositionIndex[counterOfCommunity] = 50 * i + j;
-                        //     communityArray[counterOfCommunity] = new Label()
-                        //     {
-                        //         FontSize = unitFontSize,
-                        //         WidthRequest = unitWidth,
-                        //         HeightRequest = unitHeight,
-                        //         Text = Convert.ToString(-1),
-                        //         HorizontalOptions = LayoutOptions.Start,
-                        //         VerticalOptions = LayoutOptions.Start,
-                        //         HorizontalTextAlignment = TextAlignment.Center,
-                        //         VerticalTextAlignment = TextAlignment.Center,
-                        //         BackgroundColor = Colors.Transparent
-                        //     };
-                        //     counterOfCommunity++;
-                        //     break;
-                        // case MapPatchType.Fortress:
-                        //     mapPatches[i, j].Color = Colors.Azure; //Fortress
-                        //     fortressPositionIndex[counterOfFortress] = 50 * i + j;
-                        //     fortressArray[counterOfFortress] = new Label()
-                        //     {
-                        //         FontSize = unitFontSize,
-                        //         WidthRequest = unitWidth,
-                        //         HeightRequest = unitHeight,
-                        //         Text = Convert.ToString(-1),
-                        //         HorizontalOptions = LayoutOptions.Start,
-                        //         VerticalOptions = LayoutOptions.Start,
-                        //         HorizontalTextAlignment = TextAlignment.Center,
-                        //         VerticalTextAlignment = TextAlignment.Center,
-                        //         BackgroundColor = Colors.Transparent
-                        //     };
-                        //     counterOfFortress++;
-                        //     break;
-                        // case MapPatchType.WormHole:
-                        //     mapPatches[i, j].Color = Colors.Purple; //Purple
-                        //     wormHolePositionIndex[counterOfWormHole] = 50 * i + j;
-                        //     wormHoleArray[counterOfWormHole] = new Label()
-                        //     {
-                        //         FontSize = unitFontSize,
-                        //         WidthRequest = unitWidth,
-                        //         HeightRequest = unitHeight,
-                        //         Text = Convert.ToString(-1),
-                        //         HorizontalOptions = LayoutOptions.Start,
-                        //         VerticalOptions = LayoutOptions.Start,
-                        //         HorizontalTextAlignment = TextAlignment.Center,
-                        //         VerticalTextAlignment = TextAlignment.Center,
-                        //         BackgroundColor = Colors.Transparent
-                        //     };
-                        //     counterOfWormHole++;
-                        //     break;
+
                         default:
                             break;
                     }
