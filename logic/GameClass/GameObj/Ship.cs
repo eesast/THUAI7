@@ -31,9 +31,6 @@ public class Ship : Movable, IShip
     public ShipStateType ShipState => shipState;
     public IOccupation Occupation { get; }
     public IntNumUpdateEachCD BulletNum { get; }
-    public AtomicLong Money { get; } = new(0);
-    public AtomicLong Score { get; } = new(0);
-
     #region Producer
     private ProducerType producerType = ProducerType.Null;
     public ProducerType ProducerModuleType => producerType;
