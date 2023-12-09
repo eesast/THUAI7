@@ -308,7 +308,6 @@ namespace GameClass.GameObj
             }
             protoGameMap = new uint[mapResource.GetLength(0), mapResource.GetLength(1)];
             Array.Copy(mapResource, protoGameMap, mapResource.Length);
-            long teamID = 0;
             for (int i = 0; i < GameData.MapRows; ++i)
             {
                 for (int j = 0; j < GameData.MapCols; ++j)
@@ -355,7 +354,7 @@ namespace GameClass.GameObj
                             }
                             break;
                         case (uint)PlaceType.Home:
-                            Add(new Home(GameData.GetCellCenterPos(i, j), teamID++));
+                            Add(new Home(GameData.GetCellCenterPos(i, j)));
                             break;
                     }
                 }
