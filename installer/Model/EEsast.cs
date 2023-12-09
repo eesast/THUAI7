@@ -6,7 +6,6 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using COSXML.Auth;
 
 namespace installer.Model
 {
@@ -119,10 +118,7 @@ namespace installer.Model
                             string tmpSecretKey = res["TmpSecretKey"];      //"临时密钥 SecretKey";
                             string tmpToken = res["SecurityToken"];         //"临时密钥 token";
                             long tmpExpiredTime = Convert.ToInt64(res["ExpiredTime"]);  //临时密钥有效截止时间，精确到秒
-                            QCloudCredentialProvider cosCredentialProvider = new DefaultSessionQCloudCredentialProvider(
-                                tmpSecretId, tmpSecretKey, tmpExpiredTime, tmpToken
-                            );
-                            EEsast_Cos.UpdateSecret(cosCredentialProvider);
+                            EEsast_Cos.UpdateSecret(tmpSecretId, tmpSecretKey, tmpExpiredTime, tmpToken);
 
                             string cosPath = $"/THUAI7/{GetTeamId()}/{type}/{plr}"; //对象在存储桶中的位置标识符，即称对象键
                             string srcPath = tarfile;//本地文件绝对路径
