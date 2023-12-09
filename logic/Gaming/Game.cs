@@ -11,19 +11,12 @@ namespace Gaming
 {
     public partial class Game
     {
-        public struct ShipInitInfo
+        public struct ShipInitInfo(long teamID, long playerID, uint birthPoint, ShipType shipType)
         {
-            public long teamID;
-            public long playerID;
-            public uint birthPoint;
-            public ShipType shipType;
-            public ShipInitInfo(long teamID, long playerID, uint birthPoint, ShipType shipType)
-            {
-                this.teamID = teamID;
-                this.playerID = playerID;
-                this.birthPoint = birthPoint;
-                this.shipType = shipType;
-            }
+            public long teamID = teamID;
+            public long playerID = playerID;
+            public uint birthPoint = birthPoint;
+            public ShipType shipType = shipType;
         }
         private readonly List<Team> teamList;
         public List<Team> TeamList => teamList;
