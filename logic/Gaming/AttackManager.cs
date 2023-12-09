@@ -114,6 +114,10 @@ namespace Gaming
                         { IsBackground = true }.Start();
                     }
                 }
+                if (bullet != null)
+                    return true;
+                else
+                    return false;
             }
         }
     }
