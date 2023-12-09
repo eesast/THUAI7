@@ -1,4 +1,6 @@
-﻿using Preparation.Interface;
+﻿using System;
+using GameClass.GameObj.Bullets;
+using Preparation.Interface;
 using Preparation.Utility;
 using GameClass.GameObj.Modules;
 using GameClass.GameObj.Occupations;
@@ -65,6 +67,26 @@ public class Ship : Movable, IShip
     public WeaponType WeaponModuleType => weaponType;
     private IWeapon weapon;
     public IWeapon WeaponModule => weapon;
+    public Bullet? Attack(double angle)
+    {
+        lock (actionLock)
+        {
+            if (weaponType == WeaponType.Null) return null;
+            if (BulletNum.TrySub(1) == 1)
+            {
+                XY res = Position + new XY
+                (
+                    (int)(Math.Abs((Radius + GameData.BulletRadius) * Math.Cos(angle))) * Math.Sign(Math.Cos(angle)),
+                    (int)(Math.Abs((Radius + GameData.BulletRadius) * Math.Sin(angle))) * Math.Sign(Math.Sin(angle))
+                );
+                Bullet? bullet = BulletFactory.GetBullet(this, res, weaponType);
+                if (bullet == null) return null;
+                FacingDirection = new XY(angle, bullet.AttackDistance);
+                return bullet;
+            }
+            return null;
+        }
+    }
     #endregion
 
     public int ProduceSpeed => producer.ProduceSpeed;

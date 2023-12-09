@@ -17,6 +17,30 @@ namespace GameClass.GameObj
         private readonly Dictionary<uint, XY> birthPointList;
         public Dictionary<uint, XY> BirthPointList => birthPointList;
         private Home home;
+        public long Money
+        {
+            get
+            {
+                long money = 0;
+                foreach (Ship ship in shipList)
+                {
+                    money += ship.Money;
+                }
+                return money;
+            }
+        }
+        public long Score
+        {
+            get
+            {
+                long score = 0;
+                foreach (Ship ship in shipList)
+                {
+                    score += ship.Score;
+                }
+                return score;
+            }
+        }
         public Ship? GetShip(long shipID)
         {
             foreach (Ship ship in shipList)

@@ -65,6 +65,56 @@ namespace Gaming
                 }
                 else return false;
             }
+            public bool Attack(Ship ship, double angle)
+            {
+                if (!ship.Commandable())
+                {
+                    return false;
+                }
+                Bullet? bullet = ship.Attack(angle);
+                if (bullet != null)
+                {
+                    gameMap.Add(bullet);
+                    moveEngine.MoveObj(bullet, (int)(bullet.AttackDistance * 1000 / bullet.MoveSpeed), angle, ++bullet.StateNum);  // 这里时间参数除出来的单位要是ms
+                    if (bullet.CastTime > 0)
+                    {
+                        long stateNum = ship.SetShipState(RunningStateType.Waiting, ShipStateType.Attacking);
+                        if (stateNum == -1)
+                        {
+                            TryRemoveBullet(bullet);
+                            return false;
+                        }
+                        new Thread
+                        (() =>
+                            {
+                                ship.ThreadNum.WaitOne();
+                                if (!ship.StartThread(stateNum, RunningStateType.RunningActively))
+                                {
+                                    TryRemoveBullet(bullet);
+                                    ship.ThreadNum.Release();
+                                    return;
+                                }
+                                new FrameRateTaskExecutor<int>(
+                                    loopCondition: () => stateNum == ship.StateNum && gameMap.Timer.IsGaming,
+                                    loopToDo: () => { },
+                                    timeInterval: GameData.CheckInterval,
+                                    finallyReturn: () => 0,
+                                    maxTotalDuration: bullet.CastTime
+                                ).Start();
+                                ship.ThreadNum.Release();
+                                if (gameMap.Timer.IsGaming)
+                                {
+                                    if (!ship.ResetShipState(stateNum))
+                                    {
+                                        TryRemoveBullet(bullet);
+                                    }
+                                }
+                            }
+                        )
+                        { IsBackground = true }.Start();
+                    }
+                }
+            }
         }
     }
 }
