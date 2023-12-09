@@ -1,5 +1,5 @@
-﻿using Preparation.Utility;
-using GameClass.GameObj;
+﻿using GameClass.GameObj;
+using Preparation.Utility;
 
 namespace Gaming
 {

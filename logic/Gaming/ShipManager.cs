@@ -1,7 +1,5 @@
-﻿using System.Threading;
-using GameClass.GameObj;
+﻿using GameClass.GameObj;
 using Preparation.Utility;
-using Preparation.Interface;
 
 namespace Gaming
 {

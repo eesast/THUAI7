@@ -1,11 +1,8 @@
-﻿using System;
-using System.Threading;
-using System.Collections.Generic;
-using GameClass.GameObj;
+﻿using GameClass.GameObj;
 using GameClass.GameObj.Bullets;
-using Preparation.Utility;
 using GameEngine;
-using Preparation.Interface;
+using Preparation.Utility;
+using System.Threading;
 using Timothy.FrameRateTask;
 
 namespace Gaming
@@ -15,13 +12,13 @@ namespace Gaming
         private readonly AttackManager attackManager;
         private class AttackManager(Map gameMap, ShipManager shipManager)
         {
-            readonly Map gameMap = gameMap;
+            private readonly Map gameMap = gameMap;
+            private readonly ShipManager shipManager = shipManager;
             public readonly MoveEngine moveEngine = new(
                     gameMap: gameMap,
                     OnCollision: (obj, collisionObj, moveVec) => MoveEngine.AfterCollision.Destroyed,
                     EndMove: obj => obj.CanMove.SetReturnOri(false)
                 );
-            readonly ShipManager shipManager = shipManager;
 
             public void ProduceBulletNaturally(BulletType bulletType, Ship ship, double angle, XY pos)
             {

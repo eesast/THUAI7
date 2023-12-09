@@ -1,11 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Collections.Generic;
-using Preparation.Utility;
-using Preparation.Interface;
-using GameClass.GameObj;
+﻿using GameClass.GameObj;
 using GameClass.GameObj.Areas;
+using Preparation.Utility;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace Gaming
 {
