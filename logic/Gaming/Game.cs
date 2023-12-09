@@ -133,6 +133,10 @@ namespace Gaming
         public Game(uint[,] mapResource, int numOfTeam)
         {
             gameMap = new(mapResource);
+            shipManager = new(gameMap);
+            moduleManager = new();
+            actionManager = new(gameMap, shipManager);
+            attackManager = new(gameMap, shipManager);
             teamList = [];
             foreach (GameObj gameObj in gameMap.GameObjDict[GameObjType.Home].Cast<GameObj>())
             {
