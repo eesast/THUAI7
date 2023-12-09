@@ -5,6 +5,7 @@ using Preparation.Utility;
 using Preparation.Interface;
 using GameClass.GameObj;
 using GameClass.GameObj.Areas;
+using System.Linq;
 
 namespace Gaming
 {
@@ -138,9 +139,9 @@ namespace Gaming
         }
         public Game(uint[,] mapResource, int numOfTeam)
         {
-            gameMap = new Map(mapResource);
-            teamList = new List<Team>();
-            foreach (GameObj gameObj in gameMap.GameObjDict[GameObjType.Home])
+            gameMap = new(mapResource);
+            teamList = [];
+            foreach (GameObj gameObj in gameMap.GameObjDict[GameObjType.Home].Cast<GameObj>())
             {
                 if (gameObj.Type == GameObjType.Home)
                 {
