@@ -79,6 +79,63 @@ namespace Gaming
                 return false;
             }
         }
+        public bool Produce(long shipID)
+        {
+            if (!gameMap.Timer.IsGaming)
+                return false;
+            Ship? ship = gameMap.FindShipInShipID(shipID);
+            if (ship != null)
+                return actionManager.Produce(ship);
+            return false;
+        }
+        public bool Construct(long shipID, ConstructionType constructionType)
+        {
+            if (!gameMap.Timer.IsGaming)
+                return false;
+            Ship? ship = gameMap.FindShipInShipID(shipID);
+            if (ship != null)
+                return actionManager.Construct(ship, constructionType);
+            return false;
+        }
+        public bool Repair(long ShipID)
+        {
+            if (!gameMap.Timer.IsGaming)
+                return false;
+            Ship? ship = gameMap.FindShipInShipID(ShipID);
+            if (ship != null)
+                return actionManager.Repair(ship);
+            return false;
+        }
+        public bool Stop(long shipID)
+        {
+            if (!gameMap.Timer.IsGaming)
+                return false;
+            Ship? ship = gameMap.FindShipInShipID(shipID);
+            if (ship != null)
+                return ActionManager.Stop(ship);
+            return false;
+        }
+        public bool Attack(long shipID, double angle)
+        {
+            if (!gameMap.Timer.IsGaming)
+                return false;
+            Ship? ship = gameMap.FindShipInShipID(shipID);
+            if (ship != null)
+                return attackManager.Attack(ship, angle);
+            return false;
+        }
+        public long GetTeamMoney(long teamID)
+        {
+            if (!Team.TeamExists(teamID))
+                return -1;
+            return teamList[(int)teamID].Money;
+        }
+        public long GetTeamScore(long teamID)
+        {
+            if (!Team.TeamExists(teamID))
+                return -1;
+            return teamList[(int)teamID].Score;
+        }
         public Game(uint[,] mapResource, int numOfTeam)
         {
             gameMap = new Map(mapResource);
