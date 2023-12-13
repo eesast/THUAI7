@@ -4,15 +4,11 @@ using System;
 
 namespace GameClass.GameObj.Areas;
 
-public class Home : Immovable, IHome
+public class Home(XY initPos, long id)
+    : Immovable(initPos, GameData.NumOfPosGridPerCell / 2, GameObjType.Home), IHome
 {
-    public AtomicLong TeamID { get; }
-    public LongInTheVariableRange HP => new LongInTheVariableRange(GameData.HomeHP);
-
+    public long TeamID { get; } = id;
+    public LongInTheVariableRange HP => new(GameData.HomeHP);
     public override bool IsRigid => false;
     public override ShapeType Shape => ShapeType.Square;
-    public Home(XY initPos)
-        : base(initPos, GameData.NumOfPosGridPerCell / 2, GameObjType.Home)
-    {
-    }
 }

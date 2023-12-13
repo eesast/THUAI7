@@ -22,7 +22,7 @@ namespace Gaming
         public Map GameMap => gameMap;
         public long AddShip(ShipInitInfo shipInitInfo)
         {
-            if (!Team.TeamExists(shipInitInfo.teamID))
+            if (!gameMap.TeamExists(shipInitInfo.teamID))
             {
                 return GameObj.invalidID;
             }
@@ -118,13 +118,13 @@ namespace Gaming
         }
         public long GetTeamMoney(long teamID)
         {
-            if (!Team.TeamExists(teamID))
+            if (!gameMap.TeamExists(teamID))
                 return -1;
             return teamList[(int)teamID].Money;
         }
         public long GetTeamScore(long teamID)
         {
-            if (!Team.TeamExists(teamID))
+            if (!gameMap.TeamExists(teamID))
                 return -1;
             return teamList[(int)teamID].Score;
         }
