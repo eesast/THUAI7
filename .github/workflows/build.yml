@@ -12,9 +12,11 @@ jobs:
         dotnet-version: 8.0.x
         
     - name: Install Workloads
-      run: dotnet workload restore "./logic/logic.sln"
+      run: dotnet workload install android ios maccatalyst maui-windows
+    - name: Build Proto
+      run: dotnet build "./dependency/proto/Protos.csproj" -c Release
     - name: Build Logic
-      run: dotnet build "./logic/logic.sln" -c Debug
+      run: dotnet build "./logic/logic.sln" -c Release
       
   dotnet-build-install:
     if: true
@@ -26,7 +28,7 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Install Workloads
-      run: dotnet workload restore "./installer/installer.sln"
+      run: dotnet workload install android ios maccatalyst maui-windows
     - name: Build Installer
       run: dotnet build "./installer/installer.sln" -c Release -f net8.0-windows10.0.19041.0
       

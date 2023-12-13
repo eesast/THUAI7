@@ -2,9 +2,9 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Maui.Platform;
 using Newtonsoft.Json;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -45,6 +45,8 @@ namespace installer.Model
                         MD5DataPath = Config["MD5DataPath"].StartsWith('.') ?
                             Path.Combine(InstallPath, Config["MD5DataPath"]) :
                             Config["MD5DataPath"];
+                        if (!File.Exists(MD5DataPath))
+                            SaveMD5Data();
                         ReadMD5Data();
                     }
                     else
@@ -79,6 +81,7 @@ namespace installer.Model
 
         ~Local_Data()
         {
+            SaveMD5Data();
             SaveConfig();
         }
 
@@ -103,14 +106,23 @@ namespace installer.Model
                 Config["InstallPath"] = InstallPath;
             else
                 Config.Add("InstallPath", InstallPath);
+            MD5DataPath = Config["MD5DataPath"].StartsWith('.') ?
+                Path.Combine(InstallPath, Config["MD5DataPath"]) :
+                Config["MD5DataPath"];
             SaveConfig();
+            SaveMD5Data();
+            Installed = true;
         }
 
         public static bool IsUserFile(string filename)
         {
-            if (filename.Substring(filename.Length - 3, 3).Equals(".sh") || filename.Substring(filename.Length - 4, 4).Equals(".cmd"))
+            if (filename.Contains("git") || filename.Contains("bin") || filename.Contains("obj"))
                 return true;
-            if (filename.Equals("AI.cpp") || filename.Equals("AI.py"))
+            if (filename.EndsWith("sh") || filename.EndsWith("cmd"))
+                return true;
+            if (filename.Contains("AI.cpp") || filename.Contains("AI.py"))
+                return true;
+            if (filename.Contains("hash.json"))
                 return true;
             return false;
         }
@@ -122,7 +134,7 @@ namespace installer.Model
                 string json = r.ReadToEnd();
                 if (json == null || json == "")
                 {
-                    json += @"{""THUAI6""" + ":" + @"""2023""}";
+                    json += @"{""THUAI7""" + ":" + @"""2024""}";
                 }
                 Config = Helper.TryDeserializeJson<Dictionary<string, string>>(json) ?? new Dictionary<string, string>();
             }
@@ -179,7 +191,21 @@ namespace installer.Model
             sw.Flush();
         }
 
-        public void ScanDir() => ScanDir(InstallPath);
+        public void ScanDir()
+        {
+            foreach (var _file in MD5Data.Keys)
+            {
+                if (_file is null)
+                    continue;
+                var file = _file.StartsWith('.') ?
+                    Path.Combine(InstallPath.Replace('/', Path.DirectorySeparatorChar), _file.Replace('/', Path.DirectorySeparatorChar)) :
+                    _file;
+                if (!File.Exists(file))
+                    MD5Data.Remove(_file);
+            }
+            ScanDir(InstallPath);
+            SaveMD5Data();
+        }
 
         public void ScanDir(string dir)
         {
@@ -188,7 +214,7 @@ namespace installer.Model
             {
                 var relFile = Helper.ConvertAbsToRel(InstallPath, file.FullName);
                 // 用户自己的文件不会被计入更新hash数据中
-                if (IsUserFile(file.Name))
+                if (IsUserFile(relFile))
                     continue;
                 var hash = Helper.GetFileMd5Hash(file.FullName);
                 if (MD5Data.Keys.Contains(relFile))

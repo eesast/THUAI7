@@ -30,7 +30,10 @@ public class Ship : Movable, IShip
     private ShipStateType shipState = ShipStateType.Null;
     public ShipStateType ShipState => shipState;
     public IOccupation Occupation { get; }
-    public IntNumUpdateEachCD BulletNum { get; }
+    /// <summary>
+    /// 子弹数上限, THUAI7为无穷
+    /// </summary>
+    public IntNumUpdateEachCD BulletNum => new(int.MaxValue, 1);
     #region Producer
     private ProducerType producerType = ProducerType.Null;
     public ProducerType ProducerModuleType => producerType;
@@ -71,11 +74,7 @@ public class Ship : Movable, IShip
             if (weaponType == WeaponType.Null) return null;
             if (BulletNum.TrySub(1) == 1)
             {
-                XY res = Position + new XY
-                (
-                    (int)(Math.Abs((Radius + GameData.BulletRadius) * Math.Cos(angle))) * Math.Sign(Math.Cos(angle)),
-                    (int)(Math.Abs((Radius + GameData.BulletRadius) * Math.Sin(angle))) * Math.Sign(Math.Sin(angle))
-                );
+                XY res = Position + new XY(angle, Radius + GameData.BulletRadius);
                 Bullet? bullet = BulletFactory.GetBullet(this, res, weaponType);
                 if (bullet == null) return null;
                 FacingDirection = new XY(angle, bullet.AttackDistance);

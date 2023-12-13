@@ -1,16 +1,14 @@
-﻿using System.Threading;
-using GameClass.GameObj;
+﻿using GameClass.GameObj;
 using Preparation.Utility;
-using Preparation.Interface;
 
 namespace Gaming
 {
     public partial class Game
     {
         private readonly ShipManager shipManager;
-        private partial class ShipManager
+        private class ShipManager(Map gameMap)
         {
-            readonly Map gameMap;
+            readonly Map gameMap = gameMap;
             public Ship? AddShip(XY pos, long teamID, long shipID, ShipType shipType)
             {
                 Ship newShip = new(pos, GameData.ShipRadius, shipType);
@@ -18,10 +16,6 @@ namespace Gaming
                 newShip.TeamID.SetReturnOri(teamID);
                 newShip.ShipID.SetReturnOri(shipID);
                 return newShip;
-            }
-            public ShipManager(Map gameMap)
-            {
-                this.gameMap = gameMap;
             }
         }
     }
