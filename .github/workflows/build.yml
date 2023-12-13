@@ -26,7 +26,7 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Install Workloads
-      run: "C:\Program Files\PowerShell\7\pwsh.exe" -NoLogo -Sta -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command dotnet workload restore "./installer/installer.sln"
+      run: C:\\Program Files\\PowerShell\\7\\pwsh.exe -NoLogo -Sta -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command dotnet workload restore "./installer/installer.sln"
     - name: Build Installer
       run: dotnet build "./installer/installer.sln" -c Release -f net8.0-windows10.0.19041.0
       
