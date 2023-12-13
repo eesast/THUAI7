@@ -128,7 +128,8 @@ namespace GameClass.GameObj
         public Team(Home home)
         {
             this.teamID = currentMaxTeamID++;
-            this.shipList = new List<Ship>(GameData.MaxShipNum);
+            this.shipList = new(GameData.MaxShipNum);
+            this.birthPointList = [];
             this.home = home;
             this.home.TeamID.SetReturnOri(teamID);
         }

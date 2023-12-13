@@ -296,8 +296,8 @@ namespace GameClass.GameObj
         }
         public Map(uint[,] mapResource)
         {
-            gameObjDict = new Dictionary<GameObjType, IList<IGameObj>>();
-            gameObjLockDict = new Dictionary<GameObjType, ReaderWriterLockSlim>();
+            gameObjDict = [];
+            gameObjLockDict = [];
             foreach (GameObjType idx in Enum.GetValues(typeof(GameObjType)))
             {
                 if (idx != GameObjType.Null)
@@ -313,15 +313,15 @@ namespace GameClass.GameObj
                 for (int j = 0; j < GameData.MapCols; ++j)
                 {
                     bool hasWormhole = false;
-                    switch (mapResource[i, j])
+                    switch ((PlaceType)mapResource[i, j])
                     {
-                        case (uint)PlaceType.Resource:
+                        case PlaceType.Resource:
                             Add(new Resource(GameData.GetCellCenterPos(i, j)));
                             break;
-                        case (uint)PlaceType.Construction:
+                        case PlaceType.Construction:
                             Add(new Construction(GameData.GetCellCenterPos(i, j)));
                             break;
-                        case (uint)PlaceType.Wormhole:
+                        case PlaceType.Wormhole:
                             foreach (Wormhole wormhole in GameObjDict[GameObjType.Wormhole].Cast<Wormhole>())
                             {
                                 if (wormhole.Grids.Contains(new XY(i, j)))
@@ -348,12 +348,11 @@ namespace GameClass.GameObj
                             }
                             if (!hasWormhole)
                             {
-                                List<XY> grids = new();
-                                grids.Add(new XY(i, j));
+                                List<XY> grids = [new XY(i, j)];
                                 Add(new Wormhole(GameData.GetCellCenterPos(i, j), grids));
                             }
                             break;
-                        case (uint)PlaceType.Home:
+                        case PlaceType.Home:
                             Add(new Home(GameData.GetCellCenterPos(i, j)));
                             break;
                     }
