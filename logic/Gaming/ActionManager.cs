@@ -1,9 +1,8 @@
-﻿using System;
-using System.Threading;
-using GameClass.GameObj;
+﻿using GameClass.GameObj;
 using GameClass.GameObj.Areas;
 using GameEngine;
 using Preparation.Utility;
+using System.Threading;
 using Timothy.FrameRateTask;
 
 namespace Gaming
@@ -11,16 +10,11 @@ namespace Gaming
     public partial class Game
     {
         private readonly ActionManager actionManager;
-        private class ActionManager
+        private class ActionManager(Map gameMap, ShipManager shipManager)
         {
-            private readonly Map gameMap;
-            private readonly ShipManager shipManager;
-            public readonly MoveEngine moveEngine;
-            public ActionManager(Map gameMap, ShipManager shipManager)
-            {
-                this.gameMap = gameMap;
-                this.shipManager = shipManager;
-                this.moveEngine = new MoveEngine(
+            private readonly Map gameMap = gameMap;
+            private readonly ShipManager shipManager = shipManager;
+            public readonly MoveEngine moveEngine = new(
                     gameMap: gameMap,
                     OnCollision: (obj, collisionObj, moveVec) =>
                     {
@@ -44,8 +38,7 @@ namespace Gaming
                         obj.ThreadNum.Release();
                     }
                 );
-                this.shipManager = shipManager;
-            }
+
             public bool MoveShip(Ship shipToMove, int moveTimeInMilliseconds, double moveDirection)
             {
                 if (moveTimeInMilliseconds < 5)
@@ -59,18 +52,18 @@ namespace Gaming
                 }
                 new Thread
                 (
-                () =>
-                {
-                    shipToMove.ThreadNum.WaitOne();
-                    if (!shipToMove.StartThread(stateNum, RunningStateType.RunningActively))
+                    () =>
                     {
-                        shipToMove.ThreadNum.Release();
-                        return;
+                        shipToMove.ThreadNum.WaitOne();
+                        if (!shipToMove.StartThread(stateNum, RunningStateType.RunningActively))
+                        {
+                            shipToMove.ThreadNum.Release();
+                            return;
+                        }
+                        moveEngine.MoveObj(shipToMove, moveTimeInMilliseconds, moveDirection, shipToMove.StateNum);
+                        Thread.Sleep(moveTimeInMilliseconds);
+                        shipToMove.ResetShipState(stateNum);
                     }
-                    moveEngine.MoveObj(shipToMove, moveTimeInMilliseconds, moveDirection, shipToMove.StateNum);
-                    Thread.Sleep(moveTimeInMilliseconds);
-                    shipToMove.ResetShipState(stateNum);
-                }
                 )
                 { IsBackground = true }.Start();
                 return true;
