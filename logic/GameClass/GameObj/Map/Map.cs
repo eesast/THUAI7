@@ -10,12 +10,21 @@ namespace GameClass.GameObj
 {
     public partial class Map : IMap
     {
-        private Dictionary<GameObjType, IList<IGameObj>> gameObjDict;
-        public Dictionary<GameObjType, IList<IGameObj>> GameObjDict => gameObjDict;
-        private Dictionary<GameObjType, ReaderWriterLockSlim> gameObjLockDict;
-        public Dictionary<GameObjType, ReaderWriterLockSlim> GameObjLockDict => gameObjLockDict;
+        public Dictionary<GameObjType, IList<IGameObj>> GameObjDict { get; }
+        public Dictionary<GameObjType, ReaderWriterLockSlim> GameObjLockDict { get; }
         public readonly uint[,] protoGameMap;
         public uint[,] ProtoGameMap => protoGameMap;
+
+        #region 大本营相关
+        public List<Home> Homes { get; }
+        private readonly long currentHomeNum = 0;
+        public bool TeamExists(long teamID)
+        {
+            return teamID < currentHomeNum;
+        }
+        #endregion
+
+        #region GetPlaceType
         public PlaceType GetPlaceType(IGameObj obj)
         {
             try
@@ -38,21 +47,23 @@ namespace GameClass.GameObj
                 return PlaceType.Null;
             }
         }
+        #endregion
+
         public bool IsOutOfBound(IGameObj obj)
         {
             return obj.Position.x >= GameData.MapLength - obj.Radius || obj.Position.x <= obj.Radius || obj.Position.y >= GameData.MapLength - obj.Radius || obj.Position.y <= obj.Radius;
         }
         public IOutOfBound GetOutOfBound(XY pos)
         {
-            return new Areas.OutOfBoundBlock(pos);
+            return new OutOfBoundBlock(pos);
         }
         public Ship? FindShipInID(long ID)
         {
             Ship? ship = null;
-            gameObjLockDict[GameObjType.Ship].EnterReadLock();
+            GameObjLockDict[GameObjType.Ship].EnterReadLock();
             try
             {
-                foreach (Ship s in gameObjDict[GameObjType.Ship])
+                foreach (Ship s in GameObjDict[GameObjType.Ship].Cast<Ship>())
                 {
                     if (s.ID == ID)
                     {
@@ -63,17 +74,17 @@ namespace GameClass.GameObj
             }
             finally
             {
-                gameObjLockDict[GameObjType.Ship].ExitReadLock();
+                GameObjLockDict[GameObjType.Ship].ExitReadLock();
             }
             return ship;
         }
         public Ship? FindShipInShipID(long shipID)
         {
             Ship? ship = null;
-            gameObjLockDict[GameObjType.Ship].EnterReadLock();
+            GameObjLockDict[GameObjType.Ship].EnterReadLock();
             try
             {
-                foreach (Ship s in gameObjDict[GameObjType.Ship])
+                foreach (Ship s in GameObjDict[GameObjType.Ship].Cast<Ship>())
                 {
                     if (s.ShipID == shipID)
                     {
@@ -84,7 +95,7 @@ namespace GameClass.GameObj
             }
             finally
             {
-                gameObjLockDict[GameObjType.Ship].ExitReadLock();
+                GameObjLockDict[GameObjType.Ship].ExitReadLock();
             }
             return ship;
         }
@@ -94,7 +105,7 @@ namespace GameClass.GameObj
             GameObjLockDict[gameObjType].EnterReadLock();
             try
             {
-                foreach (GameObj gameObj in GameObjDict[gameObjType])
+                foreach (GameObj gameObj in GameObjDict[gameObjType].Cast<GameObj>())
                 {
                     if (gameObjType == GameObjType.Wormhole)
                     {
@@ -135,7 +146,7 @@ namespace GameClass.GameObj
             GameObjLockDict[gameObjType].EnterReadLock();
             try
             {
-                foreach (GameObj gameObj in GameObjDict[gameObjType])
+                foreach (GameObj gameObj in GameObjDict[gameObjType].Cast<GameObj>())
                 {
                     if (GameData.IsInTheSameCell(gameObj.Position, Pos))
                     {
@@ -156,7 +167,7 @@ namespace GameClass.GameObj
             GameObjLockDict[gameObjType].EnterReadLock();
             try
             {
-                foreach (GameObj gameObj in GameObjDict[gameObjType])
+                foreach (GameObj gameObj in GameObjDict[gameObjType].Cast<GameObj>())
                 {
                     if (GameData.PartInTheSameCell(gameObj.Position, Pos))
                     {
@@ -177,7 +188,7 @@ namespace GameClass.GameObj
             GameObjLockDict[gameObjType].EnterReadLock();
             try
             {
-                foreach (GameObj gameObj in GameObjDict[gameObjType])
+                foreach (GameObj gameObj in GameObjDict[gameObjType].Cast<GameObj>())
                 {
                     if (GameData.ApproachToInteractInACross(gameObj.Position, Pos))
                     {
@@ -245,7 +256,7 @@ namespace GameClass.GameObj
             GameObjLockDict[gameObj.Type].EnterWriteLock();
             try
             {
-                foreach (GameObj obj in GameObjDict[gameObj.Type])
+                foreach (GameObj obj in GameObjDict[gameObj.Type].Cast<GameObj>())
                 {
                     if (gameObj.ID == obj.ID)
                     {
@@ -296,14 +307,14 @@ namespace GameClass.GameObj
         }
         public Map(uint[,] mapResource)
         {
-            gameObjDict = [];
-            gameObjLockDict = [];
+            GameObjDict = [];
+            GameObjLockDict = [];
             foreach (GameObjType idx in Enum.GetValues(typeof(GameObjType)))
             {
                 if (idx != GameObjType.Null)
                 {
-                    gameObjDict.Add(idx, new List<IGameObj>());
-                    gameObjLockDict.Add(idx, new ReaderWriterLockSlim());
+                    GameObjDict.Add(idx, new List<IGameObj>());
+                    GameObjLockDict.Add(idx, new ReaderWriterLockSlim());
                 }
             }
             protoGameMap = new uint[mapResource.GetLength(0), mapResource.GetLength(1)];
@@ -353,11 +364,13 @@ namespace GameClass.GameObj
                             }
                             break;
                         case PlaceType.Home:
-                            Add(new Home(GameData.GetCellCenterPos(i, j)));
+                            // 在生成地图时就把Home和TeamID获取, 生成Team时绑定上去即可
+                            Add(new Home(GameData.GetCellCenterPos(i, j), currentHomeNum++));
                             break;
                     }
                 }
             }
+            Homes = GameObjDict[GameObjType.Home].Cast<Home>().ToList();
         }
     }
 }
