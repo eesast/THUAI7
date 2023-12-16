@@ -234,25 +234,24 @@ namespace Server
             return msg;
         }
 
-        private Protobuf.PlaceType IntToPlaceType(uint n)
+        private static Protobuf.PlaceType IntToPlaceType(uint n) => n switch
         {
-            switch (n)
-            {
-                case 0:
-                case 1: return Protobuf.PlaceType.Ruin;
-                case 2: return Protobuf.PlaceType.Shadow;
-                case 3: return Protobuf.PlaceType.Asteroid;
-                case 4: return Protobuf.PlaceType.Resource;
-                case 5: return Protobuf.PlaceType.Construction;
-                case 6: return Protobuf.PlaceType.Wormhole;
-                case 7: return Protobuf.PlaceType.Home;
-                default: return Protobuf.PlaceType.NullPlaceType;
-            }
-        }
+            0 => Protobuf.PlaceType.Space,
+            1 => Protobuf.PlaceType.Ruin,
+            2 => Protobuf.PlaceType.Shadow,
+            3 => Protobuf.PlaceType.Asteroid,
+            4 => Protobuf.PlaceType.Resource,
+            5 => Protobuf.PlaceType.Construction,
+            6 => Protobuf.PlaceType.Wormhole,
+            7 => Protobuf.PlaceType.HomePlace,
+            _ => Protobuf.PlaceType.NullPlaceType,
+        };
         private MessageOfObj MapMsg(uint[,] map)
         {
-            MessageOfObj msgOfMap = new();
-            msgOfMap.MapMessage = new();
+            MessageOfObj msgOfMap = new()
+            {
+                MapMessage = new()
+            };
             for (int i = 0; i < GameData.MapRows; i++)
             {
                 msgOfMap.MapMessage.Row.Add(new MessageOfMap.Types.Row());
