@@ -113,10 +113,10 @@ int32_t Logic::GetWormHp(int32_t cellX, int32_t cellY)
     std::unique_lock<std::mutex> lock(mtxState);
     logger->debug("Called GetWormHp");
     auto pos = std::make_pair(cellX, cellY);
-    auto it = currentState->mapInfo->wormState.find(pos);
-    if (it != currentState->mapInfo->wormState.end())
+    auto it = currentState->mapInfo->wormholeState.find(pos);
+    if (it != currentState->mapInfo->wormholeState.end())
     {
-        return currentState->mapInfo->wormState[pos];
+        return currentState->mapInfo->wormholeState[pos];
     }
     else
     {
