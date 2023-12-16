@@ -162,6 +162,23 @@ namespace Gaming
                     }
                 }
             }
+            foreach (Team team in teamList)
+            {
+                foreach (XY birthPoint in team.BirthPointList)
+                {
+                    foreach (Construction construction in gameMap.GameObjDict[GameObjType.Construction]
+                                 .Cast<Construction>())
+                    {
+                        if (construction.Position == birthPoint)
+                        {
+                            if (construction.ConstructionType != ConstructionType.Community || construction.TeamID != team.TeamID)
+                            {
+                                team.BirthPointList.Remove(birthPoint);
+                            }
+                        }
+                    }
+                }
+            }
         }
         public Game(uint[,] mapResource, int numOfTeam)
         {
