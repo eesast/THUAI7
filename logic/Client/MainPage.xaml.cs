@@ -42,7 +42,7 @@ namespace Client
         {
             listOfAll = new List<MessageOfAll>();
             listOfShip = new List<MessageOfShip>();
-            listOfBuilding = new List<MessageOfBuilding>();
+            //listOfBuilding = new List<MessageOfBuilding>();
             listOfBullet = new List<MessageOfBullet>();
             listOfResource = new List<MessageOfResource>();
             listOfHome = new List<MessageOfHome>();
@@ -205,7 +205,7 @@ namespace Client
                     lock (drawPicLock)
                     {
                         listOfShip.Clear();
-                        listOfBuilding.Clear();
+                        //listOfBuilding.Clear();
                         listOfBullet.Clear();
                         listOfResource.Clear();
                         listOfHome.Clear();
@@ -224,9 +224,9 @@ namespace Client
                                             listOfShip.Add(obj.ShipMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.BuildingMessage:
-                                            listOfBuilding.Add(obj.BuildingMessage);
-                                            break;
+                                        //case MessageOfObj.MessageOfObjOneofCase.BuildingMessage:
+                                        //    listOfBuilding.Add(obj.BuildingMessage);
+                                        //    break;
 
                                         case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
                                             listOfBullet.Add(obj.BulletMessage);
@@ -248,7 +248,7 @@ namespace Client
                                 listOfAll.Add(content.AllMessage);
                                 countMap.Clear();
                                 countMap.Add((int)MapPatchType.Resource, listOfResource.Count);
-                                countMap.Add((int)MapPatchType.Building, listOfBuilding.Count);
+                                //countMap.Add((int)MapPatchType.Building, listOfBuilding.Count);
                                 GetMap(mapMassage);
                                 break;
                             case GameState.GameRunning:
@@ -260,9 +260,9 @@ namespace Client
                                             listOfShip.Add(obj.ShipMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.BuildingMessage:
-                                            listOfBuilding.Add(obj.BuildingMessage);
-                                            break;
+                                        //case MessageOfObj.MessageOfObjOneofCase.BuildingMessage:
+                                        //    listOfBuilding.Add(obj.BuildingMessage);
+                                        //    break;
 
                                         case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
                                             listOfBullet.Add(obj.BulletMessage);
@@ -287,7 +287,7 @@ namespace Client
                                 {
                                     countMap.Clear();
                                     countMap.Add((int)MapPatchType.Resource, listOfResource.Count);
-                                    countMap.Add((int)MapPatchType.Building, listOfBuilding.Count);
+                                    //countMap.Add((int)MapPatchType.Building, listOfBuilding.Count);
                                     GetMap(mapMassage);
                                     mapMessageExist = false;
                                 }
@@ -303,9 +303,9 @@ namespace Client
                                             listOfShip.Add(obj.ShipMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.BuildingMessage:
-                                            listOfBuilding.Add(obj.BuildingMessage);
-                                            break;
+                                        //case MessageOfObj.MessageOfObjOneofCase.BuildingMessage:
+                                        //    listOfBuilding.Add(obj.BuildingMessage);
+                                        //    break;
 
                                         case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
                                             listOfBullet.Add(obj.BulletMessage);
@@ -355,17 +355,17 @@ namespace Client
             return -1;
         }
 
-        private int FindIndexOfBuilding(MessageOfBuilding obj)
-        {
-            for (int i = 0; i < listOfBuilding.Count; i++)
-            {
-                if (buildingPositionIndex[i].x == obj.X && buildingPositionIndex[i].y == obj.Y)
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
+        //private int FindIndexOfBuilding(MessageOfBuilding obj)
+        //{
+        //    for (int i = 0; i < listOfBuilding.Count; i++)
+        //    {
+        //        if (buildingPositionIndex[i].x == obj.X && buildingPositionIndex[i].y == obj.Y)
+        //        {
+        //            return i;
+        //        }
+        //    }
+        //    return -1;
+        //}
 
         private void Refresh(object sender, EventArgs e)
         {
@@ -405,14 +405,14 @@ namespace Client
                             }
                             DrawHome(data);
                         }
-                        foreach (var data in listOfBuilding)
-                        {
-                            if (data.BuildingType == BuildingType.Wormhole)
-                            {
-                                gameStatusBar.SetWormHoleValue(data);
-                            }
-                            DrawBuilding(data);
-                        }
+                        //foreach (var data in listOfBuilding)
+                        //{
+                        //    if (data.BuildingType == BuildingType.Wormhole)
+                        //    {
+                        //        gameStatusBar.SetWormHoleValue(data);
+                        //    }
+                        //    DrawBuilding(data);
+                        //}
                         foreach (var data in listOfBullet)
                         {
                             DrawBullet(data);
@@ -458,33 +458,33 @@ namespace Client
             MapGrid.Children.Add(iconOfHome);
         }
 
-        private void DrawBuilding(MessageOfBuilding data)
-        {
-            int hp = data.Hp;
-            //TODO: calculate the percentage of Hp
-            int idx = FindIndexOfBuilding(data);
-            buildingArray[idx].FontSize = unitFontSize;
-            buildingArray[idx].WidthRequest = unitWidth;
-            buildingArray[idx].HeightRequest = unitHeight;
-            buildingArray[idx].Text = Convert.ToString(hp);
-            buildingArray[idx].Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0);
-            switch (data.BuildingType)
-            {
-                case BuildingType.Factory:
-                    buildingArray[idx].BackgroundColor = Colors.Chocolate;
-                    break;
-                case BuildingType.Community:
-                    buildingArray[idx].BackgroundColor = Colors.Green;
-                    break;
-                case BuildingType.Fortress:
-                    buildingArray[idx].BackgroundColor = Colors.Azure;
-                    break;
-                case BuildingType.Wormhole:
-                    buildingArray[idx].BackgroundColor = Colors.Purple;
-                    break;
-            }
-            MapGrid.Children.Add(buildingArray[idx]);
-        }
+        // private void DrawBuilding(MessageOfBuilding data)
+        // {
+        //     int hp = data.Hp;
+        //     //TODO: calculate the percentage of Hp
+        //     int idx = FindIndexOfBuilding(data);
+        //     buildingArray[idx].FontSize = unitFontSize;
+        //     buildingArray[idx].WidthRequest = unitWidth;
+        //     buildingArray[idx].HeightRequest = unitHeight;
+        //     buildingArray[idx].Text = Convert.ToString(hp);
+        //     buildingArray[idx].Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0);
+        //     switch (data.BuildingType)
+        //     {
+        //         case BuildingType.Factory:
+        //             buildingArray[idx].BackgroundColor = Colors.Chocolate;
+        //             break;
+        //         case BuildingType.Community:
+        //             buildingArray[idx].BackgroundColor = Colors.Green;
+        //             break;
+        //         case BuildingType.Fortress:
+        //             buildingArray[idx].BackgroundColor = Colors.Azure;
+        //             break;
+        //         case BuildingType.Wormhole:
+        //             buildingArray[idx].BackgroundColor = Colors.Purple;
+        //             break;
+        //     }
+        //     MapGrid.Children.Add(buildingArray[idx]);
+        // }
 
         private void DrawBullet(MessageOfBullet data)
         {
@@ -579,7 +579,7 @@ namespace Client
 
         private List<MessageOfAll> listOfAll;
         private List<MessageOfShip> listOfShip;
-        private List<MessageOfBuilding> listOfBuilding;
+        //private List<MessageOfBuilding> listOfBuilding;
         private List<MessageOfBullet> listOfBullet;
         private List<MessageOfResource> listOfResource;
         private List<MessageOfHome> listOfHome;
