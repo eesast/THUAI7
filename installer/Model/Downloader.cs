@@ -24,7 +24,7 @@ namespace installer.Model
             public string _id = "";
             public string email = "";
         }
-        public string ProgramName = "THUAI6";                     // 要运行或下载的程序名称
+        public string ProgramName = "THUAI7";                     // 要运行或下载的程序名称
         public string StartName = "maintest.exe";          // 启动的程序名
         private Local_Data Data;
         private Tencent_Cos Cloud;
@@ -38,7 +38,6 @@ namespace installer.Model
         } //{ newUser, menu, move, working, initializing, disconnected, error, successful, login, web, launch };
         public UpdateStatus Status;
 
-        ConcurrentQueue<string> downloadFile = new ConcurrentQueue<string>(); // 需要下载的文件名
         ConcurrentQueue<string> downloadFailed = new ConcurrentQueue<string>();  //更新失败的文件名
         public List<string> UpdateFailed
         {
@@ -53,9 +52,6 @@ namespace installer.Model
         {
             downloadFailed.Clear();
         }
-
-        //private int filenum = 0;                                   总文件个数
-
         public string Route { get; set; }
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
@@ -171,7 +167,7 @@ namespace installer.Model
             if (CheckUpdate())
             {
                 Status = UpdateStatus.downloading;
-                Cloud.DownloadQueueAsync(new ConcurrentQueue<string>(Data.MD5Update), downloadFailed).Wait();
+                Cloud.DownloadQueueAsync(Data.InstallPath, new ConcurrentQueue<string>(Data.MD5Update), downloadFailed).Wait();
                 if (downloadFailed.Count == 0)
                 {
                     Data.MD5Update.Clear();

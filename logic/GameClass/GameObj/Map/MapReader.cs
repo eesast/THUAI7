@@ -5,17 +5,11 @@ namespace MapGenerator;
 /// <summary>
 /// 地图结构体
 /// </summary>
-public struct MapStruct
+public struct MapStruct(uint height, uint width, uint[,] map)
 {
-    public MapStruct(uint height, uint width, uint[,] map)
-    {
-        this.height = height;
-        this.width = width;
-        this.map = map;
-    }
-    public uint height;
-    public uint width;
-    public uint[,] map;
+    public uint height = height;
+    public uint width = width;
+    public uint[,] map = map;
 }
 
 public static class MapReader

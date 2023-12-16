@@ -21,8 +21,7 @@ namespace installer.Model
         public string BucketName { get; set; }
         public ConcurrentStack<Exception> Exceptions { get; set; }
 
-        private string secretId = "***"; //"云 API 密钥 SecretId";
-        private string secretKey = "***"; //"云 API 密钥 SecretKey";
+        protected CosXmlConfig config;
         protected CosXmlServer cosXml;
 
         public Tencent_Cos(string appid, string region, string bucketName)
@@ -30,27 +29,26 @@ namespace installer.Model
             Appid = appid; Region = region; BucketName = bucketName;
             Exceptions = new ConcurrentStack<Exception>();
             // 初始化CosXmlConfig（提供配置SDK接口）
-            var config = new CosXmlConfig.Builder()
+            config = new CosXmlConfig.Builder()
                         .IsHttps(true)      // 设置默认 HTTPS 请求
                         .SetAppid(Appid)    // 设置腾讯云账户的账户标识 APPID
                         .SetRegion(Region)  // 设置一个默认的存储桶地域
                         .SetDebugLog(true)  // 显示日志
                         .Build();           // 创建 CosXmlConfig 对象
-            long durationSecond = 1000;  // 每次请求签名有效时长，单位为秒
+        }
+
+        public void UpdateSecret(string secretId, string secretKey, long durationSecond = 1000)
+        {
             QCloudCredentialProvider cosCredentialProvider = new DefaultQCloudCredentialProvider(secretId, secretKey, durationSecond);
-            // 初始化 CosXmlServer
             cosXml = new CosXmlServer(config, cosCredentialProvider);
         }
 
-        public void UpdateSecret(QCloudCredentialProvider credential)
+        public void UpdateSecret(string secretId, string secretKey, long durationSecond, string token)
         {
-            var config = new CosXmlConfig.Builder()
-            .IsHttps(true)      // 设置默认 HTTPS 请求
-            .SetAppid(Appid)    // 设置腾讯云账户的账户标识 APPID
-            .SetRegion(Region)  // 设置一个默认的存储桶地域
-            .SetDebugLog(true)  // 显示日志
-            .Build();           // 创建 CosXmlConfig 对象
-            cosXml = new CosXmlServer(config, credential);
+            QCloudCredentialProvider cosCredentialProvider = new DefaultSessionQCloudCredentialProvider(
+                secretId, secretKey, durationSecond, token
+            );
+            cosXml = new CosXmlServer(config, cosCredentialProvider);
         }
 
         public async Task DownloadFileAsync(string savePath, string? remotePath = null)
@@ -71,11 +69,13 @@ namespace installer.Model
                 Dictionary<string, string> test = request.GetRequestHeaders();
                 request.SetCosProgressCallback(delegate (long completed, long total)
                 {
-                    //Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
+                    Console.WriteLine($"[Download: {remotePath}] progress = {completed * 100.0 / total:##.##}%");
                 });
                 // 执行请求
                 GetObjectResult result = cosXml.GetObject(request);
                 // 请求成功
+                if (result.httpCode != 200)
+                    throw new Exception($"Download task: {{\"{remotePath}\"->\"{savePath}\"}} failed, message: {result.httpMessage}");
             }
             catch (Exception ex)
             {
@@ -85,28 +85,35 @@ namespace installer.Model
             }
         }
 
-        public async Task DownloadQueueAsync(ConcurrentQueue<string> queue, ConcurrentQueue<string> downloadFailed)
+        public async Task DownloadQueueAsync(string basePath, ConcurrentQueue<string> queue, ConcurrentQueue<string> downloadFailed)
         {
-            ThreadPool.SetMaxThreads(20, 20);
-            for (int i = 0; i < queue.Count; i++)
+            int count = queue.Count;
+            int finished = 0;
+            while (!queue.IsEmpty)
             {
                 string? item;
                 queue.TryDequeue(out item);
                 if (item == null)
                     continue;
-                ThreadPool.QueueUserWorkItem(async _ =>
+                string local = Path.Combine(basePath, item.Replace('/', '\\'));
+                ThreadPool.QueueUserWorkItem(_ =>
                 {
                     try
                     {
-                        await DownloadFileAsync(item);
+                        DownloadFileAsync(local, item).Wait();
                     }
                     catch (Exception ex)
                     {
                         Exceptions.Push(ex);
                         downloadFailed.Enqueue(item);
                     }
+                    finally
+                    {
+                        Interlocked.Increment(ref finished);
+                    }
                 });
             }
+            while (finished < count) ;
         }
 
         public void ArchieveUnzip(string zipPath, string targetDir)
@@ -115,9 +122,10 @@ namespace installer.Model
             Stream? gzipStream = null;
             try
             {
+                if (!Directory.Exists(targetDir))
+                    Directory.CreateDirectory(targetDir);
                 using (inStream = File.OpenRead(zipPath))
                 {
-
                     using (gzipStream = new GZipStream(inStream, CompressionMode.Decompress))
                     {
                         TarFile.ExtractToDirectory(gzipStream, targetDir, true);
@@ -151,7 +159,7 @@ namespace installer.Model
 
             uploadTask.progressCallback = delegate (long completed, long total)
             {
-                //Console.WriteLine(string.Format("progress = {0:##.##}%", completed * 100.0 / total));
+                Console.WriteLine($"[Upload: {targetPath}] progress = {completed * 100.0 / total:##.##}%");
             };
 
             COSXMLUploadTask.UploadTaskResult result = await transferManager.UploadAsync(uploadTask);
@@ -159,6 +167,8 @@ namespace installer.Model
             try
             {
                 COSXMLUploadTask.UploadTaskResult r = await transferManager.UploadAsync(uploadTask);
+                if (r.httpCode != 200)
+                    throw new Exception($"Upload task: {{\"{localPath}\"->\"{targetPath}\"}} failed, message: {r.httpMessage}");
                 //Console.WriteLine(result.GetResultInfo());
                 string eTag = r.eTag;
                 //到这里应该是成功了，但是因为我没有试过，也不知道具体情况，可能还要根据result的内容判断

@@ -4,7 +4,7 @@ namespace Preparation.Interface
 {
     public interface IHome
     {
-        public AtomicLong TeamID { get; }
+        public long TeamID { get; }
         public LongInTheVariableRange HP { get; }
     }
 }

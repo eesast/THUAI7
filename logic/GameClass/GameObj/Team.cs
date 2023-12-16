@@ -1,22 +1,22 @@
 ﻿using GameClass.GameObj.Areas;
 using Preparation.Utility;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Threading;
 
 namespace GameClass.GameObj
 {
-    public class Team
+    public class Team(Home home)
     {
-        private static long currentMaxTeamID = 0;
-        public static long CurrentMaxTeamID => currentMaxTeamID;
-        private readonly long teamID;
-        public long TeamID => teamID;
+        public long TeamID { get; } = home.TeamID;
         public const long invalidTeamID = long.MaxValue;
         public const long noneTeamID = long.MinValue;
-        private readonly List<Ship> shipList;
-        private readonly Dictionary<uint, XY> birthPointList;
+        private readonly List<Ship> shipList = new(GameData.MaxShipNum);
+        private readonly Dictionary<uint, XY> birthPointList = [];
         public Dictionary<uint, XY> BirthPointList => birthPointList;
-        private Home home;
+        private Home home = home;
+        public AtomicLong Money { get; } = new AtomicLong(0);
+        public AtomicLong Score { get; } = new AtomicLong(0);
         public Ship? GetShip(long shipID)
         {
             foreach (Ship ship in shipList)
@@ -48,54 +48,14 @@ namespace GameClass.GameObj
             //shipList.Add(ship);
             return true;
         }
-        public bool AddMoney(long shipID, long add)
+        public void AddMoney(long add)
         {
-            foreach (Ship ship in shipList)
-            {
-                if (ship.ShipID == shipID)
-                {
-                    ship.Money.Add(add);
-                    ship.Score.Add(add);
-                    return true;
-                }
-            }
-            return false;
+            Money.Add(add);
+            Score.Add(add);
         }
-        public bool SubMoney(long shipID, long sub)
+        public void SubMoney(long sub)
         {
-            foreach (Ship ship in shipList)
-            {
-                if (ship.ShipID == shipID && ship.Money >= sub)
-                {
-                    ship.Money.Sub(sub);
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public bool MoveMoney(long srcShipID, long dstShipID, long move)
-        {
-            Ship? srcShip = null;
-            Ship? dstShip = null;
-            foreach (Ship ship in shipList)
-            {
-                if (ship.ShipID == srcShipID)
-                {
-                    srcShip = ship;
-                }
-                if (ship.ShipID == dstShipID)
-                {
-                    dstShip = ship;
-                }
-            }
-            if (srcShip != null && dstShip != null && srcShip.Money >= move)
-            {
-                srcShip.Money.Sub(move);
-                dstShip.Money.Add(move);
-                return true;
-            }
-            return false;
+            Money.Sub(sub);
         }
         public void SetHome(Home home)
         {
@@ -156,18 +116,7 @@ namespace GameClass.GameObj
             }
             return shipIDs;
         }
-        public static bool TeamExists(long teamID)
-        {
-            return teamID < currentMaxTeamID;
-        }
         public void UpdateBirthPoint()
         { }
-        public Team(Home home)
-        {
-            this.teamID = currentMaxTeamID++;
-            this.shipList = new List<Ship>(GameData.MaxShipNum);
-            this.home = home;
-            this.home.TeamID.SetReturnOri(teamID);
-        }
     }
 }
