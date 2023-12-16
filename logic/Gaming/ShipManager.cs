@@ -1,4 +1,5 @@
-﻿using GameClass.GameObj;
+﻿using System.Threading;
+using GameClass.GameObj;
 using Preparation.Utility;
 
 namespace Gaming
@@ -25,81 +26,60 @@ namespace Gaming
                     return;
                 }
                 long subHP = bullet.AP;
-                switch (bullet.TypeOfBullet)
+                if (bullet.TypeOfBullet != BulletType.Missile && ship.Shield > 0)
                 {
-                    case BulletType.Laser:
-                        if (ship.Shield > 0)
-                        {
-                            ship.Shield.SubPositiveV((long)(subHP * GameData.LaserShieldModifier));
-                        }
-                        else if (ship.Armor > 0)
-                        {
-                            ship.Armor.SubPositiveV((long)(subHP * GameData.LaserArmorModifier));
-                        }
-                        else
-                        {
-                            ship.HP.SubPositiveV(subHP);
-                        }
-                        break;
-                    case BulletType.Plasma:
-                        if (ship.Shield > 0)
-                        {
-                            ship.Shield.SubPositiveV((long)(subHP * GameData.PlasmaShieldModifier));
-                        }
-                        else if (ship.Armor > 0)
-                        {
-                            ship.Armor.SubPositiveV((long)(subHP * GameData.PlasmaArmorModifier));
-                        }
-                        else
-                        {
-                            ship.HP.SubPositiveV(subHP);
-                        }
-                        break;
-                    case BulletType.Shell:
-                        if (ship.Shield > 0)
-                        {
-                            ship.Shield.SubPositiveV((long)(subHP * GameData.ShellShieldModifier));
-                        }
-                        else if (ship.Armor > 0)
-                        {
-                            ship.Armor.SubPositiveV((long)(subHP * GameData.ShellArmorModifier));
-                        }
-                        else
-                        {
-                            ship.HP.SubPositiveV(subHP);
-                        }
-                        break;
-                    case BulletType.Missile:
-                        if (ship.Armor > 0)
-                        {
-                            ship.Armor.SubPositiveV((long)(subHP * GameData.MissileArmorModifier));
-                        }
-                        else
-                        {
-                            ship.HP.SubPositiveV(subHP);
-                        }
-                        break;
-                    case BulletType.Arc:
-                        if (ship.Shield > 0)
-                        {
-                            ship.Shield.SubPositiveV((long)(subHP * GameData.ArcShieldModifier));
-                        }
-                        else if (ship.Armor > 0)
-                        {
-                            ship.Armor.SubPositiveV((long)(subHP * GameData.ArcArmorModifier));
-                        }
-                        else
-                        {
-                            ship.HP.SubPositiveV(subHP);
-                        }
-                        break;
-                    default:
-                        break;
+                    ship.Shield.SubPositiveV((long)(subHP * bullet.ShieldModifier));
+                }
+                else if (ship.Armor > 0)
+                {
+                    ship.Armor.SubPositiveV((long)(subHP * bullet.ArmorModifier));
+                }
+                else
+                {
+                    ship.HP.SubPositiveV(subHP);
                 }
                 if (ship.HP == 0)
                 {
                     Remove(ship);
                 }
+            }
+            public static long BeStunned(Ship ship, int time)
+            {
+                long stateNum = ship.SetShipState(RunningStateType.RunningForcibly, ShipStateType.Stunned);
+                if (stateNum == -1)
+                {
+                    return -1;
+                }
+                new Thread
+                (() =>
+                {
+                    Thread.Sleep(time);
+                    ship.ResetShipState(stateNum);
+                }
+                )
+                { IsBackground = true }.Start();
+                return stateNum;
+            }
+            public bool BackSwing(Ship ship, int time)
+            {
+                if (time <= 0)
+                {
+                    return false;
+                }
+                long stateNum = ship.SetShipState(RunningStateType.RunningForcibly, ShipStateType.Swinging);
+                if (stateNum == -1)
+                {
+                    return false;
+                }
+                new Thread
+                (() =>
+                {
+                    Thread.Sleep(time);
+                    ship.ResetShipState(stateNum);
+                }
+                )
+                { IsBackground = true }.Start();
+                return true;
             }
             public void Remove(Ship ship)
             {

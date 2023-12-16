@@ -16,10 +16,8 @@ internal sealed class Arc : Bullet
     public override int Speed => GameData.ArcSpeed;
     public override int CastTime => GameData.ArcCastTime;
     public override int SwingTime => GameData.ArcSwingTime;
-    private const int cd = GameData.ArcSwingTime;
-    public override int CD => cd;
-    public const int maxBulletNum = 1;
-    public override int MaxBulletNum => maxBulletNum;
+    public override double ArmorModifier => GameData.ArcArmorModifier;
+    public override double ShieldModifier => GameData.ArcShieldModifier;
     public override BulletType TypeOfBullet => BulletType.Arc;
     public override bool CanAttack(GameObj target) => false;
     public override bool CanBeBombed(GameObjType gameObjType) => gameObjType switch

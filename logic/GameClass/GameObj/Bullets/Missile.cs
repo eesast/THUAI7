@@ -1,4 +1,5 @@
-﻿using Preparation.Utility;
+﻿using System;
+using Preparation.Utility;
 
 namespace GameClass.GameObj.Bullets;
 
@@ -14,10 +15,8 @@ internal sealed class Missile : Bullet
     public override int Speed => GameData.MissileSpeed;
     public override int CastTime => GameData.MissileCastTime;
     public override int SwingTime => GameData.ShellSwingTime;
-    private const int cd = GameData.ShellSwingTime;
-    public override int CD => cd;
-    public const int maxBulletNum = 1;
-    public override int MaxBulletNum => maxBulletNum;
+    public override double ArmorModifier => GameData.MissileArmorModifier;
+    public override double ShieldModifier => Double.MaxValue;
     public override BulletType TypeOfBullet => BulletType.Missile;
     public override bool CanAttack(GameObj target) =>
         XY.DistanceFloor3(target.Position, this.Position) <= GameData.MissileBombRange;
