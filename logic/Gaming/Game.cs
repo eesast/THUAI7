@@ -37,11 +37,8 @@ namespace Gaming
                     break;
                 }
             }
-            if (gameMap.ProtoGameMap[pos.x, pos.y] == (uint)PlaceType.Asteroid ||
-                gameMap.ProtoGameMap[pos.x, pos.y] == (uint)PlaceType.Construction ||
-                gameMap.ProtoGameMap[pos.x, pos.y] == (uint)PlaceType.Home ||
-                gameMap.ProtoGameMap[pos.x, pos.y] == (uint)PlaceType.Resource ||
-                gameMap.ProtoGameMap[pos.x, pos.y] == (uint)PlaceType.Ruin)
+            if (gameMap.ProtoGameMap[pos.x, pos.y] != (uint)PlaceType.Null &&
+                gameMap.ProtoGameMap[pos.x, pos.y] != (uint)PlaceType.Shadow)
             {
                 validBirthPoint = false;
             }
