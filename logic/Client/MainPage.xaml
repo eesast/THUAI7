@@ -39,23 +39,8 @@ TargetType="Label">
                 </Grid.RowDefinitions>
 
             </Grid>
-            <!--<Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.5*" />
-                    <ColumnDefinition Width="27*" />
-                    <ColumnDefinition Width="530"/>
-                    <ColumnDefinition Width="0.5*" />
-                    <ColumnDefinition Width="6*" />
-                    <ColumnDefinition Width="0.5*" />
-                </Grid.ColumnDefinitions>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="265" />
-                    <RowDefinition Height="265" />
-                    <RowDefinition Height="20" />
-                </Grid.RowDefinitions>
-                <BoxView Grid.Row="0" Grid.Column="0" WidthRequest="10" HeightRequest="10" Color="Blue" />
-            </Grid>-->
+            <Grid x:Name="MapGrid" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" >
+            </Grid>
         </VerticalStackLayout>
     </Grid>
 </ContentPage>
