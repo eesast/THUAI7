@@ -9,8 +9,8 @@ internal sealed class NullBullet : Bullet
     public override int Speed => 0;
     public override int CastTime => 0;
     public override int SwingTime => 0;
-    public override int CD => 0;
-    public override int MaxBulletNum => 0;
+    public override double ArmorModifier => 0;
+    public override double ShieldModifier => 0;
     public override BulletType TypeOfBullet => BulletType.Null;
     public override bool CanAttack(GameObj target) => false;
     public override bool CanBeBombed(GameObjType gameObjType) => false;
