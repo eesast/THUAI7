@@ -20,12 +20,4 @@ internal sealed class Missile : Bullet
     public override BulletType TypeOfBullet => BulletType.Missile;
     public override bool CanAttack(GameObj target) =>
         XY.DistanceFloor3(target.Position, this.Position) <= GameData.MissileBombRange;
-    public override bool CanBeBombed(GameObjType gameObjType) => gameObjType switch
-    {
-        GameObjType.Ship => true,
-        GameObjType.Construction => true,
-        GameObjType.Wormhole => true,
-        GameObjType.Home => true,
-        _ => false
-    };
 }

@@ -21,12 +21,4 @@ internal sealed class Laser : Bullet
     public override double ShieldModifier => GameData.LaserShieldModifier;
     public override BulletType TypeOfBullet => BulletType.Laser;
     public override bool CanAttack(GameObj target) => false;
-    public override bool CanBeBombed(GameObjType gameObjType) => gameObjType switch
-    {
-        GameObjType.Ship => true,
-        GameObjType.Construction => true,
-        GameObjType.Wormhole => true,
-        GameObjType.Home => true,
-        _ => false
-    };
 }

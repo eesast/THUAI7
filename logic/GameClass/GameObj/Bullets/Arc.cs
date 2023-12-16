@@ -20,12 +20,4 @@ internal sealed class Arc : Bullet
     public override double ShieldModifier => GameData.ArcShieldModifier;
     public override BulletType TypeOfBullet => BulletType.Arc;
     public override bool CanAttack(GameObj target) => false;
-    public override bool CanBeBombed(GameObjType gameObjType) => gameObjType switch
-    {
-        GameObjType.Ship => true,
-        GameObjType.Construction => true,
-        GameObjType.Wormhole => true,
-        GameObjType.Home => true,
-        _ => false
-    };
 }
