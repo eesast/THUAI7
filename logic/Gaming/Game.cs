@@ -9,11 +9,11 @@ namespace Gaming
 {
     public partial class Game
     {
-        public struct ShipInitInfo(long teamID, long playerID, uint birthPoint, ShipType shipType)
+        public struct ShipInitInfo(long teamID, long playerID, XY birthPoint, ShipType shipType)
         {
             public long teamID = teamID;
             public long playerID = playerID;
-            public uint birthPoint = birthPoint;
+            public XY birthPoint = birthPoint;
             public ShipType shipType = shipType;
         }
         private readonly List<Team> teamList;
@@ -27,7 +27,20 @@ namespace Gaming
                 return GameObj.invalidID;
             }
             // 由于BirthPoint实质上是可变且每支队伍不同的，所以暂时把它放到Team里？
-            XY pos = teamList[(int)shipInitInfo.teamID].BirthPointList[shipInitInfo.birthPoint];
+            XY pos = shipInitInfo.birthPoint;
+            bool validBirthPoint = false;
+            foreach (XY birthPoint in teamList[(int)shipInitInfo.teamID].BirthPointList)
+            {
+                if (GameData.ApproachToInteract(pos, birthPoint) && pos != birthPoint)
+                {
+                    validBirthPoint = true;
+                    break;
+                }
+            }
+            if (!validBirthPoint)
+            {
+                return GameObj.invalidID;
+            }
             Ship? newShip = shipManager.AddShip(pos, shipInitInfo.teamID, shipInitInfo.playerID, shipInitInfo.shipType);
             if (newShip == null)
             {
@@ -127,6 +140,28 @@ namespace Gaming
             if (!gameMap.TeamExists(teamID))
                 return -1;
             return teamList[(int)teamID].Score;
+        }
+        public void UpdateBirthPoint()
+        {
+            foreach (Construction construction in gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>())
+            {
+                if (construction.ConstructionType == ConstructionType.Community)
+                {
+                    bool exist = false;
+                    foreach (XY birthPoint in teamList[(int)construction.TeamID].BirthPointList)
+                    {
+                        if (construction.Position == birthPoint)
+                        {
+                            exist = true;
+                            break;
+                        }
+                    }
+                    if (!exist)
+                    {
+                        teamList[(int)construction.TeamID].BirthPointList.Add(construction.Position);
+                    }
+                }
+            }
         }
         public Game(uint[,] mapResource, int numOfTeam)
         {
