@@ -58,6 +58,7 @@ enum ShipState
     ATTACKING=6;
     SWINGING=7;
     STUNNED=8;
+    MOVING=9;
 }
 
 enum WeaponType

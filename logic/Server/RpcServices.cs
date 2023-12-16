@@ -1,7 +1,6 @@
 ﻿using GameClass.GameObj;
 using Gaming;
 using Grpc.Core;
-using Grpc.Core.Logging;
 using Preparation.Utility;
 using Protobuf;
 
@@ -117,15 +116,11 @@ namespace Server
             if (communicationToGameID[request.TeamId][request.PlayerId] != GameObj.invalidID)  //是否已经添加了该玩家
                 return;
 
-            Preparation.Utility.CharacterType characterType = Preparation.Utility.CharacterType.Null;
-            if (request.IsHome)
-                characterType = Transformation.ToHomeType();
-            else
-                characterType = Transformation.ToShipType(request.ShipType);
+            var gameObjType = request.IsHome ? GameObjType.Home : GameObjType.Ship;
 
             lock (addPlayerLock)
             {
-                Game.PlayerInitInfo playerInitInfo = new(GetBirthPointIdx(request.PlayerId), request.TeamId, request.PlayerId, characterType);
+                Game.PlayerInitInfo playerInitInfo = new(GetBirthPointIdx(request.PlayerId), request.TeamId, request.PlayerId, gameObjType);
                 long newPlayerID = game.AddPlayer(playerInitInfo);
                 if (newPlayerID == GameObj.invalidID)
                     return;
@@ -394,7 +389,7 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Construct(gameID, request.ConstructionType);
+            boolRes.ActSuccess = game.Construct(gameID, Transformation.ConstructionFromProto(request.ConstructionType));
             return Task.FromResult(boolRes);
         }
 
