@@ -12,8 +12,8 @@ namespace GameClass.GameObj
         public const long invalidTeamID = long.MaxValue;
         public const long noneTeamID = long.MinValue;
         private readonly List<Ship> shipList = new(GameData.MaxShipNum);
-        private readonly Dictionary<uint, XY> birthPointList = [];
-        public Dictionary<uint, XY> BirthPointList => birthPointList;
+        private readonly List<XY> birthPointList = new();
+        public List<XY> BirthPointList => birthPointList;
         private Home home = home;
         public AtomicLong Money { get; } = new AtomicLong(0);
         public AtomicLong Score { get; } = new AtomicLong(0);
@@ -116,7 +116,5 @@ namespace GameClass.GameObj
             }
             return shipIDs;
         }
-        public void UpdateBirthPoint()
-        { }
     }
 }
