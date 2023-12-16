@@ -5,6 +5,7 @@ namespace GameClass.GameObj.Areas;
 
 public class Construction : Immovable
 {
+    public AtomicLong TeamID { get; } = new(long.MaxValue);
     public LongInTheVariableRange HP { get; } = new LongInTheVariableRange(0, GameData.CommunityHP);
     public override bool IsRigid => constructionType == ConstructionType.Community;
     public override ShapeType Shape => ShapeType.Square;
@@ -23,6 +24,7 @@ public class Construction : Immovable
         }
         if (this.constructionType == ConstructionType.Null || this.HP == 0)
         {
+            this.TeamID.SetReturnOri(ship.TeamID);
             this.constructionType = constructionType;
             switch (constructionType)
             {
