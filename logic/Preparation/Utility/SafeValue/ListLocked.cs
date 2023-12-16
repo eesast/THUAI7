@@ -10,15 +10,15 @@ namespace Preparation.Utility
         private List<T> list;
 
         #region 构造
-        public LockedList()
+        public LockedClassList()
         {
             list = new List<T>();
         }
-        public LockedList(int capacity)
+        public LockedClassList(int capacity)
         {
             list = new List<T>(capacity);
         }
-        public LockedList(IEnumerable<T> collection)
+        public LockedClassList(IEnumerable<T> collection)
         {
             list = new List<T>(collection);
         }
