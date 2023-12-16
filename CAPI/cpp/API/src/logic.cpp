@@ -98,9 +98,9 @@ int32_t Logic::GetBuildingHp(int32_t cellX, int32_t cellY) const
         return currentState->mapInfo->factoryState[pos].first;
     }
     else if (it2 != currentState->mapInfo->communityState.end())
-        return currentState->mapInfo->communityState[pos].first();
+        return currentState->mapInfo->communityState[pos].first;
     else if (it3 != currentState->mapInfo->fortressState.end())
-        return currentState->mapInfo->fortressState[pos].first();
+        return currentState->mapInfo->fortressState[pos].first;
     else
     {
         logger->warn("Building not found");
