@@ -37,6 +37,14 @@ namespace Gaming
                     break;
                 }
             }
+            if (gameMap.ProtoGameMap[pos.x, pos.y] == (uint)PlaceType.Asteroid ||
+                gameMap.ProtoGameMap[pos.x, pos.y] == (uint)PlaceType.Construction ||
+                gameMap.ProtoGameMap[pos.x, pos.y] == (uint)PlaceType.Home ||
+                gameMap.ProtoGameMap[pos.x, pos.y] == (uint)PlaceType.Resource ||
+                gameMap.ProtoGameMap[pos.x, pos.y] == (uint)PlaceType.Ruin)
+            {
+                validBirthPoint = false;
+            }
             if (!validBirthPoint)
             {
                 return GameObj.invalidID;
@@ -166,8 +174,7 @@ namespace Gaming
             {
                 foreach (XY birthPoint in team.BirthPointList)
                 {
-                    foreach (Construction construction in gameMap.GameObjDict[GameObjType.Construction]
-                                 .Cast<Construction>())
+                    foreach (Construction construction in gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>())
                     {
                         if (construction.Position == birthPoint)
                         {
