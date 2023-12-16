@@ -21,17 +21,13 @@ internal sealed class Arc : Bullet
     public const int maxBulletNum = 1;
     public override int MaxBulletNum => maxBulletNum;
     public override BulletType TypeOfBullet => BulletType.Arc;
-    public override bool CanAttack(GameObj target)
+    public override bool CanAttack(GameObj target) => false;
+    public override bool CanBeBombed(GameObjType gameObjType) => gameObjType switch
     {
-        //if (target.Type == GameObjType.Ship
-        //    || target.Type == GameObjType.Construction
-        //    || target.Type == GameObjType.Wormhole
-        //    || target.Type == GameObjType.Home)
-        //    return true;
-        return false;
-    }
-    public override bool CanBeBombed(GameObjType gameObjType)
-    {
-        return false;
-    }
+        GameObjType.Ship => true,
+        GameObjType.Construction => true,
+        GameObjType.Wormhole => true,
+        GameObjType.Home => true,
+        _ => false
+    };
 }

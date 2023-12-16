@@ -1,4 +1,5 @@
 ﻿using GameClass.GameObj;
+using GameClass.GameObj.Areas;
 using GameClass.GameObj.Bullets;
 using GameEngine;
 using Preparation.Utility;
@@ -28,6 +29,26 @@ namespace Gaming
                 if (bullet == null) return;
                 gameMap.Add(bullet);
                 moveEngine.MoveObj(bullet, (int)(bullet.AttackDistance * 1000 / bullet.MoveSpeed), angle, ++bullet.StateNum);  // 这里时间参数除出来的单位要是ms
+            }
+            private void BombObj(Bullet bullet, GameObj objBeingShot)
+            {
+                switch (objBeingShot.Type)
+                {
+                    case GameObjType.Ship:
+                        shipManager.BeAttacked((Ship)objBeingShot, bullet);
+                        break;
+                    case GameObjType.Construction:
+                        ((Construction)objBeingShot).BeAttacked(bullet);
+                        break;
+                    case GameObjType.Wormhole:
+                        ((Wormhole)objBeingShot).BeAttacked(bullet);
+                        break;
+                    case GameObjType.Home:
+                        ((Home)objBeingShot).BeAttacked(bullet);
+                        break;
+                    default:
+                        break;
+                }
             }
             public bool TryRemoveBullet(Bullet bullet)
             {
