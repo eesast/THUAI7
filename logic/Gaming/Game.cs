@@ -176,6 +176,7 @@ namespace Gaming
                 if (gameObj.Type == GameObjType.Home)
                 {
                     teamList.Add(new Team((Home)gameObj));
+                    teamList.Last().BirthPointList.Add(gameObj.Position);
                 }
                 if (teamList.Count == numOfTeam)
                 {
