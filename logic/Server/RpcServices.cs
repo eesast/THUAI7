@@ -214,7 +214,7 @@ namespace Server
             return Task.FromResult(moveRes);
         }
 
-        public override Task<BoolRes> SendMessage(SendMsg request, ServerCallContext context)
+        public override Task<BoolRes> Send(SendMsg request, ServerCallContext context)
         {
             var boolRes = new BoolRes();
             if (request.PlayerId >= spectatorMinPlayerID || playerDeceased((int)request.PlayerId))
