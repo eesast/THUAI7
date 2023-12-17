@@ -141,6 +141,7 @@
         Swinging = 6,
         Stunned = 7,
         Moving = 8,
+        Deceased = 9,
     }
     /// <summary>
     /// 舰船类型

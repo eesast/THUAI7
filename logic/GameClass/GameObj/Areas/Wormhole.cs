@@ -17,6 +17,11 @@ public class Wormhole : Immovable, IWormhole
     {
         return HP.AddV(constructSpeed) > 0;
     }
+    public void BeAttacked(Bullet bullet)
+    {
+        long subHP = bullet.AP;
+        this.HP.SubPositiveV(subHP);
+    }
     public void AddRepairNum(int add = 1)
     {
         RepairNum.Add(add);

@@ -11,4 +11,14 @@ public class Home(XY initPos, long id)
     public LongInTheVariableRange HP => new(GameData.HomeHP);
     public override bool IsRigid => false;
     public override ShapeType Shape => ShapeType.Square;
+
+    public void BeAttacked(Bullet bullet)
+    {
+        if (bullet!.Parent!.TeamID == this.TeamID)
+        {
+            return;
+        }
+        long subHP = bullet.AP;
+        this.HP.SubPositiveV(subHP);
+    }
 }
