@@ -43,6 +43,15 @@ public class Construction : Immovable
         }
         return HP.AddV(constructSpeed) > 0;
     }
+    public void BeAttacked(Bullet bullet)
+    {
+        if (bullet!.Parent!.TeamID == this.TeamID)
+        {
+            return;
+        }
+        long subHP = bullet.AP;
+        this.HP.SubPositiveV(subHP);
+    }
     public void AddConstructNum(int add = 1)
     {
         ConstructNum.Add(add);

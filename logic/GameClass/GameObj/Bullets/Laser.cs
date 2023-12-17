@@ -17,21 +17,8 @@ internal sealed class Laser : Bullet
     public override int Speed => GameData.LaserSpeed;
     public override int CastTime => GameData.LaserCastTime;
     public override int SwingTime => GameData.LaserSwingTime;
-    private const int cd = GameData.LaserSwingTime;
-    public override int CD => cd;
-    public override int MaxBulletNum => 1;
+    public override double ArmorModifier => GameData.LaserArmorModifier;
+    public override double ShieldModifier => GameData.LaserShieldModifier;
     public override BulletType TypeOfBullet => BulletType.Laser;
-    public override bool CanAttack(GameObj target)
-    {
-        //if (target.Type == GameObjType.Ship
-        //    || target.Type == GameObjType.Construction
-        //    || target.Type == GameObjType.Wormhole
-        //    || target.Type == GameObjType.Home)
-        //    return true;
-        return false;
-    }
-    public override bool CanBeBombed(GameObjType gameObjType)
-    {
-        return false;
-    }
+    public override bool CanAttack(GameObj target) => false;
 }

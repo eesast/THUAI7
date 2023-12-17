@@ -14,22 +14,8 @@ internal sealed class Shell : Bullet
     public override int Speed => GameData.ShellSpeed;
     public override int CastTime => GameData.ShellCastTime;
     public override int SwingTime => GameData.ShellSwingTime;
-    private const int cd = GameData.ShellSwingTime;
-    public override int CD => cd;
-    public const int maxBulletNum = 1;
-    public override int MaxBulletNum => maxBulletNum;
+    public override double ArmorModifier => GameData.ShellArmorModifier;
+    public override double ShieldModifier => GameData.ShellShieldModifier;
     public override BulletType TypeOfBullet => BulletType.Shell;
-    public override bool CanAttack(GameObj target)
-    {
-        //if (target.Type == GameObjType.Ship
-        //    || target.Type == GameObjType.Construction
-        //    || target.Type == GameObjType.Wormhole
-        //    || target.Type == GameObjType.Home)
-        //    return true;
-        return false;
-    }
-    public override bool CanBeBombed(GameObjType gameObjType)
-    {
-        return false;
-    }
+    public override bool CanAttack(GameObj target) => false;
 }
