@@ -399,3 +399,6 @@ FodyWeavers.xsd
 
 #THUAI playback file
 *.thuaipb
+
+#THUAI plugins file
+Plugins/
