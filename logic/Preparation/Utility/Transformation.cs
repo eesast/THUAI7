@@ -109,23 +109,23 @@ public static class Transformation
     };
     #endregion
     #region Weapon
-    public static ProtoWeapon WeaponToProto(GunType weaponType) => weaponType switch
+    public static ProtoWeapon WeaponToProto(WeaponType weaponType) => weaponType switch
     {
-        GunType.LaserGun => ProtoWeapon.Lasergun,
-        GunType.PlasmaGun => ProtoWeapon.Plasmagun,
-        GunType.ShellGun => ProtoWeapon.Shellgun,
-        GunType.MissileGun => ProtoWeapon.Missilegun,
-        GunType.ArcGun => ProtoWeapon.Arcgun,
+        WeaponType.LaserGun => ProtoWeapon.Lasergun,
+        WeaponType.PlasmaGun => ProtoWeapon.Plasmagun,
+        WeaponType.ShellGun => ProtoWeapon.Shellgun,
+        WeaponType.MissileGun => ProtoWeapon.Missilegun,
+        WeaponType.ArcGun => ProtoWeapon.Arcgun,
         _ => ProtoWeapon.NullWeaponType
     };
-    public static GunType WeaponFromProto(ProtoWeapon weaponType) => weaponType switch
+    public static WeaponType WeaponFromProto(ProtoWeapon weaponType) => weaponType switch
     {
-        ProtoWeapon.Lasergun => GunType.LaserGun,
-        ProtoWeapon.Plasmagun => GunType.PlasmaGun,
-        ProtoWeapon.Shellgun => GunType.ShellGun,
-        ProtoWeapon.Missilegun => GunType.MissileGun,
-        ProtoWeapon.Arcgun => GunType.ArcGun,
-        _ => GunType.Null
+        ProtoWeapon.Lasergun => WeaponType.LaserGun,
+        ProtoWeapon.Plasmagun => WeaponType.PlasmaGun,
+        ProtoWeapon.Shellgun => WeaponType.ShellGun,
+        ProtoWeapon.Missilegun => WeaponType.MissileGun,
+        ProtoWeapon.Arcgun => WeaponType.ArcGun,
+        _ => WeaponType.Null
     };
     #endregion
     #region Armor
@@ -174,6 +174,22 @@ public static class Transformation
         ProtoProducer.Producer2 => ProducerType.Producer2,
         ProtoProducer.Producer3 => ProducerType.Producer3,
         _ => ProducerType.Null
+    };
+    #endregion
+    #region Constructor
+    public static ProtoConstructor ConstructorToProto(ConstructorType constructorType) => constructorType switch
+    {
+        ConstructorType.Constructor1 => ProtoConstructor.Constructor1,
+        ConstructorType.Constructor2 => ProtoConstructor.Constructor2,
+        ConstructorType.Constructor3 => ProtoConstructor.Constructor3,
+        _ => ProtoConstructor.NullConstructorType
+    };
+    public static ConstructorType ConstructorFromProto(ProtoConstructor constructorType) => constructorType switch
+    {
+        ProtoConstructor.Constructor1 => ConstructorType.Constructor1,
+        ProtoConstructor.Constructor2 => ConstructorType.Constructor2,
+        ProtoConstructor.Constructor3 => ConstructorType.Constructor3,
+        _ => ConstructorType.Null
     };
     #endregion
     #region Bullet

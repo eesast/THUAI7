@@ -62,13 +62,13 @@ namespace Server
                     TeamId = player.TeamID,
                     PlayerId = player.ShipID,
                     Guid = player.ID,
-                    ShipState = Transformation.ToShipState(player.ShipState),
+                    ShipState = Transformation.ShipStateToProto(player.ShipState),
                     ShipType = Transformation.ToShipType(player.ShipType),
                     ViewRange = player.ViewRange,
-                    ConstructorType = Transformation.ToModuleType(player.ConstructorModuleType),
-                    ArmorType = Transformation.ToModuleType(player.ArmorModuleType),
-                    ShieldType = Transformation.ToModuleType(player.ShieldModuleType),
-                    WeaponType = Transformation.ToModuleType(player.WeaponModuleType),
+                    ConstructorType = Transformation.ConstructorToProto(player.ConstructorModuleType),
+                    ArmorType = Transformation.ArmorToProto(player.ArmorModuleType),
+                    ShieldType = Transformation.ShieldToProto(player.ShieldModuleType),
+                    WeaponType = Transformation.WeaponToProto(player.WeaponModuleType),
                     FacingDirection = player.FacingDirection.Angle(),
                 }
             };
