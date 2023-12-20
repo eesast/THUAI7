@@ -28,6 +28,14 @@ namespace Preparation.Utility
         {
             return (uint)gameObjType > 3;
         }
+        public static bool NeedCopy(GameObjType gameObjType)
+        {
+            return gameObjType != GameObjType.Null &&
+                   gameObjType != GameObjType.Ruin &&
+                   gameObjType != GameObjType.Shadow &&
+                   gameObjType != GameObjType.Asteroid &&
+                   gameObjType != GameObjType.OutOfBoundBlock;
+        }
         public static XY GetCellCenterPos(int x, int y)  // 求格子的中心坐标
         {
             XY ret = new(x * NumOfPosGridPerCell + NumOfPosGridPerCell / 2, y * NumOfPosGridPerCell + NumOfPosGridPerCell / 2);
