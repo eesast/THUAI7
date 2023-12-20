@@ -12,8 +12,9 @@ message PlayerMsg
 {
     int64 player_id = 1;
     ShipType ship_type = 2;
-    bool is_home=3;
-    int64 team_id = 4;
+    int64 team_id = 3;
+    int64 x=4;
+    int64 y=5;
 }
 
 message MoveMsg

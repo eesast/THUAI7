@@ -116,14 +116,13 @@ namespace Server
             if (communicationToGameID[request.TeamId][request.PlayerId] != GameObj.invalidID)  //是否已经添加了该玩家
                 return;
 
-            var gameObjType = request.IsHome ? GameObjType.Home : GameObjType.Ship;
 
             lock (addPlayerLock)
             {
                 // ShipInitInfo?
-                Game.PlayerInitInfo playerInitInfo = new(GetBirthPointIdx(request.PlayerId), request.TeamId, request.PlayerId, gameObjType);
+                Game.ShipInitInfo playerInitInfo = new( request.TeamId, request.PlayerId, request, request.ShipType);
                 // AddShip?
-                long newPlayerID = game.AddPlayer(playerInitInfo);
+                long newPlayerID = game.AddShip(playerInitInfo);
                 if (newPlayerID == GameObj.invalidID)
                     return;
                 communicationToGameID[request.TeamId][request.PlayerId] = newPlayerID;

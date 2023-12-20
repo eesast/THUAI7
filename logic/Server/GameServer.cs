@@ -229,8 +229,8 @@ namespace Server
             MessageOfAll msg = new MessageOfAll();
             msg.GameTime = time;
             int[] score = GetScore();
-            msg.RedTeamScore = score[0];
-            msg.BlueTeamScore = score[1];
+            msg.RedteamScore = score[0];
+            msg.BlueteamScore = score[1];
             return msg;
         }
 
