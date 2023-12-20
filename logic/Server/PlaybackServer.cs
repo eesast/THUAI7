@@ -44,6 +44,7 @@ namespace Server
                 return finalScore;
             }
         }
+        public override int[] GetMoney() => new int[0];
         public override int[] GetScore() => FinalScore;
         public PlaybackServer(ArgumentOptions options)
         {
