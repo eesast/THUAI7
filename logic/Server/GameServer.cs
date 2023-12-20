@@ -179,9 +179,9 @@ namespace Server
             game.GameMap.GameObjLockDict[GameObjType.Ship].EnterReadLock();
             try
             {
-                foreach (Ship ship in game.GameMap.GameObjDict[GameObjType.Ship])
+                foreach (Ship ship in game.GameMap.GameObjDict[GameObjType.Ship].Cast<Ship>())
                 {
-                    if (ship.PlayerID == playerID && ship.PlayerState == PlayerStateType.Deceased) return true;
+                    if (ship.ShipID == playerID && ship.ShipState == ShipStateType.Deceased) return true;
                 }
             }
             finally
@@ -192,22 +192,22 @@ namespace Server
             return false;
         }
 
+        public override int[] GetMoney()
+        {
+            int[] money = new int[2]; // 0代表RedTeam，1代表BlueTeam
+            foreach (Team team in game.TeamList)
+            {
+                money[(int)team.TeamID] = (int)game.GetTeamMoney(team.TeamID);
+            }
+            return money;
+        }
+
         public override int[] GetScore()
         {
             int[] score = new int[2]; // 0代表RedTeam，1代表BlueTeam
-            game.GameMap.GameObjLockDict[GameObjType.Home].EnterReadLock();
-            try
+            foreach (Team team in game.TeamList)
             {
-                foreach (Home home in game.GameMap.GameObjDict[GameObjType.Home])
-                {
-                    if (home.TeamID == 0) score[0] += (int)home.Score;
-                    else score[1] += (int)home.Score;
-                }
-
-            }
-            finally
-            {
-                game.GameMap.GameObjLockDict[GameObjType.Home].ExitReadLock();
+                score[(int)team.TeamID] = (int)game.GetTeamScore(team.TeamID);
             }
             return score;
         }
