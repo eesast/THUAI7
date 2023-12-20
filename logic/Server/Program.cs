@@ -16,8 +16,8 @@ namespace Server
         ";
         static ServerBase CreateServer(ArgumentOptions options)
         {
-            //return options.Playback ? new PlaybackServer(options) : new GameServer(options);
-            return new PlaybackServer(options);
+            return options.Playback ? new PlaybackServer(options) : new GameServer(options);
+            //return new PlaybackServer(options);
         }
 
         static int Main(string[] args)
@@ -45,7 +45,7 @@ namespace Server
             try
             {
                 var server = CreateServer(options);
-                Grpc.Core.Server rpcServer = new Grpc.Core.Server(new[] { new ChannelOption(ChannelOptions.SoReuseport, 0) })
+                Grpc.Core.Server rpcServer = new(new[] { new ChannelOption(ChannelOptions.SoReuseport, 0) })
                 {
                     Services = { AvailableService.BindService(server) },
                     Ports = { new ServerPort(options.ServerIP, options.ServerPort, ServerCredentials.Insecure) }

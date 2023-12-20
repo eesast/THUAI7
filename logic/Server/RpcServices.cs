@@ -120,7 +120,7 @@ namespace Server
             lock (addPlayerLock)
             {
                 // ShipInitInfo?
-                Game.ShipInitInfo playerInitInfo = new( request.TeamId, request.PlayerId, request, request.ShipType);
+                Game.ShipInitInfo playerInitInfo = new(request.TeamId, request.PlayerId, request, request.ShipType);
                 // AddShip?
                 long newPlayerID = game.AddShip(playerInitInfo);
                 if (newPlayerID == GameObj.invalidID)

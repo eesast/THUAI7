@@ -14,17 +14,17 @@ namespace Server
         {
             switch (gameObj.Type)
             {
-                case Preparation.Utility.GameObjType.Ship:
+                case GameObjType.Ship:
                     return Ship((Ship)gameObj, time);
-                case Preparation.Utility.GameObjType.Home:
+                case GameObjType.Home:
                     return Home((GameClass.GameObj.Areas.Home)gameObj, time);
-                case Preparation.Utility.GameObjType.Bullet:
+                case GameObjType.Bullet:
                     return Bullet((Bullet)gameObj);
-                case Preparation.Utility.GameObjType.BombedBullet:
+                case GameObjType.BombedBullet:
                     return BombedBullet((BombedBullet)gameObj);
-                case Preparation.Utility.GameObjType.Resource:
+                case GameObjType.Resource:
                     return Resource((GameClass.GameObj.Areas.Resource)gameObj);
-                case Preparation.Utility.GameObjType.Construction:
+                case GameObjType.Construction:
                     GameClass.GameObj.Areas.Construction construction = (GameClass.GameObj.Areas.Construction)gameObj;
                     if (construction.ConstructionType == Preparation.Utility.ConstructionType.Factory)
                         return Factory(construction);
@@ -33,7 +33,7 @@ namespace Server
                     else if (construction.ConstructionType == Preparation.Utility.ConstructionType.Fort)
                         return Fort(construction);
                     return null;
-                case Preparation.Utility.GameObjType.Wormhole:
+                case GameObjType.Wormhole:
                     return Wormhole((GameClass.GameObj.Areas.Wormhole)gameObj);
                 default: return null;
             }
@@ -101,7 +101,7 @@ namespace Server
                     Y = bullet.Position.y,
                     FacingDirection = bullet.FacingDirection.Angle(),
                     Damage = bullet.AP,
-                    TeamId = bullet.Parent.TeamID,
+                    TeamId = bullet.Parent!.TeamID,
                     Guid = bullet.ID,
                     BombRange = bullet.BulletBombRange,
                     Speed = bullet.Speed

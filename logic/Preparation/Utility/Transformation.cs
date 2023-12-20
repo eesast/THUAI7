@@ -165,22 +165,6 @@ public static class Transformation
         _ => ShieldType.Null
     };
     #endregion
-    #region Ship
-    public static ProtoShip ShipToProto(ShipType shipType) => shipType switch
-    {
-        ShipType.CivilShip => ProtoShip.CivilianShip,
-        ShipType.WarShip => ProtoShip.MilitaryShip,
-        ShipType.FlagShip => ProtoShip.FlagShip,
-        _ => ProtoShip.NullShipType
-    };
-    public static ShipType ShipFromProto(ProtoShip shipType) => shipType switch
-    {
-        ProtoShip.CivilianShip => ShipType.CivilShip,
-        ProtoShip.MilitaryShip => ShipType.WarShip,
-        ProtoShip.FlagShip => ShipType.FlagShip,
-        _ => ShipType.Null
-    };
-    #endregion
     #region ShipState
     public static ProtoShipState ShipStateToProto(ShipStateType shipStateType) => shipStateType switch
     {

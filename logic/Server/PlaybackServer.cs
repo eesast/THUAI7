@@ -146,13 +146,13 @@ namespace Server
             {
                 if (options.ResultOnly)
                 {
-                    using (MessageReader mr = new MessageReader(options.FileName))
+                    using (MessageReader mr = new(options.FileName))
                     {
                         Console.WriteLine("Parsing playback file...");
                         teamScore = new int[mr.teamCount, mr.playerCount];
                         finalScore = new int[mr.teamCount];
                         int infoNo = 0;
-                        object cursorLock = new object();
+                        object cursorLock = new();
                         var initialTop = Console.CursorTop;
                         var initialLeft = Console.CursorLeft;
                         while (true)
@@ -215,12 +215,12 @@ namespace Server
                         options.PlaybackSpeed = Math.Max(0.25, Math.Min(4.0, options.PlaybackSpeed));
                         timeInterval = (int)Math.Round(timeInterval / options.PlaybackSpeed);
                     }
-                    using (MessageReader mr = new MessageReader(options.FileName))
+                    using (MessageReader mr = new(options.FileName))
                     {
                         teamScore = new int[mr.teamCount, mr.playerCount];
                         finalScore = new int[mr.teamCount];
                         int infoNo = 0;
-                        object cursorLock = new object();
+                        object cursorLock = new();
                         var msgCurTop = Console.CursorTop;
                         var msgCurLeft = Console.CursorLeft;
                         var frt = new FrameRateTaskExecutor<int>

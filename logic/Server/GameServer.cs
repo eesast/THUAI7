@@ -22,7 +22,7 @@ namespace Server
         private MessageToClient currentGameInfo = new();
         private MessageOfObj currentMapMsg = new();
         private object newsLock = new();
-        private List<MessageOfNews> currentNews = new();
+        private List<MessageOfNews> currentNews = [];
         private SemaphoreSlim endGameSem = new(0);
         protected readonly Game game;
         private uint spectatorMinPlayerID = 2023;
@@ -92,12 +92,12 @@ namespace Server
 
         private void SaveGameResult(string path)
         {
-            Dictionary<string, int> result = new Dictionary<string, int>();
+            Dictionary<string, int> result = [];
             int[] score = GetScore();
             result.Add("RedTeam", score[0]);
             result.Add("BlueTeam", score[1]);
-            JsonSerializer serializer = new JsonSerializer();
-            using (StreamWriter sw = new StreamWriter(path))
+            JsonSerializer serializer = new();
+            using (StreamWriter sw = new(path))
             {
                 using (JsonWriter writer = new JsonTextWriter(sw))
                 {
@@ -137,7 +137,7 @@ namespace Server
                             IsSpectatorJoin = false;
                         }
                         long time = Environment.TickCount64;
-                        foreach (GameObj gameObj in gameObjList)
+                        foreach (GameObj gameObj in gameObjList.Cast<GameObj>())
                         {
                             MessageOfObj? msg = CopyInfo.Auto(gameObj, time);
                             if (msg != null) currentGameInfo.ObjMessage.Add(msg);
@@ -226,7 +226,7 @@ namespace Server
 
         private MessageOfAll GetMessageOfAll(int time)
         {
-            MessageOfAll msg = new MessageOfAll();
+            MessageOfAll msg = new();
             msg.GameTime = time;
             int[] score = GetScore();
             msg.RedteamScore = score[0];
@@ -275,7 +275,7 @@ namespace Server
                 {
                     string? line;
                     int i = 0, j = 0;
-                    using (StreamReader sr = new StreamReader(options.mapResource))
+                    using (StreamReader sr = new(options.mapResource))
                     {
                         while (!sr.EndOfStream && i < GameData.MapRows)
                         {
