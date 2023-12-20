@@ -63,7 +63,7 @@ namespace Server
                     PlayerId = player.ShipID,
                     Guid = player.ID,
                     ShipState = Transformation.ShipStateToProto(player.ShipState),
-                    ShipType = Transformation.ToShipType(player.ShipType),
+                    ShipType = Transformation.ShipToProto(player.ShipType),
                     ViewRange = player.ViewRange,
                     ConstructorType = Transformation.ConstructorToProto(player.ConstructorModuleType),
                     ArmorType = Transformation.ArmorToProto(player.ArmorModuleType),
@@ -98,7 +98,7 @@ namespace Server
             {
                 BulletMessage = new()
                 {
-                    Type = Transformation.ToBulletType(bullet.TypeOfBullet),
+                    Type = Transformation.BulletToProto(bullet.TypeOfBullet),
                     X = bullet.Position.x,
                     Y = bullet.Position.y,
                     FacingDirection = bullet.FacingDirection.Angle(),
@@ -118,7 +118,7 @@ namespace Server
             {
                 BombedBulletMessage = new()
                 {
-                    Type = Transformation.ToBulletType(bombedBullet.bulletHasBombed.TypeOfBullet),
+                    Type = Transformation.BulletToProto(bombedBullet.bulletHasBombed.TypeOfBullet),
                     X = bombedBullet.bulletHasBombed.Position.x,
                     Y = bombedBullet.bulletHasBombed.Position.y,
                     FacingDirection = bombedBullet.facingDirection.Angle(),
