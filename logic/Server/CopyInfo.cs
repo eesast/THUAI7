@@ -63,7 +63,7 @@ namespace Server
                     PlayerId = player.ShipID,
                     Guid = player.ID,
                     ShipState = Transformation.ShipStateToProto(player.ShipState),
-                    ShipType = Transformation.ShipToProto(player.ShipType),
+                    ShipType = Transformation.ShipTypeToProto(player.ShipType),
                     ViewRange = player.ViewRange,
                     ConstructorType = Transformation.ConstructorToProto(player.ConstructorModuleType),
                     ArmorType = Transformation.ArmorToProto(player.ArmorModuleType),
@@ -83,10 +83,8 @@ namespace Server
                 {
                     X = player.Position.x,
                     Y = player.Position.y,
-                    Score = (int)player.Score,
                     Hp = (int)player.HP,
                     TeamId = player.TeamID,
-                    PlayerId = player.PlyerID,
                 }
             };
             return msg;
