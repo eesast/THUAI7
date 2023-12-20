@@ -127,3 +127,10 @@ enum NewsType
     TEXT = 1;
     BINARY = 2;
 }
+
+enum PlayerTeam
+{
+    NULL_TEAM = 0;
+    RED=1;
+    BLUE=2;
+}

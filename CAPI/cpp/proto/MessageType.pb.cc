@@ -21,7 +21,7 @@ namespace _pbi = ::PROTOBUF_NAMESPACE_ID::internal;
 namespace protobuf
 {
 }  // namespace protobuf
-static const ::_pb::EnumDescriptor* file_level_enum_descriptors_MessageType_2eproto[14];
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_MessageType_2eproto[15];
 static constexpr const ::_pb::ServiceDescriptor**
     file_level_service_descriptors_MessageType_2eproto = nullptr;
 const ::uint32_t TableStruct_MessageType_2eproto::offsets[1] = {};
@@ -39,32 +39,34 @@ const char descriptor_table_protodef_MessageType_2eproto[] PROTOBUF_SECTION_VARI
     "yerType\022\024\n\020NULL_PLAYER_TYPE\020\000\022\010\n\004SHIP\020\001\022"
     "\010\n\004HOME\020\002*S\n\010ShipType\022\022\n\016NULL_SHIP_TYPE\020"
     "\000\022\021\n\rCIVILIAN_SHIP\020\001\022\021\n\rMILITARY_SHIP\020\002\022"
-    "\r\n\tFLAG_SHIP\020\003*\220\001\n\tShipState\022\017\n\013NULL_STA"
+    "\r\n\tFLAG_SHIP\020\003*\234\001\n\tShipState\022\017\n\013NULL_STA"
     "TUS\020\000\022\010\n\004IDLE\020\001\022\r\n\tPRODUCING\020\002\022\020\n\014CONSTR"
     "UCTING\020\003\022\016\n\nRECOVERING\020\004\022\r\n\tRECYCLING\020\005\022"
     "\r\n\tATTACKING\020\006\022\014\n\010SWINGING\020\007\022\013\n\007STUNNED\020"
-    "\010*i\n\nWeaponType\022\024\n\020NULL_WEAPON_TYPE\020\000\022\014\n"
-    "\010LASERGUN\020\001\022\r\n\tPLASMAGUN\020\002\022\014\n\010SHELLGUN\020\003"
-    "\022\016\n\nMISSILEGUN\020\004\022\n\n\006ARCGUN\020\005*b\n\017Construc"
-    "torType\022\031\n\025NULL_CONSTRUCTOR_TYPE\020\000\022\020\n\014CO"
-    "NSTRUCTOR1\020\001\022\020\n\014CONSTRUCTOR2\020\002\022\020\n\014CONSTR"
-    "UCTOR3\020\003*D\n\tArmorType\022\023\n\017NULL_ARMOR_TYPE"
-    "\020\000\022\n\n\006ARMOR1\020\001\022\n\n\006ARMOR2\020\002\022\n\n\006ARMOR3\020\003*I"
-    "\n\nShieldType\022\024\n\020NULL_SHIELD_TYPE\020\000\022\013\n\007SH"
-    "IELD1\020\001\022\013\n\007SHIELD2\020\002\022\013\n\007SHIELD3\020\003*S\n\014Pro"
-    "ducerType\022\026\n\022NULL_PRODUCER_TYPE\020\000\022\r\n\tPRO"
-    "DUCER1\020\001\022\r\n\tPRODUCER2\020\002\022\r\n\tPRODUCER3\020\003*Z"
-    "\n\nBulletType\022\024\n\020NULL_BULLET_TYPE\020\000\022\t\n\005LA"
-    "SER\020\001\022\n\n\006PLASMA\020\002\022\t\n\005SHELL\020\003\022\013\n\007MISSILE\020"
-    "\004\022\007\n\003ARC\020\005*T\n\020ConstructionType\022\032\n\026NULL_C"
-    "ONSTRUCTION_TYPE\020\000\022\013\n\007FACTORY\020\001\022\r\n\tCOMMU"
-    "NITY\020\002\022\010\n\004FORT\020\003*4\n\010NewsType\022\022\n\016NULL_NEW"
-    "S_TYPE\020\000\022\010\n\004TEXT\020\001\022\n\n\006BINARY\020\002b\006proto3"};
+    "\010\022\n\n\006MOVING\020\t*i\n\nWeaponType\022\024\n\020NULL_WEAP"
+    "ON_TYPE\020\000\022\014\n\010LASERGUN\020\001\022\r\n\tPLASMAGUN\020\002\022\014"
+    "\n\010SHELLGUN\020\003\022\016\n\nMISSILEGUN\020\004\022\n\n\006ARCGUN\020\005"
+    "*b\n\017ConstructorType\022\031\n\025NULL_CONSTRUCTOR_"
+    "TYPE\020\000\022\020\n\014CONSTRUCTOR1\020\001\022\020\n\014CONSTRUCTOR2"
+    "\020\002\022\020\n\014CONSTRUCTOR3\020\003*D\n\tArmorType\022\023\n\017NUL"
+    "L_ARMOR_TYPE\020\000\022\n\n\006ARMOR1\020\001\022\n\n\006ARMOR2\020\002\022\n"
+    "\n\006ARMOR3\020\003*I\n\nShieldType\022\024\n\020NULL_SHIELD_"
+    "TYPE\020\000\022\013\n\007SHIELD1\020\001\022\013\n\007SHIELD2\020\002\022\013\n\007SHIE"
+    "LD3\020\003*S\n\014ProducerType\022\026\n\022NULL_PRODUCER_T"
+    "YPE\020\000\022\r\n\tPRODUCER1\020\001\022\r\n\tPRODUCER2\020\002\022\r\n\tP"
+    "RODUCER3\020\003*Z\n\nBulletType\022\024\n\020NULL_BULLET_"
+    "TYPE\020\000\022\t\n\005LASER\020\001\022\n\n\006PLASMA\020\002\022\t\n\005SHELL\020\003"
+    "\022\013\n\007MISSILE\020\004\022\007\n\003ARC\020\005*T\n\020ConstructionTy"
+    "pe\022\032\n\026NULL_CONSTRUCTION_TYPE\020\000\022\013\n\007FACTOR"
+    "Y\020\001\022\r\n\tCOMMUNITY\020\002\022\010\n\004FORT\020\003*4\n\010NewsType"
+    "\022\022\n\016NULL_NEWS_TYPE\020\000\022\010\n\004TEXT\020\001\022\n\n\006BINARY"
+    "\020\002*.\n\nPlayerTeam\022\r\n\tNULL_TEAM\020\000\022\007\n\003RED\020\001"
+    "\022\010\n\004BLUE\020\002b\006proto3"};
 static ::absl::once_flag descriptor_table_MessageType_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_MessageType_2eproto = {
     false,
     false,
-    1278,
+    1338,
     descriptor_table_protodef_MessageType_2eproto,
     "MessageType.proto",
     &descriptor_table_MessageType_2eproto_once,
@@ -210,6 +212,7 @@ namespace protobuf
             case 6:
             case 7:
             case 8:
+            case 9:
                 return true;
             default:
                 return false;
@@ -351,6 +354,23 @@ namespace protobuf
         return file_level_enum_descriptors_MessageType_2eproto[13];
     }
     bool NewsType_IsValid(int value)
+    {
+        switch (value)
+        {
+            case 0:
+            case 1:
+            case 2:
+                return true;
+            default:
+                return false;
+        }
+    }
+    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* PlayerTeam_descriptor()
+    {
+        ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
+        return file_level_enum_descriptors_MessageType_2eproto[14];
+    }
+    bool PlayerTeam_IsValid(int value)
     {
         switch (value)
         {

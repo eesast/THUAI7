@@ -255,6 +255,7 @@ namespace protobuf
         ATTACKING = 6,
         SWINGING = 7,
         STUNNED = 8,
+        MOVING = 9,
         ShipState_INT_MIN_SENTINEL_DO_NOT_USE_ =
             std::numeric_limits<::int32_t>::min(),
         ShipState_INT_MAX_SENTINEL_DO_NOT_USE_ =
@@ -263,8 +264,8 @@ namespace protobuf
 
     bool ShipState_IsValid(int value);
     constexpr ShipState ShipState_MIN = static_cast<ShipState>(0);
-    constexpr ShipState ShipState_MAX = static_cast<ShipState>(8);
-    constexpr int ShipState_ARRAYSIZE = 8 + 1;
+    constexpr ShipState ShipState_MAX = static_cast<ShipState>(9);
+    constexpr int ShipState_ARRAYSIZE = 9 + 1;
     const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor*
         ShipState_descriptor();
     template<typename T>
@@ -276,7 +277,7 @@ namespace protobuf
     template<>
     inline const std::string& ShipState_Name(ShipState value)
     {
-        return ::PROTOBUF_NAMESPACE_ID::internal::NameOfDenseEnum<ShipState_descriptor, 0, 8>(
+        return ::PROTOBUF_NAMESPACE_ID::internal::NameOfDenseEnum<ShipState_descriptor, 0, 9>(
             static_cast<int>(value)
         );
     }
@@ -585,6 +586,42 @@ namespace protobuf
             NewsType_descriptor(), name, value
         );
     }
+    enum PlayerTeam : int
+    {
+        NULL_TEAM = 0,
+        RED = 1,
+        BLUE = 2,
+        PlayerTeam_INT_MIN_SENTINEL_DO_NOT_USE_ =
+            std::numeric_limits<::int32_t>::min(),
+        PlayerTeam_INT_MAX_SENTINEL_DO_NOT_USE_ =
+            std::numeric_limits<::int32_t>::max(),
+    };
+
+    bool PlayerTeam_IsValid(int value);
+    constexpr PlayerTeam PlayerTeam_MIN = static_cast<PlayerTeam>(0);
+    constexpr PlayerTeam PlayerTeam_MAX = static_cast<PlayerTeam>(2);
+    constexpr int PlayerTeam_ARRAYSIZE = 2 + 1;
+    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor*
+        PlayerTeam_descriptor();
+    template<typename T>
+    const std::string& PlayerTeam_Name(T value)
+    {
+        static_assert(std::is_same<T, PlayerTeam>::value || std::is_integral<T>::value, "Incorrect type passed to PlayerTeam_Name().");
+        return PlayerTeam_Name(static_cast<PlayerTeam>(value));
+    }
+    template<>
+    inline const std::string& PlayerTeam_Name(PlayerTeam value)
+    {
+        return ::PROTOBUF_NAMESPACE_ID::internal::NameOfDenseEnum<PlayerTeam_descriptor, 0, 2>(
+            static_cast<int>(value)
+        );
+    }
+    inline bool PlayerTeam_Parse(absl::string_view name, PlayerTeam* value)
+    {
+        return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<PlayerTeam>(
+            PlayerTeam_descriptor(), name, value
+        );
+    }
 
     // ===================================================================
 
@@ -730,6 +767,15 @@ template<>
 inline const EnumDescriptor* GetEnumDescriptor<::protobuf::NewsType>()
 {
     return ::protobuf::NewsType_descriptor();
+}
+template<>
+struct is_proto_enum<::protobuf::PlayerTeam> : std::true_type
+{
+};
+template<>
+inline const EnumDescriptor* GetEnumDescriptor<::protobuf::PlayerTeam>()
+{
+    return ::protobuf::PlayerTeam_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE
