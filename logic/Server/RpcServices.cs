@@ -9,7 +9,7 @@ namespace Server
     partial class GameServer : ServerBase
     {
         private int playerCountNow = 0;
-        protected object spectatorLock = new object();
+        protected object spectatorLock = new();
         protected bool isSpectatorJoin = false;
         protected bool IsSpectatorJoin
         {
@@ -120,7 +120,9 @@ namespace Server
 
             lock (addPlayerLock)
             {
+                // ShipInitInfo?
                 Game.PlayerInitInfo playerInitInfo = new(GetBirthPointIdx(request.PlayerId), request.TeamId, request.PlayerId, gameObjType);
+                // AddShip?
                 long newPlayerID = game.AddPlayer(playerInitInfo);
                 if (newPlayerID == GameObj.invalidID)
                     return;
@@ -176,7 +178,7 @@ namespace Server
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
             }
-            if (request.Angle == double.NaN)
+            if (double.IsNaN(request.Angle))
             {
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
@@ -198,7 +200,7 @@ namespace Server
                 moveRes.ActSuccess = false;
                 return Task.FromResult(moveRes);
             }
-            if (request.Angle == double.NaN)
+            if (double.IsNaN(request.Angle))
             {
                 moveRes.ActSuccess = false;
                 return Task.FromResult(moveRes);
@@ -236,10 +238,12 @@ namespace Server
                             boolRes.ActSuccess = false;
                             return Task.FromResult(boolRes);
                         }
-                        MessageOfNews news = new();
-                        news.TextMessage = request.TextMessage;
-                        news.FromId = request.PlayerId;
-                        news.ToId = request.ToPlayerId;
+                        MessageOfNews news = new()
+                        {
+                            TextMessage = request.TextMessage,
+                            FromId = request.PlayerId,
+                            ToId = request.ToPlayerId
+                        };
                         lock (newsLock)
                         {
                             currentNews.Add(news);
@@ -261,10 +265,12 @@ namespace Server
                             boolRes.ActSuccess = false;
                             return Task.FromResult(boolRes);
                         }
-                        MessageOfNews news = new();
-                        news.BinaryMessage = request.BinaryMessage;
-                        news.FromId = request.PlayerId;
-                        news.ToId = request.ToPlayerId;
+                        MessageOfNews news = new()
+                        {
+                            BinaryMessage = request.BinaryMessage,
+                            FromId = request.PlayerId,
+                            ToId = request.ToPlayerId
+                        };
                         lock (newsLock)
                         {
                             currentNews.Add(news);
@@ -355,9 +361,10 @@ namespace Server
 #if DEBUG
             Console.WriteLine($"BuildShip");
 #endif 
-            BoolRes boolRes = new();
-
-            boolRes.ActSuccess = game.BuildShip(request.TeamId, request.ShipType);
+            BoolRes boolRes = new()
+            {
+                ActSuccess = game.BuildShip(request.TeamId, request.ShipType)
+            };
             return Task.FromResult(boolRes);
         }
 

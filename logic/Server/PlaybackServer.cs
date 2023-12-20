@@ -19,7 +19,7 @@ namespace Server
         // private List<uint> spectatorList = new List<uint>();
         public int TeamCount => options.TeamCount;
         private object spetatorJoinLock = new();
-        protected object spectatorLock = new object();
+        protected object spectatorLock = new();
         protected bool isSpectatorJoin = false;
         protected bool IsSpectatorJoin
         {
