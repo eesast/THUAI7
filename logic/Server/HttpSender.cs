@@ -6,15 +6,10 @@ using System.Text;
 
 namespace Server
 {
-    class HttpSender
+    class HttpSender(string url, string token)
     {
-        private string url;
-        private string token;
-        public HttpSender(string url, string token)
-        {
-            this.url = url;
-            this.token = token;
-        }
+        private string url = url;
+        private string token = token;
 
         // void Test()
         // {
@@ -30,8 +25,8 @@ namespace Server
                 {
                     result = new TeamScore[]
                     {
-                        new TeamScore() { team_id = 0, score = scores[0], },
-                        new TeamScore() { team_id = 1, score = scores[1], },
+                        new() { team_id = 0, score = scores[0], },
+                        new() { team_id = 1, score = scores[1], },
                     },
                     mode = mode
                 })))
