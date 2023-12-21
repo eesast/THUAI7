@@ -149,7 +149,7 @@ namespace Server
                     using (MessageReader mr = new(options.FileName))
                     {
                         Console.WriteLine("Parsing playback file...");
-                        teamScore = new int[mr.teamCount, mr.playerCount];
+                        teamScore = new int[mr.teamCount];
                         finalScore = new int[mr.teamCount];
                         int infoNo = 0;
                         object cursorLock = new();
@@ -217,7 +217,7 @@ namespace Server
                     }
                     using (MessageReader mr = new(options.FileName))
                     {
-                        teamScore = new int[mr.teamCount, mr.playerCount];
+                        teamScore = new int[mr.teamCount];
                         finalScore = new int[mr.teamCount];
                         int infoNo = 0;
                         object cursorLock = new();
