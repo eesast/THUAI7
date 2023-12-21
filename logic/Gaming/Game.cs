@@ -112,25 +112,25 @@ namespace Gaming
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(ShipID);
+            Ship? ship = gameMap.FindShipInShipID(shipID);
             if (ship != null)
                 return actionManager.Install(ship);
             return false;
         }
-        public bool Recycle(long ShipID)
+        public bool Recycle(long shipID)
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(ShipID);
+            Ship? ship = gameMap.FindShipInShipID(shipID);
             if (ship != null)
                 return actionManager.Recycle(ship);
             return false;
         }
-        public bool Repair(long ShipID)
+        public bool Repair(long shipID)
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(ShipID);
+            Ship? ship = gameMap.FindShipInShipID(shipID);
             if (ship != null)
                 return actionManager.Repair(ship);
             return false;
