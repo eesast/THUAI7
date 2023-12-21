@@ -394,7 +394,6 @@ namespace Client
                         }
                         foreach (var data in listOfHome)
                         {
-                            //# if条件是为过编译而写的错误代码，请更正
                             if (data.TeamId == (long)PlayerTeam.Red)
                             {
                                 redPlayer.SetPlayerValue(data);
@@ -423,7 +422,6 @@ namespace Client
                         }
                         foreach (var data in listOfShip)
                         {
-                            //# if条件是为过编译而写的错误代码，请更正
                             if (data.TeamId == (long)PlayerTeam.Red)
                             {
                                 redPlayer.SetShipValue(data);
@@ -454,7 +452,6 @@ namespace Client
                 HorizontalOptions = LayoutOptions.Start,
                 VerticalOptions = LayoutOptions.Start,
                 Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0),
-                //# if条件是为过编译而写的错误代码，请更正
                 Fill = (data.TeamId == (long)PlayerTeam.Red) ? Colors.Red : Colors.Blue
             };
             MapGrid.Children.Add(iconOfHome);
@@ -497,7 +494,6 @@ namespace Client
                 HorizontalOptions = LayoutOptions.Start,
                 VerticalOptions = LayoutOptions.Start,
                 Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * bulletRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * bulletRadiusTimes, 0, 0),
-                //# if条件是为过编译而写的错误代码，请更正
                 Fill = (data.TeamId == (long)PlayerTeam.Red) ? Colors.Red : Colors.Blue
             };
             switch (data.Type)
@@ -538,7 +534,6 @@ namespace Client
                 HorizontalOptions = LayoutOptions.Start,
                 VerticalOptions = LayoutOptions.Start,
                 Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0),
-                //# if条件是为过编译而写的错误代码，请更正
                 Fill = (data.TeamId == (long)PlayerTeam.Red) ? Colors.Red : Colors.Blue
             };
             Label nameOfShip = new()
