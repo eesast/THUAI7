@@ -1,5 +1,6 @@
 ﻿using GameClass.GameObj;
 using GameClass.GameObj.Areas;
+using Preparation.Interface;
 using Preparation.Utility;
 using System.Collections.Generic;
 using System.Linq;
@@ -107,11 +108,29 @@ namespace Gaming
                 return actionManager.Construct(ship, constructionType);
             return false;
         }
-        public bool Repair(long ShipID)
+        public bool Install(long shipID)
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(ShipID);
+            Ship? ship = gameMap.FindShipInShipID(shipID);
+            if (ship != null)
+                return actionManager.Install(ship);
+            return false;
+        }
+        public bool Recycle(long shipID)
+        {
+            if (!gameMap.Timer.IsGaming)
+                return false;
+            Ship? ship = gameMap.FindShipInShipID(shipID);
+            if (ship != null)
+                return actionManager.Recycle(ship);
+            return false;
+        }
+        public bool Repair(long shipID)
+        {
+            if (!gameMap.Timer.IsGaming)
+                return false;
+            Ship? ship = gameMap.FindShipInShipID(shipID);
             if (ship != null)
                 return actionManager.Repair(ship);
             return false;
@@ -134,6 +153,31 @@ namespace Gaming
                 return attackManager.Attack(ship, angle);
             return false;
         }
+        public void ClearAllLists()
+        {
+            foreach (var keyValuePair in gameMap.GameObjDict)
+            {
+                if (!GameData.NeedCopy(keyValuePair.Key))
+                {
+                    gameMap.GameObjLockDict[keyValuePair.Key].EnterWriteLock();
+                    try
+                    {
+                        if (keyValuePair.Key == GameObjType.Ship)
+                        {
+                            foreach (Ship ship in gameMap.GameObjDict[GameObjType.Ship].Cast<Ship>())
+                            {
+                                ship.CanMove.SetReturnOri(false);
+                            }
+                        }
+                        gameMap.GameObjDict[keyValuePair.Key].Clear();
+                    }
+                    finally
+                    {
+                        gameMap.GameObjLockDict[keyValuePair.Key].ExitWriteLock();
+                    }
+                }
+            }
+        }
         public long GetTeamMoney(long teamID)
         {
             if (!gameMap.TeamExists(teamID))
@@ -145,6 +189,26 @@ namespace Gaming
             if (!gameMap.TeamExists(teamID))
                 return -1;
             return teamList[(int)teamID].Score;
+        }
+        public List<IGameObj> GetGameObj()
+        {
+            var gameObjList = new List<IGameObj>();
+            foreach (var keyValuePair in gameMap.GameObjDict)
+            {
+                if (GameData.NeedCopy(keyValuePair.Key))
+                {
+                    gameMap.GameObjLockDict[keyValuePair.Key].EnterReadLock();
+                    try
+                    {
+                        gameObjList.AddRange(gameMap.GameObjDict[keyValuePair.Key]);
+                    }
+                    finally
+                    {
+                        gameMap.GameObjLockDict[keyValuePair.Key].ExitReadLock();
+                    }
+                }
+            }
+            return gameObjList;
         }
         public void UpdateBirthPoint()
         {

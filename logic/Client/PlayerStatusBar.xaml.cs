@@ -103,25 +103,25 @@ namespace Client
 
         public void SetPlayerValue(MessageOfHome player)
         {
-            if (player.Team == PlayerTeam.Down && myRole == PlayerRole.Red || player.Team == PlayerTeam.Up && myRole == PlayerRole.Blue)
+            if (player.TeamId == (long)PlayerTeam.Red && myRole == PlayerRole.Red || player.TeamId == (long)PlayerTeam.Blue && myRole == PlayerRole.Blue)
             {
                 MyHpData.Text = player.Hp.ToString();
                 MyHpSlide.WidthRequest = player.Hp / 100.0 * lengthOfHpSlide;
-                MyMoney.Text = player.Economy.ToString();
+                MyMoney.Text = player.Score.ToString();
             }
         }
 
         public void SetShipValue(MessageOfShip ship)
         {
-            if (ship.Team == PlayerTeam.Down && myRole == PlayerRole.Red || ship.Team == PlayerTeam.Up && myRole == PlayerRole.Blue)
+            if (ship.TeamId == (long)PlayerTeam.Red && myRole == PlayerRole.Red || ship.TeamId == (long)PlayerTeam.Blue && myRole == PlayerRole.Blue)
             {
                 ShipLabel shipLabel = new ShipLabel();
-                shipLabel.name.Text = ship.ShipType.ToString() + ship.ShipId.ToString();
-                shipLabel.producer.Text = ship.CollectorType.ToString();
+                shipLabel.name.Text = ship.ShipType.ToString() + ship.PlayerId.ToString();
+                shipLabel.producer.Text = ship.ProducerType.ToString();
                 shipLabel.armor.Text = ship.ArmorType.ToString();
                 shipLabel.shield.Text = ship.ShieldType.ToString();
-                shipLabel.weapon.Text = ship.BulletType.ToString();
-                shipLabel.constructor.Text = ship.BuilderType.ToString();
+                shipLabel.weapon.Text = ship.WeaponType.ToString();
+                shipLabel.constructor.Text = ship.ConstructorType.ToString();
                 shipLabel.status.Text = ship.ShipState.ToString();
             }
             //TODO: Dynamic change the ships
