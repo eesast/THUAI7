@@ -6,13 +6,9 @@ using System.IO.Compression;
 
 namespace Playback
 {
-    public class FileFormatNotLegalException : Exception
+    public class FileFormatNotLegalException(string fileName) : Exception
     {
-        private readonly string fileName;
-        public FileFormatNotLegalException(string fileName)
-        {
-            this.fileName = fileName;
-        }
+        private readonly string fileName = fileName;
         public override string Message => $"The file: " + this.fileName + " is not a legal playback file for THUAI6.";
     }
 
@@ -88,7 +84,7 @@ namespace Playback
             var pos = cos.Position;
             try
             {
-                MessageToClient? msg = new MessageToClient();
+                MessageToClient? msg = new();
                 cos.ReadMessage(msg);
                 return msg;
             }

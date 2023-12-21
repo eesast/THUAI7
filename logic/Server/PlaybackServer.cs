@@ -7,10 +7,10 @@ using Timothy.FrameRateTask;
 
 namespace Server
 {
-    class PlaybackServer : ServerBase
+    class PlaybackServer(ArgumentOptions options) : ServerBase
     {
-        protected readonly ArgumentOptions options;
-        private int[] teamScore;
+        protected readonly ArgumentOptions options = options;
+        private int[] teamScore = new int[0];
         private ConcurrentDictionary<long, (SemaphoreSlim, SemaphoreSlim)> semaDict = new();
         // private object semaDictLock = new();
         private MessageToClient? currentGameInfo = new();
@@ -35,8 +35,8 @@ namespace Server
                     isSpectatorJoin = value;
             }
         }
-        private bool IsGaming { get; set; }
-        private int[] finalScore;
+        private bool IsGaming { get; set; } = true;
+        private int[] finalScore = new int[0];
         public int[] FinalScore
         {
             get
@@ -46,13 +46,6 @@ namespace Server
         }
         public override int[] GetMoney() => new int[0];
         public override int[] GetScore() => FinalScore;
-        public PlaybackServer(ArgumentOptions options)
-        {
-            this.options = options;
-            IsGaming = true;
-            teamScore = new int[0];
-            finalScore = new int[0];
-        }
 
         //public override async Task AddPlayer(PlayerMsg request, IServerStreamWriter<MessageToClient> responseStream, ServerCallContext context)
         //{
@@ -149,7 +142,7 @@ namespace Server
                     using (MessageReader mr = new(options.FileName))
                     {
                         Console.WriteLine("Parsing playback file...");
-                        teamScore = new int[mr.teamCount, mr.playerCount];
+                        teamScore = new int[mr.teamCount];
                         finalScore = new int[mr.teamCount];
                         int infoNo = 0;
                         object cursorLock = new();
@@ -217,7 +210,7 @@ namespace Server
                     }
                     using (MessageReader mr = new(options.FileName))
                     {
-                        teamScore = new int[mr.teamCount, mr.playerCount];
+                        teamScore = new int[mr.teamCount];
                         finalScore = new int[mr.teamCount];
                         int infoNo = 0;
                         object cursorLock = new();
