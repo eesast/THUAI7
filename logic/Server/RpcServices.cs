@@ -120,8 +120,8 @@ namespace Server
             lock (addPlayerLock)
             {
                 // ShipInitInfo?
-                XY birthPoint=new(request.X, request.Y);
-                Game.ShipInitInfo playerInitInfo = new( request.TeamId, request.PlayerId, birthPoint,Transformation.ShipTypeFromProto(request.ShipType));
+                XY birthPoint = new(request.X, request.Y);
+                Game.ShipInitInfo playerInitInfo = new(request.TeamId, request.PlayerId, birthPoint, Transformation.ShipTypeFromProto(request.ShipType));
                 // AddShip?
                 long newPlayerID = game.AddShip(playerInitInfo);
                 if (newPlayerID == GameObj.invalidID)
@@ -335,7 +335,7 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Construct(gameID,Transformation.ConstructionFromProto(request.ConstructionType));
+            boolRes.ActSuccess = game.Construct(gameID, Transformation.ConstructionFromProto(request.ConstructionType));
             return Task.FromResult(boolRes);
         }
 

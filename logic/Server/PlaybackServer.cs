@@ -253,7 +253,7 @@ namespace Server
                                     {
                                         if (item.TeamMessage != null)
                                             teamScore[item.TeamMessage.TeamId] = item.TeamMessage.Score;
-                                      
+
                                     }
                                 }
 
