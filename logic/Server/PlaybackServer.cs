@@ -10,7 +10,7 @@ namespace Server
     class PlaybackServer : ServerBase
     {
         protected readonly ArgumentOptions options;
-        private int[,] teamScore;
+        private int[] teamScore;
         private ConcurrentDictionary<long, (SemaphoreSlim, SemaphoreSlim)> semaDict = new();
         // private object semaDictLock = new();
         private MessageToClient? currentGameInfo = new();
@@ -50,7 +50,7 @@ namespace Server
         {
             this.options = options;
             IsGaming = true;
-            teamScore = new int[0, 0];
+            teamScore = new int[0];
             finalScore = new int[0];
         }
 
@@ -196,8 +196,8 @@ namespace Server
                             if (msg.GameState == GameState.GameEnd)
                             {
                                 Console.WriteLine("Game over normally!");
-                                finalScore[0] = msg.AllMessage.StudentScore;
-                                finalScore[1] = msg.AllMessage.TrickerScore;
+                                finalScore[0] = msg.AllMessage.RedteamScore;
+                                finalScore[1] = msg.AllMessage.BlueteamScore;
                                 goto endParse;
                             }
                         }
@@ -251,10 +251,9 @@ namespace Server
                                 {
                                     foreach (var item in msg.ObjMessage)
                                     {
-                                        if (item.StudentMessage != null)
-                                            teamScore[0, item.StudentMessage.PlayerId] = item.StudentMessage.Score;
-                                        if (item.TrickerMessage != null)
-                                            teamScore[1, item.TrickerMessage.PlayerId - options.MaxStudentCount] = item.TrickerMessage.Score; // 这里默认 Tricker 的 PlayerId 从 MaxStudentCount = 4 开始
+                                        if (item.TeamMessage != null)
+                                            teamScore[item.TeamMessage.TeamId] = item.TeamMessage.Score;
+                                      
                                     }
                                 }
 
@@ -270,8 +269,8 @@ namespace Server
                                 {
                                     Console.WriteLine("Game over normally!");
                                     IsGaming = false;
-                                    finalScore[0] = msg.AllMessage.StudentScore;
-                                    finalScore[1] = msg.AllMessage.TrickerScore;
+                                    finalScore[0] = msg.AllMessage.BlueteamScore;
+                                    finalScore[1] = msg.AllMessage.RedteamScore;
                                     ReportGame(msg);
                                     return false;
                                 }
@@ -326,7 +325,7 @@ namespace Server
             }
             finally
             {
-                teamScore ??= new int[0, 0];
+                teamScore ??= new int[0];
             }
         }
     }

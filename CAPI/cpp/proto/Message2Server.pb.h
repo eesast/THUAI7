@@ -493,9 +493,10 @@ namespace protobuf
         enum : int
         {
             kPlayerIdFieldNumber = 1,
+            kTeamIdFieldNumber = 3,
             kShipTypeFieldNumber = 2,
-            kIsHomeFieldNumber = 3,
-            kTeamIdFieldNumber = 4,
+            kXFieldNumber = 4,
+            kYFieldNumber = 5,
         };
         // int64 player_id = 1;
         void clear_player_id();
@@ -505,6 +506,16 @@ namespace protobuf
     private:
         ::int64_t _internal_player_id() const;
         void _internal_set_player_id(::int64_t value);
+
+    public:
+        // int64 team_id = 3;
+        void clear_team_id();
+        ::int64_t team_id() const;
+        void set_team_id(::int64_t value);
+
+    private:
+        ::int64_t _internal_team_id() const;
+        void _internal_set_team_id(::int64_t value);
 
     public:
         // .protobuf.ShipType ship_type = 2;
@@ -517,24 +528,24 @@ namespace protobuf
         void _internal_set_ship_type(::protobuf::ShipType value);
 
     public:
-        // bool is_home = 3;
-        void clear_is_home();
-        bool is_home() const;
-        void set_is_home(bool value);
+        // int32 x = 4;
+        void clear_x();
+        ::int32_t x() const;
+        void set_x(::int32_t value);
 
     private:
-        bool _internal_is_home() const;
-        void _internal_set_is_home(bool value);
+        ::int32_t _internal_x() const;
+        void _internal_set_x(::int32_t value);
 
     public:
-        // int64 team_id = 4;
-        void clear_team_id();
-        ::int64_t team_id() const;
-        void set_team_id(::int64_t value);
+        // int32 y = 5;
+        void clear_y();
+        ::int32_t y() const;
+        void set_y(::int32_t value);
 
     private:
-        ::int64_t _internal_team_id() const;
-        void _internal_set_team_id(::int64_t value);
+        ::int32_t _internal_y() const;
+        void _internal_set_y(::int32_t value);
 
     public:
         // @@protoc_insertion_point(class_scope:protobuf.PlayerMsg)
@@ -549,9 +560,10 @@ namespace protobuf
         struct Impl_
         {
             ::int64_t player_id_;
-            int ship_type_;
-            bool is_home_;
             ::int64_t team_id_;
+            int ship_type_;
+            ::int32_t x_;
+            ::int32_t y_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
         union
@@ -2459,32 +2471,7 @@ namespace protobuf
         _impl_.ship_type_ = value;
     }
 
-    // bool is_home = 3;
-    inline void PlayerMsg::clear_is_home()
-    {
-        _impl_.is_home_ = false;
-    }
-    inline bool PlayerMsg::is_home() const
-    {
-        // @@protoc_insertion_point(field_get:protobuf.PlayerMsg.is_home)
-        return _internal_is_home();
-    }
-    inline void PlayerMsg::set_is_home(bool value)
-    {
-        _internal_set_is_home(value);
-        // @@protoc_insertion_point(field_set:protobuf.PlayerMsg.is_home)
-    }
-    inline bool PlayerMsg::_internal_is_home() const
-    {
-        return _impl_.is_home_;
-    }
-    inline void PlayerMsg::_internal_set_is_home(bool value)
-    {
-        ;
-        _impl_.is_home_ = value;
-    }
-
-    // int64 team_id = 4;
+    // int64 team_id = 3;
     inline void PlayerMsg::clear_team_id()
     {
         _impl_.team_id_ = ::int64_t{0};
@@ -2507,6 +2494,56 @@ namespace protobuf
     {
         ;
         _impl_.team_id_ = value;
+    }
+
+    // int32 x = 4;
+    inline void PlayerMsg::clear_x()
+    {
+        _impl_.x_ = 0;
+    }
+    inline ::int32_t PlayerMsg::x() const
+    {
+        // @@protoc_insertion_point(field_get:protobuf.PlayerMsg.x)
+        return _internal_x();
+    }
+    inline void PlayerMsg::set_x(::int32_t value)
+    {
+        _internal_set_x(value);
+        // @@protoc_insertion_point(field_set:protobuf.PlayerMsg.x)
+    }
+    inline ::int32_t PlayerMsg::_internal_x() const
+    {
+        return _impl_.x_;
+    }
+    inline void PlayerMsg::_internal_set_x(::int32_t value)
+    {
+        ;
+        _impl_.x_ = value;
+    }
+
+    // int32 y = 5;
+    inline void PlayerMsg::clear_y()
+    {
+        _impl_.y_ = 0;
+    }
+    inline ::int32_t PlayerMsg::y() const
+    {
+        // @@protoc_insertion_point(field_get:protobuf.PlayerMsg.y)
+        return _internal_y();
+    }
+    inline void PlayerMsg::set_y(::int32_t value)
+    {
+        _internal_set_y(value);
+        // @@protoc_insertion_point(field_set:protobuf.PlayerMsg.y)
+    }
+    inline ::int32_t PlayerMsg::_internal_y() const
+    {
+        return _impl_.y_;
+    }
+    inline void PlayerMsg::_internal_set_y(::int32_t value)
+    {
+        ;
+        _impl_.y_ = value;
     }
 
     // -------------------------------------------------------------------

@@ -100,6 +100,9 @@ namespace protobuf
     class MessageOfShip;
     struct MessageOfShipDefaultTypeInternal;
     extern MessageOfShipDefaultTypeInternal _MessageOfShip_default_instance_;
+    class MessageOfTeam;
+    struct MessageOfTeamDefaultTypeInternal;
+    extern MessageOfTeamDefaultTypeInternal _MessageOfTeam_default_instance_;
     class MessageOfWormhole;
     struct MessageOfWormholeDefaultTypeInternal;
     extern MessageOfWormholeDefaultTypeInternal _MessageOfWormhole_default_instance_;
@@ -144,6 +147,8 @@ template<>
 ::protobuf::MessageOfResource* Arena::CreateMaybeMessage<::protobuf::MessageOfResource>(Arena*);
 template<>
 ::protobuf::MessageOfShip* Arena::CreateMaybeMessage<::protobuf::MessageOfShip>(Arena*);
+template<>
+::protobuf::MessageOfTeam* Arena::CreateMaybeMessage<::protobuf::MessageOfTeam>(Arena*);
 template<>
 ::protobuf::MessageOfWormhole* Arena::CreateMaybeMessage<::protobuf::MessageOfWormhole>(Arena*);
 template<>
@@ -2965,6 +2970,219 @@ namespace protobuf
         friend struct ::TableStruct_Message2Clients_2eproto;
     };  // -------------------------------------------------------------------
 
+    class MessageOfTeam final :
+        public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protobuf.MessageOfTeam) */
+    {
+    public:
+        inline MessageOfTeam() :
+            MessageOfTeam(nullptr)
+        {
+        }
+        ~MessageOfTeam() override;
+        template<typename = void>
+        explicit PROTOBUF_CONSTEXPR MessageOfTeam(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+        MessageOfTeam(const MessageOfTeam& from);
+        MessageOfTeam(MessageOfTeam&& from) noexcept
+            :
+            MessageOfTeam()
+        {
+            *this = ::std::move(from);
+        }
+
+        inline MessageOfTeam& operator=(const MessageOfTeam& from)
+        {
+            CopyFrom(from);
+            return *this;
+        }
+        inline MessageOfTeam& operator=(MessageOfTeam&& from) noexcept
+        {
+            if (this == &from)
+                return *this;
+            if (GetOwningArena() == from.GetOwningArena()
+#ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+                && GetOwningArena() != nullptr
+#endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+            )
+            {
+                InternalSwap(&from);
+            }
+            else
+            {
+                CopyFrom(from);
+            }
+            return *this;
+        }
+
+        inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const
+        {
+            return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
+        }
+        inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields()
+        {
+            return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+        }
+
+        static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor()
+        {
+            return GetDescriptor();
+        }
+        static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor()
+        {
+            return default_instance().GetMetadata().descriptor;
+        }
+        static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection()
+        {
+            return default_instance().GetMetadata().reflection;
+        }
+        static const MessageOfTeam& default_instance()
+        {
+            return *internal_default_instance();
+        }
+        static inline const MessageOfTeam* internal_default_instance()
+        {
+            return reinterpret_cast<const MessageOfTeam*>(
+                &_MessageOfTeam_default_instance_
+            );
+        }
+        static constexpr int kIndexInFileMessages =
+            11;
+
+        friend void swap(MessageOfTeam& a, MessageOfTeam& b)
+        {
+            a.Swap(&b);
+        }
+        inline void Swap(MessageOfTeam* other)
+        {
+            if (other == this)
+                return;
+#ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+            if (GetOwningArena() != nullptr &&
+                GetOwningArena() == other->GetOwningArena())
+            {
+#else   // PROTOBUF_FORCE_COPY_IN_SWAP
+            if (GetOwningArena() == other->GetOwningArena())
+            {
+#endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+                InternalSwap(other);
+            }
+            else
+            {
+                ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+            }
+        }
+        void UnsafeArenaSwap(MessageOfTeam* other)
+        {
+            if (other == this)
+                return;
+            ABSL_DCHECK(GetOwningArena() == other->GetOwningArena());
+            InternalSwap(other);
+        }
+
+        // implements Message ----------------------------------------------
+
+        MessageOfTeam* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final
+        {
+            return CreateMaybeMessage<MessageOfTeam>(arena);
+        }
+        using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+        void CopyFrom(const MessageOfTeam& from);
+        using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+        void MergeFrom(const MessageOfTeam& from)
+        {
+            MessageOfTeam::MergeImpl(*this, from);
+        }
+
+    private:
+        static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+
+    public:
+        PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+        bool IsInitialized() const final;
+
+        ::size_t ByteSizeLong() const final;
+        const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+        ::uint8_t* _InternalSerialize(
+            ::uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream
+        ) const final;
+        int GetCachedSize() const final
+        {
+            return _impl_._cached_size_.Get();
+        }
+
+    private:
+        void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+        void SharedDtor();
+        void SetCachedSize(int size) const final;
+        void InternalSwap(MessageOfTeam* other);
+
+    private:
+        friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+        static ::absl::string_view FullMessageName()
+        {
+            return "protobuf.MessageOfTeam";
+        }
+
+    protected:
+        explicit MessageOfTeam(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+
+    public:
+        static const ClassData _class_data_;
+        const ::PROTOBUF_NAMESPACE_ID::Message::ClassData* GetClassData() const final;
+
+        ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+        // nested types ----------------------------------------------------
+
+        // accessors -------------------------------------------------------
+
+        enum : int
+        {
+            kTeamIdFieldNumber = 1,
+            kScoreFieldNumber = 2,
+        };
+        // int64 team_id = 1;
+        void clear_team_id();
+        ::int64_t team_id() const;
+        void set_team_id(::int64_t value);
+
+    private:
+        ::int64_t _internal_team_id() const;
+        void _internal_set_team_id(::int64_t value);
+
+    public:
+        // int32 score = 2;
+        void clear_score();
+        ::int32_t score() const;
+        void set_score(::int32_t value);
+
+    private:
+        ::int32_t _internal_score() const;
+        void _internal_set_score(::int32_t value);
+
+    public:
+        // @@protoc_insertion_point(class_scope:protobuf.MessageOfTeam)
+
+    private:
+        class _Internal;
+
+        template<typename T>
+        friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+        typedef void InternalArenaConstructable_;
+        typedef void DestructorSkippable_;
+        struct Impl_
+        {
+            ::int64_t team_id_;
+            ::int32_t score_;
+            mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+        };
+        union
+        {
+            Impl_ _impl_;
+        };
+        friend struct ::TableStruct_Message2Clients_2eproto;
+    };  // -------------------------------------------------------------------
+
     class MessageOfObj final :
         public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protobuf.MessageOfObj) */
     {
@@ -3047,6 +3265,7 @@ namespace protobuf
             kMapMessage = 9,
             kNewsMessage = 10,
             kBombedBulletMessage = 11,
+            kTeamMessage = 12,
             MESSAGE_OF_OBJ_NOT_SET = 0,
         };
 
@@ -3057,7 +3276,7 @@ namespace protobuf
             );
         }
         static constexpr int kIndexInFileMessages =
-            11;
+            12;
 
         friend void swap(MessageOfObj& a, MessageOfObj& b)
         {
@@ -3160,6 +3379,7 @@ namespace protobuf
             kMapMessageFieldNumber = 9,
             kNewsMessageFieldNumber = 10,
             kBombedBulletMessageFieldNumber = 11,
+            kTeamMessageFieldNumber = 12,
         };
         // .protobuf.MessageOfShip ship_message = 1;
         bool has_ship_message() const;
@@ -3403,6 +3623,28 @@ namespace protobuf
             ::protobuf::MessageOfBombedBullet* bombed_bullet_message
         );
         ::protobuf::MessageOfBombedBullet* unsafe_arena_release_bombed_bullet_message();
+        // .protobuf.MessageOfTeam team_message = 12;
+        bool has_team_message() const;
+
+    private:
+        bool _internal_has_team_message() const;
+
+    public:
+        void clear_team_message();
+        const ::protobuf::MessageOfTeam& team_message() const;
+        PROTOBUF_NODISCARD ::protobuf::MessageOfTeam* release_team_message();
+        ::protobuf::MessageOfTeam* mutable_team_message();
+        void set_allocated_team_message(::protobuf::MessageOfTeam* team_message);
+
+    private:
+        const ::protobuf::MessageOfTeam& _internal_team_message() const;
+        ::protobuf::MessageOfTeam* _internal_mutable_team_message();
+
+    public:
+        void unsafe_arena_set_allocated_team_message(
+            ::protobuf::MessageOfTeam* team_message
+        );
+        ::protobuf::MessageOfTeam* unsafe_arena_release_team_message();
         void clear_message_of_obj();
         MessageOfObjCase message_of_obj_case() const;
         // @@protoc_insertion_point(class_scope:protobuf.MessageOfObj)
@@ -3420,6 +3662,7 @@ namespace protobuf
         void set_has_map_message();
         void set_has_news_message();
         void set_has_bombed_bullet_message();
+        void set_has_team_message();
 
         inline bool has_message_of_obj() const;
         inline void clear_has_message_of_obj();
@@ -3448,6 +3691,7 @@ namespace protobuf
                 ::protobuf::MessageOfMap* map_message_;
                 ::protobuf::MessageOfNews* news_message_;
                 ::protobuf::MessageOfBombedBullet* bombed_bullet_message_;
+                ::protobuf::MessageOfTeam* team_message_;
             } message_of_obj_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
             ::uint32_t _oneof_case_[1];
@@ -3535,7 +3779,7 @@ namespace protobuf
             );
         }
         static constexpr int kIndexInFileMessages =
-            12;
+            13;
 
         friend void swap(MessageOfAll& a, MessageOfAll& b)
         {
@@ -3760,7 +4004,7 @@ namespace protobuf
             );
         }
         static constexpr int kIndexInFileMessages =
-            13;
+            14;
 
         friend void swap(MessageToClient& a, MessageToClient& b)
         {
@@ -4006,7 +4250,7 @@ namespace protobuf
             );
         }
         static constexpr int kIndexInFileMessages =
-            14;
+            15;
 
         friend void swap(MoveRes& a, MoveRes& b)
         {
@@ -4231,7 +4475,7 @@ namespace protobuf
             );
         }
         static constexpr int kIndexInFileMessages =
-            15;
+            16;
 
         friend void swap(BoolRes& a, BoolRes& b)
         {
@@ -4432,7 +4676,7 @@ namespace protobuf
             );
         }
         static constexpr int kIndexInFileMessages =
-            16;
+            17;
 
         friend void swap(ShipInfoRes& a, ShipInfoRes& b)
         {
@@ -4646,7 +4890,7 @@ namespace protobuf
             );
         }
         static constexpr int kIndexInFileMessages =
-            17;
+            18;
 
         friend void swap(EcoRes& a, EcoRes& b)
         {
@@ -4854,7 +5098,7 @@ namespace protobuf
             );
         }
         static constexpr int kIndexInFileMessages =
-            18;
+            19;
 
         friend void swap(MessageOfNews& a, MessageOfNews& b)
         {
@@ -6618,6 +6862,60 @@ namespace protobuf
 
     // -------------------------------------------------------------------
 
+    // MessageOfTeam
+
+    // int64 team_id = 1;
+    inline void MessageOfTeam::clear_team_id()
+    {
+        _impl_.team_id_ = ::int64_t{0};
+    }
+    inline ::int64_t MessageOfTeam::team_id() const
+    {
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfTeam.team_id)
+        return _internal_team_id();
+    }
+    inline void MessageOfTeam::set_team_id(::int64_t value)
+    {
+        _internal_set_team_id(value);
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfTeam.team_id)
+    }
+    inline ::int64_t MessageOfTeam::_internal_team_id() const
+    {
+        return _impl_.team_id_;
+    }
+    inline void MessageOfTeam::_internal_set_team_id(::int64_t value)
+    {
+        ;
+        _impl_.team_id_ = value;
+    }
+
+    // int32 score = 2;
+    inline void MessageOfTeam::clear_score()
+    {
+        _impl_.score_ = 0;
+    }
+    inline ::int32_t MessageOfTeam::score() const
+    {
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfTeam.score)
+        return _internal_score();
+    }
+    inline void MessageOfTeam::set_score(::int32_t value)
+    {
+        _internal_set_score(value);
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfTeam.score)
+    }
+    inline ::int32_t MessageOfTeam::_internal_score() const
+    {
+        return _impl_.score_;
+    }
+    inline void MessageOfTeam::_internal_set_score(::int32_t value)
+    {
+        ;
+        _impl_.score_ = value;
+    }
+
+    // -------------------------------------------------------------------
+
     // MessageOfObj
 
     // .protobuf.MessageOfShip ship_message = 1;
@@ -7651,6 +7949,100 @@ namespace protobuf
     {
         ::protobuf::MessageOfBombedBullet* _msg = _internal_mutable_bombed_bullet_message();
         // @@protoc_insertion_point(field_mutable:protobuf.MessageOfObj.bombed_bullet_message)
+        return _msg;
+    }
+
+    // .protobuf.MessageOfTeam team_message = 12;
+    inline bool MessageOfObj::has_team_message() const
+    {
+        return message_of_obj_case() == kTeamMessage;
+    }
+    inline bool MessageOfObj::_internal_has_team_message() const
+    {
+        return message_of_obj_case() == kTeamMessage;
+    }
+    inline void MessageOfObj::set_has_team_message()
+    {
+        _impl_._oneof_case_[0] = kTeamMessage;
+    }
+    inline void MessageOfObj::clear_team_message()
+    {
+        if (message_of_obj_case() == kTeamMessage)
+        {
+            if (GetArenaForAllocation() == nullptr)
+            {
+                delete _impl_.message_of_obj_.team_message_;
+            }
+            clear_has_message_of_obj();
+        }
+    }
+    inline ::protobuf::MessageOfTeam* MessageOfObj::release_team_message()
+    {
+        // @@protoc_insertion_point(field_release:protobuf.MessageOfObj.team_message)
+        if (message_of_obj_case() == kTeamMessage)
+        {
+            clear_has_message_of_obj();
+            ::protobuf::MessageOfTeam* temp = _impl_.message_of_obj_.team_message_;
+            if (GetArenaForAllocation() != nullptr)
+            {
+                temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+            }
+            _impl_.message_of_obj_.team_message_ = nullptr;
+            return temp;
+        }
+        else
+        {
+            return nullptr;
+        }
+    }
+    inline const ::protobuf::MessageOfTeam& MessageOfObj::_internal_team_message() const
+    {
+        return message_of_obj_case() == kTeamMessage ? *_impl_.message_of_obj_.team_message_ : reinterpret_cast<::protobuf::MessageOfTeam&>(::protobuf::_MessageOfTeam_default_instance_);
+    }
+    inline const ::protobuf::MessageOfTeam& MessageOfObj::team_message() const
+    {
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfObj.team_message)
+        return _internal_team_message();
+    }
+    inline ::protobuf::MessageOfTeam* MessageOfObj::unsafe_arena_release_team_message()
+    {
+        // @@protoc_insertion_point(field_unsafe_arena_release:protobuf.MessageOfObj.team_message)
+        if (message_of_obj_case() == kTeamMessage)
+        {
+            clear_has_message_of_obj();
+            ::protobuf::MessageOfTeam* temp = _impl_.message_of_obj_.team_message_;
+            _impl_.message_of_obj_.team_message_ = nullptr;
+            return temp;
+        }
+        else
+        {
+            return nullptr;
+        }
+    }
+    inline void MessageOfObj::unsafe_arena_set_allocated_team_message(::protobuf::MessageOfTeam* team_message)
+    {
+        clear_message_of_obj();
+        if (team_message)
+        {
+            set_has_team_message();
+            _impl_.message_of_obj_.team_message_ = team_message;
+        }
+        // @@protoc_insertion_point(field_unsafe_arena_set_allocated:protobuf.MessageOfObj.team_message)
+    }
+    inline ::protobuf::MessageOfTeam* MessageOfObj::_internal_mutable_team_message()
+    {
+        if (message_of_obj_case() != kTeamMessage)
+        {
+            clear_message_of_obj();
+            set_has_team_message();
+            _impl_.message_of_obj_.team_message_ = CreateMaybeMessage<::protobuf::MessageOfTeam>(GetArenaForAllocation());
+        }
+        return _impl_.message_of_obj_.team_message_;
+    }
+    inline ::protobuf::MessageOfTeam* MessageOfObj::mutable_team_message()
+    {
+        ::protobuf::MessageOfTeam* _msg = _internal_mutable_team_message();
+        // @@protoc_insertion_point(field_mutable:protobuf.MessageOfObj.team_message)
         return _msg;
     }
 

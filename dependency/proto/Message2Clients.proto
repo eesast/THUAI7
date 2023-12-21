@@ -106,6 +106,13 @@ message MessageOfMap
     repeated Row row = 2;
 }
 
+message MessageOfTeam
+{
+	int64 team_id = 1;
+	int32 score = 2;
+
+}
+
 message MessageOfObj
 {
     oneof message_of_obj
@@ -121,6 +128,7 @@ message MessageOfObj
         MessageOfMap map_message = 9;
         MessageOfNews news_message = 10;
         MessageOfBombedBullet bombed_bullet_message = 11;
+        MessageOfTeam team_message = 12;
     }
 }
 

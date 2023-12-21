@@ -224,6 +224,13 @@ namespace Server
             return false;
         }
 
+        private int PlayerIDToTeamID(long playerID)
+        {
+            if (0 <= playerID && playerID < options.MaxPlayerNumPerTeam) return 0;
+            if (options.MaxPlayerNumPerTeam <= playerID && playerID < options.MaxPlayerNumPerTeam * 2) return 1;
+            return -1;
+        }
+
         private MessageOfAll GetMessageOfAll(int time)
         {
             MessageOfAll msg = new MessageOfAll();

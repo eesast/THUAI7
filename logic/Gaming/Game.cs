@@ -108,6 +108,24 @@ namespace Gaming
                 return actionManager.Construct(ship, constructionType);
             return false;
         }
+        public bool Install(long shipID)
+        {
+            if (!gameMap.Timer.IsGaming)
+                return false;
+            Ship? ship = gameMap.FindShipInShipID(ShipID);
+            if (ship != null)
+                return actionManager.Install(ship);
+            return false;
+        }
+        public bool Recycle(long ShipID)
+        {
+            if (!gameMap.Timer.IsGaming)
+                return false;
+            Ship? ship = gameMap.FindShipInShipID(ShipID);
+            if (ship != null)
+                return actionManager.Recycle(ship);
+            return false;
+        }
         public bool Repair(long ShipID)
         {
             if (!gameMap.Timer.IsGaming)

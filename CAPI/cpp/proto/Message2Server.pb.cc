@@ -59,13 +59,16 @@ namespace protobuf
             /*decltype(_impl_.player_id_)*/ ::int64_t{0}
 
             ,
+            /*decltype(_impl_.team_id_)*/ ::int64_t{0}
+
+            ,
             /*decltype(_impl_.ship_type_)*/ 0
 
             ,
-            /*decltype(_impl_.is_home_)*/ false
+            /*decltype(_impl_.x_)*/ 0
 
             ,
-            /*decltype(_impl_.team_id_)*/ ::int64_t{0}
+            /*decltype(_impl_.y_)*/ 0
 
             ,
             /*decltype(_impl_._cached_size_)*/ {}}
@@ -371,8 +374,9 @@ const ::uint32_t TableStruct_Message2Server_2eproto::offsets[] PROTOBUF_SECTION_
     ~0u,  // no sizeof(Split)
     PROTOBUF_FIELD_OFFSET(::protobuf::PlayerMsg, _impl_.player_id_),
     PROTOBUF_FIELD_OFFSET(::protobuf::PlayerMsg, _impl_.ship_type_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::PlayerMsg, _impl_.is_home_),
     PROTOBUF_FIELD_OFFSET(::protobuf::PlayerMsg, _impl_.team_id_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::PlayerMsg, _impl_.x_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::PlayerMsg, _impl_.y_),
     ~0u,  // no _has_bits_
     PROTOBUF_FIELD_OFFSET(::protobuf::MoveMsg, _internal_metadata_),
     ~0u,  // no _extensions_
@@ -469,13 +473,13 @@ static const ::_pbi::MigrationSchema
     schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
         {0, -1, -1, sizeof(::protobuf::IDMsg)},
         {10, -1, -1, sizeof(::protobuf::PlayerMsg)},
-        {22, -1, -1, sizeof(::protobuf::MoveMsg)},
-        {34, -1, -1, sizeof(::protobuf::SendMsg)},
-        {48, -1, -1, sizeof(::protobuf::AttackMsg)},
-        {59, -1, -1, sizeof(::protobuf::ConstructMsg)},
-        {72, -1, -1, sizeof(::protobuf::TargetMsg)},
-        {84, -1, -1, sizeof(::protobuf::InstallMsg)},
-        {100, -1, -1, sizeof(::protobuf::BuildShipMsg)},
+        {23, -1, -1, sizeof(::protobuf::MoveMsg)},
+        {35, -1, -1, sizeof(::protobuf::SendMsg)},
+        {49, -1, -1, sizeof(::protobuf::AttackMsg)},
+        {60, -1, -1, sizeof(::protobuf::ConstructMsg)},
+        {73, -1, -1, sizeof(::protobuf::TargetMsg)},
+        {85, -1, -1, sizeof(::protobuf::InstallMsg)},
+        {101, -1, -1, sizeof(::protobuf::BuildShipMsg)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -492,32 +496,32 @@ static const ::_pb::Message* const file_default_instances[] = {
 const char descriptor_table_protodef_Message2Server_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
     "\n\024Message2Server.proto\022\010protobuf\032\021Messag"
     "eType.proto\"+\n\005IDMsg\022\021\n\tplayer_id\030\001 \001(\003\022"
-    "\017\n\007team_id\030\002 \001(\003\"g\n\tPlayerMsg\022\021\n\tplayer_"
+    "\017\n\007team_id\030\002 \001(\003\"l\n\tPlayerMsg\022\021\n\tplayer_"
     "id\030\001 \001(\003\022%\n\tship_type\030\002 \001(\0162\022.protobuf.S"
-    "hipType\022\017\n\007is_home\030\003 \001(\010\022\017\n\007team_id\030\004 \001("
-    "\003\"Z\n\007MoveMsg\022\021\n\tplayer_id\030\001 \001(\003\022\r\n\005angle"
-    "\030\002 \001(\001\022\034\n\024time_in_milliseconds\030\003 \001(\003\022\017\n\007"
-    "team_id\030\004 \001(\003\"\200\001\n\007SendMsg\022\021\n\tplayer_id\030\001"
-    " \001(\003\022\024\n\014to_player_id\030\002 \001(\003\022\026\n\014text_messa"
-    "ge\030\003 \001(\tH\000\022\030\n\016binary_message\030\004 \001(\014H\000\022\017\n\007"
-    "team_id\030\005 \001(\003B\t\n\007message\">\n\tAttackMsg\022\021\n"
-    "\tplayer_id\030\001 \001(\003\022\r\n\005angle\030\002 \001(\001\022\017\n\007team_"
-    "id\030\003 \001(\003\"\177\n\014ConstructMsg\022\t\n\001x\030\001 \001(\005\022\t\n\001y"
-    "\030\002 \001(\005\022\021\n\tplayer_id\030\003 \001(\003\0225\n\021constructio"
-    "n_type\030\004 \001(\0162\032.protobuf.ConstructionType"
-    "\022\017\n\007team_id\030\005 \001(\003\"E\n\tTargetMsg\022\t\n\001x\030\001 \001("
-    "\005\022\t\n\001y\030\002 \001(\005\022\021\n\tplayer_id\030\003 \001(\003\022\017\n\007team_"
-    "id\030\004 \001(\003\"\254\002\n\nInstallMsg\0225\n\020constructor_t"
-    "ype\030\001 \001(\0162\031.protobuf.ConstructorTypeH\000\022)"
-    "\n\narmor_type\030\002 \001(\0162\023.protobuf.ArmorTypeH"
-    "\000\022+\n\013shield_type\030\003 \001(\0162\024.protobuf.Shield"
-    "TypeH\000\022+\n\013weapon_type\030\004 \001(\0162\024.protobuf.W"
-    "eaponTypeH\000\022/\n\rproducer_type\030\005 \001(\0162\026.pro"
-    "tobuf.ProducerTypeH\000\022\021\n\tplayer_id\030\006 \001(\003\022"
-    "\017\n\007team_id\030\007 \001(\003B\r\n\013module_type\"\\\n\014Build"
-    "ShipMsg\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022%\n\tship_ty"
-    "pe\030\003 \001(\0162\022.protobuf.ShipType\022\017\n\007team_id\030"
-    "\004 \001(\003b\006proto3"};
+    "hipType\022\017\n\007team_id\030\003 \001(\003\022\t\n\001x\030\004 \001(\005\022\t\n\001y"
+    "\030\005 \001(\005\"Z\n\007MoveMsg\022\021\n\tplayer_id\030\001 \001(\003\022\r\n\005"
+    "angle\030\002 \001(\001\022\034\n\024time_in_milliseconds\030\003 \001("
+    "\003\022\017\n\007team_id\030\004 \001(\003\"\200\001\n\007SendMsg\022\021\n\tplayer"
+    "_id\030\001 \001(\003\022\024\n\014to_player_id\030\002 \001(\003\022\026\n\014text_"
+    "message\030\003 \001(\tH\000\022\030\n\016binary_message\030\004 \001(\014H"
+    "\000\022\017\n\007team_id\030\005 \001(\003B\t\n\007message\">\n\tAttackM"
+    "sg\022\021\n\tplayer_id\030\001 \001(\003\022\r\n\005angle\030\002 \001(\001\022\017\n\007"
+    "team_id\030\003 \001(\003\"\177\n\014ConstructMsg\022\t\n\001x\030\001 \001(\005"
+    "\022\t\n\001y\030\002 \001(\005\022\021\n\tplayer_id\030\003 \001(\003\0225\n\021constr"
+    "uction_type\030\004 \001(\0162\032.protobuf.Constructio"
+    "nType\022\017\n\007team_id\030\005 \001(\003\"E\n\tTargetMsg\022\t\n\001x"
+    "\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\021\n\tplayer_id\030\003 \001(\003\022\017\n\007"
+    "team_id\030\004 \001(\003\"\254\002\n\nInstallMsg\0225\n\020construc"
+    "tor_type\030\001 \001(\0162\031.protobuf.ConstructorTyp"
+    "eH\000\022)\n\narmor_type\030\002 \001(\0162\023.protobuf.Armor"
+    "TypeH\000\022+\n\013shield_type\030\003 \001(\0162\024.protobuf.S"
+    "hieldTypeH\000\022+\n\013weapon_type\030\004 \001(\0162\024.proto"
+    "buf.WeaponTypeH\000\022/\n\rproducer_type\030\005 \001(\0162"
+    "\026.protobuf.ProducerTypeH\000\022\021\n\tplayer_id\030\006"
+    " \001(\003\022\017\n\007team_id\030\007 \001(\003B\r\n\013module_type\"\\\n\014"
+    "BuildShipMsg\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022%\n\tsh"
+    "ip_type\030\003 \001(\0162\022.protobuf.ShipType\022\017\n\007tea"
+    "m_id\030\004 \001(\003b\006proto3"};
 static const ::_pbi::DescriptorTable* const descriptor_table_Message2Server_2eproto_deps[1] =
     {
         &::descriptor_table_MessageType_2eproto,
@@ -526,7 +530,7 @@ static ::absl::once_flag descriptor_table_Message2Server_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Message2Server_2eproto = {
     false,
     false,
-    1093,
+    1098,
     descriptor_table_protodef_Message2Server_2eproto,
     "Message2Server.proto",
     &descriptor_table_Message2Server_2eproto_once,
@@ -843,13 +847,16 @@ namespace protobuf
             decltype(_impl_.player_id_){::int64_t{0}}
 
             ,
+            decltype(_impl_.team_id_){::int64_t{0}}
+
+            ,
             decltype(_impl_.ship_type_){0}
 
             ,
-            decltype(_impl_.is_home_){false}
+            decltype(_impl_.x_){0}
 
             ,
-            decltype(_impl_.team_id_){::int64_t{0}}
+            decltype(_impl_.y_){0}
 
             ,
             /*decltype(_impl_._cached_size_)*/ {}};
@@ -883,7 +890,7 @@ namespace protobuf
         // Prevent compiler warnings about cached_has_bits being unused
         (void)cached_has_bits;
 
-        ::memset(&_impl_.player_id_, 0, static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.team_id_) - reinterpret_cast<char*>(&_impl_.player_id_)) + sizeof(_impl_.team_id_));
+        ::memset(&_impl_.player_id_, 0, static_cast<::size_t>(reinterpret_cast<char*>(&_impl_.y_) - reinterpret_cast<char*>(&_impl_.player_id_)) + sizeof(_impl_.y_));
         _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
     }
 
@@ -923,11 +930,11 @@ namespace protobuf
                         goto handle_unusual;
                     }
                     continue;
-                // bool is_home = 3;
+                // int64 team_id = 3;
                 case 3:
                     if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 24))
                     {
-                        _impl_.is_home_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+                        _impl_.team_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
                         CHK_(ptr);
                     }
                     else
@@ -935,11 +942,23 @@ namespace protobuf
                         goto handle_unusual;
                     }
                     continue;
-                // int64 team_id = 4;
+                // int32 x = 4;
                 case 4:
                     if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 32))
                     {
-                        _impl_.team_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+                        _impl_.x_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+                        CHK_(ptr);
+                    }
+                    else
+                    {
+                        goto handle_unusual;
+                    }
+                    continue;
+                // int32 y = 5;
+                case 5:
+                    if (PROTOBUF_PREDICT_TRUE(static_cast<::uint8_t>(tag) == 40))
+                    {
+                        _impl_.y_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
                         CHK_(ptr);
                     }
                     else
@@ -999,21 +1018,30 @@ namespace protobuf
             );
         }
 
-        // bool is_home = 3;
-        if (this->_internal_is_home() != 0)
-        {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteBoolToArray(
-                3, this->_internal_is_home(), target
-            );
-        }
-
-        // int64 team_id = 4;
+        // int64 team_id = 3;
         if (this->_internal_team_id() != 0)
         {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteInt64ToArray(
-                4, this->_internal_team_id(), target
+                3, this->_internal_team_id(), target
+            );
+        }
+
+        // int32 x = 4;
+        if (this->_internal_x() != 0)
+        {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteInt32ToArray(
+                4, this->_internal_x(), target
+            );
+        }
+
+        // int32 y = 5;
+        if (this->_internal_y() != 0)
+        {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteInt32ToArray(
+                5, this->_internal_y(), target
             );
         }
 
@@ -1044,6 +1072,14 @@ namespace protobuf
             );
         }
 
+        // int64 team_id = 3;
+        if (this->_internal_team_id() != 0)
+        {
+            total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(
+                this->_internal_team_id()
+            );
+        }
+
         // .protobuf.ShipType ship_type = 2;
         if (this->_internal_ship_type() != 0)
         {
@@ -1051,17 +1087,19 @@ namespace protobuf
                           ::_pbi::WireFormatLite::EnumSize(this->_internal_ship_type());
         }
 
-        // bool is_home = 3;
-        if (this->_internal_is_home() != 0)
+        // int32 x = 4;
+        if (this->_internal_x() != 0)
         {
-            total_size += 2;
+            total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+                this->_internal_x()
+            );
         }
 
-        // int64 team_id = 4;
-        if (this->_internal_team_id() != 0)
+        // int32 y = 5;
+        if (this->_internal_y() != 0)
         {
-            total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(
-                this->_internal_team_id()
+            total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
+                this->_internal_y()
             );
         }
 
@@ -1089,17 +1127,21 @@ namespace protobuf
         {
             _this->_internal_set_player_id(from._internal_player_id());
         }
+        if (from._internal_team_id() != 0)
+        {
+            _this->_internal_set_team_id(from._internal_team_id());
+        }
         if (from._internal_ship_type() != 0)
         {
             _this->_internal_set_ship_type(from._internal_ship_type());
         }
-        if (from._internal_is_home() != 0)
+        if (from._internal_x() != 0)
         {
-            _this->_internal_set_is_home(from._internal_is_home());
+            _this->_internal_set_x(from._internal_x());
         }
-        if (from._internal_team_id() != 0)
+        if (from._internal_y() != 0)
         {
-            _this->_internal_set_team_id(from._internal_team_id());
+            _this->_internal_set_y(from._internal_y());
         }
         _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
     }
@@ -1123,7 +1165,7 @@ namespace protobuf
         using std::swap;
         _internal_metadata_.InternalSwap(&other->_internal_metadata_);
         ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-            PROTOBUF_FIELD_OFFSET(PlayerMsg, _impl_.team_id_) + sizeof(PlayerMsg::_impl_.team_id_) - PROTOBUF_FIELD_OFFSET(PlayerMsg, _impl_.player_id_)>(
+            PROTOBUF_FIELD_OFFSET(PlayerMsg, _impl_.y_) + sizeof(PlayerMsg::_impl_.y_) - PROTOBUF_FIELD_OFFSET(PlayerMsg, _impl_.player_id_)>(
             reinterpret_cast<char*>(&_impl_.player_id_),
             reinterpret_cast<char*>(&other->_impl_.player_id_)
         );

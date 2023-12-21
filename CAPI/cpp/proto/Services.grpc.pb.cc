@@ -33,7 +33,6 @@ namespace protobuf
         "/protobuf.AvailableService/Attack",
         "/protobuf.AvailableService/Send",
         "/protobuf.AvailableService/InstallModule",
-        "/protobuf.AvailableService/BuildShip",
         "/protobuf.AvailableService/Recycle",
         "/protobuf.AvailableService/EndAllAction",
     };
@@ -57,9 +56,8 @@ namespace protobuf
         rpcmethod_Attack_(AvailableService_method_names[7], options.suffix_for_stats(), ::grpc::internal::RpcMethod::NORMAL_RPC, channel),
         rpcmethod_Send_(AvailableService_method_names[8], options.suffix_for_stats(), ::grpc::internal::RpcMethod::NORMAL_RPC, channel),
         rpcmethod_InstallModule_(AvailableService_method_names[9], options.suffix_for_stats(), ::grpc::internal::RpcMethod::NORMAL_RPC, channel),
-        rpcmethod_BuildShip_(AvailableService_method_names[10], options.suffix_for_stats(), ::grpc::internal::RpcMethod::NORMAL_RPC, channel),
-        rpcmethod_Recycle_(AvailableService_method_names[11], options.suffix_for_stats(), ::grpc::internal::RpcMethod::NORMAL_RPC, channel),
-        rpcmethod_EndAllAction_(AvailableService_method_names[12], options.suffix_for_stats(), ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+        rpcmethod_Recycle_(AvailableService_method_names[10], options.suffix_for_stats(), ::grpc::internal::RpcMethod::NORMAL_RPC, channel),
+        rpcmethod_EndAllAction_(AvailableService_method_names[11], options.suffix_for_stats(), ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
     {
     }
 
@@ -195,27 +193,27 @@ namespace protobuf
         return result;
     }
 
-    ::grpc::Status AvailableService::Stub::Rebuild(::grpc::ClientContext* context, const ::protobuf::TargetMsg& request, ::protobuf::BoolRes* response)
+    ::grpc::Status AvailableService::Stub::Rebuild(::grpc::ClientContext* context, const ::protobuf::ConstructMsg& request, ::protobuf::BoolRes* response)
     {
-        return ::grpc::internal::BlockingUnaryCall<::protobuf::TargetMsg, ::protobuf::BoolRes, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Rebuild_, context, request, response);
+        return ::grpc::internal::BlockingUnaryCall<::protobuf::ConstructMsg, ::protobuf::BoolRes, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Rebuild_, context, request, response);
     }
 
-    void AvailableService::Stub::async::Rebuild(::grpc::ClientContext* context, const ::protobuf::TargetMsg* request, ::protobuf::BoolRes* response, std::function<void(::grpc::Status)> f)
+    void AvailableService::Stub::async::Rebuild(::grpc::ClientContext* context, const ::protobuf::ConstructMsg* request, ::protobuf::BoolRes* response, std::function<void(::grpc::Status)> f)
     {
-        ::grpc::internal::CallbackUnaryCall<::protobuf::TargetMsg, ::protobuf::BoolRes, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Rebuild_, context, request, response, std::move(f));
+        ::grpc::internal::CallbackUnaryCall<::protobuf::ConstructMsg, ::protobuf::BoolRes, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Rebuild_, context, request, response, std::move(f));
     }
 
-    void AvailableService::Stub::async::Rebuild(::grpc::ClientContext* context, const ::protobuf::TargetMsg* request, ::protobuf::BoolRes* response, ::grpc::ClientUnaryReactor* reactor)
+    void AvailableService::Stub::async::Rebuild(::grpc::ClientContext* context, const ::protobuf::ConstructMsg* request, ::protobuf::BoolRes* response, ::grpc::ClientUnaryReactor* reactor)
     {
         ::grpc::internal::ClientCallbackUnaryFactory::Create<::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Rebuild_, context, request, response, reactor);
     }
 
-    ::grpc::ClientAsyncResponseReader<::protobuf::BoolRes>* AvailableService::Stub::PrepareAsyncRebuildRaw(::grpc::ClientContext* context, const ::protobuf::TargetMsg& request, ::grpc::CompletionQueue* cq)
+    ::grpc::ClientAsyncResponseReader<::protobuf::BoolRes>* AvailableService::Stub::PrepareAsyncRebuildRaw(::grpc::ClientContext* context, const ::protobuf::ConstructMsg& request, ::grpc::CompletionQueue* cq)
     {
-        return ::grpc::internal::ClientAsyncResponseReaderHelper::Create<::protobuf::BoolRes, ::protobuf::TargetMsg, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Rebuild_, context, request);
+        return ::grpc::internal::ClientAsyncResponseReaderHelper::Create<::protobuf::BoolRes, ::protobuf::ConstructMsg, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Rebuild_, context, request);
     }
 
-    ::grpc::ClientAsyncResponseReader<::protobuf::BoolRes>* AvailableService::Stub::AsyncRebuildRaw(::grpc::ClientContext* context, const ::protobuf::TargetMsg& request, ::grpc::CompletionQueue* cq)
+    ::grpc::ClientAsyncResponseReader<::protobuf::BoolRes>* AvailableService::Stub::AsyncRebuildRaw(::grpc::ClientContext* context, const ::protobuf::ConstructMsg& request, ::grpc::CompletionQueue* cq)
     {
         auto* result =
             this->PrepareAsyncRebuildRaw(context, request, cq);
@@ -331,34 +329,6 @@ namespace protobuf
     {
         auto* result =
             this->PrepareAsyncInstallModuleRaw(context, request, cq);
-        result->StartCall();
-        return result;
-    }
-
-    ::grpc::Status AvailableService::Stub::BuildShip(::grpc::ClientContext* context, const ::protobuf::BuildShipMsg& request, ::protobuf::BoolRes* response)
-    {
-        return ::grpc::internal::BlockingUnaryCall<::protobuf::BuildShipMsg, ::protobuf::BoolRes, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_BuildShip_, context, request, response);
-    }
-
-    void AvailableService::Stub::async::BuildShip(::grpc::ClientContext* context, const ::protobuf::BuildShipMsg* request, ::protobuf::BoolRes* response, std::function<void(::grpc::Status)> f)
-    {
-        ::grpc::internal::CallbackUnaryCall<::protobuf::BuildShipMsg, ::protobuf::BoolRes, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_BuildShip_, context, request, response, std::move(f));
-    }
-
-    void AvailableService::Stub::async::BuildShip(::grpc::ClientContext* context, const ::protobuf::BuildShipMsg* request, ::protobuf::BoolRes* response, ::grpc::ClientUnaryReactor* reactor)
-    {
-        ::grpc::internal::ClientCallbackUnaryFactory::Create<::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_BuildShip_, context, request, response, reactor);
-    }
-
-    ::grpc::ClientAsyncResponseReader<::protobuf::BoolRes>* AvailableService::Stub::PrepareAsyncBuildShipRaw(::grpc::ClientContext* context, const ::protobuf::BuildShipMsg& request, ::grpc::CompletionQueue* cq)
-    {
-        return ::grpc::internal::ClientAsyncResponseReaderHelper::Create<::protobuf::BoolRes, ::protobuf::BuildShipMsg, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_BuildShip_, context, request);
-    }
-
-    ::grpc::ClientAsyncResponseReader<::protobuf::BoolRes>* AvailableService::Stub::AsyncBuildShipRaw(::grpc::ClientContext* context, const ::protobuf::BuildShipMsg& request, ::grpc::CompletionQueue* cq)
-    {
-        auto* result =
-            this->PrepareAsyncBuildShipRaw(context, request, cq);
         result->StartCall();
         return result;
     }
@@ -494,10 +464,10 @@ namespace protobuf
         AddMethod(new ::grpc::internal::RpcServiceMethod(
             AvailableService_method_names[5],
             ::grpc::internal::RpcMethod::NORMAL_RPC,
-            new ::grpc::internal::RpcMethodHandler<AvailableService::Service, ::protobuf::TargetMsg, ::protobuf::BoolRes, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+            new ::grpc::internal::RpcMethodHandler<AvailableService::Service, ::protobuf::ConstructMsg, ::protobuf::BoolRes, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
                 [](AvailableService::Service* service,
                    ::grpc::ServerContext* ctx,
-                   const ::protobuf::TargetMsg* req,
+                   const ::protobuf::ConstructMsg* req,
                    ::protobuf::BoolRes* resp)
                 {
                     return service->Rebuild(ctx, req, resp);
@@ -564,20 +534,6 @@ namespace protobuf
         AddMethod(new ::grpc::internal::RpcServiceMethod(
             AvailableService_method_names[10],
             ::grpc::internal::RpcMethod::NORMAL_RPC,
-            new ::grpc::internal::RpcMethodHandler<AvailableService::Service, ::protobuf::BuildShipMsg, ::protobuf::BoolRes, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
-                [](AvailableService::Service* service,
-                   ::grpc::ServerContext* ctx,
-                   const ::protobuf::BuildShipMsg* req,
-                   ::protobuf::BoolRes* resp)
-                {
-                    return service->BuildShip(ctx, req, resp);
-                },
-                this
-            )
-        ));
-        AddMethod(new ::grpc::internal::RpcServiceMethod(
-            AvailableService_method_names[11],
-            ::grpc::internal::RpcMethod::NORMAL_RPC,
             new ::grpc::internal::RpcMethodHandler<AvailableService::Service, ::protobuf::IDMsg, ::protobuf::BoolRes, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
                 [](AvailableService::Service* service,
                    ::grpc::ServerContext* ctx,
@@ -590,7 +546,7 @@ namespace protobuf
             )
         ));
         AddMethod(new ::grpc::internal::RpcServiceMethod(
-            AvailableService_method_names[12],
+            AvailableService_method_names[11],
             ::grpc::internal::RpcMethod::NORMAL_RPC,
             new ::grpc::internal::RpcMethodHandler<AvailableService::Service, ::protobuf::IDMsg, ::protobuf::BoolRes, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
                 [](AvailableService::Service* service,
@@ -649,7 +605,7 @@ namespace protobuf
         return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
 
-    ::grpc::Status AvailableService::Service::Rebuild(::grpc::ServerContext* context, const ::protobuf::TargetMsg* request, ::protobuf::BoolRes* response)
+    ::grpc::Status AvailableService::Service::Rebuild(::grpc::ServerContext* context, const ::protobuf::ConstructMsg* request, ::protobuf::BoolRes* response)
     {
         (void)context;
         (void)request;
@@ -682,14 +638,6 @@ namespace protobuf
     }
 
     ::grpc::Status AvailableService::Service::InstallModule(::grpc::ServerContext* context, const ::protobuf::InstallMsg* request, ::protobuf::BoolRes* response)
-    {
-        (void)context;
-        (void)request;
-        (void)response;
-        return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-
-    ::grpc::Status AvailableService::Service::BuildShip(::grpc::ServerContext* context, const ::protobuf::BuildShipMsg* request, ::protobuf::BoolRes* response)
     {
         (void)context;
         (void)request;

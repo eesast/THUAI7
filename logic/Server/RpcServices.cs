@@ -120,7 +120,8 @@ namespace Server
             lock (addPlayerLock)
             {
                 // ShipInitInfo?
-                Game.ShipInitInfo playerInitInfo = new( request.TeamId, request.PlayerId, request, request.ShipType);
+                XY birthPoint=new(request.X, request.Y);
+                Game.ShipInitInfo playerInitInfo = new( request.TeamId, request.PlayerId, birthPoint,Transformation.ShipTypeFromProto(request.ShipType));
                 // AddShip?
                 long newPlayerID = game.AddShip(playerInitInfo);
                 if (newPlayerID == GameObj.invalidID)
@@ -218,8 +219,7 @@ namespace Server
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
             }
-            if (!ValidPlayerID(request.PlayerId) || !ValidPlayerID(request.ToPlayerId)
-                || PlayerIDToTeamID(request.PlayerId) != PlayerIDToTeamID(request.ToPlayerId) || request.PlayerId == request.ToPlayerId)
+            if (!ValidPlayerID(request.PlayerId) || !ValidPlayerID(request.ToPlayerId) || request.PlayerId == request.ToPlayerId)
             {
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
@@ -303,7 +303,7 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Recover(gameID);
+            boolRes.ActSuccess = game.Repair(gameID);
             return Task.FromResult(boolRes);
         }
 
@@ -319,11 +319,11 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Produce(gameID, request.TeamId);
+            boolRes.ActSuccess = game.Produce(gameID);
             return Task.FromResult(boolRes);
         }
 
-        public override Task<BoolRes> Rebuild(TargetMsg request, ServerCallContext context)
+        public override Task<BoolRes> Rebuild(ConstructMsg request, ServerCallContext context)
         {
 #if DEBUG
             Console.WriteLine($"Rebuild ID: {request.PlayerId}");
@@ -335,7 +335,7 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Rebuild(gameID);
+            boolRes.ActSuccess = game.Construct(gameID,Transformation.ConstructionFromProto(request.ConstructionType));
             return Task.FromResult(boolRes);
         }
 
@@ -355,17 +355,6 @@ namespace Server
             return Task.FromResult(boolRes);
         }
 
-        public override Task<BoolRes> BuildShip(BuildShipMsg request, ServerCallContext context)
-        {
-#if DEBUG
-            Console.WriteLine($"BuildShip");
-#endif 
-            BoolRes boolRes = new()
-            {
-                ActSuccess = game.BuildShip(request.TeamId, request.ShipType)
-            };
-            return Task.FromResult(boolRes);
-        }
 
         public override Task<BoolRes> InstallModule(InstallMsg request, ServerCallContext context)
         {
@@ -379,7 +368,7 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.InstallModule(gameID, request.ModuleTypeCase);
+            boolRes.ActSuccess = game.Install(gameID);
             return Task.FromResult(boolRes);
         }
 

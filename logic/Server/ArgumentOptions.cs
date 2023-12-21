@@ -1,4 +1,6 @@
 ﻿using CommandLine;
+using CommandLine.Text;
+using Newtonsoft.Json;
 
 namespace Server
 {
@@ -25,6 +27,9 @@ namespace Server
 
         [Option("MaxCivilShipNum", Required = false, HelpText = "The number of max civil ship num, 3 by default")]
         public ushort MaxCivilShipCount { get; set; } = 3;
+
+        [Option("MaxPlayerNumPerTeam", Required = false, HelpText = "The max player number of team, 5 by defualt")]
+        public ushort MaxPlayerNumPerTeam { get; set; } = 5;
 
         [Option("warShipNum", Required = false, HelpText = "The number of civil ship num, 0 by default")]
         public ushort WarShipCount { get; set; } = 0;
