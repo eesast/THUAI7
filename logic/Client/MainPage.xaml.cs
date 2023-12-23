@@ -40,13 +40,13 @@ namespace Client
         /* initiate the Lists of Objects and CountList */
         private void InitiateObjects()
         {
-            listOfAll = new List<MessageOfAll>();
-            listOfShip = new List<MessageOfShip>();
-            //listOfBuilding = new List<MessageOfBuilding>();
-            listOfBullet = new List<MessageOfBullet>();
-            listOfResource = new List<MessageOfResource>();
-            listOfHome = new List<MessageOfHome>();
-            countMap = new Dictionary<int, int>();
+            listOfAll = [];
+            listOfShip = [];
+            //listOfBuilding = [];
+            listOfBullet = [];
+            listOfResource = [];
+            listOfHome = [];
+            countMap = [];
         }
 
         /* Get the Map to default map */
@@ -136,8 +136,7 @@ namespace Client
                         VerticalOptions = LayoutOptions.Start,
                         Margin = new Thickness(unitWidth * j, unitHeight * i, 0, 0)
                     };
-                    MapPatchType mapPatchType = new MapPatchType();
-                    mapPatchType = (MapPatchType)todrawMap[i, j];
+                    MapPatchType mapPatchType = (MapPatchType)todrawMap[i, j];
                     switch (mapPatchType)
                     {
                         case MapPatchType.RedHome:
@@ -211,7 +210,7 @@ namespace Client
                         listOfHome.Clear();
                         listOfAll.Clear();
                         MessageToClient content = responseStream.ResponseStream.Current;
-                        MessageOfMap mapMassage = new MessageOfMap();
+                        MessageOfMap mapMassage = new();
                         bool mapMessageExist = false;
                         switch (content.GameState)
                         {
@@ -381,7 +380,7 @@ namespace Client
                     }
                     if (!isClientStocked)
                     {
-                        if (MapGrid.Children.Count() > 0)
+                        if (MapGrid.Children.Count > 0)
                         {
                             MapGrid.Children.Clear();
                         }
@@ -395,7 +394,7 @@ namespace Client
                         }
                         foreach (var data in listOfHome)
                         {
-                            if (data.Team == PlayerTeam.Down)
+                            if (data.TeamId == (long)PlayerTeam.Red)
                             {
                                 redPlayer.SetPlayerValue(data);
                             }
@@ -423,7 +422,7 @@ namespace Client
                         }
                         foreach (var data in listOfShip)
                         {
-                            if (data.Team == PlayerTeam.Down)
+                            if (data.TeamId == (long)PlayerTeam.Red)
                             {
                                 redPlayer.SetShipValue(data);
                             }
@@ -453,7 +452,7 @@ namespace Client
                 HorizontalOptions = LayoutOptions.Start,
                 VerticalOptions = LayoutOptions.Start,
                 Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0),
-                Fill = data.Team == PlayerTeam.Down ? Colors.Red : Colors.Blue
+                Fill = (data.TeamId == (long)PlayerTeam.Red) ? Colors.Red : Colors.Blue
             };
             MapGrid.Children.Add(iconOfHome);
         }
@@ -495,7 +494,7 @@ namespace Client
                 HorizontalOptions = LayoutOptions.Start,
                 VerticalOptions = LayoutOptions.Start,
                 Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * bulletRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * bulletRadiusTimes, 0, 0),
-                Fill = data.Team == PlayerTeam.Down ? Colors.Red : Colors.Blue
+                Fill = (data.TeamId == (long)PlayerTeam.Red) ? Colors.Red : Colors.Blue
             };
             switch (data.Type)
             {
@@ -508,7 +507,7 @@ namespace Client
                 case BulletType.Missile:
                     iconOfBullet.Fill = Colors.Purple;
                     break;
-                case BulletType.ElectricArc:
+                case BulletType.Arc:
                     iconOfBullet.Fill = Colors.Green;
                     break;
             }
@@ -535,14 +534,14 @@ namespace Client
                 HorizontalOptions = LayoutOptions.Start,
                 VerticalOptions = LayoutOptions.Start,
                 Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0),
-                Fill = data.Team == PlayerTeam.Down ? Colors.Red : Colors.Blue
+                Fill = (data.TeamId == (long)PlayerTeam.Red) ? Colors.Red : Colors.Blue
             };
             Label nameOfShip = new()
             {
                 FontSize = unitFontSize,
                 WidthRequest = unitWidth,
                 HeightRequest = unitHeight,
-                Text = data.ShipType.ToString()[0] + data.ShipId.ToString(),
+                Text = data.ShipType.ToString()[0] + data.PlayerId.ToString(),
                 HorizontalOptions = LayoutOptions.Start,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalTextAlignment = TextAlignment.Center,
@@ -599,7 +598,7 @@ namespace Client
         // private int[] wormHolePositionIndex;
         private Dictionary<int, int> countMap;
 
-        private object drawPicLock = new object();
+        private readonly object drawPicLock = new();
 
         private bool mapFlag = false;
         private bool hasDrawed = false;

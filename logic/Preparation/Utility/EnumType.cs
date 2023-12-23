@@ -62,18 +62,6 @@
         OutOfBoundBlock = 11,
     }
     /// <summary>
-    /// 武器类型
-    /// </summary>
-    public enum GunType
-    {
-        Null = 0,
-        LaserGun = 1,
-        PlasmaGun = 2,
-        ShellGun = 3,
-        MissileGun = 4,
-        ArcGun = 5,
-    }
-    /// <summary>
     /// PlaceType
     /// </summary>
     public enum PlaceType
@@ -141,6 +129,7 @@
         Swinging = 6,
         Stunned = 7,
         Moving = 8,
+        Deceased = 9,
     }
     /// <summary>
     /// 舰船类型

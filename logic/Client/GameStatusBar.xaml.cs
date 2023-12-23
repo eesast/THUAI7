@@ -18,25 +18,25 @@ public partial class GameStatusBar : ContentView
         parent.SetRow(this, Row);
         parent.SetRowSpan(this, 2);
     }
-    public void SetWormHoleValue(MessageOfBuilding wormholeMsg)
-    {
-        if (wormholeMsg.BuildingType != BuildingType.Wormhole)
-        {
-            return;
-        }
-        switch (wormholeMsg.BuildingId)
-        {
-            case 0:
-                WormHole1HpSlide.WidthRequest = wormholeMsg.Hp / WormHoleFullHp * lengthOfWormHole1HpSlide;
-                break;
-            case 1:
-                WormHole2HpSlide.WidthRequest = wormholeMsg.Hp / WormHoleFullHp * lengthOfWormHole2HpSlide;
-                break;
-            case 2:
-                WormHole3HpSlide.WidthRequest = wormholeMsg.Hp / WormHoleFullHp * lengthOfWormHole3HpSlide;
-                break;
-        }
-    }
+    //public void SetWormHoleValue(MessageOfBuilding wormholeMsg)
+    //{
+    //    if (wormholeMsg.BuildingType != BuildingType.Wormhole)
+    //    {
+    //        return;
+    //    }
+    //    switch (wormholeMsg.BuildingId)
+    //    {
+    //        case 0:
+    //            WormHole1HpSlide.WidthRequest = wormholeMsg.Hp / WormHoleFullHp * lengthOfWormHole1HpSlide;
+    //            break;
+    //        case 1:
+    //            WormHole2HpSlide.WidthRequest = wormholeMsg.Hp / WormHoleFullHp * lengthOfWormHole2HpSlide;
+    //            break;
+    //        case 2:
+    //            WormHole3HpSlide.WidthRequest = wormholeMsg.Hp / WormHoleFullHp * lengthOfWormHole3HpSlide;
+    //            break;
+    //    }
+    //}
 
     public void SetGameTimeValue(MessageOfAll obj)
     {

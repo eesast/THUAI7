@@ -6,28 +6,21 @@ import "Message2Server.proto";
 
 service AvailableService
 {
-    rpc TryConnection (IDMsg) returns(BoolRes);
+    rpc TryConnection(IDMsg) returns(BoolRes);
     // 游戏开局调用一次的服务
-    rpc AddBasicShip (ShipMsg) returns(stream MessageToClient); // 连接上后等待游戏开始，server会定时通过该服务向所有client发送消息。
-    rpc AddHome (HomeMsg) returns (stream MessageToClient);
-    rpc AddBuilding(BuildingMsg) returns (stream MessageToClient);
+    rpc AddPlayer(PlayerMsg) returns(stream MessageToClient); // 连接上后等待游戏开始，server会定时通过该服务向所有client发送消息。
     // 游戏过程中玩家执行操作的服务   
-    //船动作
-    rpc Move (MoveMsg) returns (MoveRes);
-    rpc InstallCollectorModule (CollectorMsg) returns (BoolRes);
-    rpc InstallArmorModule (ArmorMsg) returns (BoolRes);
-    rpc InstallShieldModule (ShieldMsg) returns (BoolRes);
-    rpc InstallBuilderModule (BuilderMsg) returns (BoolRes);
-    rpc InstallBulletModule (BulleterMsg) returns (BoolRes);
-    rpc SendMessage (SendMsg) returns (BoolRes);
-    // rpc GetMessage (IDMsg) returns (stream MsgRes);
-    rpc StartRecovering (IDMsg) returns (BoolRes); 
-    rpc StartProducing (IDMsg) returns (BoolRes); 
-    rpc StartRecycling (IDMsg) returns (BoolRes); 
-    rpc StartBuilding (BuildMsg) returns (BoolRes); 
-    rpc Attack (AttackMsg) returns (BoolRes); // 攻击
-
-    //建筑动作
-    rpc BuildShip (BuildMsg) returns (BoolRes); // 造船
-    rpc EndAllAction (IDMsg) returns (BoolRes); // 结束所有动作
+    // 船
+    rpc Move(MoveMsg) returns (MoveRes);             //移动
+    rpc Recover(IDMsg) returns (BoolRes);            //回复
+    rpc Produce(TargetMsg) returns (BoolRes);       //开采
+    rpc Rebuild(ConstructMsg) returns (BoolRes);       //给建筑回血     
+    rpc Construct(ConstructMsg) returns (BoolRes);  //修建建筑
+    rpc Attack(AttackMsg) returns (BoolRes);        // 攻击
+    rpc Send(SendMsg) returns (BoolRes);            // 传递信息
+    // 大本营
+    rpc InstallModule(InstallMsg) returns (BoolRes);
+    rpc Recycle(IDMsg) returns (BoolRes);
+    
+    rpc EndAllAction(IDMsg) returns (BoolRes); // 结束所有动作
 }

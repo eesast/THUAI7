@@ -39,6 +39,10 @@ namespace Gaming
                     }
                 );
 
+            public bool Install(Ship ship)
+            {
+                return false;
+            }
             public bool MoveShip(Ship shipToMove, int moveTimeInMilliseconds, double moveDirection)
             {
                 if (moveTimeInMilliseconds < 5)
@@ -190,6 +194,10 @@ namespace Gaming
                     }
                 )
                 { IsBackground = true }.Start();
+                return false;
+            }
+            public bool Recycle(Ship ship)
+            {
                 return false;
             }
             public bool Repair(Ship ship)
