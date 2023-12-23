@@ -18,10 +18,10 @@ namespace Server
         // private object semaDictLock = new();
         protected readonly ArgumentOptions options;
         private HttpSender? httpSender;
-        private object gameLock = new();
+        private readonly object gameLock = new();
         private MessageToClient currentGameInfo = new();
         private MessageOfObj currentMapMsg = new();
-        private object newsLock = new();
+        private readonly object newsLock = new();
         private List<MessageOfNews> currentNews = [];
         private SemaphoreSlim endGameSem = new(0);
         protected readonly Game game;
@@ -32,7 +32,7 @@ namespace Server
         private readonly object messageToAllClientsLock = new();
         public static readonly long SendMessageToClientIntervalInMilliseconds = 50;
         private MessageWriter? mwr = null;
-        private object spetatorJoinLock = new();
+        private readonly object spectatorJoinLock = new();
 
         public void StartGame()
         {
@@ -159,7 +159,7 @@ namespace Server
                         break;
                 }
             }
-            lock (spetatorJoinLock)
+            lock (spectatorJoinLock)
             {
                 foreach (var kvp in semaDict)
                 {
@@ -233,8 +233,10 @@ namespace Server
 
         private MessageOfAll GetMessageOfAll(int time)
         {
-            MessageOfAll msg = new();
-            msg.GameTime = time;
+            MessageOfAll msg = new()
+            {
+                GameTime = time
+            };
             int[] score = GetScore();
             msg.RedteamScore = score[0];
             msg.BlueteamScore = score[1];

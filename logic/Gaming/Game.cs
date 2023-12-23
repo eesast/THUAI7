@@ -32,7 +32,7 @@ namespace Gaming
             bool validBirthPoint = false;
             foreach (XY birthPoint in teamList[(int)shipInitInfo.teamID].BirthPointList)
             {
-                if (GameData.ApproachToInteract(pos, birthPoint) && pos != birthPoint)
+                if (GameData.ApproachToInteract(GameData.PosGridToCellXY(pos), birthPoint) && GameData.PosGridToCellXY(pos) != birthPoint)
                 {
                     validBirthPoint = true;
                     break;

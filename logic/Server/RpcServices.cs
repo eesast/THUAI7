@@ -53,7 +53,7 @@ namespace Server
             if (request.PlayerId >= spectatorMinPlayerID && options.NotAllowSpectator == false)
             {
                 // 观战模式
-                lock (spetatorJoinLock) // 具体原因见另一个上锁的地方
+                lock (spectatorJoinLock) // 具体原因见另一个上锁的地方
                 {
                     if (semaDict.TryAdd(request.PlayerId, (new SemaphoreSlim(0, 1), new SemaphoreSlim(0, 1))))
                     {
@@ -130,7 +130,7 @@ namespace Server
                 var temp = (new SemaphoreSlim(0, 1), new SemaphoreSlim(0, 1));
                 bool start = false;
                 Console.WriteLine($"Id: {request.PlayerId} joins.");
-                lock (spetatorJoinLock)  // 为了保证绝对安全，还是加上这个锁吧
+                lock (spectatorJoinLock)  // 为了保证绝对安全，还是加上这个锁吧
                 {
                     if (semaDict.TryAdd(request.PlayerId, temp))
                     {
