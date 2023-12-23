@@ -34,6 +34,11 @@ public class Ship : Movable, IShip
     /// 子弹数上限, THUAI7为无穷
     /// </summary>
     public IntNumUpdateEachCD BulletNum => new(int.MaxValue, 1);
+    /// <summary>
+    /// 模块相关
+    /// </summary>
+    #region Modules
+
     #region Producer
     private ProducerType producerType = ProducerType.Null;
     public ProducerType ProducerModuleType => producerType;
@@ -87,6 +92,146 @@ public class Ship : Movable, IShip
 
     public int ProduceSpeed => producer.ProduceSpeed;
     public int ConstructSpeed => constructor.ConstructSpeed;
+    public bool InstallModule(ModuleType moduleType)
+    {
+        lock (actionLock)
+        {
+            if (moduleType == ModuleType.Null) return false;
+            if (!this.Occupation.IsModuleValid(moduleType)) return false;
+            switch (moduleType)
+            {
+                case ModuleType.Producer1:
+                    if (producerType != ProducerType.Producer1)
+                    {
+                        producerType = ProducerType.Producer1;
+                        producer = ModuleFactory.FindIProducer(ShipType, producerType);
+                        return true;
+                    }
+                    break;
+                case ModuleType.Producer2:
+                    if (producerType != ProducerType.Producer2)
+                    {
+                        producerType = ProducerType.Producer2;
+                        producer = ModuleFactory.FindIProducer(ShipType, producerType);
+                        return true;
+                    }
+                    break;
+                case ModuleType.Producer3:
+                    if (producerType != ProducerType.Producer3)
+                    {
+                        producerType = ProducerType.Producer3;
+                        producer = ModuleFactory.FindIProducer(ShipType, producerType);
+                        return true;
+                    }
+                    break;
+                case ModuleType.Constructor1:
+                    if (constructorType != ConstructorType.Constructor1)
+                    {
+                        constructorType = ConstructorType.Constructor1;
+                        constructor = ModuleFactory.FindIConstructor(ShipType, constructorType);
+                        return true;
+                    }
+                    break;
+                case ModuleType.Constructor2:
+                    if (constructorType != ConstructorType.Constructor2)
+                    {
+                        constructorType = ConstructorType.Constructor2;
+                        constructor = ModuleFactory.FindIConstructor(ShipType, constructorType);
+                        return true;
+                    }
+                    break;
+                case ModuleType.Constructor3:
+                    if (constructorType != ConstructorType.Constructor3)
+                    {
+                        constructorType = ConstructorType.Constructor3;
+                        constructor = ModuleFactory.FindIConstructor(ShipType, constructorType);
+                        return true;
+                    }
+                    break;
+                case ModuleType.Armor1:
+                    armorType = ArmorType.Armor1;
+                    armor = ModuleFactory.FindIArmor(ShipType, armorType);
+                    this.Armor.SetV(armor.ArmorHP);
+                    return true;
+                    break;
+                case ModuleType.Armor2:
+                    armorType = ArmorType.Armor2;
+                    armor = ModuleFactory.FindIArmor(ShipType, armorType);
+                    this.Armor.SetV(armor.ArmorHP);
+                    return true;
+                    break;
+                case ModuleType.Armor3:
+                    armorType = ArmorType.Armor3;
+                    armor = ModuleFactory.FindIArmor(ShipType, armorType);
+                    this.Armor.SetV(armor.ArmorHP);
+                    return true;
+                    break;
+                case ModuleType.Shield1:
+                    shieldType = ShieldType.Shield1;
+                    shield = ModuleFactory.FindIShield(ShipType, shieldType);
+                    this.Shield.SetV(shield.ShieldHP);
+                    return true;
+                    break;
+                case ModuleType.Shield2:
+                    shieldType = ShieldType.Shield2;
+                    shield = ModuleFactory.FindIShield(ShipType, shieldType);
+                    this.Shield.SetV(shield.ShieldHP);
+                    return true;
+                    break;
+                case ModuleType.Shield3:
+                    shieldType = ShieldType.Shield3;
+                    shield = ModuleFactory.FindIShield(ShipType, shieldType);
+                    this.Shield.SetV(shield.ShieldHP);
+                    return true;
+                    break;
+                case ModuleType.LaserGun:
+                    if (weaponType != WeaponType.LaserGun)
+                    {
+                        weaponType = WeaponType.LaserGun;
+                        weapon = ModuleFactory.FindIWeapon(ShipType, weaponType);
+                        return true;
+                    }
+                    break;
+                case ModuleType.PlasmaGun:
+                    if (weaponType != WeaponType.PlasmaGun)
+                    {
+                        weaponType = WeaponType.PlasmaGun;
+                        weapon = ModuleFactory.FindIWeapon(ShipType, weaponType);
+                        return true;
+                    }
+                    break;
+                case ModuleType.ShellGun:
+                    if (weaponType != WeaponType.ShellGun)
+                    {
+                        weaponType = WeaponType.ShellGun;
+                        weapon = ModuleFactory.FindIWeapon(ShipType, weaponType);
+                        return true;
+                    }
+                    break;
+                case ModuleType.MissileGun:
+                    if (weaponType != WeaponType.MissileGun)
+                    {
+                        weaponType = WeaponType.MissileGun;
+                        weapon = ModuleFactory.FindIWeapon(ShipType, weaponType);
+                        return true;
+                    }
+                    break;
+                case ModuleType.ArcGun:
+                    if (weaponType != WeaponType.ArcGun)
+                    {
+                        weaponType = WeaponType.ArcGun;
+                        weapon = ModuleFactory.FindIWeapon(ShipType, weaponType);
+                        return true;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return false;
+        }
+    }
+
+    #endregion
 
     private GameObj? whatInteractingWith = null;
     public GameObj? WhatInteractingWith
