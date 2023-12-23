@@ -2,7 +2,6 @@
 using COSXML.Auth;
 using COSXML.CosException;
 using COSXML.Model.Object;
-using Newtonsoft.Json;
 using System.Collections.Concurrent;
 using System.IO.Compression;
 using System.Formats.Tar;

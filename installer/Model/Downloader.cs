@@ -1,5 +1,4 @@
 ﻿using COSXML.CosException;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -26,11 +25,11 @@ namespace installer.Model
         }
         public string ProgramName = "THUAI7";                     // 要运行或下载的程序名称
         public string StartName = "maintest.exe";          // 启动的程序名
-        private Local_Data Data;
-        private Tencent_Cos Cloud;
+        public Local_Data Data;
+        public Tencent_Cos Cloud;
 
-        private HttpClient Client = new HttpClient();
-        private EEsast Web = new EEsast();
+        public HttpClient Client = new HttpClient();
+        public EEsast Web = new EEsast();
 
         public enum UpdateStatus
         {

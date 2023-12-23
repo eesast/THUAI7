@@ -17,7 +17,7 @@ namespace installer.Model
         public string Token { get; set; } = "";
     }
 
-    class EEsast
+    public class EEsast
     {
         public enum LangUsed { cpp, py };
         private string token = string.Empty;
@@ -54,7 +54,7 @@ namespace installer.Model
                     switch (response.StatusCode)
                     {
                         case System.Net.HttpStatusCode.OK:
-                            var info = Helper.DeserializeJson1<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
+                            var info = JsonSerializer.Deserialize<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
                             ID = info.Keys.Contains("_id") ? info["_id"] : string.Empty;
                             Email = info.Keys.Contains("email") ? info["email"] : string.Empty;
                             Token = info.Keys.Contains("token") ? info["token"] : string.Empty;
@@ -113,7 +113,7 @@ namespace installer.Model
                     switch (response.StatusCode)
                     {
                         case System.Net.HttpStatusCode.OK:
-                            var res = Helper.DeserializeJson1<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
+                            var res = JsonSerializer.Deserialize<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
                             string tmpSecretId = res["TmpSecretId"];        //"临时密钥 SecretId";
                             string tmpSecretKey = res["TmpSecretKey"];      //"临时密钥 SecretKey";
                             string tmpToken = res["SecurityToken"];         //"临时密钥 token";
@@ -182,7 +182,7 @@ namespace installer.Model
             }
         }
 
-        async public Task<string> GetTeamId()
+        async public Task<string?> GetTeamId()
         {
             var client = new HttpClient();
             var request = new HttpRequestMessage(HttpMethod.Post, "https://api.eesast.com/dev/v1/graphql");
@@ -197,9 +197,9 @@ namespace installer.Model
             var response = await client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             var info = await response.Content.ReadAsStringAsync();
-            var s1 = Helper.DeserializeJson1<Dictionary<string, object>>(info)["data"];
-            var s2 = Helper.DeserializeJson1<Dictionary<string, List<object>>>(s1.ToString() ?? "")["contest_team_member"];
-            var sres = Helper.DeserializeJson1<Dictionary<string, string>>(s2[0].ToString() ?? "")["team_id"];
+            var s1 = (info is null) ? null : JsonSerializer.Deserialize<Dictionary<string, string>>(info)["data"];
+            var s2 = (s1 is null) ? null : JsonSerializer.Deserialize<Dictionary<string, List<string>>>(s1 ?? "")["contest_team_member"];
+            var sres = (s2 is null) ? null : JsonSerializer.Deserialize<Dictionary<string, string>>(s2[0] ?? "")["team_id"];
             return sres;
         }
 
@@ -215,7 +215,5 @@ namespace installer.Model
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsStringAsync();
         }
-
-
     }
 }

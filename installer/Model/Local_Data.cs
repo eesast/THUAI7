@@ -4,13 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace installer.Model
 {
-    class Local_Data
+    public class Local_Data
     {
         public string ConfigPath;      // 标记路径记录文件THUAI7.json的路径
         public string MD5DataPath;     // 标记MD5本地文件缓存值
@@ -132,11 +131,11 @@ namespace installer.Model
             using (StreamReader r = new StreamReader(ConfigPath))
             {
                 string json = r.ReadToEnd();
-                if (json == null || json == "")
+                if (json is null || json == "")
                 {
                     json += @"{""THUAI7""" + ":" + @"""2024""}";
                 }
-                Config = Helper.TryDeserializeJson<Dictionary<string, string>>(json) ?? new Dictionary<string, string>();
+                Config = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? new Dictionary<string, string>();
             }
         }
 
@@ -145,7 +144,7 @@ namespace installer.Model
             using FileStream fs = new FileStream(ConfigPath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             using StreamWriter sw = new StreamWriter(fs);
             fs.SetLength(0);
-            sw.Write(JsonConvert.SerializeObject(Config));
+            sw.Write(JsonSerializer.Serialize(Config));
             sw.Flush();
         }
 
@@ -155,13 +154,13 @@ namespace installer.Model
             using (StreamReader r = new StreamReader(MD5DataPath))
             {
                 string json = r.ReadToEnd();
-                if (json == null || json == "")
+                if (json is null || json == "")
                 {
                     newMD5Data = new Dictionary<string, string>();
                 }
                 else
                 {
-                    newMD5Data = Helper.TryDeserializeJson<Dictionary<string, string>>(json) ?? new Dictionary<string, string>();
+                    newMD5Data = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
                 }
             }
             foreach (var item in newMD5Data)
@@ -187,7 +186,7 @@ namespace installer.Model
             using FileStream fs = new FileStream(MD5DataPath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             using StreamWriter sw = new StreamWriter(fs);
             fs.SetLength(0);
-            sw.Write(JsonConvert.SerializeObject(MD5Data));
+            sw.Write(JsonSerializer.Serialize(MD5Data));
             sw.Flush();
         }
 
