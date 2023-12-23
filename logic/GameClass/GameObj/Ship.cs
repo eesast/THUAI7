@@ -153,37 +153,31 @@ public class Ship : Movable, IShip
                     armor = ModuleFactory.FindIArmor(ShipType, armorType);
                     this.Armor.SetV(armor.ArmorHP);
                     return true;
-                    break;
                 case ModuleType.Armor2:
                     armorType = ArmorType.Armor2;
                     armor = ModuleFactory.FindIArmor(ShipType, armorType);
                     this.Armor.SetV(armor.ArmorHP);
                     return true;
-                    break;
                 case ModuleType.Armor3:
                     armorType = ArmorType.Armor3;
                     armor = ModuleFactory.FindIArmor(ShipType, armorType);
                     this.Armor.SetV(armor.ArmorHP);
                     return true;
-                    break;
                 case ModuleType.Shield1:
                     shieldType = ShieldType.Shield1;
                     shield = ModuleFactory.FindIShield(ShipType, shieldType);
                     this.Shield.SetV(shield.ShieldHP);
                     return true;
-                    break;
                 case ModuleType.Shield2:
                     shieldType = ShieldType.Shield2;
                     shield = ModuleFactory.FindIShield(ShipType, shieldType);
                     this.Shield.SetV(shield.ShieldHP);
                     return true;
-                    break;
                 case ModuleType.Shield3:
                     shieldType = ShieldType.Shield3;
                     shield = ModuleFactory.FindIShield(ShipType, shieldType);
                     this.Shield.SetV(shield.ShieldHP);
                     return true;
-                    break;
                 case ModuleType.LaserGun:
                     if (weaponType != WeaponType.LaserGun)
                     {
