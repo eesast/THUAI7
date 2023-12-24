@@ -63,16 +63,9 @@ message TargetMsg
 }
 message InstallMsg
 {
-    oneof module_type
-    {
-        ConstructorType constructor_type = 1;
-        ArmorType armor_type = 2;
-        ShieldType shield_type = 3;
-        WeaponType weapon_type = 4;
-        ProducerType producer_type = 5;
-    }
-    int64 player_id = 6;
-    int64 team_id = 7;
+    ModuleType module_type = 1;
+    int64 player_id = 2;
+    int64 team_id = 3;
 }
 message BuildShipMsg
 {

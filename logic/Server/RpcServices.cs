@@ -368,7 +368,7 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Install(gameID);
+            boolRes.ActSuccess = game.InstallModule(gameID, Transformation.ModuleFromProto(request.ModuleType));
             return Task.FromResult(boolRes);
         }
 
