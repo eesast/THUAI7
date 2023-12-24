@@ -1,16 +1,17 @@
 ﻿#region using Proto
+using ProtoArmor = Protobuf.ArmorType;
+using ProtoBullet = Protobuf.BulletType;
+using ProtoConstruction = Protobuf.ConstructionType;
+using ProtoConstructor = Protobuf.ConstructorType;
+using ProtoModule = Protobuf.ModuleType;
 using ProtoPlace = Protobuf.PlaceType;
-using ProtoShape = Protobuf.ShapeType;
 using ProtoPlayer = Protobuf.PlayerType;
+using ProtoProducer = Protobuf.ProducerType;
+using ProtoShape = Protobuf.ShapeType;
+using ProtoShield = Protobuf.ShieldType;
 using ProtoShip = Protobuf.ShipType;
 using ProtoShipState = Protobuf.ShipState;
 using ProtoWeapon = Protobuf.WeaponType;
-using ProtoConstructor = Protobuf.ConstructorType;
-using ProtoArmor = Protobuf.ArmorType;
-using ProtoShield = Protobuf.ShieldType;
-using ProtoProducer = Protobuf.ProducerType;
-using ProtoBullet = Protobuf.BulletType;
-using ProtoConstruction = Protobuf.ConstructionType;
 #endregion
 
 namespace Preparation.Utility;
@@ -83,6 +84,50 @@ public static class Transformation
         ProtoConstructor.Constructor2 => ConstructorType.Constructor2,
         ProtoConstructor.Constructor3 => ConstructorType.Constructor3,
         _ => ConstructorType.Null
+    };
+    #endregion
+    #region Module
+    public static ProtoModule ModuleToProto(ModuleType moduleType) => moduleType switch
+    {
+        ModuleType.Producer1 => ProtoModule.ModuleProducer1,
+        ModuleType.Producer2 => ProtoModule.ModuleProducer2,
+        ModuleType.Producer3 => ProtoModule.ModuleProducer3,
+        ModuleType.Constructor1 => ProtoModule.ModuleConstructor1,
+        ModuleType.Constructor2 => ProtoModule.ModuleConstructor2,
+        ModuleType.Constructor3 => ProtoModule.ModuleConstructor3,
+        ModuleType.Armor1 => ProtoModule.ModuleArmor1,
+        ModuleType.Armor2 => ProtoModule.ModuleArmor2,
+        ModuleType.Armor3 => ProtoModule.ModuleArmor3,
+        ModuleType.Shield1 => ProtoModule.ModuleShield1,
+        ModuleType.Shield2 => ProtoModule.ModuleShield2,
+        ModuleType.Shield3 => ProtoModule.ModuleShield3,
+        ModuleType.LaserGun => ProtoModule.ModuleLasergun,
+        ModuleType.PlasmaGun => ProtoModule.ModulePlasmagun,
+        ModuleType.ShellGun => ProtoModule.ModuleShellgun,
+        ModuleType.MissileGun => ProtoModule.ModuleMissilegun,
+        ModuleType.ArcGun => ProtoModule.ModuleArcgun,
+        _ => ProtoModule.NullModuleType
+    };
+    public static ModuleType ModuleFromProto(ProtoModule moduleType) => moduleType switch
+    {
+        ProtoModule.ModuleProducer1 => ModuleType.Producer1,
+        ProtoModule.ModuleProducer2 => ModuleType.Producer2,
+        ProtoModule.ModuleProducer3 => ModuleType.Producer3,
+        ProtoModule.ModuleConstructor1 => ModuleType.Constructor1,
+        ProtoModule.ModuleConstructor2 => ModuleType.Constructor2,
+        ProtoModule.ModuleConstructor3 => ModuleType.Constructor3,
+        ProtoModule.ModuleArmor1 => ModuleType.Armor1,
+        ProtoModule.ModuleArmor2 => ModuleType.Armor2,
+        ProtoModule.ModuleArmor3 => ModuleType.Armor3,
+        ProtoModule.ModuleShield1 => ModuleType.Shield1,
+        ProtoModule.ModuleShield2 => ModuleType.Shield2,
+        ProtoModule.ModuleShield3 => ModuleType.Shield3,
+        ProtoModule.ModuleLasergun => ModuleType.LaserGun,
+        ProtoModule.ModulePlasmagun => ModuleType.PlasmaGun,
+        ProtoModule.ModuleShellgun => ModuleType.ShellGun,
+        ProtoModule.ModuleMissilegun => ModuleType.MissileGun,
+        ProtoModule.ModuleArcgun => ModuleType.ArcGun,
+        _ => ModuleType.Null
     };
     #endregion
     #region Place
