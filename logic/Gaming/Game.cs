@@ -1,4 +1,4 @@
-﻿using GameClass.GameObj;
+using GameClass.GameObj;
 using GameClass.GameObj.Areas;
 using Preparation.Interface;
 using Preparation.Utility;
@@ -108,13 +108,13 @@ namespace Gaming
                 return actionManager.Construct(ship, constructionType);
             return false;
         }
-        public bool Install(long shipID)
+        public bool InstallModule(long shipID, ModuleType moduleType)
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInShipID(shipID);
             if (ship != null)
-                return actionManager.Install(ship);
+                return moduleManager.InstallModule(ship, moduleType);
             return false;
         }
         public bool Recycle(long shipID)
