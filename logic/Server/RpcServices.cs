@@ -74,7 +74,7 @@ namespace Server
                         if (currentGameInfo != null)
                         {
                             await responseStream.WriteAsync(currentGameInfo);
-                            //Console.WriteLine("Send!");
+                            Console.WriteLine("Send!");
                         }
                     }
                     catch (InvalidOperationException)
@@ -147,7 +147,7 @@ namespace Server
                     if (currentGameInfo != null && !exitFlag)
                     {
                         await responseStream.WriteAsync(currentGameInfo);
-                        //Console.WriteLine("Send!");
+                        Console.WriteLine("Send!");
                     }
                 }
                 catch

@@ -166,7 +166,7 @@ namespace Server
                     kvp.Value.Item1.Release();
                 }
 
-                // 若此时观战者加入，则死锁，所以需要 spetatorJoinLock
+                // 若此时观战者加入，则死锁，所以需要 spectatorJoinLock
 
                 foreach (var kvp in semaDict)
                 {
