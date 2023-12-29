@@ -1,5 +1,6 @@
 using GameClass.GameObj;
 using GameClass.GameObj.Areas;
+using MapGenerator;
 using Preparation.Interface;
 using Preparation.Utility;
 using System.Collections.Generic;
@@ -248,7 +249,7 @@ namespace Gaming
                 }
             }
         }
-        public Game(uint[,] mapResource, int numOfTeam)
+        public Game(MapStruct mapResource, int numOfTeam)
         {
             gameMap = new(mapResource);
             shipManager = new(gameMap);

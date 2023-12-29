@@ -1,6 +1,7 @@
 ﻿using GameClass.GameObj;
 using GameClass.GameObj.Areas;
 using Gaming;
+using MapGenerator;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Playback;
@@ -105,6 +106,7 @@ namespace Server
                 }
             }
         }
+
         protected void SendGameResult(int[] scores, int mode)		// 天梯的 Server 给网站发消息记录比赛结果
         {
             httpSender?.SendHttpRequest(scores, mode).Wait();
@@ -118,7 +120,7 @@ namespace Server
                 SaveGameResult(options.ResultFileName.EndsWith(".json") ? options.ResultFileName : options.ResultFileName + ".json");
             int[] scores = GetScore();
             SendGameResult(scores, options.Mode);
-            this.endGameSem.Release();
+            endGameSem.Release();
         }
         public void ReportGame(GameState gameState, bool requiredGaming = true)
         {
@@ -174,7 +176,8 @@ namespace Server
                 }
             }
         }
-        private bool PlayerDeceased(int playerID)    //这里需要判断大本营deceased吗？
+
+        private bool PlayerDeceased(int playerID)    //# 这里需要判断大本营deceased吗？
         {
             game.GameMap.GameObjLockDict[GameObjType.Ship].EnterReadLock();
             try
@@ -212,7 +215,8 @@ namespace Server
             return score;
         }
 
-        private static uint GetBirthPointIdx(long playerID)  // 获取出生点位置
+        //# 需要改进为非static
+        private uint GetBirthPointIdx(long playerID)  // 获取出生点位置
         {
             return (uint)playerID + 1; // ID从0-8,出生点从1-9
         }
@@ -243,20 +247,20 @@ namespace Server
             return msg;
         }
 
-        private static MessageOfObj MapMsg(uint[,] map)
+        private MessageOfObj MapMsg(uint[,] map)
         {
             MessageOfObj msgOfMap = new()
             {
                 MapMessage = new()
                 {
-                    Height = GameData.MapRows,
-                    Width = GameData.MapCols
+                    Height = game.GameMap.Height,
+                    Width = game.GameMap.Width
                 }
             };
-            for (int i = 0; i < GameData.MapRows; i++)
+            for (int i = 0; i < game.GameMap.Height; i++)
             {
                 msgOfMap.MapMessage.Rows.Add(new MessageOfMap.Types.Row());
-                for (int j = 0; j < GameData.MapCols; j++)
+                for (int j = 0; j < game.GameMap.Width; j++)
                 {
                     msgOfMap.MapMessage.Rows[i].Cols.Add(Transformation.PlaceTypeToProto((Utility.PlaceType)map[i, j]));
                 }
@@ -268,7 +272,7 @@ namespace Server
         {
             this.options = options;
             if (options.mapResource == DefaultArgumentOptions.MapResource)
-                this.game = new Game(MapInfo.defaultMap, options.TeamCount);
+                game = new(MapInfo.defaultMapStruct, options.TeamCount);
             else
             {
                 uint[,] map = new uint[GameData.MapRows, GameData.MapCols];
@@ -310,7 +314,16 @@ namespace Server
                 {
                     map = MapInfo.defaultMap;
                 }
-                finally { this.game = new Game(map, options.TeamCount); }
+                finally
+                {
+                    MapStruct mapResource = new()
+                    {
+                        height = GameData.MapRows,
+                        width = GameData.MapCols,
+                        map = map
+                    };
+                    game = new(mapResource, options.TeamCount);
+                }
             }
             currentMapMsg = MapMsg(game.GameMap.ProtoGameMap);
             playerNum = options.ShipCount + options.HomeCount;
