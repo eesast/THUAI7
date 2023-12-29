@@ -1,9 +1,7 @@
 ﻿using GameClass.GameObj;
-using GameClass.GameObj.Areas;
 using Gaming;
 using MapGenerator;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Playback;
 using Preparation.Utility;
 using Protobuf;
@@ -247,22 +245,19 @@ namespace Server
             return msg;
         }
 
-        private MessageOfObj MapMsg(uint[,] map)
+        private MessageOfMap MapMsg()
         {
-            MessageOfObj msgOfMap = new()
+            MessageOfMap msgOfMap = new()
             {
-                MapMessage = new()
-                {
-                    Height = game.GameMap.Height,
-                    Width = game.GameMap.Width
-                }
+                Height = game.GameMap.Height,
+                Width = game.GameMap.Width
             };
             for (int i = 0; i < game.GameMap.Height; i++)
             {
-                msgOfMap.MapMessage.Rows.Add(new MessageOfMap.Types.Row());
+                msgOfMap.Rows.Add(new MessageOfMap.Types.Row());
                 for (int j = 0; j < game.GameMap.Width; j++)
                 {
-                    msgOfMap.MapMessage.Rows[i].Cols.Add(Transformation.PlaceTypeToProto((Utility.PlaceType)map[i, j]));
+                    msgOfMap.Rows[i].Cols.Add(Transformation.PlaceTypeToProto((Utility.PlaceType)game.GameMap.ProtoGameMap[i, j]));
                 }
             }
             return msgOfMap;
@@ -325,7 +320,7 @@ namespace Server
                     game = new(mapResource, options.TeamCount);
                 }
             }
-            currentMapMsg = MapMsg(game.GameMap.ProtoGameMap);
+            currentMapMsg = new() { MapMessage = MapMsg() };
             playerNum = options.ShipCount + options.HomeCount;
             communicationToGameID = new long[TeamCount][];
             for (int i = 0; i < TeamCount; i++)
