@@ -25,21 +25,21 @@ namespace Constants
     SCCI double recycleMultiplier = 0.5;
     struct Home
     {
-        SCCI int32_t Hp = 24000;
-        SCCI int32_t economy = 1;
+        SCCI int32_t maxHp = 24000;
+        SCCI int32_t moneySpeed = 1;
     };
     struct Factory
     {
-        SCCI int32_t Hp = 8000;
-        SCCI int32_t economy = 3;
+        SCCI int32_t maxHp = 8000;
+        SCCI int32_t moneySpeed = 3;
     };
     struct Community
     {
-        SCCI int32_t Hp = 6000;
+        SCCI int32_t maxHp = 6000;
     };
-    struct Fortress
+    struct Fort
     {
-        SCCI int32_t Hp = 12000;
+        SCCI int32_t maxHp = 12000;
         SCCI int32_t attackRange = 8000;
         SCCI int32_t damage = 1200;
     };
@@ -48,7 +48,7 @@ namespace Constants
     SCCI int32_t sizeofShip = 800;
     struct CivilianShip
     {
-        SCCI int32_t Hp = 3000;
+        SCCI int32_t maxHp = 3000;
         SCCI int32_t basicArmor = 0;
         SCCI int32_t basicShield = 0;
         SCCI int32_t Speed = 3000;
@@ -56,7 +56,7 @@ namespace Constants
     };
     struct MilitaryShip
     {
-        SCCI int32_t Hp = 4000;
+        SCCI int32_t maxHp = 4000;
         SCCI int32_t basicArmor = 400;
         SCCI int32_t basicShield = 400;
         SCCI int32_t Speed = 2800;
@@ -64,7 +64,7 @@ namespace Constants
     };
     struct FlagShip
     {
-        SCCI int32_t Hp = 12000;
+        SCCI int32_t maxHp = 12000;
         SCCI int32_t basicArmor = 800;
         SCCI int32_t basicShield = 800;
         SCCI int32_t Speed = 2700;
@@ -72,41 +72,41 @@ namespace Constants
     };
 
     // 模块
-    struct Collector
+    struct Producer
     {
-        SCCI int32_t basicEconomy = 5;
-        SCCI int32_t advancedEconomy = 7;
-        SCCI int32_t ultimateEconomy = 10;
-        SCCI int32_t basicCost = 0;
-        SCCI int32_t advancedCost = 40;
-        SCCI int32_t ultimateCost = 80;
+        SCCI int32_t moneySpeed1 = 5;
+        SCCI int32_t moneySpeed2 = 7;
+        SCCI int32_t moneySpeed3 = 10;
+        SCCI int32_t Cost1 = 0;
+        SCCI int32_t Cost2 = 40;
+        SCCI int32_t Cost3 = 80;
     };
-    struct Builder
+    struct Constructor
     {
-        SCCI int32_t basicBuildSpeed = 500;
-        SCCI int32_t advancedBuildSpeed = 750;
-        SCCI int32_t ultimateBuildSpeed = 1000;
-        SCCI int32_t basicCost = 0;
-        SCCI int32_t advancedCost = 40;
-        SCCI int32_t ultimateCost = 80;
+        SCCI int32_t constructSpeed1 = 500;
+        SCCI int32_t constructSpeed2 = 750;
+        SCCI int32_t constructSpeed3 = 1000;
+        SCCI int32_t Cost1 = 0;
+        SCCI int32_t Cost2 = 40;
+        SCCI int32_t Cost3 = 80;
     };
     struct Armor
     {
-        SCCI int32_t basicArmor = 2000;
-        SCCI int32_t advancedArmor = 3000;
-        SCCI int32_t ultimateArmor = 4000;
-        SCCI int32_t basicCost = 60;
-        SCCI int32_t advancedCost = 120;
-        SCCI int32_t ultimateCost = 180;
+        SCCI int32_t armor1 = 2000;
+        SCCI int32_t armor2 = 3000;
+        SCCI int32_t armor3 = 4000;
+        SCCI int32_t Cost1 = 60;
+        SCCI int32_t Cost2 = 120;
+        SCCI int32_t Cost3 = 180;
     };
     struct Shield
     {
-        SCCI int32_t basicShield = 2000;
-        SCCI int32_t advancedShield = 3000;
-        SCCI int32_t ultimateShield = 4000;
-        SCCI int32_t basicCost = 60;
-        SCCI int32_t advancedCost = 120;
-        SCCI int32_t ultimateCost = 180;
+        SCCI int32_t shield1 = 2000;
+        SCCI int32_t shield2 = 3000;
+        SCCI int32_t shield3 = 4000;
+        SCCI int32_t Cost1 = 60;
+        SCCI int32_t Cost2 = 120;
+        SCCI int32_t Cost3 = 180;
     };
     struct Weapon
     {
@@ -114,7 +114,7 @@ namespace Constants
         SCCI int32_t PlasmaCost = 120;
         SCCI int32_t ShellCost = 130;
         SCCI int32_t MissileCost = 180;
-        SCCI int32_t ElectricArc = 240;
+        SCCI int32_t ArcCost = 240;
     };
 
     // 子弹
@@ -154,12 +154,12 @@ namespace Constants
         SCCI int32_t AttackRange = 8000;
         SCCI int32_t ExplodeRange = 1600;
         SCCI double ArmorDamageMultiplier = 1.0;
-        // SCCI double ShieldDamageMultiplier = 0.4;
+        SCCI double ShieldDamageMultiplier = 0.4;
         SCCI int32_t Speed = 6000;
         SCCI int32_t CastTime = 600;  // ms
         SCCI int32_t BackSwing = 600;
     };
-    struct ElectricArc
+    struct Arc
     {
         SCCI int32_t Damage = 3200;  // 100-3200
         SCCI int32_t AttackRange = 8000;
