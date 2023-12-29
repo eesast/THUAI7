@@ -24,85 +24,92 @@ namespace Protobuf {
     static MessageTypeReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChFNZXNzYWdlVHlwZS5wcm90bxIIcHJvdG9idWYqdQoJUGxhY2VUeXBlEhMK",
-            "D05VTExfUExBQ0VfVFlQRRAAEggKBEhPTUUQARIJCgVTUEFDRRACEggKBFJV",
-            "SU4QAxIKCgZTSEFET1cQBBIMCghBU1RFUk9JRBAFEgwKCFJFU09VUkNFEAYS",
-            "DAoIQlVJTERJTkcQByptCg1Db2xsZWN0b3JUeXBlEhcKE05VTExfQ09MTEVD",
-            "VE9SX1RZUEUQABITCg9CQVNJQ19DT0xMRUNUT1IQARIWChJBRFZBTkNFRF9D",
-            "T0xMRUNUT1IQAhIWChJVTFRJTUFURV9DT0xMRUNUT1IQAypZCglBcm1vclR5",
-            "cGUSEwoPTlVMTF9BUk1PUl9UWVBFEAASDwoLQkFTSUNfQVJNT1IQARISCg5B",
-            "RFZBTkNFRF9BUk1PUhACEhIKDlVMVElNQVRFX0FSTU9SEAMqXgoKU2hpZWxk",
-            "VHlwZRIUChBOVUxMX1NISUVMRF9UWVBFEAASEAoMQkFTSUNfU0hJRUxEEAES",
-            "EwoPQURWQU5DRURfU0hJRUxEEAISEwoPVUxUSU1BVEVfU0hJRUxEEAMqYwoL",
-            "QnVpbGRlclR5cGUSFQoRTlVMTF9CVUlMREVSX1RZUEUQABIRCg1CQVNJQ19C",
-            "VUlMREVSEAESFAoQQURWQU5DRURfQlVJTERFUhACEhQKEFVMVElNQVRFX0JV",
-            "SUxERVIQAypjCgpCdWxsZXRUeXBlEhQKEE5VTExfQlVMTEVUX1RZUEUQABIJ",
-            "CgVMQVNFUhABEgoKBlBMQVNNQRACEgkKBVNIRUxMEAMSCwoHTUlTU0lMRRAE",
-            "EhAKDEVMRUNUUklDX0FSQxAFKpABCglTaGlwU3RhdGUSDwoLTlVMTF9TVEFU",
-            "VVMQABIICgRJRExFEAESDQoJUFJPRFVDSU5HEAISEAoMQ09OU1RSVUNUSU5H",
-            "EAMSDgoKUkVDT1ZFUklORxAEEg0KCVJFQ1lDTElORxAFEg0KCUFUVEFDS0lO",
-            "RxAGEgwKCFNXSU5HSU5HEAcSCwoHU1RVTk5FRBAIKl4KDEJ1aWxkaW5nVHlw",
-            "ZRIWChJOVUxMX0JVSUxESU5HX1RZUEUQABILCgdGQUNUT1JZEAESDQoJQ09N",
-            "TVVOSVRZEAISDAoIRk9SVFJFU1MQAxIMCghXT1JNSE9MRRAEKlMKCFNoaXBU",
-            "eXBlEhIKDk5VTExfU0hJUF9UWVBFEAASEQoNQ0lWSUxJQU5fU0hJUBABEhEK",
-            "DU1JTElUQVJZX1NISVAQAhINCglGTEFHX1NISVAQAyotCgpQbGF5ZXJUZWFt",
-            "Eg0KCU5VTExfVEVBTRAAEgYKAlVQEAESCAoERE9XThACKlAKCUdhbWVTdGF0",
-            "ZRITCg9OVUxMX0dBTUVfU1RBVEUQABIOCgpHQU1FX1NUQVJUEAESEAoMR0FN",
-            "RV9SVU5OSU5HEAISDAoIR0FNRV9FTkQQA2IGcHJvdG8z"));
+            "ChFNZXNzYWdlVHlwZS5wcm90bxIIcHJvdG9idWYqUAoJR2FtZVN0YXRlEhMK",
+            "D05VTExfR0FNRV9TVEFURRAAEg4KCkdBTUVfU1RBUlQQARIQCgxHQU1FX1JV",
+            "Tk5JTkcQAhIMCghHQU1FX0VORBADKo0BCglQbGFjZVR5cGUSEwoPTlVMTF9Q",
+            "TEFDRV9UWVBFEAASDgoKSE9NRV9QTEFDRRABEgkKBVNQQUNFEAISCAoEUlVJ",
+            "ThADEgoKBlNIQURPVxAEEgwKCEFTVEVST0lEEAUSDAoIUkVTT1VSQ0UQBhIQ",
+            "CgxDT05TVFJVQ1RJT04QBxIMCghXT1JNSE9MRRAIKjgKCVNoYXBlVHlwZRIT",
+            "Cg9OVUxMX1NIQVBFX1RZUEUQABIKCgZDSVJDTEUQARIKCgZTUVVBUkUQAio2",
+            "CgpQbGF5ZXJUeXBlEhQKEE5VTExfUExBWUVSX1RZUEUQABIICgRTSElQEAES",
+            "CAoESE9NRRACKlMKCFNoaXBUeXBlEhIKDk5VTExfU0hJUF9UWVBFEAASEQoN",
+            "Q0lWSUxJQU5fU0hJUBABEhEKDU1JTElUQVJZX1NISVAQAhINCglGTEFHX1NI",
+            "SVAQAyqcAQoJU2hpcFN0YXRlEg8KC05VTExfU1RBVFVTEAASCAoESURMRRAB",
+            "Eg0KCVBST0RVQ0lORxACEhAKDENPTlNUUlVDVElORxADEg4KClJFQ09WRVJJ",
+            "TkcQBBINCglSRUNZQ0xJTkcQBRINCglBVFRBQ0tJTkcQBhIMCghTV0lOR0lO",
+            "RxAHEgsKB1NUVU5ORUQQCBIKCgZNT1ZJTkcQCSppCgpXZWFwb25UeXBlEhQK",
+            "EE5VTExfV0VBUE9OX1RZUEUQABIMCghMQVNFUkdVThABEg0KCVBMQVNNQUdV",
+            "ThACEgwKCFNIRUxMR1VOEAMSDgoKTUlTU0lMRUdVThAEEgoKBkFSQ0dVThAF",
+            "KmIKD0NvbnN0cnVjdG9yVHlwZRIZChVOVUxMX0NPTlNUUlVDVE9SX1RZUEUQ",
+            "ABIQCgxDT05TVFJVQ1RPUjEQARIQCgxDT05TVFJVQ1RPUjIQAhIQCgxDT05T",
+            "VFJVQ1RPUjMQAypECglBcm1vclR5cGUSEwoPTlVMTF9BUk1PUl9UWVBFEAAS",
+            "CgoGQVJNT1IxEAESCgoGQVJNT1IyEAISCgoGQVJNT1IzEAMqSQoKU2hpZWxk",
+            "VHlwZRIUChBOVUxMX1NISUVMRF9UWVBFEAASCwoHU0hJRUxEMRABEgsKB1NI",
+            "SUVMRDIQAhILCgdTSElFTEQzEAMqUwoMUHJvZHVjZXJUeXBlEhYKEk5VTExf",
+            "UFJPRFVDRVJfVFlQRRAAEg0KCVBST0RVQ0VSMRABEg0KCVBST0RVQ0VSMhAC",
+            "Eg0KCVBST0RVQ0VSMxADKo4DCgpNb2R1bGVUeXBlEhQKEE5VTExfTU9EVUxF",
+            "X1RZUEUQABIUChBNT0RVTEVfUFJPRFVDRVIxEAESFAoQTU9EVUxFX1BST0RV",
+            "Q0VSMhACEhQKEE1PRFVMRV9QUk9EVUNFUjMQAxIXChNNT0RVTEVfQ09OU1RS",
+            "VUNUT1IxEAQSFwoTTU9EVUxFX0NPTlNUUlVDVE9SMhAFEhcKE01PRFVMRV9D",
+            "T05TVFJVQ1RPUjMQBhIRCg1NT0RVTEVfQVJNT1IxEAcSEQoNTU9EVUxFX0FS",
+            "TU9SMhAIEhEKDU1PRFVMRV9BUk1PUjMQCRISCg5NT0RVTEVfU0hJRUxEMRAK",
+            "EhIKDk1PRFVMRV9TSElFTEQyEAsSEgoOTU9EVUxFX1NISUVMRDMQDBITCg9N",
+            "T0RVTEVfTEFTRVJHVU4QDRIUChBNT0RVTEVfUExBU01BR1VOEA4SEwoPTU9E",
+            "VUxFX1NIRUxMR1VOEA8SFQoRTU9EVUxFX01JU1NJTEVHVU4QEBIRCg1NT0RV",
+            "TEVfQVJDR1VOEBEqWgoKQnVsbGV0VHlwZRIUChBOVUxMX0JVTExFVF9UWVBF",
+            "EAASCQoFTEFTRVIQARIKCgZQTEFTTUEQAhIJCgVTSEVMTBADEgsKB01JU1NJ",
+            "TEUQBBIHCgNBUkMQBSpUChBDb25zdHJ1Y3Rpb25UeXBlEhoKFk5VTExfQ09O",
+            "U1RSVUNUSU9OX1RZUEUQABILCgdGQUNUT1JZEAESDQoJQ09NTVVOSVRZEAIS",
+            "CAoERk9SVBADKjQKCE5ld3NUeXBlEhIKDk5VTExfTkVXU19UWVBFEAASCAoE",
+            "VEVYVBABEgoKBkJJTkFSWRACKi4KClBsYXllclRlYW0SDQoJTlVMTF9URUFN",
+            "EAASBwoDUkVEEAESCAoEQkxVRRACYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protobuf.PlaceType), typeof(global::Protobuf.CollectorType), typeof(global::Protobuf.ArmorType), typeof(global::Protobuf.ShieldType), typeof(global::Protobuf.BuilderType), typeof(global::Protobuf.BulletType), typeof(global::Protobuf.ShipState), typeof(global::Protobuf.BuildingType), typeof(global::Protobuf.ShipType), typeof(global::Protobuf.PlayerTeam), typeof(global::Protobuf.GameState), }, null, null));
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protobuf.GameState), typeof(global::Protobuf.PlaceType), typeof(global::Protobuf.ShapeType), typeof(global::Protobuf.PlayerType), typeof(global::Protobuf.ShipType), typeof(global::Protobuf.ShipState), typeof(global::Protobuf.WeaponType), typeof(global::Protobuf.ConstructorType), typeof(global::Protobuf.ArmorType), typeof(global::Protobuf.ShieldType), typeof(global::Protobuf.ProducerType), typeof(global::Protobuf.ModuleType), typeof(global::Protobuf.BulletType), typeof(global::Protobuf.ConstructionType), typeof(global::Protobuf.NewsType), typeof(global::Protobuf.PlayerTeam), }, null, null));
     }
     #endregion
 
   }
   #region Enums
+  /// <summary>
+  /// 游戏进行状态
+  /// </summary>
+  public enum GameState {
+    [pbr::OriginalName("NULL_GAME_STATE")] NullGameState = 0,
+    [pbr::OriginalName("GAME_START")] GameStart = 1,
+    [pbr::OriginalName("GAME_RUNNING")] GameRunning = 2,
+    [pbr::OriginalName("GAME_END")] GameEnd = 3,
+  }
+
   public enum PlaceType {
     [pbr::OriginalName("NULL_PLACE_TYPE")] NullPlaceType = 0,
-    [pbr::OriginalName("HOME")] Home = 1,
+    [pbr::OriginalName("HOME_PLACE")] HomePlace = 1,
     [pbr::OriginalName("SPACE")] Space = 2,
     [pbr::OriginalName("RUIN")] Ruin = 3,
     [pbr::OriginalName("SHADOW")] Shadow = 4,
     [pbr::OriginalName("ASTEROID")] Asteroid = 5,
     [pbr::OriginalName("RESOURCE")] Resource = 6,
-    [pbr::OriginalName("BUILDING")] Building = 7,
+    [pbr::OriginalName("CONSTRUCTION")] Construction = 7,
+    [pbr::OriginalName("WORMHOLE")] Wormhole = 8,
   }
 
-  public enum CollectorType {
-    [pbr::OriginalName("NULL_COLLECTOR_TYPE")] NullCollectorType = 0,
-    [pbr::OriginalName("BASIC_COLLECTOR")] BasicCollector = 1,
-    [pbr::OriginalName("ADVANCED_COLLECTOR")] AdvancedCollector = 2,
-    [pbr::OriginalName("ULTIMATE_COLLECTOR")] UltimateCollector = 3,
+  public enum ShapeType {
+    [pbr::OriginalName("NULL_SHAPE_TYPE")] NullShapeType = 0,
+    [pbr::OriginalName("CIRCLE")] Circle = 1,
+    [pbr::OriginalName("SQUARE")] Square = 2,
   }
 
-  public enum ArmorType {
-    [pbr::OriginalName("NULL_ARMOR_TYPE")] NullArmorType = 0,
-    [pbr::OriginalName("BASIC_ARMOR")] BasicArmor = 1,
-    [pbr::OriginalName("ADVANCED_ARMOR")] AdvancedArmor = 2,
-    [pbr::OriginalName("ULTIMATE_ARMOR")] UltimateArmor = 3,
+  public enum PlayerType {
+    [pbr::OriginalName("NULL_PLAYER_TYPE")] NullPlayerType = 0,
+    [pbr::OriginalName("SHIP")] Ship = 1,
+    [pbr::OriginalName("HOME")] Home = 2,
   }
 
-  public enum ShieldType {
-    [pbr::OriginalName("NULL_SHIELD_TYPE")] NullShieldType = 0,
-    [pbr::OriginalName("BASIC_SHIELD")] BasicShield = 1,
-    [pbr::OriginalName("ADVANCED_SHIELD")] AdvancedShield = 2,
-    [pbr::OriginalName("ULTIMATE_SHIELD")] UltimateShield = 3,
-  }
-
-  public enum BuilderType {
-    [pbr::OriginalName("NULL_BUILDER_TYPE")] NullBuilderType = 0,
-    [pbr::OriginalName("BASIC_BUILDER")] BasicBuilder = 1,
-    [pbr::OriginalName("ADVANCED_BUILDER")] AdvancedBuilder = 2,
-    [pbr::OriginalName("ULTIMATE_BUILDER")] UltimateBuilder = 3,
-  }
-
-  public enum BulletType {
-    [pbr::OriginalName("NULL_BULLET_TYPE")] NullBulletType = 0,
-    [pbr::OriginalName("LASER")] Laser = 1,
-    [pbr::OriginalName("PLASMA")] Plasma = 2,
-    [pbr::OriginalName("SHELL")] Shell = 3,
-    [pbr::OriginalName("MISSILE")] Missile = 4,
-    [pbr::OriginalName("ELECTRIC_ARC")] ElectricArc = 5,
+  public enum ShipType {
+    [pbr::OriginalName("NULL_SHIP_TYPE")] NullShipType = 0,
+    [pbr::OriginalName("CIVILIAN_SHIP")] CivilianShip = 1,
+    [pbr::OriginalName("MILITARY_SHIP")] MilitaryShip = 2,
+    [pbr::OriginalName("FLAG_SHIP")] FlagShip = 3,
   }
 
   public enum ShipState {
@@ -115,37 +122,93 @@ namespace Protobuf {
     [pbr::OriginalName("ATTACKING")] Attacking = 6,
     [pbr::OriginalName("SWINGING")] Swinging = 7,
     [pbr::OriginalName("STUNNED")] Stunned = 8,
+    [pbr::OriginalName("MOVING")] Moving = 9,
   }
 
-  public enum BuildingType {
-    [pbr::OriginalName("NULL_BUILDING_TYPE")] NullBuildingType = 0,
+  public enum WeaponType {
+    [pbr::OriginalName("NULL_WEAPON_TYPE")] NullWeaponType = 0,
+    [pbr::OriginalName("LASERGUN")] Lasergun = 1,
+    [pbr::OriginalName("PLASMAGUN")] Plasmagun = 2,
+    [pbr::OriginalName("SHELLGUN")] Shellgun = 3,
+    [pbr::OriginalName("MISSILEGUN")] Missilegun = 4,
+    [pbr::OriginalName("ARCGUN")] Arcgun = 5,
+  }
+
+  public enum ConstructorType {
+    [pbr::OriginalName("NULL_CONSTRUCTOR_TYPE")] NullConstructorType = 0,
+    [pbr::OriginalName("CONSTRUCTOR1")] Constructor1 = 1,
+    [pbr::OriginalName("CONSTRUCTOR2")] Constructor2 = 2,
+    [pbr::OriginalName("CONSTRUCTOR3")] Constructor3 = 3,
+  }
+
+  public enum ArmorType {
+    [pbr::OriginalName("NULL_ARMOR_TYPE")] NullArmorType = 0,
+    [pbr::OriginalName("ARMOR1")] Armor1 = 1,
+    [pbr::OriginalName("ARMOR2")] Armor2 = 2,
+    [pbr::OriginalName("ARMOR3")] Armor3 = 3,
+  }
+
+  public enum ShieldType {
+    [pbr::OriginalName("NULL_SHIELD_TYPE")] NullShieldType = 0,
+    [pbr::OriginalName("SHIELD1")] Shield1 = 1,
+    [pbr::OriginalName("SHIELD2")] Shield2 = 2,
+    [pbr::OriginalName("SHIELD3")] Shield3 = 3,
+  }
+
+  public enum ProducerType {
+    [pbr::OriginalName("NULL_PRODUCER_TYPE")] NullProducerType = 0,
+    [pbr::OriginalName("PRODUCER1")] Producer1 = 1,
+    [pbr::OriginalName("PRODUCER2")] Producer2 = 2,
+    [pbr::OriginalName("PRODUCER3")] Producer3 = 3,
+  }
+
+  public enum ModuleType {
+    [pbr::OriginalName("NULL_MODULE_TYPE")] NullModuleType = 0,
+    [pbr::OriginalName("MODULE_PRODUCER1")] ModuleProducer1 = 1,
+    [pbr::OriginalName("MODULE_PRODUCER2")] ModuleProducer2 = 2,
+    [pbr::OriginalName("MODULE_PRODUCER3")] ModuleProducer3 = 3,
+    [pbr::OriginalName("MODULE_CONSTRUCTOR1")] ModuleConstructor1 = 4,
+    [pbr::OriginalName("MODULE_CONSTRUCTOR2")] ModuleConstructor2 = 5,
+    [pbr::OriginalName("MODULE_CONSTRUCTOR3")] ModuleConstructor3 = 6,
+    [pbr::OriginalName("MODULE_ARMOR1")] ModuleArmor1 = 7,
+    [pbr::OriginalName("MODULE_ARMOR2")] ModuleArmor2 = 8,
+    [pbr::OriginalName("MODULE_ARMOR3")] ModuleArmor3 = 9,
+    [pbr::OriginalName("MODULE_SHIELD1")] ModuleShield1 = 10,
+    [pbr::OriginalName("MODULE_SHIELD2")] ModuleShield2 = 11,
+    [pbr::OriginalName("MODULE_SHIELD3")] ModuleShield3 = 12,
+    [pbr::OriginalName("MODULE_LASERGUN")] ModuleLasergun = 13,
+    [pbr::OriginalName("MODULE_PLASMAGUN")] ModulePlasmagun = 14,
+    [pbr::OriginalName("MODULE_SHELLGUN")] ModuleShellgun = 15,
+    [pbr::OriginalName("MODULE_MISSILEGUN")] ModuleMissilegun = 16,
+    [pbr::OriginalName("MODULE_ARCGUN")] ModuleArcgun = 17,
+  }
+
+  public enum BulletType {
+    [pbr::OriginalName("NULL_BULLET_TYPE")] NullBulletType = 0,
+    [pbr::OriginalName("LASER")] Laser = 1,
+    [pbr::OriginalName("PLASMA")] Plasma = 2,
+    [pbr::OriginalName("SHELL")] Shell = 3,
+    [pbr::OriginalName("MISSILE")] Missile = 4,
+    [pbr::OriginalName("ARC")] Arc = 5,
+  }
+
+  public enum ConstructionType {
+    [pbr::OriginalName("NULL_CONSTRUCTION_TYPE")] NullConstructionType = 0,
     [pbr::OriginalName("FACTORY")] Factory = 1,
     [pbr::OriginalName("COMMUNITY")] Community = 2,
-    [pbr::OriginalName("FORTRESS")] Fortress = 3,
-    [pbr::OriginalName("WORMHOLE")] Wormhole = 4,
+    [pbr::OriginalName("FORT")] Fort = 3,
   }
 
-  public enum ShipType {
-    [pbr::OriginalName("NULL_SHIP_TYPE")] NullShipType = 0,
-    [pbr::OriginalName("CIVILIAN_SHIP")] CivilianShip = 1,
-    [pbr::OriginalName("MILITARY_SHIP")] MilitaryShip = 2,
-    [pbr::OriginalName("FLAG_SHIP")] FlagShip = 3,
+  public enum NewsType {
+    [pbr::OriginalName("NULL_NEWS_TYPE")] NullNewsType = 0,
+    [pbr::OriginalName("TEXT")] Text = 1,
+    [pbr::OriginalName("BINARY")] Binary = 2,
   }
 
   public enum PlayerTeam {
     [pbr::OriginalName("NULL_TEAM")] NullTeam = 0,
-    [pbr::OriginalName("UP")] Up = 1,
-    [pbr::OriginalName("DOWN")] Down = 2,
-  }
-
-  /// <summary>
-  /// 游戏进行状态
-  /// </summary>
-  public enum GameState {
-    [pbr::OriginalName("NULL_GAME_STATE")] NullGameState = 0,
-    [pbr::OriginalName("GAME_START")] GameStart = 1,
-    [pbr::OriginalName("GAME_RUNNING")] GameRunning = 2,
-    [pbr::OriginalName("GAME_END")] GameEnd = 3,
+    [pbr::OriginalName("RED")] Red = 1,
+    [pbr::OriginalName("BLUE")] Blue = 2,
   }
 
   #endregion
