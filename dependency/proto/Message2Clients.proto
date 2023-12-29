@@ -100,11 +100,13 @@ message MessageOfHome
 
 message MessageOfMap
 {
+    uint32 height = 1;
+    uint32 width = 2;
     message Row
     {
-        repeated PlaceType col = 1;
+        repeated PlaceType cols = 1;
     }
-    repeated Row row = 2;
+    repeated Row rows = 3;
 }
 
 message MessageOfTeam

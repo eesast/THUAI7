@@ -59,7 +59,7 @@ namespace Client
                 {
                     for (int j = 0; j < 50; j++)
                     {
-                        map[i, j] = Convert.ToInt32(obj.Row[i].Col[j]) + 4;//与proto一致
+                        map[i, j] = Convert.ToInt32(obj.Rows[i].Cols[j]) + 4; // 与proto一致
                     }
                 }
             }

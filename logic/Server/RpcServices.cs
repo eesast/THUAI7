@@ -212,7 +212,7 @@ namespace Server
         public override Task<BoolRes> Send(SendMsg request, ServerCallContext context)
         {
             var boolRes = new BoolRes();
-            if (request.PlayerId >= spectatorMinPlayerID || playerDeceased((int)request.PlayerId))
+            if (request.PlayerId >= spectatorMinPlayerID || PlayerDeceased((int)request.PlayerId))
             {
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
