@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using Protobuf;
 
 public class MapControl : MonoBehaviour {
     public GameObject mapFa;
@@ -38,7 +39,7 @@ public class MapControl : MonoBehaviour {
         fs.Close();
         for (int i = 0; i < 50; i++) {
             for (int j = 0; j < 50; j++) {
-                Instantiate(ParaDefine.GetInstance().PT((ParaDefine.PlaceType)map[i][j]), new Vector3(j, 50 - i, 0), Quaternion.identity, mapFa.transform);
+                Instantiate(ParaDefine.GetInstance().PT((PlaceType)map[i][j]), new Vector3(j, 50 - i, 0), Quaternion.identity, mapFa.transform);
             }
         }
     }
