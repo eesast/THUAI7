@@ -230,7 +230,7 @@ int32_t TeamAPI::GetMoney() const
     return logic.GetMoney();
 }
 
-// Ship¶ÀÓÐ
+// Shipç‹¬æœ‰
 std::future<bool> ShipAPI::Move(int64_t timeInMilliseconds, double angleInRadian)
 {
     return std::async(std::launch::async, [=]()
@@ -293,7 +293,7 @@ bool ShipAPI::HaveView(int32_t gridX, int32_t gridY) const
     return logic.HaveView(gridX, gridY, selfInfo->x, selfInfo->y);
 }
 
-// Team ¶ÀÓÐ
+// Teamç‹¬æœ‰
 std::future<bool> TeamAPI::InstallModule(int64_t playerID, const THUAI7::ModuleType moduleType)
 {
     return std::async(std::launch::async, [=]()
