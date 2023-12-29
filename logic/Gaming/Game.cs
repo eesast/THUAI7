@@ -1,4 +1,4 @@
-﻿using GameClass.GameObj;
+using GameClass.GameObj;
 using GameClass.GameObj.Areas;
 using Preparation.Interface;
 using Preparation.Utility;
