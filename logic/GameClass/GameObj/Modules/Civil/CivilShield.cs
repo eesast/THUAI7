@@ -5,8 +5,6 @@ namespace GameClass.GameObj.Modules;
 
 public class CivilShield1 : IShield
 {
-    private const int cost = GameData.CivilShipShield1Cost;
-    public int Cost => cost;
-    private const int shieldHP = GameData.Shield1;
-    public int ShieldHP => shieldHP;
+    public int Cost => GameData.CivilShipShield1Cost;
+    public int ShieldHP => GameData.Shield1;
 }

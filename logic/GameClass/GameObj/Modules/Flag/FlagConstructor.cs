@@ -5,8 +5,6 @@ namespace GameClass.GameObj.Modules;
 
 public class FlagConstructor1 : IConstructor
 {
-    private const int cost = GameData.FlagShipConstructor1Cost;
-    public int Cost => cost;
-    private const int constructSpeed = GameData.Constructor1Speed;
-    public int ConstructSpeed => constructSpeed;
+    public int Cost => GameData.FlagShipConstructor1Cost;
+    public int ConstructSpeed => GameData.Constructor1Speed;
 }
