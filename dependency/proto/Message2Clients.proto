@@ -92,10 +92,8 @@ message MessageOfHome
 {
     int32 x = 1;
     int32 y = 2;
-    int32 score = 3;
-    int32 hp = 4;
-    int64 player_id = 5;
-    int64 team_id = 6;
+    int32 hp = 3;
+    int64 team_id = 4;
 }
 
 message MessageOfMap
@@ -112,7 +110,9 @@ message MessageOfMap
 message MessageOfTeam
 {
 	int64 team_id = 1;
-	int32 score = 2;
+    int64 player_id = 2;
+	int32 score = 3;
+    int32 money = 4;
 
 }
 
@@ -138,8 +138,8 @@ message MessageOfObj
 message MessageOfAll
 {
     int32 game_time = 1;
-    int32 redteam_score=2;
-    int32 blueteam_score=3;
+    int32 red_team_score=2;
+    int32 blue_team_score=3;
 }
 
 message MessageToClient

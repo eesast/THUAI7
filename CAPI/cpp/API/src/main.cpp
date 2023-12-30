@@ -31,14 +31,16 @@ static constexpr std::string_view welcomeString = R"welcome(
                   \/           \/               \/        \/    
 )welcome"sv;
 
-int THUAI6Main(int argc, char** argv, CreateAIFunc AIBuilder)
+int THUAI7Main(int argc, char** argv, CreateAIFunc AIBuilder)
 {
     int pID = 0;
+    int tID = 0;
     std::string sIP = "172.22.32.1";
     std::string sPort = "8888";
     bool file = false;
     bool print = false;
     bool warnOnly = false;
+    extern const std::array<THUAI7::ShipType, 4> shipTypeDict;
     // {
     //     file = true;
     //     print = true;
@@ -58,9 +60,14 @@ int THUAI6Main(int argc, char** argv, CreateAIFunc AIBuilder)
         TCLAP::ValueArg<std::string> serverPort("P", "serverPort", "Port the server listens to 7777 in default", false, "7777", "USORT");
         cmd.add(serverPort);
 
-        std::vector<int> validPlayerIDs{0, 1};
+        std::vector<int> validTeamIDs{0, 1};  // 红0蓝1
+        TCLAP::ValuesConstraint<int> teamIdConstraint(validTeamIDs);
+        TCLAP::ValueArg<int> teamID("t", "teamID", "Team ID 0,1 valid only", true, -1, &teamIdConstraint);
+        cmd.add(teamID);
+
+        std::vector<int> validPlayerIDs{0, 1, 2, 3, 4};
         TCLAP::ValuesConstraint<int> playerIdConstraint(validPlayerIDs);
-        TCLAP::ValueArg<int> playerID("p", "playerID", "Player ID 0,1 valid only", true, -1, &playerIdConstraint);
+        TCLAP::ValueArg<int> playerID("p", "playerID", "Player ID 0,1,2,3,4 valid only", true, -1, &playerIdConstraint);
         cmd.add(playerID);
 
         std::string DebugDesc = "Set this flag to save the debug log to ./logs folder.\n";
@@ -76,6 +83,7 @@ int THUAI6Main(int argc, char** argv, CreateAIFunc AIBuilder)
         cmd.add(warning);
 
         cmd.parse(argc, argv);
+        tID = teamID.getValue();
         pID = playerID.getValue();
         sIP = serverIP.getValue();
         sPort = serverPort.getValue();
@@ -92,11 +100,20 @@ int THUAI6Main(int argc, char** argv, CreateAIFunc AIBuilder)
     }
     try
     {
+        THUAI7::PlayerType playerType;
+        THUAI7::ShipType shipType = THUAI7::ShipType::NullShipType;
+        if (pID == 0)
+            playerType = THUAI7::PlayerType::Team;
+        else
+        {
+            playerType = THUAI7::PlayerType::Ship;
+            shipType = shipTypeDict[pID];
+        }
 #ifdef _MSC_VER
-        std::cout << welcomeString << std::endl;
+        std::cout
+            << welcomeString << std::endl;
 #endif
-
-        Logic logic(pID, ShipType);
+        Logic logic(pID, tID, playerType, shipType);
         logic.Main(AIBuilder, sIP, sPort, file, print, warnOnly);
     }
     catch (const std::exception& e)

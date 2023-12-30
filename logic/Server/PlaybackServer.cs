@@ -187,8 +187,8 @@ namespace Server
                             if (msg.GameState == GameState.GameEnd)
                             {
                                 Console.WriteLine("Game over normally!");
-                                finalScore[0] = msg.AllMessage.RedteamScore;
-                                finalScore[1] = msg.AllMessage.BlueteamScore;
+                                finalScore[0] = msg.AllMessage.RedTeamScore;
+                                finalScore[1] = msg.AllMessage.BlueTeamScore;
                                 goto endParse;
                             }
                         }
@@ -260,8 +260,8 @@ namespace Server
                                 {
                                     Console.WriteLine("Game over normally!");
                                     IsGaming = false;
-                                    finalScore[0] = msg.AllMessage.BlueteamScore;
-                                    finalScore[1] = msg.AllMessage.RedteamScore;
+                                    finalScore[0] = msg.AllMessage.BlueTeamScore;
+                                    finalScore[1] = msg.AllMessage.RedTeamScore;
                                     ReportGame(msg);
                                     return false;
                                 }

@@ -140,7 +140,7 @@ public static class Transformation
         PlaceType.Resource => ProtoPlace.Resource,
         PlaceType.Construction => ProtoPlace.Construction,
         PlaceType.Wormhole => ProtoPlace.Wormhole,
-        PlaceType.Home => ProtoPlace.HomePlace,
+        PlaceType.Home => ProtoPlace.Home,
         _ => ProtoPlace.NullPlaceType
     };
     public static PlaceType PlaceTypeFromProto(ProtoPlace placeType) => placeType switch
@@ -152,7 +152,7 @@ public static class Transformation
         ProtoPlace.Resource => PlaceType.Resource,
         ProtoPlace.Construction => PlaceType.Construction,
         ProtoPlace.Wormhole => PlaceType.Wormhole,
-        ProtoPlace.HomePlace => PlaceType.Home,
+        ProtoPlace.Home => PlaceType.Home,
         _ => PlaceType.Null
     };
     #endregion
@@ -160,8 +160,14 @@ public static class Transformation
     public static ProtoPlayer PlayerToProto(GameObjType playerType) => playerType switch
     {
         GameObjType.Ship => ProtoPlayer.Ship,
-        GameObjType.Home => ProtoPlayer.Home,
+        GameObjType.Home => ProtoPlayer.Team,
         _ => ProtoPlayer.NullPlayerType
+    };
+    public static GameObjType PlayerFromProto(ProtoPlayer playerType) => playerType switch
+    {
+        ProtoPlayer.Ship => GameObjType.Ship,
+        ProtoPlayer.Team => GameObjType.Home,
+        _ => GameObjType.Null
     };
     #endregion
     #region Producer

@@ -14,10 +14,11 @@
 
 extern const bool asynchronous;
 
-Logic::Logic(int64_t ID, THUAI7::PlayerTeam team, bool ISship) :
-    APIid(ID),
-    playerTeam(team),
-    isShip(ISship),
+Logic::Logic(int64_t pID, int64_t tID, THUAI7::PlayerType pType, THUAI7::ShipType sType) :
+    playerID(pID),
+    teamID(tID),
+    playerType(pType),
+    shipType(sType)
 
 {
     currentState = &state[0];
@@ -26,6 +27,10 @@ Logic::Logic(int64_t ID, THUAI7::PlayerTeam team, bool ISship) :
     currentState->mapInfo = std::make_shared<THUAI7::GameMap>();
     bufferState->gameInfo = std::make_shared<THUAI7::GameInfo>();
     bufferState->mapInfo = std::make_shared<THUAI7::GameMap>();
+    if (teamID == 0)
+        playerTeam = THUAI7::PlayerTeam::Red;
+    else
+        playerTeam = THUAI7::PlayerTeam::Blue;
 }
 
 std::vector<std::shared_ptr<const THUAI7::Ship>> Logic::GetShips() const
@@ -36,7 +41,7 @@ std::vector<std::shared_ptr<const THUAI7::Ship>> Logic::GetShips() const
     return temp;
 }
 
-std::vector<std::shared_ptr<const THUAI7::Ship>> Logic::GetEnemyShip()
+std::vector<std::shared_ptr<const THUAI7::Ship>> Logic::GetEnemyShips()
 {
     std::unique_lock<std::mutex> lock(mtxState);
     std::vector<std::shared_ptr<const THUAI7::Ship>> temp(currentState->enemyships.begin(), currentState->enemyships.end());
@@ -52,18 +57,18 @@ std::vector<std::shared_ptr<const THUAI7::Bullet>> Logic::GetBullets() const
     return temp;
 }
 
-std::shared_ptr<const THUAI7::Ship> Logic::GetSelfInfo()
+std::shared_ptr<const THUAI7::Ship> Logic::ShipGetSelfInfo()
 {
     std::unique_lock<std::mutex> lock(mtxState);
     logger->debug("Called ShipGetSelfInfo");
     return currentState->shipSelf;
 }
 
-std::shared_ptr<const THUAI7::Home> Logic::GetSelfInfo()
+std::shared_ptr<const THUAI7::Team> Logic::TeamGetSelfInfo()
 {
     std::unique_lock<std::mutex> lock(mtxState);
-    logger->debug("Called HomeGetSelfInfo");
-    return currentState->homeSelf;
+    logger->debug("Called TeamGetSelfInfo");
+    return currentState->teamSelf;
 }
 
 std::vector<std::vector<THUAI7::PlaceType>> Logic::GetFullMap() const
@@ -85,25 +90,25 @@ THUAI7::PlaceType Logic::GetPlaceType(int32_t cellX, int32_t cellY) const
     return currentState->gameMap[cellX][cellY];
 }
 
-int32_t Logic::GetBuildingHp(int32_t cellX, int32_t cellY) const
+int32_t Logic::GetConstructionHp(int32_t cellX, int32_t cellY) const
 {
     std::unique_lock<std::mutex> lock(mtxState);
-    logger->debug("Called GetBuildingHp");
+    logger->debug("Called GetConstructionHp");
     auto pos = std::make_pair(cellX, cellY);
     auto it = currentState->mapInfo->factoryState.find(pos);
     auto it2 = currentState->mapInfo->communityState.find(pos);
-    auto it3 = currentState->mapInfo->fortressState.find(pos);
+    auto it3 = currentState->mapInfo->fortState.find(pos);
     if (it != currentState->mapInfo->factoryState.end())
     {
         return currentState->mapInfo->factoryState[pos].first;
     }
     else if (it2 != currentState->mapInfo->communityState.end())
         return currentState->mapInfo->communityState[pos].first;
-    else if (it3 != currentState->mapInfo->fortressState.end())
-        return currentState->mapInfo->fortressState[pos].first;
+    else if (it3 != currentState->mapInfo->fortState.end())
+        return currentState->mapInfo->fortState[pos].first;
     else
     {
-        logger->warn("Building not found");
+        logger->warn("Construction not found");
         return -1;
     }
 }
@@ -124,8 +129,17 @@ int32_t Logic::GetWormHp(int32_t cellX, int32_t cellY)
         return -1;
     }
 }
+int32_t Logic::GetHomeHp()
+{
+    std::unique_lock<std::mutex> lock(mtxState);
+    logger->debug("Called GetHomeHp");
+    if (playerTeam == THUAI7::PlayerTeam::Red)
+        return currentState->gameInfo->redHomeHp;
+    else
+        return curretState->gameInfo->blueHomeHp;
+}
 
-int32_t GetResourceState(int32_t cellX, int32_t cellY)
+int32_t Logic::GetResourceState(int32_t cellX, int32_t cellY)
 {
     std::unique_lock<std::mutex> lock(mtxState);
     logger->debug("Called GetResourceState");
@@ -142,14 +156,28 @@ int32_t GetResourceState(int32_t cellX, int32_t cellY)
     }
 }
 
-int32_t Logic::GetEconomy()
+int32_t Logic::GetMoney()
 {
     std::unique_lock<std::mutex> lock(mtxState);
-    logger->debug("Called GetEconomy");
-    if (playerTeam == THUAI7::PlayerTeam::Up)
-        return currentState->gameInfo->upEconomy;
-    else if (playerTeam == THUAI7::PlayerTeam::Down)
-        return currentState->gameInfo->downEconomy;
+    logger->debug("Called GetMoney");
+    if (playerTeam == THUAI7::PlayerTeam::Red)
+        return currentState->gameInfo->redMoney;
+    else if (playerTeam == THUAI7::PlayerTeam::Blue)
+        return currentState->gameInfo->blueMoney;
+    else
+    {
+        logger->warn("Invalid playerTeam");
+        return -1;
+    }
+}
+int32_t Logic::GetScore()
+{
+    std::unique_lock<std::mutex> lock(mtxState);
+    logger->debug("Called GetScore");
+    if (playerTeam == THUAI7::PlayerTeam::Red)
+        return currentState->gameInfo->redScore;
+    else if (playerTeam == THUAI7::PlayerTeam::Blue)
+        return currentState->gameInfo->blueScore;
     else
     {
         logger->warn("Invalid playerTeam");
@@ -167,13 +195,13 @@ std::shared_ptr<const THUAI7::GameInfo> Logic::GetGameInfo() const
 bool Logic::Move(int64_t time, double angle)
 {
     logger->debug("Called Move");
-    return pComm->Move(time, angle, APIid);
+    return pComm->Move(playerID, teamID, time, angle);
 }
 
 bool Logic::SendMessage(int64_t toID, std::string message, bool binary)
 {
     logger->debug("Called SendMessage");
-    return pComm->SendMessage(toID, std::move(message), binary, playerID);
+    return pComm->SendMessage(playerID, teamID, toID, std::move(message), binary);
 }
 
 bool Logic::HaveMessage()
@@ -198,44 +226,44 @@ std::pair<int64_t, std::string> Logic::GetMessage()
 bool Logic::Attack(double angle)
 {
     logger->debug("Called Attack");
-    return pComm->Attack(angle, playerID);
+    return pComm->Attack(playerID, teamID, angle);
 }
 
 bool Logic::Recover()
 {
     logger->debug("Called Recover");
-    return pComm->Recover(APIid);
+    return pComm->Recover(playerID, teamID);
 }
 
 // 等待完成
 bool Logic::Recycle()
 {
-    // logger->debug("Called Recycle");
-    // return pComm->Recycle(APIid);
+    logger->debug("Called Recycle");
+    return pComm->Recycle(playerID, teamID);
 }
 
-bool Logic::Produce(int32_t x, int32_t y);
+bool Logic::Produce();
 {
     logger->debug("Called Produce");
-    return pComm->Produce(APIid, x, y);
+    return pComm->Produce(playerID, teamID);
 }
 
-bool Logic::Rebuild(int32_t cellX, int32_t cellY)
+bool Logic::Rebuild(THUAI7::ConstructionType constructionType)
 {
     logger->debug("Called Rebuild");
-    return pComm->Rebuild(APIid, cellX, cellY);
+    return pComm->Rebuild(playerID, teamID, constructionType);
 }
 
-bool Logic::InstallModule(THUAI7::Module module)
+bool Logic::InstallModule(int64_t playerID, THUAI7::ModuleType moduleType)
 {
     logger->debug("Called InstallModule");
-    return pComm->InstallModule(module, APIid);
+    return pComm->InstallModule(playerID, teamID, moduleType);
 }
 
 bool Logic::EndAllAction()
 {
     logger->debug("Called EndAllAction");
-    return pComm->EndAllAction(APIid);
+    return pComm->EndAllAction(playerID, teamID);
 }
 
 bool Logic::WaitThread()
@@ -251,7 +279,7 @@ void Logic::ProcessMessage()
         try
         {
             logger->info("Message thread start!");
-            pComm->AddShip(APIid, shipType, playerTeam);
+            pComm->AddPlayer(playerID, teamID, shipType, x, y);
             while (gameState != THUAI7::GameState::GameEnd)
             {
                 auto clientMsg = pComm->GetMessage2Client();  // 在获得新消息之前阻塞
@@ -331,13 +359,13 @@ void Logic::ProcessMessage()
 
 void Logic::LoadBufferSelf(const protobuf::MessageToClient& message)
 {
-    if (isShip)  // 本身是船
+    if (playerType == THUAI7::PlayerType::Ship)  // 本身是船
     {
         for (const auto& item : message.obj_message())
         {
             if (Proto2THUAI7::messageOfObjDict[item.message_of_obj_case()] == THUAI7::MessageOfObj::ShipMessage)
             {
-                if (item.ship_message().ship_id() == APIid)
+                if (item.ship_message().player_id() == playerID)
                 {
                     bufferState->shipSelf = Proto2THUAI7::Protobuf2THUAI7Ship(item.ship_message());
                     bufferState->ships.push_back(bufferState->shipSelf);
@@ -345,25 +373,25 @@ void Logic::LoadBufferSelf(const protobuf::MessageToClient& message)
                 else
                 {
                     std::shared_ptr<THUAI7::Ship> ship = Proto2THUAI7::Protobuf2THUAI7Ship(item.ship_message());
-                    if (ship->team == playerTeam)
+                    if (ship->teamID == teamID)
                         bufferState->ships.push_back(ship);
                 }
                 logger->debug("Add Ship!");
             }
         }
     }
-    else  // 本身是大本营
+    else  // 本身是Team
     {
         for (const auto& item : message.obj_message())
         {
-            if (Proto2THUAI7::messageOfObjDict[item.message_of_obj_case()] == THUAI7::MessageOfObj::HomeMessage)
+            if (Proto2THUAI7::messageOfObjDict[item.message_of_obj_case()] == THUAI7::MessageOfObj::TeamMessage)
             {
-                if (item.home_message().home_id() == APIid)
+                if (item.team_message().player_id() == playerID)
                 {
-                    bufferState->homeSelf = Proto2THUAI7::Protobuf2THUAI7Home(item.home_message());
-                    bufferState->homes.push_back(bufferState->shipSelf);
+                    bufferState->teamSelf = Proto2THUAI7::Protobuf2THUAI7Team(item.team_message());
+                    bufferState->teams.push_back(bufferState->teamSelf);
                 }
-                logger->debug("Add Home!");
+                logger->debug("Add Team!");
             }
         }
     }
@@ -431,19 +459,19 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                 }
             }
             break;
-        case THUAI7::MessageOfObj::FortressMessage:
-            if (AssistFunction::HaveView(x, y, item.fortress_message().x(), item.fortress_message().y(), bufferState->gameMap))
+        case THUAI7::MessageOfObj::FortMessage:
+            if (AssistFunction::HaveView(x, y, item.fort_message().x(), item.fort_message().y(), bufferState->gameMap))
             {
-                auto pos = std::make_pair(AssistFunction::GridToCell(item.fortress_message().x()), AssistFunction::GridToCell(item.fortress_message().y()));
-                if (bufferState->mapInfo->fortressState.count(pos) == 0)
+                auto pos = std::make_pair(AssistFunction::GridToCell(item.fort_message().x()), AssistFunction::GridToCell(item.fort_message().y()));
+                if (bufferState->mapInfo->fortState.count(pos) == 0)
                 {
-                    bufferState->mapInfo->fortressState.emplace(pos, {item.fortress_message().hp(), item.fortress_message().team()});
-                    logger->debug("Add Fortress!");
+                    bufferState->mapInfo->fortState.emplace(pos, {item.fort_message().hp(), item.fort_message().team()});
+                    logger->debug("Add Fort!");
                 }
                 else
                 {
-                    bufferState->mapInfo->fortressState[pos].first = item.fortress_message().hp();
-                    logger->debug("Update Fortress!");
+                    bufferState->mapInfo->fortState[pos].first = item.fort_message().hp();
+                    logger->debug("Update Fort!");
                 }
             }
             break;

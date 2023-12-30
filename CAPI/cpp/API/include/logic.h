@@ -47,7 +47,9 @@ private:
 
     // ID
     THUAI7::PlayerType playerType;
-    int64_t player_id;
+    int64_t playerID;
+    int64_t teamID;
+    THUAI7::PlayerTeam playerTeam;
     THUAI7::ShipType shipType;
 
     std::unique_ptr<IGameTimer> timer;
@@ -88,39 +90,44 @@ private:
 
     // 提供给API使用的函数
 
-    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Ship>> GetShips() const override;
-    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Ship>> GetEnemyShip() const override;
-    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Bullet>> GetBullets() const override;
-    [[nodiscard]] std::shared_ptr<const THUAI7::Ship> GetSelfInfo() const override;
-    [[nodiscard]] std::shared_ptr<const THUAI7::Home> GetSelfInfo() const override;
-    [[nodiscard]] std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const override;
-    [[nodiscard]] THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const override;
-    [[nodiscard]] int32_t GetBuildingHp(int32_t cellX, int32_t cellY) const override;
-    [[nodiscard]] int32_t GetWormHp(int32_t cellX, int32_t cellY) const override;
-    [[nodiscard]] int32_t GetResourceState(int32_t cellX, int32_t cellY) const override;
-    [[nodiscard]] std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const override;
-    [[nodiscard]] int32_t GetEconomy() const override;
+    [[nodiscard]] virtual std::vector<std::shared_ptr<const THUAI7::Ship>> GetShips() const = 0;
+    [[nodiscard]] virtual std::vector<std::shared_ptr<const THUAI7::Ship>> GetEnemyShips() const = 0;
+    [[nodiscard]] virtual std::vector<std::shared_ptr<const THUAI7::Bullet>> GetBullets() const = 0;
+    [[nodiscard]] virtual std::shared_ptr<const THUAI7::Ship> ShipGetSelfInfo() const = 0;
+    [[nodiscard]] virtual std::shared_ptr<const THUAI7::Team> TeamGetSelfInfo() const = 0;
+    [[nodiscard]] virtual std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const = 0;
+    [[nodiscard]] virtual std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const = 0;
+    [[nodiscard]] virtual THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const = 0;
+    [[nodiscard]] virtual std::vector<int64_t> GetPlayerGUIDs() const = 0;
+    [[nodiscard]] virtual int32_t GetConstructionHp(int32_t cellX, int32_t cellY) const = 0;
+    [[nodiscard]] virtual int32_t GetWormHp(int32_t cellX, int32_t cellY) const = 0;
+    [[nodiscard]] virtual int32_t GetResourceState(int32_t cellX, int32_t cellY) const = 0;
+    [[nodiscard]] virtual int32_t GetHomeHp() const = 0;
+    [[nodiscard]] virtual int32_t GetMoney() const = 0;
+    [[nodiscard]] virtual int32_t GetScore() const = 0;
 
     // 供IAPI使用的操作相关的部分
-    bool Move(int64_t time, double angle) override;
-    bool SendMessage(int64_t toID, std::string message, bool binary) override;
-    bool HaveMessage() override;
-    std::pair<int64_t, std::string> GetMessage() override;
-
-    int32_t GetCounter() const override;
+    virtual bool Send(int64_t toPlayerID, std::string message, bool binary) = 0;
+    virtual bool HaveMessage() = 0;
+    virtual std::pair<int64_t, std::string> GetMessage() = 0;
+    virtual bool WaitThread() = 0;
+    virtual int32_t GetCounter() const = 0;
+    virtual bool EndAllAction() = 0;
 
     // IShipAPI使用的部分
-    bool Recover() override;
-    bool Recycle() override;
-    bool Produce(int32_t x, int32_t y) override;
-    bool Rebuild(int32_t cellX, int32_t cellY) override;
-    bool InstallModule(THUAI7::Module module) override;
-    bool EndAllAction() override;
-    bool Attack(double angle) override;
-    std::vector<int64_t> GetShipGUIDs() const override;
-    [[nodiscard]] bool HaveView(int32_t gridX, int32_t gridY, int32_t selfX, int32_t selfY, int32_t viewRange) const override;
+    virtual bool Move(int64_t time, double angle) = 0;
+    virtual bool Recover() = 0;
+    virtual bool Produce() = 0;
+    virtual bool ReBuild(THUAI7::ConstructionType constructionType) = 0;
+    virtual bool Construct(THUAI7::ConstructionType constructionType) = 0;
+    virtual bool Attack(double angle) = 0;
+    [[nodiscard]] virtual bool HaveView(int32_t gridX, int32_t gridY, int32_t selfX, int32_t selfY, int32_t viewRange) const = 0;
 
-    bool WaitThread() override;
+    // ITeamAPI
+    virtual bool Recycle(int64_t playerID) = 0;
+    virtual bool InstallModule(int64_t playerID, THUAI7::ModuleType moduleType) = 0;
+    virtual bool BuildShip(THUAI7::ShipType shipType, int32_t playerID, int32_t cellX, int32_t cellY) = 0;
+
     bool TryConnection();
     void ProcessMessage();
 
@@ -140,7 +147,7 @@ private:
 
 public:
     // 构造函数还需要传更多参数，有待补充
-    Logic(int64_t playerID, THUAI7::PlayerType player_type, THUAI7::ShipType shipType);
+    Logic(int64_t playerID, int64_t teamID, THUAI7::PlayerType playerType, THUAI7::ShipType shipType);
 
     ~Logic()
     {

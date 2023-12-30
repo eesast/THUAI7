@@ -170,7 +170,7 @@ namespace Server
 #if DEBUG
             Console.WriteLine($"GetMap IP: {context.Peer}");
 #endif 
-            return Task.FromResult(MapMsg());
+            return Task.FromResult(MapMsg(game.GameMap.ProtoGameMap));
         }
 
         public override Task<BoolRes> Attack(AttackMsg request, ServerCallContext context)
@@ -312,7 +312,7 @@ namespace Server
             return Task.FromResult(boolRes);
         }
 
-        public override Task<BoolRes> Produce(TargetMsg request, ServerCallContext context)
+        public override Task<BoolRes> Produce(IDMsg request, ServerCallContext context)
         {
 #if DEBUG
             Console.WriteLine($"Produce ID: {request.PlayerId}");
@@ -363,7 +363,7 @@ namespace Server
         public override Task<BoolRes> InstallModule(InstallMsg request, ServerCallContext context)
         {
 #if DEBUG
-            Console.WriteLine($"Rebuild ID: {request.PlayerId}");
+            Console.WriteLine($"InstallModule ID: {request.PlayerId}");
 #endif 
             BoolRes boolRes = new();
             if (request.PlayerId >= spectatorMinPlayerID)

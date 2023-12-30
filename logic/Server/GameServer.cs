@@ -240,12 +240,25 @@ namespace Server
                 GameTime = time
             };
             int[] score = GetScore();
-            msg.RedteamScore = score[0];
-            msg.BlueteamScore = score[1];
+            msg.RedTeamScore = score[0];
+            msg.BlueTeamScore = score[1];
             return msg;
         }
 
-        private MessageOfMap MapMsg()
+        private static Protobuf.PlaceType IntToPlaceType(uint n) => n switch
+        {
+            0 => Protobuf.PlaceType.Space,
+            1 => Protobuf.PlaceType.Ruin,
+            2 => Protobuf.PlaceType.Shadow,
+            3 => Protobuf.PlaceType.Asteroid,
+            4 => Protobuf.PlaceType.Resource,
+            5 => Protobuf.PlaceType.Construction,
+            6 => Protobuf.PlaceType.Wormhole,
+            7 => Protobuf.PlaceType.Home,
+            _ => Protobuf.PlaceType.NullPlaceType,
+        };
+
+        private MessageOfMap MapMsg(uint[,] map)
         {
             MessageOfMap msgOfMap = new()
             {
@@ -320,7 +333,7 @@ namespace Server
                     game = new(mapResource, options.TeamCount);
                 }
             }
-            currentMapMsg = new() { MapMessage = MapMsg() };
+            currentMapMsg = new() { MapMessage = MapMsg(game.GameMap.ProtoGameMap) };
             playerNum = options.ShipCount + options.HomeCount;
             communicationToGameID = new long[TeamCount][];
             for (int i = 0; i < TeamCount; i++)

@@ -14,7 +14,7 @@ enum GameState
 enum PlaceType // 地图中的所有建筑/地点类型
 {
     NULL_PLACE_TYPE = 0;
-    HOME_PLACE = 1;
+    HOME = 1;
     SPACE = 2;
     RUIN = 3;
     SHADOW = 4;
@@ -36,7 +36,7 @@ enum PlayerType
 {
     NULL_PLAYER_TYPE = 0;
     SHIP = 1;
-    HOME = 2;
+    TEAM = 2;
 }
 
 enum ShipType
