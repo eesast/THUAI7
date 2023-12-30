@@ -170,7 +170,7 @@ namespace Server
 #if DEBUG
             Console.WriteLine($"GetMap IP: {context.Peer}");
 #endif 
-            return Task.FromResult(MapMsg(game.GameMap.ProtoGameMap));
+            return Task.FromResult(MapMsg());
         }
 
         public override Task<BoolRes> Attack(AttackMsg request, ServerCallContext context)
