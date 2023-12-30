@@ -19,6 +19,7 @@ namespace installer.Model
         public string Region { get; init; }     // 设置一个默认的存储桶地域
         public string BucketName { get; set; }
         public ConcurrentStack<Exception> Exceptions { get; set; }
+        protected Logger Log = LoggerProvider.FromConsole();
 
         protected CosXmlConfig config;
         protected CosXmlServer cosXml;
@@ -50,15 +51,20 @@ namespace installer.Model
             cosXml = new CosXmlServer(config, cosCredentialProvider);
         }
 
-        public async Task DownloadFileAsync(string savePath, string? remotePath = null)
+        public async Task<int> DownloadFileAsync(string savePath, string? remotePath = null)
         {
+            int thID = Log.StartNew();
             // download_dir标记根文件夹路径，key为相对根文件夹的路径（不带./）
             // 创建存储桶
             try
             {
+                Log.LogInfo(thID, $"Download task: {{\"{remotePath}\"->\"{savePath}\"}} started.");
                 // 覆盖对应文件，如果无法覆盖则报错
                 if (File.Exists(savePath))
+                {
                     File.Delete(savePath);
+                    Log.LogInfo(thID, $"{savePath} has existed. Original file has been deleted.");
+                }
                 string bucket = $"{BucketName}-{Appid}";                                // 格式：BucketName-APPID
                 string localDir = Path.GetDirectoryName(savePath)     // 本地文件夹
                     ?? throw new Exception("本地文件夹路径获取失败");
@@ -68,8 +74,7 @@ namespace installer.Model
                 Dictionary<string, string> test = request.GetRequestHeaders();
                 request.SetCosProgressCallback(delegate (long completed, long total)
                 {
-                    if (completed == 1.0)
-                        Console.WriteLine($"[Download: {remotePath}] progress = {completed * 100.0 / total:##.##}%");
+                    Log.LogInfo(thID, $"[Download: {remotePath}] progress = {completed * 100.0 / total:##.##}%");
                 });
                 // 执行请求
                 GetObjectResult result = cosXml.GetObject(request);
@@ -80,23 +85,27 @@ namespace installer.Model
             catch (Exception ex)
             {
                 Exceptions.Push(ex);
-                throw;
-                //MessageBox.Show($"下载{download_dir}时出现未知问题，请反馈");
+                Log.LogError(thID, ex.Message);
             }
+            Log.LogInfo(thID, $"Download task: {{\"{remotePath}\"->\"{savePath}\"}} finished.");
+            return thID;
         }
 
-        public async Task DownloadQueueAsync(string basePath, IEnumerable<string> queue, ConcurrentQueue<string> downloadFailed)
+        public async Task<int> DownloadQueueAsync(string basePath, IEnumerable<string> queue, ConcurrentQueue<string> downloadFailed)
         {
+            int thID = Log.StartNew();
+            Log.LogInfo(thID, "Batch download task started.");
             int count = queue.Count();
             int finished = 0;
             foreach (var item in queue)
             {
                 string local = Path.Combine(basePath, item);
+                int subID = -1;
                 ThreadPool.QueueUserWorkItem(_ =>
                 {
                     try
                     {
-                        DownloadFileAsync(local, item).Wait();
+                        subID = DownloadFileAsync(local, item).Result;
                     }
                     catch (Exception ex)
                     {
@@ -105,20 +114,27 @@ namespace installer.Model
                     finally
                     {
                         Interlocked.Increment(ref finished);
+                        Log.LogInfo(thID, $"Child process: {subID} finished.");
                     }
                 });
             }
-            while (finished < count) ;
+            while (finished < count);
+            Log.LogInfo(thID, "Batch download task finished.");
+            return thID;
         }
 
         public void ArchieveUnzip(string zipPath, string targetDir)
         {
             Stream? inStream = null;
             Stream? gzipStream = null;
+            int thID = Log.StartNew();
+            Log.LogInfo(thID, $"Zip {zipPath} is being extracted...");
             try
             {
                 if (!Directory.Exists(targetDir))
+                {
                     Directory.CreateDirectory(targetDir);
+                }
                 using (inStream = File.OpenRead(zipPath))
                 {
                     using (gzipStream = new GZipStream(inStream, CompressionMode.Decompress))
@@ -127,19 +143,22 @@ namespace installer.Model
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                //出错
+                Log.LogError(thID, ex.Message);
             }
             finally
             {
                 if (gzipStream != null) gzipStream.Close();
                 if (inStream != null) inStream.Close();
+                Log.LogInfo(thID, $"Zip has been extracted to {targetDir}");
             }
         }
 
         public async Task UploadFileAsync(string localPath, string targetPath)
         {
+            int thID = Log.StartNew();
+            Log.LogInfo(thID, $"Upload task: {{\"{localPath}\"->\"{targetPath}\"}} started.");
             // 初始化 TransferConfig
             TransferConfig transferConfig = new TransferConfig();
 
@@ -155,7 +174,7 @@ namespace installer.Model
             uploadTask.progressCallback = delegate (long completed, long total)
             {
                 if (completed == 1.0)
-                    Console.WriteLine($"[Upload: {targetPath}] progress = {completed * 100.0 / total:##.##}%");
+                    Log.LogInfo(thID, $"[Upload: {targetPath}] progress = {completed * 100.0 / total:##.##}%");
             };
 
             COSXMLUploadTask.UploadTaskResult result = await transferManager.UploadAsync(uploadTask);
@@ -174,7 +193,7 @@ namespace installer.Model
                 Exceptions.Push(ex);
                 throw;
             }
-
+            Log.LogInfo(thID, $"Upload task: {{\"{localPath}\"->\"{targetPath}\"}} finished.");
         }
     }
 }

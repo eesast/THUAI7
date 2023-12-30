@@ -28,6 +28,8 @@ namespace installer.Model
         }// 路径为绝对路径
         public string InstallPath = ""; // 最后一级为THUAI7文件夹所在目录
         public bool Installed = false;  // 项目是否安装
+        protected Logger Log = LoggerProvider.FromConsole();
+
         public Local_Data()
         {
             MD5Update = new ConcurrentBag<(DataRowState state, string name)>();

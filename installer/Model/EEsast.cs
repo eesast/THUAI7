@@ -35,6 +35,8 @@ namespace installer.Model
         public string Email { get; protected set; } = string.Empty;
 
         public ConcurrentQueue<Exception> Exceptions = new ConcurrentQueue<Exception>();
+        protected Logger Log = LoggerProvider.FromConsole();
+
         public enum WebStatus
         {
             disconnected, offline, logined
