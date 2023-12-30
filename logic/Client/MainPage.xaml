@@ -38,12 +38,10 @@ TargetType="Label">
                     <RowDefinition Height="20" />
                 </Grid.RowDefinitions>
 
-                    
-
                 <Grid x:Name="MapGrid" WidthRequest="530" HeightRequest="530" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" BackgroundColor="Yellow">
                 </Grid>
             </Grid>
-            
+
         </VerticalStackLayout>
     </Grid>
 </ContentPage>
