@@ -1,13 +1,9 @@
-﻿namespace GameClass.GameObj
+﻿using MapGenerator;
+
+namespace GameClass.GameObj
 {
     public static class MapInfo
     {
-        /// <summary>
-        /// 检测物体在哪；不能返回invisible。
-        /// </summary>
-        /// <param name="obj"></param>
-        //// <returns></returns>
-
         /// <summary>
         /// 50*50
         /// </summary>
@@ -65,5 +61,11 @@
             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
         };
         public static uint[,] birthPoints = new uint[2, 2] { { 3, 46 }, { 46, 3 } };
+        public static MapStruct defaultMapStruct = new()
+        {
+            height = 50,
+            width = 50,
+            map = defaultMap
+        };
     }
 }

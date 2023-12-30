@@ -3,6 +3,8 @@ syntax = "proto3";
 package protobuf;
 import "MessageType.proto";
 
+message NullRequest {}
+
 message IDMsg
 {
     int64 player_id = 1;

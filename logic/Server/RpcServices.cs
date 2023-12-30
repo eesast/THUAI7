@@ -165,6 +165,14 @@ namespace Server
             } while (game.GameMap.Timer.IsGaming);
         }
 
+        public override Task<MessageOfMap> GetMap(NullRequest request, ServerCallContext context)
+        {
+#if DEBUG
+            Console.WriteLine($"GetMap IP: {context.Peer}");
+#endif 
+            return Task.FromResult(MapMsg());
+        }
+
         public override Task<BoolRes> Attack(AttackMsg request, ServerCallContext context)
         {
 #if DEBUG
@@ -185,7 +193,6 @@ namespace Server
             boolRes.ActSuccess = game.Attack(gameID, request.Angle);
             return Task.FromResult(boolRes);
         }
-
 
         public override Task<MoveRes> Move(MoveMsg request, ServerCallContext context)
         {
@@ -212,7 +219,7 @@ namespace Server
         public override Task<BoolRes> Send(SendMsg request, ServerCallContext context)
         {
             var boolRes = new BoolRes();
-            if (request.PlayerId >= spectatorMinPlayerID || playerDeceased((int)request.PlayerId))
+            if (request.PlayerId >= spectatorMinPlayerID || PlayerDeceased((int)request.PlayerId))
             {
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
@@ -352,7 +359,6 @@ namespace Server
             boolRes.ActSuccess = game.Recycle(gameID);
             return Task.FromResult(boolRes);
         }
-
 
         public override Task<BoolRes> InstallModule(InstallMsg request, ServerCallContext context)
         {
