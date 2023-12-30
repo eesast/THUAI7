@@ -21,13 +21,13 @@ namespace Client
             Console.WriteLine("Hello World");
             timer = Dispatcher.CreateTimer();
             timer.Interval = TimeSpan.FromMilliseconds(50);
-            //timer.Tick += new EventHandler(Refresh);
+            timer.Tick += new EventHandler(Refresh);
             timer.Start();
             Application.Current.UserAppTheme = AppTheme.Light;  //Light Theme Mode
             InitializeComponent();
             SetStatusBars();
             InitiateObjects();
-            PureDrawMap();
+            //PureDrawMap();
             UIinitiated = true;
         }
 
@@ -511,10 +511,11 @@ namespace Client
                     }
                     if (!isClientStocked)
                     {
-                        if (MapGrid.Children.Count > 0)
-                        {
-                            MapGrid.Children.Clear();
-                        }
+                        /* For Debug */
+                        //if (MapGrid.Children.Count > 0)
+                        //{
+                        //    MapGrid.Children.Clear();
+                        //}
                         foreach (var data in listOfAll)
                         {
                             gameStatusBar.SetGameTimeValue(data);
