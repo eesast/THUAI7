@@ -81,6 +81,20 @@ namespace Gaming
                 { IsBackground = true }.Start();
                 return true;
             }
+            public bool Recover(Ship ship, long recover)
+            {
+                if (recover <= 0)
+                {
+                    return false;
+                }
+                if (ship.MoneyPool.Money < (ship.HP.GetMaxV() - ship.HP.GetValue()) * 1.2)
+                {
+                    return false;
+                }
+                long actualRecover = ship.HP.AddPositiveV(recover);
+                ship.SubMoney((long)(actualRecover * 1.2));
+                return true;
+            }
             public bool Recycle(Ship ship)
             {
                 long shipValue = 0;

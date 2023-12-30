@@ -132,6 +132,29 @@ namespace Gaming
                 return moduleManager.InstallModule(ship, moduleType);
             return false;
         }
+        public bool Recover(long shipID, long recover)
+        {
+            if (!gameMap.Timer.IsGaming)
+                return false;
+            Ship? ship = gameMap.FindShipInShipID(shipID);
+            if (ship != null)
+            {
+                bool validRecoverPoint = false;
+                foreach (XY recoverPoint in teamList[(int)ship.TeamID].BirthPointList)
+                {
+                    if (GameData.ApproachToInteract(ship.Position, recoverPoint) && ship.Position != recoverPoint)
+                    {
+                        validRecoverPoint = true;
+                        break;
+                    }
+                }
+                if (validRecoverPoint)
+                {
+                    return shipManager.Recover(ship, recover);
+                }
+            }
+            return false;
+        }
         public bool Recycle(long shipID)
         {
             if (!gameMap.Timer.IsGaming)
