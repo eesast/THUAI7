@@ -110,6 +110,7 @@ public static class ModuleFactory
         },
         _ => NullWeapon.Instance
     };
+
     public static int FindModuleCost(ShipType shipType, ModuleType moduleType) => shipType switch
     {
         ShipType.CivilShip => moduleType switch
@@ -157,5 +158,5 @@ public static class ModuleFactory
             ModuleType.ArcGun => GameData.FlagShipArcGunCost,
             _ => int.MaxValue
         }
-    }
+    };
 }
