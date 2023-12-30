@@ -42,7 +42,7 @@ namespace installer.Model
 
         public static string ConvertAbsToRel(string basePath, string fullPath)
         {
-            fullPath = fullPath.Replace('\\', '/');
+            fullPath = fullPath.Replace(Path.DirectorySeparatorChar, '/');
             if (fullPath.StartsWith(basePath))
             {
                 fullPath = fullPath.Replace(basePath, ".");

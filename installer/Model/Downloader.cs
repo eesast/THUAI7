@@ -166,7 +166,9 @@ namespace installer.Model
             if (CheckUpdate())
             {
                 Status = UpdateStatus.downloading;
-                Cloud.DownloadQueueAsync(Data.InstallPath, new ConcurrentQueue<string>(Data.MD5Update), downloadFailed).Wait();
+                Cloud.DownloadQueueAsync(Data.InstallPath, 
+                    from item in Data.MD5Update select item.name,
+                    downloadFailed).Wait();
                 if (downloadFailed.Count == 0)
                 {
                     Data.MD5Update.Clear();
@@ -187,8 +189,10 @@ namespace installer.Model
             Status = UpdateStatus.error;
         }
 
-        public async Task Login()
+        public async Task Login(string username = "", string password = "")
         {
+            Username = username.Length > 0 ? username : Username;
+            Password = password.Length > 0 ? password : Password;
             await Web.LoginToEEsast(Client, Username, Password);
         }
 

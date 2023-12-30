@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -21,7 +22,7 @@ namespace installer.Model
         {
             get; protected set;
         } = new Dictionary<string, string>();   // 路径为尽可能相对路径
-        public ConcurrentBag<string> MD5Update
+        public ConcurrentBag<(DataRowState state, string name)> MD5Update
         {
             get; set;
         }// 路径为绝对路径
@@ -29,7 +30,7 @@ namespace installer.Model
         public bool Installed = false;  // 项目是否安装
         public Local_Data()
         {
-            MD5Update = new ConcurrentBag<string>();
+            MD5Update = new ConcurrentBag<(DataRowState state, string name)>();
             ConfigPath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 "THUAI7.json");
@@ -38,7 +39,7 @@ namespace installer.Model
                 ReadConfig();
                 if (Config.ContainsKey("InstallPath") && Directory.Exists(Config["InstallPath"]))
                 {
-                    InstallPath = Config["InstallPath"].Replace('\\', '/');
+                    InstallPath = Config["InstallPath"].Replace(Path.DirectorySeparatorChar, '/');
                     if (Config.ContainsKey("MD5DataPath"))
                     {
                         MD5DataPath = Config["MD5DataPath"].StartsWith('.') ?
@@ -47,6 +48,7 @@ namespace installer.Model
                         if (!File.Exists(MD5DataPath))
                             SaveMD5Data();
                         ReadMD5Data();
+                        MD5Update.Clear();
                     }
                     else
                     {
@@ -100,7 +102,7 @@ namespace installer.Model
                 // 移动已有文件夹至新位置
                 Directory.Move(newPath, InstallPath);
             }
-            InstallPath = newPath.Replace('\\', '/');
+            InstallPath = newPath.Replace(Path.DirectorySeparatorChar, '/');
             if (Config.ContainsKey("InstallPath"))
                 Config["InstallPath"] = InstallPath;
             else
@@ -150,8 +152,9 @@ namespace installer.Model
 
         public void ReadMD5Data()
         {
-            var newMD5Data = new Dictionary<string, string>();
-            using (StreamReader r = new StreamReader(MD5DataPath))
+            Dictionary<string, string> newMD5Data;
+            StreamReader r = new StreamReader(MD5DataPath);
+            try
             {
                 string json = r.ReadToEnd();
                 if (json is null || json == "")
@@ -162,32 +165,43 @@ namespace installer.Model
                 {
                     newMD5Data = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
                 }
+                r.Close(); r.Dispose();
+            }
+            catch (JsonException)
+            {
+                // Json反序列化失败，考虑重新创建MD5数据库
+                newMD5Data = new Dictionary<string, string>();
+                r.Close(); r.Dispose();
+                File.Delete(MD5DataPath);
+                File.Create(MD5DataPath);
             }
             foreach (var item in newMD5Data)
             {
                 if (MD5Data.ContainsKey(item.Key))
                 {
-                    if (MD5Data[item.Key] != newMD5Data[item.Value])
+                    if (MD5Data[item.Key] != item.Value)
                     {
-                        MD5Data[item.Key] = newMD5Data[item.Value];
-                        MD5Update.Add(Path.Combine(InstallPath, item.Key));
+                        MD5Data[item.Key] = item.Value;
+                        MD5Update.Add((DataRowState.Modified, item.Key));
                     }
                 }
                 else
                 {
                     MD5Data.Add(item.Key, item.Value);
-                    MD5Update.Add(Path.Combine(InstallPath, item.Key));
+                    MD5Update.Add((DataRowState.Added, item.Key));
                 }
             }
         }
 
         public void SaveMD5Data()
         {
-            using FileStream fs = new FileStream(MD5DataPath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            using StreamWriter sw = new StreamWriter(fs);
-            fs.SetLength(0);
-            sw.Write(JsonSerializer.Serialize(MD5Data));
-            sw.Flush();
+            using (FileStream fs = new FileStream(MD5DataPath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            using (StreamWriter sw = new StreamWriter(fs))
+            {
+                fs.SetLength(0);
+                sw.Write(JsonSerializer.Serialize(MD5Data));
+                sw.Flush();
+            }
         }
 
         public void ScanDir()
@@ -200,7 +214,10 @@ namespace installer.Model
                     Path.Combine(InstallPath.Replace('/', Path.DirectorySeparatorChar), _file.Replace('/', Path.DirectorySeparatorChar)) :
                     _file;
                 if (!File.Exists(file))
+                {
                     MD5Data.Remove(_file);
+                    MD5Update.Add((DataRowState.Deleted, _file));
+                }
             }
             ScanDir(InstallPath);
             SaveMD5Data();
@@ -221,13 +238,13 @@ namespace installer.Model
                     if (MD5Data[relFile] != hash)
                     {
                         MD5Data[relFile] = hash;
-                        MD5Update.Add(file.FullName);
+                        MD5Update.Add((DataRowState.Modified, relFile));
                     }
                 }
                 else
                 {
                     MD5Data.Add(relFile, hash);
-                    MD5Update.Add(file.FullName);
+                    MD5Update.Add((DataRowState.Added, relFile));
                 }
             }
             foreach (var d1 in d.GetDirectories()) { ScanDir(d1.FullName); }

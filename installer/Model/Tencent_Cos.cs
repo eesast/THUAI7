@@ -68,7 +68,8 @@ namespace installer.Model
                 Dictionary<string, string> test = request.GetRequestHeaders();
                 request.SetCosProgressCallback(delegate (long completed, long total)
                 {
-                    Console.WriteLine($"[Download: {remotePath}] progress = {completed * 100.0 / total:##.##}%");
+                    if (completed == 1.0)
+                        Console.WriteLine($"[Download: {remotePath}] progress = {completed * 100.0 / total:##.##}%");
                 });
                 // 执行请求
                 GetObjectResult result = cosXml.GetObject(request);
@@ -84,17 +85,13 @@ namespace installer.Model
             }
         }
 
-        public async Task DownloadQueueAsync(string basePath, ConcurrentQueue<string> queue, ConcurrentQueue<string> downloadFailed)
+        public async Task DownloadQueueAsync(string basePath, IEnumerable<string> queue, ConcurrentQueue<string> downloadFailed)
         {
-            int count = queue.Count;
+            int count = queue.Count();
             int finished = 0;
-            while (!queue.IsEmpty)
+            foreach (var item in queue)
             {
-                string? item;
-                queue.TryDequeue(out item);
-                if (item == null)
-                    continue;
-                string local = Path.Combine(basePath, item.Replace('/', '\\'));
+                string local = Path.Combine(basePath, item);
                 ThreadPool.QueueUserWorkItem(_ =>
                 {
                     try
@@ -103,7 +100,6 @@ namespace installer.Model
                     }
                     catch (Exception ex)
                     {
-                        Exceptions.Push(ex);
                         downloadFailed.Enqueue(item);
                     }
                     finally
@@ -158,7 +154,8 @@ namespace installer.Model
 
             uploadTask.progressCallback = delegate (long completed, long total)
             {
-                Console.WriteLine($"[Upload: {targetPath}] progress = {completed * 100.0 / total:##.##}%");
+                if (completed == 1.0)
+                    Console.WriteLine($"[Upload: {targetPath}] progress = {completed * 100.0 / total:##.##}%");
             };
 
             COSXMLUploadTask.UploadTaskResult result = await transferManager.UploadAsync(uploadTask);
