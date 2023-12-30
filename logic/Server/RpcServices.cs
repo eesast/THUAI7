@@ -200,11 +200,11 @@ namespace Server
 #endif
             return Task.FromResult(MapMsg());
         }
-        
+
         #endregion
 
         #region 游戏过程中玩家执行操作的服务
-        
+
         #region 船
 
         public override Task<MoveRes> Move(MoveMsg request, ServerCallContext context)
