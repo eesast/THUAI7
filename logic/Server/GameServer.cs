@@ -238,8 +238,8 @@ namespace Server
                 GameTime = time
             };
             int[] score = GetScore();
-            msg.RedteamScore = score[0];
-            msg.BlueteamScore = score[1];
+            msg.RedTeamScore = score[0];
+            msg.BlueTeamScore = score[1];
             return msg;
         }
 
@@ -252,7 +252,7 @@ namespace Server
             4 => Protobuf.PlaceType.Resource,
             5 => Protobuf.PlaceType.Construction,
             6 => Protobuf.PlaceType.Wormhole,
-            7 => Protobuf.PlaceType.HomePlace,
+            7 => Protobuf.PlaceType.Home,
             _ => Protobuf.PlaceType.NullPlaceType,
         };
         private MessageOfObj MapMsg(uint[,] map)
