@@ -169,7 +169,7 @@ namespace Server
         {
 #if DEBUG
             Console.WriteLine($"GetMap IP: {context.Peer}");
-#endif 
+#endif
             return Task.FromResult(MapMsg());
         }
 
@@ -177,7 +177,7 @@ namespace Server
         {
 #if DEBUG
             Console.WriteLine($"Attack ID: {request.PlayerId}");
-#endif 
+#endif
             BoolRes boolRes = new();
             if (request.PlayerId >= spectatorMinPlayerID)
             {
@@ -198,7 +198,7 @@ namespace Server
         {
 #if DEBUG
             Console.WriteLine($"Move ID: {request.PlayerId}, TimeInMilliseconds: {request.TimeInMilliseconds}");
-#endif            
+#endif
             MoveRes moveRes = new();
             if (request.PlayerId >= spectatorMinPlayerID)
             {
@@ -300,7 +300,7 @@ namespace Server
         {
 #if DEBUG
             Console.WriteLine($"Recover ID: {request.PlayerId}");
-#endif 
+#endif
             BoolRes boolRes = new();
             if (request.PlayerId >= spectatorMinPlayerID)
             {
@@ -316,7 +316,7 @@ namespace Server
         {
 #if DEBUG
             Console.WriteLine($"Produce ID: {request.PlayerId}");
-#endif 
+#endif
             BoolRes boolRes = new();
             if (request.PlayerId >= spectatorMinPlayerID)
             {
@@ -332,7 +332,7 @@ namespace Server
         {
 #if DEBUG
             Console.WriteLine($"Rebuild ID: {request.PlayerId}");
-#endif 
+#endif
             BoolRes boolRes = new();
             if (request.PlayerId >= spectatorMinPlayerID)
             {
@@ -348,7 +348,7 @@ namespace Server
         {
 #if DEBUG
             Console.WriteLine($"Recycle ID: {request.PlayerId}");
-#endif 
+#endif
             BoolRes boolRes = new();
             if (request.PlayerId >= spectatorMinPlayerID)
             {
@@ -364,7 +364,7 @@ namespace Server
         {
 #if DEBUG
             Console.WriteLine($"InstallModule ID: {request.PlayerId}");
-#endif 
+#endif
             BoolRes boolRes = new();
             if (request.PlayerId >= spectatorMinPlayerID)
             {
@@ -380,7 +380,7 @@ namespace Server
         {
 #if DEBUG
             Console.WriteLine($"Construct ID: {request.PlayerId}");
-#endif 
+#endif
             BoolRes boolRes = new();
             if (request.PlayerId >= spectatorMinPlayerID)
             {
@@ -396,7 +396,7 @@ namespace Server
         {
 #if DEBUG
             Console.WriteLine($"EndAllAction ID: {request.PlayerId}");
-#endif     
+#endif
             BoolRes boolRes = new();
             if (request.PlayerId >= spectatorMinPlayerID)
             {
