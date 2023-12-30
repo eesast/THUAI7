@@ -30,6 +30,7 @@ namespace installer.Model
 
         public HttpClient Client = new HttpClient();
         public EEsast Web = new EEsast();
+        protected Logger Log = LoggerProvider.FromConsole();
 
         public enum UpdateStatus
         {
@@ -42,11 +43,6 @@ namespace installer.Model
         {
             get { return downloadFailed.ToList(); }
         }
-        public bool UpdatePlanned
-        {
-            get; set;
-        }
-
         public void ResetDownloadFailedInfo()
         {
             downloadFailed.Clear();
@@ -166,7 +162,7 @@ namespace installer.Model
             if (CheckUpdate())
             {
                 Status = UpdateStatus.downloading;
-                Cloud.DownloadQueueAsync(Data.InstallPath, 
+                Cloud.DownloadQueueAsync(Data.InstallPath,
                     from item in Data.MD5Update select item.name,
                     downloadFailed).Wait();
                 if (downloadFailed.Count == 0)
