@@ -10,9 +10,9 @@ namespace Gaming
         private class ShipManager(Map gameMap)
         {
             readonly Map gameMap = gameMap;
-            public Ship? AddShip(XY pos, long teamID, long shipID, ShipType shipType)
+            public Ship? AddShip(XY pos, long teamID, long shipID, ShipType shipType, MoneyPool moneyPool)
             {
-                Ship newShip = new(pos, GameData.ShipRadius, shipType);
+                Ship newShip = new(pos, GameData.ShipRadius, shipType, moneyPool);
                 gameMap.Add(newShip);
                 newShip.TeamID.SetReturnOri(teamID);
                 newShip.ShipID.SetReturnOri(shipID);

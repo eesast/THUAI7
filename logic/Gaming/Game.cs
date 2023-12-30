@@ -28,7 +28,6 @@ namespace Gaming
             {
                 return GameObj.invalidID;
             }
-            // 由于BirthPoint实质上是可变且每支队伍不同的，所以暂时把它放到Team里？
             XY pos = shipInitInfo.birthPoint;
             bool validBirthPoint = false;
             foreach (XY birthPoint in teamList[(int)shipInitInfo.teamID].BirthPointList)
@@ -48,7 +47,8 @@ namespace Gaming
             {
                 return GameObj.invalidID;
             }
-            Ship? newShip = shipManager.AddShip(pos, shipInitInfo.teamID, shipInitInfo.playerID, shipInitInfo.shipType);
+            Ship? newShip = shipManager.AddShip(pos, shipInitInfo.teamID, shipInitInfo.playerID,
+                shipInitInfo.shipType, teamList[(int)shipInitInfo.teamID].MoneyPool);
             if (newShip == null)
             {
                 return GameObj.invalidID;

@@ -30,6 +30,7 @@ public class Ship : Movable, IShip
     private ShipStateType shipState = ShipStateType.Null;
     public ShipStateType ShipState => shipState;
     public IOccupation Occupation { get; }
+    public MoneyPool MoneyPool { get; }
     /// <summary>
     /// 子弹数上限, THUAI7为无穷
     /// </summary>
@@ -238,6 +239,15 @@ public class Ship : Movable, IShip
             }
         }
     }
+    public void AddMoney(long add)
+    {
+        MoneyPool.Money.Add(add);
+        MoneyPool.Score.Add(add);
+    }
+    public void SubMoney(long sub)
+    {
+        MoneyPool.Money.Sub(sub);
+    }
     private long ChangeShipState(RunningStateType running, ShipStateType value = ShipStateType.Null, GameObj? gameObj = null)
     {
         //只能被SetShipState引用
@@ -354,7 +364,7 @@ public class Ship : Movable, IShip
                 && shipState != ShipStateType.Attacking);
         }
     }
-    public Ship(XY initPos, int initRadius, ShipType shipType) :
+    public Ship(XY initPos, int initRadius, ShipType shipType, MoneyPool moneyPool) :
         base(initPos, initRadius, GameObjType.Ship)
     {
         this.CanMove.SetReturnOri(true);
@@ -364,6 +374,7 @@ public class Ship : Movable, IShip
         this.Armor = new(this.Occupation.BaseArmor);
         this.Shield = new(this.Occupation.BaseShield);
         this.MoveSpeed.SetReturnOri(this.orgMoveSpeed = Occupation.MoveSpeed);
+        this.MoneyPool = moneyPool;
         (this.producerType, this.constructorType, this.armorType, this.shieldType, this.weaponType) = this.ShipType switch
         {
             ShipType.CivilShip => (
