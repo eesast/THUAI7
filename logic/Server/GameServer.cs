@@ -257,8 +257,8 @@ namespace Server
             7 => Protobuf.PlaceType.Home,
             _ => Protobuf.PlaceType.NullPlaceType,
         };
-        private MessageOfObj MapMsg(uint[,] map)
 
+        private MessageOfObj MapMsg(uint[,] map)
         {
             MessageOfMap msgOfMap = new()
             {

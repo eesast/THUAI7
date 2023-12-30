@@ -17,7 +17,6 @@ service AvailableService
     rpc Produce(IDMsg) returns (BoolRes);       //开采
     rpc Rebuild(ConstructMsg) returns (BoolRes);       //给建筑回血     
     rpc Construct(ConstructMsg) returns (BoolRes);  //修建建筑
-
     rpc Attack(AttackMsg) returns (BoolRes);        // 攻击
     rpc Send(SendMsg) returns (BoolRes);            // 传递信息
     // 大本营
