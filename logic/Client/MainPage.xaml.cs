@@ -21,7 +21,7 @@ namespace Client
             Console.WriteLine("Hello World");
             timer = Dispatcher.CreateTimer();
             timer.Interval = TimeSpan.FromMilliseconds(50);
-            timer.Tick += new EventHandler(Refresh);
+            //timer.Tick += new EventHandler(Refresh);
             timer.Start();
             Application.Current.UserAppTheme = AppTheme.Light;  //Light Theme Mode
             InitializeComponent();
@@ -117,8 +117,11 @@ namespace Client
                             break;
                     }
                     MapGrid.Children.Add(mapPatches[i, j]);
+                    MapGrid.SetColumn(mapPatches[i, j], i);
+                    MapGrid.SetRow(mapPatches[i, j], j);
                 }
             }
+            hasDrawed = true;
         }
 
         private void DrawMap()
@@ -244,7 +247,6 @@ namespace Client
                     MapGrid.Children.Add(mapPatches[i, j]);
                 }
             }
-            hasDrawed = true;
         }
 
         private async void OnReceive()
@@ -517,9 +519,14 @@ namespace Client
                         {
                             gameStatusBar.SetGameTimeValue(data);
                         }
-                        if (!hasDrawed && mapFlag)
+                        /* For Debug */
+                        //if (!hasDrawed && mapFlag)
+                        //{ 
+                        //    DrawMap();
+                        //}
+                        if (!hasDrawed)
                         {
-                            DrawMap();
+                            PureDrawMap();
                         }
                         foreach (var data in listOfHome)
                         {
@@ -724,7 +731,7 @@ namespace Client
         private long counter;
 
         AsyncServerStreamingCall<MessageToClient>? responseStream;
-        private bool isClientStocked;
+        private bool isClientStocked = false;
 
         private PlayerStatusBar redPlayer;
         private PlayerStatusBar bluePlayer;
@@ -768,6 +775,8 @@ namespace Client
         private Dictionary<int, int> countMap;
 
         private readonly object drawPicLock = new();
+
+        private readonly object locklock = new();
 
         private bool mapFlag = false;
         private bool hasDrawed = false;
