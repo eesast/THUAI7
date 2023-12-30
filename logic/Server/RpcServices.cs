@@ -305,7 +305,7 @@ namespace Server
             return Task.FromResult(boolRes);
         }
 
-        public override Task<BoolRes> Produce(TargetMsg request, ServerCallContext context)
+        public override Task<BoolRes> Produce(IDMsg request, ServerCallContext context)
         {
 #if DEBUG
             Console.WriteLine($"Produce ID: {request.PlayerId}");
@@ -357,7 +357,7 @@ namespace Server
         public override Task<BoolRes> InstallModule(InstallMsg request, ServerCallContext context)
         {
 #if DEBUG
-            Console.WriteLine($"Rebuild ID: {request.PlayerId}");
+            Console.WriteLine($"InstallModule ID: {request.PlayerId}");
 #endif 
             BoolRes boolRes = new();
             if (request.PlayerId >= spectatorMinPlayerID)
