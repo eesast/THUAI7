@@ -14,7 +14,7 @@ public:
     virtual ~IAI() = default;
     IAI() = default;
     virtual void play(IShipAPI& api) = 0;
-    virtual void play(IHomeAPI& api) = 0;
+    virtual void play(ITeamAPI& api) = 0;
 };
 
 using CreateAIFunc = std::unique_ptr<IAI> (*)(int64_t playerID);
@@ -28,7 +28,7 @@ public:
     {
     }
     void play(IShipAPI& api) override;
-    void play(IHomeAPI& api) override;
+    void play(ITeamAPI& api) override;
 
 private:
     int64_t playerID;

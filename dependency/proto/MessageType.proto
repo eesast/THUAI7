@@ -14,7 +14,7 @@ enum GameState
 enum PlaceType // 地图中的所有建筑/地点类型
 {
     NULL_PLACE_TYPE = 0;
-    HOME_PLACE = 1;
+    HOME = 1;
     SPACE = 2;
     RUIN = 3;
     SHADOW = 4;
@@ -36,7 +36,7 @@ enum PlayerType
 {
     NULL_PLAYER_TYPE = 0;
     SHIP = 1;
-    HOME = 2;
+    TEAM = 2;
 }
 
 enum ShipType
@@ -101,6 +101,28 @@ enum ProducerType
     PRODUCER1 = 1;
     PRODUCER2 = 2;
     PRODUCER3 = 3;
+}
+
+enum ModuleType
+{
+    NULL_MODULE_TYPE = 0;
+    MODULE_PRODUCER1 = 1;
+    MODULE_PRODUCER2 = 2;
+    MODULE_PRODUCER3 = 3;
+    MODULE_CONSTRUCTOR1 = 4;
+    MODULE_CONSTRUCTOR2 = 5;
+    MODULE_CONSTRUCTOR3 = 6;
+    MODULE_ARMOR1 = 7;
+    MODULE_ARMOR2 = 8;
+    MODULE_ARMOR3 = 9;
+    MODULE_SHIELD1 = 10;
+    MODULE_SHIELD2 = 11;
+    MODULE_SHIELD3 = 12;
+    MODULE_LASERGUN = 13;
+    MODULE_PLASMAGUN = 14;
+    MODULE_SHELLGUN = 15;
+    MODULE_MISSILEGUN = 16;
+    MODULE_ARCGUN = 17;
 }
 
 enum BulletType

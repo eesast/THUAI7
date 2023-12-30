@@ -6,14 +6,15 @@ import "Message2Server.proto";
 
 service AvailableService
 {
-    rpc TryConnection(IDMsg) returns(BoolRes);
+    rpc TryConnection(IDMsg) returns (BoolRes);
     // 游戏开局调用一次的服务
-    rpc AddPlayer(PlayerMsg) returns(stream MessageToClient); // 连接上后等待游戏开始，server会定时通过该服务向所有client发送消息。
+    rpc AddPlayer(PlayerMsg) returns (stream MessageToClient); // 连接上后等待游戏开始，server会定时通过该服务向所有client发送消息。
+    rpc GetMap(NullRequest) returns (MessageOfMap);
     // 游戏过程中玩家执行操作的服务   
     // 船
     rpc Move(MoveMsg) returns (MoveRes);             //移动
     rpc Recover(IDMsg) returns (BoolRes);            //回复
-    rpc Produce(TargetMsg) returns (BoolRes);       //开采
+    rpc Produce(IDMsg) returns (BoolRes);       //开采
     rpc Rebuild(ConstructMsg) returns (BoolRes);       //给建筑回血     
     rpc Construct(ConstructMsg) returns (BoolRes);  //修建建筑
     rpc Attack(AttackMsg) returns (BoolRes);        // 攻击
@@ -21,6 +22,6 @@ service AvailableService
     // 大本营
     rpc InstallModule(InstallMsg) returns (BoolRes);
     rpc Recycle(IDMsg) returns (BoolRes);
-    
+    rpc BuildShip(BuildShipMsg) returns (BoolRes);
     rpc EndAllAction(IDMsg) returns (BoolRes); // 结束所有动作
 }

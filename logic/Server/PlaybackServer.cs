@@ -1,6 +1,4 @@
-﻿using Gaming;
-using Grpc.Core;
-using Playback;
+﻿using Playback;
 using Protobuf;
 using System.Collections.Concurrent;
 using Timothy.FrameRateTask;
@@ -18,7 +16,7 @@ namespace Server
         private uint spectatorMinPlayerID = 2023;
         // private List<uint> spectatorList = new List<uint>();
         public int TeamCount => options.TeamCount;
-        private object spetatorJoinLock = new();
+        private object spectatorJoinLock = new();
         protected object spectatorLock = new();
         protected bool isSpectatorJoin = false;
         protected bool IsSpectatorJoin
@@ -53,7 +51,7 @@ namespace Server
         //    if (request.PlayerId >= spectatorMinPlayerID && options.NotAllowSpectator == false)
         //    {
         //        // 观战模式
-        //        lock (spetatorJoinLock) // 具体原因见另一个上锁的地方
+        //        lock (spectatorJoinLock) // 具体原因见另一个上锁的地方
         //        {
         //            if (semaDict.TryAdd(request.PlayerId, (new SemaphoreSlim(0, 1), new SemaphoreSlim(0, 1))))
         //            {
@@ -74,7 +72,7 @@ namespace Server
         //                if (currentGameInfo != null)
         //                {
         //                    await responseStream.WriteAsync(currentGameInfo);
-        //                    //Console.WriteLine("Send!");
+        //                    Console.WriteLine("Send!");
         //                }
         //            }
         //            catch (InvalidOperationException)
@@ -189,8 +187,8 @@ namespace Server
                             if (msg.GameState == GameState.GameEnd)
                             {
                                 Console.WriteLine("Game over normally!");
-                                finalScore[0] = msg.AllMessage.RedteamScore;
-                                finalScore[1] = msg.AllMessage.BlueteamScore;
+                                finalScore[0] = msg.AllMessage.RedTeamScore;
+                                finalScore[1] = msg.AllMessage.BlueTeamScore;
                                 goto endParse;
                             }
                         }
@@ -262,8 +260,8 @@ namespace Server
                                 {
                                     Console.WriteLine("Game over normally!");
                                     IsGaming = false;
-                                    finalScore[0] = msg.AllMessage.BlueteamScore;
-                                    finalScore[1] = msg.AllMessage.RedteamScore;
+                                    finalScore[0] = msg.AllMessage.BlueTeamScore;
+                                    finalScore[1] = msg.AllMessage.RedTeamScore;
                                     ReportGame(msg);
                                     return false;
                                 }

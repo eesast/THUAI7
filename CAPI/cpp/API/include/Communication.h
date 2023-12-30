@@ -27,22 +27,22 @@ public:
     ~Communication()
     {
     }
-    bool TryConnection(int64_t playerID);
+    bool TryConnection(int64_t playerID, int64_t teamID);
     protobuf::MessageToClient GetMessage2Client();
-    void AddPlayer(int64_t playerID, THUAI7::PlayerType playerType, THUAI7::ShipType shipType);
-    bool EndAllAction(int64_t playerID);
-    // 船
-    bool Move(int64_t time, double angle, int64_t playerID);
-    bool Recover(int64_t playerID);
-    bool Produce(int64_t playerID, int32_t x, int32_t y);
-    bool Rebuild(int64_t playerID, int32_t x, int32_t y);
-    bool Construct(int64_t playerID, THUAI7::BuildingType buidingType, int32_t x, int32_t y);
-    bool Attack(double angle, int64_t playerID);
-
-    // 大本营
-    bool InstallModule(THUAI7::Module module, int64_t playerID);
+    void AddPlayer(int64_t playerID, int64_t teamID, THUAI7::ShipType shipType, int32_t x, int32_t y);
+    bool EndAllAction(int64_t playerID, int64_t teamID);
+    // Ship
+    bool Move(int64_t playerID, int64_t teamID, int64_t time, double angle);
+    bool Recover(int64_t playerID, int64_t teamID);
+    bool Produce(int64_t playerID, int64_t teamID);
+    bool Rebuild(int64_t playerID, int64_t teamID, THUAI7::ConstructionType constructionType);
+    bool Construct(int64_t playerID, int64_t teamID, THUAI7::ConstructionType constructionType);
+    bool Attack(int64_t playerID, int64_t teamID, double angle);
+    bool Send(int64_t playerID, int64_t toPlayerID, int64_t teamID, std::string message, bool binary)
+        // Team
+        bool InstallModule(int64_t playerID, int64_t teamID, THUAI7::ModuleType moduleType);
     bool BuildShip(THUAI7::ShipType shipType, int32_t x, int32_t y);
-    bool Recycle(int64_t playerID);
+    bool Recycle(int64_t playerID, int64_t teamID);
 
 private:
     std::unique_ptr<protobuf::AvailableService::Stub> THUAI7Stub;

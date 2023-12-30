@@ -3,6 +3,8 @@ syntax = "proto3";
 package protobuf;
 import "MessageType.proto";
 
+message NullRequest {}
+
 message IDMsg
 {
     int64 player_id = 1;
@@ -11,10 +13,10 @@ message IDMsg
 message PlayerMsg
 {
     int64 player_id = 1;
-    ShipType ship_type = 2;
-    int64 team_id = 3;
-    int32 x=4;
-    int32 y=5;
+    int64 team_id = 2;
+    ShipType ship_type = 3;
+    int32 x = 4;
+    int32 y = 5;
 }
 
 message MoveMsg
@@ -47,32 +49,17 @@ message AttackMsg // 相当于攻击
 
 message ConstructMsg //修建建筑
 {
-    int32 x = 1;
-    int32 y = 2;
-    int64 player_id = 3;
-    ConstructionType construction_type = 4;
-    int64 team_id = 5;
+    int64 player_id = 1;
+    ConstructionType construction_type = 2;
+    int64 team_id = 3;
 }
 
-message TargetMsg  
-{
-    int32 x = 1;
-    int32 y = 2;
-    int64 player_id = 3;
-    int64 team_id = 4;
-}
+
 message InstallMsg
 {
-    oneof module_type
-    {
-        ConstructorType constructor_type = 1;
-        ArmorType armor_type = 2;
-        ShieldType shield_type = 3;
-        WeaponType weapon_type = 4;
-        ProducerType producer_type = 5;
-    }
-    int64 player_id = 6;
-    int64 team_id = 7;
+    ModuleType module_type = 1;
+    int64 player_id = 2;
+    int64 team_id = 3;
 }
 message BuildShipMsg
 {

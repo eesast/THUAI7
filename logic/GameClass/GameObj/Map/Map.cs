@@ -5,6 +5,7 @@ using Preparation.Utility;
 using System;
 using GameClass.GameObj.Areas;
 using System.Linq;
+using MapGenerator;
 
 namespace GameClass.GameObj
 {
@@ -12,6 +13,10 @@ namespace GameClass.GameObj
     {
         public Dictionary<GameObjType, IList<IGameObj>> GameObjDict { get; }
         public Dictionary<GameObjType, ReaderWriterLockSlim> GameObjLockDict { get; }
+        private readonly uint height;
+        public uint Height => height;
+        private readonly uint width;
+        public uint Width => width;
         public readonly uint[,] protoGameMap;
         public uint[,] ProtoGameMap => protoGameMap;
 
@@ -305,7 +310,7 @@ namespace GameClass.GameObj
                 GameObjLockDict[gameObj.Type].ExitWriteLock();
             }
         }
-        public Map(uint[,] mapResource)
+        public Map(MapStruct mapResource)
         {
             GameObjDict = [];
             GameObjLockDict = [];
@@ -317,14 +322,15 @@ namespace GameClass.GameObj
                     GameObjLockDict.Add(idx, new ReaderWriterLockSlim());
                 }
             }
-            protoGameMap = new uint[mapResource.GetLength(0), mapResource.GetLength(1)];
-            Array.Copy(mapResource, protoGameMap, mapResource.Length);
-            for (int i = 0; i < GameData.MapRows; ++i)
+            height = mapResource.height;
+            width = mapResource.width;
+            protoGameMap = mapResource.map;
+            for (int i = 0; i < height; ++i)
             {
-                for (int j = 0; j < GameData.MapCols; ++j)
+                for (int j = 0; j < width; ++j)
                 {
                     bool hasWormhole = false;
-                    switch ((PlaceType)mapResource[i, j])
+                    switch ((PlaceType)mapResource.map[i, j])
                     {
                         case PlaceType.Resource:
                             Add(new Resource(GameData.GetCellCenterPos(i, j)));

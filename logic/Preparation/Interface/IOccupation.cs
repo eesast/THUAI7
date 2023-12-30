@@ -10,4 +10,5 @@ public interface IOccupation
     public int BaseArmor { get; }
     public int BaseShield { get; }
     public int ViewRange { get; }
+    public bool IsModuleValid(ModuleType moduleType);
 }
