@@ -24,6 +24,8 @@ namespace Preparation.Utility
         public const int MapRows = 50;                  // 行数
         public const int MapCols = 50;                  // 列数
 
+        public const int InitialMoney = 50;             // 初始金钱
+
         public static bool IsGameObjMap(GameObjType gameObjType)
         {
             return (uint)gameObjType > 3;

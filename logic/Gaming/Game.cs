@@ -54,6 +54,20 @@ namespace Gaming
                 return GameObj.invalidID;
             }
             teamList[(int)shipInitInfo.teamID].AddShip(newShip);
+            long subMoney = 0;
+            switch (newShip.ShipType)
+            {
+                case ShipType.CivilShip:
+                    subMoney = GameData.CivilShipCost;
+                    break;
+                case ShipType.WarShip:
+                    subMoney = GameData.WarShipCost;
+                    break;
+                case ShipType.FlagShip:
+                    subMoney = GameData.FlagShipCost;
+                    break;
+            }
+            teamList[(int)shipInitInfo.teamID].SubMoney(subMoney);
             return newShip.ShipID;
         }
         public bool StartGame(int milliSeconds)
@@ -124,7 +138,7 @@ namespace Gaming
                 return false;
             Ship? ship = gameMap.FindShipInShipID(shipID);
             if (ship != null)
-                return actionManager.Recycle(ship);
+                return shipManager.Recycle(ship);
             return false;
         }
         public bool Repair(long shipID)
@@ -263,6 +277,7 @@ namespace Gaming
                 {
                     teamList.Add(new Team((Home)gameObj));
                     teamList.Last().BirthPointList.Add(gameObj.Position);
+                    teamList.Last().AddMoney(GameData.InitialMoney);
                 }
                 if (teamList.Count == numOfTeam)
                 {

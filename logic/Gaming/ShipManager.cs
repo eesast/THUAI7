@@ -81,6 +81,32 @@ namespace Gaming
                 { IsBackground = true }.Start();
                 return true;
             }
+            public bool Recycle(Ship ship)
+            {
+                long shipValue = 0;
+                switch (ship.ShipType)
+                {
+                    case ShipType.CivilShip:
+                        shipValue += GameData.CivilShipCost;
+                        break;
+                    case ShipType.WarShip:
+                        shipValue += GameData.WarShipCost;
+                        break;
+                    case ShipType.FlagShip:
+                        shipValue += GameData.FlagShipCost;
+                        break;
+                    default:
+                        return false;
+                }
+                shipValue += ship.ProducerModule.Cost;
+                shipValue += ship.ConstructorModule.Cost;
+                shipValue += ship.ArmorModule.Cost;
+                shipValue += ship.ShieldModule.Cost;
+                shipValue += ship.WeaponModule.Cost;
+                ship.AddMoney((long)(shipValue * 0.5 * ship.HP / ship.HP.GetMaxV()));
+                Remove(ship);
+                return false;
+            }
             public void Remove(Ship ship)
             {
                 if (!ship.TryToRemoveFromGame(ShipStateType.Deceased))
