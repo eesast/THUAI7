@@ -183,13 +183,13 @@ namespace Gaming
         {
             if (!gameMap.TeamExists(teamID))
                 return -1;
-            return teamList[(int)teamID].Money;
+            return teamList[(int)teamID].MoneyPool.Money;
         }
         public long GetTeamScore(long teamID)
         {
             if (!gameMap.TeamExists(teamID))
                 return -1;
-            return teamList[(int)teamID].Score;
+            return teamList[(int)teamID].MoneyPool.Score;
         }
         public List<IGameObj> GetGameObj()
         {
