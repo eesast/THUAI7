@@ -258,7 +258,7 @@ namespace Server
             _ => Protobuf.PlaceType.NullPlaceType,
         };
 
-        private MessageOfObj MapMsg(uint[,] map)
+        private MessageOfMap MapMsg(uint[,] map)
         {
             MessageOfMap msgOfMap = new()
             {
@@ -333,7 +333,7 @@ namespace Server
                     game = new(mapResource, options.TeamCount);
                 }
             }
-            currentMapMsg = new() { MapMessage = MapMsg() };
+            currentMapMsg = new() { MapMessage = MapMsg(game.GameMap.ProtoGameMap) };
             playerNum = options.ShipCount + options.HomeCount;
             communicationToGameID = new long[TeamCount][];
             for (int i = 0; i < TeamCount; i++)
