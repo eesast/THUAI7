@@ -270,8 +270,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2020139210}
-  - component: {fileID: 2020139209}
   - component: {fileID: 2020139211}
+  - component: {fileID: 2020139212}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -279,27 +279,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2020139209
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2020139208}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bd56b6eee0bc3f4da48e1882fd58fdb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spaceG: {fileID: 3763284726051510260, guid: 991ffbdd1770fa744ad6e9335807a90e, type: 3}
-  ruinG: {fileID: 1304984658260562521, guid: 693d92e1c7f9c6e4597faf934cdb42c0, type: 3}
-  homeG: {fileID: 2487624789702488523, guid: 9ba3f57fff0f3f240aad67b489d717f2, type: 3}
-  shadowG: {fileID: 0}
-  asteroidG: {fileID: 73901610976941151, guid: c7b49a90d8bef8d46a4bce231bbd4bbc, type: 3}
-  resourceG: {fileID: 3917097161056082449, guid: 698b4c070ca03c24486b31eb1e5afe81, type: 3}
-  communityG: {fileID: 6520154078847335470, guid: 3ca3df56b82e8484ca02de1e96d8cef9, type: 3}
-  factoryG: {fileID: 6257076823173944538, guid: f0f5b7271131c0f4b97b109570925eb9, type: 3}
-  fortressG: {fileID: 2765499537454312851, guid: c0434feb803d4aa439d0ae84becb87c6, type: 3}
 --- !u!4 &2020139210
 Transform:
   m_ObjectHideFlags: 0
@@ -328,6 +307,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapFa: {fileID: 2074007630}
+--- !u!114 &2020139212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2020139208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bd56b6eee0bc3f4da48e1882fd58fdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spaceG: {fileID: 3763284726051510260, guid: 991ffbdd1770fa744ad6e9335807a90e, type: 3}
+  ruinG: {fileID: 1304984658260562521, guid: 693d92e1c7f9c6e4597faf934cdb42c0, type: 3}
+  homeplaceG: {fileID: 2487624789702488523, guid: 9ba3f57fff0f3f240aad67b489d717f2, type: 3}
+  shadowG: {fileID: 0}
+  asteroidG: {fileID: 73901610976941151, guid: c7b49a90d8bef8d46a4bce231bbd4bbc, type: 3}
+  resourceG: {fileID: 3917097161056082449, guid: 698b4c070ca03c24486b31eb1e5afe81, type: 3}
+  communityG: {fileID: 6520154078847335470, guid: 3ca3df56b82e8484ca02de1e96d8cef9, type: 3}
+  factoryG: {fileID: 6257076823173944538, guid: f0f5b7271131c0f4b97b109570925eb9, type: 3}
+  fortG: {fileID: 2765499537454312851, guid: c0434feb803d4aa439d0ae84becb87c6, type: 3}
+  civilianshipG: {fileID: 5171509434299531292, guid: bf6625a2d3f00dd48b69ae78320c2ae9, type: 3}
+  militaryshipG: {fileID: 7636309505896027477, guid: bc122dbec7939954f8fde7be8f609605, type: 3}
+  flagshipG: {fileID: 9176460285754036534, guid: 3dafac374e7e5334ebdd2c352bfd214a, type: 3}
+  laserG: {fileID: 0}
+  plasmaG: {fileID: 0}
+  shellG: {fileID: 0}
+  missileG: {fileID: 0}
+  arcG: {fileID: 0}
 --- !u!1 &2074007630
 GameObject:
   m_ObjectHideFlags: 0

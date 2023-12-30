@@ -32,7 +32,7 @@ namespace AssistFunction
         return int(grid) / numOfGridPerCell;
     }
 
-    inline bool HaveView(int32_t x, int32_t y, int32_t newX, int32_t newY, std::vector<std::vector<THUAI6::PlaceType>>& map)
+    inline bool HaveView(int32_t x, int32_t y, int32_t newX, int32_t newY, int32_t viewRange, std::vector<std::vector<THUAI7::PlaceType>>& map)
     {
         int32_t deltaX = newX - x;
         int32_t deltaY = newY - y;
@@ -72,6 +72,13 @@ namespace AssistFunction
 namespace Proto2THUAI7
 {
     // 用于将Protobuf中的枚举转换为THUAI7的枚举
+    inline std::map<protobuf::GameState, THUAI7::GameState> gameStateDict{
+        {protobuf::GameState::NULL_GAME_STATE, THUAI7::GameState::NullGameState},
+        {protobuf::GameState::GAME_START, THUAI7::GameState::GameStart},
+        {protobuf::GameState::GAME_RUNNING, THUAI7::GameState::GameRunning},
+        {protobuf::GameState::GAME_END, THUAI7::GameState::GameEnd},
+    };
+
     inline std::map<protobuf::PlaceType, THUAI7::PlaceType> placeTypeDict{
         {protobuf::PlaceType::NULL_PLACE_TYPE, THUAI7::PlaceType::NullPlaceType},
         {protobuf::PlaceType::HOME, THUAI7::PlaceType::Home},
@@ -80,7 +87,7 @@ namespace Proto2THUAI7
         {protobuf::PlaceType::SHADOW, THUAI7::PlaceType::Shadow},
         {protobuf::PlaceType::ASTEROID, THUAI7::PlaceType::Asteroid},
         {protobuf::PlaceType::RESOURCE, THUAI7::PlaceType::Resource},
-        {protobuf::PlaceType::BUILDING, THUAI7::PlaceType::Building},
+        {protobuf::PlaceType::CONSTRUCTION, THUAI7::PlaceType::Construction},
         {protobuf::PlaceType::WORMHOLE, THUAI7::PlaceType::Wormhole},
     };
 
@@ -90,10 +97,10 @@ namespace Proto2THUAI7
         {protobuf::ShapeType::SQUARE, THUAI7::ShapeType::Square},
     };
 
-    inline std::map<protobuf::PlayerTeam, THUAI7::PlayerTeam> playerTeamDict{
-        {protobuf::PlayerTeam::NULL_TEAM, THUAI7::PlayerTeam::NullTeam},
-        {protobuf::PlayerTeam::UP, THUAI7::PlayerTeam::Up},
-        {protobuf::PlayerTeam::DOWN, THUAI7::PlayerTeam::Down},
+    inline std::map<protobuf::PlayerType, THUAI7::PlayerType> playerTypeDict{
+        {protobuf::PlayerType::NULL_PLAYER_TYPE, THUAI7::PlayerType::NullPlayerType},
+        {protobuf::PlayerType::SHIP, THUAI7::PlayerType::Ship},
+        {protobuf::PlayerType::TEAM, THUAI7::PlayerType::Team},
     };
 
     inline std::map<protobuf::ShipType, THUAI7::ShipType> shipTypeDict{
@@ -113,13 +120,65 @@ namespace Proto2THUAI7
         {protobuf::ShipState::ATTACKING, THUAI7::ShipState::Attacking},
         {protobuf::ShipState::SWINGING, THUAI7::ShipState::Swinging},
         {protobuf::ShipState::STUUNED, THUAI7::ShipState::Stuuned},
+        {protobuff::ShipState::MOVING, THUAI7::ShipState::Moving},
     };
 
-    inline std::map<protobuf::GameState, THUAI7::GameState> gameStateDict{
-        {protobuf::GameState::NULL_GAME_STATE, THUAI7::GameState::NullGameState},
-        {protobuf::GameState::GAME_START, THUAI7::GameState::GameStart},
-        {protobuf::GameState::GAME_RUNNING, THUAI7::GameState::GameRunning},
-        {protobuf::GameState::GAME_END, THUAI7::GameState::GameEnd},
+    inline std::map<protobuf::WeaponType, THUAI7::WeaponType> weaponTypeDict{
+        {protobuf::WeaponType::NULL_WEAPON_TYPE, THUAI7::WeaponType::NullWeaponType},
+        {protobuf::WeaponType::LASERGUN, THUAI7::WeaponType::LaserGun},
+        {protobuf::WeaponType::PLASMAGUN, THUAI7::WeaponType::PlasmaGun},
+        {protobuf::WeaponType::SHELLGUN, THUAI7::WeaponType::ShellGun},
+        {protobuf::WeaponType::MISSILEGUN, THUAI7::WeaponType::MissileGun},
+        {protobuf::WeaponType::ARCGUN, THUAI7::WeaponType::ArcGun},
+    };
+
+    inline std::map<protobuf::ConstructorType, THUAI7::ConstructorType> constructorTypeDict{
+        {protobuf::ConstructorType::NULL_CONSTRUCTOR_TYPE, THUAI7::ConstructorType::NullConstructorType},
+        {protobuf::ConstructorType::CONSTRUCTOR1, THUAI7::ConstructorType::Constructor1},
+        {protobuf::ConstructorType::CONSTRUCTOR2, THUAI7::ConstructorType::Constructor2},
+        {protobuf::ConstructorType::CONSTRUCTOR3, THUAI7::ConstructorType::Constructor3},
+    };
+
+    inline std::map<protobuf::ArmorType, THUAI7::ArmorType> armorTypeDict{
+        {protobuf::ArmorType::NULL_ARMOR_TYPE, THUAI7::ArmorType::NullArmorType},
+        {protobuf::ArmorType::ARMOR1, THUAI7::ArmorType::Armor1},
+        {protobuf::ArmorType::ARMOR2, THUAI7::ArmorType::Armor2},
+        {protobuf::ArmorType::ARMOR3, THUAI7::ArmorType::Armor3},
+    };
+
+    inline std::map<protobuf::ShieldType, THUAI7::ShieldType> shieldTypeDict{
+        {protobuf::ShieldType::NULL_SHIELD_TYPE, THUAI7::ShieldType::NullShieldType},
+        {protobuf::ShieldType::SHIELD1, THUAI7::ShieldType::Shield1},
+        {protobuf::ShieldType::SHIELD2, THUAI7::ShieldType::Shield2},
+        {protobuf::ShieldType::SHIELD3, THUAI7::ShieldType::Shield3},
+    };
+
+    inline std::map<protobuf::ProducerType, THUAI7::ProducerType> producerTypeDict{
+        {protobuf::ProducerType::NULL_PRODUCER_TYPE, THUAI7::ProducerType::NullProducerType},
+        {protobuf::ProducerType::PRODUCER1, THUAI7::ProducerType::Producer1},
+        {protobuf::ProducerType::PRODUCER2, THUAI7::ProducerType::Producer2},
+        {protobuf::ProducerType::PRODUCER3, THUAI7::ProducerType::Producer3},
+    };
+
+    inline std::map<protobuf::ModuleType, THUAI7::ModuleType> moduleTypeDict{
+        {protobuf::ModuleType::NULL_MODULE_TYPE, THUAI7::ModuleType::NullModuleType},
+        {protobuf::ModuleType::MODULE_PRODUCER1, THUAI7::ModuleType::ModuleProducer1},
+        {protobuf::ModuleType::MODULE_PRODUCER2, THUAI7::ModuleType::ModuleProducer2},
+        {protobuf::ModuleType::MODULE_PRODUCER3, THUAI7::ModuleType::ModuleProducer3},
+        {protobuf::ModuleType::MODULE_CONSTRUCTOR1, THUAI7::ModuleType::ModuleConstructor1},
+        {protobuf::ModuleType::MODULE_CONSTRUCTOR2, THUAI7::ModuleType::ModuleConstructor2},
+        {protobuf::ModuleType::MODULE_CONSTRUCTOR3, THUAI7::ModuleType::ModuleConstructor3},
+        {protobuf::ModuleType::MODULE_ARMOR1, THUAI7::ModuleType::ModuleArmor1},
+        {protobuf::ModuleType::MODULE_ARMOR2, THUAI7::ModuleType::ModuleArmor2},
+        {protobuf::ModuleType::MODULE_ARMOR3, THUAI7::ModuleType::ModuleArmor3},
+        {protobuf::ModuleType::MODULE_SHIELD1, THUAI7::ModuleType::ModuleShield1},
+        {protobuf::ModuleType::MODULE_SHIELD2, THUAI7::ModuleType::ModuleShield2},
+        {protobuf::ModuleType::MODULE_SHIELD3, THUAI7::ModuleType::ModuleShield3},
+        {protobuf::ModuleType::MODULE_LASERGUN, THUAI7::ModuleType::ModuleLaserGun},
+        {protobuf::ModuleType::MODULE_PLASMAGUN, THUAI7::ModuleType::ModulePlasmaGun},
+        {protobuf::ModuleType::MODULE_SHELLGUN, THUAI7::ModuleType::ModuleShellGun},
+        {protobuf::ModuleType::MODULE_MISSILEGUN, THUAI7::ModuleType::ModuleMissileGun},
+        {protobuf::ModuleType::MODULE_ARCGUN, THUAI7::ModuleType::ModuleArcGun},
     };
 
     inline std::map<protobuf::BulletType, THUAI7::BulletType> bulletTypeDict{
@@ -128,7 +187,20 @@ namespace Proto2THUAI7
         {protobuf::BulletType::PLASMA, THUAI7::BulletType::Plasma},
         {protobuf::BulletType::SHELL, THUAI7::BulletType::Shell},
         {protobuf::BulletType::MISSILE, THUAI7::BulletType::Missile},
-        {protobuf::BulletType::ELECTRICARC, THUAI7::BulletType::ElectricArc},
+        {protobuf::BulletType::ARC, THUAI7::BulletType::Arc},
+    };
+
+    inline std::map<protobuf::ConstructionType, THUAI7::ConstructionType> constructionTypeDict{
+        {protobuf::ConstructionType::NULL_CONSTRUCTION_TYPE, THUAI7::ConstructionType::NullConstructionType},
+        {protobuf::ConstructionType::FACTORY, THUAI7::ConstructionType::Factory},
+        {protobuf::ConstructionType::COMMUNITY, THUAI7::ConstructionType::Community},
+        {protobuf::ConstructionType::FORT, THUAI7::ConstructionType::Fort},
+    };
+
+    inline std::map<protobuf::PlayerTeam, THUAI7::PlayerTeam> playerTeamDict{
+        {protobuf::PlayerTeam::NULL_TEAM, THUAI7::PlayerTeam::NullTeam},
+        {protobuf::PlayerTeam::RED, THUAI7::PlayerTeam::Red},
+        {protobuf::PlayerTeam::BLUE, THUAI7::PlayerTeam::Blue},
     };
 
     inline std::map<protobuf::MessageOfObj::MessageOfObjCase, THUAI7::MessageOfObj> messageOfObjDict{
@@ -136,11 +208,14 @@ namespace Proto2THUAI7
         {protobuf::MessageOfObj::MessageOfObjCase::kBulletMessage, THUAI7::MessageOfObj::BulletMessage},
         {protobuf::MessageOfObj::MessageOfObjCase::kFactoryMessage, THUAI7::MessageOfObj::FactoryMessage},
         {protobuf::MessageOfObj::MessageOfObjCase::kCommunityMessage, THUAI7::MessageOfObj::CommunityMessage},
-        {protobuf::MessageOfObj::MessageOfObjCase::kFortressMessage, THUAI7::MessageOfObj::FortressMessage},
+        {protobuf::MessageOfObj::MessageOfObjCase::kFortMessage, THUAI7::MessageOfObj::FortMessage},
         {protobuf::MessageOfObj::MessageOfObjCase::kWormholeMessage, THUAI7::MessageOfObj::WormholeMessage},
         {protobuf::MessageOfObj::MessageOfObjCase::kHomeMessage, THUAI7::MessageOfObj::HomeMessage},
         {protobuf::MessageOfObj::MessageOfObjCase::kResourceMessage, THUAI7::MessageOfObj::ResourceMessage},
         {protobuf::MessageOfObj::MessageOfObjCase::kMapMessage, THUAI7::MessageOfObj::MapMessage},
+        {protobuf::MessageOfObj::MessageOfObjCase::kNewsMessage, THUAI7::MessageOfObj::NewsMessage},
+        {protobuf::MessageOfObj::MessageOfObjCase::kBombedBulletMessage, THUAI7::MessageOfObj::BombedBulletMessage},
+        {protobuf::MessageOfObj::MessageOfObjCase::kTeamMessage, THUAI7::MessageOfObj::TeamMessage},
     };
 
     inline std::map<protobuf::MessageOfNews::NewsCase, THUAI7::NewsType> newsTypeDict{
@@ -157,26 +232,21 @@ namespace Proto2THUAI7
         ship->y = shipMsg.y();
         ship->speed = shipMsg.speed();
         ship->hp = shipMsg.hp();
-        ship->team = playerTeamDict[shipMsg.team()];
-        ship->facingDirection = shipMsg.facing_direction();
+        ship->armor = shipMsg.armor();
+        ship->shield = shipMsg.shield();
+        ship->teamID = shipMsg.team_id();
+        ship->playerID = shipMsg.player_id();
+        ship->guid = shipMsg.guid();
         ship->shipState = shipStateDict[shipMsg.ship_state()];
         ship->shipType = shipTypeDict[shipMsg.ship_type()];
-        ship->guid = shipMsg.guid();
-        ship->playerTeam = playerTeamDict[shipMsg.player_team()];
-        ship->economy = shipMsg.economy();
-        for (int32_t i = 0; i <= shipMsg.module_size(); i++)
-        {
-            ship->module.push_back(Protobuf2THUAI7Module(shipMsg.module(i)));
-        }
+        ship->viewRange = shipMsg.view_range();
+        ship->producerType = producerTypeDict[shipMsg.producer_type()];
+        ship->constructorType = constructorTypeDict[shipMsg.constructor_type()];
+        ship->armorType = armorTypeDict[shipMsg.armor_type()];
+        ship->shieldType = shieldTypeDict[shipMsg.shield_type()];
+        ship->weaponType = weaponTypeDict[shipMsg.weapon_type()];
+        ship->facingDirection = shipMsg.facing_direction();
         return ship;
-    }
-
-    inline std::shared_ptr<THUAI7::Module> Protobuf2THUAI7Module(const protobuf::MessageOfModule& moduleMsg)
-    {
-        auto module = std::make_shared<THUAI7::Module>();
-        module->moduleType = moduleMsg.module_type();
-        module->moduleLevel = moduleMsg.module_label();
-        return module;
     }
 
     inline std::shared_ptr<THUAI7::Bullet> Protobuf2THUAI7Bullet(const protobuf::MessageOfBullet& bulletMsg)
@@ -185,14 +255,12 @@ namespace Proto2THUAI7
         bullet->bulletType = bulletTypeDict[bulletMsg.bullet_type()];
         bullet->x = bulletMsg.x();
         bullet->y = bulletMsg.y();
-        bullet->speed = bulletMsg.speed();
         bullet->facingDirection = bulletMsg.facing_direction();
+        bullet->damage = bulletMsg.damage();
+        bullet->teamID = bulletMsg.team_id();
         bullet->guid = bulletMsg.guid();
-        bullet->armorRate = bulletMsg.armor_rate();
-        bullet->team = playerTeamDict[bulletMsg.team()];
-        bullet->shieldRate = bulletMsg.shield_rate();
+        bullet->speed = bulletMsg.speed();
         bullet->bombRange = bulletMsg.bomb_range();
-        bullet->radius = bulletMsg.radius();
         return bullet;
     }
 
@@ -202,64 +270,26 @@ namespace Proto2THUAI7
         home->x = homeMsg.x();
         home->y = homeMsg.y();
         home->hp = homeMsg.hp();
-        home->guid = homeMsg.guid();
-        home->team = playerTeamDict[homeMsg.team()];
-        home->economy = homeMsg.economy();
+        home->teamID = homeMsg.team_id();
         return home;
     }
 
-    inline std::shared_ptr<THUAI7::Map> Protobuf2THUAI7Map(const protobuf::MessageOfMap& mapMsg)
+    inline std::shared_ptr<THUAI7::Team> Protobuf2THUAI7Team(const protobuf::MessageOfTeam& teamMsg)
     {
-        auto map = std::make_shared<THUAI7::Map>();
-        map->x = mapMsg.x();
-        map->y = mapMsg.y();
-        map->placeType = placeTypeDict[mapMsg.place_type()];
-        map->shapeType = shapeTypeDict[mapMsg.shape_type()];
-        map->guid = mapMsg.guid();
-        map->playerID = mapMsg.player_id();
-        map->viewRange = mapMsg.view_range();
-        map->radius = mapMsg.radius();
-        return map;
-    }
-
-    inline std::shared_ptr<THUAI7::News> Protobuf2THUAI7News(const protobuf::MessageOfNews& newsMsg)
-    {
-        auto news = std::make_shared<THUAI7::News>();
-        news->newsType = newsTypeDict[newsMsg.news_case()];
-        news->textMessage = newsMsg.text_message();
-        news->binaryMessage = newsMsg.binary_message();
-        return news;
+        auto team = std::make_shared<THUAI7::Team>();
+        team->playerID = teamMsg.player_id();
+        team->teamID = teamMsg.team_id();
+        team->score = teamMsg.score();
+        team->money = teamMsg.money();
+        return team
     }
 
     inline std::shared_ptr<THUAI7::GameInfo> Protobuf2THUAI7GameInfo(const protobuf::MessageOfAll& allMsg)
     {
         auto gameInfo = std::make_shared<THUAI7::GameInfo>();
-        gameInfo->gameTime = gameInfoMsg.game_time();
-        gameInfo->upEconomy = gameInfoMsg.up_economy();
-        gameInfo->downEconomy = gameInfoMsg.down_economy();
-    }
-
-    inline std::shared_ptr<THUAI7::Message2Clients> Protobuf2THUAI7Message2Clients(const protobuf::Message2Clients& message2Clients)
-    {
-        auto message = std::make_shared<THUAI7::Message2Clients>();
-        message->messageType = message2Clients.message_type();
-        message->message = message2Clients.message();
-        return message;
-    }
-
-    inline std::shared_ptr<THUAI7::Message2Server> Protobuf2THUAI7Message2Server(const protobuf::Message2Server& message2Server)
-    {
-        auto message = std::make_shared<THUAI7::Message2Server>();
-        message->messageType = message2Server.message_type();
-        message->message = message2Server.message();
-        return message;
-    }
-
-    inline std::shared_ptr<THUAI7::Message2Clients> Protobuf2THUAI7Message2Clients(const std::string& message2Clients)
-    {
-        protobuf::Message2Clients message2ClientsMsg;
-        message2ClientsMsg.ParseFromString(message2Clients);
-        return Protobuf2THUAI7Message2Clients(message2ClientsMsg);
+        gameInfo->gameTime = allMsg.game_time();
+        gameInfo->redTeamScore = allMsg.red_team_score();
+        gameInfo->blueTeamScore = allMsg.blue_team_score();
     }
 
 }  // namespace Proto2THUAI7
@@ -267,6 +297,13 @@ namespace Proto2THUAI7
 namespace THUAI72Proto
 {
     // 用于将THUAI7的枚举转换为Protobuf的枚举
+    inline std::map<THUAI7::GameState, protobuf::GameState> gameStateDict{
+        {THUAI7::GameState::NullGameState, protobuf::GameState::NULL_GAME_STATE},
+        {THUAI7::GameState::GameStart, protobuf::GameState::GAME_START},
+        {THUAI7::GameState::GameRunning, protobuf::GameState::GAME_RUNNING},
+        {THUAI7::GameState::GameEnd, protobuf::GameState::GAME_END},
+    };
+
     inline std::map<THUAI7::PlaceType, protobuf::PlaceType> placeTypeDict{
         {THUAI7::PlaceType::NullPlaceType, protobuf::PlaceType::NULL_PLACE_TYPE},
         {THUAI7::PlaceType::Home, protobuf::PlaceType::HOME},
@@ -275,7 +312,7 @@ namespace THUAI72Proto
         {THUAI7::PlaceType::Shadow, protobuf::PlaceType::SHADOW},
         {THUAI7::PlaceType::Asteroid, protobuf::PlaceType::ASTEROID},
         {THUAI7::PlaceType::Resource, protobuf::PlaceType::RESOURCE},
-        {THUAI7::PlaceType::Building, protobuf::PlaceType::BUILDING},
+        {THUAI7::PlaceType::Construction, protobuf::PlaceType::CONSTRUCTION},
         {THUAI7::PlaceType::Wormhole, protobuf::PlaceType::WORMHOLE},
     };
 
@@ -285,10 +322,10 @@ namespace THUAI72Proto
         {THUAI7::ShapeType::Square, protobuf::ShapeType::SQUARE},
     };
 
-    inline std::map<THUAI7::PlayerTeam, protobuf::PlayerTeam> playerTeamDict{
-        {THUAI7::PlayerTeam::NullTeam, protobuf::PlayerTeam::NULL_TEAM},
-        {THUAI7::PlayerTeam::Up, protobuf::PlayerTeam::UP},
-        {THUAI7::PlayerTeam::Down, protobuf::PlayerTeam::DOWN},
+    inline std::map<THUAI7::PlayerType, protobuf::PlayerType> playerTypeDict{
+        {THUAI7::PlayerType::NullPlayerType, protobuf::PlayerType::NULL_PLAYER_TYPE},
+        {THUAI7::PlayerType::Ship, protobuf::PlayerType::SHIP},
+        {THUAI7::PlayerType::Team, protobuf::PlayerType::TEAM},
     };
 
     inline std::map<THUAI7::ShipType, protobuf::ShipType> shipTypeDict{
@@ -307,15 +344,66 @@ namespace THUAI72Proto
         {THUAI7::ShipState::Recycling, protobuf::ShipState::RECYCLING},
         {THUAI7::ShipState::Attacking, protobuf::ShipState::ATTACKING},
         {THUAI7::ShipState::Swinging, protobuf::ShipState::SWINGING},
-        {THUAI7::ShipState::Stunned, protobuf::ShipState::STUNNED},
-
+        {THUAI7::ShipState::Stuuned, protobuf::ShipState::STUUNED},
+        {THUAI7::ShipState::Moving, protobuf::ShipState::MOVING},
     };
 
-    inline std::map<THUAI7::GameState, protobuf::GameState> gameStateDict{
-        {THUAI7::GameState::NullGameState, protobuf::GameState::NULL_GAME_STATE},
-        {THUAI7::GameState::GameStart, protobuf::GameState::GAME_START},
-        {THUAI7::GameState::GameRunning, protobuf::GameState::GAME_RUNNING},
-        {THUAI7::GameState::GameEnd, protobuf::GameState::GAME_END},
+    inline std::map<THUAI7::WeaponType, protobuf::WeaponType> weaponTypeDict{
+        {THUAI7::WeaponType::NullWeaponType, protobuf::WeaponType::NULL_WEAPON_TYPE},
+        {THUAI7::WeaponType::LaserGun, protobuf::WeaponType::LASERGUN},
+        {THUAI7::WeaponType::PlasmaGun, protobuf::WeaponType::PLASMAGUN},
+        {THUAI7::WeaponType::ShellGun, protobuf::WeaponType::SHELLGUN},
+        {THUAI7::WeaponType::MissileGun, protobuf::WeaponType::MISSILEGUN},
+        {THUAI7::WeaponType::ArcGun, protobuf::WeaponType::ARCGUN},
+    };
+
+    inline std::map<THUAI7::ConstructorType, protobuf::ConstructorType> constructorTypeDict{
+        {THUAI7::ConstructorType::NullConstructorType, protobuf::ConstructorType::NULL_CONSTRUCTOR_TYPE},
+        {THUAI7::ConstructorType::Constructor1, protobuf::ConstructorType::CONSTRUCTOR1},
+        {THUAI7::ConstructorType::Constructor2, protobuf::ConstructorType::CONSTRUCTOR2},
+        {THUAI7::ConstructorType::Constructor3, protobuf::ConstructorType::CONSTRUCTOR3},
+    };
+
+    inline std::map<THUAI7::ArmorType, protobuf::ArmorType> armorTypeDict{
+        {THUAI7::ArmorType::NullArmorType, protobuf::ArmorType::NULL_ARMOR_TYPE},
+        {THUAI7::ArmorType::Armor1, protobuf::ArmorType::ARMOR1},
+        {THUAI7::ArmorType::Armor2, protobuf::ArmorType::ARMOR2},
+        {THUAI7::ArmorType::Armor3, protobuf::ArmorType::ARMOR3},
+    };
+
+    inline std::map<THUAI7::ShieldType, protobuf::ShieldType> shieldTypeDict{
+        {THUAI7::ShieldType::NullShieldType, protobuf::ShieldType::NULL_SHIELD_TYPE},
+        {THUAI7::ShieldType::Shield1, protobuf::ShieldType::SHIELD1},
+        {THUAI7::ShieldType::Shield2, protobuf::ShieldType::SHIELD2},
+        {THUAI7::ShieldType::Shield3, protobuf::ShieldType::SHIELD3},
+    };
+
+    inline std::map<THUAI7::ProducerType, protobuf::ProducerType> producerTypeDict{
+        {THUAI7::ProducerType::NullProducerType, protobuf::ProducerType::NULL_PRODUCER_TYPE},
+        {THUAI7::ProducerType::Producer1, protobuf::ProducerType::PRODUCER1},
+        {THUAI7::ProducerType::Producer2, protobuf::ProducerType::PRODUCER2},
+        {THUAI7::ProducerType::Producer3, protobuf::ProducerType::PRODUCER3},
+    };
+
+    inline std::map<THUAI7::ModuleType, protobuf::ModuleType> moduleTypeDict{
+        {THUAI7::ModuleType::NullModuleType, protobuf::ModuleType::NULL_MODULE_TYPE},
+        {THUAI7::ModuleType::ModuleProducer1, protobuf::ModuleType::MODULE_PRODUCER1},
+        {THUAI7::ModuleType::ModuleProducer2, protobuf::ModuleType::MODULE_PRODUCER2},
+        {THUAI7::ModuleType::ModuleProducer3, protobuf::ModuleType::MODULE_PRODUCER3},
+        {THUAI7::ModuleType::ModuleConstructor1, protobuf::ModuleType::MODULE_CONSTRUCTOR1},
+        {THUAI7::ModuleType::ModuleConstructor2, protobuf::ModuleType::MODULE_CONSTRUCTOR2},
+        {THUAI7::ModuleType::ModuleConstructor3, protobuf::ModuleType::MODULE_CONSTRUCTOR3},
+        {THUAI7::ModuleType::ModuleArmor1, protobuf::ModuleType::MODULE_ARMOR1},
+        {THUAI7::ModuleType::ModuleArmor2, protobuf::ModuleType::MODULE_ARMOR2},
+        {THUAI7::ModuleType::ModuleArmor3, protobuf::ModuleType::MODULE_ARMOR3},
+        {THUAI7::ModuleType::ModuleShield1, protobuf::ModuleType::MODULE_SHIELD1},
+        {THUAI7::ModuleType::ModuleShield2, protobuf::ModuleType::MODULE_SHIELD2},
+        {THUAI7::ModuleType::ModuleShield3, protobuf::ModuleType::MODULE_SHIELD3},
+        {THUAI7::ModuleType::ModuleLaserGun, protobuf::ModuleType::MODULE_LASERGUN},
+        {THUAI7::ModuleType::ModulePlasmaGun, protobuf::ModuleType::MODULE_PLASMAGUN},
+        {THUAI7::ModuleType::ModuleShellGun, protobuf::ModuleType::MODULE_SHELLGUN},
+        {THUAI7::ModuleType::ModuleMissileGun, protobuf::ModuleType::MODULE_MISSILEGUN},
+        {THUAI7::ModuleType::ModuleArcGun, protobuf::ModuleType::MODULE_ARCGUN},
     };
 
     inline std::map<THUAI7::BulletType, protobuf::BulletType> bulletTypeDict{
@@ -324,19 +412,35 @@ namespace THUAI72Proto
         {THUAI7::BulletType::Plasma, protobuf::BulletType::PLASMA},
         {THUAI7::BulletType::Shell, protobuf::BulletType::SHELL},
         {THUAI7::BulletType::Missile, protobuf::BulletType::MISSILE},
-        {THUAI7::BulletType::ElectricArc, protobuf::BulletType::ELECTRIC_ARC},
+        {THUAI7::BulletType::Arc, protobuf::BulletType::ARC},
+    };
+
+    inline std::map<THUAI7::ConstructionType, protobuf::ConstructionType> constructionTypeDict{
+        {THUAI7::ConstructionType::NullConstructionType, protobuf::ConstructionType::NULL_CONSTRUCTION_TYPE},
+        {THUAI7::ConstructionType::Factory, protobuf::ConstructionType::FACTORY},
+        {THUAI7::ConstructionType::Community, protobuf::ConstructionType::COMMUNITY},
+        {THUAI7::ConstructionType::Fort, protobuf::ConstructionType::FORT},
+    };
+
+    inline std::map<THUAI7::PlayerTeam, protobuf::PlayerTeam> playerTeamDict{
+        {THUAI7::PlayerTeam::NullTeam, protobuf::PlayerTeam::NULL_TEAM},
+        {THUAI7::PlayerTeam::Red, protobuf::PlayerTeam::RED},
+        {THUAI7::PlayerTeam::Blue, protobuf::PlayerTeam::BLUE},
     };
 
     inline std::map<THUAI7::MessageOfObj, protobuf::MessageOfObj::MessageOfObjCase> messageOfObjDict{
-        {THUAI7::MessageOfObj::NullMessageOfObj, protobuf::MessageOfObj::MessageOfObjCase::MESSAGE_OF_OBJ_NOT_SET},
         {THUAI7::MessageOfObj::ShipMessage, protobuf::MessageOfObj::MessageOfObjCase::kShipMessage},
         {THUAI7::MessageOfObj::BulletMessage, protobuf::MessageOfObj::MessageOfObjCase::kBulletMessage},
         {THUAI7::MessageOfObj::FactoryMessage, protobuf::MessageOfObj::MessageOfObjCase::kFactoryMessage},
         {THUAI7::MessageOfObj::CommunityMessage, protobuf::MessageOfObj::MessageOfObjCase::kCommunityMessage},
-        {THUAI7::MessageOfObj::FortressMessage, protobuf::MessageOfObj::MessageOfObjCase::kFortressMessage},
+        {THUAI7::MessageOfObj::FortMessage, protobuf::MessageOfObj::MessageOfObjCase::kFortMessage},
         {THUAI7::MessageOfObj::WormholeMessage, protobuf::MessageOfObj::MessageOfObjCase::kWormholeMessage},
         {THUAI7::MessageOfObj::HomeMessage, protobuf::MessageOfObj::MessageOfObjCase::kHomeMessage},
+        {THUAI7::MessageOfObj::ResourceMessage, protobuf::MessageOfObj::MessageOfObjCase::kResourceMessage},
         {THUAI7::MessageOfObj::MapMessage, protobuf::MessageOfObj::MessageOfObjCase::kMapMessage},
+        {THUAI7::MessageOfObj::NewsMessage, protobuf::MessageOfObj::MessageOfObjCase::kNewsMessage},
+        {THUAI7::MessageOfObj::BombedBulletMessage, protobuf::MessageOfObj::MessageOfObjCase::kBombedBulletMessage},
+        {THUAI7::MessageOfObj::TeamMessage, protobuf::MessageOfObj::MessageOfObjCase::kTeamMessage},
     };
 
     inline std::map<THUAI7::NewsType, protobuf::MessageOfNews::NewsCase> newsTypeDict{
@@ -345,82 +449,83 @@ namespace THUAI72Proto
         {THUAI7::NewsType::BinaryMessage, protobuf::MessageOfNews::NewsCase::kBinaryMessage},
     };
 
-    inline protobuf::MoveMsg THUAI72ProtobufMove(int64_t time, double angle, int64_t id)
+    inline protobuf::MoveMsg THUAI72ProtobufMoveMsg(int64_t playerID, int64_t teamID, int64_t time, double angle)
     {
         protobuf::MoveMsg moveMsg;
         moveMsg.set_time_in_milliseconds(time);
         moveMsg.set_angle(angle);
-        moveMsg.set_ship_id(id);
+        moveMsg.set_player_id(playerID);
+        moveMsg.set_team_id(teamID);
         return moveMsg;
     }
 
-    inline protobuf::RecoverMsg THUAI72ProtobufRecover(int64_t id)
+    inline protobuf::IDMsg THUAI72ProtobufIDMsg(int64_t playerID, int64_t teamID)
     {
-        protobuf::RecoverMsg recoverMsg;
-        recoverMsg.set_ship_id(id);
-        return recoverMsg;
+        protobuf::IDMsg IDMsg;
+        IDMsg.set_player_id(playerID);
+        IDMsg.set_team_id(teamID);
+        return IDMsg;
     }
 
-    inline protobuf::TargetMsg THUAI72ProtobufTarget(int64_t id, int32_t x, int32_t y)
+    inline protobuf::ConstructMsg THUAI72ProtobufConstructMsg(int64_t playerID, int64_t teamID, THUAI7::ConstructionType constructionType)
     {
-        protobuf::TargetMsg targetMsg;
-        targetMsg.set_x(x);
-        targetMsg.set_y(y);
-        targetMsg.set_ship_id(id);
-        return targetMsg;
+        protobuf::ConstructMsg constructMsg;
+        constructMsg.set_player_id(playerID);
+        constructMsg.set_team_id(teamID);
+        constructMsg.set_construction_type(THUAI72Proto::constructionTypeDict[constructorType]);
+        return constructMsg;
     }
 
-    inline protobuf::SendMsg THUAI72ProtobufSend(std::string msg, int64_t toID, bool binary, int64_t id)
+    inline protobuf::AttackMsg THUI72ProtobufAttackMsg(int64_t playerID, int64_t teamID, double angle)
+    {
+        protobuf::AttackMsg attackMsg;
+        attackMsg.set_player_id(playerID);
+        attackMsg.set_team_id(teamID);
+        attackMsg.set_angle(angle);
+        return attackMsg;
+    }
+
+    inline protobuf::SendMsg THUAI72ProtobufSendMsg(int64_t playerID, int64_t toPlayerID, int64_t teamID, std::string msg, bool binary)
     {
         protobuf::SendMsg sendMsg;
         if (binary)
             sendMsg.set_binary_message(std::move(msg));
         else
             sendMsg.set_text_message(std::move(msg));
-        sendMsg.set_to_player_id(toID);
-        sendMsg.set_player_id(id);
+        sendMsg.set_to_player_id(toPlayerID);
+        sendMsg.set_player_id(playerID);
+        sendMsg.set_team_id(teamID);
         return sendMsg;
     }
 
-    inline protobuf::ConstructMsg THUAI72ProtobufConstruct(int64_t id, int32_t x, int32_t y)
-    {
-        protobuf::ConstructMsg constructMsg;
-        constructMsg.set_x(x);
-        constructMsg.set_y(y);
-        constructMsg.set_building_id(id);
-        return constructMsg;
-    }
-
-    inline protobuf::InstallMsg THUAI72ProtobufInstall(THUAI7::Module module, int64_t id)
+    inline protobuf::InstallMsg THUAI72ProtobufInstallMsg(int64_t playerID, int64_t teamID, THUAI7::ModuleType moduleType)
     {
         protobuf::InstallMsg installMsg;
-        installMsg.set_module_type(module.moduleType);
-        installMsg.set_module_level(module.ModuleLevel);
-        installMsg.set_ship_id(id);
+        installMsg.set_module_type(moduleType);
+        installMsg.set_player_id(playerID);
+        installMsg.set_team_id(teamID);
         return installMsg;
     }
 
-    inline protobuf::IDMsg THUAI72ProtobufID(int64_t shipID)
+    inline protobuf::BuildShipMsg THUAI72ProtobufBuildShipMsg(int64_t teamID, THUAI7::ShipType shipType, int32_t x, int32_t y)
     {
-        protobuf::IDMsg idMsg;
-        idMsg.set_ship_id(shipID);
-        return idMsg;
+        protobuf::BuildShipMsg buildShipMsg;
+        buildShipMsg.set_team_id(teamID);
+        buildShipMsg.set_x(x);
+        buildShipMsg.set_y(y);
+        buildShipMsg.set_ship_type(THUAI72Proto::shipTypeDict[shipType]);
+        return buildShipMsg;
     }
 
-    inline protobuf::ShipMsg THUAI72ProtobufShip(int64_t shipID, THUAI7::ShipType shipType, THUAI7::PlayerTeam playerTeam)
+    inline protobuf::PlayerMsg THUAI72ProtobufPlayerMsg(int64_t playerID, int64_t teamID, THUAI7::ShipType shipType, int32_t x, int32_t y)
     {
-        protobuf::ShipMsg shipMsg;
-        shipMsg.set_ship_id(shipID);
-        shipMsg.set_ship_type(shipTypeDict[shipType]);
-        if (playerTeam == THUAI7::PlayerTeam::Up)
-        {
-            shipMsg.set_player_team(protobuf::PlayerTeam::UP);
-        }
-        else if (playerTeam == THUAI7::PlayerTeam::Down)
-        {
-            shipMsg.set_player_team(protobuf::PlayerTeam::DOWN);
-        }
-        return shipMsg;
+        protobuf::PlayerMsg playerMsg;
+        playerMsg.set_player_id(playerID);
+        playerMsg.set_team_id(teamID);
+        playerMsg.set_ship_type(THUAI72Proto::shipTypeDict[shipType]);
+        playerMsg.set_x(x);
+        playerMsg.set_y(y);
+        return playerMsg;
     }
 
     // 用于将THUAI7的类转换为Protobuf的类

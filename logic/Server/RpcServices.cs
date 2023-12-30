@@ -53,7 +53,7 @@ namespace Server
             if (request.PlayerId >= spectatorMinPlayerID && options.NotAllowSpectator == false)
             {
                 // 观战模式
-                lock (spetatorJoinLock) // 具体原因见另一个上锁的地方
+                lock (spectatorJoinLock) // 具体原因见另一个上锁的地方
                 {
                     if (semaDict.TryAdd(request.PlayerId, (new SemaphoreSlim(0, 1), new SemaphoreSlim(0, 1))))
                     {
@@ -74,7 +74,7 @@ namespace Server
                         if (currentGameInfo != null)
                         {
                             await responseStream.WriteAsync(currentGameInfo);
-                            //Console.WriteLine("Send!");
+                            Console.WriteLine("Send!");
                         }
                     }
                     catch (InvalidOperationException)
@@ -119,10 +119,8 @@ namespace Server
 
             lock (addPlayerLock)
             {
-                // ShipInitInfo?
                 XY birthPoint = new(request.X, request.Y);
                 Game.ShipInitInfo playerInitInfo = new(request.TeamId, request.PlayerId, birthPoint, Transformation.ShipTypeFromProto(request.ShipType));
-                // AddShip?
                 long newPlayerID = game.AddShip(playerInitInfo);
                 if (newPlayerID == GameObj.invalidID)
                     return;
@@ -130,7 +128,7 @@ namespace Server
                 var temp = (new SemaphoreSlim(0, 1), new SemaphoreSlim(0, 1));
                 bool start = false;
                 Console.WriteLine($"Id: {request.PlayerId} joins.");
-                lock (spetatorJoinLock)  // 为了保证绝对安全，还是加上这个锁吧
+                lock (spectatorJoinLock)  // 为了保证绝对安全，还是加上这个锁吧
                 {
                     if (semaDict.TryAdd(request.PlayerId, temp))
                     {
@@ -149,7 +147,7 @@ namespace Server
                     if (currentGameInfo != null && !exitFlag)
                     {
                         await responseStream.WriteAsync(currentGameInfo);
-                        //Console.WriteLine("Send!");
+                        Console.WriteLine("Send!");
                     }
                 }
                 catch
@@ -165,6 +163,14 @@ namespace Server
                     semaDict[request.PlayerId].Item2.Release();
                 }
             } while (game.GameMap.Timer.IsGaming);
+        }
+
+        public override Task<MessageOfMap> GetMap(NullRequest request, ServerCallContext context)
+        {
+#if DEBUG
+            Console.WriteLine($"GetMap IP: {context.Peer}");
+#endif 
+            return Task.FromResult(MapMsg());
         }
 
         public override Task<BoolRes> Attack(AttackMsg request, ServerCallContext context)
@@ -187,7 +193,6 @@ namespace Server
             boolRes.ActSuccess = game.Attack(gameID, request.Angle);
             return Task.FromResult(boolRes);
         }
-
 
         public override Task<MoveRes> Move(MoveMsg request, ServerCallContext context)
         {
@@ -214,7 +219,7 @@ namespace Server
         public override Task<BoolRes> Send(SendMsg request, ServerCallContext context)
         {
             var boolRes = new BoolRes();
-            if (request.PlayerId >= spectatorMinPlayerID || playerDeceased((int)request.PlayerId))
+            if (request.PlayerId >= spectatorMinPlayerID || PlayerDeceased((int)request.PlayerId))
             {
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
@@ -307,7 +312,7 @@ namespace Server
             return Task.FromResult(boolRes);
         }
 
-        public override Task<BoolRes> Produce(TargetMsg request, ServerCallContext context)
+        public override Task<BoolRes> Produce(IDMsg request, ServerCallContext context)
         {
 #if DEBUG
             Console.WriteLine($"Produce ID: {request.PlayerId}");
@@ -355,11 +360,10 @@ namespace Server
             return Task.FromResult(boolRes);
         }
 
-
         public override Task<BoolRes> InstallModule(InstallMsg request, ServerCallContext context)
         {
 #if DEBUG
-            Console.WriteLine($"Rebuild ID: {request.PlayerId}");
+            Console.WriteLine($"InstallModule ID: {request.PlayerId}");
 #endif 
             BoolRes boolRes = new();
             if (request.PlayerId >= spectatorMinPlayerID)
@@ -368,7 +372,7 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Install(gameID);
+            boolRes.ActSuccess = game.InstallModule(gameID, Transformation.ModuleFromProto(request.ModuleType));
             return Task.FromResult(boolRes);
         }
 

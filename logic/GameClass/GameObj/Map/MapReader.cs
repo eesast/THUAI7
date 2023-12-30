@@ -3,7 +3,7 @@ using System.IO;
 namespace MapGenerator;
 
 /// <summary>
-/// µØÍ¼½á¹¹Ìå
+/// åœ°å›¾ç»“æ„ä½“
 /// </summary>
 public struct MapStruct(uint height, uint width, uint[,] map)
 {
@@ -15,10 +15,10 @@ public struct MapStruct(uint height, uint width, uint[,] map)
 public static class MapReader
 {
     /// <summary>
-    /// ¶ÁÈ¡¶ş½øÖÆµØÍ¼ÎÄ¼ş
+    /// è¯»å–äºŒè¿›åˆ¶åœ°å›¾æ–‡ä»¶
     /// </summary>
-    /// <param name="mapFile">µØÍ¼ÎÄ¼şÂ·¾¶</param>
-    /// <param name="dtype">µØÍ¼ÎÄ¼ş¶ÁÈ¡ÀàĞÍ</param>
+    /// <param name="mapFile">åœ°å›¾æ–‡ä»¶è·¯å¾„</param>
+    /// <param name="dtype">åœ°å›¾æ–‡ä»¶è¯»å–ç±»å‹</param>
     /// <returns></returns>
     public static MapStruct MapRead(string mapFile, char dtype = 'B')
     {
@@ -26,7 +26,7 @@ public static class MapReader
         BinaryReader br = new(fp);
         switch (dtype)
         {
-            #region ÒÔÏÂÖ§³Ö
+            #region ä»¥ä¸‹æ”¯æŒ
 
             case 'b':
                 {
@@ -122,7 +122,7 @@ public static class MapReader
 
             #endregion
 
-            #region ÒÔÏÂÖ§³Öµ«ÎŞĞ§
+            #region ä»¥ä¸‹æ”¯æŒä½†æ— æ•ˆ
 
             case 'l':
                 {
@@ -179,7 +179,7 @@ public static class MapReader
 
             #endregion
 
-            #region ÒÔÏÂ²»Ö§³Ö
+            #region ä»¥ä¸‹ä¸æ”¯æŒ
 
             case 'q':
                 {

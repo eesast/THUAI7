@@ -107,7 +107,7 @@ namespace Client
             {
                 MyHpData.Text = player.Hp.ToString();
                 MyHpSlide.WidthRequest = player.Hp / 100.0 * lengthOfHpSlide;
-                MyMoney.Text = player.Score.ToString();
+                //MyMoney.Text = player.Score.ToString();
             }
         }
 

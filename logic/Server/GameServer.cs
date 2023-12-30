@@ -1,14 +1,13 @@
 ﻿using GameClass.GameObj;
-using GameClass.GameObj.Areas;
 using Gaming;
+using MapGenerator;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Playback;
 using Preparation.Utility;
 using Protobuf;
 using System.Collections.Concurrent;
 using Timothy.FrameRateTask;
-
+using Utility = Preparation.Utility;
 
 namespace Server
 {
@@ -18,21 +17,21 @@ namespace Server
         // private object semaDictLock = new();
         protected readonly ArgumentOptions options;
         private HttpSender? httpSender;
-        private object gameLock = new();
+        private readonly object gameLock = new();
         private MessageToClient currentGameInfo = new();
         private MessageOfObj currentMapMsg = new();
-        private object newsLock = new();
+        private readonly object newsLock = new();
         private List<MessageOfNews> currentNews = [];
         private SemaphoreSlim endGameSem = new(0);
         protected readonly Game game;
-        private uint spectatorMinPlayerID = 2023;
+        private readonly uint spectatorMinPlayerID = 2023;
         public int playerNum;
         public int TeamCount => options.TeamCount;
         protected long[][] communicationToGameID; // 通信用的ID映射到游戏内的ID，0指向队伍1，1指向队伍2，通信中0-2为民船，3-6为军用船，7为旗舰，8为大本营
         private readonly object messageToAllClientsLock = new();
         public static readonly long SendMessageToClientIntervalInMilliseconds = 50;
         private MessageWriter? mwr = null;
-        private object spetatorJoinLock = new();
+        private readonly object spectatorJoinLock = new();
 
         public void StartGame()
         {
@@ -105,6 +104,7 @@ namespace Server
                 }
             }
         }
+
         protected void SendGameResult(int[] scores, int mode)		// 天梯的 Server 给网站发消息记录比赛结果
         {
             httpSender?.SendHttpRequest(scores, mode).Wait();
@@ -118,7 +118,7 @@ namespace Server
                 SaveGameResult(options.ResultFileName.EndsWith(".json") ? options.ResultFileName : options.ResultFileName + ".json");
             int[] scores = GetScore();
             SendGameResult(scores, options.Mode);
-            this.endGameSem.Release();
+            endGameSem.Release();
         }
         public void ReportGame(GameState gameState, bool requiredGaming = true)
         {
@@ -159,14 +159,14 @@ namespace Server
                         break;
                 }
             }
-            lock (spetatorJoinLock)
+            lock (spectatorJoinLock)
             {
                 foreach (var kvp in semaDict)
                 {
                     kvp.Value.Item1.Release();
                 }
 
-                // 若此时观战者加入，则死锁，所以需要 spetatorJoinLock
+                // 若此时观战者加入，则死锁，所以需要 spectatorJoinLock
 
                 foreach (var kvp in semaDict)
                 {
@@ -174,7 +174,8 @@ namespace Server
                 }
             }
         }
-        private bool playerDeceased(int playerID)    //这里需要判断大本营deceased吗？
+
+        private bool PlayerDeceased(int playerID)    //# 这里需要判断大本营deceased吗？
         {
             game.GameMap.GameObjLockDict[GameObjType.Ship].EnterReadLock();
             try
@@ -212,6 +213,7 @@ namespace Server
             return score;
         }
 
+        //# 需要改进为非static
         private uint GetBirthPointIdx(long playerID)  // 获取出生点位置
         {
             return (uint)playerID + 1; // ID从0-8,出生点从1-9
@@ -233,38 +235,29 @@ namespace Server
 
         private MessageOfAll GetMessageOfAll(int time)
         {
-            MessageOfAll msg = new();
-            msg.GameTime = time;
+            MessageOfAll msg = new()
+            {
+                GameTime = time
+            };
             int[] score = GetScore();
-            msg.RedteamScore = score[0];
-            msg.BlueteamScore = score[1];
+            msg.RedTeamScore = score[0];
+            msg.BlueTeamScore = score[1];
             return msg;
         }
 
-        private static Protobuf.PlaceType IntToPlaceType(uint n) => n switch
+        private MessageOfMap MapMsg()
         {
-            0 => Protobuf.PlaceType.Space,
-            1 => Protobuf.PlaceType.Ruin,
-            2 => Protobuf.PlaceType.Shadow,
-            3 => Protobuf.PlaceType.Asteroid,
-            4 => Protobuf.PlaceType.Resource,
-            5 => Protobuf.PlaceType.Construction,
-            6 => Protobuf.PlaceType.Wormhole,
-            7 => Protobuf.PlaceType.HomePlace,
-            _ => Protobuf.PlaceType.NullPlaceType,
-        };
-        private MessageOfObj MapMsg(uint[,] map)
-        {
-            MessageOfObj msgOfMap = new()
+            MessageOfMap msgOfMap = new()
             {
-                MapMessage = new()
+                Height = game.GameMap.Height,
+                Width = game.GameMap.Width
             };
-            for (int i = 0; i < GameData.MapRows; i++)
+            for (int i = 0; i < game.GameMap.Height; i++)
             {
-                msgOfMap.MapMessage.Row.Add(new MessageOfMap.Types.Row());
-                for (int j = 0; j < GameData.MapCols; j++)
+                msgOfMap.Rows.Add(new MessageOfMap.Types.Row());
+                for (int j = 0; j < game.GameMap.Width; j++)
                 {
-                    msgOfMap.MapMessage.Row[i].Col.Add(IntToPlaceType(map[i, j]));
+                    msgOfMap.Rows[i].Cols.Add(Transformation.PlaceTypeToProto((Utility.PlaceType)game.GameMap.ProtoGameMap[i, j]));
                 }
             }
             return msgOfMap;
@@ -274,7 +267,7 @@ namespace Server
         {
             this.options = options;
             if (options.mapResource == DefaultArgumentOptions.MapResource)
-                this.game = new Game(MapInfo.defaultMap, options.TeamCount);
+                game = new(MapInfo.defaultMapStruct, options.TeamCount);
             else
             {
                 uint[,] map = new uint[GameData.MapRows, GameData.MapCols];
@@ -298,7 +291,7 @@ namespace Server
                                     else
                                     {
                                         //2022-04-22 by LHR 十六进制编码地图方案（防止地图编辑员瞎眼x
-                                        map[i, j] = (uint)Preparation.Utility.MapEncoder.Hex2Dec(char.Parse(item));
+                                        map[i, j] = (uint)MapEncoder.Hex2Dec(char.Parse(item));
                                     }
                                     j++;
                                     if (j >= GameData.MapCols)
@@ -316,9 +309,18 @@ namespace Server
                 {
                     map = MapInfo.defaultMap;
                 }
-                finally { this.game = new Game(map, options.TeamCount); }
+                finally
+                {
+                    MapStruct mapResource = new()
+                    {
+                        height = GameData.MapRows,
+                        width = GameData.MapCols,
+                        map = map
+                    };
+                    game = new(mapResource, options.TeamCount);
+                }
             }
-            currentMapMsg = MapMsg(game.GameMap.ProtoGameMap);
+            currentMapMsg = new() { MapMessage = MapMsg() };
             playerNum = options.ShipCount + options.HomeCount;
             communicationToGameID = new long[TeamCount][];
             for (int i = 0; i < TeamCount; i++)
