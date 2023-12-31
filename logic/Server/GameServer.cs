@@ -325,12 +325,12 @@ namespace Server
             communicationToGameID = new long[TeamCount][];
             for (int i = 0; i < TeamCount; i++)
             {
-                communicationToGameID[i] = new long[options.ShipCount + options.HomeCount];
+                communicationToGameID[i] = new long[options.MaxShipCount + options.HomeCount];
             }
             //创建server时先设定待加入对象都是invalid
             for (int team = 0; team < TeamCount; team++)
             {
-                for (int i = 0; i < options.ShipCount; i++)
+                for (int i = 0; i < options.MaxShipCount; i++)
                 {
                     communicationToGameID[team][i] = GameObj.invalidID;
                 }
