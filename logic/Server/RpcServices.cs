@@ -296,7 +296,7 @@ namespace Server
 
         }
 
-        public override Task<BoolRes> Recover(IDMsg request, ServerCallContext context)
+        public override Task<BoolRes> Recover(RecoverMsg request, ServerCallContext context)
         {
 #if DEBUG
             Console.WriteLine($"Recover ID: {request.PlayerId}");
@@ -308,7 +308,7 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Repair(gameID);
+            boolRes.ActSuccess = game.Recover(gameID, request.Recover);
             return Task.FromResult(boolRes);
         }
 
