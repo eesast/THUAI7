@@ -192,10 +192,6 @@ namespace Gaming
                 { IsBackground = true }.Start();
                 return false;
             }
-            public bool Recycle(Ship ship)
-            {
-                return false;
-            }
             public bool Repair(Ship ship)
             {
                 Wormhole? wormhole = (Wormhole?)gameMap.OneForInteract(ship.Position, GameObjType.Wormhole);

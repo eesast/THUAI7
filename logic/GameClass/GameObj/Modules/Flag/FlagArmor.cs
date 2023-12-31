@@ -5,22 +5,16 @@ namespace GameClass.GameObj.Modules;
 
 public class FlagArmor1 : IArmor
 {
-    private const int cost = GameData.FlagShipArmor1Cost;
-    public int Cost => cost;
-    private const int armorHP = GameData.Armor1;
-    public int ArmorHP => armorHP;
+    public int Cost => GameData.FlagShipArmor1Cost;
+    public int ArmorHP => GameData.Armor1;
 }
 public class FlagArmor2 : IArmor
 {
-    private const int cost = GameData.FlagShipArmor2Cost;
-    public int Cost => cost;
-    private const int armorHP = GameData.Armor2;
-    public int ArmorHP => armorHP;
+    public int Cost => GameData.FlagShipArmor2Cost;
+    public int ArmorHP => GameData.Armor2;
 }
 public class FlagArmor3 : IArmor
 {
-    private const int cost = GameData.FlagShipArmor3Cost;
-    public int Cost => cost;
-    private const int armorHP = GameData.Armor3;
-    public int ArmorHP => armorHP;
+    public int Cost => GameData.FlagShipArmor3Cost;
+    public int ArmorHP => GameData.Armor3;
 }

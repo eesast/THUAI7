@@ -12,8 +12,12 @@ public class Resource : Immovable
     public AtomicInt ProduceNum { get; } = new AtomicInt(0);
     public bool Produce(int produceSpeed, Ship ship)
     {
-        // TODO: Add Money
-        return HP.SubV(produceSpeed) > 0;
+        if (HP.SubV(produceSpeed) > 0)
+        {
+            ship.MoneyPool.AddMoney(produceSpeed);
+            return true;
+        }
+        return false;
     }
     public void AddProduceNum(int add = 1)
     {
