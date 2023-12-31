@@ -1,5 +1,4 @@
 ﻿using COSXML.CosException;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -26,11 +25,12 @@ namespace installer.Model
         }
         public string ProgramName = "THUAI7";                     // 要运行或下载的程序名称
         public string StartName = "maintest.exe";          // 启动的程序名
-        private Local_Data Data;
-        private Tencent_Cos Cloud;
+        public Local_Data Data;
+        public Tencent_Cos Cloud;
 
-        private HttpClient Client = new HttpClient();
-        private EEsast Web = new EEsast();
+        public HttpClient Client = new HttpClient();
+        public EEsast Web = new EEsast();
+        protected Logger Log = LoggerProvider.FromConsole();
 
         public enum UpdateStatus
         {
@@ -43,11 +43,6 @@ namespace installer.Model
         {
             get { return downloadFailed.ToList(); }
         }
-        public bool UpdatePlanned
-        {
-            get; set;
-        }
-
         public void ResetDownloadFailedInfo()
         {
             downloadFailed.Clear();
@@ -167,7 +162,9 @@ namespace installer.Model
             if (CheckUpdate())
             {
                 Status = UpdateStatus.downloading;
-                Cloud.DownloadQueueAsync(Data.InstallPath, new ConcurrentQueue<string>(Data.MD5Update), downloadFailed).Wait();
+                Cloud.DownloadQueueAsync(Data.InstallPath,
+                    from item in Data.MD5Update select item.name,
+                    downloadFailed).Wait();
                 if (downloadFailed.Count == 0)
                 {
                     Data.MD5Update.Clear();
@@ -188,8 +185,10 @@ namespace installer.Model
             Status = UpdateStatus.error;
         }
 
-        public async Task Login()
+        public async Task Login(string username = "", string password = "")
         {
+            Username = username.Length > 0 ? username : Username;
+            Password = password.Length > 0 ? password : Password;
             await Web.LoginToEEsast(Client, Username, Password);
         }
 
