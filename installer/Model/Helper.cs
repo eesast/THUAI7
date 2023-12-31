@@ -4,25 +4,11 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace installer.Model
 {
     internal static class Helper
     {
-        public static T DeserializeJson1<T>(string json)
-            where T : notnull
-        {
-            return JsonConvert.DeserializeObject<T>(json)
-                ?? throw new Exception("Failed to deserialize json.");
-        }
-
-        public static T? TryDeserializeJson<T>(string json)
-            where T : notnull
-        {
-            return JsonConvert.DeserializeObject<T>(json);
-        }
-
         public static string GetFileMd5Hash(string strFileFullPath)
         {
             FileStream? fst = null;
@@ -56,7 +42,7 @@ namespace installer.Model
 
         public static string ConvertAbsToRel(string basePath, string fullPath)
         {
-            fullPath = fullPath.Replace('\\', '/');
+            fullPath = fullPath.Replace(Path.DirectorySeparatorChar, '/');
             if (fullPath.StartsWith(basePath))
             {
                 fullPath = fullPath.Replace(basePath, ".");
