@@ -28,7 +28,6 @@ namespace Gaming
             {
                 return GameObj.invalidID;
             }
-            // 由于BirthPoint实质上是可变且每支队伍不同的，所以暂时把它放到Team里？
             XY pos = shipInitInfo.birthPoint;
             bool validBirthPoint = false;
             foreach (XY birthPoint in teamList[(int)shipInitInfo.teamID].BirthPointList)
@@ -48,12 +47,27 @@ namespace Gaming
             {
                 return GameObj.invalidID;
             }
-            Ship? newShip = shipManager.AddShip(pos, shipInitInfo.teamID, shipInitInfo.playerID, shipInitInfo.shipType);
+            Ship? newShip = shipManager.AddShip(pos, shipInitInfo.teamID, shipInitInfo.playerID,
+                shipInitInfo.shipType, teamList[(int)shipInitInfo.teamID].MoneyPool);
             if (newShip == null)
             {
                 return GameObj.invalidID;
             }
             teamList[(int)shipInitInfo.teamID].AddShip(newShip);
+            long subMoney = 0;
+            switch (newShip.ShipType)
+            {
+                case ShipType.CivilShip:
+                    subMoney = GameData.CivilShipCost;
+                    break;
+                case ShipType.WarShip:
+                    subMoney = GameData.WarShipCost;
+                    break;
+                case ShipType.FlagShip:
+                    subMoney = GameData.FlagShipCost;
+                    break;
+            }
+            teamList[(int)shipInitInfo.teamID].SubMoney(subMoney);
             return newShip.ShipID;
         }
         public bool StartGame(int milliSeconds)
@@ -118,13 +132,36 @@ namespace Gaming
                 return moduleManager.InstallModule(ship, moduleType);
             return false;
         }
+        public bool Recover(long shipID, long recover)
+        {
+            if (!gameMap.Timer.IsGaming)
+                return false;
+            Ship? ship = gameMap.FindShipInShipID(shipID);
+            if (ship != null)
+            {
+                bool validRecoverPoint = false;
+                foreach (XY recoverPoint in teamList[(int)ship.TeamID].BirthPointList)
+                {
+                    if (GameData.ApproachToInteract(ship.Position, recoverPoint) && ship.Position != recoverPoint)
+                    {
+                        validRecoverPoint = true;
+                        break;
+                    }
+                }
+                if (validRecoverPoint)
+                {
+                    return shipManager.Recover(ship, recover);
+                }
+            }
+            return false;
+        }
         public bool Recycle(long shipID)
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInShipID(shipID);
             if (ship != null)
-                return actionManager.Recycle(ship);
+                return shipManager.Recycle(ship);
             return false;
         }
         public bool Repair(long shipID)
@@ -183,13 +220,13 @@ namespace Gaming
         {
             if (!gameMap.TeamExists(teamID))
                 return -1;
-            return teamList[(int)teamID].Money;
+            return teamList[(int)teamID].MoneyPool.Money;
         }
         public long GetTeamScore(long teamID)
         {
             if (!gameMap.TeamExists(teamID))
                 return -1;
-            return teamList[(int)teamID].Score;
+            return teamList[(int)teamID].MoneyPool.Score;
         }
         public List<IGameObj> GetGameObj()
         {
@@ -263,6 +300,7 @@ namespace Gaming
                 {
                     teamList.Add(new Team((Home)gameObj));
                     teamList.Last().BirthPointList.Add(gameObj.Position);
+                    teamList.Last().AddMoney(GameData.InitialMoney);
                 }
                 if (teamList.Count == numOfTeam)
                 {

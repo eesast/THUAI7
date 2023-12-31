@@ -1,4 +1,4 @@
-﻿using GameClass.GameObj;
+using GameClass.GameObj;
 using Gaming;
 using Grpc.Core;
 using Preparation.Utility;
@@ -244,7 +244,7 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Repair(gameID);
+            boolRes.ActSuccess = game.Recover(gameID, request.Recover);
 #if DEBUG
             Console.WriteLine("END Recover");
 #endif

@@ -13,7 +13,7 @@ service AvailableService
     // 游戏过程中玩家执行操作的服务
     // 船
     rpc Move(MoveMsg) returns (MoveRes);            // 移动
-    rpc Recover(IDMsg) returns (BoolRes);           // 回复
+    rpc Recover(RecoverMsg) returns (BoolRes);      // 回复
     rpc Produce(IDMsg) returns (BoolRes);           // 开采
     rpc Rebuild(ConstructMsg) returns (BoolRes);    // 给建筑回血
     rpc Construct(ConstructMsg) returns (BoolRes);  // 修建建筑

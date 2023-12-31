@@ -30,6 +30,7 @@ public class Ship : Movable, IShip
     private ShipStateType shipState = ShipStateType.Null;
     public ShipStateType ShipState => shipState;
     public IOccupation Occupation { get; }
+    public MoneyPool MoneyPool { get; }
     /// <summary>
     /// 子弹数上限, THUAI7为无穷
     /// </summary>
@@ -97,7 +98,8 @@ public class Ship : Movable, IShip
         lock (actionLock)
         {
             if (moduleType == ModuleType.Null) return false;
-            if (!this.Occupation.IsModuleValid(moduleType)) return false;
+            if (!Occupation.IsModuleValid(moduleType)) return false;
+            if (MoneyPool.Money < ModuleFactory.FindModuleCost(ShipType, moduleType)) return false;
             switch (moduleType)
             {
                 case ModuleType.Producer1:
@@ -105,6 +107,7 @@ public class Ship : Movable, IShip
                     {
                         producerType = ProducerType.Producer1;
                         producer = ModuleFactory.FindIProducer(ShipType, producerType);
+                        SubMoney(producer.Cost);
                         return true;
                     }
                     break;
@@ -113,6 +116,7 @@ public class Ship : Movable, IShip
                     {
                         producerType = ProducerType.Producer2;
                         producer = ModuleFactory.FindIProducer(ShipType, producerType);
+                        SubMoney(producer.Cost);
                         return true;
                     }
                     break;
@@ -121,6 +125,7 @@ public class Ship : Movable, IShip
                     {
                         producerType = ProducerType.Producer3;
                         producer = ModuleFactory.FindIProducer(ShipType, producerType);
+                        SubMoney(producer.Cost);
                         return true;
                     }
                     break;
@@ -129,6 +134,7 @@ public class Ship : Movable, IShip
                     {
                         constructorType = ConstructorType.Constructor1;
                         constructor = ModuleFactory.FindIConstructor(ShipType, constructorType);
+                        SubMoney(constructor.Cost);
                         return true;
                     }
                     break;
@@ -137,6 +143,7 @@ public class Ship : Movable, IShip
                     {
                         constructorType = ConstructorType.Constructor2;
                         constructor = ModuleFactory.FindIConstructor(ShipType, constructorType);
+                        SubMoney(constructor.Cost);
                         return true;
                     }
                     break;
@@ -145,44 +152,52 @@ public class Ship : Movable, IShip
                     {
                         constructorType = ConstructorType.Constructor3;
                         constructor = ModuleFactory.FindIConstructor(ShipType, constructorType);
+                        SubMoney(constructor.Cost);
                         return true;
                     }
                     break;
                 case ModuleType.Armor1:
                     armorType = ArmorType.Armor1;
                     armor = ModuleFactory.FindIArmor(ShipType, armorType);
-                    this.Armor.SetV(armor.ArmorHP);
+                    Armor.SetV(armor.ArmorHP);
+                    SubMoney(armor.Cost);
                     return true;
                 case ModuleType.Armor2:
                     armorType = ArmorType.Armor2;
                     armor = ModuleFactory.FindIArmor(ShipType, armorType);
-                    this.Armor.SetV(armor.ArmorHP);
+                    Armor.SetV(armor.ArmorHP);
+                    SubMoney(armor.Cost);
                     return true;
                 case ModuleType.Armor3:
                     armorType = ArmorType.Armor3;
                     armor = ModuleFactory.FindIArmor(ShipType, armorType);
-                    this.Armor.SetV(armor.ArmorHP);
+                    Armor.SetV(armor.ArmorHP);
+                    SubMoney(armor.Cost);
                     return true;
                 case ModuleType.Shield1:
                     shieldType = ShieldType.Shield1;
                     shield = ModuleFactory.FindIShield(ShipType, shieldType);
-                    this.Shield.SetV(shield.ShieldHP);
+                    Shield.SetV(shield.ShieldHP);
+                    SubMoney(shield.Cost);
                     return true;
                 case ModuleType.Shield2:
                     shieldType = ShieldType.Shield2;
                     shield = ModuleFactory.FindIShield(ShipType, shieldType);
-                    this.Shield.SetV(shield.ShieldHP);
+                    Shield.SetV(shield.ShieldHP);
+                    SubMoney(shield.Cost);
                     return true;
                 case ModuleType.Shield3:
                     shieldType = ShieldType.Shield3;
                     shield = ModuleFactory.FindIShield(ShipType, shieldType);
-                    this.Shield.SetV(shield.ShieldHP);
+                    Shield.SetV(shield.ShieldHP);
+                    SubMoney(shield.Cost);
                     return true;
                 case ModuleType.LaserGun:
                     if (weaponType != WeaponType.LaserGun)
                     {
                         weaponType = WeaponType.LaserGun;
                         weapon = ModuleFactory.FindIWeapon(ShipType, weaponType);
+                        SubMoney(weapon.Cost);
                         return true;
                     }
                     break;
@@ -191,6 +206,7 @@ public class Ship : Movable, IShip
                     {
                         weaponType = WeaponType.PlasmaGun;
                         weapon = ModuleFactory.FindIWeapon(ShipType, weaponType);
+                        SubMoney(weapon.Cost);
                         return true;
                     }
                     break;
@@ -199,6 +215,7 @@ public class Ship : Movable, IShip
                     {
                         weaponType = WeaponType.ShellGun;
                         weapon = ModuleFactory.FindIWeapon(ShipType, weaponType);
+                        SubMoney(weapon.Cost);
                         return true;
                     }
                     break;
@@ -207,6 +224,7 @@ public class Ship : Movable, IShip
                     {
                         weaponType = WeaponType.MissileGun;
                         weapon = ModuleFactory.FindIWeapon(ShipType, weaponType);
+                        SubMoney(weapon.Cost);
                         return true;
                     }
                     break;
@@ -215,6 +233,7 @@ public class Ship : Movable, IShip
                     {
                         weaponType = WeaponType.ArcGun;
                         weapon = ModuleFactory.FindIWeapon(ShipType, weaponType);
+                        SubMoney(weapon.Cost);
                         return true;
                     }
                     break;
@@ -237,6 +256,15 @@ public class Ship : Movable, IShip
                 return whatInteractingWith;
             }
         }
+    }
+    public void AddMoney(long add)
+    {
+        MoneyPool.Money.Add(add);
+        MoneyPool.Score.Add(add);
+    }
+    public void SubMoney(long sub)
+    {
+        MoneyPool.Money.Sub(sub);
     }
     private long ChangeShipState(RunningStateType running, ShipStateType value = ShipStateType.Null, GameObj? gameObj = null)
     {
@@ -354,7 +382,7 @@ public class Ship : Movable, IShip
                 && shipState != ShipStateType.Attacking);
         }
     }
-    public Ship(XY initPos, int initRadius, ShipType shipType) :
+    public Ship(XY initPos, int initRadius, ShipType shipType, MoneyPool moneyPool) :
         base(initPos, initRadius, GameObjType.Ship)
     {
         this.CanMove.SetReturnOri(true);
@@ -364,6 +392,7 @@ public class Ship : Movable, IShip
         this.Armor = new(this.Occupation.BaseArmor);
         this.Shield = new(this.Occupation.BaseShield);
         this.MoveSpeed.SetReturnOri(this.orgMoveSpeed = Occupation.MoveSpeed);
+        this.MoneyPool = moneyPool;
         (this.producerType, this.constructorType, this.armorType, this.shieldType, this.weaponType) = this.ShipType switch
         {
             ShipType.CivilShip => (
