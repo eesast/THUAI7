@@ -1,4 +1,4 @@
-﻿using GameClass.GameObj;
+using GameClass.GameObj;
 using Gaming;
 using Grpc.Core;
 using Preparation.Utility;
@@ -27,9 +27,8 @@ namespace Server
         }
         public override Task<BoolRes> TryConnection(IDMsg request, ServerCallContext context)
         {
-
 #if DEBUG
-            Console.WriteLine($"TryConnection ID: {request.PlayerId} from Team {request.TeamId}");
+            Console.WriteLine($"TRY TryConnection: Player {request.PlayerId} from Team {request.TeamId}");
 #endif 
             var onConnection = new BoolRes();
             lock (gameLock)
@@ -42,16 +41,25 @@ namespace Server
                 }
             }
             onConnection.ActSuccess = false;
+#if DEBUG
+            Console.WriteLine("END TryConnection");
+#endif 
             return Task.FromResult(onConnection);
         }
+
+        #region 游戏开局调用一次的服务
 
         protected readonly object addPlayerLock = new();
         public override async Task AddPlayer(PlayerMsg request, IServerStreamWriter<MessageToClient> responseStream, ServerCallContext context)
         {
-
-            Console.WriteLine($"AddPlayer: {request.PlayerId} from Team{request.TeamId}");
+#if !DEBUG
+            Console.WriteLine($"AddPlayer: Player {request.PlayerId} from Team {request.TeamId}");
+#endif
             if (request.PlayerId >= spectatorMinPlayerID && options.NotAllowSpectator == false)
             {
+#if DEBUG
+                Console.WriteLine($"TRY Add Spectator: Player {request.PlayerId}");
+#endif
                 // 观战模式
                 lock (spectatorJoinLock) // 具体原因见另一个上锁的地方
                 {
@@ -91,9 +99,9 @@ namespace Server
                             return;
                         }
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        // Console.WriteLine(ex);
+                        Console.WriteLine(ex);
                     }
                     finally
                     {
@@ -104,9 +112,14 @@ namespace Server
                         catch { }
                     }
                 } while (game.GameMap.Timer.IsGaming);
+#if DEBUG
+                Console.WriteLine("END Add Spectator");
+#endif
                 return;
             }
-
+#if DEBUG
+            Console.WriteLine($"TRY Add Player: Player {request.PlayerId} from Team {request.TeamId}");
+#endif
             if (game.GameMap.Timer.IsGaming)
                 return;
             if (!ValidPlayerID(request.PlayerId))  //玩家id是否正确
@@ -115,15 +128,21 @@ namespace Server
                 return;
             if (communicationToGameID[request.TeamId][request.PlayerId] != GameObj.invalidID)  //是否已经添加了该玩家
                 return;
-
-
+#if DEBUG
+            Console.WriteLine("Check Correct");
+#endif
             lock (addPlayerLock)
             {
                 XY birthPoint = new(request.X, request.Y);
                 Game.ShipInitInfo playerInitInfo = new(request.TeamId, request.PlayerId, birthPoint, Transformation.ShipTypeFromProto(request.ShipType));
                 long newPlayerID = game.AddShip(playerInitInfo);
                 if (newPlayerID == GameObj.invalidID)
+                {
+#if DEBUG
+                    Console.WriteLine("Fail Add Ship");
+#endif
                     return;
+                }
                 communicationToGameID[request.TeamId][request.PlayerId] = newPlayerID;
                 var temp = (new SemaphoreSlim(0, 1), new SemaphoreSlim(0, 1));
                 bool start = false;
@@ -135,7 +154,13 @@ namespace Server
                         start = Interlocked.Increment(ref playerCountNow) == playerNum;
                     }
                 }
-                if (start) StartGame();
+                if (start)
+                {
+#if DEBUG
+                    Console.WriteLine("Game Start");
+#endif
+                    StartGame();
+                }
             }
 
             bool exitFlag = false;
@@ -163,42 +188,30 @@ namespace Server
                     semaDict[request.PlayerId].Item2.Release();
                 }
             } while (game.GameMap.Timer.IsGaming);
+#if DEBUG
+            Console.WriteLine("END Add Player");
+#endif
         }
 
         public override Task<MessageOfMap> GetMap(NullRequest request, ServerCallContext context)
         {
 #if DEBUG
-            Console.WriteLine($"GetMap IP: {context.Peer}");
-#endif 
+            Console.WriteLine($"GetMap: IP {context.Peer}");
+#endif
             return Task.FromResult(MapMsg());
         }
 
-        public override Task<BoolRes> Attack(AttackMsg request, ServerCallContext context)
-        {
-#if DEBUG
-            Console.WriteLine($"Attack ID: {request.PlayerId}");
-#endif 
-            BoolRes boolRes = new();
-            if (request.PlayerId >= spectatorMinPlayerID)
-            {
-                boolRes.ActSuccess = false;
-                return Task.FromResult(boolRes);
-            }
-            if (double.IsNaN(request.Angle))
-            {
-                boolRes.ActSuccess = false;
-                return Task.FromResult(boolRes);
-            }
-            var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Attack(gameID, request.Angle);
-            return Task.FromResult(boolRes);
-        }
+        #endregion
+
+        #region 游戏过程中玩家执行操作的服务
+
+        #region 船
 
         public override Task<MoveRes> Move(MoveMsg request, ServerCallContext context)
         {
 #if DEBUG
-            Console.WriteLine($"Move ID: {request.PlayerId}, TimeInMilliseconds: {request.TimeInMilliseconds}");
-#endif            
+            Console.WriteLine($"TRY Move: Player {request.PlayerId} from Team {request.TeamId}, TimeInMilliseconds: {request.TimeInMilliseconds}");
+#endif
             MoveRes moveRes = new();
             if (request.PlayerId >= spectatorMinPlayerID)
             {
@@ -213,11 +226,117 @@ namespace Server
             var gameID = communicationToGameID[request.TeamId][request.PlayerId];
             moveRes.ActSuccess = game.MoveShip(gameID, (int)request.TimeInMilliseconds, request.Angle);
             if (!game.GameMap.Timer.IsGaming) moveRes.ActSuccess = false;
+#if DEBUG
+            Console.WriteLine("END Move");
+#endif
             return Task.FromResult(moveRes);
+        }
+
+        public override Task<BoolRes> Recover(RecoverMsg request, ServerCallContext context)
+        {
+#if DEBUG
+            Console.WriteLine($"TRY Recover: Player {request.PlayerId} from Team {request.TeamId}");
+#endif
+            BoolRes boolRes = new();
+            if (request.PlayerId >= spectatorMinPlayerID)
+            {
+                boolRes.ActSuccess = false;
+                return Task.FromResult(boolRes);
+            }
+            var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            boolRes.ActSuccess = game.Recover(gameID, request.Recover);
+#if DEBUG
+            Console.WriteLine("END Recover");
+#endif
+            return Task.FromResult(boolRes);
+        }
+
+        public override Task<BoolRes> Produce(IDMsg request, ServerCallContext context)
+        {
+#if DEBUG
+            Console.WriteLine($"TRY Produce: Player {request.PlayerId} from Team {request.TeamId}");
+#endif
+            BoolRes boolRes = new();
+            if (request.PlayerId >= spectatorMinPlayerID)
+            {
+                boolRes.ActSuccess = false;
+                return Task.FromResult(boolRes);
+            }
+            var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            boolRes.ActSuccess = game.Produce(gameID);
+#if DEBUG
+            Console.WriteLine("END Produce");
+#endif
+            return Task.FromResult(boolRes);
+        }
+
+        public override Task<BoolRes> Rebuild(ConstructMsg request, ServerCallContext context)
+        {
+#if DEBUG
+            Console.WriteLine($"TRY Rebuild: Player {request.PlayerId} from Team {request.TeamId}");
+#endif
+            BoolRes boolRes = new();
+            if (request.PlayerId >= spectatorMinPlayerID)
+            {
+                boolRes.ActSuccess = false;
+                return Task.FromResult(boolRes);
+            }
+            var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            boolRes.ActSuccess = game.Construct(gameID, Transformation.ConstructionFromProto(request.ConstructionType));
+#if DEBUG
+            Console.WriteLine("END Rebuild");
+#endif
+            return Task.FromResult(boolRes);
+        }
+
+        public override Task<BoolRes> Construct(ConstructMsg request, ServerCallContext context)
+        {
+#if DEBUG
+            Console.WriteLine($"TRY Construct: Player {request.PlayerId} from Team {request.TeamId}");
+#endif
+            BoolRes boolRes = new();
+            if (request.PlayerId >= spectatorMinPlayerID)
+            {
+                boolRes.ActSuccess = false;
+                return Task.FromResult(boolRes);
+            }
+            var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            boolRes.ActSuccess = game.Construct(gameID, Transformation.ConstructionFromProto(request.ConstructionType));
+#if DEBUG
+            Console.WriteLine("END Construct");
+#endif
+            return Task.FromResult(boolRes);
+        }
+
+        public override Task<BoolRes> Attack(AttackMsg request, ServerCallContext context)
+        {
+#if DEBUG
+            Console.WriteLine($"TRY Attack: Player {request.PlayerId} from Team {request.TeamId}");
+#endif
+            BoolRes boolRes = new();
+            if (request.PlayerId >= spectatorMinPlayerID)
+            {
+                boolRes.ActSuccess = false;
+                return Task.FromResult(boolRes);
+            }
+            if (double.IsNaN(request.Angle))
+            {
+                boolRes.ActSuccess = false;
+                return Task.FromResult(boolRes);
+            }
+            var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            boolRes.ActSuccess = game.Attack(gameID, request.Angle);
+#if DEBUG
+            Console.WriteLine("END Attack");
+#endif
+            return Task.FromResult(boolRes);
         }
 
         public override Task<BoolRes> Send(SendMsg request, ServerCallContext context)
         {
+#if DEBUG
+            Console.WriteLine($"TRY Send: From Player {request.PlayerId} To Player {request.ToPlayerId} from Team {request.TeamId}");
+#endif
             var boolRes = new BoolRes();
             if (request.PlayerId >= spectatorMinPlayerID || PlayerDeceased((int)request.PlayerId))
             {
@@ -229,7 +348,9 @@ namespace Server
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
             }
-
+#if DEBUG
+            Console.WriteLine($"As {request.MessageCase}");
+#endif
             switch (request.MessageCase)
             {
                 case SendMsg.MessageOneofCase.TextMessage:
@@ -256,11 +377,13 @@ namespace Server
                         Console.WriteLine(news.TextMessage);
 #endif
                         boolRes.ActSuccess = true;
+#if DEBUG
+                        Console.WriteLine($"END Send");
+#endif
                         return Task.FromResult(boolRes);
                     }
                 case SendMsg.MessageOneofCase.BinaryMessage:
                     {
-
                         if (request.BinaryMessage.Length > 256)
                         {
 #if DEBUG
@@ -284,6 +407,9 @@ namespace Server
                         Console.WriteLine(news.BinaryMessage.Length);
 #endif
                         boolRes.ActSuccess = true;
+#if DEBUG
+                        Console.WriteLine($"END Send");
+#endif
                         return Task.FromResult(boolRes);
                     }
                 default:
@@ -292,79 +418,17 @@ namespace Server
                         return Task.FromResult(boolRes);
                     }
             }
-
-
         }
 
-        public override Task<BoolRes> Recover(RecoverMsg request, ServerCallContext context)
-        {
-#if DEBUG
-            Console.WriteLine($"Recover ID: {request.PlayerId}");
-#endif 
-            BoolRes boolRes = new();
-            if (request.PlayerId >= spectatorMinPlayerID)
-            {
-                boolRes.ActSuccess = false;
-                return Task.FromResult(boolRes);
-            }
-            var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Recover(gameID, request.Recover);
-            return Task.FromResult(boolRes);
-        }
+        #endregion
 
-        public override Task<BoolRes> Produce(IDMsg request, ServerCallContext context)
-        {
-#if DEBUG
-            Console.WriteLine($"Produce ID: {request.PlayerId}");
-#endif 
-            BoolRes boolRes = new();
-            if (request.PlayerId >= spectatorMinPlayerID)
-            {
-                boolRes.ActSuccess = false;
-                return Task.FromResult(boolRes);
-            }
-            var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Produce(gameID);
-            return Task.FromResult(boolRes);
-        }
-
-        public override Task<BoolRes> Rebuild(ConstructMsg request, ServerCallContext context)
-        {
-#if DEBUG
-            Console.WriteLine($"Rebuild ID: {request.PlayerId}");
-#endif 
-            BoolRes boolRes = new();
-            if (request.PlayerId >= spectatorMinPlayerID)
-            {
-                boolRes.ActSuccess = false;
-                return Task.FromResult(boolRes);
-            }
-            var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Construct(gameID, Transformation.ConstructionFromProto(request.ConstructionType));
-            return Task.FromResult(boolRes);
-        }
-
-        public override Task<BoolRes> Recycle(IDMsg request, ServerCallContext context)
-        {
-#if DEBUG
-            Console.WriteLine($"Recycle ID: {request.PlayerId}");
-#endif 
-            BoolRes boolRes = new();
-            if (request.PlayerId >= spectatorMinPlayerID)
-            {
-                boolRes.ActSuccess = false;
-                return Task.FromResult(boolRes);
-            }
-            var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Recycle(gameID);
-            return Task.FromResult(boolRes);
-        }
+        #region 大本营
 
         public override Task<BoolRes> InstallModule(InstallMsg request, ServerCallContext context)
         {
 #if DEBUG
-            Console.WriteLine($"InstallModule ID: {request.PlayerId}");
-#endif 
+            Console.WriteLine($"TRY InstallModule: Player {request.PlayerId} from Team {request.TeamId}");
+#endif
             BoolRes boolRes = new();
             if (request.PlayerId >= spectatorMinPlayerID)
             {
@@ -373,14 +437,17 @@ namespace Server
             }
             var gameID = communicationToGameID[request.TeamId][request.PlayerId];
             boolRes.ActSuccess = game.InstallModule(gameID, Transformation.ModuleFromProto(request.ModuleType));
+#if DEBUG
+            Console.WriteLine("END InstallModule");
+#endif
             return Task.FromResult(boolRes);
         }
 
-        public override Task<BoolRes> Construct(ConstructMsg request, ServerCallContext context)
+        public override Task<BoolRes> Recycle(IDMsg request, ServerCallContext context)
         {
 #if DEBUG
-            Console.WriteLine($"Construct ID: {request.PlayerId}");
-#endif 
+            Console.WriteLine($"TRY Recycle: Player {request.PlayerId} from Team {request.TeamId}");
+#endif
             BoolRes boolRes = new();
             if (request.PlayerId >= spectatorMinPlayerID)
             {
@@ -388,15 +455,18 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Construct(gameID, Transformation.ConstructionFromProto(request.ConstructionType));
+            boolRes.ActSuccess = game.Recycle(gameID);
+#if DEBUG
+            Console.WriteLine("END Recycle");
+#endif
             return Task.FromResult(boolRes);
         }
 
         public override Task<BoolRes> EndAllAction(IDMsg request, ServerCallContext context)
         {
 #if DEBUG
-            Console.WriteLine($"EndAllAction ID: {request.PlayerId}");
-#endif     
+            Console.WriteLine($"TRY EndAllAction: Player {request.PlayerId} from Team {request.TeamId}");
+#endif
             BoolRes boolRes = new();
             if (request.PlayerId >= spectatorMinPlayerID)
             {
@@ -405,10 +475,14 @@ namespace Server
             }
             var gameID = communicationToGameID[request.TeamId][request.PlayerId];
             boolRes.ActSuccess = game.Stop(gameID);
+#if DEBUG
+            Console.WriteLine("END EndAllAction");
+#endif
             return Task.FromResult(boolRes);
         }
 
+        #endregion
 
-
+        #endregion
     }
 }
