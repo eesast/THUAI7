@@ -9,6 +9,7 @@ using Google.Protobuf;
 using System.Runtime.CompilerServices;
 using Protobuf;
 using Microsoft.Maui.Controls.Shapes;
+using System.Linq.Expressions;
 
 namespace Client
 {
@@ -26,7 +27,7 @@ namespace Client
             InitializeComponent();
             SetStatusBars();
             InitiateObjects();
-            PureDrawMap();
+            //PureDrawMap();
             UIinitiated = true;
         }
 
@@ -40,13 +41,17 @@ namespace Client
         /* initiate the Lists of Objects and CountList */
         private void InitiateObjects()
         {
-            listOfAll = [];
-            listOfShip = [];
+            listOfAll = new List<MessageOfAll>();
+            listOfShip = new List<MessageOfShip>(); ;
             //listOfBuilding = [];
-            listOfBullet = [];
-            listOfResource = [];
-            listOfHome = [];
-            countMap = [];
+            listOfBullet = new List<MessageOfBullet>();
+            listOfBombedBullet = new List<MessageOfBombedBullet>();
+            listOfFactory = new List<MessageOfFactory>();
+            listOfCommunity = new List<MessageOfCommunity>();
+            listOfFort = new List<MessageOfFort>();
+            listOfResource = new List<MessageOfResource>();
+            listOfHome = new List<MessageOfHome>();
+            countMap = new Dictionary<int, int>();
         }
 
         /* Get the Map to default map */
@@ -102,25 +107,40 @@ namespace Client
                             mapPatches[i, j].Color = Colors.Brown; break; // Asteroid
                         case MapPatchType.Resource:
                             mapPatches[i, j].Color = Colors.Yellow; break; //Resource
-                        case MapPatchType.Building:
-                            mapPatches[i, j].Color = Colors.Orange; break; //Building
+                        case MapPatchType.Factory:
+                            mapPatches[i, j].Color = Colors.Orange; break; //Factiry
+                        case MapPatchType.Community:
+                            mapPatches[i, j].Color = Colors.Chocolate; break; //Community
+                        case MapPatchType.Fort:
+                            mapPatches[i, j].Color = Colors.Azure; break; //Fort
                         default:
                             break;
                     }
                     MapGrid.Children.Add(mapPatches[i, j]);
+                    MapGrid.SetColumn(mapPatches[i, j], i);
+                    MapGrid.SetRow(mapPatches[i, j], j);
                 }
             }
+            hasDrawed = true;
         }
 
         private void DrawMap()
         {
             resourceArray = new Label[countMap[(int)MapPatchType.Resource]];
             resourcePositionIndex = new (int x, int y)[countMap[(int)MapPatchType.Resource]];
-            buildingArray = new Label[countMap[(int)MapPatchType.Building]];
-            buildingPositionIndex = new (int x, int y)[countMap[(int)MapPatchType.Building]];
+            factoryArray = new Label[countMap[(int)MapPatchType.Factory]];
+            factoryPositionIndex = new (int x, int y)[countMap[(int)MapPatchType.Factory]];
+            communityArray = new Label[countMap[(int)MapPatchType.Community]];
+            communityPositionIndex = new (int x, int y)[countMap[(int)MapPatchType.Community]];
+            fortArray = new Label[countMap[(int)MapPatchType.Fort]];
+            fortPositionIndex = new (int x, int y)[countMap[(int)MapPatchType.Fort]];
+
 
             int counterOfResource = 0;
-            int counterOfBuilding = 0;
+            int counterOfFactory = 0;
+            int counterOfCommunity = 0;
+            int counterOfFort = 0;
+
 
             int[,] todrawMap;
             todrawMap = defaultMap;
@@ -167,10 +187,10 @@ namespace Client
                             counterOfResource++;
                             break;
 
-                        case MapPatchType.Building:
-                            mapPatches[i, j].Color = Colors.Orange; //Building
-                            buildingPositionIndex[counterOfBuilding] = (i, j);
-                            buildingArray[counterOfBuilding] = new Label()
+                        case MapPatchType.Factory:
+                            mapPatches[i, j].Color = Colors.Orange; //Factory
+                            factoryPositionIndex[counterOfFactory] = (i, j);
+                            factoryArray[counterOfFactory] = new Label()
                             {
                                 FontSize = unitFontSize,
                                 WidthRequest = unitWidth,
@@ -182,9 +202,44 @@ namespace Client
                                 VerticalTextAlignment = TextAlignment.Center,
                                 BackgroundColor = Colors.Transparent
                             };
-                            counterOfBuilding++;
+                            counterOfFactory++;
                             break;
 
+                        case MapPatchType.Community:
+                            mapPatches[i, j].Color = Colors.Chocolate; //Community
+                            factoryPositionIndex[counterOfCommunity] = (i, j);
+                            factoryArray[counterOfCommunity] = new Label()
+                            {
+                                FontSize = unitFontSize,
+                                WidthRequest = unitWidth,
+                                HeightRequest = unitHeight,
+                                Text = Convert.ToString(-1),
+                                HorizontalOptions = LayoutOptions.Start,
+                                VerticalOptions = LayoutOptions.Start,
+                                HorizontalTextAlignment = TextAlignment.Center,
+                                VerticalTextAlignment = TextAlignment.Center,
+                                BackgroundColor = Colors.Transparent
+                            };
+                            counterOfCommunity++;
+                            break;
+
+                        case MapPatchType.Fort:
+                            mapPatches[i, j].Color = Colors.Azure; //Fort
+                            factoryPositionIndex[counterOfFort] = (i, j);
+                            factoryArray[counterOfFort] = new Label()
+                            {
+                                FontSize = unitFontSize,
+                                WidthRequest = unitWidth,
+                                HeightRequest = unitHeight,
+                                Text = Convert.ToString(-1),
+                                HorizontalOptions = LayoutOptions.Start,
+                                VerticalOptions = LayoutOptions.Start,
+                                HorizontalTextAlignment = TextAlignment.Center,
+                                VerticalTextAlignment = TextAlignment.Center,
+                                BackgroundColor = Colors.Transparent
+                            };
+                            counterOfFort++;
+                            break;
 
                         default:
                             break;
@@ -192,7 +247,6 @@ namespace Client
                     MapGrid.Children.Add(mapPatches[i, j]);
                 }
             }
-            hasDrawed = true;
         }
 
         private async void OnReceive()
@@ -231,6 +285,22 @@ namespace Client
                                             listOfBullet.Add(obj.BulletMessage);
                                             break;
 
+                                        case MessageOfObj.MessageOfObjOneofCase.BombedBulletMessage:
+                                            listOfBombedBullet.Add(obj.BombedBulletMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
+                                            listOfFactory.Add(obj.FactoryMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
+                                            listOfCommunity.Add(obj.CommunityMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.FortMessage:
+                                            listOfFort.Add(obj.FortMessage);
+                                            break;
+
                                         case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
                                             listOfResource.Add(obj.ResourceMessage);
                                             break;
@@ -247,6 +317,9 @@ namespace Client
                                 listOfAll.Add(content.AllMessage);
                                 countMap.Clear();
                                 countMap.Add((int)MapPatchType.Resource, listOfResource.Count);
+                                countMap.Add((int)MapPatchType.Factory, listOfFactory.Count);
+                                countMap.Add((int)MapPatchType.Community, listOfCommunity.Count);
+                                countMap.Add((int)MapPatchType.Fort, listOfFort.Count);
                                 //countMap.Add((int)MapPatchType.Building, listOfBuilding.Count);
                                 GetMap(mapMassage);
                                 break;
@@ -259,12 +332,28 @@ namespace Client
                                             listOfShip.Add(obj.ShipMessage);
                                             break;
 
+                                        case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
+                                            listOfFactory.Add(obj.FactoryMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
+                                            listOfCommunity.Add(obj.CommunityMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.FortMessage:
+                                            listOfFort.Add(obj.FortMessage);
+                                            break;
+
                                         //case MessageOfObj.MessageOfObjOneofCase.BuildingMessage:
                                         //    listOfBuilding.Add(obj.BuildingMessage);
                                         //    break;
 
                                         case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
                                             listOfBullet.Add(obj.BulletMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.BombedBulletMessage:
+                                            listOfBombedBullet.Add(obj.BombedBulletMessage);
                                             break;
 
                                         case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
@@ -286,7 +375,9 @@ namespace Client
                                 {
                                     countMap.Clear();
                                     countMap.Add((int)MapPatchType.Resource, listOfResource.Count);
-                                    //countMap.Add((int)MapPatchType.Building, listOfBuilding.Count);
+                                    countMap.Add((int)MapPatchType.Factory, listOfFactory.Count);
+                                    countMap.Add((int)MapPatchType.Community, listOfCommunity.Count);
+                                    countMap.Add((int)MapPatchType.Fort, listOfFort.Count);
                                     GetMap(mapMassage);
                                     mapMessageExist = false;
                                 }
@@ -306,8 +397,24 @@ namespace Client
                                         //    listOfBuilding.Add(obj.BuildingMessage);
                                         //    break;
 
+                                        case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
+                                            listOfFactory.Add(obj.FactoryMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
+                                            listOfCommunity.Add(obj.CommunityMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.FortMessage:
+                                            listOfFort.Add(obj.FortMessage);
+                                            break;
+
                                         case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
                                             listOfBullet.Add(obj.BulletMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.BombedBulletMessage:
+                                            listOfBombedBullet.Add(obj.BombedBulletMessage);
                                             break;
 
                                         case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
@@ -354,17 +461,41 @@ namespace Client
             return -1;
         }
 
-        //private int FindIndexOfBuilding(MessageOfBuilding obj)
-        //{
-        //    for (int i = 0; i < listOfBuilding.Count; i++)
-        //    {
-        //        if (buildingPositionIndex[i].x == obj.X && buildingPositionIndex[i].y == obj.Y)
-        //        {
-        //            return i;
-        //        }
-        //    }
-        //    return -1;
-        //}
+        private int FindIndexOfFactory(MessageOfFactory obj)
+        {
+            for (int i = 0; i < listOfFactory.Count; i++)
+            {
+                if (factoryPositionIndex[i].x == obj.X && factoryPositionIndex[i].y == obj.Y)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        private int FindIndexOfCommunity(MessageOfCommunity obj)
+        {
+            for (int i = 0; i < listOfCommunity.Count; i++)
+            {
+                if (communityPositionIndex[i].x == obj.X && communityPositionIndex[i].y == obj.Y)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        private int FindIndexOfFort(MessageOfFort obj)
+        {
+            for (int i = 0; i < listOfFort.Count; i++)
+            {
+                if (fortPositionIndex[i].x == obj.X && fortPositionIndex[i].y == obj.Y)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
 
         private void Refresh(object sender, EventArgs e)
         {
@@ -380,17 +511,23 @@ namespace Client
                     }
                     if (!isClientStocked)
                     {
-                        if (MapGrid.Children.Count > 0)
-                        {
-                            MapGrid.Children.Clear();
-                        }
+                        /* For Debug */
+                        //if (MapGrid.Children.Count > 0)
+                        //{
+                        //    MapGrid.Children.Clear();
+                        //}
                         foreach (var data in listOfAll)
                         {
                             gameStatusBar.SetGameTimeValue(data);
                         }
-                        if (!hasDrawed && mapFlag)
+                        /* For Debug */
+                        //if (!hasDrawed && mapFlag)
+                        //{ 
+                        //    DrawMap();
+                        //}
+                        if (!hasDrawed)
                         {
-                            DrawMap();
+                            PureDrawMap();
                         }
                         foreach (var data in listOfHome)
                         {
@@ -404,14 +541,10 @@ namespace Client
                             }
                             DrawHome(data);
                         }
-                        //foreach (var data in listOfBuilding)
-                        //{
-                        //    if (data.BuildingType == BuildingType.Wormhole)
-                        //    {
-                        //        gameStatusBar.SetWormHoleValue(data);
-                        //    }
-                        //    DrawBuilding(data);
-                        //}
+                        foreach (var data in listOfBombedBullet)
+                        {
+                            DrawBombedBullet(data);
+                        }
                         foreach (var data in listOfBullet)
                         {
                             DrawBullet(data);
@@ -457,34 +590,47 @@ namespace Client
             MapGrid.Children.Add(iconOfHome);
         }
 
-        // private void DrawBuilding(MessageOfBuilding data)
-        // {
-        //     int hp = data.Hp;
-        //     //TODO: calculate the percentage of Hp
-        //     int idx = FindIndexOfBuilding(data);
-        //     buildingArray[idx].FontSize = unitFontSize;
-        //     buildingArray[idx].WidthRequest = unitWidth;
-        //     buildingArray[idx].HeightRequest = unitHeight;
-        //     buildingArray[idx].Text = Convert.ToString(hp);
-        //     buildingArray[idx].Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0);
-        //     switch (data.BuildingType)
-        //     {
-        //         case BuildingType.Factory:
-        //             buildingArray[idx].BackgroundColor = Colors.Chocolate;
-        //             break;
-        //         case BuildingType.Community:
-        //             buildingArray[idx].BackgroundColor = Colors.Green;
-        //             break;
-        //         case BuildingType.Fortress:
-        //             buildingArray[idx].BackgroundColor = Colors.Azure;
-        //             break;
-        //         case BuildingType.Wormhole:
-        //             buildingArray[idx].BackgroundColor = Colors.Purple;
-        //             break;
-        //     }
-        //     MapGrid.Children.Add(buildingArray[idx]);
-        // }
+        private void DrawFactory(MessageOfFactory data)
+        {
+            int hp = data.Hp;
+            //TODO: calculate the percentage of Hp
+            int idx = FindIndexOfFactory(data);
+            factoryArray[idx].FontSize = unitFontSize;
+            factoryArray[idx].WidthRequest = unitWidth;
+            factoryArray[idx].HeightRequest = unitHeight;
+            factoryArray[idx].Text = Convert.ToString(hp);
+            factoryArray[idx].Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0);
+            factoryArray[idx].BackgroundColor = Colors.Chocolate;
+            MapGrid.Children.Add(factoryArray[idx]);
+        }
 
+        private void DrawCommunity(MessageOfCommunity data)
+        {
+            int hp = data.Hp;
+            //TODO: calculate the percentage of Hp
+            int idx = FindIndexOfCommunity(data);
+            communityArray[idx].FontSize = unitFontSize;
+            communityArray[idx].WidthRequest = unitWidth;
+            communityArray[idx].HeightRequest = unitHeight;
+            communityArray[idx].Text = Convert.ToString(hp);
+            communityArray[idx].Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0);
+            communityArray[idx].BackgroundColor = Colors.Green;
+            MapGrid.Children.Add(communityArray[idx]);
+        }
+
+        private void DrawFort(MessageOfFort data)
+        {
+            int hp = data.Hp;
+            //TODO: calculate the percentage of Hp
+            int idx = FindIndexOfFort(data);
+            fortArray[idx].FontSize = unitFontSize;
+            fortArray[idx].WidthRequest = unitWidth;
+            fortArray[idx].HeightRequest = unitHeight;
+            fortArray[idx].Text = Convert.ToString(hp);
+            fortArray[idx].Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0);
+            fortArray[idx].BackgroundColor = Colors.Azure;
+            MapGrid.Children.Add(fortArray[idx]);
+        }
         private void DrawBullet(MessageOfBullet data)
         {
             Ellipse iconOfBullet = new()
@@ -512,6 +658,35 @@ namespace Client
                     break;
             }
             MapGrid.Children.Add(iconOfBullet);
+        }
+
+        private void DrawBombedBullet(MessageOfBombedBullet data)
+        {
+            Ellipse iconOfBombedBullet = new()
+            {
+                WidthRequest = 2 * bulletRadiusTimes * unitWidth,
+                HeightRequest = 2 * bulletRadiusTimes * unitHeight,
+                HorizontalOptions = LayoutOptions.Start,
+                VerticalOptions = LayoutOptions.Start,
+                Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * bulletRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * bulletRadiusTimes, 0, 0),
+                Fill = (data.MappingId == (long)PlayerTeam.Red) ? Colors.Red : Colors.Blue
+            };
+            switch (data.Type)
+            {
+                case BulletType.Plasma:
+                    iconOfBombedBullet.Fill = Colors.Yellow;
+                    break;
+                case BulletType.Laser:
+                    iconOfBombedBullet.Fill = Colors.Orange;
+                    break;
+                case BulletType.Missile:
+                    iconOfBombedBullet.Fill = Colors.Purple;
+                    break;
+                case BulletType.Arc:
+                    iconOfBombedBullet.Fill = Colors.Green;
+                    break;
+            }
+            MapGrid.Children.Add(iconOfBombedBullet);
         }
 
         private void DrawResource(MessageOfResource data)
@@ -557,7 +732,7 @@ namespace Client
         private long counter;
 
         AsyncServerStreamingCall<MessageToClient>? responseStream;
-        private bool isClientStocked;
+        private bool isClientStocked = false;
 
         private PlayerStatusBar redPlayer;
         private PlayerStatusBar bluePlayer;
@@ -578,27 +753,31 @@ namespace Client
 
         private List<MessageOfAll> listOfAll;
         private List<MessageOfShip> listOfShip;
-        //private List<MessageOfBuilding> listOfBuilding;
         private List<MessageOfBullet> listOfBullet;
+        private List<MessageOfBombedBullet> listOfBombedBullet;
+        private List<MessageOfFactory> listOfFactory;
+        private List<MessageOfCommunity> listOfCommunity;
+        private List<MessageOfFort> listOfFort;
+        private List<MessageOfWormhole> listOfWormhole;
         private List<MessageOfResource> listOfResource;
         private List<MessageOfHome> listOfHome;
         private int gameTime;
 
         private Label[] resourceArray;
         private (int x, int y)[] resourcePositionIndex;
-        private Label[] buildingArray;
-        private (int x, int y)[] buildingPositionIndex;
-        // private Label[] factoryArray;
-        // private int[] factoryPositionIndex;
-        // private Label[] communityArray;
-        // private int[] communityPositionIndex;
-        // private Label[] fortressArray;
-        // private int[] fortressPositionIndex;
-        // private Label[] wormHoleArray;
-        // private int[] wormHolePositionIndex;
+        private Label[] factoryArray;
+        private (int x, int y)[] factoryPositionIndex;
+        private Label[] communityArray;
+        private (int x, int y)[] communityPositionIndex;
+        private Label[] fortArray;
+        private (int x, int y)[] fortPositionIndex;
+        private Label[] wormHoleArray;
+        private (int x, int y)[] wormHolePositionIndex;
         private Dictionary<int, int> countMap;
 
         private readonly object drawPicLock = new();
+
+        private readonly object locklock = new();
 
         private bool mapFlag = false;
         private bool hasDrawed = false;
@@ -664,7 +843,9 @@ namespace Client
             Shadow = 4,
             Asteroid = 5,
             Resource = 6,
-            Building = 7
+            Factory = 7,
+            Community = 8,
+            Fort = 9
         };
 
     }
