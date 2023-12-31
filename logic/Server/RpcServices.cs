@@ -232,7 +232,7 @@ namespace Server
             return Task.FromResult(moveRes);
         }
 
-        public override Task<BoolRes> Recover(IDMsg request, ServerCallContext context)
+        public override Task<BoolRes> Recover(RecoverMsg request, ServerCallContext context)
         {
 #if DEBUG
             Console.WriteLine($"TRY Recover: Player {request.PlayerId} from Team {request.TeamId}");
