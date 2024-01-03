@@ -11,7 +11,7 @@
 
 ## 软件架构
 
-![structure](resource/structure.png)
+![structure](resource/structure.svg)
 
 ## 仓库说明
 
