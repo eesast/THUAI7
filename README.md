@@ -11,7 +11,7 @@
 
 ## 软件架构
 
-![structure](resource/structure.png)
+![structure](resource/structure_compressed.png)
 
 ## 仓库说明
 
