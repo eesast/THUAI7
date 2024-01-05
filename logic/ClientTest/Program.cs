@@ -36,7 +36,7 @@ namespace ClientTest
             {
                 Thread.Sleep(50);
                 MoveRes boolRes = client.Move(moveMsg);
-                if (boolRes.ActSuccess == false) break;
+                //if (boolRes.ActSuccess == false) break;
                 tot++;
                 if (tot % 10 == 0) moveMsg.Angle += 1;
 
