@@ -6,13 +6,11 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MessageReceiverLive : MonoBehaviour
+public class MessageReceiverLive : SingletonDontDestory<MessageReceiverLive>
 {
-    public static string IP = null;
-    public static string Port = null;
+    public static string IP = "localhost";
+    public static string Port = "8888";
     public static string filename = null;
-
-    public static MessageOfMap map;
 
     // Start is called before the first frame update
     async void Start()
@@ -20,15 +18,22 @@ public class MessageReceiverLive : MonoBehaviour
         try {
             var channel = new Channel(IP + ":" + Port, ChannelCredentials.Insecure);
             var client = new AvailableService.AvailableServiceClient(channel);
-            PlayerMsg msg = new PlayerMsg();
-            msg.PlayerId = -1;
-            msg.ShipType = ShipType.NullShipType;
-            msg.TeamId = -1;
-            msg.X = msg.Y = -1;
+            Debug.Log(channel);
+            Debug.Log(client);
+            PlayerMsg msg = new PlayerMsg() {
+                PlayerId = 2024,
+                ShipType = ShipType.NullShipType,
+                TeamId = -1,
+                X = 0,
+                Y = 0,
+            };
             var response = client.AddPlayer(msg);
+            MapControl.GetInstance().DrawMap(client.GetMap(new NullRequest()));
             if (await response.ResponseStream.MoveNext()) {
                 var responseVal = response.ResponseStream.Current;
-                map = responseVal.ObjMessage[0].MapMessage;
+                Debug.Log("recieve further info");
+                ParaDefine.GetInstance().map = responseVal.ObjMessage[0].MapMessage;
+                MapControl.GetInstance().DrawMap(ParaDefine.GetInstance().map);
             }
             while (await response.ResponseStream.MoveNext()) {
                 var responseVal = response.ResponseStream.Current;
@@ -37,6 +42,7 @@ public class MessageReceiverLive : MonoBehaviour
             IP = null;
             Port = null;
         }catch (RpcException) {
+            Debug.Log("net work error: ");
             IP = null;
             Port = null;
         }

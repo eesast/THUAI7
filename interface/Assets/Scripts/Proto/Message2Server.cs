@@ -25,35 +25,33 @@ namespace Protobuf {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChRNZXNzYWdlMlNlcnZlci5wcm90bxIIcHJvdG9idWYaEU1lc3NhZ2VUeXBl",
-            "LnByb3RvIisKBUlETXNnEhEKCXBsYXllcl9pZBgBIAEoAxIPCgd0ZWFtX2lk",
-            "GAIgASgDImwKCVBsYXllck1zZxIRCglwbGF5ZXJfaWQYASABKAMSJQoJc2hp",
-            "cF90eXBlGAIgASgOMhIucHJvdG9idWYuU2hpcFR5cGUSDwoHdGVhbV9pZBgD",
-            "IAEoAxIJCgF4GAQgASgFEgkKAXkYBSABKAUiWgoHTW92ZU1zZxIRCglwbGF5",
-            "ZXJfaWQYASABKAMSDQoFYW5nbGUYAiABKAESHAoUdGltZV9pbl9taWxsaXNl",
-            "Y29uZHMYAyABKAMSDwoHdGVhbV9pZBgEIAEoAyKAAQoHU2VuZE1zZxIRCglw",
-            "bGF5ZXJfaWQYASABKAMSFAoMdG9fcGxheWVyX2lkGAIgASgDEhYKDHRleHRf",
-            "bWVzc2FnZRgDIAEoCUgAEhgKDmJpbmFyeV9tZXNzYWdlGAQgASgMSAASDwoH",
-            "dGVhbV9pZBgFIAEoA0IJCgdtZXNzYWdlIj4KCUF0dGFja01zZxIRCglwbGF5",
-            "ZXJfaWQYASABKAMSDQoFYW5nbGUYAiABKAESDwoHdGVhbV9pZBgDIAEoAyJ/",
-            "CgxDb25zdHJ1Y3RNc2cSCQoBeBgBIAEoBRIJCgF5GAIgASgFEhEKCXBsYXll",
-            "cl9pZBgDIAEoAxI1ChFjb25zdHJ1Y3Rpb25fdHlwZRgEIAEoDjIaLnByb3Rv",
-            "YnVmLkNvbnN0cnVjdGlvblR5cGUSDwoHdGVhbV9pZBgFIAEoAyJFCglUYXJn",
-            "ZXRNc2cSCQoBeBgBIAEoBRIJCgF5GAIgASgFEhEKCXBsYXllcl9pZBgDIAEo",
-            "AxIPCgd0ZWFtX2lkGAQgASgDIlsKCkluc3RhbGxNc2cSKQoLbW9kdWxlX3R5",
-            "cGUYASABKA4yFC5wcm90b2J1Zi5Nb2R1bGVUeXBlEhEKCXBsYXllcl9pZBgC",
-            "IAEoAxIPCgd0ZWFtX2lkGAMgASgDIlwKDEJ1aWxkU2hpcE1zZxIJCgF4GAEg",
-            "ASgFEgkKAXkYAiABKAUSJQoJc2hpcF90eXBlGAMgASgOMhIucHJvdG9idWYu",
-            "U2hpcFR5cGUSDwoHdGVhbV9pZBgEIAEoA2IGcHJvdG8z"));
+            "LnByb3RvIg0KC051bGxSZXF1ZXN0IisKBUlETXNnEhEKCXBsYXllcl9pZBgB",
+            "IAEoAxIPCgd0ZWFtX2lkGAIgASgDImwKCVBsYXllck1zZxIRCglwbGF5ZXJf",
+            "aWQYASABKAMSDwoHdGVhbV9pZBgCIAEoAxIlCglzaGlwX3R5cGUYAyABKA4y",
+            "Ei5wcm90b2J1Zi5TaGlwVHlwZRIJCgF4GAQgASgFEgkKAXkYBSABKAUiWgoH",
+            "TW92ZU1zZxIRCglwbGF5ZXJfaWQYASABKAMSDQoFYW5nbGUYAiABKAESHAoU",
+            "dGltZV9pbl9taWxsaXNlY29uZHMYAyABKAMSDwoHdGVhbV9pZBgEIAEoAyKA",
+            "AQoHU2VuZE1zZxIRCglwbGF5ZXJfaWQYASABKAMSFAoMdG9fcGxheWVyX2lk",
+            "GAIgASgDEhYKDHRleHRfbWVzc2FnZRgDIAEoCUgAEhgKDmJpbmFyeV9tZXNz",
+            "YWdlGAQgASgMSAASDwoHdGVhbV9pZBgFIAEoA0IJCgdtZXNzYWdlIj4KCUF0",
+            "dGFja01zZxIRCglwbGF5ZXJfaWQYASABKAMSDQoFYW5nbGUYAiABKAESDwoH",
+            "dGVhbV9pZBgDIAEoAyJpCgxDb25zdHJ1Y3RNc2cSEQoJcGxheWVyX2lkGAEg",
+            "ASgDEjUKEWNvbnN0cnVjdGlvbl90eXBlGAIgASgOMhoucHJvdG9idWYuQ29u",
+            "c3RydWN0aW9uVHlwZRIPCgd0ZWFtX2lkGAMgASgDIlsKCkluc3RhbGxNc2cS",
+            "KQoLbW9kdWxlX3R5cGUYASABKA4yFC5wcm90b2J1Zi5Nb2R1bGVUeXBlEhEK",
+            "CXBsYXllcl9pZBgCIAEoAxIPCgd0ZWFtX2lkGAMgASgDIlwKDEJ1aWxkU2hp",
+            "cE1zZxIJCgF4GAEgASgFEgkKAXkYAiABKAUSJQoJc2hpcF90eXBlGAMgASgO",
+            "MhIucHJvdG9idWYuU2hpcFR5cGUSDwoHdGVhbV9pZBgEIAEoA2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protobuf.MessageTypeReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.NullRequest), global::Protobuf.NullRequest.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.IDMsg), global::Protobuf.IDMsg.Parser, new[]{ "PlayerId", "TeamId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.PlayerMsg), global::Protobuf.PlayerMsg.Parser, new[]{ "PlayerId", "ShipType", "TeamId", "X", "Y" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.PlayerMsg), global::Protobuf.PlayerMsg.Parser, new[]{ "PlayerId", "TeamId", "ShipType", "X", "Y" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.MoveMsg), global::Protobuf.MoveMsg.Parser, new[]{ "PlayerId", "Angle", "TimeInMilliseconds", "TeamId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.SendMsg), global::Protobuf.SendMsg.Parser, new[]{ "PlayerId", "ToPlayerId", "TextMessage", "BinaryMessage", "TeamId" }, new[]{ "Message" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.AttackMsg), global::Protobuf.AttackMsg.Parser, new[]{ "PlayerId", "Angle", "TeamId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.ConstructMsg), global::Protobuf.ConstructMsg.Parser, new[]{ "X", "Y", "PlayerId", "ConstructionType", "TeamId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.TargetMsg), global::Protobuf.TargetMsg.Parser, new[]{ "X", "Y", "PlayerId", "TeamId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.ConstructMsg), global::Protobuf.ConstructMsg.Parser, new[]{ "PlayerId", "ConstructionType", "TeamId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.InstallMsg), global::Protobuf.InstallMsg.Parser, new[]{ "ModuleType", "PlayerId", "TeamId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.BuildShipMsg), global::Protobuf.BuildShipMsg.Parser, new[]{ "X", "Y", "ShipType", "TeamId" }, null, null, null, null)
           }));
@@ -62,6 +60,142 @@ namespace Protobuf {
 
   }
   #region Messages
+  public sealed partial class NullRequest : pb::IMessage<NullRequest>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<NullRequest> _parser = new pb::MessageParser<NullRequest>(() => new NullRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<NullRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Protobuf.Message2ServerReflection.Descriptor.MessageTypes[0]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public NullRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public NullRequest(NullRequest other) : this() {
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public NullRequest Clone() {
+      return new NullRequest(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as NullRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(NullRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(NullRequest other) {
+      if (other == null) {
+        return;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+        }
+      }
+    }
+    #endif
+
+  }
+
   public sealed partial class IDMsg : pb::IMessage<IDMsg>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -74,7 +208,7 @@ namespace Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protobuf.Message2ServerReflection.Descriptor.MessageTypes[0]; }
+      get { return global::Protobuf.Message2ServerReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -282,7 +416,7 @@ namespace Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protobuf.Message2ServerReflection.Descriptor.MessageTypes[1]; }
+      get { return global::Protobuf.Message2ServerReflection.Descriptor.MessageTypes[2]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -300,8 +434,8 @@ namespace Protobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public PlayerMsg(PlayerMsg other) : this() {
       playerId_ = other.playerId_;
-      shipType_ = other.shipType_;
       teamId_ = other.teamId_;
+      shipType_ = other.shipType_;
       x_ = other.x_;
       y_ = other.y_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -323,25 +457,25 @@ namespace Protobuf {
       }
     }
 
-    /// <summary>Field number for the "ship_type" field.</summary>
-    public const int ShipTypeFieldNumber = 2;
-    private global::Protobuf.ShipType shipType_ = global::Protobuf.ShipType.NullShipType;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::Protobuf.ShipType ShipType {
-      get { return shipType_; }
-      set {
-        shipType_ = value;
-      }
-    }
-
     /// <summary>Field number for the "team_id" field.</summary>
-    public const int TeamIdFieldNumber = 3;
+    public const int TeamIdFieldNumber = 2;
     private long teamId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public long TeamId {
       get { return teamId_; }
       set {
         teamId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "ship_type" field.</summary>
+    public const int ShipTypeFieldNumber = 3;
+    private global::Protobuf.ShipType shipType_ = global::Protobuf.ShipType.NullShipType;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Protobuf.ShipType ShipType {
+      get { return shipType_; }
+      set {
+        shipType_ = value;
       }
     }
 
@@ -381,8 +515,8 @@ namespace Protobuf {
         return true;
       }
       if (PlayerId != other.PlayerId) return false;
-      if (ShipType != other.ShipType) return false;
       if (TeamId != other.TeamId) return false;
+      if (ShipType != other.ShipType) return false;
       if (X != other.X) return false;
       if (Y != other.Y) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -392,8 +526,8 @@ namespace Protobuf {
     public override int GetHashCode() {
       int hash = 1;
       if (PlayerId != 0L) hash ^= PlayerId.GetHashCode();
-      if (ShipType != global::Protobuf.ShipType.NullShipType) hash ^= ShipType.GetHashCode();
       if (TeamId != 0L) hash ^= TeamId.GetHashCode();
+      if (ShipType != global::Protobuf.ShipType.NullShipType) hash ^= ShipType.GetHashCode();
       if (X != 0) hash ^= X.GetHashCode();
       if (Y != 0) hash ^= Y.GetHashCode();
       if (_unknownFields != null) {
@@ -416,13 +550,13 @@ namespace Protobuf {
         output.WriteRawTag(8);
         output.WriteInt64(PlayerId);
       }
-      if (ShipType != global::Protobuf.ShipType.NullShipType) {
-        output.WriteRawTag(16);
-        output.WriteEnum((int) ShipType);
-      }
       if (TeamId != 0L) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(16);
         output.WriteInt64(TeamId);
+      }
+      if (ShipType != global::Protobuf.ShipType.NullShipType) {
+        output.WriteRawTag(24);
+        output.WriteEnum((int) ShipType);
       }
       if (X != 0) {
         output.WriteRawTag(32);
@@ -445,13 +579,13 @@ namespace Protobuf {
         output.WriteRawTag(8);
         output.WriteInt64(PlayerId);
       }
-      if (ShipType != global::Protobuf.ShipType.NullShipType) {
-        output.WriteRawTag(16);
-        output.WriteEnum((int) ShipType);
-      }
       if (TeamId != 0L) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(16);
         output.WriteInt64(TeamId);
+      }
+      if (ShipType != global::Protobuf.ShipType.NullShipType) {
+        output.WriteRawTag(24);
+        output.WriteEnum((int) ShipType);
       }
       if (X != 0) {
         output.WriteRawTag(32);
@@ -473,11 +607,11 @@ namespace Protobuf {
       if (PlayerId != 0L) {
         size += 1 + pb::CodedOutputStream.ComputeInt64Size(PlayerId);
       }
-      if (ShipType != global::Protobuf.ShipType.NullShipType) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) ShipType);
-      }
       if (TeamId != 0L) {
         size += 1 + pb::CodedOutputStream.ComputeInt64Size(TeamId);
+      }
+      if (ShipType != global::Protobuf.ShipType.NullShipType) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) ShipType);
       }
       if (X != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(X);
@@ -499,11 +633,11 @@ namespace Protobuf {
       if (other.PlayerId != 0L) {
         PlayerId = other.PlayerId;
       }
-      if (other.ShipType != global::Protobuf.ShipType.NullShipType) {
-        ShipType = other.ShipType;
-      }
       if (other.TeamId != 0L) {
         TeamId = other.TeamId;
+      }
+      if (other.ShipType != global::Protobuf.ShipType.NullShipType) {
+        ShipType = other.ShipType;
       }
       if (other.X != 0) {
         X = other.X;
@@ -530,11 +664,11 @@ namespace Protobuf {
             break;
           }
           case 16: {
-            ShipType = (global::Protobuf.ShipType) input.ReadEnum();
+            TeamId = input.ReadInt64();
             break;
           }
           case 24: {
-            TeamId = input.ReadInt64();
+            ShipType = (global::Protobuf.ShipType) input.ReadEnum();
             break;
           }
           case 32: {
@@ -564,11 +698,11 @@ namespace Protobuf {
             break;
           }
           case 16: {
-            ShipType = (global::Protobuf.ShipType) input.ReadEnum();
+            TeamId = input.ReadInt64();
             break;
           }
           case 24: {
-            TeamId = input.ReadInt64();
+            ShipType = (global::Protobuf.ShipType) input.ReadEnum();
             break;
           }
           case 32: {
@@ -598,7 +732,7 @@ namespace Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protobuf.Message2ServerReflection.Descriptor.MessageTypes[2]; }
+      get { return global::Protobuf.Message2ServerReflection.Descriptor.MessageTypes[3]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -878,7 +1012,7 @@ namespace Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protobuf.Message2ServerReflection.Descriptor.MessageTypes[3]; }
+      get { return global::Protobuf.Message2ServerReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1225,7 +1359,7 @@ namespace Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protobuf.Message2ServerReflection.Descriptor.MessageTypes[4]; }
+      get { return global::Protobuf.Message2ServerReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1469,7 +1603,7 @@ namespace Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protobuf.Message2ServerReflection.Descriptor.MessageTypes[5]; }
+      get { return global::Protobuf.Message2ServerReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1486,8 +1620,6 @@ namespace Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public ConstructMsg(ConstructMsg other) : this() {
-      x_ = other.x_;
-      y_ = other.y_;
       playerId_ = other.playerId_;
       constructionType_ = other.constructionType_;
       teamId_ = other.teamId_;
@@ -1499,30 +1631,8 @@ namespace Protobuf {
       return new ConstructMsg(this);
     }
 
-    /// <summary>Field number for the "x" field.</summary>
-    public const int XFieldNumber = 1;
-    private int x_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int X {
-      get { return x_; }
-      set {
-        x_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "y" field.</summary>
-    public const int YFieldNumber = 2;
-    private int y_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Y {
-      get { return y_; }
-      set {
-        y_ = value;
-      }
-    }
-
     /// <summary>Field number for the "player_id" field.</summary>
-    public const int PlayerIdFieldNumber = 3;
+    public const int PlayerIdFieldNumber = 1;
     private long playerId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public long PlayerId {
@@ -1533,7 +1643,7 @@ namespace Protobuf {
     }
 
     /// <summary>Field number for the "construction_type" field.</summary>
-    public const int ConstructionTypeFieldNumber = 4;
+    public const int ConstructionTypeFieldNumber = 2;
     private global::Protobuf.ConstructionType constructionType_ = global::Protobuf.ConstructionType.NullConstructionType;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Protobuf.ConstructionType ConstructionType {
@@ -1544,7 +1654,7 @@ namespace Protobuf {
     }
 
     /// <summary>Field number for the "team_id" field.</summary>
-    public const int TeamIdFieldNumber = 5;
+    public const int TeamIdFieldNumber = 3;
     private long teamId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public long TeamId {
@@ -1567,8 +1677,6 @@ namespace Protobuf {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (X != other.X) return false;
-      if (Y != other.Y) return false;
       if (PlayerId != other.PlayerId) return false;
       if (ConstructionType != other.ConstructionType) return false;
       if (TeamId != other.TeamId) return false;
@@ -1578,8 +1686,6 @@ namespace Protobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (X != 0) hash ^= X.GetHashCode();
-      if (Y != 0) hash ^= Y.GetHashCode();
       if (PlayerId != 0L) hash ^= PlayerId.GetHashCode();
       if (ConstructionType != global::Protobuf.ConstructionType.NullConstructionType) hash ^= ConstructionType.GetHashCode();
       if (TeamId != 0L) hash ^= TeamId.GetHashCode();
@@ -1599,24 +1705,16 @@ namespace Protobuf {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (X != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(X);
-      }
-      if (Y != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(Y);
-      }
       if (PlayerId != 0L) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(8);
         output.WriteInt64(PlayerId);
       }
       if (ConstructionType != global::Protobuf.ConstructionType.NullConstructionType) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(16);
         output.WriteEnum((int) ConstructionType);
       }
       if (TeamId != 0L) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(24);
         output.WriteInt64(TeamId);
       }
       if (_unknownFields != null) {
@@ -1628,24 +1726,16 @@ namespace Protobuf {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (X != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(X);
-      }
-      if (Y != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(Y);
-      }
       if (PlayerId != 0L) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(8);
         output.WriteInt64(PlayerId);
       }
       if (ConstructionType != global::Protobuf.ConstructionType.NullConstructionType) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(16);
         output.WriteEnum((int) ConstructionType);
       }
       if (TeamId != 0L) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(24);
         output.WriteInt64(TeamId);
       }
       if (_unknownFields != null) {
@@ -1657,12 +1747,6 @@ namespace Protobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (X != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(X);
-      }
-      if (Y != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Y);
-      }
       if (PlayerId != 0L) {
         size += 1 + pb::CodedOutputStream.ComputeInt64Size(PlayerId);
       }
@@ -1682,12 +1766,6 @@ namespace Protobuf {
     public void MergeFrom(ConstructMsg other) {
       if (other == null) {
         return;
-      }
-      if (other.X != 0) {
-        X = other.X;
-      }
-      if (other.Y != 0) {
-        Y = other.Y;
       }
       if (other.PlayerId != 0L) {
         PlayerId = other.PlayerId;
@@ -1713,22 +1791,14 @@ namespace Protobuf {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            X = input.ReadInt32();
-            break;
-          }
-          case 16: {
-            Y = input.ReadInt32();
-            break;
-          }
-          case 24: {
             PlayerId = input.ReadInt64();
             break;
           }
-          case 32: {
+          case 16: {
             ConstructionType = (global::Protobuf.ConstructionType) input.ReadEnum();
             break;
           }
-          case 40: {
+          case 24: {
             TeamId = input.ReadInt64();
             break;
           }
@@ -1747,302 +1817,14 @@ namespace Protobuf {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            X = input.ReadInt32();
-            break;
-          }
-          case 16: {
-            Y = input.ReadInt32();
-            break;
-          }
-          case 24: {
             PlayerId = input.ReadInt64();
             break;
           }
-          case 32: {
+          case 16: {
             ConstructionType = (global::Protobuf.ConstructionType) input.ReadEnum();
             break;
           }
-          case 40: {
-            TeamId = input.ReadInt64();
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
-  public sealed partial class TargetMsg : pb::IMessage<TargetMsg>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<TargetMsg> _parser = new pb::MessageParser<TargetMsg>(() => new TargetMsg());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<TargetMsg> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Protobuf.Message2ServerReflection.Descriptor.MessageTypes[6]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public TargetMsg() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public TargetMsg(TargetMsg other) : this() {
-      x_ = other.x_;
-      y_ = other.y_;
-      playerId_ = other.playerId_;
-      teamId_ = other.teamId_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public TargetMsg Clone() {
-      return new TargetMsg(this);
-    }
-
-    /// <summary>Field number for the "x" field.</summary>
-    public const int XFieldNumber = 1;
-    private int x_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int X {
-      get { return x_; }
-      set {
-        x_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "y" field.</summary>
-    public const int YFieldNumber = 2;
-    private int y_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Y {
-      get { return y_; }
-      set {
-        y_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "player_id" field.</summary>
-    public const int PlayerIdFieldNumber = 3;
-    private long playerId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public long PlayerId {
-      get { return playerId_; }
-      set {
-        playerId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "team_id" field.</summary>
-    public const int TeamIdFieldNumber = 4;
-    private long teamId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public long TeamId {
-      get { return teamId_; }
-      set {
-        teamId_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as TargetMsg);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(TargetMsg other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (X != other.X) return false;
-      if (Y != other.Y) return false;
-      if (PlayerId != other.PlayerId) return false;
-      if (TeamId != other.TeamId) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (X != 0) hash ^= X.GetHashCode();
-      if (Y != 0) hash ^= Y.GetHashCode();
-      if (PlayerId != 0L) hash ^= PlayerId.GetHashCode();
-      if (TeamId != 0L) hash ^= TeamId.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (X != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(X);
-      }
-      if (Y != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(Y);
-      }
-      if (PlayerId != 0L) {
-        output.WriteRawTag(24);
-        output.WriteInt64(PlayerId);
-      }
-      if (TeamId != 0L) {
-        output.WriteRawTag(32);
-        output.WriteInt64(TeamId);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (X != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(X);
-      }
-      if (Y != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(Y);
-      }
-      if (PlayerId != 0L) {
-        output.WriteRawTag(24);
-        output.WriteInt64(PlayerId);
-      }
-      if (TeamId != 0L) {
-        output.WriteRawTag(32);
-        output.WriteInt64(TeamId);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (X != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(X);
-      }
-      if (Y != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Y);
-      }
-      if (PlayerId != 0L) {
-        size += 1 + pb::CodedOutputStream.ComputeInt64Size(PlayerId);
-      }
-      if (TeamId != 0L) {
-        size += 1 + pb::CodedOutputStream.ComputeInt64Size(TeamId);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(TargetMsg other) {
-      if (other == null) {
-        return;
-      }
-      if (other.X != 0) {
-        X = other.X;
-      }
-      if (other.Y != 0) {
-        Y = other.Y;
-      }
-      if (other.PlayerId != 0L) {
-        PlayerId = other.PlayerId;
-      }
-      if (other.TeamId != 0L) {
-        TeamId = other.TeamId;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 8: {
-            X = input.ReadInt32();
-            break;
-          }
-          case 16: {
-            Y = input.ReadInt32();
-            break;
-          }
           case 24: {
-            PlayerId = input.ReadInt64();
-            break;
-          }
-          case 32: {
-            TeamId = input.ReadInt64();
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 8: {
-            X = input.ReadInt32();
-            break;
-          }
-          case 16: {
-            Y = input.ReadInt32();
-            break;
-          }
-          case 24: {
-            PlayerId = input.ReadInt64();
-            break;
-          }
-          case 32: {
             TeamId = input.ReadInt64();
             break;
           }

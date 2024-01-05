@@ -54,11 +54,13 @@ namespace Protobuf {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Protobuf.MessageToClient> __Marshaller_protobuf_MessageToClient = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Protobuf.MessageToClient.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Protobuf.NullRequest> __Marshaller_protobuf_NullRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Protobuf.NullRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Protobuf.MessageOfMap> __Marshaller_protobuf_MessageOfMap = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Protobuf.MessageOfMap.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Protobuf.MoveMsg> __Marshaller_protobuf_MoveMsg = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Protobuf.MoveMsg.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Protobuf.MoveRes> __Marshaller_protobuf_MoveRes = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Protobuf.MoveRes.Parser));
-    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::Protobuf.TargetMsg> __Marshaller_protobuf_TargetMsg = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Protobuf.TargetMsg.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Protobuf.ConstructMsg> __Marshaller_protobuf_ConstructMsg = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Protobuf.ConstructMsg.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
@@ -67,6 +69,8 @@ namespace Protobuf {
     static readonly grpc::Marshaller<global::Protobuf.SendMsg> __Marshaller_protobuf_SendMsg = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Protobuf.SendMsg.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Protobuf.InstallMsg> __Marshaller_protobuf_InstallMsg = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Protobuf.InstallMsg.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Protobuf.BuildShipMsg> __Marshaller_protobuf_BuildShipMsg = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Protobuf.BuildShipMsg.Parser));
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Protobuf.IDMsg, global::Protobuf.BoolRes> __Method_TryConnection = new grpc::Method<global::Protobuf.IDMsg, global::Protobuf.BoolRes>(
@@ -85,6 +89,14 @@ namespace Protobuf {
         __Marshaller_protobuf_MessageToClient);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Protobuf.NullRequest, global::Protobuf.MessageOfMap> __Method_GetMap = new grpc::Method<global::Protobuf.NullRequest, global::Protobuf.MessageOfMap>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "GetMap",
+        __Marshaller_protobuf_NullRequest,
+        __Marshaller_protobuf_MessageOfMap);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Protobuf.MoveMsg, global::Protobuf.MoveRes> __Method_Move = new grpc::Method<global::Protobuf.MoveMsg, global::Protobuf.MoveRes>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -101,11 +113,11 @@ namespace Protobuf {
         __Marshaller_protobuf_BoolRes);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Method<global::Protobuf.TargetMsg, global::Protobuf.BoolRes> __Method_Produce = new grpc::Method<global::Protobuf.TargetMsg, global::Protobuf.BoolRes>(
+    static readonly grpc::Method<global::Protobuf.IDMsg, global::Protobuf.BoolRes> __Method_Produce = new grpc::Method<global::Protobuf.IDMsg, global::Protobuf.BoolRes>(
         grpc::MethodType.Unary,
         __ServiceName,
         "Produce",
-        __Marshaller_protobuf_TargetMsg,
+        __Marshaller_protobuf_IDMsg,
         __Marshaller_protobuf_BoolRes);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
@@ -154,6 +166,14 @@ namespace Protobuf {
         __ServiceName,
         "Recycle",
         __Marshaller_protobuf_IDMsg,
+        __Marshaller_protobuf_BoolRes);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Protobuf.BuildShipMsg, global::Protobuf.BoolRes> __Method_BuildShip = new grpc::Method<global::Protobuf.BuildShipMsg, global::Protobuf.BoolRes>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "BuildShip",
+        __Marshaller_protobuf_BuildShipMsg,
         __Marshaller_protobuf_BoolRes);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
@@ -240,6 +260,26 @@ namespace Protobuf {
       public virtual grpc::AsyncServerStreamingCall<global::Protobuf.MessageToClient> AddPlayer(global::Protobuf.PlayerMsg request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncServerStreamingCall(__Method_AddPlayer, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Protobuf.MessageOfMap GetMap(global::Protobuf.NullRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetMap(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Protobuf.MessageOfMap GetMap(global::Protobuf.NullRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetMap, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Protobuf.MessageOfMap> GetMapAsync(global::Protobuf.NullRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetMapAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Protobuf.MessageOfMap> GetMapAsync(global::Protobuf.NullRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetMap, null, options, request);
       }
       /// <summary>
       /// 游戏过程中玩家执行操作的服务   
@@ -350,7 +390,7 @@ namespace Protobuf {
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::Protobuf.BoolRes Produce(global::Protobuf.TargetMsg request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual global::Protobuf.BoolRes Produce(global::Protobuf.IDMsg request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return Produce(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
@@ -361,7 +401,7 @@ namespace Protobuf {
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::Protobuf.BoolRes Produce(global::Protobuf.TargetMsg request, grpc::CallOptions options)
+      public virtual global::Protobuf.BoolRes Produce(global::Protobuf.IDMsg request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_Produce, null, options, request);
       }
@@ -374,7 +414,7 @@ namespace Protobuf {
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::Protobuf.BoolRes> ProduceAsync(global::Protobuf.TargetMsg request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual grpc::AsyncUnaryCall<global::Protobuf.BoolRes> ProduceAsync(global::Protobuf.IDMsg request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return ProduceAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
@@ -385,7 +425,7 @@ namespace Protobuf {
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::Protobuf.BoolRes> ProduceAsync(global::Protobuf.TargetMsg request, grpc::CallOptions options)
+      public virtual grpc::AsyncUnaryCall<global::Protobuf.BoolRes> ProduceAsync(global::Protobuf.IDMsg request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_Produce, null, options, request);
       }
@@ -648,6 +688,26 @@ namespace Protobuf {
       public virtual grpc::AsyncUnaryCall<global::Protobuf.BoolRes> RecycleAsync(global::Protobuf.IDMsg request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_Recycle, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Protobuf.BoolRes BuildShip(global::Protobuf.BuildShipMsg request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return BuildShip(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Protobuf.BoolRes BuildShip(global::Protobuf.BuildShipMsg request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_BuildShip, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Protobuf.BoolRes> BuildShipAsync(global::Protobuf.BuildShipMsg request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return BuildShipAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Protobuf.BoolRes> BuildShipAsync(global::Protobuf.BuildShipMsg request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_BuildShip, null, options, request);
       }
       /// <summary>
       /// 结束所有动作

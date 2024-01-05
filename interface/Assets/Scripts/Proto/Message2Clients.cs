@@ -51,39 +51,40 @@ namespace Protobuf {
             "IAEoBRIPCgd0ZWFtX2lkGAQgASgDIjUKEU1lc3NhZ2VPZldvcm1ob2xlEgkK",
             "AXgYASABKAUSCQoBeRgCIAEoBRIKCgJocBgDIAEoBSI7ChFNZXNzYWdlT2ZS",
             "ZXNvdXJjZRIJCgF4GAEgASgFEgkKAXkYAiABKAUSEAoIcHJvZ3Jlc3MYAyAB",
-            "KAUiZAoNTWVzc2FnZU9mSG9tZRIJCgF4GAEgASgFEgkKAXkYAiABKAUSDQoF",
-            "c2NvcmUYAyABKAUSCgoCaHAYBCABKAUSEQoJcGxheWVyX2lkGAUgASgDEg8K",
-            "B3RlYW1faWQYBiABKAMiYAoMTWVzc2FnZU9mTWFwEicKA3JvdxgCIAMoCzIa",
-            "LnByb3RvYnVmLk1lc3NhZ2VPZk1hcC5Sb3caJwoDUm93EiAKA2NvbBgBIAMo",
-            "DjITLnByb3RvYnVmLlBsYWNlVHlwZSIvCg1NZXNzYWdlT2ZUZWFtEg8KB3Rl",
-            "YW1faWQYASABKAMSDQoFc2NvcmUYAiABKAUinwUKDE1lc3NhZ2VPZk9iahIv",
-            "CgxzaGlwX21lc3NhZ2UYASABKAsyFy5wcm90b2J1Zi5NZXNzYWdlT2ZTaGlw",
-            "SAASMwoOYnVsbGV0X21lc3NhZ2UYAiABKAsyGS5wcm90b2J1Zi5NZXNzYWdl",
-            "T2ZCdWxsZXRIABI1Cg9mYWN0b3J5X21lc3NhZ2UYAyABKAsyGi5wcm90b2J1",
-            "Zi5NZXNzYWdlT2ZGYWN0b3J5SAASOQoRY29tbXVuaXR5X21lc3NhZ2UYBCAB",
-            "KAsyHC5wcm90b2J1Zi5NZXNzYWdlT2ZDb21tdW5pdHlIABIvCgxmb3J0X21l",
-            "c3NhZ2UYBSABKAsyFy5wcm90b2J1Zi5NZXNzYWdlT2ZGb3J0SAASNwoQd29y",
-            "bWhvbGVfbWVzc2FnZRgGIAEoCzIbLnByb3RvYnVmLk1lc3NhZ2VPZldvcm1o",
-            "b2xlSAASLwoMaG9tZV9tZXNzYWdlGAcgASgLMhcucHJvdG9idWYuTWVzc2Fn",
-            "ZU9mSG9tZUgAEjcKEHJlc291cmNlX21lc3NhZ2UYCCABKAsyGy5wcm90b2J1",
-            "Zi5NZXNzYWdlT2ZSZXNvdXJjZUgAEi0KC21hcF9tZXNzYWdlGAkgASgLMhYu",
-            "cHJvdG9idWYuTWVzc2FnZU9mTWFwSAASLwoMbmV3c19tZXNzYWdlGAogASgL",
-            "MhcucHJvdG9idWYuTWVzc2FnZU9mTmV3c0gAEkAKFWJvbWJlZF9idWxsZXRf",
-            "bWVzc2FnZRgLIAEoCzIfLnByb3RvYnVmLk1lc3NhZ2VPZkJvbWJlZEJ1bGxl",
-            "dEgAEi8KDHRlYW1fbWVzc2FnZRgMIAEoCzIXLnByb3RvYnVmLk1lc3NhZ2VP",
-            "ZlRlYW1IAEIQCg5tZXNzYWdlX29mX29iaiJQCgxNZXNzYWdlT2ZBbGwSEQoJ",
-            "Z2FtZV90aW1lGAEgASgFEhUKDXJlZHRlYW1fc2NvcmUYAiABKAUSFgoOYmx1",
-            "ZXRlYW1fc2NvcmUYAyABKAUilAEKD01lc3NhZ2VUb0NsaWVudBIrCgtvYmpf",
-            "bWVzc2FnZRgBIAMoCzIWLnByb3RvYnVmLk1lc3NhZ2VPZk9iahInCgpnYW1l",
-            "X3N0YXRlGAIgASgOMhMucHJvdG9idWYuR2FtZVN0YXRlEisKC2FsbF9tZXNz",
-            "YWdlGAMgASgLMhYucHJvdG9idWYuTWVzc2FnZU9mQWxsIkoKB01vdmVSZXMS",
-            "FAoMYWN0dWFsX3NwZWVkGAEgASgDEhQKDGFjdHVhbF9hbmdsZRgCIAEoARIT",
-            "CgthY3Rfc3VjY2VzcxgDIAEoCCIeCgdCb29sUmVzEhMKC2FjdF9zdWNjZXNz",
-            "GAEgASgIIjkKC1NoaXBJbmZvUmVzEioKCXNoaXBfaW5mbxgBIAMoCzIXLnBy",
-            "b3RvYnVmLk1lc3NhZ2VPZlNoaXAiGQoGRWNvUmVzEg8KB2Vjb25vbXkYASAB",
-            "KAMiaQoNTWVzc2FnZU9mTmV3cxIWCgx0ZXh0X21lc3NhZ2UYASABKAlIABIY",
-            "Cg5iaW5hcnlfbWVzc2FnZRgEIAEoDEgAEg8KB2Zyb21faWQYAiABKAMSDQoF",
-            "dG9faWQYAyABKANCBgoEbmV3c2IGcHJvdG8z"));
+            "KAUiQgoNTWVzc2FnZU9mSG9tZRIJCgF4GAEgASgFEgkKAXkYAiABKAUSCgoC",
+            "aHAYAyABKAUSDwoHdGVhbV9pZBgEIAEoAyKBAQoMTWVzc2FnZU9mTWFwEg4K",
+            "BmhlaWdodBgBIAEoDRINCgV3aWR0aBgCIAEoDRIoCgRyb3dzGAMgAygLMhou",
+            "cHJvdG9idWYuTWVzc2FnZU9mTWFwLlJvdxooCgNSb3cSIQoEY29scxgBIAMo",
+            "DjITLnByb3RvYnVmLlBsYWNlVHlwZSJRCg1NZXNzYWdlT2ZUZWFtEg8KB3Rl",
+            "YW1faWQYASABKAMSEQoJcGxheWVyX2lkGAIgASgDEg0KBXNjb3JlGAMgASgF",
+            "Eg0KBW1vbmV5GAQgASgFIp8FCgxNZXNzYWdlT2ZPYmoSLwoMc2hpcF9tZXNz",
+            "YWdlGAEgASgLMhcucHJvdG9idWYuTWVzc2FnZU9mU2hpcEgAEjMKDmJ1bGxl",
+            "dF9tZXNzYWdlGAIgASgLMhkucHJvdG9idWYuTWVzc2FnZU9mQnVsbGV0SAAS",
+            "NQoPZmFjdG9yeV9tZXNzYWdlGAMgASgLMhoucHJvdG9idWYuTWVzc2FnZU9m",
+            "RmFjdG9yeUgAEjkKEWNvbW11bml0eV9tZXNzYWdlGAQgASgLMhwucHJvdG9i",
+            "dWYuTWVzc2FnZU9mQ29tbXVuaXR5SAASLwoMZm9ydF9tZXNzYWdlGAUgASgL",
+            "MhcucHJvdG9idWYuTWVzc2FnZU9mRm9ydEgAEjcKEHdvcm1ob2xlX21lc3Nh",
+            "Z2UYBiABKAsyGy5wcm90b2J1Zi5NZXNzYWdlT2ZXb3JtaG9sZUgAEi8KDGhv",
+            "bWVfbWVzc2FnZRgHIAEoCzIXLnByb3RvYnVmLk1lc3NhZ2VPZkhvbWVIABI3",
+            "ChByZXNvdXJjZV9tZXNzYWdlGAggASgLMhsucHJvdG9idWYuTWVzc2FnZU9m",
+            "UmVzb3VyY2VIABItCgttYXBfbWVzc2FnZRgJIAEoCzIWLnByb3RvYnVmLk1l",
+            "c3NhZ2VPZk1hcEgAEi8KDG5ld3NfbWVzc2FnZRgKIAEoCzIXLnByb3RvYnVm",
+            "Lk1lc3NhZ2VPZk5ld3NIABJAChVib21iZWRfYnVsbGV0X21lc3NhZ2UYCyAB",
+            "KAsyHy5wcm90b2J1Zi5NZXNzYWdlT2ZCb21iZWRCdWxsZXRIABIvCgx0ZWFt",
+            "X21lc3NhZ2UYDCABKAsyFy5wcm90b2J1Zi5NZXNzYWdlT2ZUZWFtSABCEAoO",
+            "bWVzc2FnZV9vZl9vYmoiUgoMTWVzc2FnZU9mQWxsEhEKCWdhbWVfdGltZRgB",
+            "IAEoBRIWCg5yZWRfdGVhbV9zY29yZRgCIAEoBRIXCg9ibHVlX3RlYW1fc2Nv",
+            "cmUYAyABKAUilAEKD01lc3NhZ2VUb0NsaWVudBIrCgtvYmpfbWVzc2FnZRgB",
+            "IAMoCzIWLnByb3RvYnVmLk1lc3NhZ2VPZk9iahInCgpnYW1lX3N0YXRlGAIg",
+            "ASgOMhMucHJvdG9idWYuR2FtZVN0YXRlEisKC2FsbF9tZXNzYWdlGAMgASgL",
+            "MhYucHJvdG9idWYuTWVzc2FnZU9mQWxsIkoKB01vdmVSZXMSFAoMYWN0dWFs",
+            "X3NwZWVkGAEgASgDEhQKDGFjdHVhbF9hbmdsZRgCIAEoARITCgthY3Rfc3Vj",
+            "Y2VzcxgDIAEoCCIeCgdCb29sUmVzEhMKC2FjdF9zdWNjZXNzGAEgASgIIjkK",
+            "C1NoaXBJbmZvUmVzEioKCXNoaXBfaW5mbxgBIAMoCzIXLnByb3RvYnVmLk1l",
+            "c3NhZ2VPZlNoaXAiGQoGRWNvUmVzEg8KB2Vjb25vbXkYASABKAMiaQoNTWVz",
+            "c2FnZU9mTmV3cxIWCgx0ZXh0X21lc3NhZ2UYASABKAlIABIYCg5iaW5hcnlf",
+            "bWVzc2FnZRgEIAEoDEgAEg8KB2Zyb21faWQYAiABKAMSDQoFdG9faWQYAyAB",
+            "KANCBgoEbmV3c2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Protobuf.MessageTypeReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -95,11 +96,11 @@ namespace Protobuf {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.MessageOfFort), global::Protobuf.MessageOfFort.Parser, new[]{ "X", "Y", "Hp", "TeamId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.MessageOfWormhole), global::Protobuf.MessageOfWormhole.Parser, new[]{ "X", "Y", "Hp" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.MessageOfResource), global::Protobuf.MessageOfResource.Parser, new[]{ "X", "Y", "Progress" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.MessageOfHome), global::Protobuf.MessageOfHome.Parser, new[]{ "X", "Y", "Score", "Hp", "PlayerId", "TeamId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.MessageOfMap), global::Protobuf.MessageOfMap.Parser, new[]{ "Row" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.MessageOfMap.Types.Row), global::Protobuf.MessageOfMap.Types.Row.Parser, new[]{ "Col" }, null, null, null, null)}),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.MessageOfTeam), global::Protobuf.MessageOfTeam.Parser, new[]{ "TeamId", "Score" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.MessageOfHome), global::Protobuf.MessageOfHome.Parser, new[]{ "X", "Y", "Hp", "TeamId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.MessageOfMap), global::Protobuf.MessageOfMap.Parser, new[]{ "Height", "Width", "Rows" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.MessageOfMap.Types.Row), global::Protobuf.MessageOfMap.Types.Row.Parser, new[]{ "Cols" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.MessageOfTeam), global::Protobuf.MessageOfTeam.Parser, new[]{ "TeamId", "PlayerId", "Score", "Money" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.MessageOfObj), global::Protobuf.MessageOfObj.Parser, new[]{ "ShipMessage", "BulletMessage", "FactoryMessage", "CommunityMessage", "FortMessage", "WormholeMessage", "HomeMessage", "ResourceMessage", "MapMessage", "NewsMessage", "BombedBulletMessage", "TeamMessage" }, new[]{ "MessageOfObj" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.MessageOfAll), global::Protobuf.MessageOfAll.Parser, new[]{ "GameTime", "RedteamScore", "BlueteamScore" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.MessageOfAll), global::Protobuf.MessageOfAll.Parser, new[]{ "GameTime", "RedTeamScore", "BlueTeamScore" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.MessageToClient), global::Protobuf.MessageToClient.Parser, new[]{ "ObjMessage", "GameState", "AllMessage" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.MoveRes), global::Protobuf.MoveRes.Parser, new[]{ "ActualSpeed", "ActualAngle", "ActSuccess" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protobuf.BoolRes), global::Protobuf.BoolRes.Parser, new[]{ "ActSuccess" }, null, null, null, null),
@@ -3082,9 +3083,7 @@ namespace Protobuf {
     public MessageOfHome(MessageOfHome other) : this() {
       x_ = other.x_;
       y_ = other.y_;
-      score_ = other.score_;
       hp_ = other.hp_;
-      playerId_ = other.playerId_;
       teamId_ = other.teamId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -3116,19 +3115,8 @@ namespace Protobuf {
       }
     }
 
-    /// <summary>Field number for the "score" field.</summary>
-    public const int ScoreFieldNumber = 3;
-    private int score_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int Score {
-      get { return score_; }
-      set {
-        score_ = value;
-      }
-    }
-
     /// <summary>Field number for the "hp" field.</summary>
-    public const int HpFieldNumber = 4;
+    public const int HpFieldNumber = 3;
     private int hp_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Hp {
@@ -3138,19 +3126,8 @@ namespace Protobuf {
       }
     }
 
-    /// <summary>Field number for the "player_id" field.</summary>
-    public const int PlayerIdFieldNumber = 5;
-    private long playerId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public long PlayerId {
-      get { return playerId_; }
-      set {
-        playerId_ = value;
-      }
-    }
-
     /// <summary>Field number for the "team_id" field.</summary>
-    public const int TeamIdFieldNumber = 6;
+    public const int TeamIdFieldNumber = 4;
     private long teamId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public long TeamId {
@@ -3175,9 +3152,7 @@ namespace Protobuf {
       }
       if (X != other.X) return false;
       if (Y != other.Y) return false;
-      if (Score != other.Score) return false;
       if (Hp != other.Hp) return false;
-      if (PlayerId != other.PlayerId) return false;
       if (TeamId != other.TeamId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -3187,9 +3162,7 @@ namespace Protobuf {
       int hash = 1;
       if (X != 0) hash ^= X.GetHashCode();
       if (Y != 0) hash ^= Y.GetHashCode();
-      if (Score != 0) hash ^= Score.GetHashCode();
       if (Hp != 0) hash ^= Hp.GetHashCode();
-      if (PlayerId != 0L) hash ^= PlayerId.GetHashCode();
       if (TeamId != 0L) hash ^= TeamId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -3215,20 +3188,12 @@ namespace Protobuf {
         output.WriteRawTag(16);
         output.WriteInt32(Y);
       }
-      if (Score != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(Score);
-      }
       if (Hp != 0) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(24);
         output.WriteInt32(Hp);
       }
-      if (PlayerId != 0L) {
-        output.WriteRawTag(40);
-        output.WriteInt64(PlayerId);
-      }
       if (TeamId != 0L) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(32);
         output.WriteInt64(TeamId);
       }
       if (_unknownFields != null) {
@@ -3248,20 +3213,12 @@ namespace Protobuf {
         output.WriteRawTag(16);
         output.WriteInt32(Y);
       }
-      if (Score != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(Score);
-      }
       if (Hp != 0) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(24);
         output.WriteInt32(Hp);
       }
-      if (PlayerId != 0L) {
-        output.WriteRawTag(40);
-        output.WriteInt64(PlayerId);
-      }
       if (TeamId != 0L) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(32);
         output.WriteInt64(TeamId);
       }
       if (_unknownFields != null) {
@@ -3279,14 +3236,8 @@ namespace Protobuf {
       if (Y != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Y);
       }
-      if (Score != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Score);
-      }
       if (Hp != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Hp);
-      }
-      if (PlayerId != 0L) {
-        size += 1 + pb::CodedOutputStream.ComputeInt64Size(PlayerId);
       }
       if (TeamId != 0L) {
         size += 1 + pb::CodedOutputStream.ComputeInt64Size(TeamId);
@@ -3308,14 +3259,8 @@ namespace Protobuf {
       if (other.Y != 0) {
         Y = other.Y;
       }
-      if (other.Score != 0) {
-        Score = other.Score;
-      }
       if (other.Hp != 0) {
         Hp = other.Hp;
-      }
-      if (other.PlayerId != 0L) {
-        PlayerId = other.PlayerId;
       }
       if (other.TeamId != 0L) {
         TeamId = other.TeamId;
@@ -3343,18 +3288,10 @@ namespace Protobuf {
             break;
           }
           case 24: {
-            Score = input.ReadInt32();
-            break;
-          }
-          case 32: {
             Hp = input.ReadInt32();
             break;
           }
-          case 40: {
-            PlayerId = input.ReadInt64();
-            break;
-          }
-          case 48: {
+          case 32: {
             TeamId = input.ReadInt64();
             break;
           }
@@ -3381,18 +3318,10 @@ namespace Protobuf {
             break;
           }
           case 24: {
-            Score = input.ReadInt32();
-            break;
-          }
-          case 32: {
             Hp = input.ReadInt32();
             break;
           }
-          case 40: {
-            PlayerId = input.ReadInt64();
-            break;
-          }
-          case 48: {
+          case 32: {
             TeamId = input.ReadInt64();
             break;
           }
@@ -3432,7 +3361,9 @@ namespace Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public MessageOfMap(MessageOfMap other) : this() {
-      row_ = other.row_.Clone();
+      height_ = other.height_;
+      width_ = other.width_;
+      rows_ = other.rows_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -3441,14 +3372,36 @@ namespace Protobuf {
       return new MessageOfMap(this);
     }
 
-    /// <summary>Field number for the "row" field.</summary>
-    public const int RowFieldNumber = 2;
-    private static readonly pb::FieldCodec<global::Protobuf.MessageOfMap.Types.Row> _repeated_row_codec
-        = pb::FieldCodec.ForMessage(18, global::Protobuf.MessageOfMap.Types.Row.Parser);
-    private readonly pbc::RepeatedField<global::Protobuf.MessageOfMap.Types.Row> row_ = new pbc::RepeatedField<global::Protobuf.MessageOfMap.Types.Row>();
+    /// <summary>Field number for the "height" field.</summary>
+    public const int HeightFieldNumber = 1;
+    private uint height_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Protobuf.MessageOfMap.Types.Row> Row {
-      get { return row_; }
+    public uint Height {
+      get { return height_; }
+      set {
+        height_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "width" field.</summary>
+    public const int WidthFieldNumber = 2;
+    private uint width_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint Width {
+      get { return width_; }
+      set {
+        width_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "rows" field.</summary>
+    public const int RowsFieldNumber = 3;
+    private static readonly pb::FieldCodec<global::Protobuf.MessageOfMap.Types.Row> _repeated_rows_codec
+        = pb::FieldCodec.ForMessage(26, global::Protobuf.MessageOfMap.Types.Row.Parser);
+    private readonly pbc::RepeatedField<global::Protobuf.MessageOfMap.Types.Row> rows_ = new pbc::RepeatedField<global::Protobuf.MessageOfMap.Types.Row>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::Protobuf.MessageOfMap.Types.Row> Rows {
+      get { return rows_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3464,14 +3417,18 @@ namespace Protobuf {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if(!row_.Equals(other.row_)) return false;
+      if (Height != other.Height) return false;
+      if (Width != other.Width) return false;
+      if(!rows_.Equals(other.rows_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      hash ^= row_.GetHashCode();
+      if (Height != 0) hash ^= Height.GetHashCode();
+      if (Width != 0) hash ^= Width.GetHashCode();
+      hash ^= rows_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3488,7 +3445,15 @@ namespace Protobuf {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      row_.WriteTo(output, _repeated_row_codec);
+      if (Height != 0) {
+        output.WriteRawTag(8);
+        output.WriteUInt32(Height);
+      }
+      if (Width != 0) {
+        output.WriteRawTag(16);
+        output.WriteUInt32(Width);
+      }
+      rows_.WriteTo(output, _repeated_rows_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -3498,7 +3463,15 @@ namespace Protobuf {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      row_.WriteTo(ref output, _repeated_row_codec);
+      if (Height != 0) {
+        output.WriteRawTag(8);
+        output.WriteUInt32(Height);
+      }
+      if (Width != 0) {
+        output.WriteRawTag(16);
+        output.WriteUInt32(Width);
+      }
+      rows_.WriteTo(ref output, _repeated_rows_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -3508,7 +3481,13 @@ namespace Protobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      size += row_.CalculateSize(_repeated_row_codec);
+      if (Height != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Height);
+      }
+      if (Width != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Width);
+      }
+      size += rows_.CalculateSize(_repeated_rows_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -3520,7 +3499,13 @@ namespace Protobuf {
       if (other == null) {
         return;
       }
-      row_.Add(other.row_);
+      if (other.Height != 0) {
+        Height = other.Height;
+      }
+      if (other.Width != 0) {
+        Width = other.Width;
+      }
+      rows_.Add(other.rows_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -3535,8 +3520,16 @@ namespace Protobuf {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 18: {
-            row_.AddEntriesFrom(input, _repeated_row_codec);
+          case 8: {
+            Height = input.ReadUInt32();
+            break;
+          }
+          case 16: {
+            Width = input.ReadUInt32();
+            break;
+          }
+          case 26: {
+            rows_.AddEntriesFrom(input, _repeated_rows_codec);
             break;
           }
         }
@@ -3553,8 +3546,16 @@ namespace Protobuf {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 18: {
-            row_.AddEntriesFrom(ref input, _repeated_row_codec);
+          case 8: {
+            Height = input.ReadUInt32();
+            break;
+          }
+          case 16: {
+            Width = input.ReadUInt32();
+            break;
+          }
+          case 26: {
+            rows_.AddEntriesFrom(ref input, _repeated_rows_codec);
             break;
           }
         }
@@ -3595,7 +3596,7 @@ namespace Protobuf {
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public Row(Row other) : this() {
-          col_ = other.col_.Clone();
+          cols_ = other.cols_.Clone();
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
@@ -3604,14 +3605,14 @@ namespace Protobuf {
           return new Row(this);
         }
 
-        /// <summary>Field number for the "col" field.</summary>
-        public const int ColFieldNumber = 1;
-        private static readonly pb::FieldCodec<global::Protobuf.PlaceType> _repeated_col_codec
+        /// <summary>Field number for the "cols" field.</summary>
+        public const int ColsFieldNumber = 1;
+        private static readonly pb::FieldCodec<global::Protobuf.PlaceType> _repeated_cols_codec
             = pb::FieldCodec.ForEnum(10, x => (int) x, x => (global::Protobuf.PlaceType) x);
-        private readonly pbc::RepeatedField<global::Protobuf.PlaceType> col_ = new pbc::RepeatedField<global::Protobuf.PlaceType>();
+        private readonly pbc::RepeatedField<global::Protobuf.PlaceType> cols_ = new pbc::RepeatedField<global::Protobuf.PlaceType>();
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public pbc::RepeatedField<global::Protobuf.PlaceType> Col {
-          get { return col_; }
+        public pbc::RepeatedField<global::Protobuf.PlaceType> Cols {
+          get { return cols_; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3627,14 +3628,14 @@ namespace Protobuf {
           if (ReferenceEquals(other, this)) {
             return true;
           }
-          if(!col_.Equals(other.col_)) return false;
+          if(!cols_.Equals(other.cols_)) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public override int GetHashCode() {
           int hash = 1;
-          hash ^= col_.GetHashCode();
+          hash ^= cols_.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -3651,7 +3652,7 @@ namespace Protobuf {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           output.WriteRawMessage(this);
         #else
-          col_.WriteTo(output, _repeated_col_codec);
+          cols_.WriteTo(output, _repeated_cols_codec);
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
           }
@@ -3661,7 +3662,7 @@ namespace Protobuf {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-          col_.WriteTo(ref output, _repeated_col_codec);
+          cols_.WriteTo(ref output, _repeated_cols_codec);
           if (_unknownFields != null) {
             _unknownFields.WriteTo(ref output);
           }
@@ -3671,7 +3672,7 @@ namespace Protobuf {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public int CalculateSize() {
           int size = 0;
-          size += col_.CalculateSize(_repeated_col_codec);
+          size += cols_.CalculateSize(_repeated_cols_codec);
           if (_unknownFields != null) {
             size += _unknownFields.CalculateSize();
           }
@@ -3683,7 +3684,7 @@ namespace Protobuf {
           if (other == null) {
             return;
           }
-          col_.Add(other.col_);
+          cols_.Add(other.cols_);
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
 
@@ -3700,7 +3701,7 @@ namespace Protobuf {
                 break;
               case 10:
               case 8: {
-                col_.AddEntriesFrom(input, _repeated_col_codec);
+                cols_.AddEntriesFrom(input, _repeated_cols_codec);
                 break;
               }
             }
@@ -3719,7 +3720,7 @@ namespace Protobuf {
                 break;
               case 10:
               case 8: {
-                col_.AddEntriesFrom(ref input, _repeated_col_codec);
+                cols_.AddEntriesFrom(ref input, _repeated_cols_codec);
                 break;
               }
             }
@@ -3764,7 +3765,9 @@ namespace Protobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public MessageOfTeam(MessageOfTeam other) : this() {
       teamId_ = other.teamId_;
+      playerId_ = other.playerId_;
       score_ = other.score_;
+      money_ = other.money_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -3784,14 +3787,36 @@ namespace Protobuf {
       }
     }
 
+    /// <summary>Field number for the "player_id" field.</summary>
+    public const int PlayerIdFieldNumber = 2;
+    private long playerId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public long PlayerId {
+      get { return playerId_; }
+      set {
+        playerId_ = value;
+      }
+    }
+
     /// <summary>Field number for the "score" field.</summary>
-    public const int ScoreFieldNumber = 2;
+    public const int ScoreFieldNumber = 3;
     private int score_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Score {
       get { return score_; }
       set {
         score_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "money" field.</summary>
+    public const int MoneyFieldNumber = 4;
+    private int money_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int Money {
+      get { return money_; }
+      set {
+        money_ = value;
       }
     }
 
@@ -3809,7 +3834,9 @@ namespace Protobuf {
         return true;
       }
       if (TeamId != other.TeamId) return false;
+      if (PlayerId != other.PlayerId) return false;
       if (Score != other.Score) return false;
+      if (Money != other.Money) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -3817,7 +3844,9 @@ namespace Protobuf {
     public override int GetHashCode() {
       int hash = 1;
       if (TeamId != 0L) hash ^= TeamId.GetHashCode();
+      if (PlayerId != 0L) hash ^= PlayerId.GetHashCode();
       if (Score != 0) hash ^= Score.GetHashCode();
+      if (Money != 0) hash ^= Money.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3838,9 +3867,17 @@ namespace Protobuf {
         output.WriteRawTag(8);
         output.WriteInt64(TeamId);
       }
-      if (Score != 0) {
+      if (PlayerId != 0L) {
         output.WriteRawTag(16);
+        output.WriteInt64(PlayerId);
+      }
+      if (Score != 0) {
+        output.WriteRawTag(24);
         output.WriteInt32(Score);
+      }
+      if (Money != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Money);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -3855,9 +3892,17 @@ namespace Protobuf {
         output.WriteRawTag(8);
         output.WriteInt64(TeamId);
       }
-      if (Score != 0) {
+      if (PlayerId != 0L) {
         output.WriteRawTag(16);
+        output.WriteInt64(PlayerId);
+      }
+      if (Score != 0) {
+        output.WriteRawTag(24);
         output.WriteInt32(Score);
+      }
+      if (Money != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Money);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -3871,8 +3916,14 @@ namespace Protobuf {
       if (TeamId != 0L) {
         size += 1 + pb::CodedOutputStream.ComputeInt64Size(TeamId);
       }
+      if (PlayerId != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(PlayerId);
+      }
       if (Score != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Score);
+      }
+      if (Money != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Money);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3888,8 +3939,14 @@ namespace Protobuf {
       if (other.TeamId != 0L) {
         TeamId = other.TeamId;
       }
+      if (other.PlayerId != 0L) {
+        PlayerId = other.PlayerId;
+      }
       if (other.Score != 0) {
         Score = other.Score;
+      }
+      if (other.Money != 0) {
+        Money = other.Money;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -3910,7 +3967,15 @@ namespace Protobuf {
             break;
           }
           case 16: {
+            PlayerId = input.ReadInt64();
+            break;
+          }
+          case 24: {
             Score = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            Money = input.ReadInt32();
             break;
           }
         }
@@ -3932,7 +3997,15 @@ namespace Protobuf {
             break;
           }
           case 16: {
+            PlayerId = input.ReadInt64();
+            break;
+          }
+          case 24: {
             Score = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            Money = input.ReadInt32();
             break;
           }
         }
@@ -4757,8 +4830,8 @@ namespace Protobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public MessageOfAll(MessageOfAll other) : this() {
       gameTime_ = other.gameTime_;
-      redteamScore_ = other.redteamScore_;
-      blueteamScore_ = other.blueteamScore_;
+      redTeamScore_ = other.redTeamScore_;
+      blueTeamScore_ = other.blueTeamScore_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -4778,25 +4851,25 @@ namespace Protobuf {
       }
     }
 
-    /// <summary>Field number for the "redteam_score" field.</summary>
-    public const int RedteamScoreFieldNumber = 2;
-    private int redteamScore_;
+    /// <summary>Field number for the "red_team_score" field.</summary>
+    public const int RedTeamScoreFieldNumber = 2;
+    private int redTeamScore_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int RedteamScore {
-      get { return redteamScore_; }
+    public int RedTeamScore {
+      get { return redTeamScore_; }
       set {
-        redteamScore_ = value;
+        redTeamScore_ = value;
       }
     }
 
-    /// <summary>Field number for the "blueteam_score" field.</summary>
-    public const int BlueteamScoreFieldNumber = 3;
-    private int blueteamScore_;
+    /// <summary>Field number for the "blue_team_score" field.</summary>
+    public const int BlueTeamScoreFieldNumber = 3;
+    private int blueTeamScore_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int BlueteamScore {
-      get { return blueteamScore_; }
+    public int BlueTeamScore {
+      get { return blueTeamScore_; }
       set {
-        blueteamScore_ = value;
+        blueTeamScore_ = value;
       }
     }
 
@@ -4814,8 +4887,8 @@ namespace Protobuf {
         return true;
       }
       if (GameTime != other.GameTime) return false;
-      if (RedteamScore != other.RedteamScore) return false;
-      if (BlueteamScore != other.BlueteamScore) return false;
+      if (RedTeamScore != other.RedTeamScore) return false;
+      if (BlueTeamScore != other.BlueTeamScore) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -4823,8 +4896,8 @@ namespace Protobuf {
     public override int GetHashCode() {
       int hash = 1;
       if (GameTime != 0) hash ^= GameTime.GetHashCode();
-      if (RedteamScore != 0) hash ^= RedteamScore.GetHashCode();
-      if (BlueteamScore != 0) hash ^= BlueteamScore.GetHashCode();
+      if (RedTeamScore != 0) hash ^= RedTeamScore.GetHashCode();
+      if (BlueTeamScore != 0) hash ^= BlueTeamScore.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -4845,13 +4918,13 @@ namespace Protobuf {
         output.WriteRawTag(8);
         output.WriteInt32(GameTime);
       }
-      if (RedteamScore != 0) {
+      if (RedTeamScore != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(RedteamScore);
+        output.WriteInt32(RedTeamScore);
       }
-      if (BlueteamScore != 0) {
+      if (BlueTeamScore != 0) {
         output.WriteRawTag(24);
-        output.WriteInt32(BlueteamScore);
+        output.WriteInt32(BlueTeamScore);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -4866,13 +4939,13 @@ namespace Protobuf {
         output.WriteRawTag(8);
         output.WriteInt32(GameTime);
       }
-      if (RedteamScore != 0) {
+      if (RedTeamScore != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(RedteamScore);
+        output.WriteInt32(RedTeamScore);
       }
-      if (BlueteamScore != 0) {
+      if (BlueTeamScore != 0) {
         output.WriteRawTag(24);
-        output.WriteInt32(BlueteamScore);
+        output.WriteInt32(BlueTeamScore);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -4886,11 +4959,11 @@ namespace Protobuf {
       if (GameTime != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(GameTime);
       }
-      if (RedteamScore != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RedteamScore);
+      if (RedTeamScore != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RedTeamScore);
       }
-      if (BlueteamScore != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(BlueteamScore);
+      if (BlueTeamScore != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(BlueTeamScore);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -4906,11 +4979,11 @@ namespace Protobuf {
       if (other.GameTime != 0) {
         GameTime = other.GameTime;
       }
-      if (other.RedteamScore != 0) {
-        RedteamScore = other.RedteamScore;
+      if (other.RedTeamScore != 0) {
+        RedTeamScore = other.RedTeamScore;
       }
-      if (other.BlueteamScore != 0) {
-        BlueteamScore = other.BlueteamScore;
+      if (other.BlueTeamScore != 0) {
+        BlueTeamScore = other.BlueTeamScore;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -4931,11 +5004,11 @@ namespace Protobuf {
             break;
           }
           case 16: {
-            RedteamScore = input.ReadInt32();
+            RedTeamScore = input.ReadInt32();
             break;
           }
           case 24: {
-            BlueteamScore = input.ReadInt32();
+            BlueTeamScore = input.ReadInt32();
             break;
           }
         }
@@ -4957,11 +5030,11 @@ namespace Protobuf {
             break;
           }
           case 16: {
-            RedteamScore = input.ReadInt32();
+            RedTeamScore = input.ReadInt32();
             break;
           }
           case 24: {
-            BlueteamScore = input.ReadInt32();
+            BlueTeamScore = input.ReadInt32();
             break;
           }
         }
