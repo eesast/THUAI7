@@ -6,26 +6,26 @@ public class ParaDefine : SingletonDontDestory<ParaDefine>{
     public MessageOfMap map;
     public GameObject spaceG;
     public GameObject[] ruinG;
-    public GameObject homeG;
+    public GameObject[] homeG;
     public GameObject shadowG;
     public GameObject[] asteroidG;
-    public GameObject resourceG;
+    public GameObject[] resourceG;
     public GameObject wormholeG;
-    public GameObject communityG;
-    public GameObject factoryG;
-    public GameObject fortG;
-    public GameObject civilianshipG;
-    public GameObject militaryshipG;
-    public GameObject flagshipG;
-    public GameObject laserG;
-    public GameObject plasmaG;
-    public GameObject shellG;
-    public GameObject missileG;
-    public GameObject arcG;
-    public GameObject PT(PlaceType _placeType) {
+    public GameObject[] communityG;
+    public GameObject[] factoryG;
+    public GameObject[] fortG;
+    public GameObject[] civilianshipG;
+    public GameObject[] militaryshipG;
+    public GameObject[] flagshipG;
+    public GameObject[] laserG;
+    public GameObject[] plasmaG;
+    public GameObject[] shellG;
+    public GameObject[] missileG;
+    public GameObject[] arcG;
+    public GameObject PT(PlaceType _placeType, int teamKey = 0) {
         switch (_placeType) {
             case PlaceType.Home:
-                return homeG;
+                return homeG[teamKey];
             case PlaceType.Space:
                 return spaceG;
             case PlaceType.Ruin:
@@ -35,46 +35,46 @@ public class ParaDefine : SingletonDontDestory<ParaDefine>{
             case PlaceType.Asteroid:
                 return asteroidG[GetRand()%3];
             case PlaceType.Resource:
-                return resourceG;
+                return resourceG[GetRand()%3];
             case PlaceType.Wormhole:
                 return wormholeG;
             default: return null;
         }
     }
-    public GameObject PT(ConstructionType _constructionType) {
+    public GameObject PT(ConstructionType _constructionType, int teamKey = 0) {
         switch (_constructionType) {
             case ConstructionType.Community:
-                return communityG;
+                return communityG[teamKey];
             case ConstructionType.Factory:
-                return factoryG;
+                return factoryG[teamKey];
             case ConstructionType.Fort:
-                return fortG;
+                return fortG[teamKey];
             default: return null;
         }
     }
-    public GameObject PT(ShipType _shipType) {
+    public GameObject PT(ShipType _shipType, int teamKey = 0) {
         switch (_shipType) {
             case ShipType.CivilianShip:
-                return civilianshipG;
+                return civilianshipG[teamKey];
             case ShipType.MilitaryShip:
-                return militaryshipG;
+                return militaryshipG[teamKey];
             case ShipType.FlagShip:
-                return flagshipG;
+                return flagshipG[teamKey];
             default: return null;
         }
     }
-    public GameObject PT(BulletType _bulletType) {
+    public GameObject PT(BulletType _bulletType, int teamKey = 0) {
         switch (_bulletType) {
             case BulletType.Laser:
-                return laserG;
+                return laserG[teamKey];
             case BulletType.Plasma:
-                return plasmaG;
+                return plasmaG[teamKey];
             case BulletType.Shell:
-                return shellG;
+                return shellG[teamKey];
             case BulletType.Missile:
-                return missileG;
+                return missileG[teamKey];
             case BulletType.Arc:
-                return arcG;
+                return arcG[teamKey];
             default: return null;
         }
     }
