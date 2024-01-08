@@ -11,12 +11,12 @@ public class MapControl : SingletonMono<MapControl> {
             for (int j = 0; j < 50; j++) {
                 if(ParaDefine.GetInstance().PT(map.Rows[i].Cols[j])){
                     if(map.Rows[i].Cols[j] == PlaceType.Shadow)
-                        Instantiate(
+                        ObjectCreater.GetInstance().CreateObject(
                             ParaDefine.GetInstance().PT(PlaceType.Space),
                             ParaDefine.GetInstance().CellToMap(i, j),
                             Quaternion.identity,
                             mapFa.transform);
-                    Instantiate(
+                    ObjectCreater.GetInstance().CreateObject(
                         ParaDefine.GetInstance().PT(map.Rows[i].Cols[j]),
                         ParaDefine.GetInstance().CellToMap(i, j),
                         Quaternion.identity,

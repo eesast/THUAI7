@@ -255,6 +255,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1023347885}
+  - component: {fileID: 1023347886}
   - component: {fileID: 1023347884}
   m_Layer: 0
   m_Name: MessageControl
@@ -290,6 +291,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1023347886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023347883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 978c3febd6cbd5b46b11e2702768ef20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1826692505
 GameObject:
   m_ObjectHideFlags: 0
@@ -330,6 +343,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2020139210}
+  - component: {fileID: 2020139213}
   - component: {fileID: 2020139211}
   - component: {fileID: 2020139212}
   m_Layer: 0
@@ -402,18 +416,10 @@ MonoBehaviour:
   factoryG:
   - {fileID: 6257076823173944538, guid: f0f5b7271131c0f4b97b109570925eb9, type: 3}
   - {fileID: 6257076823173944538, guid: f0f5b7271131c0f4b97b109570925eb9, type: 3}
-  fortG:
-  - {fileID: 8321255172527423901, guid: a914fa8a139c80943b41f4d48a55a3c5, type: 3}
-  - {fileID: 7112353806274185965, guid: 3dbbb168648a76c419ff6ec503a728a8, type: 3}
-  civilianshipG:
-  - {fileID: 2471517941928819193, guid: aacb0567466af1f49a819e9cca2aa25a, type: 3}
-  - {fileID: 2839346728300598120, guid: b10467a71f6849a40b3f4d2ef878fe6e, type: 3}
-  militaryshipG:
-  - {fileID: 8791801804747653345, guid: 0af6f1601d486d444aff275528c46a67, type: 3}
-  - {fileID: 5108960663769765756, guid: a41aff2827ee50d408062f8ab30d1912, type: 3}
-  flagshipG:
-  - {fileID: 8557423861053313593, guid: a2d61b0a8cfdbe44aaebf66457df9608, type: 3}
-  - {fileID: 3202352412248203209, guid: ac213e4499d38e642b2a07fbfc564554, type: 3}
+  fortG: {fileID: 8302654837601584078, guid: ab06c719504fda3449d4df06ab5693cc, type: 3}
+  civilianshipG: {fileID: 7171601645716739352, guid: 689388b1ed32205428711466f3794748, type: 3}
+  militaryshipG: {fileID: 1718981553063819522, guid: a69b4f22edee38141902bab64373c73d, type: 3}
+  flagshipG: {fileID: 8427987949455047532, guid: 57d8c0b08e0f19f48a227b34b8b70a0b, type: 3}
   laserG:
   - {fileID: 0}
   - {fileID: 0}
@@ -429,6 +435,18 @@ MonoBehaviour:
   arcG:
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &2020139213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2020139208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848c5060fd574ee40b5650bb0e25f5fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2074007630
 GameObject:
   m_ObjectHideFlags: 0

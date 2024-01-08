@@ -13,10 +13,10 @@ public class ParaDefine : SingletonDontDestory<ParaDefine>{
     public GameObject wormholeG;
     public GameObject[] communityG;
     public GameObject[] factoryG;
-    public GameObject[] fortG;
-    public GameObject[] civilianshipG;
-    public GameObject[] militaryshipG;
-    public GameObject[] flagshipG;
+    public GameObject fortG;
+    public GameObject civilianshipG;
+    public GameObject militaryshipG;
+    public GameObject flagshipG;
     public GameObject[] laserG;
     public GameObject[] plasmaG;
     public GameObject[] shellG;
@@ -48,18 +48,18 @@ public class ParaDefine : SingletonDontDestory<ParaDefine>{
             case ConstructionType.Factory:
                 return factoryG[teamKey];
             case ConstructionType.Fort:
-                return fortG[teamKey];
+                return fortG;
             default: return null;
         }
     }
     public GameObject PT(ShipType _shipType, int teamKey = 0) {
         switch (_shipType) {
             case ShipType.CivilianShip:
-                return civilianshipG[teamKey];
+                return civilianshipG;
             case ShipType.MilitaryShip:
-                return militaryshipG[teamKey];
+                return militaryshipG;
             case ShipType.FlagShip:
-                return flagshipG[teamKey];
+                return flagshipG;
             default: return null;
         }
     }
