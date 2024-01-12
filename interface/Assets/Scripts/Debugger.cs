@@ -8,13 +8,11 @@ public class Debugger : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
         target.transform.Find("mask1").GetComponent<SpriteRenderer>().material.color = Color.blue;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 }

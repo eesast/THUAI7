@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SingletonMono <T> : MonoBehaviour where T: MonoBehaviour
+public class SingletonMono<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T Instance;
     public static T GetInstance()
@@ -12,14 +12,14 @@ public class SingletonMono <T> : MonoBehaviour where T: MonoBehaviour
 
     protected void Awake()
     {
-        if (Instance==null)
+        if (Instance == null)
         {
             Instance = this as T;
-//            DontDestroyOnLoad(gameObject);
+            // DontDestroyOnLoad(gameObject);
         }
         else
         {
-//            Destroy(gameObject);
+            // Destroy(gameObject);
         }
     }
 
