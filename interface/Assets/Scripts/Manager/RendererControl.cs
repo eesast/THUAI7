@@ -9,7 +9,8 @@ public class RendererControl : Singleton<RendererControl>
     Renderer CurrentRenderer = new Renderer();
     Tuple<Color, Color> Team0Color = new Tuple<Color, Color>(new Color(6, 0.11f, 0, 0), new Color(6f, 0.85f, 0, 0));
     Tuple<Color, Color> Team1Color = new Tuple<Color, Color>(new Color(0.141f, 0, 6, 0), new Color(0, 0.45f, 6, 0));
-    void Start(){
+    void Start()
+    {
     }
     // public Tuple<MaterialPropertyBlock, MaterialPropertyBlock> GetColFromTeam(int teamKey, MaterialPropertyBlock a)
     // {
@@ -37,33 +38,35 @@ public class RendererControl : Singleton<RendererControl>
     //         default: return null;
     //     }
     // }
-    public void SetColToChild(int teamKey, Transform targetTransform){
+    public void SetColToChild(int teamKey, Transform targetTransform)
+    {
         Debug.Log("step2");
-        switch(teamKey){
+        switch (teamKey)
+        {
             case 0:
-            Debug.Log("step2.5");
-            CurrentRenderer = targetTransform.Find("mask1").GetComponent<Renderer>();
-            Debug.Log("step2.55:" + CurrentRenderer == null);
-            CurrentRenderer.GetPropertyBlock(CurrentPropertyBlock);
-            Debug.Log("step2.6");
-            CurrentPropertyBlock.SetColor("_GlowColor", Team0Color.Item1);
-            CurrentRenderer.SetPropertyBlock(CurrentPropertyBlock);
-            CurrentRenderer = targetTransform.Find("mask2").GetComponent<Renderer>();
-            CurrentRenderer.GetPropertyBlock(CurrentPropertyBlock);
-            CurrentPropertyBlock.SetColor("_GlowColor", Team0Color.Item2);
-            CurrentRenderer.SetPropertyBlock(CurrentPropertyBlock);
-            return ;
+                Debug.Log("step2.5");
+                CurrentRenderer = targetTransform.Find("mask1").GetComponent<Renderer>();
+                Debug.Log("step2.55:" + CurrentRenderer == null);
+                CurrentRenderer.GetPropertyBlock(CurrentPropertyBlock);
+                Debug.Log("step2.6");
+                CurrentPropertyBlock.SetColor("_GlowColor", Team0Color.Item1);
+                CurrentRenderer.SetPropertyBlock(CurrentPropertyBlock);
+                CurrentRenderer = targetTransform.Find("mask2").GetComponent<Renderer>();
+                CurrentRenderer.GetPropertyBlock(CurrentPropertyBlock);
+                CurrentPropertyBlock.SetColor("_GlowColor", Team0Color.Item2);
+                CurrentRenderer.SetPropertyBlock(CurrentPropertyBlock);
+                return;
             case 1:
-            CurrentRenderer = targetTransform.Find("mask1").GetComponent<Renderer>();
-            CurrentRenderer.GetPropertyBlock(CurrentPropertyBlock);
-            CurrentPropertyBlock.SetColor("_GlowColor", Team1Color.Item1);
-            CurrentRenderer.SetPropertyBlock(CurrentPropertyBlock);
-            CurrentRenderer = targetTransform.Find("mask2").GetComponent<Renderer>();
-            CurrentRenderer.GetPropertyBlock(CurrentPropertyBlock);
-            CurrentPropertyBlock.SetColor("_GlowColor", Team1Color.Item2);
-            CurrentRenderer.SetPropertyBlock(CurrentPropertyBlock);
-            return ;
-            default: return ;
+                CurrentRenderer = targetTransform.Find("mask1").GetComponent<Renderer>();
+                CurrentRenderer.GetPropertyBlock(CurrentPropertyBlock);
+                CurrentPropertyBlock.SetColor("_GlowColor", Team1Color.Item1);
+                CurrentRenderer.SetPropertyBlock(CurrentPropertyBlock);
+                CurrentRenderer = targetTransform.Find("mask2").GetComponent<Renderer>();
+                CurrentRenderer.GetPropertyBlock(CurrentPropertyBlock);
+                CurrentPropertyBlock.SetColor("_GlowColor", Team1Color.Item2);
+                CurrentRenderer.SetPropertyBlock(CurrentPropertyBlock);
+                return;
+            default: return;
         }
     }
 }
