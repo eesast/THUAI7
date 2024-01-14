@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SingletonDontDestory<T> : MonoBehaviour where T : MonoBehaviour
+public class SingletonDontDestory<T> : MonoBehaviour
+    where T : MonoBehaviour
 {
     private static T Instance;
     public static T GetInstance()
@@ -22,5 +23,4 @@ public class SingletonDontDestory<T> : MonoBehaviour where T : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
 }

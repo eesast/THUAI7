@@ -66,7 +66,8 @@ public class RendererControl : Singleton<RendererControl>
                 CurrentPropertyBlock.SetColor("_GlowColor", Team1Color.Item2);
                 CurrentRenderer.SetPropertyBlock(CurrentPropertyBlock);
                 return;
-            default: return;
+            default:
+                return;
         }
     }
 }

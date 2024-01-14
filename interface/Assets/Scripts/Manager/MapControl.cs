@@ -20,12 +20,14 @@ public class MapControl : SingletonMono<MapControl>
                             ParaDefine.GetInstance().PT(PlaceType.Space),
                             ParaDefine.GetInstance().CellToMap(i, j),
                             Quaternion.identity,
-                            mapFa.transform);
+                            mapFa.transform
+                        );
                     ObjectCreater.GetInstance().CreateObject(
                         ParaDefine.GetInstance().PT(map.Rows[i].Cols[j]),
                         ParaDefine.GetInstance().CellToMap(i, j),
                         Quaternion.identity,
-                        mapFa.transform);
+                        mapFa.transform
+                    );
                 }
             }
         }

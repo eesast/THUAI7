@@ -21,8 +21,7 @@ public class MessageReceiverPlay : SingletonDontDestory<MessageReceiverPlay>
             var client = new AvailableService.AvailableServiceClient(channel);
             Debug.Log(channel);
             Debug.Log(client);
-            PlayerMsg msg = new PlayerMsg()
-            {
+            PlayerMsg msg = new PlayerMsg() {
                 PlayerId = 0,
                 TeamId = 0,
                 ShipType = ShipType.CivilianShip,
@@ -93,10 +92,7 @@ public class MessageReceiverPlay : SingletonDontDestory<MessageReceiverPlay>
                     if (MessageManager.GetInstance().ShipG[messageOfObj.ShipMessage.Guid] == null)
                     {
                         MessageManager.GetInstance().ShipG[messageOfObj.ShipMessage.Guid] =
-                            Instantiate(ParaDefine.GetInstance().PT(messageOfObj.ShipMessage.ShipType),
-                                        new Vector3(messageOfObj.ShipMessage.X, messageOfObj.ShipMessage.Y),
-                                        Quaternion.identity,
-                                        GameObject.Find("Ship").transform);
+                            Instantiate(ParaDefine.GetInstance().PT(messageOfObj.ShipMessage.ShipType), new Vector3(messageOfObj.ShipMessage.X, messageOfObj.ShipMessage.Y), Quaternion.identity, GameObject.Find("Ship").transform);
                         MessageManager.GetInstance().Ship[messageOfObj.ShipMessage.Guid] = messageOfObj.ShipMessage;
                     }
                     break;
@@ -104,10 +100,7 @@ public class MessageReceiverPlay : SingletonDontDestory<MessageReceiverPlay>
                     if (MessageManager.GetInstance().BulletG[messageOfObj.BulletMessage.Guid] == null)
                     {
                         MessageManager.GetInstance().BulletG[messageOfObj.BulletMessage.Guid] =
-                            Instantiate(ParaDefine.GetInstance().PT(messageOfObj.BulletMessage.Type),
-                                        new Vector3(messageOfObj.BulletMessage.X, messageOfObj.BulletMessage.Y),
-                                        Quaternion.identity,
-                                        GameObject.Find("Bullet").transform);
+                            Instantiate(ParaDefine.GetInstance().PT(messageOfObj.BulletMessage.Type), new Vector3(messageOfObj.BulletMessage.X, messageOfObj.BulletMessage.Y), Quaternion.identity, GameObject.Find("Bullet").transform);
                         MessageManager.GetInstance().Bullet[messageOfObj.BulletMessage.Guid] = messageOfObj.BulletMessage;
                     }
                     break;
@@ -123,7 +116,8 @@ public class MessageReceiverPlay : SingletonDontDestory<MessageReceiverPlay>
                     break;
                 case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
                     break;
-                default: break;
+                default:
+                    break;
             }
         }
     }
