@@ -21,7 +21,8 @@ public class MessageReceiverLive : SingletonDontDestory<MessageReceiverLive>
             var client = new AvailableService.AvailableServiceClient(channel);
             Debug.Log(channel);
             Debug.Log(client);
-            PlayerMsg msg = new PlayerMsg() {
+            PlayerMsg msg = new PlayerMsg()
+            {
                 PlayerId = 2024,
                 ShipType = ShipType.NullShipType,
                 TeamId = -1,
