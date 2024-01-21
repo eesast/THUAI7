@@ -24,9 +24,19 @@ namespace Preparation.Utility
         public const int MapRows = 50;                  // 行数
         public const int MapCols = 50;                  // 列数
 
+        public const int InitialMoney = 50;             // 初始金钱
+
         public static bool IsGameObjMap(GameObjType gameObjType)
         {
             return (uint)gameObjType > 3;
+        }
+        public static bool NeedCopy(GameObjType gameObjType)
+        {
+            return gameObjType != GameObjType.Null &&
+                   gameObjType != GameObjType.Ruin &&
+                   gameObjType != GameObjType.Shadow &&
+                   gameObjType != GameObjType.Asteroid &&
+                   gameObjType != GameObjType.OutOfBoundBlock;
         }
         public static XY GetCellCenterPos(int x, int y)  // 求格子的中心坐标
         {

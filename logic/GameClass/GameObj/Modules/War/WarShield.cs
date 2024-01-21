@@ -5,22 +5,16 @@ namespace GameClass.GameObj.Modules;
 
 public class WarShield1 : IShield
 {
-    private const int cost = GameData.WarShipShield1Cost;
-    public int Cost => cost;
-    private const int shieldHP = GameData.Shield1;
-    public int ShieldHP => shieldHP;
+    public int Cost => GameData.WarShipShield1Cost;
+    public int ShieldHP => GameData.Shield1;
 }
 public class WarShield2 : IShield
 {
-    private const int cost = GameData.WarShipShield2Cost;
-    public int Cost => cost;
-    private const int shieldHP = GameData.Shield2;
-    public int ShieldHP => shieldHP;
+    public int Cost => GameData.WarShipShield2Cost;
+    public int ShieldHP => GameData.Shield2;
 }
 public class WarShield3 : IShield
 {
-    private const int cost = GameData.WarShipShield3Cost;
-    public int Cost => cost;
-    private const int shieldHP = GameData.Shield3;
-    public int ShieldHP => shieldHP;
+    public int Cost => GameData.WarShipShield3Cost;
+    public int ShieldHP => GameData.Shield3;
 }

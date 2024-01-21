@@ -11,13 +11,20 @@ public abstract class Bullet : ObjOfShip
     public abstract int Speed { get; }
     public abstract int CastTime { get; }
     public abstract int SwingTime { get; }
-    public abstract int CD { get; }
-    public abstract int MaxBulletNum { get; }
+    public abstract double ArmorModifier { get; }
+    public abstract double ShieldModifier { get; }
     public override bool IsRigid => true;                 // 默认为true
     public override ShapeType Shape => ShapeType.Circle;  // 默认为圆形
     public abstract BulletType TypeOfBullet { get; }
     public abstract bool CanAttack(GameObj target);
-    public abstract bool CanBeBombed(GameObjType gameObjType);
+    public virtual bool CanBeBombed(GameObjType gameObjType) => gameObjType switch
+    {
+        GameObjType.Ship => true,
+        GameObjType.Construction => true,
+        GameObjType.Wormhole => true,
+        GameObjType.Home => true,
+        _ => false
+    };
     public override bool IgnoreCollideExecutor(IGameObj targetObj)
     {
         if (targetObj == Parent) return true;

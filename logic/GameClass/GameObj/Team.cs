@@ -15,8 +15,7 @@ namespace GameClass.GameObj
         private readonly List<XY> birthPointList = new();
         public List<XY> BirthPointList => birthPointList;
         private Home home = home;
-        public AtomicLong Money { get; } = new AtomicLong(0);
-        public AtomicLong Score { get; } = new AtomicLong(0);
+        public MoneyPool MoneyPool { get; } = new MoneyPool();
         public Ship? GetShip(long shipID)
         {
             foreach (Ship ship in shipList)
@@ -50,12 +49,12 @@ namespace GameClass.GameObj
         }
         public void AddMoney(long add)
         {
-            Money.Add(add);
-            Score.Add(add);
+            MoneyPool.Money.Add(add);
+            MoneyPool.Score.Add(add);
         }
         public void SubMoney(long sub)
         {
-            Money.Sub(sub);
+            MoneyPool.Money.Sub(sub);
         }
         public void SetHome(Home home)
         {

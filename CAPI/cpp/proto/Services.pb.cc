@@ -31,34 +31,25 @@ static constexpr ::_pb::Message* const* file_default_instances = nullptr;
 
 const char descriptor_table_protodef_Services_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
     "\n\016Services.proto\022\010protobuf\032\025Message2Clie"
-    "nts.proto\032\024Message2Server.proto2\240\010\n\020Avai"
+    "nts.proto\032\024Message2Server.proto2\265\005\n\020Avai"
     "lableService\0223\n\rTryConnection\022\017.protobuf"
-    ".IDMsg\032\021.protobuf.BoolRes\022>\n\014AddBasicShi"
-    "p\022\021.protobuf.ShipMsg\032\031.protobuf.MessageT"
-    "oClient0\001\0229\n\007AddHome\022\021.protobuf.HomeMsg\032"
-    "\031.protobuf.MessageToClient0\001\022A\n\013AddBuild"
-    "ing\022\025.protobuf.BuildingMsg\032\031.protobuf.Me"
-    "ssageToClient0\001\022,\n\004Move\022\021.protobuf.MoveM"
-    "sg\032\021.protobuf.MoveRes\022C\n\026InstallCollecto"
-    "rModule\022\026.protobuf.CollectorMsg\032\021.protob"
-    "uf.BoolRes\022;\n\022InstallArmorModule\022\022.proto"
-    "buf.ArmorMsg\032\021.protobuf.BoolRes\022=\n\023Insta"
-    "llShieldModule\022\023.protobuf.ShieldMsg\032\021.pr"
-    "otobuf.BoolRes\022\?\n\024InstallBuilderModule\022\024"
-    ".protobuf.BuilderMsg\032\021.protobuf.BoolRes\022"
-    "\?\n\023InstallBulletModule\022\025.protobuf.Bullet"
-    "erMsg\032\021.protobuf.BoolRes\0223\n\013SendMessage\022"
-    "\021.protobuf.SendMsg\032\021.protobuf.BoolRes\0225\n"
-    "\017StartRecovering\022\017.protobuf.IDMsg\032\021.prot"
-    "obuf.BoolRes\0224\n\016StartProducing\022\017.protobu"
-    "f.IDMsg\032\021.protobuf.BoolRes\0224\n\016StartRecyc"
-    "ling\022\017.protobuf.IDMsg\032\021.protobuf.BoolRes"
-    "\0226\n\rStartBuilding\022\022.protobuf.BuildMsg\032\021."
-    "protobuf.BoolRes\0220\n\006Attack\022\023.protobuf.At"
-    "tackMsg\032\021.protobuf.BoolRes\0222\n\tBuildShip\022"
-    "\022.protobuf.BuildMsg\032\021.protobuf.BoolRes\0222"
-    "\n\014EndAllAction\022\017.protobuf.IDMsg\032\021.protob"
-    "uf.BoolResb\006proto3";
+    ".IDMsg\032\021.protobuf.BoolRes\022=\n\tAddPlayer\022\023"
+    ".protobuf.PlayerMsg\032\031.protobuf.MessageTo"
+    "Client0\001\022,\n\004Move\022\021.protobuf.MoveMsg\032\021.pr"
+    "otobuf.MoveRes\022-\n\007Recover\022\017.protobuf.IDM"
+    "sg\032\021.protobuf.BoolRes\022-\n\007Produce\022\017.proto"
+    "buf.IDMsg\032\021.protobuf.BoolRes\0224\n\007Rebuild\022"
+    "\026.protobuf.ConstructMsg\032\021.protobuf.BoolR"
+    "es\0226\n\tConstruct\022\026.protobuf.ConstructMsg\032"
+    "\021.protobuf.BoolRes\0220\n\006Attack\022\023.protobuf."
+    "AttackMsg\032\021.protobuf.BoolRes\022,\n\004Send\022\021.p"
+    "rotobuf.SendMsg\032\021.protobuf.BoolRes\0228\n\rIn"
+    "stallModule\022\024.protobuf.InstallMsg\032\021.prot"
+    "obuf.BoolRes\022-\n\007Recycle\022\017.protobuf.IDMsg"
+    "\032\021.protobuf.BoolRes\0226\n\tBuildShip\022\026.proto"
+    "buf.BuildShipMsg\032\021.protobuf.BoolRes\0222\n\014E"
+    "ndAllAction\022\017.protobuf.IDMsg\032\021.protobuf."
+    "BoolResb\006proto3";
 static const ::_pbi::DescriptorTable* const descriptor_table_Services_2eproto_deps[2] = {
     &::descriptor_table_Message2Clients_2eproto,
     &::descriptor_table_Message2Server_2eproto,
@@ -67,7 +58,7 @@ static ::_pbi::once_flag descriptor_table_Services_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Services_2eproto = {
     false,
     false,
-    1138,
+    775,
     descriptor_table_protodef_Services_2eproto,
     "Services.proto",
     &descriptor_table_Services_2eproto_once,

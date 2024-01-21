@@ -1,8 +1,11 @@
-﻿using GameClass.GameObj;
+﻿using System.Collections.Generic;
+using System.Threading;
+using GameClass.GameObj;
+using GameClass.GameObj.Areas;
 using GameClass.GameObj.Bullets;
 using GameEngine;
 using Preparation.Utility;
-using System.Threading;
+using Preparation.Interface;
 using Timothy.FrameRateTask;
 
 namespace Gaming
@@ -29,6 +32,26 @@ namespace Gaming
                 gameMap.Add(bullet);
                 moveEngine.MoveObj(bullet, (int)(bullet.AttackDistance * 1000 / bullet.MoveSpeed), angle, ++bullet.StateNum);  // 这里时间参数除出来的单位要是ms
             }
+            private void BombObj(Bullet bullet, GameObj objBeingShot)
+            {
+                switch (objBeingShot.Type)
+                {
+                    case GameObjType.Ship:
+                        shipManager.BeAttacked((Ship)objBeingShot, bullet);
+                        break;
+                    case GameObjType.Construction:
+                        ((Construction)objBeingShot).BeAttacked(bullet);
+                        break;
+                    case GameObjType.Wormhole:
+                        ((Wormhole)objBeingShot).BeAttacked(bullet);
+                        break;
+                    case GameObjType.Home:
+                        ((Home)objBeingShot).BeAttacked(bullet);
+                        break;
+                    default:
+                        break;
+                }
+            }
             public bool TryRemoveBullet(Bullet bullet)
             {
                 if (gameMap.Remove(bullet))
@@ -50,6 +73,55 @@ namespace Gaming
                     return true;
                 }
                 else return false;
+            }
+            private void BulletBomb(Bullet bullet, GameObj? objBeingShot)
+            {
+                if (!TryRemoveBullet(bullet))
+                {
+                    return;
+                }
+                if (bullet.BulletBombRange == 0)
+                {
+                    if (objBeingShot == null)
+                    {
+                        shipManager.BackSwing((Ship)bullet.Parent!, bullet.SwingTime);
+                        return;
+                    }
+                    BombObj(bullet, objBeingShot);
+                    shipManager.BackSwing((Ship)bullet.Parent!, bullet.SwingTime);
+                    return;
+                }
+                else
+                {
+                    var beAttackedList = new List<IGameObj>();
+                    foreach (var kvp in gameMap.GameObjDict)
+                    {
+                        if (bullet.CanBeBombed(kvp.Key))
+                        {
+                            gameMap.GameObjLockDict[kvp.Key].EnterReadLock();
+                            try
+                            {
+                                foreach (var item in gameMap.GameObjDict[kvp.Key])
+                                {
+                                    if (bullet.CanAttack((GameObj)item))
+                                    {
+                                        beAttackedList.Add(item);
+                                    }
+                                }
+                            }
+                            finally
+                            {
+                                gameMap.GameObjLockDict[kvp.Key].ExitReadLock();
+                            }
+                        }
+                    }
+                    foreach (GameObj beAttackedObj in beAttackedList)
+                    {
+                        BombObj(bullet, beAttackedObj);
+                    }
+                    beAttackedList.Clear();
+                    shipManager.BackSwing((Ship)bullet.Parent!, bullet.SwingTime);
+                }
             }
             public bool Attack(Ship ship, double angle)
             {

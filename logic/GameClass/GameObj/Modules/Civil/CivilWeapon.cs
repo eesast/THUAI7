@@ -5,8 +5,6 @@ namespace GameClass.GameObj.Modules;
 
 public class CivilLaserGun : IWeapon
 {
-    private const int cost = GameData.CivilShipLaserGunCost;
-    public int Cost => cost;
-    private const BulletType bulletType = BulletType.Laser;
-    public BulletType BulletType => bulletType;
+    public int Cost => GameData.CivilShipLaserGunCost;
+    public BulletType BulletType => BulletType.Laser;
 }

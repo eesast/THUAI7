@@ -110,4 +110,53 @@ public static class ModuleFactory
         },
         _ => NullWeapon.Instance
     };
+
+    public static int FindModuleCost(ShipType shipType, ModuleType moduleType) => shipType switch
+    {
+        ShipType.CivilShip => moduleType switch
+        {
+            ModuleType.Producer1 => GameData.CivilShipProducer1Cost,
+            ModuleType.Producer2 => GameData.CivilShipProducer2Cost,
+            ModuleType.Producer3 => GameData.CivilShipProducer3Cost,
+            ModuleType.Constructor1 => GameData.CivilShipConstructor1Cost,
+            ModuleType.Constructor2 => GameData.CivilShipConstructor2Cost,
+            ModuleType.Constructor3 => GameData.CivilShipConstructor3Cost,
+            ModuleType.Armor1 => GameData.CivilShipArmor1Cost,
+            ModuleType.Shield1 => GameData.CivilShipShield1Cost,
+            ModuleType.LaserGun => GameData.CivilShipLaserGunCost,
+            _ => int.MaxValue
+        },
+        ShipType.WarShip => moduleType switch
+        {
+            ModuleType.Armor1 => GameData.WarShipArmor1Cost,
+            ModuleType.Armor2 => GameData.WarShipArmor2Cost,
+            ModuleType.Armor3 => GameData.WarShipArmor3Cost,
+            ModuleType.Shield1 => GameData.WarShipShield1Cost,
+            ModuleType.Shield2 => GameData.WarShipShield2Cost,
+            ModuleType.Shield3 => GameData.WarShipShield3Cost,
+            ModuleType.LaserGun => GameData.WarShipLaserGunCost,
+            ModuleType.PlasmaGun => GameData.WarShipPlasmaGunCost,
+            ModuleType.ShellGun => GameData.WarShipShellGunCost,
+            ModuleType.MissileGun => GameData.WarShipMissileGunCost,
+            ModuleType.ArcGun => GameData.WarShipArcGunCost,
+            _ => int.MaxValue
+        },
+        ShipType.FlagShip => moduleType switch
+        {
+            ModuleType.Producer1 => GameData.FlagShipProducer1Cost,
+            ModuleType.Constructor1 => GameData.FlagShipConstructor1Cost,
+            ModuleType.Armor1 => GameData.FlagShipArmor1Cost,
+            ModuleType.Armor2 => GameData.FlagShipArmor2Cost,
+            ModuleType.Armor3 => GameData.FlagShipArmor3Cost,
+            ModuleType.Shield1 => GameData.FlagShipShield1Cost,
+            ModuleType.Shield2 => GameData.FlagShipShield2Cost,
+            ModuleType.Shield3 => GameData.FlagShipShield3Cost,
+            ModuleType.LaserGun => GameData.FlagShipLaserGunCost,
+            ModuleType.PlasmaGun => GameData.FlagShipPlasmaGunCost,
+            ModuleType.ShellGun => GameData.FlagShipShellGunCost,
+            ModuleType.MissileGun => GameData.FlagShipMissileGunCost,
+            ModuleType.ArcGun => GameData.FlagShipArcGunCost,
+            _ => int.MaxValue
+        }
+    };
 }

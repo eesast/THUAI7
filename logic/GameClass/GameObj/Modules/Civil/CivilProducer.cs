@@ -5,22 +5,16 @@ namespace GameClass.GameObj.Modules;
 
 public class CivilProducer1 : IProducer
 {
-    private const int cost = GameData.CivilShipProducer1Cost;
-    public int Cost => cost;
-    private const int produceSpeed = GameData.ScoreProducer1PerSecond;
-    public int ProduceSpeed => produceSpeed;
+    public int Cost => GameData.CivilShipProducer1Cost;
+    public int ProduceSpeed => GameData.ScoreProducer1PerSecond;
 }
 public class CivilProducer2 : IProducer
 {
-    private const int cost = GameData.CivilShipProducer1Cost;
-    public int Cost => cost;
-    private const int produceSpeed = GameData.ScoreProducer2PerSecond;
-    public int ProduceSpeed => produceSpeed;
+    public int Cost => GameData.CivilShipProducer2Cost;
+    public int ProduceSpeed => GameData.ScoreProducer2PerSecond;
 }
 public class CivilProducer3 : IProducer
 {
-    private const int cost = GameData.CivilShipProducer1Cost;
-    public int Cost => cost;
-    private const int produceSpeed = GameData.ScoreProducer3PerSecond;
-    public int ProduceSpeed => produceSpeed;
+    public int Cost => GameData.CivilShipProducer3Cost;
+    public int ProduceSpeed => GameData.ScoreProducer3PerSecond;
 }

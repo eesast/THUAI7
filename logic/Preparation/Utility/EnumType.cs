@@ -42,6 +42,7 @@
         Constructor2 = 2,
         Constructor3 = 3,
     }
+
     /// <summary>
     /// 游戏对象类型
     /// </summary>
@@ -61,17 +62,26 @@
         Home = 10,
         OutOfBoundBlock = 11,
     }
-    /// <summary>
-    /// 武器类型
-    /// </summary>
-    public enum GunType
+    public enum ModuleType
     {
         Null = 0,
-        LaserGun = 1,
-        PlasmaGun = 2,
-        ShellGun = 3,
-        MissileGun = 4,
-        ArcGun = 5,
+        Producer1 = 1,
+        Producer2 = 2,
+        Producer3 = 3,
+        Constructor1 = 4,
+        Constructor2 = 5,
+        Constructor3 = 6,
+        Armor1 = 7,
+        Armor2 = 8,
+        Armor3 = 9,
+        Shield1 = 10,
+        Shield2 = 11,
+        Shield3 = 12,
+        LaserGun = 13,
+        PlasmaGun = 14,
+        ShellGun = 15,
+        MissileGun = 16,
+        ArcGun = 17,
     }
     /// <summary>
     /// PlaceType
@@ -141,6 +151,7 @@
         Swinging = 6,
         Stunned = 7,
         Moving = 8,
+        Deceased = 9,
     }
     /// <summary>
     /// 舰船类型
