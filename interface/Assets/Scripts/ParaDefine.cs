@@ -41,7 +41,8 @@ public class ParaDefine : SingletonDontDestory<ParaDefine>
                 return resourceG[GetRand() % 3];
             case PlaceType.Wormhole:
                 return wormholeG;
-            default: return null;
+            default:
+                return null;
         }
     }
     public GameObject PT(ConstructionType _constructionType, int teamKey = 0)
@@ -54,7 +55,8 @@ public class ParaDefine : SingletonDontDestory<ParaDefine>
                 return factoryG[teamKey];
             case ConstructionType.Fort:
                 return fortG;
-            default: return null;
+            default:
+                return null;
         }
     }
     public GameObject PT(ShipType _shipType, int teamKey = 0)
@@ -67,7 +69,8 @@ public class ParaDefine : SingletonDontDestory<ParaDefine>
                 return militaryshipG;
             case ShipType.FlagShip:
                 return flagshipG;
-            default: return null;
+            default:
+                return null;
         }
     }
     public GameObject PT(BulletType _bulletType, int teamKey = 0)
@@ -84,7 +87,8 @@ public class ParaDefine : SingletonDontDestory<ParaDefine>
                 return missileG[teamKey];
             case BulletType.Arc:
                 return arcG[teamKey];
-            default: return null;
+            default:
+                return null;
         }
     }
     public Vector3 CellToMap(int x, int y)

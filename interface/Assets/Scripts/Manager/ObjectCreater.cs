@@ -8,7 +8,8 @@ public class ObjectCreater : SingletonMono<ObjectCreater>
     public GameObject CreateObject(GameObject targetG, Vector2 position, Quaternion quaternion, Transform targetPa, int teamKey = 0)
     {
         GameObject obj = Instantiate(targetG, position, quaternion, targetPa);
-        if (targetG.transform.childCount == 0) return obj;
+        if (targetG.transform.childCount == 0)
+            return obj;
         Debug.Log("step1");
         RendererControl.GetInstance().SetColToChild(teamKey, obj.transform);
         Debug.Log("step3");
