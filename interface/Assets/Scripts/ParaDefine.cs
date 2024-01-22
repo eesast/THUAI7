@@ -2,8 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Protobuf;
+using System;
 public class ParaDefine : SingletonDontDestory<ParaDefine>
 {
+    [Serializable]
+    public class litColorSetting
+    {
+        public litColorSetting(Color _color, float _idensity)
+        {
+            this.color = _color;
+            this.idensity = _idensity;
+        }
+        public Color color;
+        public float idensity;
+    }
+    public litColorSetting[] Team0Color; //= { new litColorSetting(new Color(6, 0.11f, 0, 0), 2.0f), new litColorSetting(new Color(6f, 0.85f, 0, 0), 2.0f) };
+    public litColorSetting[] Team1Color = { new litColorSetting(new Color(0.141f, 0, 6, 0), 2.0f), new litColorSetting(new Color(0, 1f, 6, 0), 2.0f) };
+    public litColorSetting[] ResourceColor = { new litColorSetting(new Color(0.141f, 0, 6, 0), 2.0f), new litColorSetting(new Color(0, 1f, 6, 0), 2.0f) };
     public MessageOfMap map;
     public GameObject spaceG;
     public GameObject[] ruinG;
