@@ -50,3 +50,7 @@ class MapStruct:
     def ToFile(self, path: str) -> None:
         with open(path, 'wb') as fp:
             self.__arrAlloc.tofile(fp)
+
+    def Clear(self) -> None:
+        for i in range(2, 2 + self.height * self.width):
+            self.__arrAlloc[i] = 0

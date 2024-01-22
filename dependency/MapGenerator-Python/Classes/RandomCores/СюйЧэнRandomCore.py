@@ -161,6 +161,7 @@ class СюйЧэнRandomCore(RandomCore):
         return True
 
     def Random(self, mp: MapStruct) -> None:
+        mp.Clear()
         СюйЧэнRandomCore.generateBorderRuin(mp)
         СюйЧэнRandomCore.generateHome(mp)
         СюйЧэнRandomCore.generateAsteroid(mp, self.asteroidWidth)
@@ -193,7 +194,7 @@ class СюйЧэнRandomCore(RandomCore):
         for i in range(x - r if x - r >= 0 else 0, (x + r if x + r <= 49 else 49) + 1):
             if mp[i, y] == tp:
                 ret += 1
-        for j in range(y - r if y - r >= 0 else 0, (y - r if y + r <= 9 else 49) + 1):
+        for j in range(y - r if y - r >= 0 else 0, (y + r if y + r <= 49 else 49) + 1):
             if mp[x, j] == tp:
                 ret += 1
         return ret
