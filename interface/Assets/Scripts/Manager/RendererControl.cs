@@ -101,4 +101,37 @@ public class RendererControl : Singleton<RendererControl>
             default: return;
         }
     }
+    public void SetColToChild(BulletType bulletType, Transform targetTransform)
+    {
+        switch (bulletType)
+        {
+            case BulletType.Laser:
+                CurrentRenderer = targetTransform.Find("mask1").GetComponent<Renderer>();
+                if (CurrentRenderer)
+                {
+                    CurrentRenderer.GetPropertyBlock(CurrentPropertyBlock);
+                    litColor = new Color(
+                        ParaDefine.GetInstance().LaserColor[0].color.r * Mathf.Pow(2, ParaDefine.GetInstance().LaserColor[0].idensity),
+                        ParaDefine.GetInstance().LaserColor[0].color.g * Mathf.Pow(2, ParaDefine.GetInstance().LaserColor[0].idensity),
+                        ParaDefine.GetInstance().LaserColor[0].color.b * Mathf.Pow(2, ParaDefine.GetInstance().LaserColor[0].idensity),
+                        0);
+                    CurrentPropertyBlock.SetColor("_GlowColor", litColor);
+                    CurrentRenderer.SetPropertyBlock(CurrentPropertyBlock);
+                }
+                CurrentRenderer = targetTransform.Find("mask2").GetComponent<Renderer>();
+                if (CurrentRenderer)
+                {
+                    CurrentRenderer.GetPropertyBlock(CurrentPropertyBlock);
+                    litColor = new Color(
+                        ParaDefine.GetInstance().ResourceColor[1].color.r * Mathf.Pow(2, ParaDefine.GetInstance().ResourceColor[1].idensity),
+                        ParaDefine.GetInstance().ResourceColor[1].color.g * Mathf.Pow(2, ParaDefine.GetInstance().ResourceColor[1].idensity),
+                        ParaDefine.GetInstance().ResourceColor[1].color.b * Mathf.Pow(2, ParaDefine.GetInstance().ResourceColor[1].idensity),
+                        0);
+                    CurrentPropertyBlock.SetColor("_GlowColor", litColor);
+                    CurrentRenderer.SetPropertyBlock(CurrentPropertyBlock);
+                }
+                return;
+            default: return;
+        }
+    }
 }
