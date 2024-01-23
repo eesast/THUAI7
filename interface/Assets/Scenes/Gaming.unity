@@ -488,6 +488,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bd56b6eee0bc3f4da48e1882fd58fdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Team0Color:
+  - color: {r: 1, g: 0.17, b: 0, a: 0}
+    idensity: 2.07
+  - color: {r: 0.75, g: 0.66, b: 0, a: 0}
+    idensity: 1.69
+  Team1Color:
+  - color: {r: 0, g: 0.12, b: 0.75, a: 0}
+    idensity: 3.17
+  - color: {r: 0, g: 0.75, b: 0.585, a: 0}
+    idensity: 1.61
+  ResourceColor:
+  - color: {r: 0.141, g: 0, b: 6, a: 0}
+    idensity: -1.74
+  - color: {r: 0, g: 0.067037575, b: 0.7490196, a: 0}
+    idensity: 1.42
+  LaserColor: []
+  PlasmaColor: []
   spaceG: {fileID: 3763284726051510260, guid: 991ffbdd1770fa744ad6e9335807a90e, type: 3}
   ruinG:
   - {fileID: 1304984658260562521, guid: 693d92e1c7f9c6e4597faf934cdb42c0, type: 3}
@@ -501,9 +518,9 @@ MonoBehaviour:
   - {fileID: 2076829689532050399, guid: 22ca1ac7000005944a2fb85b1ddb6e7f, type: 3}
   - {fileID: 889495328777635882, guid: d7a44630d1355954f85ba41057cccb41, type: 3}
   resourceG:
-  - {fileID: 3917097161056082449, guid: 698b4c070ca03c24486b31eb1e5afe81, type: 3}
-  - {fileID: 3223653183166598939, guid: b64a3f318e9d45948bcaf9286ceeed3d, type: 3}
-  - {fileID: 8924777353683230611, guid: 7f6bfe663b4e04346a3746ee95da5d51, type: 3}
+  - {fileID: 2817536373982564735, guid: d43c88f52cfe70248899ea9ef8cfe8a2, type: 3}
+  - {fileID: 6689915564642265873, guid: 904adecf3b36a41439687b01ef339180, type: 3}
+  - {fileID: 667973134933400006, guid: 8787298c21a136d48a2b6956ab9c2277, type: 3}
   wormholeG: {fileID: 0}
   communityG:
   - {fileID: 6520154078847335470, guid: 3ca3df56b82e8484ca02de1e96d8cef9, type: 3}

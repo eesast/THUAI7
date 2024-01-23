@@ -17,13 +17,13 @@ public class MapControl : SingletonMono<MapControl>
                 {
                     if (map.Rows[i].Cols[j] == PlaceType.Shadow)
                         ObjectCreater.GetInstance().CreateObject(
-                            ParaDefine.GetInstance().PT(PlaceType.Space),
+                            PlaceType.Space,
                             ParaDefine.GetInstance().CellToMap(i, j),
                             Quaternion.identity,
                             mapFa.transform
                         );
                     ObjectCreater.GetInstance().CreateObject(
-                        ParaDefine.GetInstance().PT(map.Rows[i].Cols[j]),
+                        map.Rows[i].Cols[j],
                         ParaDefine.GetInstance().CellToMap(i, j),
                         Quaternion.identity,
                         mapFa.transform
