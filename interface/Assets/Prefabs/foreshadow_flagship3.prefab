@@ -178,6 +178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 750574882568330089}
   - component: {fileID: 4697488312729372394}
+  - component: {fileID: 5941177432112284421}
   m_Layer: 0
   m_Name: foreshadow_flagship3
   m_TagString: Untagged
@@ -254,3 +255,16 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &5941177432112284421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8427987949455047532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e061b091191c35d4aae1cb397dc28bcd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teamId: 0
