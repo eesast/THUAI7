@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Protobuf;
 using System;
-public class ParaDefine : SingletonDontDestory<ParaDefine>
+public class ParaDefine : SingletonMono<ParaDefine>
 {
     [Serializable]
     public class litColorSetting
