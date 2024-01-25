@@ -10,9 +10,12 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-        
+    - name: Setup dotnet-script
+      run: dotnet tool install --global dotnet-script
+    - name: Pre-Process1
+      run: dotnet script .github/preProcess/MauiEnvConfig.csx
     - name: Install Workloads
-      run: dotnet workload install android ios maccatalyst maui-windows
+      run: dotnet workload install maui-windows
     - name: Build Proto
       run: dotnet build "./dependency/proto/Protos.csproj" -c Release
     - name: Build Logic
@@ -27,10 +30,14 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+    - name: Setup dotnet-script
+      run: dotnet tool install --global dotnet-script
+    - name: Pre-Process1
+      run: dotnet script .github/preProcess/MauiEnvConfig.csx  
     - name: Install Workloads
-      run: dotnet workload install android ios maccatalyst maui-windows
+      run: dotnet workload install maui-windows
     - name: Build Installer
-      run: dotnet build "./installer/installer.sln" -c Release -f net8.0-windows10.0.19041.0
+      run: dotnet build "./installer/installer.sln" -c Release
       
   dotnet-build-launcher:
     if: true
