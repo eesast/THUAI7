@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Globalization;
 using System.Windows.Input;
 using System.Runtime.CompilerServices;
+using installer.Model;
 
 namespace installer.ViewModel
 {

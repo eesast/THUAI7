@@ -12,8 +12,9 @@ namespace installer.Model
 {
     public class Local_Data
     {
-        public string ConfigPath;      // 标记路径记录文件THUAI7.json的路径
-        public string MD5DataPath;     // 标记MD5本地文件缓存值
+        public string ConfigPath;       // 标记路径记录文件THUAI7.json的路径
+        public string MD5DataPath;      // 标记MD5本地缓存文件的路径
+        public string UserCodePath;     // 用户代码位置(相对于InstallPath)
         public Dictionary<string, string> Config
         {
             get; protected set;
@@ -25,7 +26,7 @@ namespace installer.Model
         public ConcurrentBag<(DataRowState state, string name)> MD5Update
         {
             get; set;
-        }// 路径为绝对路径
+        }                               // 路径为绝对路径
         public string InstallPath = ""; // 最后一级为THUAI7文件夹所在目录
         public bool Installed = false;  // 项目是否安装
         protected Logger Log = LoggerProvider.FromConsole();
@@ -122,6 +123,8 @@ namespace installer.Model
             if (filename.Contains("git") || filename.Contains("bin") || filename.Contains("obj"))
                 return true;
             if (filename.EndsWith("sh") || filename.EndsWith("cmd"))
+                return true;
+            if (filename.EndsWith("gz"))
                 return true;
             if (filename.Contains("AI.cpp") || filename.Contains("AI.py"))
                 return true;

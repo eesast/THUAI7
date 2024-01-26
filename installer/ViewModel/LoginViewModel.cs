@@ -10,6 +10,7 @@ namespace installer.ViewModel
 {
     internal class LoginViewModel : NotificationObject
     {
+        Model.Downloader Downloader { get => MauiProgram.Downloader; }
         bool enabled = false;
         string txt1 = "False";
 
