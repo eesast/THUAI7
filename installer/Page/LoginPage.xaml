@@ -8,17 +8,34 @@
         <viewModels:LoginViewModel />
     </ContentPage.BindingContext>
     <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+        <Editor
+            Placeholder="请输入EESAST账户名……"
+            Text="{Binding Username}"
+            FontSize="20" />
+
+        <Entry
+            Placeholder="请输入EESAST账户密码……"
+            IsPassword="True"
+            Text="{Binding Password}"
+            ReturnCommand="{Binding LoginBtnClickedCommand}"
+            FontSize="20" />
+
+        <HorizontalStackLayout>
+            <CheckBox
+                IsChecked="{Binding Remember}"
+                VerticalOptions="Center"/>
+            <Label
+                Text="记住我"
+                FontSize="18"
+                VerticalOptions="Center"/>
+        </HorizontalStackLayout>
 
         <Label
-            Text="{Binding Txt1}"
+            Text="{Binding ID}"
             FontSize="24" />
 
         <Button
-            Text="Click me!"
-            Command="{Binding BtnClickedCommand}" />
+            Text="登录"
+            Command="{Binding LoginBtnClickedCommand}" />
     </VerticalStackLayout>
 </ContentPage>
