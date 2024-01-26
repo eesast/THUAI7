@@ -60,7 +60,7 @@ namespace installer.Model
             public bool ProfileAvailable { get; set; }
         }
         public bool LoginFailed { get; set; } = false;
-        public bool RememberMe { get; set; }
+        public bool RememberMe { get => Data.RememberMe; set { Data.RememberMe = value; } }
 
         #endregion
 
@@ -194,8 +194,8 @@ namespace installer.Model
         /// <returns></returns>
         public async Task Login(string username = "", string password = "")
         {
-            Username = string.IsNullOrEmpty(username) ? username : Username;
-            Password = string.IsNullOrEmpty(password) ? password : Password;
+            Username = string.IsNullOrEmpty(username) ? Username : username;
+            Password = string.IsNullOrEmpty(password) ? Password : password;
             await Web.LoginToEEsast(Client, Username, Password);
         }
 
@@ -204,7 +204,7 @@ namespace installer.Model
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        public void SaveToken(object? sender, EventArgs args)  
+        public void SaveToken(object? sender, EventArgs args)
         {
             if (Data.Config.ContainsKey("Token"))
                 Data.Config["Token"] = Web.Token;

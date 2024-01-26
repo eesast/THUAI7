@@ -29,11 +29,14 @@ namespace installer.Model
         }                               // 路径为绝对路径
         public string InstallPath = ""; // 最后一级为THUAI7文件夹所在目录
         public bool Installed = false;  // 项目是否安装
+        public bool RememberMe = false; // 是否记录账号密码
         protected Logger Log = LoggerProvider.FromConsole();
 
         public Local_Data()
         {
             MD5Update = new ConcurrentBag<(DataRowState state, string name)>();
+            if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)))
+                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
             ConfigPath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 "THUAI7.json");
@@ -60,10 +63,14 @@ namespace installer.Model
                         SaveMD5Data();
                         SaveConfig();
                     }
+                    RememberMe = (Config.ContainsKey("Remembered") && Convert.ToBoolean(Config["Remembered"]));
                     Installed = true;
                 }
                 else
                 {
+                    var dir = Directory.CreateDirectory(Path.Combine(AppContext.BaseDirectory, "THUAI7"));
+                    InstallPath = dir.FullName;
+                    Config["InstallPath"] = InstallPath;
                     MD5DataPath = Path.Combine(InstallPath, "./hash.json");
                     Config["MD5DataPath"] = "./hash.json";
                     SaveMD5Data();
@@ -77,6 +84,9 @@ namespace installer.Model
                     { "THUAI7", "2024" },
                     { "MD5DataPath", "./hash.json" }
                 };
+                var dir = Directory.CreateDirectory(Path.Combine(AppContext.BaseDirectory, "THUAI7"));
+                InstallPath = dir.FullName;
+                Config["InstallPath"] = InstallPath;
                 MD5DataPath = Path.Combine(InstallPath, "./hash.json");
                 SaveMD5Data();
                 SaveConfig();

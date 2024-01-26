@@ -11,6 +11,11 @@ namespace installer.ViewModel
 {
     class MainViewModel : NotificationObject
     {
+        public MainViewModel()
+        {
+            CounterClickedCommand = new RelayCommand(CounterClicked);
+        }
+
         Model.Downloader Downloader { get => MauiProgram.Downloader; }
         private string count_txt = "Haven't clicked yet.";
         private string slider_txt = "0";
@@ -36,11 +41,6 @@ namespace installer.ViewModel
         }
 
         public ICommand CounterClickedCommand { get; }
-
-        public MainViewModel()
-        {
-            CounterClickedCommand = new RelayCommand(CounterClicked);
-        }
 
         private void CounterClicked()
         {
