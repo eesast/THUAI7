@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Globalization;
 using System.Windows.Input;
 using System.Runtime.CompilerServices;
-using installer.Model;
 
 namespace installer.ViewModel
 {
@@ -162,4 +161,15 @@ namespace installer.ViewModel
     }
     */
 
+    public abstract class BaseViewModel : NotificationObject
+    {
+        private const string constBackgroundColor = "White";
+        public string ConstBackgroundColor { get => constBackgroundColor; }
+
+        private const string constFontSize = "18";
+        public string ConstFontSize { get => constFontSize; }
+
+        private const string constTextColor = "Blue";
+        public string ConstTextColor { get => constTextColor; }
+    }
 }

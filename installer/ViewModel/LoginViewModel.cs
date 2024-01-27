@@ -8,38 +8,56 @@ using System.Windows.Input;
 
 namespace installer.ViewModel
 {
-    internal class LoginViewModel : NotificationObject
+    internal class LoginViewModel : BaseViewModel
     {
         public LoginViewModel()
         {
             LoginBtnClickedCommand = new RelayCommand(LoginBtnClicked);
         }
 
-        Model.Downloader Downloader { get => MauiProgram.Downloader; }
+        Model.Downloader Downloader
+        {
+            get => MauiProgram.Downloader;
+        }
         public string Username
         {
             get => Downloader.Username;
-            set { Downloader.Username = value; OnPropertyChanged(); }
+            set
+            {
+                Downloader.Username = value;
+                OnPropertyChanged();
+            }
         }
         public string Password
         {
             get => Downloader.Password;
-            set { Downloader.Password = value; OnPropertyChanged(); }
+            set
+            {
+                Downloader.Password = value;
+                OnPropertyChanged();
+            }
         }
-        string id;
-        public string ID
+        string? id;
+        public string? ID
         {
             get => id;
-            set { id = value; OnPropertyChanged(); }
+            set
+            {
+                id = value;
+                OnPropertyChanged();
+            }
         }
         public bool Remember
         {
             get => Downloader.RememberMe;
-            set { Downloader.RememberMe = value; OnPropertyChanged(); }
+            set
+            {
+                Downloader.RememberMe = value;
+                OnPropertyChanged();
+            }
         }
 
         public ICommand LoginBtnClickedCommand { get; }
-
         private void LoginBtnClicked()
         {
             var task = Downloader.Login();

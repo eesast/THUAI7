@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace installer.ViewModel
 {
-    class LaunchViewModel
+    internal class LaunchViewModel : BaseViewModel
     {
 
     }
