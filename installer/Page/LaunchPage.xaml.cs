@@ -1,8 +1,8 @@
 namespace installer.Page;
 
-public partial class LoginPage : ContentPage
+public partial class LaunchPage : ContentPage
 {
-    public LoginPage()
+    public LaunchPage()
     {
         InitializeComponent();
     }

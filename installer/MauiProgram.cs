@@ -17,8 +17,7 @@ namespace installer
                 });
 
             // 此处填写Secret ID和Secret Key
-            Downloader.Cloud.UpdateSecret("***",
-                "***"); ;
+            Downloader.Cloud.UpdateSecret("***", "***");
 
 #if DEBUG
             builder.Logging.AddDebug();

@@ -2,24 +2,25 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:installer.ViewModel"
-             x:Class="installer.LoginPage"
+             x:Class="installer.Page.LoginPage"
              Title="Login">
     <ContentPage.BindingContext>
-        <viewModels:LoginViewModel />
+        <viewModels:LoginViewModel/>
     </ContentPage.BindingContext>
-    <VerticalStackLayout>
+
+    <VerticalStackLayout
+        HorizontalOptions="Center"
+        WidthRequest="600">
         <Editor
             Placeholder="请输入EESAST账户名……"
             Text="{Binding Username}"
-            FontSize="20" />
-
+            FontSize="20"/>
         <Entry
             Placeholder="请输入EESAST账户密码……"
             IsPassword="True"
             Text="{Binding Password}"
             ReturnCommand="{Binding LoginBtnClickedCommand}"
-            FontSize="20" />
-
+            FontSize="20"/>
         <HorizontalStackLayout>
             <CheckBox
                 IsChecked="{Binding Remember}"
@@ -29,13 +30,15 @@
                 FontSize="18"
                 VerticalOptions="Center"/>
         </HorizontalStackLayout>
-
         <Label
             Text="{Binding ID}"
-            FontSize="24" />
-
+            FontSize="{Binding ConstFontSize}"/>
         <Button
             Text="登录"
-            Command="{Binding LoginBtnClickedCommand}" />
+            Command="{Binding LoginBtnClickedCommand}"
+            BackgroundColor="{Binding ConstBackgroundColor}"
+            FontSize="{Binding ConstFontSize}"
+            TextColor="{Binding ConstTextColor}"/>
     </VerticalStackLayout>
+
 </ContentPage>
