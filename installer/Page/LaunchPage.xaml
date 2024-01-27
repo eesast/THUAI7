@@ -12,7 +12,13 @@
         <Label
             Text="敬请期待"
             VerticalOptions="Center"
-            HorizontalOptions="Center"/>
+            HorizontalOptions="Center"
+            FontSize="24"/>
+        <Label
+            Text="欢迎加入电子系科协软件部"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            FontSize="30"/>
     </VerticalStackLayout>
     
 </ContentPage>
