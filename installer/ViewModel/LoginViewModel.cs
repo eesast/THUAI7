@@ -10,28 +10,47 @@ namespace installer.ViewModel
 {
     internal class LoginViewModel : NotificationObject
     {
-        bool enabled = false;
-        string txt1 = "False";
-
-        public string Txt1
-        {
-            get => txt1;
-            set { txt1 = value; OnPropertyChanged(); }
-        }
-
-        public ICommand BtnClickedCommand { get; }
-
         public LoginViewModel()
         {
-            BtnClickedCommand = new RelayCommand(BtnClicked);
+            LoginBtnClickedCommand = new RelayCommand(LoginBtnClicked);
         }
 
-        private void BtnClicked()
+        Model.Downloader Downloader { get => MauiProgram.Downloader; }
+        public string Username
         {
-            enabled = !enabled;
-            Txt1 = enabled.ToString();
+            get => Downloader.Username;
+            set { Downloader.Username = value; OnPropertyChanged(); }
+        }
+        public string Password
+        {
+            get => Downloader.Password;
+            set { Downloader.Password = value; OnPropertyChanged(); }
+        }
+        string id;
+        public string ID
+        {
+            get => id;
+            set { id = value; OnPropertyChanged(); }
+        }
+        public bool Remember
+        {
+            get => Downloader.RememberMe;
+            set { Downloader.RememberMe = value; OnPropertyChanged(); }
         }
 
-    }
+        public ICommand LoginBtnClickedCommand { get; }
 
+        private void LoginBtnClicked()
+        {
+            var task = Downloader.Login();
+            task.ContinueWith(t =>
+            {
+                ID = Downloader.UserId;
+                if (Remember)
+                    Downloader.RememberUser();
+                else
+                    Downloader.ForgetUser();
+            });
+        }
+    }
 }

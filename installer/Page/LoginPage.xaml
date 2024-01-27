@@ -4,9 +4,34 @@
              x:Class="installer.Page.LoginPage"
              Title="Login">
     <VerticalStackLayout>
-        <Label 
-            Text="敬请期待"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+        <Editor
+            Placeholder="请输入EESAST账户名……"
+            Text="{Binding Username}"
+            FontSize="20" />
+
+        <Entry
+            Placeholder="请输入EESAST账户密码……"
+            IsPassword="True"
+            Text="{Binding Password}"
+            ReturnCommand="{Binding LoginBtnClickedCommand}"
+            FontSize="20" />
+
+        <HorizontalStackLayout>
+            <CheckBox
+                IsChecked="{Binding Remember}"
+                VerticalOptions="Center"/>
+            <Label
+                Text="记住我"
+                FontSize="18"
+                VerticalOptions="Center"/>
+        </HorizontalStackLayout>
+
+        <Label
+            Text="{Binding ID}"
+            FontSize="24" />
+
+        <Button
+            Text="登录"
+            Command="{Binding LoginBtnClickedCommand}" />
     </VerticalStackLayout>
 </ContentPage>

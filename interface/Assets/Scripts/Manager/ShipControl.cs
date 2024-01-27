@@ -8,6 +8,10 @@ public class ShipControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (GameControl.GetInstance().gameState == GameControl.GameState.Test)
+        {
+            gameObject.AddComponent<TestPlayerControl>();
+        }
     }
 
     // Update is called once per frame
