@@ -5,7 +5,7 @@
              Title="Login">
     <VerticalStackLayout>
         <Label 
-            Text="Welcome to .NET MAUI!"
+            Text="敬请期待"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
     </VerticalStackLayout>

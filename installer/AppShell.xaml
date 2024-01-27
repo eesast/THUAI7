@@ -4,16 +4,17 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:installer.Page"
-    Shell.FlyoutBehavior="Disabled">
+    Shell.FlyoutBehavior="Disabled"
+    Title="THUAI7">
 
     <FlyoutItem
         FlyoutDisplayOptions="AsMultipleItems">
 
         <ShellContent
-            Title="Installer"
+            Title="Install"
             ContentTemplate="{DataTemplate local:InstallPage}"/>
         <ShellContent
-            Title="Launcher"
+            Title="Launch"
             ContentTemplate="{DataTemplate local:LaunchPage}"/>
         <ShellContent
             Title="Login"
