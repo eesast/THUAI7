@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -27,9 +28,10 @@ namespace installer.Model
         None = 6,
     }
 
-    public abstract class Logger
+    public abstract class Logger : IDisposable
     {
         private int jobID = 0;
+        public abstract DateTime LastRecordTime { get; }
         protected abstract bool IsEnabled(LogLevel level);
         protected abstract void Log(LogLevel logLevel, int eventId, string message);
         protected abstract void Log(LogLevel logLevel, string message);
@@ -46,11 +48,13 @@ namespace installer.Model
             => Log(LogLevel.Error, eventId, message);
         public void LogError(string message)
             => Log(LogLevel.Error, message);
+        public virtual void Dispose() { }
     }
 
     public class ConsoleLogger : Logger
     {
         private DateTime time = DateTime.MinValue;
+        public override DateTime LastRecordTime => time;
         protected override bool IsEnabled(LogLevel logLevel)
         {
             if (Debugger.IsAttached)
@@ -155,9 +159,14 @@ namespace installer.Model
     public class FileLogger : Logger
     {
         private StreamWriter writer;
-        private DateTime time;
+        private DateTime time = DateTime.MinValue;
+        public override DateTime LastRecordTime => time;
         public FileLogger(string path)
         {
+            if (!File.Exists(path))
+            {
+                File.Create(path).Dispose();
+            }
             using (var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite))
             using (var reader = new StreamReader(stream))
             {
@@ -259,6 +268,58 @@ namespace installer.Model
                     break;
             }
             writer.Flush();
+        }
+        public override void Dispose()
+        {
+            writer.Dispose();
+            base.Dispose();
+        }
+    }
+
+    public class ExceptionStack
+    {
+        public Logger logger;
+        protected ConcurrentStack<Exception> Exceptions;
+        protected object? Source;
+        public event EventHandler? OnFailed;
+        public event EventHandler? OnFailProcessed;
+        public event EventHandler? OnFailClear;
+        public int Count { get => Exceptions.Count; }
+        public ExceptionStack(Logger _logger, object? _source = null)
+        {
+            logger = _logger;
+            Exceptions = new ConcurrentStack<Exception>();
+            Source = _source;
+        }
+        public void Push(Exception e, int eventID = -1)
+        {
+            if (eventID > 0)
+            {
+                e.Data.Add("Event ID", eventID);
+                logger.LogError(eventID, $"{e}: {e.Message}");
+            }
+            else
+            {
+                logger.LogError($"{e}: {e.Message}");
+            }
+            Exceptions.Push(e);
+            OnFailed?.Invoke(Source, new EventArgs());
+        }
+        public Exception? Pop()
+        {
+            Exception? e;
+            if (!Exceptions.TryPop(out e))
+                e = null;
+            else
+                OnFailProcessed?.Invoke(Source, new EventArgs());
+            return e;
+        }
+        public void Clear()
+        {
+            bool invoke = Count > 0;
+            Exceptions.Clear();
+            if (invoke)
+                OnFailClear?.Invoke(Source, new EventArgs());
         }
     }
 }

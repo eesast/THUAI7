@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,8 @@ namespace installer.Model
         private string token = string.Empty;
         public string Token
         {
-            get => token; protected set
+            get => token;
+            protected set
             {
                 if (token != value)
                     Token_Changed?.Invoke(this, new EventArgs());
@@ -36,15 +38,21 @@ namespace installer.Model
         public string ID { get; protected set; } = string.Empty;
         public string Email { get; protected set; } = string.Empty;
 
-        public ConcurrentStack<Exception> Exceptions = new ConcurrentStack<Exception>();
-        protected Logger Log = LoggerProvider.FromConsole();
-
+        public Logger Log;
+        public Logger LogError;
+        public ExceptionStack Exceptions;
         public enum WebStatus
         {
             disconnected, offline, logined
         }
         public WebStatus Status = WebStatus.disconnected;
         public Tencent_Cos EEsast_Cos { get; protected set; } = new Tencent_Cos("1255334966", "ap-beijing", "eesast");
+        public EEsast(Logger? _log = null, Logger? _logError = null)
+        {
+            Log = _log ?? LoggerProvider.FromConsole();
+            LogError = _logError ?? Log;
+            Exceptions = new ExceptionStack(LogError, this);
+        }
         public async Task LoginToEEsast(HttpClient client, string useremail = "", string userpassword = "")
         {
             try
@@ -62,6 +70,7 @@ namespace installer.Model
                             ID = info.Keys.Contains("_id") ? info["_id"] : string.Empty;
                             Email = info.Keys.Contains("email") ? info["email"] : string.Empty;
                             Token = info.Keys.Contains("token") ? info["token"] : string.Empty;
+                            Log.LogInfo($"{Username} logined successfully.");
                             Status = WebStatus.logined;
                             break;
                         default:
@@ -96,8 +105,7 @@ namespace installer.Model
         {
             if (Status != WebStatus.logined)
             {
-                Log.LogError("用户未登录");
-                Exceptions.Append(new UnauthorizedAccessException("User hasn't logined."));
+                Exceptions.Push(new UnauthorizedAccessException("用户未登录。"));
                 return -1;
             }
             try
@@ -106,8 +114,7 @@ namespace installer.Model
                 client.DefaultRequestHeaders.Authorization = new("Bearer", Token);
                 if (!File.Exists(userfile))
                 {
-                    Log.LogError("选手文件(AI.cpp or AI.py)不存在");
-                    Exceptions.Append(new IOException("Cannot find user's code."));
+                    Exceptions.Push(new IOException("选手文件(AI.cpp or AI.py)不存在。"));
                     return -2;
                 }
                 using FileStream fs = new FileStream(userfile, FileMode.Open, FileAccess.Read);
@@ -128,29 +135,25 @@ namespace installer.Model
 
                             string cosPath = $"/THUAI7/{GetTeamId()}/{type}/{plr}"; //对象在存储桶中的位置标识符，即称对象键
                             EEsast_Cos.UploadFileAsync(userfile, cosPath).Wait();
-
+                            Log.LogInfo($"{userfile}上传成功。");
                             break;
                         case System.Net.HttpStatusCode.Unauthorized:
-                            Log.LogError("未登录或登录过期，无法上传文件");
-                            Exceptions.Push(new UnauthorizedAccessException("User token is out of expire time."));
+                            Exceptions.Push(new UnauthorizedAccessException("未登录或登录过期，无法向EEsast上传文件。"));
                             return -4;
                         default:
-                            Log.LogError("未知的错误");
-                            Exceptions.Push(new Exception("Unknown reason."));
+                            Exceptions.Push(new Exception("向eesast服务器上传时发生了未知的错误。"));
                             return -5;
                     }
                 }
             }
             catch (IOException)
             {
-                Log.LogError("文件读取错误，请检查文件是否被其它应用占用");
-                Exceptions.Push(new IOException());
+                Exceptions.Push(new IOException($"{userfile}读取错误，请检查文件是否被其它应用占用。"));
                 return -6;
             }
             catch
             {
-                Log.LogError("请求错误，无网络连接。");
-                Exceptions.Push(new Exception("Cannot connect to the web server."));
+                Exceptions.Push(new Exception("请求错误，无法连接到eesast服务器。"));
                 return -7;
             }
             return 0;
@@ -160,7 +163,7 @@ namespace installer.Model
         {
             if (Status != WebStatus.logined)  // 读取token失败
             {
-                Exceptions.Append(new UnauthorizedAccessException("用户未登录"));
+                Exceptions.Push(new UnauthorizedAccessException("用户未登录。"));
                 return;
             }
             try
@@ -172,14 +175,13 @@ namespace installer.Model
                     switch (response.StatusCode)
                     {
                         case System.Net.HttpStatusCode.OK:
-                            Console.WriteLine("Require OK");
-                            Console.WriteLine(await response.Content.ReadAsStringAsync());
+                            Log.LogInfo("Success!\n" + await response.Content.ReadAsStringAsync());
                             break;
                         default:
                             int code = ((int)response.StatusCode);
                             if (code == 401)
                             {
-                                Console.WriteLine("您未登录或登录过期，请先登录");
+                                Exceptions.Push(new UnauthorizedAccessException("您未登录或登录过期，请先登录。"));
                             }
                             return;
                     }
