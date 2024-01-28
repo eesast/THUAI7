@@ -18,16 +18,19 @@ namespace installer.Model
         public string Appid { get; init; }      // 设置腾讯云账户的账户标识（APPID）
         public string Region { get; init; }     // 设置一个默认的存储桶地域
         public string BucketName { get; set; }
-        public ConcurrentStack<Exception> Exceptions { get; set; }
-        protected Logger Log = LoggerProvider.FromConsole();
+        public ExceptionStack Exceptions { get; set; }
+        public Logger Log;
+        public Logger LogError;
 
         protected CosXmlConfig config;
         protected CosXmlServer cosXml;
 
-        public Tencent_Cos(string appid, string region, string bucketName)
+        public Tencent_Cos(string appid, string region, string bucketName, Logger? _log = null, Logger? _logError = null)
         {
             Appid = appid; Region = region; BucketName = bucketName;
-            Exceptions = new ConcurrentStack<Exception>();
+            Log = _log ?? LoggerProvider.FromConsole();
+            LogError = _logError ?? Log;
+            Exceptions = new ExceptionStack(LogError, this);
             // 初始化CosXmlConfig（提供配置SDK接口）
             config = new CosXmlConfig.Builder()
                         .IsHttps(true)      // 设置默认 HTTPS 请求
@@ -80,12 +83,11 @@ namespace installer.Model
                 GetObjectResult result = cosXml.GetObject(request);
                 // 请求成功
                 if (result.httpCode != 200)
-                    throw new Exception($"Download task: {{\"{remotePath}\"->\"{savePath}\"}} failed, message: {result.httpMessage}");
+                    throw new Exception($"Download task: {{\"{remotePath}\"->\"{savePath}\"}} failed, message: {result.httpCode} {result.httpMessage}");
             }
             catch (Exception ex)
             {
-                Exceptions.Push(ex);
-                Log.LogError(thID, ex.Message);
+                Exceptions.Push(ex, thID);
             }
             Log.LogInfo(thID, $"Download task: {{\"{remotePath}\"->\"{savePath}\"}} finished.");
             return thID;
@@ -183,15 +185,13 @@ namespace installer.Model
             {
                 COSXMLUploadTask.UploadTaskResult r = await transferManager.UploadAsync(uploadTask);
                 if (r.httpCode != 200)
-                    throw new Exception($"Upload task: {{\"{localPath}\"->\"{targetPath}\"}} failed, message: {r.httpMessage}");
-                //Console.WriteLine(result.GetResultInfo());
+                    Exceptions.Push(new Exception($"Upload task: {{\"{localPath}\"->\"{targetPath}\"}} failed, message: {r.httpMessage}"), thID);
                 string eTag = r.eTag;
                 //到这里应该是成功了，但是因为我没有试过，也不知道具体情况，可能还要根据result的内容判断
             }
             catch (Exception ex)
             {
                 Exceptions.Push(ex);
-                throw;
             }
             Log.LogInfo(thID, $"Upload task: {{\"{localPath}\"->\"{targetPath}\"}} finished.");
         }
