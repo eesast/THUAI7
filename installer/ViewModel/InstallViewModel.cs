@@ -12,7 +12,8 @@ namespace installer.ViewModel
     {
         public InstallViewModel()
         {
-            downloadPath = "D:\\THUAI7";
+            downloadPath = Downloader.Data.InstallPath;
+            installEnabled = false;
             BrowseBtnClickedCommand = new RelayCommand(BrowseBtnClicked);
             CheckUpdBtnClickedCommand = new RelayCommand(CheckUpdBtnClicked);
             DownloadBtnClickedCommand = new RelayCommand(DownloadBtnClicked);
@@ -40,6 +41,7 @@ namespace installer.ViewModel
             set
             {
                 downloadPath = value;
+                InstallEnabled = (value != Downloader.Data.InstallPath);
                 OnPropertyChanged();
             }
         }
@@ -69,6 +71,23 @@ namespace installer.ViewModel
             DebugAlert = "Download Button Clicked";
             await Task.Run(() => Downloader.ResetInstallPath(downloadPath));
             await Task.Run(() => Downloader.Install());
+            DownloadPath = Downloader.Data.InstallPath;
+        }
+
+        private bool installEnabled;
+        public bool InstallEnabled
+        {
+            get => installEnabled;
+            set
+            {
+                installEnabled = value;
+                OnPropertyChanged("CheckEnabled");
+                OnPropertyChanged();
+            }
+        }
+        public bool CheckEnabled
+        {
+            get => !installEnabled;
         }
     }
 }
