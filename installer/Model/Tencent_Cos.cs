@@ -75,10 +75,6 @@ namespace installer.Model
                 GetObjectRequest request = new GetObjectRequest(bucket, remotePath ?? localFileName, localDir, localFileName);
 
                 Dictionary<string, string> test = request.GetRequestHeaders();
-                request.SetCosProgressCallback(delegate (long completed, long total)
-                {
-                    Log.LogInfo(thID, $"[Download: {remotePath}] progress = {completed * 100.0 / total:##.##}%");
-                });
                 // 执行请求
                 GetObjectResult result = cosXml.GetObject(request);
                 // 请求成功

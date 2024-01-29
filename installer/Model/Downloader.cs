@@ -115,7 +115,23 @@ namespace installer.Model
             Web = new EEsast(LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.log")),
                 LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.error.log")));
             Web.Token_Changed += SaveToken;
+            LoggerBinding();
 
+            string? temp;
+            if (Data.Config.TryGetValue("Remembered", out temp))
+            {
+                if (Convert.ToBoolean(temp))
+                {
+                    if (Data.Config.TryGetValue("Username", out temp))
+                        Username = temp;
+                    if (Data.Config.TryGetValue("Password", out temp))
+                        Password = temp;
+                }
+            }
+        }
+
+        public void LoggerBinding()
+        {
             // Debug模式下将Exceptions直接抛出触发断点
             if (Debugger.IsAttached && MauiProgram.ErrorTrigger_WhileDebug)
             {
@@ -157,17 +173,6 @@ namespace installer.Model
             {
                 Status = UpdateStatus.success;
             };
-            string? temp;
-            if (Data.Config.TryGetValue("Remembered", out temp))
-            {
-                if (Convert.ToBoolean(temp))
-                {
-                    if (Data.Config.TryGetValue("Username", out temp))
-                        Username = temp;
-                    if (Data.Config.TryGetValue("Password", out temp))
-                        Password = temp;
-                }
-            }
         }
 
         public void UpdateMD5()
@@ -192,8 +197,21 @@ namespace installer.Model
             UpdateMD5();
             if (Status == UpdateStatus.error) return;
 
-            if (Directory.Exists(Data.InstallPath))
-                Directory.Delete(Data.InstallPath, true);
+            Action<DirectoryInfo> action = (dir) => { };
+            var deleteTask = (DirectoryInfo dir) =>
+            {
+                foreach (var file in dir.EnumerateFiles())
+                {
+                    if (!Local_Data.IsUserFile(file.FullName))
+                        file.Delete();
+                }
+                foreach (var sub in dir.EnumerateDirectories())
+                {
+                    action(sub);
+                }
+            };
+            action = deleteTask;
+            deleteTask(new DirectoryInfo(Data.InstallPath));
 
             Data.Installed = false;
             string zp = Path.Combine(Data.InstallPath, "THUAI7.tar.gz");
@@ -227,7 +245,23 @@ namespace installer.Model
             newPath = newPath.EndsWith(Path.DirectorySeparatorChar) ? newPath[0..-1] : newPath;
             var installPath = Data.InstallPath.EndsWith(Path.DirectorySeparatorChar) ? Data.InstallPath[0..-1] : Data.InstallPath;
             if (newPath != Data.InstallPath)
+            {
+                Log.Dispose(); LogError.Dispose(); Exceptions.logger.Dispose();
+                Cloud.Log.Dispose(); Cloud.LogError.Dispose(); Cloud.Exceptions.logger.Dispose();
+                Web.Log.Dispose(); Web.LogError.Dispose(); Web.Exceptions.logger.Dispose();
                 Data.ResetInstallPath(newPath);
+
+                Cloud.Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.log"));
+                Cloud.LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.error.log"));
+                Cloud.Exceptions = new ExceptionStack(Cloud.LogError, Cloud);
+                Web.Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.log"));
+                Web.LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.error.log"));
+                Web.Exceptions = new ExceptionStack(Web.LogError, Web);
+                Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.log"));
+                LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.error.log"));
+                Exceptions = new ExceptionStack(LogError, this);
+                LoggerBinding();
+            }
         }
 
         /// <summary>

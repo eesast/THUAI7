@@ -71,6 +71,7 @@ namespace installer.ViewModel
             DebugAlert = "Download Button Clicked";
             await Task.Run(() => Downloader.ResetInstallPath(downloadPath));
             await Task.Run(() => Downloader.Install());
+            DownloadPath = Downloader.Data.InstallPath;
         }
 
         private bool installEnabled;
