@@ -5,6 +5,8 @@ namespace installer
     public static class MauiProgram
     {
         public static Model.Downloader Downloader = new Model.Downloader();
+        public static bool ErrorTrigger_WhileDebug = true;
+        public static bool RefreshLogs_WhileDebug = false;
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();

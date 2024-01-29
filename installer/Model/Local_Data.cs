@@ -3,10 +3,10 @@ using System.Collections.Concurrent;
 using System.Data;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace installer.Model
 {
@@ -14,7 +14,13 @@ namespace installer.Model
     {
         public string ConfigPath;       // 标记路径记录文件THUAI7.json的路径
         public string MD5DataPath;      // 标记MD5本地缓存文件的路径
-        public string UserCodePath;     // 用户代码位置(相对于InstallPath)
+        public string UserCodePostfix;  // 用户文件后缀(.cpp/.py)
+        public string UserCodePath
+        {
+            get => Path.Combine(InstallPath,
+            $"???{Path.DirectorySeparatorChar}AI{UserCodePostfix}");
+        }
+        public string LogPath { get => Path.Combine(InstallPath, "Logs"); }
         public Dictionary<string, string> Config
         {
             get; protected set;
@@ -30,8 +36,9 @@ namespace installer.Model
         public string InstallPath = ""; // 最后一级为THUAI7文件夹所在目录
         public bool Installed = false;  // 项目是否安装
         public bool RememberMe = false; // 是否记录账号密码
-        protected Logger Log = LoggerProvider.FromConsole();
-
+        public Logger Log;
+        public Logger LogError;
+        public ExceptionStack Exceptions;
         public Local_Data()
         {
             MD5Update = new ConcurrentBag<(DataRowState state, string name)>();
@@ -45,7 +52,7 @@ namespace installer.Model
                 ReadConfig();
                 if (Config.ContainsKey("InstallPath") && Directory.Exists(Config["InstallPath"]))
                 {
-                    InstallPath = Config["InstallPath"].Replace(Path.DirectorySeparatorChar, '/');
+                    InstallPath = Config["InstallPath"];
                     if (Config.ContainsKey("MD5DataPath"))
                     {
                         MD5DataPath = Config["MD5DataPath"].StartsWith('.') ?
@@ -58,8 +65,8 @@ namespace installer.Model
                     }
                     else
                     {
-                        MD5DataPath = Path.Combine(InstallPath, "./hash.json");
-                        Config["MD5DataPath"] = "./hash.json";
+                        MD5DataPath = Path.Combine(InstallPath, $".{Path.DirectorySeparatorChar}hash.json");
+                        Config["MD5DataPath"] = $".{Path.DirectorySeparatorChar}hash.json";
                         SaveMD5Data();
                         SaveConfig();
                     }
@@ -71,8 +78,8 @@ namespace installer.Model
                     var dir = Directory.CreateDirectory(Path.Combine(AppContext.BaseDirectory, "THUAI7"));
                     InstallPath = dir.FullName;
                     Config["InstallPath"] = InstallPath;
-                    MD5DataPath = Path.Combine(InstallPath, "./hash.json");
-                    Config["MD5DataPath"] = "./hash.json";
+                    MD5DataPath = Path.Combine(InstallPath, $".{Path.DirectorySeparatorChar}hash.json");
+                    Config["MD5DataPath"] = $".{Path.DirectorySeparatorChar}hash.json";
                     SaveMD5Data();
                     SaveConfig();
                 }
@@ -82,15 +89,28 @@ namespace installer.Model
                 Config = new Dictionary<string, string>
                 {
                     { "THUAI7", "2024" },
-                    { "MD5DataPath", "./hash.json" }
+                    { "MD5DataPath", $".{Path.DirectorySeparatorChar}hash.json" }
                 };
                 var dir = Directory.CreateDirectory(Path.Combine(AppContext.BaseDirectory, "THUAI7"));
                 InstallPath = dir.FullName;
                 Config["InstallPath"] = InstallPath;
-                MD5DataPath = Path.Combine(InstallPath, "./hash.json");
+                MD5DataPath = Path.Combine(InstallPath, $".{Path.DirectorySeparatorChar}hash.json");
                 SaveMD5Data();
                 SaveConfig();
             }
+            if (!Directory.Exists(LogPath))
+                Directory.CreateDirectory(LogPath);
+            // DEBUG模式下每次启动清除日志
+            if (Debugger.IsAttached && MauiProgram.RefreshLogs_WhileDebug)
+            {
+                foreach (var log in Directory.EnumerateFiles(LogPath))
+                {
+                    File.Delete(log);
+                }
+            }
+            Log = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.log"));
+            LogError = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.error.log"));
+            Exceptions = new ExceptionStack(LogError, this);
         }
 
         ~Local_Data()
@@ -101,31 +121,66 @@ namespace installer.Model
 
         public void ResetInstallPath(string newPath)
         {
-            string? dirName = Path.GetDirectoryName(newPath);
-            if (dirName is null)
-            {
-                return;
-            }
-            if (!Directory.Exists(dirName))
-            {
-                Directory.CreateDirectory(dirName);
-            }
             if (Installed)
             {
                 // 移动已有文件夹至新位置
-                Directory.Move(newPath, InstallPath);
+                try
+                {
+                    if (!Directory.Exists(newPath))
+                    {
+                        Directory.CreateDirectory(newPath);
+                    }
+                    Log.LogInfo($"Move work started: {InstallPath} -> {newPath}");
+                    Log.Dispose(); LogError.Dispose(); Exceptions.logger.Dispose();
+                    Action<DirectoryInfo> action = (dir) => { };
+                    var moveTask = (DirectoryInfo dir) =>
+                    {
+                        foreach (var file in dir.EnumerateFiles())
+                        {
+                            var newName = Path.Combine(newPath, Helper.ConvertAbsToRel(InstallPath, file.FullName));
+                            file.MoveTo(newName);
+                        }
+                        foreach (var sub in dir.EnumerateDirectories())
+                        {
+                            var newName = Path.Combine(newPath, Helper.ConvertAbsToRel(InstallPath, sub.FullName));
+                            if (!Directory.Exists(newName))
+                            {
+                                Directory.CreateDirectory(newName);
+                            }
+                            action(sub);
+                        }
+                    };
+                    action = moveTask;
+                    moveTask(new DirectoryInfo(InstallPath));
+                    Directory.Delete(InstallPath, true);
+                    InstallPath = newPath;
+                    if (Config.ContainsKey("InstallPath"))
+                        Config["InstallPath"] = InstallPath;
+                    else
+                        Config.Add("InstallPath", InstallPath);
+                    MD5DataPath = Config["MD5DataPath"].StartsWith('.') ?
+                        Path.Combine(InstallPath, Config["MD5DataPath"]) :
+                        Config["MD5DataPath"];
+                    SaveConfig();
+                    SaveMD5Data();
+                    Installed = true;
+                }
+                catch (Exception e)
+                {
+                    Exceptions.Push(e);
+                }
+                finally
+                {
+                    if (!Directory.Exists(LogPath))
+                    {
+                        Directory.CreateDirectory(LogPath);
+                    }
+                    Log = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.log"));
+                    LogError = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.error.log"));
+                    Exceptions = new ExceptionStack(LogError, this);
+                    Log.LogInfo($"Move work finished: {InstallPath} -> {newPath}");
+                }
             }
-            InstallPath = newPath.Replace(Path.DirectorySeparatorChar, '/');
-            if (Config.ContainsKey("InstallPath"))
-                Config["InstallPath"] = InstallPath;
-            else
-                Config.Add("InstallPath", InstallPath);
-            MD5DataPath = Config["MD5DataPath"].StartsWith('.') ?
-                Path.Combine(InstallPath, Config["MD5DataPath"]) :
-                Config["MD5DataPath"];
-            SaveConfig();
-            SaveMD5Data();
-            Installed = true;
         }
 
         public static bool IsUserFile(string filename)
@@ -140,29 +195,45 @@ namespace installer.Model
                 return true;
             if (filename.Contains("hash.json"))
                 return true;
+            if (filename.EndsWith("log"))
+                return true;
             return false;
         }
 
         public void ReadConfig()
         {
-            using (StreamReader r = new StreamReader(ConfigPath))
+            try
             {
-                string json = r.ReadToEnd();
-                if (json is null || json == "")
+                using (StreamReader r = new StreamReader(ConfigPath))
                 {
-                    json += @"{""THUAI7""" + ":" + @"""2024""}";
+                    string json = r.ReadToEnd();
+                    if (json is null || json == "")
+                    {
+                        json += @"{""THUAI7""" + ":" + @"""2024""}";
+                    }
+                    Config = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? new Dictionary<string, string>();
                 }
-                Config = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? new Dictionary<string, string>();
+            }
+            catch (Exception e)
+            {
+                Exceptions.Push(e);
             }
         }
 
         public void SaveConfig()
         {
-            using FileStream fs = new FileStream(ConfigPath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            using StreamWriter sw = new StreamWriter(fs);
-            fs.SetLength(0);
-            sw.Write(JsonSerializer.Serialize(Config));
-            sw.Flush();
+            try
+            {
+                using FileStream fs = new FileStream(ConfigPath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                using StreamWriter sw = new StreamWriter(fs);
+                fs.SetLength(0);
+                sw.Write(JsonSerializer.Serialize(Config));
+                sw.Flush();
+            }
+            catch (Exception e)
+            {
+                Exceptions.Push(e);
+            }
         }
 
         public void ReadMD5Data()
@@ -182,7 +253,7 @@ namespace installer.Model
                 }
                 r.Close(); r.Dispose();
             }
-            catch (JsonException)
+            catch (JsonException e)
             {
                 // Json反序列化失败，考虑重新创建MD5数据库
                 newMD5Data = new Dictionary<string, string>();
@@ -190,32 +261,48 @@ namespace installer.Model
                 File.Delete(MD5DataPath);
                 File.Create(MD5DataPath);
             }
+            catch (Exception e)
+            {
+                Exceptions.Push(e);
+                newMD5Data = new Dictionary<string, string>();
+                r.Close(); r.Dispose();
+            }
             foreach (var item in newMD5Data)
             {
-                if (MD5Data.ContainsKey(item.Key))
+                var key = item.Key.Replace('/', Path.DirectorySeparatorChar);
+                if (MD5Data.ContainsKey(key))
                 {
-                    if (MD5Data[item.Key] != item.Value)
+                    if (MD5Data[key] != item.Value)
                     {
-                        MD5Data[item.Key] = item.Value;
-                        MD5Update.Add((DataRowState.Modified, item.Key));
+                        MD5Data[key] = item.Value;
+                        MD5Update.Add((DataRowState.Modified, key));
                     }
                 }
                 else
                 {
-                    MD5Data.Add(item.Key, item.Value);
-                    MD5Update.Add((DataRowState.Added, item.Key));
+                    MD5Data.Add(key, item.Value);
+                    MD5Update.Add((DataRowState.Added, key));
                 }
             }
         }
 
         public void SaveMD5Data()
         {
-            using (FileStream fs = new FileStream(MD5DataPath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
-            using (StreamWriter sw = new StreamWriter(fs))
+            try
             {
-                fs.SetLength(0);
-                sw.Write(JsonSerializer.Serialize(MD5Data));
-                sw.Flush();
+                using (FileStream fs = new FileStream(MD5DataPath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                using (StreamWriter sw = new StreamWriter(fs))
+                {
+                    fs.SetLength(0);
+                    var exp1 = from i in MD5Data
+                               select new KeyValuePair<string, string>(i.Key.Replace(Path.DirectorySeparatorChar, '/'), i.Value);
+                    sw.Write(JsonSerializer.Serialize(exp1.ToDictionary<string, string>()));
+                    sw.Flush();
+                }
+            }
+            catch (Exception e)
+            {
+                Exceptions.Push(e);
             }
         }
 
@@ -226,8 +313,7 @@ namespace installer.Model
                 if (_file is null)
                     continue;
                 var file = _file.StartsWith('.') ?
-                    Path.Combine(InstallPath.Replace('/', Path.DirectorySeparatorChar), _file.Replace('/', Path.DirectorySeparatorChar)) :
-                    _file;
+                    Path.Combine(InstallPath, _file) : _file;
                 if (!File.Exists(file))
                 {
                     MD5Data.Remove(_file);

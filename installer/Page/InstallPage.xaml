@@ -15,6 +15,7 @@
             <Button
                 WidthRequest="400"
                 Text="下载"
+                IsEnabled="{Binding InstallEnabled}"
                 Command="{Binding DownloadBtnClickedCommand}"
                 BackgroundColor="{Binding ConstBackgroundColor}"
                 FontSize="{Binding ConstFontSize}"
@@ -22,6 +23,7 @@
             <Button
                 WidthRequest="200"
                 Text="检查更新"
+                IsEnabled="{Binding CheckEnabled}"
                 Command="{Binding CheckUpdBtnClickedCommand}"
                 BackgroundColor="{Binding ConstBackgroundColor}"
                 FontSize="{Binding ConstFontSize}"

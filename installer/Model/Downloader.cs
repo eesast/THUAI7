@@ -2,9 +2,12 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO.Compression;
+using System.Formats.Tar;
 
 namespace installer.Model
 {
@@ -29,9 +32,9 @@ namespace installer.Model
         public Tencent_Cos Cloud;                           // THUAI7 Cos桶
 
         public HttpClient Client = new HttpClient();
-        public EEsast Web = new EEsast();                   // EEsast服务器
-        protected Logger Log = LoggerProvider.FromConsole();// 日志管理器
-
+        public EEsast Web;                                  // EEsast服务器
+        public Logger Log;                               // 日志管理器
+        public Logger LogError;
         public enum UpdateStatus
         {
             success, unarchieving, downloading, hash_computing, error
@@ -50,7 +53,7 @@ namespace installer.Model
         public LaunchLanguage Language { get; set; } = LaunchLanguage.cpp;
         public enum UsingOS { Win, Linux, OSX };
         public UsingOS usingOS { get; set; }
-        public ConcurrentStack<Exception> Exceptions = new ConcurrentStack<Exception>();
+        public ExceptionStack Exceptions;
         public class Updater
         {
             public string Message = string.Empty;
@@ -68,9 +71,52 @@ namespace installer.Model
         public Downloader()
         {
             Data = new Local_Data();
+            Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.log"));
+            LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.error.log"));
+            if ((Log.LastRecordTime != DateTime.MinValue && DateTime.Now.Month != Log.LastRecordTime.Month)
+                || (LogError.LastRecordTime != DateTime.MinValue && DateTime.Now.Month != LogError.LastRecordTime.Month))
+            {
+                string tardir = Path.Combine(Data.InstallPath, "LogArchieved");
+                if (!Directory.Exists(tardir))
+                    Directory.CreateDirectory(tardir);
+                string tarPath = Path.Combine(tardir, $"Backup-{Log.LastRecordTime.Year}-{Log.LastRecordTime.Month}.tar");
+                if (File.Exists(tarPath))
+                    File.Delete(tarPath);
+                if (File.Exists(tarPath + ".gz"))
+                    File.Delete(tarPath + ".gz");
+                Data.Log.Dispose();
+                Data.LogError.Dispose();
+                Data.Exceptions.logger.Dispose();
+                Log.Dispose();
+                LogError.Dispose();
+                TarFile.CreateFromDirectory(Data.LogPath, tarPath, false);
+                using (FileStream tar = File.Open(tarPath, FileMode.Open))
+                using (FileStream gz = File.Create(tarPath + ".gz"))
+                using (var compressor = new GZipStream(gz, CompressionMode.Compress))
+                {
+                    tar.CopyTo(compressor);
+                }
+                File.Delete(tarPath);
+                foreach (var log in Directory.EnumerateFiles(Data.LogPath))
+                {
+                    File.Delete(log);
+                }
+                Data.Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "LocalData.log"));
+                Data.LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "LocalData.error.log"));
+                Data.Exceptions = new ExceptionStack(Data.LogError);
+                Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.log"));
+                LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.error.log"));
+            }
+            Exceptions = new ExceptionStack(LogError, this);
             Route = Data.InstallPath;
-            Cloud = new Tencent_Cos("1319625962", "ap-beijing", "bucket1");
+            Cloud = new Tencent_Cos("1319625962", "ap-beijing", "bucket1",
+                LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.log")),
+                LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.error.log")));
+            Web = new EEsast(LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.log")),
+                LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.error.log")));
             Web.Token_Changed += SaveToken;
+            LoggerBinding();
+
             string? temp;
             if (Data.Config.TryGetValue("Remembered", out temp))
             {
@@ -84,13 +130,58 @@ namespace installer.Model
             }
         }
 
+        public void LoggerBinding()
+        {
+            // Debug模式下将Exceptions直接抛出触发断点
+            if (Debugger.IsAttached && MauiProgram.ErrorTrigger_WhileDebug)
+            {
+                Exceptions.OnFailed += (obj, _) =>
+                {
+                    var e = Exceptions.Pop();
+                    if (e is not null)
+                        throw e;
+                };
+            }
+            Data.Exceptions.OnFailed += (obj, _) =>
+            {
+                var e = Data.Exceptions.Pop();
+                if (e is null) return;
+                if (obj is not null)
+                    e.Data["Source"] = obj.ToString();
+                LogError.LogError($"从Downloader.Data处提取的错误。");
+                Exceptions.Push(e);
+            };
+            Cloud.Exceptions.OnFailed += (obj, _) =>
+            {
+                var e = Cloud.Exceptions.Pop();
+                if (e is null) return;
+                if (obj is not null)
+                    e.Data["Source"] = obj.ToString();
+                LogError.LogError($"从Downloader.Cloud处提取的错误。");
+                Exceptions.Push(e);
+            };
+            Web.Exceptions.OnFailed += (obj, _) =>
+            {
+                var e = Web.Exceptions.Pop();
+                if (e is null) return;
+                if (obj is not null)
+                    e.Data["Source"] = obj.ToString();
+                LogError.LogError($"从Downloader.Web处提取的错误。");
+                Exceptions.Push(e);
+            };
+            Exceptions.OnFailClear += (_, _) =>
+            {
+                Status = UpdateStatus.success;
+            };
+        }
+
         public void UpdateMD5()
         {
             if (File.Exists(Data.MD5DataPath))
                 File.Delete(Data.MD5DataPath);
             Status = UpdateStatus.downloading;
             Cloud.DownloadFileAsync(Data.MD5DataPath, "hash.json").Wait();
-            if (Cloud.Exceptions.Count > 0)
+            if (Exceptions.Count > 0)
             {
                 Status = UpdateStatus.error;
                 return;
@@ -106,8 +197,21 @@ namespace installer.Model
             UpdateMD5();
             if (Status == UpdateStatus.error) return;
 
-            if (Directory.Exists(Data.InstallPath))
-                Directory.Delete(Data.InstallPath, true);
+            Action<DirectoryInfo> action = (dir) => { };
+            var deleteTask = (DirectoryInfo dir) =>
+            {
+                foreach (var file in dir.EnumerateFiles())
+                {
+                    if (!Local_Data.IsUserFile(file.FullName))
+                        file.Delete();
+                }
+                foreach (var sub in dir.EnumerateDirectories())
+                {
+                    action(sub);
+                }
+            };
+            action = deleteTask;
+            deleteTask(new DirectoryInfo(Data.InstallPath));
 
             Data.Installed = false;
             string zp = Path.Combine(Data.InstallPath, "THUAI7.tar.gz");
@@ -138,7 +242,26 @@ namespace installer.Model
         /// <param name="newPath">新的THUAI7根目录</param>
         public void ResetInstallPath(string newPath)
         {
-            Data.ResetInstallPath(newPath);
+            newPath = newPath.EndsWith(Path.DirectorySeparatorChar) ? newPath[0..-1] : newPath;
+            var installPath = Data.InstallPath.EndsWith(Path.DirectorySeparatorChar) ? Data.InstallPath[0..-1] : Data.InstallPath;
+            if (newPath != Data.InstallPath)
+            {
+                Log.Dispose(); LogError.Dispose(); Exceptions.logger.Dispose();
+                Cloud.Log.Dispose(); Cloud.LogError.Dispose(); Cloud.Exceptions.logger.Dispose();
+                Web.Log.Dispose(); Web.LogError.Dispose(); Web.Exceptions.logger.Dispose();
+                Data.ResetInstallPath(newPath);
+
+                Cloud.Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.log"));
+                Cloud.LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.error.log"));
+                Cloud.Exceptions = new ExceptionStack(Cloud.LogError, Cloud);
+                Web.Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.log"));
+                Web.LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.error.log"));
+                Web.Exceptions = new ExceptionStack(Web.LogError, Web);
+                Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.log"));
+                LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.error.log"));
+                Exceptions = new ExceptionStack(LogError, this);
+                LoggerBinding();
+            }
         }
 
         /// <summary>
