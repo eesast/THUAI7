@@ -258,6 +258,7 @@ namespace installer.Model
             {
                 Exceptions.Push(e);
                 newMD5Data = new Dictionary<string, string>();
+                r.Close(); r.Dispose();
             }
             foreach (var item in newMD5Data)
             {

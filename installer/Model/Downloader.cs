@@ -153,6 +153,10 @@ namespace installer.Model
                 LogError.LogError($"从Downloader.Web处提取的错误。");
                 Exceptions.Push(e);
             };
+            Exceptions.OnFailClear += (_, _) =>
+            {
+                Status = UpdateStatus.success;
+            };
             string? temp;
             if (Data.Config.TryGetValue("Remembered", out temp))
             {
@@ -172,7 +176,7 @@ namespace installer.Model
                 File.Delete(Data.MD5DataPath);
             Status = UpdateStatus.downloading;
             Cloud.DownloadFileAsync(Data.MD5DataPath, "hash.json").Wait();
-            if (Cloud.Exceptions.Count > 0)
+            if (Exceptions.Count > 0)
             {
                 Status = UpdateStatus.error;
                 return;
