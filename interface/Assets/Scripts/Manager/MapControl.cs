@@ -9,6 +9,8 @@ public class MapControl : SingletonMono<MapControl>
     public GameObject mapFa;
     public void DrawMap(MessageOfMap map)
     {
+        if (!mapFa)
+            mapFa = GameObject.Find("Map");
         for (int i = 0; i < 50; i++)
         {
             for (int j = 0; j < 50; j++)

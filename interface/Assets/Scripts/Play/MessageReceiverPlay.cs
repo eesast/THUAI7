@@ -19,8 +19,6 @@ public class MessageReceiverPlay : SingletonDontDestory<MessageReceiverPlay>
         {
             var channel = new Channel(IP + ":" + Port, ChannelCredentials.Insecure);
             var client = new AvailableService.AvailableServiceClient(channel);
-            Debug.Log(channel);
-            Debug.Log(client);
             PlayerMsg msg = new PlayerMsg()
             {
                 PlayerId = 0,

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:installer.ViewModel"
+             x:Class="installer.Page.InstallPage"
+             Title="Installer">
+    <ContentPage.BindingContext>
+        <viewModels:InstallViewModel/>
+    </ContentPage.BindingContext>
+
+    <VerticalStackLayout
+        HorizontalOptions="Center"
+        WidthRequest="600">
+        <HorizontalStackLayout>
+            <Button
+                WidthRequest="400"
+                Text="下载"
+                IsEnabled="{Binding InstallEnabled}"
+                Command="{Binding DownloadBtnClickedCommand}"
+                BackgroundColor="{Binding ConstBackgroundColor}"
+                FontSize="{Binding ConstFontSize}"
+                TextColor="{Binding ConstTextColor}"/>
+            <Button
+                WidthRequest="200"
+                Text="检查更新"
+                IsEnabled="{Binding CheckEnabled}"
+                Command="{Binding CheckUpdBtnClickedCommand}"
+                BackgroundColor="{Binding ConstBackgroundColor}"
+                FontSize="{Binding ConstFontSize}"
+                TextColor="{Binding ConstTextColor}"/>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout>
+            <Label
+                WidthRequest="100"
+                Text="文件路径:"
+                VerticalOptions="Center"
+                FontSize="16"/>
+            <Entry
+                WidthRequest="400"
+                Placeholder="请输入文件路径……"
+                Text="{Binding DownloadPath}"
+                ReturnCommand="{Binding DownloadBtnClickedCommand}"
+                FontSize="16"/>
+            <Button
+                Text="选择文件夹"
+                Command="{Binding BrowseBtnClickedCommand}"
+                BackgroundColor="{Binding ConstBackgroundColor}"
+                TextColor="{Binding ConstTextColor}"/>
+        </HorizontalStackLayout>
+        <Label
+            Text="{Binding DebugAlert}"/>
+    </VerticalStackLayout>
+
+</ContentPage>

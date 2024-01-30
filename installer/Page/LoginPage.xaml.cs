@@ -1,4 +1,4 @@
-namespace installer;
+namespace installer.Page;
 
 public partial class LoginPage : ContentPage
 {

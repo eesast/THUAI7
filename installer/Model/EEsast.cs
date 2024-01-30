@@ -23,7 +23,8 @@ namespace installer.Model
         private string token = string.Empty;
         public string Token
         {
-            get => token; protected set
+            get => token;
+            protected set
             {
                 if (token != value)
                     Token_Changed?.Invoke(this, new EventArgs());
@@ -31,26 +32,34 @@ namespace installer.Model
             }
         }
         public event EventHandler? Token_Changed;
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
         public string ID { get; protected set; } = string.Empty;
         public string Email { get; protected set; } = string.Empty;
 
-        public ConcurrentQueue<Exception> Exceptions = new ConcurrentQueue<Exception>();
-        protected Logger Log = LoggerProvider.FromConsole();
-
+        public Logger Log;
+        public Logger LogError;
+        public ExceptionStack Exceptions;
         public enum WebStatus
         {
             disconnected, offline, logined
         }
         public WebStatus Status = WebStatus.disconnected;
         public Tencent_Cos EEsast_Cos { get; protected set; } = new Tencent_Cos("1255334966", "ap-beijing", "eesast");
-        public async Task LoginToEEsast(HttpClient client, string useremail, string userpassword)
+        public EEsast(Logger? _log = null, Logger? _logError = null)
+        {
+            Log = _log ?? LoggerProvider.FromConsole();
+            LogError = _logError ?? Log;
+            Exceptions = new ExceptionStack(LogError, this);
+        }
+        public async Task LoginToEEsast(HttpClient client, string useremail = "", string userpassword = "")
         {
             try
             {
                 using (var response = await client.PostAsync("https://api.eesast.com/users/login", JsonContent.Create(new
                 {
-                    email = useremail,
-                    password = userpassword,
+                    email = string.IsNullOrEmpty(useremail) ? Username : useremail,
+                    password = string.IsNullOrEmpty(userpassword) ? Password : userpassword,
                 })))
                 {
                     switch (response.StatusCode)
@@ -60,17 +69,18 @@ namespace installer.Model
                             ID = info.Keys.Contains("_id") ? info["_id"] : string.Empty;
                             Email = info.Keys.Contains("email") ? info["email"] : string.Empty;
                             Token = info.Keys.Contains("token") ? info["token"] : string.Empty;
+                            Log.LogInfo($"{Username} logined successfully.");
                             Status = WebStatus.logined;
                             break;
                         default:
                             int code = ((int)response.StatusCode);
                             if (code == 401)
                             {
-                                Exceptions.Enqueue(new Exception("邮箱或密码错误！"));
+                                Exceptions.Push(new Exception("邮箱或密码错误！"));
                             }
                             else
                             {
-                                Exceptions.Enqueue(new Exception($"HTTP错误，错误码：{code}"));
+                                Exceptions.Push(new Exception($"HTTP错误，错误码：{code}"));
                             }
                             break;
                     }
@@ -78,35 +88,35 @@ namespace installer.Model
             }
             catch (Exception ex)
             {
-                Exceptions.Enqueue(ex);
+                Exceptions.Push(ex);
             }
         }
 
         /// <summary>
-        /// 
+        /// 将用户代码文件上传到EEsast服务器
         /// </summary>
         /// <param name="client">http client</param>
-        /// <param name="tarfile">代码源位置</param>
+        /// <param name="userfile">代码文件(AI.cpp或AI.py)源位置</param>
         /// <param name="type">编程语言，格式为"cpp"或"python"</param>
         /// <param name="plr">第x位玩家，格式为"player_x"</param>
         /// <returns>-1:tokenFail;-2:FileNotExist;-3:CosFail;-4:loginTimeout;-5:Fail;-6:ReadFileFail;-7:networkError</returns>
-        async public Task<int> UploadFiles(HttpClient client, string tarfile, string type, string plr)    //用来上传文件
+        public async Task<int> UploadFiles(HttpClient client, string userfile, string type, string plr)    //用来上传文件
         {
-            if (Status != WebStatus.logined)   // 
+            if (Status != WebStatus.logined)
             {
-                Exceptions.Append(new UnauthorizedAccessException("用户未登录"));
+                Exceptions.Push(new UnauthorizedAccessException("用户未登录。"));
                 return -1;
             }
             try
             {
                 string content;
                 client.DefaultRequestHeaders.Authorization = new("Bearer", Token);
-                if (!File.Exists(tarfile))
+                if (!File.Exists(userfile))
                 {
-                    Exceptions.Append(new IOException("用户不存在"));
+                    Exceptions.Push(new IOException("选手文件(AI.cpp or AI.py)不存在。"));
                     return -2;
                 }
-                using FileStream fs = new FileStream(tarfile, FileMode.Open, FileAccess.Read);
+                using FileStream fs = new FileStream(userfile, FileMode.Open, FileAccess.Read);
                 using StreamReader sr = new StreamReader(fs);
                 content = sr.ReadToEnd();
                 string targetUrl = $"https://api.eesast.com/static/player?team_id={await GetTeamId()}";
@@ -123,27 +133,26 @@ namespace installer.Model
                             EEsast_Cos.UpdateSecret(tmpSecretId, tmpSecretKey, tmpExpiredTime, tmpToken);
 
                             string cosPath = $"/THUAI7/{GetTeamId()}/{type}/{plr}"; //对象在存储桶中的位置标识符，即称对象键
-                            string srcPath = tarfile;//本地文件绝对路径
-                            EEsast_Cos.UploadFileAsync(srcPath, cosPath).Wait();
-
+                            EEsast_Cos.UploadFileAsync(userfile, cosPath).Wait();
+                            Log.LogInfo($"{userfile}上传成功。");
                             break;
                         case System.Net.HttpStatusCode.Unauthorized:
-                            //Console.WriteLine("您未登录或登录过期，请先登录");
+                            Exceptions.Push(new UnauthorizedAccessException("未登录或登录过期，无法向EEsast上传文件。"));
                             return -4;
                         default:
-                            //Console.WriteLine("上传失败！");
+                            Exceptions.Push(new Exception("向eesast服务器上传时发生了未知的错误。"));
                             return -5;
                     }
                 }
             }
             catch (IOException)
             {
-                //Console.WriteLine("文件读取错误！请检查文件是否被其它应用占用！");
+                Exceptions.Push(new IOException($"{userfile}读取错误，请检查文件是否被其它应用占用。"));
                 return -6;
             }
             catch
             {
-                //Console.WriteLine("请求错误！请检查网络连接！");
+                Exceptions.Push(new Exception("请求错误，无法连接到eesast服务器。"));
                 return -7;
             }
             return 0;
@@ -153,7 +162,7 @@ namespace installer.Model
         {
             if (Status != WebStatus.logined)  // 读取token失败
             {
-                Exceptions.Append(new UnauthorizedAccessException("用户未登录"));
+                Exceptions.Push(new UnauthorizedAccessException("用户未登录。"));
                 return;
             }
             try
@@ -165,14 +174,13 @@ namespace installer.Model
                     switch (response.StatusCode)
                     {
                         case System.Net.HttpStatusCode.OK:
-                            Console.WriteLine("Require OK");
-                            Console.WriteLine(await response.Content.ReadAsStringAsync());
+                            Log.LogInfo("Success!\n" + await response.Content.ReadAsStringAsync());
                             break;
                         default:
                             int code = ((int)response.StatusCode);
                             if (code == 401)
                             {
-                                Console.WriteLine("您未登录或登录过期，请先登录");
+                                Exceptions.Push(new UnauthorizedAccessException("您未登录或登录过期，请先登录。"));
                             }
                             return;
                     }
