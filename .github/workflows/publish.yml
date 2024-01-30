@@ -1,0 +1,24 @@
+name: publish
+on:
+  push:
+    branches: [dev, main, master]
+
+jobs:
+  print-thuai7-json:
+    runs-on: ubuntu-latest
+
+    steps:
+        - uses: actions/checkout@v4
+        - name: Setup .NET Core
+          uses: actions/setup-dotnet@v4
+          with:
+            dotnet-version: 8.0.x
+        - name: Setup dotnet-script
+          run: dotnet tool install --global dotnet-script
+        - name: Generate THUAI7 hash.json
+          run: dotnet script .github/preProcess/ExportHash.csx
+        - name: Upload THUAI7 hash.json
+          uses: actions/upload-artifact@v4
+          with:
+            name: hash.json
+            path: ./hash.json
