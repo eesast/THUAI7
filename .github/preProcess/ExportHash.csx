@@ -13,33 +13,18 @@ public string ConvertAbsToRel(string basePath, string fullPath)
 
 public string GetFileMd5Hash(string strFileFullPath)
 {
-    FileStream? fst = null;
-    try
-    {
-        fst = new FileStream(strFileFullPath, FileMode.Open, FileAccess.Read);
-        byte[] data = System.Security.Cryptography.MD5.Create().ComputeHash(fst);
+    var fst = new FileStream(strFileFullPath, FileMode.Open, FileAccess.Read);
+    byte[] data = System.Security.Cryptography.MD5.Create().ComputeHash(fst);
 
-        StringBuilder sBuilder = new StringBuilder();
+    StringBuilder sBuilder = new StringBuilder();
 
-        for (int i = 0; i < data.Length; i++)
-        {
-            sBuilder.Append(data[i].ToString("x2"));
-        }
+    for (int i = 0; i < data.Length; i++)
+    {
+        sBuilder.Append(data[i].ToString("x2"));
+    }
 
-        fst.Close();
-        return sBuilder.ToString().ToLower();
-    }
-    catch (Exception)
-    {
-        if (fst != null)
-            fst.Close();
-        if (File.Exists(strFileFullPath))
-            return "conflict";
-        return "";
-    }
-    finally
-    {
-    }
+    fst.Close();
+    return sBuilder.ToString().ToLower();
 }
 
 public static bool IsUserFile(string filename)
@@ -61,7 +46,7 @@ public static bool IsUserFile(string filename)
 
 public void SaveMD5Data()
 {
-    FileStream fs = new FileStream(@"D:\a\THUAI7\hash.json", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+    FileStream fs = new FileStream(@"/home/runner/work/THUAI7/hash.json", FileMode.OpenOrCreate, FileAccess.ReadWrite);
     StreamWriter sw = new StreamWriter(fs);
     fs.SetLength(0);
     var exp1 = from i in MD5Data
@@ -77,7 +62,7 @@ public void ScanDir(string dir)
     var d = new DirectoryInfo(dir);
     foreach (var file in d.GetFiles())
     {
-        var relFile = ConvertAbsToRel(@"D:\a\THUAI7\", file.FullName);
+        var relFile = ConvertAbsToRel(@"/home/runner/work/THUAI7/", file.FullName);
         // 用户自己的文件不会被计入更新hash数据中
         if (IsUserFile(relFile))
             continue;
@@ -97,5 +82,5 @@ public void ScanDir(string dir)
     foreach (var d1 in d.GetDirectories()) { ScanDir(d1.FullName); }
 }
 
-ScanDir(@"D:\a\THUAI7\");
+ScanDir(@"/home/runner/work/THUAI7/");
 SaveMD5Data();
