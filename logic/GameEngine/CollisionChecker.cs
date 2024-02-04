@@ -118,11 +118,11 @@ namespace GameEngine
         /// 寻找最大可能移动距离
         /// </summary>
         /// <param name="obj">移动物体，默认obj.Rigid为true</param>
-        /// <param name="nextPos">下一步要到达的位置</param>
         /// <param name="moveVec">移动的位移向量，默认与nextPos协调</param>
         /// <returns>最大可能的移动距离</returns>
-        public double FindMax(IMovable obj, XY nextPos, XY moveVec)
+        public double FindMax(IMovable obj, XY moveVec)
         {
+            XY nextPos = obj.Position + moveVec;
             double tmpMax = uint.MaxValue;  // 暂存最大值
 
             double maxDistance = uint.MaxValue;
@@ -208,6 +208,77 @@ namespace GameEngine
                 }
             }
             return maxDistance;
+        }
+
+        public XY TrySlide(IMovable obj,XY nextPos,XY moveVec)
+        {
+            XY slideVec = new XY(0, 0);
+            foreach (var listWithLock in lists)
+            {
+                var lst = listWithLock.Item1;
+                var listLock = listWithLock.Item2;
+                listLock.EnterReadLock();
+                try
+                {
+                    foreach (IGameObj listObj in lst)
+                    {
+                        if (obj.WillCollideWith(listObj, nextPos))
+                        {
+                            switch (listObj.Shape)
+                            {
+                                case ShapeType.Circle:
+                                    {
+                                        double mod = XY.DistanceFloor3(listObj.Position, obj.Position);
+                                        int orgDeltaX = listObj.Position.x - obj.Position.x;
+                                        int orgDeltaY = listObj.Position.y - obj.Position.y;
+                                        if (mod < listObj.Radius + obj.Radius)
+                                        {
+                                            slideVec = new XY(0, 0);
+                                        }
+                                        else
+                                        {
+                                            double tmp = mod - obj.Radius - listObj.Radius;
+                                            tmp = ((int)(tmp * 1000 / Math.Cos(Math.Atan2(orgDeltaY, orgDeltaX) - moveVec.Angle())));
+                                            if (tmp < 0 || tmp > uint.MaxValue || double.IsNaN(tmp))
+                                            {
+                                                slideVec = new XY(0, 0);
+                                            }
+                                            else
+                                            {
+                                                slideVec = new XY(tmp / 1000.0, moveVec.Angle());
+                                            }
+                                        }
+                                        break;
+                                    }
+                                case ShapeType.Square:
+                                    {
+                                        int left = 0, right = (int)moveVec.Length();
+                                        while (left < right - 1)
+                                        {
+                                            int mid = (right - left) / 2 + left;
+                                            if (obj.WillCollideWith(listObj, obj.Position + new XY(moveVec, mid)))
+                                            {
+                                                right = mid;
+                                            }
+                                            else
+                                                left = mid;
+                                        }
+                                        slideVec = new XY(left, moveVec.Angle());
+                                        break;
+                                    }
+                                default:
+                                    slideVec = new XY(0, 0);
+                                    break;
+                            }
+                        }
+                    }
+                }
+                finally
+                {
+                    listLock.ExitReadLock();
+                }
+            }
+            return slideVec;
         }
 
         readonly IMap gameMap;
