@@ -210,7 +210,7 @@ namespace GameEngine
             return maxDistance;
         }
 
-        public XY TrySlide(IMovable obj,XY nextPos,XY moveVec)
+        public XY TrySlide(IMovable obj, XY nextPos, XY moveVec)
         {
             XY slideVec = new XY(0, 0);
             foreach (var listWithLock in lists)
