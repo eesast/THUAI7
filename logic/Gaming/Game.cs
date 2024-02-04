@@ -3,6 +3,7 @@ using GameClass.GameObj.Areas;
 using MapGenerator;
 using Preparation.Interface;
 using Preparation.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -45,7 +46,10 @@ namespace Gaming
             }
             if (!validBirthPoint)
             {
-                return GameObj.invalidID;
+                // 如果出生点不合法，就找一个合法的出生点
+                XY defaultBirthPoint = teamList[(int)shipInitInfo.teamID].BirthPointList[0];
+                Random random = new();
+                pos = defaultBirthPoint + new XY((random.Next() & 2) - 1, (random.Next() & 2) - 1);
             }
             Ship? newShip = shipManager.AddShip(pos, shipInitInfo.teamID, shipInitInfo.playerID,
                 shipInitInfo.shipType, teamList[(int)shipInitInfo.teamID].MoneyPool);
