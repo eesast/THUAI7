@@ -19,6 +19,17 @@ var color = [
     "#ED1C24", // Home
 ];
 
+const placeType = {
+    Space: 0,
+    Ruin: 1,
+    Shadow: 2,
+    Asteroid: 3,
+    Resource: 4,
+    Construction: 5,
+    Wormhole: 6,
+    Home: 7,
+};
+
 function draw() {
     ctx.clearRect(0, 0, 500, 500);
     for (var i = 0; i < 50; i++) {
@@ -162,31 +173,31 @@ function haveSthCross(x, y, radius, type) {
 
 function generateBorderRuin() {
     for (var i = 0; i < 50; i++) {
-        map[i][0] = 1;
-        map[i][49] = 1;
-        map[0][i] = 1;
-        map[49][i] = 1;
+        map[i][0] = placeType.Ruin;
+        map[i][49] = placeType.Ruin;
+        map[0][i] = placeType.Ruin;
+        map[49][i] = placeType.Ruin;
     }
 }
 
 function generateHome() {
-    map[3][46] = 7;
-    map[46][3] = 7;
+    map[3][46] = placeType.Home;
+    map[46][3] = placeType.Home;
 }
 
 function generateAsteroid(width = 2) {
     for (var i = 1; i < 49; i++) {
         for (var j = 24; j > 24 - width; j--) {
-            map[i][j] = 3;
-            map[49 - i][49 - j] = 3;
+            map[i][j] = placeType.Asteroid;
+            map[49 - i][49 - j] = placeType.Asteroid;
         }
     }
     for (var i = 1; i < 23; i++) {
         if (Math.random() < 0.5 && i != 9 && i != 10 && i != 11 && i != 12) {
-            map[i][24 - width] = 3;
-            map[i][24 + width] = 0;
-            map[49 - i][25 + width] = 3;
-            map[49 - i][25 - width] = 0;
+            map[i][24 - width] = placeType.Asteroid;
+            map[i][24 + width] = placeType.Space;
+            map[49 - i][25 + width] = placeType.Asteroid;
+            map[49 - i][25 - width] = placeType.Space;
         }
     }
 }
@@ -196,8 +207,8 @@ function generateResource(num = 7) {
         var x = Math.floor(Math.random() * 48) + 1;
         var y = Math.floor(Math.random() * 23) + 1;
         if (isEmptyNearby(x, y, 2)) {
-            map[x][y] = 4;
-            map[49 - x][49 - y] = 4;
+            map[x][y] = placeType.Resource;
+            map[49 - x][49 - y] = placeType.Resource;
         }
         else {
             i--;
@@ -210,8 +221,8 @@ function generateConstruction(num = 5) {
         var x = Math.floor(Math.random() * 48) + 1;
         var y = Math.floor(Math.random() * 23) + 1;
         if (isEmptyNearby(x, y, 1)) {
-            map[x][y] = 5;
-            map[49 - x][49 - y] = 5;
+            map[x][y] = placeType.Construction;
+            map[49 - x][49 - y] = placeType.Construction;
         }
         else {
             i--;
@@ -222,9 +233,9 @@ function generateConstruction(num = 5) {
 function generateShadow(prob = 0.015, crossBonus = 23) {
     for (var i = 0; i < 50; i++) {
         for (var j = 0; j < 50; j++) {
-            if (map[i][j] == 0 && Math.random() < prob * (haveSthCross(i, j, 1, 2) * crossBonus + 1)) {
-                map[i][j] = 2;
-                map[49 - i][49 - j] = 2;
+            if (map[i][j] == 0 && Math.random() < prob * (haveSthCross(i, j, 1, placeType.Shadow) * crossBonus + 1)) {
+                map[i][j] = placeType.Shadow;
+                map[49 - i][49 - j] = placeType.Shadow;
             }
         }
     }
@@ -233,7 +244,10 @@ function generateShadow(prob = 0.015, crossBonus = 23) {
 function generateRuin(prob = 0.01, crossBonus = 40) {
     for (var i = 2; i < 48; i++) {
         for (var j = 2; j < 48; j++) {
-            if ((map[i][j] == 0 || map[i][j] == 2) && !haveSthNearby(i, j, 1, 3) && !haveSthNearby(i, j, 1, 7) && Math.random() < prob * (haveSthCross(i, j, 1, 1) * (haveSthCross(i, j, 1, 1) > 1 ? 0 : crossBonus) + 1)) {
+            if ((map[i][j] == 0 || map[i][j] == 2) &&
+                !haveSthNearby(i, j, 1, placeType.Asteroid) &&
+                !haveSthNearby(i, j, 1, placeType.Home) &&
+                Math.random() < prob * (haveSthCross(i, j, 1, placeType.Ruin) * (haveSthCross(i, j, 1, placeType.Ruin) > 1 ? 0 : crossBonus) + 1)) {
                 map[i][j] = 1;
                 map[49 - i][49 - j] = 1;
             }
@@ -244,16 +258,16 @@ function generateRuin(prob = 0.01, crossBonus = 40) {
 function generateWormhole() {
     for (var i = 1; i < 49; i++) {
         if (map[10][i] == 3) {
-            map[10][i] = 6;
-            map[39][49 - i] = 6;
+            map[10][i] = placeType.Wormhole;
+            map[39][49 - i] = placeType.Wormhole;
         }
         if (map[11][i] == 3) {
-            map[11][i] = 6;
-            map[38][49 - i] = 6;
+            map[11][i] = placeType.Wormhole;
+            map[38][49 - i] = placeType.Wormhole;
         }
         if (map[24][i] == 3) {
-            map[24][i] = 6;
-            map[25][49 - i] = 6;
+            map[24][i] = placeType.Wormhole;
+            map[25][49 - i] = placeType.Wormhole;
         }
     }
 }
