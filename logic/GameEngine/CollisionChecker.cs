@@ -118,11 +118,11 @@ namespace GameEngine
         /// 寻找最大可能移动距离
         /// </summary>
         /// <param name="obj">移动物体，默认obj.Rigid为true</param>
-        /// <param name="nextPos">下一步要到达的位置</param>
         /// <param name="moveVec">移动的位移向量，默认与nextPos协调</param>
         /// <returns>最大可能的移动距离</returns>
-        public double FindMax(IMovable obj, XY nextPos, XY moveVec)
+        public double FindMax(IMovable obj, XY moveVec)
         {
+            XY nextPos = obj.Position + moveVec;
             double tmpMax = uint.MaxValue;  // 暂存最大值
 
             double maxDistance = uint.MaxValue;
