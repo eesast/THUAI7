@@ -88,6 +88,14 @@ public class XY
         return Math.Atan2(y, x);
     }
 
+    /// <summary>
+    /// 逆时针旋转90°
+    /// </summary>
+    public XY Perpendicular()
+    {
+        return new XY(-y, x);
+    }
+
     public override bool Equals(object? obj) => obj is not null && obj is XY xy && this == xy;
 
     public override int GetHashCode()
