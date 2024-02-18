@@ -257,7 +257,7 @@ namespace Server
                 msgOfMap.Rows.Add(new MessageOfMap.Types.Row());
                 for (int j = 0; j < game.GameMap.Width; j++)
                 {
-                    msgOfMap.Rows[i].Cols.Add(Transformation.PlaceTypeToProto((Utility.PlaceType)game.GameMap.ProtoGameMap[i, j]));
+                    msgOfMap.Rows[i].Cols.Add(Transformation.PlaceTypeToProto(game.GameMap.ProtoGameMap[i, j]));
                 }
             }
             return msgOfMap;
@@ -311,12 +311,7 @@ namespace Server
                 }
                 finally
                 {
-                    MapStruct mapResource = new()
-                    {
-                        height = GameData.MapRows,
-                        width = GameData.MapCols,
-                        map = map
-                    };
+                    MapStruct mapResource = new(GameData.MapRows, GameData.MapCols, map);
                     game = new(mapResource, options.TeamCount);
                 }
             }

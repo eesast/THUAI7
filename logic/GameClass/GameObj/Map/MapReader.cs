@@ -1,18 +1,39 @@
-using System.IO;
+using Preparation.Utility;
 
 namespace MapGenerator;
 
 /// <summary>
 /// 地图结构体
 /// </summary>
-public struct MapStruct(uint height, uint width, uint[,] map)
+public struct MapStruct
 {
-    public uint height = height;
-    public uint width = width;
-    public uint[,] map = map;
+    public uint height;
+    public uint width;
+    public PlaceType[,] map;
+    public MapStruct(uint height, uint width)
+    {
+        this.height = height; this.width = width;
+        map = new PlaceType[height, width];
+    }
+    public MapStruct(uint height, uint width, PlaceType[,] map)
+    {
+        this.height = height; this.width = width; this.map = map;
+    }
+    public MapStruct(uint height, uint width, uint[,] map)
+    {
+        this.height = height; this.width = width;
+        this.map = new PlaceType[height, width];
+        for (uint i = 0; i < height; i++)
+        {
+            for (uint j = 0; j < width; j++)
+            {
+                this.map[i, j] = (PlaceType)map[i, j];
+            }
+        }
+    }
 }
 
-public static class MapReader
+/*public static class MapReader
 {
     /// <summary>
     /// 读取二进制地图文件
@@ -224,4 +245,4 @@ public static class MapReader
                 #endregion
         };
     }
-}
+}*/

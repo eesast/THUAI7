@@ -17,8 +17,8 @@ namespace GameClass.GameObj
         public uint Height => height;
         private readonly uint width;
         public uint Width => width;
-        public readonly uint[,] protoGameMap;
-        public uint[,] ProtoGameMap => protoGameMap;
+        public readonly PlaceType[,] protoGameMap;
+        public PlaceType[,] ProtoGameMap => protoGameMap;
 
         #region 大本营相关
         public List<Home> Homes { get; }
@@ -34,7 +34,7 @@ namespace GameClass.GameObj
         {
             try
             {
-                return (PlaceType)protoGameMap[obj.Position.x / GameData.NumOfPosGridPerCell, obj.Position.y / GameData.NumOfPosGridPerCell];
+                return protoGameMap[obj.Position.x / GameData.NumOfPosGridPerCell, obj.Position.y / GameData.NumOfPosGridPerCell];
             }
             catch
             {
@@ -45,7 +45,7 @@ namespace GameClass.GameObj
         {
             try
             {
-                return (PlaceType)protoGameMap[pos.x / GameData.NumOfPosGridPerCell, pos.y / GameData.NumOfPosGridPerCell];
+                return protoGameMap[pos.x / GameData.NumOfPosGridPerCell, pos.y / GameData.NumOfPosGridPerCell];
             }
             catch
             {
@@ -330,7 +330,7 @@ namespace GameClass.GameObj
                 for (int j = 0; j < width; ++j)
                 {
                     bool hasWormhole = false;
-                    switch ((PlaceType)mapResource.map[i, j])
+                    switch (mapResource.map[i, j])
                     {
                         case PlaceType.Resource:
                             Add(new Resource(GameData.GetCellCenterPos(i, j)));
