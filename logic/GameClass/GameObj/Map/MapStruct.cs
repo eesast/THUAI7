@@ -1,7 +1,7 @@
 using Preparation.Utility;
 using System.IO;
 
-namespace MapGenerator;
+namespace GameClass.MapGenerator;
 
 /// <summary>
 /// 地图结构体

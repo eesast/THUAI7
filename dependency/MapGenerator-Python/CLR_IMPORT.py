@@ -1,12 +1,31 @@
 import CLR_START
 import clr
 import sys
-try:
-    sys.path.append(r'../../logic/Preparation/bin/Release/net8.0/')
-    clr.AddReference('Preparation')
-except BaseException:
+clr.AddReference('System')
+PREPARATION_IMPORT = [r'../../logic/Preparation/bin/Debug/net8.0/',
+                      r'../../logic/Preparation/bin/Release/net8.0/',
+                      r'../../../logic/Preparation/bin/Debug/net8.0/',
+                      r'../../../logic/Preparation/bin/Release/net8.0/',
+                      r'_internal/']
+PREPARATION = 'Preparation'
+GAMECLASS_IMPORT = [r'../../logic/GameClass/bin/Debug/net8.0/',
+                    r'../../logic/GameClass/bin/Release/net8.0/',
+                    r'../../../logic/GameClass/bin/Debug/net8.0/',
+                    r'../../../logic/GameClass/bin/Release/net8.0/',
+                    r'_internal/']
+GAMECLASS = 'GameClass'
+
+
+def Find(paths: list[str], target: str) -> None:
     try:
-        sys.path.append(r'../../logic/Preparation/bin/Debug/net8.0/')
-        clr.AddReference('Preparation')
+        sys.path.append(paths[0])
+        clr.AddReference(target)
     except BaseException:
-        raise FileNotFoundError('Preparation项目未正确编译')
+        paths.pop(0)
+        if paths == []:
+            raise FileNotFoundError(f'未找到{target}')
+        Find(paths, target)
+
+
+Find(PREPARATION_IMPORT, PREPARATION)
+Find(GAMECLASS_IMPORT, GAMECLASS)

@@ -5,7 +5,7 @@ using Preparation.Utility;
 using System;
 using GameClass.GameObj.Areas;
 using System.Linq;
-using MapGenerator;
+using GameClass.MapGenerator;
 
 namespace GameClass.GameObj
 {

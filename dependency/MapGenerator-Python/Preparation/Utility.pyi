@@ -1,7 +1,11 @@
-from enum import Enum
+# Stub for C#
+
+from __future__ import annotations
+
+from System import UInt32
 
 
-class PlaceType(Enum):
+class PlaceType(UInt32):
     Null: PlaceType
     Ruin: PlaceType
     Shadow: PlaceType

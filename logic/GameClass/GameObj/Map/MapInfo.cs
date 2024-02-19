@@ -1,4 +1,4 @@
-﻿using MapGenerator;
+﻿using GameClass.MapGenerator;
 
 namespace GameClass.GameObj
 {
