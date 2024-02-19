@@ -1,6 +1,6 @@
 using GameClass.GameObj;
 using GameClass.GameObj.Areas;
-using MapGenerator;
+using GameClass.MapGenerator;
 using Preparation.Interface;
 using Preparation.Utility;
 using System;

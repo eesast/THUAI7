@@ -1,6 +1,6 @@
 ﻿using GameClass.GameObj;
 using Gaming;
-using MapGenerator;
+using GameClass.MapGenerator;
 using Newtonsoft.Json;
 using Playback;
 using Preparation.Utility;
