@@ -107,26 +107,26 @@ private:
     [[nodiscard]] int32_t GetScore() const;
 
     // 供IAPI使用的操作相关的部分
-     bool Send(int64_t toPlayerID, std::string message, bool binary);
-     bool HaveMessage();
-     std::pair<int64_t, std::string> GetMessage();
-     bool WaitThread();
-     int32_t GetCounter() const;
-     bool EndAllAction();
+    bool Send(int64_t toPlayerID, std::string message, bool binary);
+    bool HaveMessage();
+    std::pair<int64_t, std::string> GetMessage();
+    bool WaitThread();
+    int32_t GetCounter() const;
+    bool EndAllAction();
 
     // IShipAPI使用的部分
-     bool Move(int64_t time, double angle);
-     bool Recover();
-     bool Produce();
-     bool ReBuild(THUAI7::ConstructionType constructionType);
-     bool Construct(THUAI7::ConstructionType constructionType);
-     bool Attack(double angle);
-    [[nodiscard]]  bool HaveView(int32_t gridX, int32_t gridY, int32_t selfX, int32_t selfY, int32_t viewRange) const;
+    bool Move(int64_t time, double angle);
+    bool Recover();
+    bool Produce();
+    bool ReBuild(THUAI7::ConstructionType constructionType);
+    bool Construct(THUAI7::ConstructionType constructionType);
+    bool Attack(double angle);
+    [[nodiscard]] bool HaveView(int32_t gridX, int32_t gridY, int32_t selfX, int32_t selfY, int32_t viewRange) const;
 
     // ITeamAPI
-     bool Recycle(int64_t playerID);
-     bool InstallModule(int64_t playerID, THUAI7::ModuleType moduleType);
-     bool BuildShip(THUAI7::ShipType shipType,int32_t cellX, int32_t cellY);
+    bool Recycle(int64_t playerID);
+    bool InstallModule(int64_t playerID, THUAI7::ModuleType moduleType);
+    bool BuildShip(THUAI7::ShipType shipType, int32_t cellX, int32_t cellY);
 
     bool TryConnection();
     void ProcessMessage();

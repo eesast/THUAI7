@@ -147,27 +147,27 @@ int32_t ShipAPI::GetConstructionHp(int32_t cellX, int32_t cellY) const
 
 int32_t TeamAPI::GetConstructionHp(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetConstructionHp( cellX,  cellY);
+    return logic.GetConstructionHp(cellX, cellY);
 }
 
 int32_t ShipAPI::GetWormHp(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetWormHp(cellX,  cellY);
+    return logic.GetWormHp(cellX, cellY);
 }
 
 int32_t TeamAPI::GetWormHp(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetWormHp(cellX,  cellY);
+    return logic.GetWormHp(cellX, cellY);
 }
 
 int32_t ShipAPI::GetResourceState(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetResourceState(cellX,  cellY);
+    return logic.GetResourceState(cellX, cellY);
 }
 
 int32_t TeamAPI::GetResourceState(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetResourceState(cellX,  cellY);
+    return logic.GetResourceState(cellX, cellY);
 }
 
 int32_t ShipAPI::GetHomeHp() const
@@ -290,7 +290,7 @@ std::future<bool> ShipAPI::Construct(THUAI7::ConstructionType constructionType)
 bool ShipAPI::HaveView(int32_t gridX, int32_t gridY) const
 {
     auto selfInfo = GetSelfInfo();
-    return logic.HaveView(gridX, gridY, selfInfo->x, selfInfo->y,selfInfo->viewRange);
+    return logic.HaveView(gridX, gridY, selfInfo->x, selfInfo->y, selfInfo->viewRange);
 }
 
 // Team独有

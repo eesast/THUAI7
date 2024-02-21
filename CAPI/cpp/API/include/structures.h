@@ -261,7 +261,7 @@ namespace THUAI7
 
     struct GameMap
     {
-        //x,y,id,hp
+        // x,y,id,hp
         std::map<std::pair<int32_t, int32_t>, std::pair<int64_t, int32_t>> factoryState;
         std::map<std::pair<int32_t, int32_t>, std::pair<int64_t, int32_t>> communityState;
         std::map<std::pair<int32_t, int32_t>, std::pair<int64_t, int32_t>> fortState;
@@ -284,73 +284,73 @@ namespace THUAI7
     // 仅供DEBUG使用，名称可改动
     // 还没写完，后面待续
 
-     inline std::map<GameState, std::string> gameStateDict{
-         {GameState::NullGameState, "NullGameState"},
-         {GameState::GameStart, "GameStart"},
-         {GameState::GameRunning, "GameRunning"},
-         {GameState::GameEnd, "GameEnd"},
-     };
+    inline std::map<GameState, std::string> gameStateDict{
+        {GameState::NullGameState, "NullGameState"},
+        {GameState::GameStart, "GameStart"},
+        {GameState::GameRunning, "GameRunning"},
+        {GameState::GameEnd, "GameEnd"},
+    };
 
-     inline std::map<ShipType, std::string> shipTypeDict{
-         {ShipType::NullShipType, "NullShipType"},
-         {ShipType::CivilianShip, "CivilianShip"},
-         {ShipType::MilitaryShip, "MilitaryShip"},
-         {ShipType::FlagShip, "FlagShip"},
-     };
+    inline std::map<ShipType, std::string> shipTypeDict{
+        {ShipType::NullShipType, "NullShipType"},
+        {ShipType::CivilianShip, "CivilianShip"},
+        {ShipType::MilitaryShip, "MilitaryShip"},
+        {ShipType::FlagShip, "FlagShip"},
+    };
 
-     inline std::map<ShipState, std::string> shipStateDict{
-         {ShipState::NullStatus, "NullState"},
-         {ShipState::Idle, "Idle"},
-         {ShipState::Producing, "Producing"},
-         {ShipState::Constructing, "Constructing"},
-         {ShipState::Recovering, "Recoverying"},
-         {ShipState::Recycling, "Recycling"},
-         {ShipState::Attacking, "Attacking"},
-         {ShipState::Swinging, "Swinging"},
-         {ShipState::Stunned, "Stunned"},
-     };
+    inline std::map<ShipState, std::string> shipStateDict{
+        {ShipState::NullStatus, "NullState"},
+        {ShipState::Idle, "Idle"},
+        {ShipState::Producing, "Producing"},
+        {ShipState::Constructing, "Constructing"},
+        {ShipState::Recovering, "Recoverying"},
+        {ShipState::Recycling, "Recycling"},
+        {ShipState::Attacking, "Attacking"},
+        {ShipState::Swinging, "Swinging"},
+        {ShipState::Stunned, "Stunned"},
+    };
 
-     inline std::map<PlayerTeam, std::string> playerTeamDict{
-         {PlayerTeam::NullTeam, "NullTeam"},
-         {PlayerTeam::Red, "Red"},
-         {PlayerTeam::Blue, "Blue"},
-     };
+    inline std::map<PlayerTeam, std::string> playerTeamDict{
+        {PlayerTeam::NullTeam, "NullTeam"},
+        {PlayerTeam::Red, "Red"},
+        {PlayerTeam::Blue, "Blue"},
+    };
 
-     inline std::map<PlaceType, std::string> placeTypeDict{
-         {PlaceType::NullPlaceType, "NullPlaceType"},
-         {PlaceType::Home, "Home"},
-         {PlaceType::Space, "Space"},
-         {PlaceType::Ruin, "Ruin"},
-         {PlaceType::Shadow, "Shadow"},
-         {PlaceType::Asteroid, "Asteroid"},
-         {PlaceType::Resource, "Resource"},
-         {PlaceType::Construction, "Construction"},
-     };
+    inline std::map<PlaceType, std::string> placeTypeDict{
+        {PlaceType::NullPlaceType, "NullPlaceType"},
+        {PlaceType::Home, "Home"},
+        {PlaceType::Space, "Space"},
+        {PlaceType::Ruin, "Ruin"},
+        {PlaceType::Shadow, "Shadow"},
+        {PlaceType::Asteroid, "Asteroid"},
+        {PlaceType::Resource, "Resource"},
+        {PlaceType::Construction, "Construction"},
+    };
 
-     inline std::map<BulletType, std::string> bulletTypeDict{
-         {BulletType::NullBulletType, "NullBulletType"},
-         {BulletType::Laser, "Laser"},
-         {BulletType::Plasma, "Plasma"},
-         {BulletType::Shell, "Shell"},
-         {BulletType::Missile, "Missile"},
-         {BulletType::Arc, "Arc"},
-     };
+    inline std::map<BulletType, std::string> bulletTypeDict{
+        {BulletType::NullBulletType, "NullBulletType"},
+        {BulletType::Laser, "Laser"},
+        {BulletType::Plasma, "Plasma"},
+        {BulletType::Shell, "Shell"},
+        {BulletType::Missile, "Missile"},
+        {BulletType::Arc, "Arc"},
+    };
 
-     inline std::map<MessageOfObj, std::string> messageOfObjDict{
-         {MessageOfObj::NullMessageOfObj, "NullMessageOfObj"},
-         {MessageOfObj::ShipMessage, "ShipMessage"},
-         {MessageOfObj::BulletMessage, "BulletMessage"},
-         {MessageOfObj::FactoryMessage, "FactoryMessage"},
-         {MessageOfObj::CommunityMessage, "CommunityMessage"},
-         {MessageOfObj::FortMessage, "FortMessage"},
-         {MessageOfObj::WormholeMessage, "WormholeMessage"},
-         {MessageOfObj::HomeMessage, "HomeMessage"},
-         {MessageOfObj::ResourceMessage, "ResourceMessage"},
-         {MessageOfObj::MapMessage, "MapMessage"},
-         {MessageOfObj::NewsMessage, "NewsMessage"},
-         {MessageOfObj::BombedBulletMessage, "BombedBulletMessage"},
-         {MessageOfObj::TeamMessage, "TeamMessage"},
-     };
+    inline std::map<MessageOfObj, std::string> messageOfObjDict{
+        {MessageOfObj::NullMessageOfObj, "NullMessageOfObj"},
+        {MessageOfObj::ShipMessage, "ShipMessage"},
+        {MessageOfObj::BulletMessage, "BulletMessage"},
+        {MessageOfObj::FactoryMessage, "FactoryMessage"},
+        {MessageOfObj::CommunityMessage, "CommunityMessage"},
+        {MessageOfObj::FortMessage, "FortMessage"},
+        {MessageOfObj::WormholeMessage, "WormholeMessage"},
+        {MessageOfObj::HomeMessage, "HomeMessage"},
+        {MessageOfObj::ResourceMessage, "ResourceMessage"},
+        {MessageOfObj::MapMessage, "MapMessage"},
+        {MessageOfObj::NewsMessage, "NewsMessage"},
+        {MessageOfObj::BombedBulletMessage, "BombedBulletMessage"},
+        {MessageOfObj::TeamMessage, "TeamMessage"},
+    };
 }  // namespace THUAI7
 
 #endif

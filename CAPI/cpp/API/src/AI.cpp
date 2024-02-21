@@ -23,7 +23,6 @@ void AI::play(IShipAPI& api)
 {
     if (this->playerID == 0)
     {
-
     }
     else if (this->playerID == 1)
     {

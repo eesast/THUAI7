@@ -246,8 +246,8 @@ void ShipDebugAPI::PrintShip() const
     for (const auto& Ship : logic.GetShips())
     {
         logger->info("******Ship Info******");
-        logger->info("type={}, playerID={}, GUID={}, x={}, y={}", THUAI7::shipTypeDict[Ship->shipType],Ship->playerID, Ship->guid, Ship->x, Ship->y);
-        logger->info("state={},speed={}, view range={},facing direction={}", THUAI7::shipStateDict[Ship->shipState],Ship->speed, Ship->viewRange,Ship->facingDirection);
+        logger->info("type={}, playerID={}, GUID={}, x={}, y={}", THUAI7::shipTypeDict[Ship->shipType], Ship->playerID, Ship->guid, Ship->x, Ship->y);
+        logger->info("state={},speed={}, view range={},facing direction={}", THUAI7::shipStateDict[Ship->shipState], Ship->speed, Ship->viewRange, Ship->facingDirection);
         logger->info("************************\n");
     }
 }
@@ -421,7 +421,7 @@ int32_t TeamDebugAPI::GetScore() const
 std::future<bool> TeamDebugAPI::InstallModule(int64_t playerID, THUAI7::ModuleType moduleType)
 {
     return std::async(std::launch::async, [=]()
-                      { return logic.InstallModule(playerID, moduleType);});
+                      { return logic.InstallModule(playerID, moduleType); });
 }
 void TeamDebugAPI::PrintSelfInfo() const
 {
