@@ -21,6 +21,10 @@ extern const std::array<THUAI7::ShipType, 4> shipTypeDict = {
 
 void AI::play(IShipAPI& api)
 {
+    if (this->playerID == 0)
+    {
+
+    }
     else if (this->playerID == 1)
     {
         // 玩家1执行操作
