@@ -71,4 +71,16 @@ public struct MapStruct
             }
         }
     }
+    public void Clear()
+    {
+        for (uint i = 0; i < height; i++)
+        {
+            for (uint j = 0; j < width; j++) map[i, j] = PlaceType.Null;
+        }
+    }
+    public PlaceType this[uint i, uint j]
+    {
+        get => map[i, j];
+        set => map[i, j] = value;
+    }
 }
