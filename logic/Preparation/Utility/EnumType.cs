@@ -46,7 +46,7 @@
     /// <summary>
     /// 游戏对象类型
     /// </summary>
-    public enum GameObjType
+    public enum GameObjType : uint
     {
         Null = 0,
         Ship = 1,
@@ -86,7 +86,7 @@
     /// <summary>
     /// PlaceType
     /// </summary>
-    public enum PlaceType
+    public enum PlaceType : uint
     {
         Null = 0,
         Ruin = 1,

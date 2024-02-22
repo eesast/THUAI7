@@ -4,7 +4,8 @@ from random import random
 
 from easygui import multenterbox
 
-from Classes.MapStruct import MapStruct
+from GameClass.MapGenerator import MapStruct
+from Preparation.Utility import PlaceType as PT
 from Classes.RandomCore import RandomCore
 
 
@@ -161,6 +162,7 @@ class СюйЧэнRandomCore(RandomCore):
         return True
 
     def Random(self, mp: MapStruct) -> None:
+        mp.Clear()
         СюйЧэнRandomCore.generateBorderRuin(mp)
         СюйЧэнRandomCore.generateHome(mp)
         СюйЧэнRandomCore.generateAsteroid(mp, self.asteroidWidth)
@@ -174,12 +176,12 @@ class СюйЧэнRandomCore(RandomCore):
     def isEmptyNearby(mp: MapStruct, x: int, y: int, r: int) -> bool:
         for i in range(x - r if x - r >= 0 else 0, (x + r if x + r <= 49 else 49) + 1):
             for j in range(y - r if y - r >= 0 else 0, (y - r if y + r <= 9 else 49) + 1):
-                if mp[i, j] != 0:
+                if mp[i, j] != PT.Null:
                     return False
         return True
 
     @staticmethod
-    def haveSthNearby(mp: MapStruct, x: int, y: int, r: int, tp: int) -> int:
+    def haveSthNearby(mp: MapStruct, x: int, y: int, r: int, tp: PT) -> int:
         ret = 0
         for i in range(x - r if x - r >= 0 else 0, (x + r if x + r <= 49 else 49) + 1):
             for j in range(y - r if y - r >= 0 else 0, (y - r if y + r <= 9 else 49) + 1):
@@ -188,12 +190,12 @@ class СюйЧэнRandomCore(RandomCore):
         return ret
 
     @staticmethod
-    def haveSthCross(mp: MapStruct, x: int, y: int, r: int, tp: int) -> int:
+    def haveSthCross(mp: MapStruct, x: int, y: int, r: int, tp: PT) -> int:
         ret = 0
         for i in range(x - r if x - r >= 0 else 0, (x + r if x + r <= 49 else 49) + 1):
             if mp[i, y] == tp:
                 ret += 1
-        for j in range(y - r if y - r >= 0 else 0, (y - r if y + r <= 9 else 49) + 1):
+        for j in range(y - r if y - r >= 0 else 0, (y + r if y + r <= 49 else 49) + 1):
             if mp[x, j] == tp:
                 ret += 1
         return ret
@@ -201,28 +203,28 @@ class СюйЧэнRandomCore(RandomCore):
     @staticmethod
     def generateBorderRuin(mp: MapStruct) -> None:
         for i in range(50):
-            mp[i, 0] = 1
-            mp[i, 49] = 1
-            mp[0, i] = 1
-            mp[49, i] = 1
+            mp[i, 0] = PT.Ruin
+            mp[i, 49] = PT.Ruin
+            mp[0, i] = PT.Ruin
+            mp[49, i] = PT.Ruin
 
     @staticmethod
     def generateHome(mp: MapStruct) -> None:
-        mp[3, 46] = 7
-        mp[46, 3] = 7
+        mp[3, 46] = PT.Home
+        mp[46, 3] = PT.Home
 
     @staticmethod
     def generateAsteroid(mp: MapStruct, width: int = DefaultСюйЧэнRandomSettings.asteroidWidth) -> None:
         for i in range(1, 49):
             for j in range(24, 24 - width, -1):
-                mp[i, j] = 3
-                mp[49 - i, 49 - j] = 3
+                mp[i, j] = PT.Asteroid
+                mp[49 - i, 49 - j] = PT.Asteroid
         for i in range(1, 23):
             if random() < 0.5 and i != 9 and i != 10 and i != 11 and i != 12:
-                mp[i, 24 - width] = 3
-                mp[i, 24 + width] = 0
-                mp[49 - i, 25 + width] = 3
-                mp[49 - i, 25 - width] = 0
+                mp[i, 24 - width] = PT.Asteroid
+                mp[i, 24 + width] = PT.Null
+                mp[49 - i, 25 + width] = PT.Asteroid
+                mp[49 - i, 25 - width] = PT.Null
 
     @staticmethod
     def generateResource(mp: MapStruct, num: int = DefaultСюйЧэнRandomSettings.resourceNum) -> None:
@@ -231,8 +233,8 @@ class СюйЧэнRandomCore(RandomCore):
             x = floor(random() * 48) + 1
             y = floor(random() * 23) + 1
             if СюйЧэнRandomCore.isEmptyNearby(mp, x, y, 2):
-                mp[x, y] = 4
-                mp[49 - x, 49 - y] = 4
+                mp[x, y] = PT.Resource
+                mp[49 - x, 49 - y] = PT.Resource
             else:
                 i -= 1
             i += 1
@@ -244,8 +246,8 @@ class СюйЧэнRandomCore(RandomCore):
             x = floor(random() * 48) + 1
             y = floor(random() * 23) + 1
             if СюйЧэнRandomCore.isEmptyNearby(mp, x, y, 1):
-                mp[x, y] = 5
-                mp[49 - x, 49 - y] = 5
+                mp[x, y] = PT.Construction
+                mp[49 - x, 49 - y] = PT.Construction
             else:
                 i -= 1
             i += 1
@@ -255,35 +257,35 @@ class СюйЧэнRandomCore(RandomCore):
                        crossBonus: int = DefaultСюйЧэнRandomSettings.shadowCrossBonus) -> None:
         for i in range(50):
             for j in range(50):
-                if (mp[i, j] == 0 and
-                        random() < prob * (СюйЧэнRandomCore.haveSthCross(mp, i, j, 1, 2) * crossBonus + 1)):
-                    mp[i, j] = 2
-                    mp[49 - i, 49 - j] = 2
+                if (mp[i, j] == PT.Null and
+                        random() < prob * (СюйЧэнRandomCore.haveSthCross(mp, i, j, 1, PT.Shadow) * crossBonus + 1)):
+                    mp[i, j] = PT.Shadow
+                    mp[49 - i, 49 - j] = PT.Shadow
 
     @staticmethod
     def generateRuin(mp: MapStruct, prob: float = DefaultСюйЧэнRandomSettings.ruinProb,
                      crossBonus: int = DefaultСюйЧэнRandomSettings.ruinCrossBonus) -> None:
         for i in range(2, 48):
             for j in range(2, 48):
-                if ((mp[i, j] == 0 or mp[i, j] == 2) and
-                    not СюйЧэнRandomCore.haveSthNearby(mp, i, j, 1, 3) and
-                    not СюйЧэнRandomCore.haveSthNearby(mp, i, j, 1, 7) and
+                if ((mp[i, j] == PT.Null or mp[i, j] == PT.Shadow) and
+                    not СюйЧэнRandomCore.haveSthNearby(mp, i, j, 1, PT.Asteroid) and
+                    not СюйЧэнRandomCore.haveSthNearby(mp, i, j, 1, PT.Home) and
                         random() < prob
-                        * (СюйЧэнRandomCore.haveSthCross(mp, i, j, 1, 1)
-                           * (0 if СюйЧэнRandomCore.haveSthCross(mp, i, j, 1, 1) > 1
+                        * (СюйЧэнRandomCore.haveSthCross(mp, i, j, 1, PT.Ruin)
+                           * (0 if СюйЧэнRandomCore.haveSthCross(mp, i, j, 1, PT.Ruin) > 1
                               else crossBonus) + 1)):
-                    mp[i, j] = 1
-                    mp[49 - i, 49 - j] = 1
+                    mp[i, j] = PT.Ruin
+                    mp[49 - i, 49 - j] = PT.Ruin
 
     @staticmethod
     def generateWormhole(mp: MapStruct) -> None:
         for i in range(1, 49):
-            if mp[10, i] == 3:
-                mp[10, i] = 6
-                mp[39, 49 - i] = 6
-            if mp[11, i] == 3:
-                mp[11, i] = 6
-                mp[38, 49 - i] = 6
-            if mp[24, i] == 3:
-                mp[24, i] = 6
-                mp[25, 49 - i] = 6
+            if mp[10, i] == PT.Asteroid:
+                mp[10, i] = PT.Wormhole
+                mp[39, 49 - i] = PT.Wormhole
+            if mp[11, i] == PT.Asteroid:
+                mp[11, i] = PT.Wormhole
+                mp[38, 49 - i] = PT.Wormhole
+            if mp[24, i] == PT.Asteroid:
+                mp[24, i] = PT.Wormhole
+                mp[25, 49 - i] = PT.Wormhole

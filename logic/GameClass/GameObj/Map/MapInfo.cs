@@ -1,13 +1,13 @@
-﻿using MapGenerator;
+﻿using GameClass.MapGenerator;
 
 namespace GameClass.GameObj
 {
     public static class MapInfo
     {
         /// <summary>
-        /// 50*50
+        /// 缺省地图
         /// </summary>
-        public static uint[,] defaultMap = new uint[50, 50]
+        public static readonly uint[,] defaultMap = new uint[50, 50]
         {
             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
             {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 1},
@@ -60,12 +60,7 @@ namespace GameClass.GameObj
             {1, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
         };
-        public static uint[,] birthPoints = new uint[2, 2] { { 3, 46 }, { 46, 3 } };
-        public static MapStruct defaultMapStruct = new()
-        {
-            height = 50,
-            width = 50,
-            map = defaultMap
-        };
+        public static readonly uint[,] birthPoints = new uint[2, 2] { { 3, 46 }, { 46, 3 } };
+        public static readonly MapStruct defaultMapStruct = new(50, 50, defaultMap);
     }
 }
