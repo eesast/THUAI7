@@ -1,6 +1,6 @@
 using GameClass.GameObj;
 using GameClass.GameObj.Areas;
-using MapGenerator;
+using GameClass.MapGenerator;
 using Preparation.Interface;
 using Preparation.Utility;
 using System;
@@ -39,8 +39,8 @@ namespace Gaming
                     break;
                 }
             }
-            if (gameMap.ProtoGameMap[pos.x, pos.y] != (uint)PlaceType.Null &&
-                gameMap.ProtoGameMap[pos.x, pos.y] != (uint)PlaceType.Shadow)
+            if (gameMap.ProtoGameMap[pos.x, pos.y] != PlaceType.Null &&
+                gameMap.ProtoGameMap[pos.x, pos.y] != PlaceType.Shadow)
             {
                 validBirthPoint = false;
             }

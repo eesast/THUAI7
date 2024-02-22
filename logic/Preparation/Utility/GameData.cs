@@ -75,7 +75,7 @@ namespace Preparation.Utility
         }
 
         public const int ShipRadius = 400;
-        public static XY PosNotInGame = new XY(1, 1);
+        public static readonly XY PosNotInGame = new(1, 1);
 
         public const int BulletRadius = 200;  // 子弹半径
         public const int LaserRange = 4000;             // 激光射程
