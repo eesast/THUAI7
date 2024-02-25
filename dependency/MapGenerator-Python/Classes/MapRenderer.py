@@ -1,7 +1,8 @@
 from __future__ import annotations
 from queue import Queue
+from typing import Any, Generator, NoReturn
 
-from easygui import choicebox
+from easygui import choicebox, msgbox
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.axes import Axes
@@ -9,8 +10,9 @@ from matplotlib.patches import Rectangle
 from matplotlib.ticker import MultipleLocator
 from matplotlib.backend_bases import MouseEvent, KeyEvent
 
-from Classes.AreaRenderDict import AreaRenderDict
-from Classes.MapStruct import MapStruct
+from System import String
+from GameClass.MapGenerator import MapStruct
+from Preparation.Utility import PlaceType as PT
 from Classes.RandomCore import RandomCore
 
 
@@ -25,10 +27,30 @@ class MapRenderer:
             self.c = _c
             self.tp = _tp
 
+    class CurrentRender:
+        __cur_gen: Generator[PT, Any, NoReturn]
+        __cur: PT
+
+        def __init__(self, _areas: dict[PT, str]) -> None:
+            _keys = list(_areas.keys())
+            self.__cur = _keys[0]
+
+            def g():
+                while True:
+                    for k in _keys:
+                        yield k
+            self.__cur_gen = g()
+
+        def Get(self) -> PT:
+            return self.__cur
+
+        def Switch(self) -> None:
+            self.__cur = next(self.__cur_gen)
+
     title: str
     map: MapStruct
-    areaRender: AreaRenderDict
-    mapf: str
+    areas: dict[PT, str]
+    mapf: String
     fig: Figure
     ax: Axes
     rects: list[list[Rectangle]]
@@ -38,17 +60,7 @@ class MapRenderer:
     isCursorLift: int  # 0: 未提起; 1: 提起未选定; 2: 提起并选定
     cursorLift: tuple[int]  # 提起坐标
 
-    __curMax: int
-    __cur: int
-
-    @property
-    def Cur(self) -> str:
-        return self.areaRender.areas[self.__cur].color
-
-    @Cur.setter
-    def Cur(self, _) -> None:
-        self.__cur += 1
-        self.__cur %= self.__curMax
+    cur: CurrentRender
 
     @property
     def Queue_Render(self) -> RenderUnit:
@@ -58,22 +70,21 @@ class MapRenderer:
     def Queue_Render(self, value: RenderUnit) -> None:
         self.queue_render.put(value, timeout=0.1)
 
-    def __init__(self, _title, _mapStruct: MapStruct, _areas: AreaRenderDict,
+    def __init__(self, _title, _mapStruct: MapStruct, _areas: dict[PT, str],
                  _mapf: str, _randoms: list[RandomCore]) -> None:
         self.title = _title
         self.map = _mapStruct
-        self.areaRender = _areas
+        self.areas = _areas
         self.mapf = _mapf
         self.randomCores = _randoms
         self.fig, self.ax = plt.subplots()
-        self.rects = [[Rectangle((j, i), 1, 1, facecolor=self.areaRender.areas[self.map[i, j]].color)
+        self.rects = [[Rectangle((j, i), 1, 1, facecolor=self.areas[self.map[i, j]])
                        for j in range(self.map.width)]
                       for i in range(self.map.height)]
         self.queue_render = Queue()
         self.isCursorLift = 0
         self.cursorLift = None
-        self.__curMax = len(self.areaRender.areas)
-        self.__cur = 0
+        self.cur = MapRenderer.CurrentRender(_areas)
 
     def MainFrame(self) -> None:
         self.fig.set_size_inches(self.map.width, self.map.height)
@@ -99,8 +110,8 @@ class MapRenderer:
                 r, c = int(event.ydata), int(event.xdata)
                 match self.isCursorLift:
                     case 0:
-                        self.map[r, c] = self.areaRender.Color2Unit[self.Cur].value
-                        self.Queue_Render = MapRenderer.RenderUnit(r, c, self.Cur)
+                        self.map[r, c] = self.cur.Get()
+                        self.Queue_Render = MapRenderer.RenderUnit(r, c, self.areas[self.cur.Get()])
                         self.Render()
                     case 1:
                         self.cursorLift = (r, c)
@@ -110,12 +121,12 @@ class MapRenderer:
                         dir_r, dir_c = (1 if liftr <= r else -1), (1 if liftc <= c else -1)
                         for i in range(liftr, r + dir_r, dir_r):
                             for j in range(liftc, c + dir_c, dir_c):
-                                self.map[i, j] = self.areaRender.Color2Unit[self.Cur].value
-                                self.Queue_Render = MapRenderer.RenderUnit(i, j, self.Cur)
+                                self.map[i, j] = self.cur.Get()
+                                self.Queue_Render = MapRenderer.RenderUnit(i, j, self.areas[self.cur.Get()])
                         self.Render()
                         self.isCursorLift = 0
             case 3:
-                self.Cur = 0
+                self.cur.Switch()
             case _:
                 return
 
@@ -126,7 +137,8 @@ class MapRenderer:
             case 'z':
                 self.isCursorLift = 1
             case 'c':
-                self.map.ToFile(self.mapf)
+                MapStruct.ToFile(self.mapf, self.map)
+                msgbox(msg='Your map has been saved.', title=self.title)
             case 'p':
                 opt = choicebox(msg='Choose random', title=self.title, choices=[x.Name for x in self.randomCores])
                 if opt is None:
@@ -137,10 +149,8 @@ class MapRenderer:
                             x.Random(self.map)
                             for r in range(self.map.height):
                                 for c in range(self.map.width):
-                                    self.Queue_Render = MapRenderer.RenderUnit(
-                                        r, c, self.areaRender.Value2Color[self.map[r, c]])
+                                    self.Queue_Render = MapRenderer.RenderUnit(r, c, self.areas[self.map[r, c]])
                             self.Render()
-                            plt.show(block=False)
             case _:
                 return
 
@@ -148,8 +158,8 @@ class MapRenderer:
         while not self.queue_render.empty():
             cur = self.Queue_Render
             self._render(cur.r, cur.c, cur.tp)
+        plt.show(block=False)
 
     def _render(self, r: int, c: int, tp: str) -> None:
         self.rects[r][c].set_color(tp)
         self.ax.draw_artist(self.rects[r][c])
-        plt.show(block=False)

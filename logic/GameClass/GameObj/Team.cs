@@ -12,7 +12,7 @@ namespace GameClass.GameObj
         public const long invalidTeamID = long.MaxValue;
         public const long noneTeamID = long.MinValue;
         private readonly List<Ship> shipList = new(GameData.MaxShipNum);
-        private readonly List<XY> birthPointList = new();
+        private readonly List<XY> birthPointList = [];
         public List<XY> BirthPointList => birthPointList;
         private Home home = home;
         public MoneyPool MoneyPool { get; } = new MoneyPool();
