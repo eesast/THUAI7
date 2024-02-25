@@ -39,7 +39,7 @@ namespace AssistFunction
         double distance = deltaX * deltaX + deltaY * deltaY;
         THUAI7::PlaceType myPlace = map[GridToCell(x)][GridToCell(y)];
         THUAI7::PlaceType newPlace = map[GridToCell(newX)][GridToCell(newY)];
-        if (newPlace == THUAI7::PlaceType::Shadow && myPlace != THUAI6::PlaceType::Shadow)
+        if (newPlace == THUAI7::PlaceType::Shadow && myPlace != THUAI7::PlaceType::Shadow)
             return false;
         int32_t divide = std::max(std::abs(deltaX), std::abs(deltaY)) / 100;
         if (divide == 0)
@@ -61,7 +61,7 @@ namespace AssistFunction
             {
                 myX += dx;
                 myY += dy;
-                if (map[GridToCell(myX)][GridToCell(myY)] == THUAI6::PlaceType::Ruin)
+                if (map[GridToCell(myX)][GridToCell(myY)] == THUAI7::PlaceType::Ruin)
                     return false;
             }
         return true;
@@ -111,7 +111,7 @@ namespace Proto2THUAI7
     };
 
     inline std::map<protobuf::ShipState, THUAI7::ShipState> shipStateDict{
-        {protobuf::ShipState::NULL_SHIP_STATE, THUAI7::ShipState::NullShipState},
+        {protobuf::ShipState::NULL_STATUS, THUAI7::ShipState::NullStatus},
         {protobuf::ShipState::IDLE, THUAI7::ShipState::Idle},
         {protobuf::ShipState::PRODUCING, THUAI7::ShipState::Producing},
         {protobuf::ShipState::CONSTRUCTING, THUAI7::ShipState::Constructing},
@@ -119,8 +119,8 @@ namespace Proto2THUAI7
         {protobuf::ShipState::RECYCLING, THUAI7::ShipState::Recycling},
         {protobuf::ShipState::ATTACKING, THUAI7::ShipState::Attacking},
         {protobuf::ShipState::SWINGING, THUAI7::ShipState::Swinging},
-        {protobuf::ShipState::STUUNED, THUAI7::ShipState::Stuuned},
-        {protobuff::ShipState::MOVING, THUAI7::ShipState::Moving},
+        {protobuf::ShipState::STUNNED, THUAI7::ShipState::Stunned},
+        {protobuf::ShipState::MOVING, THUAI7::ShipState::Moving},
     };
 
     inline std::map<protobuf::WeaponType, THUAI7::WeaponType> weaponTypeDict{
@@ -252,7 +252,7 @@ namespace Proto2THUAI7
     inline std::shared_ptr<THUAI7::Bullet> Protobuf2THUAI7Bullet(const protobuf::MessageOfBullet& bulletMsg)
     {
         auto bullet = std::make_shared<THUAI7::Bullet>();
-        bullet->bulletType = bulletTypeDict[bulletMsg.bullet_type()];
+        bullet->bulletType = bulletTypeDict[bulletMsg.type()];
         bullet->x = bulletMsg.x();
         bullet->y = bulletMsg.y();
         bullet->facingDirection = bulletMsg.facing_direction();
@@ -281,19 +281,18 @@ namespace Proto2THUAI7
         team->teamID = teamMsg.team_id();
         team->score = teamMsg.score();
         team->money = teamMsg.money();
-        return team
+        return team;
     }
 
     inline std::shared_ptr<THUAI7::GameInfo> Protobuf2THUAI7GameInfo(const protobuf::MessageOfAll& allMsg)
     {
         auto gameInfo = std::make_shared<THUAI7::GameInfo>();
         gameInfo->gameTime = allMsg.game_time();
-        gameInfo->redTeamScore = allMsg.red_team_score();
-        gameInfo->blueTeamScore = allMsg.blue_team_score();
+        gameInfo->redScore = allMsg.red_team_score();
+        gameInfo->blueScore = allMsg.blue_team_score();
     }
-
 }  // namespace Proto2THUAI7
-// 辅助函数，用于将proto信息转换为THUAI6信息
+// 辅助函数，用于将proto信息转换为THUAI7信息
 namespace THUAI72Proto
 {
     // 用于将THUAI7的枚举转换为Protobuf的枚举
@@ -336,7 +335,7 @@ namespace THUAI72Proto
     };
 
     inline std::map<THUAI7::ShipState, protobuf::ShipState> shipStateDict{
-        {THUAI7::ShipState::NullShipState, protobuf::ShipState::NULL_SHIP_STATE},
+        {THUAI7::ShipState::NullStatus, protobuf::ShipState::NULL_STATUS},
         {THUAI7::ShipState::Idle, protobuf::ShipState::IDLE},
         {THUAI7::ShipState::Producing, protobuf::ShipState::PRODUCING},
         {THUAI7::ShipState::Constructing, protobuf::ShipState::CONSTRUCTING},
@@ -344,7 +343,7 @@ namespace THUAI72Proto
         {THUAI7::ShipState::Recycling, protobuf::ShipState::RECYCLING},
         {THUAI7::ShipState::Attacking, protobuf::ShipState::ATTACKING},
         {THUAI7::ShipState::Swinging, protobuf::ShipState::SWINGING},
-        {THUAI7::ShipState::Stuuned, protobuf::ShipState::STUUNED},
+        {THUAI7::ShipState::Stunned, protobuf::ShipState::STUNNED},
         {THUAI7::ShipState::Moving, protobuf::ShipState::MOVING},
     };
 
@@ -472,7 +471,7 @@ namespace THUAI72Proto
         protobuf::ConstructMsg constructMsg;
         constructMsg.set_player_id(playerID);
         constructMsg.set_team_id(teamID);
-        constructMsg.set_construction_type(THUAI72Proto::constructionTypeDict[constructorType]);
+        constructMsg.set_construction_type(THUAI72Proto::constructionTypeDict[constructionType]);
         return constructMsg;
     }
 
@@ -501,7 +500,7 @@ namespace THUAI72Proto
     inline protobuf::InstallMsg THUAI72ProtobufInstallMsg(int64_t playerID, int64_t teamID, THUAI7::ModuleType moduleType)
     {
         protobuf::InstallMsg installMsg;
-        installMsg.set_module_type(moduleType);
+        installMsg.set_module_type(THUAI72Proto::moduleTypeDict[moduleType]);
         installMsg.set_player_id(playerID);
         installMsg.set_team_id(teamID);
         return installMsg;
@@ -530,5 +529,13 @@ namespace THUAI72Proto
 
     // 用于将THUAI7的类转换为Protobuf的类
 }  // namespace THUAI72Proto
-
+namespace Time
+{
+    inline double TimeSinceStart(const std::chrono::system_clock::time_point& sp)
+    {
+        std::chrono::system_clock::time_point tp = std::chrono::system_clock::now();
+        std::chrono::duration<double, std::milli> time_span = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(tp - sp);
+        return time_span.count();
+    }
+}  // namespace Time
 #endif

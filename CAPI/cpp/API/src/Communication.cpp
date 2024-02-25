@@ -37,7 +37,7 @@ bool Communication::Move(int64_t playerID, int64_t teamID, int64_t time, double 
         return false;
 }
 
-bool Communication::SendMessage(int64_t playerID, int64_t toPlayerID, int64_t teamID, std::string message, bool binary)
+bool Communication::Send(int64_t playerID, int64_t toPlayerID, int64_t teamID, std::string message, bool binary)
 {
     {
         std::lock_guard<std::mutex> lock(mtxLimit);
@@ -47,8 +47,8 @@ bool Communication::SendMessage(int64_t playerID, int64_t toPlayerID, int64_t te
     }
     protobuf::BoolRes sendMessageResult;
     ClientContext context;
-    auto request = THUAI72Proto::THUAI72ProtobufSendMsg(playerID, toPlayerID, teamID, std::move(message), toID, binary);
-    auto status = THUAI7Stub->SendMessage(&context, request, &sendMessageResult);
+    auto request = THUAI72Proto::THUAI72ProtobufSendMsg(playerID, toPlayerID, teamID, std::move(message), binary);
+    auto status = THUAI7Stub->Send(&context, request, &sendMessageResult);
     if (status.ok())
         return sendMessageResult.act_success();
     else
@@ -142,7 +142,7 @@ bool Communication::Construct(int64_t playerID, int64_t teamID, THUAI7::Construc
     }
     protobuf::BoolRes constructResult;
     ClientContext context;
-    auto request = THUAI72Proto::THUAI72ProtobufConstructMsg(int64_t playerID, int64_t teamID, THUAI7::ConstructionType constructionType);
+    auto request = THUAI72Proto::THUAI72ProtobufConstructMsg(playerID, teamID, constructionType);
     auto status = THUAI7Stub->Construct(&context, request, &constructResult);
     if (status.ok())
         return constructResult.act_success();
