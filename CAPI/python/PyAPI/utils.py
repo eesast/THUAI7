@@ -498,3 +498,5 @@ class THUAI72Proto(NoInstance):
     @staticmethod
     def THUAI72ProtobufRecoverMsg(playerID:int,recover:int,teamID:int)->Message2Server.RecoverMsg:
         return Message2Server.RecoverMsg(player_id=playerID,team_id=teamID,recover=recover)
+    
+
