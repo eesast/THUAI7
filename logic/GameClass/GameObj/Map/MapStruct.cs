@@ -4,7 +4,7 @@ using System.IO;
 namespace GameClass.MapGenerator;
 
 /// <summary>
-/// 地图结构体
+/// 地图结构体，本结构将会被MapGenerator-Python引用——asdawej
 /// </summary>
 public struct MapStruct
 {
@@ -71,14 +71,17 @@ public struct MapStruct
             }
         }
     }
-    public void Clear()
+    /// <summary>
+    /// 地图清空
+    /// </summary>
+    public readonly void Clear()
     {
         for (uint i = 0; i < height; i++)
         {
             for (uint j = 0; j < width; j++) map[i, j] = PlaceType.Null;
         }
     }
-    public PlaceType this[uint i, uint j]
+    public readonly PlaceType this[uint i, uint j]
     {
         get => map[i, j];
         set => map[i, j] = value;
