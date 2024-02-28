@@ -1,18 +1,16 @@
 using Google.Protobuf;
 using Protobuf;
-using System;
-using System.IO;
 using System.IO.Compression;
 
 namespace Playback
 {
+    using PBConst = PlayBackConstant;
     public class MessageWriter : IDisposable
     {
-        private FileStream fs;
-        private CodedOutputStream cos;
-        private MemoryStream ms;
-        private GZipStream gzs;
-        private const int memoryCapacity = 10 * 1024 * 1024;    // 10M
+        private readonly FileStream fs;
+        private readonly CodedOutputStream cos;
+        private readonly MemoryStream ms;
+        private readonly GZipStream gzs;
 
         private static void ClearMemoryStream(MemoryStream msToClear)
         {
@@ -22,17 +20,16 @@ namespace Playback
 
         public MessageWriter(string fileName, uint teamCount, uint playerCount)
         {
-            if (!fileName.EndsWith(PlayBackConstant.ExtendedName))
+            if (!fileName.EndsWith(PBConst.ExtendedName))
             {
-                fileName += PlayBackConstant.ExtendedName;
+                fileName += PBConst.ExtendedName;
             }
 
             fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-            fs.Write(PlayBackConstant.Prefix);      // 写入前缀
-
-            fs.Write(BitConverter.GetBytes((UInt32)teamCount));    // 写入队伍数
-            fs.Write(BitConverter.GetBytes((UInt32)playerCount));    // 写入每队的玩家人数
-            ms = new MemoryStream(memoryCapacity);
+            fs.Write(PBConst.FileHeader);                   // 写入文件头
+            fs.Write(BitConverter.GetBytes(teamCount));     // 写入队伍数
+            fs.Write(BitConverter.GetBytes(playerCount));   // 写入每队的玩家人数
+            ms = new MemoryStream(PBConst.BufferMaxSize);
             cos = new CodedOutputStream(ms);
             gzs = new GZipStream(fs, CompressionMode.Compress);
         }
@@ -40,7 +37,7 @@ namespace Playback
         public void WriteOne(MessageToClient msg)
         {
             cos.WriteMessage(msg);
-            if (ms.Length > memoryCapacity)
+            if (ms.Length > PBConst.BufferMaxSize)
                 Flush();
         }
 
@@ -65,6 +62,7 @@ namespace Playback
                 gzs.Dispose();
                 fs.Dispose();
             }
+            GC.SuppressFinalize(this);
         }
 
         ~MessageWriter()

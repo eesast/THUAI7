@@ -109,9 +109,9 @@ message MessageOfMap
 
 message MessageOfTeam
 {
-	int64 team_id = 1;
+    int64 team_id = 1;
     int64 player_id = 2;
-	int32 score = 3;
+    int32 score = 3;
     int32 money = 4;
 
 }

@@ -1,51 +1,48 @@
 ﻿using Google.Protobuf;
 using Protobuf;
-using System;
-using System.IO;
 using System.IO.Compression;
 
 namespace Playback
 {
+    using PBConst = PlayBackConstant;
     public class FileFormatNotLegalException(string fileName) : Exception
     {
         private readonly string fileName = fileName;
-        public override string Message => $"The file: " + this.fileName + " is not a legal playback file for THUAI6.";
+        public override string Message => $"The file: {fileName} is not a legal playback file for THUAI{PBConst.Version}.";
     }
 
     public class MessageReader : IDisposable
     {
-        private FileStream? fs;
-        private CodedInputStream cos;
-        private GZipStream gzs;
+        private readonly FileStream fs;
+        private CodedInputStream cis;
+        private readonly GZipStream gzs;
         private byte[] buffer;
         public bool Finished { get; private set; } = false;
 
         public readonly uint teamCount;
         public readonly uint playerCount;
 
-        const int bufferMaxSize = 10 * 1024 * 1024;       // 10M
-
         public MessageReader(string fileName)
         {
-            if (!fileName.EndsWith(PlayBackConstant.ExtendedName))
+            if (!fileName.EndsWith(PBConst.ExtendedName))
             {
-                fileName += PlayBackConstant.ExtendedName;
+                fileName += PBConst.ExtendedName;
             }
 
             fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
 
             try
             {
-                var prefixLen = PlayBackConstant.Prefix.Length;
-                byte[] bt = new byte[prefixLen + sizeof(UInt32) * 2];
+                var headerLen = PBConst.FileHeader.Length;
+                byte[] bt = new byte[headerLen + sizeof(uint) * 2];
                 fs.Read(bt, 0, bt.Length);
-                for (int i = 0; i < prefixLen; ++i)
+                for (int i = 0; i < headerLen; ++i)
                 {
-                    if (bt[i] != PlayBackConstant.Prefix[i]) throw new FileFormatNotLegalException(fileName);
+                    if (bt[i] != PBConst.FileHeader[i]) throw new FileFormatNotLegalException(fileName);
                 }
 
-                teamCount = BitConverter.ToUInt32(bt, prefixLen);
-                playerCount = BitConverter.ToUInt32(bt, prefixLen + sizeof(UInt32));
+                teamCount = BitConverter.ToUInt32(bt, headerLen);
+                playerCount = BitConverter.ToUInt32(bt, headerLen + sizeof(uint));
             }
             catch
             {
@@ -53,14 +50,14 @@ namespace Playback
             }
 
             gzs = new GZipStream(fs, CompressionMode.Decompress);
-            var tmpBuffer = new byte[bufferMaxSize];
+            var tmpBuffer = new byte[PBConst.BufferMaxSize];
             var bufferSize = gzs.Read(tmpBuffer);
             if (bufferSize == 0)
             {
                 buffer = tmpBuffer;
                 Finished = true;
             }
-            else if (bufferSize != bufferMaxSize)       // 不留空位，防止 CodedInputStream 获取信息错误
+            else if (bufferSize != PBConst.BufferMaxSize)       // 不留空位，防止 CodedInputStream 获取信息错误
             {
                 if (bufferSize == 0)
                 {
@@ -73,7 +70,7 @@ namespace Playback
             {
                 buffer = tmpBuffer;
             }
-            cos = new CodedInputStream(buffer);
+            cis = new CodedInputStream(buffer);
         }
 
         public MessageToClient? ReadOne()
@@ -81,19 +78,19 @@ namespace Playback
         beginRead:
             if (Finished)
                 return null;
-            var pos = cos.Position;
+            var pos = cis.Position;
             try
             {
                 MessageToClient? msg = new();
-                cos.ReadMessage(msg);
+                cis.ReadMessage(msg);
                 return msg;
             }
             catch (InvalidProtocolBufferException)
             {
                 var leftByte = buffer.Length - pos;     // 上次读取剩余的字节
-                if (buffer.Length < bufferMaxSize / 2)
+                if (buffer.Length < PBConst.BufferMaxSize / 2)
                 {
-                    var newBuffer = new byte[bufferMaxSize];
+                    var newBuffer = new byte[PBConst.BufferMaxSize];
                     for (int i = 0; i < leftByte; i++)
                     {
                         newBuffer[i] = buffer[pos + i];
@@ -119,7 +116,7 @@ namespace Playback
                     Array.Copy(buffer, tmpBuffer, bufferSize);
                     buffer = tmpBuffer;
                 }
-                cos = new CodedInputStream(buffer);
+                cis = new CodedInputStream(buffer);
                 goto beginRead;
             }
         }
@@ -127,12 +124,11 @@ namespace Playback
         public void Dispose()
         {
             Finished = true;
-            if (fs == null)
-                return;
             if (fs.CanRead)
             {
                 fs.Close();
             }
+            GC.SuppressFinalize(this);
         }
 
         ~MessageReader()
