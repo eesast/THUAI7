@@ -54,12 +54,6 @@ namespace THUAI7
         Blue = 2,
     };
 
-    inline std::map<PlayerTeam, int32_t> playerTeamDict{
-        {PlayerTeam::NullTeam, 0},
-        {PlayerTeam::Red, 1},
-        {PlayerTeam::Blue, 2},
-    };
-
     enum class PlayerType : unsigned char
     {
         NullPlayerType = 0,
