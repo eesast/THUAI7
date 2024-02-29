@@ -7,12 +7,7 @@ from typing import Final, List
 numOfGridPerCell: Final[int] = 1000
 
 
-class NoInstance:
-    def __call__(self):
-        raise TypeError("This class cannot be instantiated.")
-
-
-class AssistFunction(NoInstance):
+class AssistFunction:
     @staticmethod
     def CellToGrid(cell: int) -> int:
         return cell * numOfGridPerCell + numOfGridPerCell // 2
@@ -30,46 +25,39 @@ class AssistFunction(NoInstance):
         newY: int,
         map: List[List[THUAI7.PlaceType]],
     ) -> bool:
-        deltaX: int = newX - x
-        deltaY: int = newY - y
-        distance: float = deltaX**2 + deltaY**2
+        deltaX = newX - x
+        deltaY = newY - y
+        distance = deltaX**2 + deltaY**2
         myPlace = map[AssistFunction.GridToCell(x)][AssistFunction.GridToCell(y)]
         newPlace = map[AssistFunction.GridToCell(newX)][AssistFunction.GridToCell(newY)]
         if myPlace != THUAI7.PlaceType.Shadow and newPlace == THUAI7.PlaceType.Shadow:
             return False
         if distance <= viewRange * viewRange:
-            divide: int = max(abs(deltaX), abs(deltaY)) // 100
+            divide = max(abs(deltaX), abs(deltaY)) // 100
             if divide == 0:
                 return True
-            dx: float = deltaX / divide
-            dy: float = deltaY / divide
-            selfX: float = float(x)
-            selfY: float = float(y)
-            if (
-                newPlace == THUAI7.PlaceType.Shadow
-                and myPlace == THUAI7.PlaceType.Shadow
-            ):
-                for i in range(divide):
+            dx = deltaX / divide
+            dy = deltaY / divide
+            selfX = float(x)
+            selfY = float(y)
+            if (newPlace == THUAI7.PlaceType.Shadow and myPlace == THUAI7.PlaceType.Shadow):
+                for _ in range(divide):
                     selfX += dx
                     selfY += dy
                     if (
-                        map[AssistFunction.GridToCell(int(selfX))][
-                            AssistFunction.GridToCell(int(selfY))
-                        ]
+                        map[AssistFunction.GridToCell(int(selfX))][AssistFunction.GridToCell(int(selfY))]
                         != THUAI7.PlaceType.Shadow
                     ):
                         return False
                 else:
                     return True
             else:
-                for i in range(divide):
+                for _ in range(divide):
                     selfX += dx
                     selfY += dy
                     if (
-                        map[AssistFunction.GridToCell(int(selfX))][
-                            AssistFunction.GridToCell(int(selfY))
-                        ]
-                        == THUAI7.PlaceType.Wall
+                        map[AssistFunction.GridToCell(int(selfX))][AssistFunction.GridToCell(int(selfY))]
+                        == THUAI7.PlaceType.Ruin
                     ):
                         return False
                 else:
@@ -211,9 +199,9 @@ class Proto2THUAI7:
     }
 
     newsTypeDict: Final[dict] = {
-        MessageType.NewsCase.NEWS_NOT_SET: THUAI7.NewsType.NullNewsType,
-        MessageType.NewsCase.kTextMessage: THUAI7.NewsType.TextMessage,
-        MessageType.NewsCase.kBinaryMessage: THUAI7.NewsType.BinaryMessage,
+        MessageType.NewsType.NULL_NEWS_TYPE: THUAI7.NewsType.NullNewsType,
+        MessageType.NewsType.TEXT: THUAI7.NewsType.TextMessage,
+        MessageType.NewsType.BINARY: THUAI7.NewsType.BinaryMessage,
     }
 
     @staticmethod
@@ -286,7 +274,7 @@ class Proto2THUAI7:
         return gameInfo
 
 
-class THUAI72Proto(NoInstance):
+class THUAI72Proto:
     gameStateDict: Final[dict] = {
         THUAI7.GameState.NullGameState: MessageType.NULL_GAME_STATE,
         THUAI7.GameState.GameStart: MessageType.GAME_START,
@@ -423,12 +411,18 @@ class THUAI72Proto(NoInstance):
         playerID: int, teamID: int, time: int, angle: float
     ) -> Message2Server.MoveMsg:
         return Message2Server.MoveMsg(
-            time_in_milliseconds=time, angle=angle, player_id=playerID, team_id=teamID
+            player_id=playerID,
+            team_id=teamID,
+            time_in_milliseconds=time,
+            angle=angle
         )
 
     @staticmethod
     def THUAI72ProtobufIDMsg(playerID: int, teamID: int) -> Message2Server.IDMsg:
-        return Message2Server.IDMsg(player_id=playerID, team_id=teamID)
+        return Message2Server.IDMsg(
+            player_id=playerID,
+            team_id=teamID
+        )
 
     @staticmethod
     def THUAI72ProtobufConstructMsg(
@@ -437,14 +431,28 @@ class THUAI72Proto(NoInstance):
         return Message2Server.ConstructMsg(
             player_id=playerID,
             team_id=teamID,
-            construction_type=THUAI72Proto.constructionTypeDict[constructionType],
+            construction_type=THUAI72Proto.constructionTypeDict[constructionType]
         )
 
     @staticmethod
-    def THUI72ProtobufAttackMsg(
+    def THUAI72ProtobufAttackMsg(
         playerID: int, teamID: int, angle: float
     ) -> Message2Server.AttackMsg:
-        return Message2Server.AttackMsg(player_id=playerID, team_id=teamID, angle=angle)
+        return Message2Server.AttackMsg(
+            player_id=playerID,
+            team_id=teamID,
+            angle=angle
+        )
+
+    @staticmethod
+    def THUAI72ProtobufRecoverMsg(
+        playerID: int, teamID: int, recover: int
+    ) -> Message2Server.RecoverMsg:
+        return Message2Server.RecoverMsg(
+            player_id=playerID,
+            team_id=teamID,
+            recover=recover
+        )
 
     @staticmethod
     def THUAI72ProtobufSendMsg(
@@ -452,17 +460,17 @@ class THUAI72Proto(NoInstance):
     ) -> Message2Server.SendMsg:
         if binary:
             return Message2Server.SendMsg(
-                binary_message=msg,
-                to_player_id=toPlayerID,
                 player_id=playerID,
                 team_id=teamID,
+                binary_message=msg,
+                to_player_id=toPlayerID
             )
         else:
             return Message2Server.SendMsg(
-                text_message=msg,
-                to_player_id=toPlayerID,
                 player_id=playerID,
                 team_id=teamID,
+                text_message=msg,
+                to_player_id=toPlayerID
             )
 
     @staticmethod
@@ -472,7 +480,7 @@ class THUAI72Proto(NoInstance):
         return Message2Server.InstallMsg(
             module_type=THUAI72Proto.moduleTypeDict[moduleType],
             player_id=playerID,
-            team_id=teamID,
+            team_id=teamID
         )
 
     @staticmethod
@@ -480,7 +488,10 @@ class THUAI72Proto(NoInstance):
         teamID: int, shipType: THUAI7.ShipType, x: int, y: int
     ) -> Message2Server.BuildShipMsg:
         return Message2Server.BuildShipMsg(
-            team_id=teamID, x=x, y=y, ship_type=THUAI72Proto.shipTypeDict[shipType]
+            team_id=teamID,
+            x=x,
+            y=y,
+            ship_type=THUAI72Proto.shipTypeDict[shipType]
         )
 
     @staticmethod
@@ -490,7 +501,7 @@ class THUAI72Proto(NoInstance):
         return Message2Server.PlayerMsg(
             player_id=playerID,
             team_id=teamID,
-            ship_type=THUAI72Proto.shipTypeDict[shipType],
             x=x,
             y=y,
+            ship_type=THUAI72Proto.shipTypeDict[shipType]
         )

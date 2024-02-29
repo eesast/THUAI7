@@ -40,10 +40,10 @@ class Communication:
                     return False
                 self.__counter += 1
                 self.__counterMove += 1
-            moveResult = self.__THUAI7Stub.Move(
+            moveResult: Message2Clients.MoveRes = self.__THUAI7Stub.Move(
                 THUAI72Proto.THUAI72ProtobufMoveMsg(time, angle, playerID)
             )
-        except grpc.RpcError as e:
+        except grpc.RpcError:
             return False
         else:
             return moveResult.act_success
@@ -54,12 +54,11 @@ class Communication:
                 if self.__counter >= self.__limit:
                     return False
                 self.__counter += 1
-            sendResult = self.__THUAI7Stub.SendMessage(
+            sendResult: Message2Clients.BoolRes = self.__THUAI7Stub.Send(
                 THUAI72Proto.THUAI72ProtobufSendMsg(
-                    playerID, toID, teamID, message, True if isinstance(
-                        message, bytes) else False)
+                    playerID, toID, teamID, message, True if isinstance(message, bytes) else False)
             )
-        except grpc.RpcError as e:
+        except grpc.RpcError:
             return False
         else:
             return sendResult.act_success
@@ -70,10 +69,10 @@ class Communication:
                 if self.__counter >= self.__limit:
                     return False
                 self.__counter += 1
-            attackResult = self.__THUAI7Stub.Attack(
+            attackResult: Message2Clients.BoolRes = self.__THUAI7Stub.Attack(
                 THUAI72Proto.THUAI72ProtobufAttackMsg(playerID, teamID, angle)
             )
-        except grpc.RpcError as e:
+        except grpc.RpcError:
             return False
         else:
             return attackResult.act_success
@@ -84,10 +83,10 @@ class Communication:
                 if self.__counter >= self.__limit:
                     return False
                 self.__counter += 1
-            recoverResult = self.__THUAI7Stub.Recover(
+            recoverResult: Message2Clients.BoolRes = self.__THUAI7Stub.Recover(
                 THUAI72Proto.THUAI72ProtobufRecoverMsg(playerID, recover, teamID)
             )
-        except grpc.RpcError as e:
+        except grpc.RpcError:
             return False
         else:
             return recoverResult.act_success
@@ -98,10 +97,10 @@ class Communication:
                 if self.__counter >= self.__limit:
                     return False
                 self.__counter += 1
-            produceResult = self.__THUAI7Stub.Produce(
+            produceResult: Message2Clients.BoolRes = self.__THUAI7Stub.Produce(
                 THUAI72Proto.THUAI72ProtobufIDMsg(playerID, teamID)
             )
-        except grpc.RpcError as e:
+        except grpc.RpcError:
             return False
         else:
             return produceResult.act_success
@@ -112,10 +111,10 @@ class Communication:
                 if self.__counter >= self.__limit:
                     return False
                 self.__counter += 1
-            rebuildResult = self.__THUAI7Stub.Rebuild(
+            rebuildResult: Message2Clients.BoolRes = self.__THUAI7Stub.Rebuild(
                 THUAI72Proto.THUAI72ProtobufConstructMsg(playerID, teamID, constructionType)
             )
-        except grpc.RpcError as e:
+        except grpc.RpcError:
             return False
         else:
             return rebuildResult.act_success
@@ -126,10 +125,10 @@ class Communication:
                 if self.__counter >= self.__limit:
                     return False
                 self.__counter += 1
-            constructResult = self.__THUAI7Stub.Construct(
+            constructResult: Message2Clients.BoolRes = self.__THUAI7Stub.Construct(
                 THUAI72Proto.THUAI72ProtobufConstructMsg(playerID, teamID, constructionType)
             )
-        except grpc.RpcError as e:
+        except grpc.RpcError:
             return False
         else:
             return constructResult.act_success
@@ -144,10 +143,10 @@ class Communication:
                     return False
                 self.__counter += 1
                 self.__counterMove += 1
-            endResult = self.__THUAI7Stub.EndAllAction(
+            endResult: Message2Clients.BoolRes = self.__THUAI7Stub.EndAllAction(
                 THUAI72Proto.THUAI72ProtobufIDMsg(playerID, teamID)
             )
-        except grpc.RpcError as e:
+        except grpc.RpcError:
             return False
         else:
             return endResult.act_success
@@ -158,12 +157,11 @@ class Communication:
                 if self.__counter >= self.__limit:
                     return False
                 self.__counter += 1
-            sendResult = self.__THUAI7Stub.SendMessage(
+            sendResult: Message2Clients.BoolRes = self.__THUAI7Stub.Send(
                 THUAI72Proto.THUAI72ProtobufSendMsg(
-                    playerID, toID, teamID, message, True if isinstance(
-                        message, bytes) else False)
+                    playerID, toID, teamID, message, True if isinstance(message, bytes) else False)
             )
-        except grpc.RpcError as e:
+        except grpc.RpcError:
             return False
         else:
             return sendResult.act_success
@@ -174,10 +172,10 @@ class Communication:
                 if self.__counter >= self.__limit:
                     return False
                 self.__counter += 1
-            installResult = self.__THUAI7Stub.InstallModule(
+            installResult: Message2Clients.BoolRes = self.__THUAI7Stub.InstallModule(
                 THUAI72Proto.THUAI72ProtobufInstallMsg(playerID, teamID, moduleType)
             )
-        except grpc.RpcError as e:
+        except grpc.RpcError:
             return False
         else:
             return installResult.act_success
@@ -188,10 +186,10 @@ class Communication:
                 if self.__counter >= self.__limit:
                     return False
                 self.__counter += 1
-            recycleResult = self.__THUAI7Stub.Recycle(
+            recycleResult: Message2Clients.BoolRes = self.__THUAI7Stub.Recycle(
                 THUAI72Proto.THUAI72ProtobufIDMsg(playerID, teamID)
             )
-        except grpc.RpcError as e:
+        except grpc.RpcError:
             return False
         else:
             return recycleResult.act_success
@@ -202,23 +200,23 @@ class Communication:
                 if self.__counter >= self.__limit:
                     return False
                 self.__counter += 1
-            buildResult = self.__THUAI7Stub.BuildShip(
+            buildResult: Message2Clients.BoolRes = self.__THUAI7Stub.BuildShip(
                 THUAI72Proto.THUAI72ProtobufBuildShipMsg(teamID, shipType, cellX, cellY)
             )
-        except grpc.RpcError as e:
+        except grpc.RpcError:
             return False
         else:
             return buildResult.act_success
 
     def TryConnection(self, playerID: int, teamID: int) -> bool:
         try:
-            tryResult = self.__THUAI7Stub.TryConnection(
+            tryResult: Message2Clients.BoolRes = self.__THUAI7Stub.TryConnection(
                 THUAI72Proto.THUAI72ProtobufIDMsg(playerID, teamID)
             )
-        except grpc.RpcError as e:
+        except grpc.RpcError:
             return False
         else:
-            return True
+            return tryResult.act_success
 
     def GetMessage2Client(self) -> Message2Clients.MessageToClient:
         with self.__cvMessage:
@@ -238,7 +236,7 @@ class Communication:
                         with self.__mtxLimit:
                             self.__counter = 0
                             self.__counterMove = 0
-            except grpc.RpcError as e:
+            except grpc.RpcError:
                 return
 
         threading.Thread(target=tMessage).start()

@@ -160,14 +160,16 @@ class Logic(ILogic):
     def GetHomeHp(self) -> int:
         with self.__mtxState:
             self.__logger.debug("Called GetHomeHp")
-            return copy.deepcopy(self.__currentState.gameInfo.blueHomeHp if self.__teamID ==
-                                 1 else self.__currentState.gameInfo.redHomeHp)
+            return copy.deepcopy(self.__currentState.gameInfo.blueHomeHp
+                                 if self.__teamID == 1
+                                 else self.__currentState.gameInfo.redHomeHp)
 
     def GetMoney(self) -> int:
         with self.__mtxState:
             self.__logger.debug("Called GetMoney")
-            return copy.deepcopy(self.__currentState.gameInfo.blueMoney if self.__teamID ==
-                                 1 else self.__currentState.gameInfo.redMoney)
+            return copy.deepcopy(self.__currentState.gameInfo.blueMoney
+                                 if self.__teamID == 1
+                                 else self.__currentState.gameInfo.redMoney)
 
     def Attack(self, angle: float) -> int:
         self.__logger.debug("Called Attack")
@@ -231,11 +233,11 @@ class Logic(ILogic):
                     for obj in clientMsg.obj_message:
                         if obj.WhichOneof("message_of_obj") == "map_message":
                             gameMap: List[List[THUAI7.PlaceType]] = []
-                            for row in obj.map_message.row:
-                                col: List[THUAI7.PlaceType] = []
-                                for place in row.col:
-                                    col.append(Proto2THUAI7.placeTypeDict[place])
-                                gameMap.append(col)
+                            for row in obj.map_message.rows:
+                                cols: List[THUAI7.PlaceType] = []
+                                for place in row.cols:
+                                    cols.append(Proto2THUAI7.placeTypeDict[place])
+                                gameMap.append(cols)
                             self.__currentState.gameMap = gameMap
                             self.__bufferState.gameMap = gameMap
                             self.__logger.info("Game map loaded!")
@@ -308,8 +310,12 @@ class Logic(ILogic):
 
     def LoadBufferCase(self, item: Message2Clients.MessageOfObj) -> None:
         if item.WhichOneof("message_of_obj") == "ship_message":
-            if AssistFunction.HaveView(self.__bufferState.self.viewRange, self.__bufferState.self.x,
-                                       self.__bufferState.self.y, item.ship_message.x, item.ship_message.y, self.__bufferState.gameMap):
+            if AssistFunction.HaveView(self.__bufferState.self.viewRange,
+                                       self.__bufferState.self.x,
+                                       self.__bufferState.self.y,
+                                       item.ship_message.x,
+                                       item.ship_message.y,
+                                       self.__bufferState.gameMap):
                 if item.ship_message.team_id != self.__teamID:
                     self.__bufferState.enemyShips.append(Proto2THUAI7.Protobuf2THUAI7Ship(item.ship_message))
                     self.__logger.debug("Load enemy ship")
