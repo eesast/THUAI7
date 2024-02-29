@@ -16,213 +16,217 @@ from PyAPI.Communication import Communication
 from PyAPI.State import State
 from PyAPI.Interface import ILogic, IGameTimer
 
+
 class Logic(ILogic):
-    def __init__(self,playerID:int,shipType:THUAI7.ShipType,teamID:int,x:int,y:int)->None:
-        self.__playerID:int=playerID
-        self.__teamID:int=teamID
-        self.__shipType:THUAI7.ShipType=shipType
-        self.__x:int=x
-        self.__y:int=y
+    def __init__(self, playerID: int, shipType: THUAI7.ShipType, teamID: int, x: int, y: int) -> None:
+        self.__playerID: int = playerID
+        self.__teamID: int = teamID
+        self.__shipType: THUAI7.ShipType = shipType
+        self.__x: int = x
+        self.__y: int = y
 
-        self.__comm:Communication
+        self.__comm: Communication
 
-        self.__currentState:State=State()
-        self.__bufferState:State=State()
+        self.__currentState: State = State()
+        self.__bufferState: State = State()
 
-        self.__timer:IGameTimer
+        self.__timer: IGameTimer
 
-        self.__threadAI:threading.Thread
+        self.__threadAI: threading.Thread
 
-        self.__mtxState:threading.Lock=threading.Lock()
+        self.__mtxState: threading.Lock = threading.Lock()
 
-        self.__cvBuffer:threading.Condition=threading.Condition()
-        self.__cvAI:threading.Condition=threading.Condition()
+        self.__cvBuffer: threading.Condition = threading.Condition()
+        self.__cvAI: threading.Condition = threading.Condition()
 
-        self.__counterState:int=0
-        self.__counterBuffer:int=0
+        self.__counterState: int = 0
+        self.__counterBuffer: int = 0
 
-        self.__gameState:THUAI7.GameState=THUAI7.GameState(0)
+        self.__gameState: THUAI7.GameState = THUAI7.GameState(0)
 
-        self.__AILoop:bool=True
+        self.__AILoop: bool = True
 
-        self.__bufferUpdated:bool=False
+        self.__bufferUpdated: bool = False
 
-        self.__AIStart:bool=False
+        self.__AIStart: bool = False
 
-        self.__freshed:bool=False
+        self.__freshed: bool = False
 
-        self.__logger:logging.Logger=logging.getLogger("Logic")
+        self.__logger: logging.Logger = logging.getLogger("Logic")
 
-        self.__messageQueue:Queue=Queue()
+        self.__messageQueue: Queue = Queue()
 
     def GetShips(self) -> List[THUAI7.Ship]:
         with self.__mtxState:
             self.__logger.debug("Called GetShips")
             return copy.deepcopy(self.__currentState.ships)
-        
+
     def GetEnemyShips(self) -> List[THUAI7.Ship]:
         with self.__mtxState:
             self.__logger.debug("Called GetEnemyShips")
             return copy.deepcopy(self.__currentState.enemyShips)
-        
+
     def GetBullets(self) -> List[THUAI7.Bullet]:
         with self.__mtxState:
             self.__logger.debug("Called GetBullets")
             return copy.deepcopy(self.__currentState.bullets)
-        
-    def GetSelfInfo(self)->Union[THUAI7.Ship,THUAI7.Team]:
+
+    def GetSelfInfo(self) -> Union[THUAI7.Ship, THUAI7.Team]:
         with self.__mtxState:
             self.__logger.debug("Called GetSelfInfo")
             return copy.deepcopy(self.__currentState.self)
-        
+
     def GetFullMap(self) -> List[List[THUAI7.PlaceType]]:
         with self.__mtxState:
             self.__logger.debug("Called GetFullMap")
             return copy.deepcopy(self.__currentState.gameMap)
-        
-    def GetPlaceType(self,x:int,y:int)->THUAI7.PlaceType:
+
+    def GetPlaceType(self, x: int, y: int) -> THUAI7.PlaceType:
         with self.__mtxState:
-            if x<0 or x>=len(self.__currentState.gameMap) or y<0 or y>=len(self.__currentState.gameMap[0]):
+            if x < 0 or x >= len(self.__currentState.gameMap) or y < 0 or y >= len(self.__currentState.gameMap[0]):
                 self.__logger.warning("GetPlaceType: Out of range")
                 return THUAI7.PlaceType(0)
             self.__logger.debug("Called GetPlaceType")
             return copy.deepcopy(self.__currentState.gameMap[x][y])
-        
-    def GetGameInfo(self)->THUAI7.GameInfo:
+
+    def GetGameInfo(self) -> THUAI7.GameInfo:
         with self.__mtxState:
             self.__logger.debug("Called GetGameInfo")
             return copy.deepcopy(self.__currentState.gameInfo)
-        
-    def Move(self,time:int,angle:float)->bool:
+
+    def Move(self, time: int, angle: float) -> bool:
         self.__logger.debug("Called Move")
-        return self.__comm.Move(time,angle,self.__playerID)
-    
-    def SendMessage(self,toID:int,message:Union[str,bytes])->bool:
+        return self.__comm.Move(time, angle, self.__playerID)
+
+    def SendMessage(self, toID: int, message: Union[str, bytes]) -> bool:
         self.__logger.debug("Called SendMessage")
-        return self.__comm.SendMessage(toID,message,self.__playerID,self.__teamID)
-    
-    def HaveMessage(self)->bool:
+        return self.__comm.SendMessage(toID, message, self.__playerID, self.__teamID)
+
+    def HaveMessage(self) -> bool:
         self.__logger.debug("Called HaveMessage")
         return not self.__messageQueue.empty()
-    
-    def GetMessage(self)->Tuple[int,Union[str,bytes]]:
+
+    def GetMessage(self) -> Tuple[int, Union[str, bytes]]:
         self.__logger.debug("Called GetMessage")
         if self.__messageQueue.empty():
             self.__logger.warning("GetMessage: No message")
-            return -1,""
+            return -1, ""
         else:
             return self.__messageQueue.get()
-        
+
     def WaitThread(self) -> bool:
         self.__Update()
         return True
-    
-    def GetCounter(self)->int:
+
+    def GetCounter(self) -> int:
         with self.__mtxState:
             return copy.deepcopy(self.__counterState)
-        
-    def GetPlayerGUIDs(self)->List[int]:
+
+    def GetPlayerGUIDs(self) -> List[int]:
         with self.__mtxState:
             return copy.deepcopy(self.__currentState.guids)
-        
+
     def GetConstructionHp(self, cellX: int, cellY: int) -> int:
         with self.__mtxState:
             self.__logger.debug("Called GetConstructionHp")
-            if (cellX,cellY) in self.__currentState.mapInfo.
-            if cellX<0 or cellX>=len(self.__currentState.gameMap) or cellY<0 or cellY>=len(self.__currentState.gameMap[0]):
+            if (cellX, cellY) in self.__currentState.mapInfo.
+            if cellX < 0 or cellX >= len(self.__currentState.gameMap) or cellY < 0 or cellY >= len(
+                    self.__currentState.gameMap[0]):
                 self.__logger.warning("GetConstructionHp: Out of range")
                 return 0
             return copy.deepcopy(self.__currentState.constructionHp[cellX][cellY])
-        
+
     def GetWormHp(self, cellX: int, cellY: int) -> int:
         with self.__mtxState:
             self.__logger.debug("Called GetWormHp")
-            if (cellX,cellY) not in self.__currentState.mapInfo.wormholeState:
+            if (cellX, cellY) not in self.__currentState.mapInfo.wormholeState:
                 self.__logger.warning("GetWormHp: Out of range")
                 return -1
             else:
-                return copy.deepcopy(self.__currentState.mapInfo.wormholeState[(cellX,cellY)])
-            
+                return copy.deepcopy(self.__currentState.mapInfo.wormholeState[(cellX, cellY)])
+
     def GetResourceState(self, cellX: int, cellY: int) -> int:
         with self.__mtxState:
             self.__logger.debug("Called GetResourceState")
-            if (cellX,cellY) not in self.__currentState.mapInfo.resourceState:
+            if (cellX, cellY) not in self.__currentState.mapInfo.resourceState:
                 self.__logger.warning("GetResourceState: Out of range")
                 return -1
             else:
-                return copy.deepcopy(self.__currentState.mapInfo.resourceState[(cellX,cellY)])
-            
+                return copy.deepcopy(self.__currentState.mapInfo.resourceState[(cellX, cellY)])
+
     def GetHomeHp(self) -> int:
         with self.__mtxState:
             self.__logger.debug("Called GetHomeHp")
-            return copy.deepcopy(self.__currentState.gameInfo.blueHomeHp if self.__teamID==1 else self.__currentState.gameInfo.redHomeHp)
-        
+            return copy.deepcopy(self.__currentState.gameInfo.blueHomeHp if self.__teamID ==
+                                 1 else self.__currentState.gameInfo.redHomeHp)
+
     def GetMoney(self) -> int:
         with self.__mtxState:
             self.__logger.debug("Called GetMoney")
-            return copy.deepcopy(self.__currentState.gameInfo.blueMoney if self.__teamID==1 else self.__currentState.gameInfo.redMoney)
-        
-    def Attack(self,angle:float)->int:
+            return copy.deepcopy(self.__currentState.gameInfo.blueMoney if self.__teamID ==
+                                 1 else self.__currentState.gameInfo.redMoney)
+
+    def Attack(self, angle: float) -> int:
         self.__logger.debug("Called Attack")
-        return self.__comm.Attack(angle,self.__playerID,self.__teamID)
-    
+        return self.__comm.Attack(angle, self.__playerID, self.__teamID)
+
     def EndAllAction(self) -> bool:
         self.__logger.debug("Called EndAllAction")
-        return self.__comm.EndAllAction(self.__playerID,self.__teamID)
-    
-    def HaveView(self,gridX:int,gridY:int,selfX:int,selfY:int,viewRange:int)->bool:
+        return self.__comm.EndAllAction(self.__playerID, self.__teamID)
+
+    def HaveView(self, gridX: int, gridY: int, selfX: int, selfY: int, viewRange: int) -> bool:
         with self.__mtxState:
             self.__logger.debug("Called HaveView")
-            return AssistFunction.HaveView(viewRange,selfX,selfY,gridX,gridY,self.__currentState.gameMap)
-        
-    def TryConnection(self)->bool:
+            return AssistFunction.HaveView(viewRange, selfX, selfY, gridX, gridY, self.__currentState.gameMap)
+
+    def TryConnection(self) -> bool:
         self.__logger.info("Called TryConnection")
-        return self.__comm.TryConnection(self.__playerID,self.__teamID)
-    
-    def Recover(self,recover:int)->bool:
+        return self.__comm.TryConnection(self.__playerID, self.__teamID)
+
+    def Recover(self, recover: int) -> bool:
         self.__logger.debug("Called Recover")
-        return self.__comm.Recover(self.__playerID,self.__teamID,recover)
-    
-    def Produce(self)->bool:
+        return self.__comm.Recover(self.__playerID, self.__teamID, recover)
+
+    def Produce(self) -> bool:
         self.__logger.debug("Called Produce")
-        return self.__comm.Produce(self.__playerID,self.__teamID)
-    
-    def ReBuild(self,constructionType:THUAI7.ConstructionType)->bool:
+        return self.__comm.Produce(self.__playerID, self.__teamID)
+
+    def ReBuild(self, constructionType: THUAI7.ConstructionType) -> bool:
         self.__logger.debug("Called ReBuild")
-        return self.__comm.ReBuild(constructionType,self.__playerID,self.__teamID)
-    
-    def Construct(self,constructionType:THUAI7.ConstructionType)->bool:
+        return self.__comm.ReBuild(constructionType, self.__playerID, self.__teamID)
+
+    def Construct(self, constructionType: THUAI7.ConstructionType) -> bool:
         self.__logger.debug("Called Construct")
-        return self.__comm.Construct(constructionType,self.__playerID,self.__teamID)
-    
-    def InstallModule(self,  moduleType: THUAI7.ModuleType) -> bool:
+        return self.__comm.Construct(constructionType, self.__playerID, self.__teamID)
+
+    def InstallModule(self, moduleType: THUAI7.ModuleType) -> bool:
         self.__logger.debug("Called InstallModule")
-        return self.__comm.InstallModule(moduleType,self.__playerID,self.__teamID)
-    
+        return self.__comm.InstallModule(moduleType, self.__playerID, self.__teamID)
+
     def Recycle(self) -> bool:
         self.__logger.debug("Called Recycle")
-        return self.__comm.Recycle(self.__playerID,self.__playerID,self.__teamID)
-    
+        return self.__comm.Recycle(self.__playerID, self.__playerID, self.__teamID)
+
     def BuildShip(self, shipType: THUAI7.ShipType, cellX: int, cellY: int) -> bool:
         self.__logger.debug("Called BuildShip")
-        return self.__comm.BuildShip(cellX,cellY,shipType,self.__teamID)
-    
-    def __ProcessMessage(self)->None:
+        return self.__comm.BuildShip(cellX, cellY, shipType, self.__teamID)
+
+    def __ProcessMessage(self) -> None:
         def messageThread():
             self.__logger.info("Message thread started")
-            self.__comm.AddPlayer(self.__playerID,self.__teamID,self.__shipType,self.__x,self.__y)
+            self.__comm.AddPlayer(self.__playerID, self.__teamID, self.__shipType, self.__x, self.__y)
             self.__logger.info("Player added")
 
-            while self.__gameState!=THUAI7.GameState(3):
-                clientMsg=self.__comm.GetMessage2Client()
+            while self.__gameState != THUAI7.GameState(3):
+                clientMsg = self.__comm.GetMessage2Client()
                 self.__logger.debug("Get message from server")
-                self.__gameState=Proto2THUAI7.gameStateDict[clientMsg.game_state]
+                self.__gameState = Proto2THUAI7.gameStateDict[clientMsg.game_state]
 
-                if self.__gameState==THUAI7.GameState(1):
+                if self.__gameState == THUAI7.GameState(1):
                     self.__logger.info("Game start!")
 
                     for obj in clientMsg.obj_message:
-                        if obj.WhichOneof("message_of_obj")=="map_message":
+                        if obj.WhichOneof("message_of_obj") == "map_message":
                             gameMap: List[List[THUAI7.PlaceType]] = []
                             for row in obj.map_message.row:
                                 col: List[THUAI7.PlaceType] = []
@@ -232,7 +236,7 @@ class Logic(ILogic):
                             self.__currentState.gameMap = gameMap
                             self.__bufferState.gameMap = gameMap
                             self.__logger.info("Game map loaded!")
-                            break 
+                            break
                     else:
                         self.__logger.error("No map message received")
 
@@ -255,8 +259,8 @@ class Logic(ILogic):
             self.__AILoop = False
 
         threading.Thread(target=messageThread).start()
-    
-    def LoadBuffer(self,message:Message2Clients.MessageToClient)->None:
+
+    def LoadBuffer(self, message: Message2Clients.MessageToClient) -> None:
         with self.__cvBuffer:
             self.__bufferState.ships.clear()
             self.__bufferState.enemyShips.clear()
@@ -267,10 +271,10 @@ class Logic(ILogic):
             self.__logger.debug("Buffer cleared")
 
             for obj in message.obj_message:
-                if obj.WhichOneof("message_of_obj")=="ship_message":
+                if obj.WhichOneof("message_of_obj") == "ship_message":
                     self.__bufferState.guids.append(obj.ship_message.guid)
 
-            self.__bufferState.gameInfo=Proto2THUAI7.Protobuf2THUAI7GameInfo(message.all_message)
+            self.__bufferState.gameInfo = Proto2THUAI7.Protobuf2THUAI7GameInfo(message.all_message)
 
             self.__LoadBufferSelf(message)
             for item in message.obj_message:
@@ -289,24 +293,25 @@ class Logic(ILogic):
             self.__counterBuffer += 1
             self.__cvBuffer.notify()
 
-    def LoadBufferSelf(self,message:Message2Clients.MessageToClient)->None:
+    def LoadBufferSelf(self, message: Message2Clients.MessageToClient) -> None:
         for item in message.obj_message:
-            if item.WhichOneof("message_of_obj")=="ship_message":
-                if item.ship_message.player_id==self.__playerID:
-                    self.__bufferState.self=Proto2THUAI7.Protobuf2THUAI7Ship(item.ship_message)
+            if item.WhichOneof("message_of_obj") == "ship_message":
+                if item.ship_message.player_id == self.__playerID:
+                    self.__bufferState.self = Proto2THUAI7.Protobuf2THUAI7Ship(item.ship_message)
                     self.__bufferState.ships.append(self.__bufferState.self)
                 else:
                     self.__bufferState.ships.append(Proto2THUAI7.Protobuf2THUAI7Ship(item.ship_message))
                 self.__logger.debug("Load ship")
 
-    def LoadBufferCase(self,item:Message2Clients.MessageOfObj)->None:
-        if item.WhichOneof("message_of_obj")=="ship_message":
-            if AssistFunction.HaveView(self.__bufferState.self.viewRange,self.__bufferState.self.x,self.__bufferState.self.y,item.ship_message.x,item.ship_message.y,self.__bufferState.gameMap):
-                if item.ship_message.team_id!=self.__teamID:
+    def LoadBufferCase(self, item: Message2Clients.MessageOfObj) -> None:
+        if item.WhichOneof("message_of_obj") == "ship_message":
+            if AssistFunction.HaveView(self.__bufferState.self.viewRange, self.__bufferState.self.x,
+                                       self.__bufferState.self.y, item.ship_message.x, item.ship_message.y, self.__bufferState.gameMap):
+                if item.ship_message.team_id != self.__teamID:
                     self.__bufferState.enemyShips.append(Proto2THUAI7.Protobuf2THUAI7Ship(item.ship_message))
                     self.__logger.debug("Load enemy ship")
 
-        elif item.WhichOneof("message_of_obj")=="bullet_message":
+        elif item.WhichOneof("message_of_obj") == "bullet_message":
             if AssistFunction.HaveView(
                 self.__bufferState.self.viewRange,
                 self.__bufferState.self.x,
@@ -320,52 +325,64 @@ class Logic(ILogic):
                 )
                 self.__logger.debug("Add Bullet!")
 
-        elif item.WhichOneof("message_of_obj")=="factory_message":
-            if item.factory_message.team_id==self.__teamID:
-                pos=(AssistFunction.GridToCell(item.factory_message.x),AssistFunction.GridToCell(item.factory_message.y))
+        elif item.WhichOneof("message_of_obj") == "factory_message":
+            if item.factory_message.team_id == self.__teamID:
+                pos = (
+                    AssistFunction.GridToCell(
+                        item.factory_message.x), AssistFunction.GridToCell(
+                        item.factory_message.y))
                 if pos not in self.__bufferState.mapInfo.factoryState:
-                    self.__bufferState.mapInfo.factoryState[pos]=item.factory_message.hp
+                    self.__bufferState.mapInfo.factoryState[pos] = item.factory_message.hp
                     self.__logger.debug("New Factory")
                 else:
-                    self.__bufferState.mapInfo.factoryState[pos]=item.factory_message.hp
+                    self.__bufferState.mapInfo.factoryState[pos] = item.factory_message.hp
                     self.__logger.debug("Update Factory")
 
-        elif item.WhichOneof("message_of_obj")=="community_message":
-            if item.community_message.team_id==self.__teamID:
-                pos=(AssistFunction.GridToCell(item.community_message.x),AssistFunction.GridToCell(item.community_message.y))
+        elif item.WhichOneof("message_of_obj") == "community_message":
+            if item.community_message.team_id == self.__teamID:
+                pos = (
+                    AssistFunction.GridToCell(
+                        item.community_message.x), AssistFunction.GridToCell(
+                        item.community_message.y))
                 if pos not in self.__bufferState.mapInfo.communityState:
-                    self.__bufferState.mapInfo.communityState[pos]=item.community_message.hp
+                    self.__bufferState.mapInfo.communityState[pos] = item.community_message.hp
                     self.__logger.debug("New Community")
                 else:
-                    self.__bufferState.mapInfo.communityState[pos]=item.community_message.hp
+                    self.__bufferState.mapInfo.communityState[pos] = item.community_message.hp
                     self.__logger.debug("Update Community")
 
-        elif item.WhichOneof("message_of_obj")=="fort_message":
-            if item.fort_message.team_id==self.__teamID:
-                pos=(AssistFunction.GridToCell(item.fort_message.x),AssistFunction.GridToCell(item.fort_message.y))
+        elif item.WhichOneof("message_of_obj") == "fort_message":
+            if item.fort_message.team_id == self.__teamID:
+                pos = (AssistFunction.GridToCell(item.fort_message.x), AssistFunction.GridToCell(item.fort_message.y))
                 if pos not in self.__bufferState.mapInfo.fortState:
-                    self.__bufferState.mapInfo.fortState[pos]=item.fort_message.hp
+                    self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
                     self.__logger.debug("New Fort")
                 else:
-                    self.__bufferState.mapInfo.fortState[pos]=item.fort_message.hp
+                    self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
                     self.__logger.debug("Update Fort")
-        
-        elif item.WhichOneof("message_of_obj")=="wormhole_message":
-            pos=(AssistFunction.GridToCell(item.wormhole_message.x),AssistFunction.GridToCell(item.wormhole_message.y))
-            self.__bufferState.mapInfo.wormholeState[pos]=item.wormhole_message.hp
+
+        elif item.WhichOneof("message_of_obj") == "wormhole_message":
+            pos = (
+                AssistFunction.GridToCell(
+                    item.wormhole_message.x), AssistFunction.GridToCell(
+                    item.wormhole_message.y))
+            self.__bufferState.mapInfo.wormholeState[pos] = item.wormhole_message.hp
             self.__logger.debug("Update Wormhole")
 
-        elif item.WhichOneof("message_of_obj")=="home_message":
-            pos=(AssistFunction.GridToCell(item.home_message.x),AssistFunction.GridToCell(item.home_message.y))
-            self.__bufferState.mapInfo.homeState[pos]=item.home_message.hp
+        elif item.WhichOneof("message_of_obj") == "home_message":
+            pos = (AssistFunction.GridToCell(item.home_message.x), AssistFunction.GridToCell(item.home_message.y))
+            self.__bufferState.mapInfo.homeState[pos] = item.home_message.hp
             self.__logger.debug("Update Home")
 
-        elif item.WhichOneof("message_of_obj")=="resource_message":
-            pos=(AssistFunction.GridToCell(item.resource_message.x),AssistFunction.GridToCell(item.resource_message.y))
-            self.__bufferState.mapInfo.resourceState[pos]=item.resource_message.progress
+        elif item.WhichOneof("message_of_obj") == "resource_message":
+            pos = (
+                AssistFunction.GridToCell(
+                    item.resource_message.x), AssistFunction.GridToCell(
+                    item.resource_message.y))
+            self.__bufferState.mapInfo.resourceState[pos] = item.resource_message.progress
             self.__logger.debug("Update Resource")
 
-        elif item.WhichOneof("message_of_obj")=="news_message":
+        elif item.WhichOneof("message_of_obj") == "news_message":
             if item.news_message.to_id == self.__playerID:
                 if item.news_message.WhichOneof("news") == "text_message":
                     self.__messageQueue.put(
@@ -379,7 +396,7 @@ class Logic(ILogic):
                     self.__logger.debug("Add News!")
                 else:
                     self.__logger.error("Unknown News!")
-        
+
         # elif item.WhichOneof("message_of_obj")=="bombed_bullet_message":
         #     if AssistFunction.HaveView(
         #         self.__bufferState.self.viewRange,
@@ -391,14 +408,13 @@ class Logic(ILogic):
         #     ):
         #         self.__bufferState.bombedBullets.append(Proto2THUAI7.Protobuf2THUAI7BombedBullet(item.bombed_bullet_message))
         #         self.__logger.debug("Add Bombed Bullet!")
-                    
-        elif item.WhichOneof("message_of_obj")=="team_message":
+
+        elif item.WhichOneof("message_of_obj") == "team_message":
             self.__bufferState.teams.append(Proto2THUAI7.Protobuf2THUAI7Team(item.team_message))
             self.__logger.debug("Add Team!")
 
         else:
             self.__logger.error("Unknown message!")
-
 
     def __UnBlockAI(self) -> None:
         with self.__cvAI:
@@ -491,7 +507,7 @@ class Logic(ILogic):
             #     self, file, screen, warnOnly, self.__playerID
             # )
 
-    # 构建AI线程
+            # 构建AI线程
         def AIThread():
             with self.__cvAI:
                 self.__cvAI.wait_for(lambda: self.__AIStart)

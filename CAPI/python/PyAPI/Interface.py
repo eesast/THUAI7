@@ -6,6 +6,7 @@ import PyAPI.structures as THUAI7
 from abc import ABCMeta, abstractmethod
 from typing import List, Tuple, Union
 
+
 class ILogic(metaclass=ABCMeta):
     # IAPI统一可用的接口
 
@@ -135,6 +136,7 @@ class ILogic(metaclass=ABCMeta):
     def BuildShip(self, shipType: THUAI7.ShipType, cellX: int, cellY: int) -> bool:
         pass
 
+
 class IAPI(metaclass=ABCMeta):
     # 选手可执行的操作，应当保证所有函数的返回值都应当为asyncio.Future，例如下面的移动函数：
     # 指挥本角色进行移动，`timeInMilliseconds` 为移动时间，单位为毫秒；`angleInRadian` 表示移动的方向，单位是弧度，使用极坐标——竖直向下方向为 x 轴，水平向右方向为 y 轴
@@ -237,6 +239,7 @@ class IAPI(metaclass=ABCMeta):
     def PrintSelfInfo(self) -> None:
         pass
 
+
 class IShipAPI(IAPI, metaclass=ABCMeta):
     @abstractmethod
     def Move(self, timeInMilliseconds: int, angleInRadian: float) -> Future[bool]:
@@ -286,6 +289,7 @@ class IShipAPI(IAPI, metaclass=ABCMeta):
     def HaveView(self, gridX: int, gridY: int) -> bool:
         pass
 
+
 class ITeamAPI(IAPI, metaclass=ABCMeta):
     @abstractmethod
     def GetSelfInfo(self) -> THUAI7.Team:
@@ -303,6 +307,7 @@ class ITeamAPI(IAPI, metaclass=ABCMeta):
     def BuildShip(self, shipType: THUAI7.ShipType, cellX: int, cellY: int) -> Future[bool]:
         pass
 
+
 class IAI(metaclass=ABCMeta):
     @abstractmethod
     def ShipPlay(self, api: IShipAPI) -> None:
@@ -311,6 +316,7 @@ class IAI(metaclass=ABCMeta):
     @abstractmethod
     def TeamPlay(self, api: ITeamAPI) -> None:
         pass
+
 
 class IGameTimer(metaclass=ABCMeta):
     @abstractmethod
@@ -324,6 +330,7 @@ class IGameTimer(metaclass=ABCMeta):
     @abstractmethod
     def Play(self, ai: IAI) -> None:
         pass
+
 
 class IErrorHandler(metaclass=ABCMeta):
     @staticmethod

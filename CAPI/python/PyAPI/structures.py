@@ -1,16 +1,18 @@
 from enum import Enum
-from typing import List,Dict
+from typing import List, Dict
 import sys
 if sys.version_info < (3, 9):
     from typing import Tuple
 else:
     Tuple = tuple
 
+
 class GameState(Enum):
     NullGameState = 0
     GameStart = 1
     GameRunning = 2
     GameEnd = 3
+
 
 class PlaceType(Enum):
     NullPlaceType = 0
@@ -23,15 +25,18 @@ class PlaceType(Enum):
     Construction = 7
     Wormhole = 8
 
+
 class ShapeType(Enum):
     NullShapeType = 0
     Circle = 1
     Square = 2
 
+
 class PlayerTeam(Enum):
     NullTeam = 0
     Red = 1
     Blue = 2
+
 
 playerTeamDict = {
     PlayerTeam.NullTeam: 0,
@@ -39,16 +44,19 @@ playerTeamDict = {
     PlayerTeam.Blue: 2
 }
 
+
 class PlayerType(Enum):
     NullPlayerType = 0
     Ship = 1
     Team = 2
+
 
 class ShipType(Enum):
     NullShipType = 0
     CivilianShip = 1
     MilitaryShip = 2
     FlagShip = 3
+
 
 class WeaponType(Enum):
     NullWeaponType = 0
@@ -58,11 +66,13 @@ class WeaponType(Enum):
     MissileGun = 4
     ArcGun = 5
 
+
 class ConstructorType(Enum):
     NullConstructorType = 0
     Constructor1 = 1
     Constructor2 = 2
     Constructor3 = 3
+
 
 class ArmorType(Enum):
     NullArmorType = 0
@@ -70,17 +80,20 @@ class ArmorType(Enum):
     Armor2 = 2
     Armor3 = 3
 
+
 class ShieldType(Enum):
     NullShieldType = 0
     Shield1 = 1
     Shield2 = 2
     Shield3 = 3
 
+
 class ProducerType(Enum):
     NullProducerType = 0
     Producer1 = 1
     Producer2 = 2
     Producer3 = 3
+
 
 class ModuleType(Enum):
     NullModuleType = 0
@@ -102,6 +115,7 @@ class ModuleType(Enum):
     ModuleMissileGun = 16
     ModuleArcGun = 17
 
+
 class ShipState(Enum):
     NullStatus = 0
     Idle = 1
@@ -114,6 +128,7 @@ class ShipState(Enum):
     Stunned = 8
     Moving = 9
 
+
 class BulletType(Enum):
     NullBulletType = 0
     Laser = 1
@@ -122,11 +137,13 @@ class BulletType(Enum):
     Missile = 4
     Arc = 5
 
+
 class ConstructionType(Enum):
     NullConstructionType = 0
     Factory = 1
     Community = 2
     Fort = 3
+
 
 class MessageOfObj(Enum):
     NullMessageOfObj = 0
@@ -142,6 +159,7 @@ class MessageOfObj(Enum):
     NewsMessage = 10
     BombedBulletMessage = 11
     TeamMessage = 12
+
 
 class NewsType(Enum):
     NullNewsType = 0
