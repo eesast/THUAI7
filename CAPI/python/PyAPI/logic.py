@@ -194,9 +194,9 @@ class Logic(ILogic):
         self.__logger.debug("Called Produce")
         return self.__comm.Produce(self.__playerID, self.__teamID)
 
-    def ReBuild(self, constructionType: THUAI7.ConstructionType) -> bool:
-        self.__logger.debug("Called ReBuild")
-        return self.__comm.ReBuild(constructionType, self.__playerID, self.__teamID)
+    def Rebuild(self, constructionType: THUAI7.ConstructionType) -> bool:
+        self.__logger.debug("Called Rebuild")
+        return self.__comm.Rebuild(constructionType, self.__playerID, self.__teamID)
 
     def Construct(self, constructionType: THUAI7.ConstructionType) -> bool:
         self.__logger.debug("Called Construct")

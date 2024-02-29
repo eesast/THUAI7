@@ -106,7 +106,7 @@ class Communication:
         else:
             return produceResult.act_success
 
-    def ReBuild(self, constructionType: THUAI7.ConstructionType, playerID: int, teamID: int) -> bool:
+    def Rebuild(self, constructionType: THUAI7.ConstructionType, playerID: int, teamID: int) -> bool:
         try:
             with self.__mtxLimit:
                 if self.__counter >= self.__limit:

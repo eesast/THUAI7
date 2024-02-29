@@ -107,7 +107,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def ReBuild(self, constructionType: THUAI7.ConstructionType) -> bool:
+    def Rebuild(self, constructionType: THUAI7.ConstructionType) -> bool:
         pass
 
     @abstractmethod
@@ -279,7 +279,7 @@ class IShipAPI(IAPI, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def ReBuild(self, constructionType: THUAI7.ConstructionType) -> Future[bool]:
+    def Rebuild(self, constructionType: THUAI7.ConstructionType) -> Future[bool]:
         pass
 
     @abstractmethod
