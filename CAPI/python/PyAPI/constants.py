@@ -1,13 +1,4 @@
-from ast import Constant
-from asyncio import constants
-
-
-class NoInstance:
-    def __call__(self):
-        raise TypeError("This class cannot be instantiated")
-
-
-class Constants(NoInstance):
+class Constants:
     frameDuration = 50
     numofGridPerCell = 1000
     rows = 50

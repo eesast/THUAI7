@@ -129,12 +129,15 @@ class Logic(ILogic):
     def GetConstructionHp(self, cellX: int, cellY: int) -> int:
         with self.__mtxState:
             self.__logger.debug("Called GetConstructionHp")
-            if (cellX, cellY) in self.__currentState.mapInfo.
-            if cellX < 0 or cellX >= len(self.__currentState.gameMap) or cellY < 0 or cellY >= len(
-                    self.__currentState.gameMap[0]):
+            if (cellX, cellY) in self.__currentState.mapInfo.factoryState:
+                return copy.deepcopy(self.__currentState.mapInfo.factoryState[(cellX, cellY)])
+            elif (cellX, cellY) in self.__currentState.mapInfo.communityState:
+                return copy.deepcopy(self.__currentState.mapInfo.communityState[(cellX, cellY)])
+            elif (cellX, cellY) in self.__currentState.mapInfo.fortState:
+                return copy.deepcopy(self.__currentState.mapInfo.fortState[(cellX, cellY)])
+            else:
                 self.__logger.warning("GetConstructionHp: Out of range")
-                return 0
-            return copy.deepcopy(self.__currentState.constructionHp[cellX][cellY])
+                return -1
 
     def GetWormHp(self, cellX: int, cellY: int) -> int:
         with self.__mtxState:
@@ -502,12 +505,12 @@ class Logic(ILogic):
         # 构造timer
         if not file and not screen:
             self.__timer = ShipAPI(self)
-        else:
-            # self.__timer = ShipDebugAPI(
-            #     self, file, screen, warnOnly, self.__playerID
-            # )
+        # else:
+        #     self.__timer = ShipDebugAPI(
+        #         self, file, screen, warnOnly, self.__playerID
+        #     )
 
-            # 构建AI线程
+        # 构建AI线程
         def AIThread():
             with self.__cvAI:
                 self.__cvAI.wait_for(lambda: self.__AIStart)
