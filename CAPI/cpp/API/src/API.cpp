@@ -11,25 +11,25 @@
 std::future<bool> ShipAPI::SendTextMessage(int64_t toID, std::string message)
 {
     return std::async(std::launch::async, [=, message = std::move(message)]()
-                      { return logic.SendMessage(toID, std::move(message), false); });
+                      { return logic.Send(toID, std::move(message), false); });
 }
 
 std::future<bool> TeamAPI::SendTextMessage(int64_t toID, std::string message)
 {
     return std::async(std::launch::async, [=, message = std::move(message)]()
-                      { return logic.SendMessage(toID, std::move(message), false); });
+                      { return logic.Send(toID, std::move(message), false); });
 }
 
 std::future<bool> ShipAPI::SendBinaryMessage(int64_t toID, std::string message)
 {
     return std::async(std::launch::async, [=, message = std::move(message)]()
-                      { return logic.SendMessage(toID, std::move(message), false); });
+                      { return logic.Send(toID, std::move(message), true); });
 }
 
 std::future<bool> TeamAPI::SendBinaryMessage(int64_t toID, std::string message)
 {
     return std::async(std::launch::async, [=, message = std::move(message)]()
-                      { return logic.SendMessage(toID, std::move(message), false); });
+                      { return logic.Send(toID, std::move(message), true); });
 }
 
 bool ShipAPI::HaveMessage()
@@ -90,12 +90,12 @@ std::future<bool> TeamAPI::EndAllAction()
                       { return logic.EndAllAction(); });
 }
 
-std::vector<std::shared_ptr<const THUAI7::Ship>> ShipAPI::GetShips()
+std::vector<std::shared_ptr<const THUAI7::Ship>> ShipAPI::GetShips() const
 {
     return logic.GetShips();
 }
 
-std::vector<std::shared_ptr<const THUAI7::Ship>> TeamAPI::GetShips()
+std::vector<std::shared_ptr<const THUAI7::Ship>> TeamAPI::GetShips() const
 {
     return logic.GetShips();
 }
@@ -135,47 +135,47 @@ THUAI7::PlaceType ShipAPI::GetPlaceType(int32_t cellX, int32_t cellY) const
     return logic.GetPlaceType(cellX, cellY);
 }
 
-THUIAI7::PlaceType TeamAPI::GetPlaceType(int32_t cellX, int32_t cellY) const
+THUAI7::PlaceType TeamAPI::GetPlaceType(int32_t cellX, int32_t cellY) const
 {
     return logic.GetPlaceType(cellX, cellY);
 }
 
-int32_t ShipAPI::GetConstructionHp(int32_t cellX, int32_t cellY)
+int32_t ShipAPI::GetConstructionHp(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetConstructionHp(int32_t cellX, int32_t cellY);
+    return logic.GetConstructionHp(cellX, cellY);
 }
 
-int32_t TeamAPI::GetConstructionHp(int32_t cellX, int32_t cellY)
+int32_t TeamAPI::GetConstructionHp(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetConstructionHp(int32_t cellX, int32_t cellY);
+    return logic.GetConstructionHp(cellX, cellY);
 }
 
-int32_t ShipAPI::GetWormHp(int32_t cellX, int32_t cellY)
+int32_t ShipAPI::GetWormHp(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetWormHp(int32_t cellX, int32_t cellY);
+    return logic.GetWormHp(cellX, cellY);
 }
 
-int32_t TeamAPI::GetWormHp(int32_t cellX, int32_t cellY)
+int32_t TeamAPI::GetWormHp(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetWormHp(int32_t cellX, int32_t cellY);
+    return logic.GetWormHp(cellX, cellY);
 }
 
-int32_t ShipAPI::GetResourceState(int32_t cellX, int32_t cellY)
+int32_t ShipAPI::GetResourceState(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetResourceState(int32_t cellX, int32_t cellY);
+    return logic.GetResourceState(cellX, cellY);
 }
 
-int32_t TeamAPI::GetResourceState(int32_t cellX, int32_t cellY)
+int32_t TeamAPI::GetResourceState(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetResourceState(int32_t cellX, int32_t cellY);
+    return logic.GetResourceState(cellX, cellY);
 }
 
-int32_t ShipAPI::GetHomeHp()
+int32_t ShipAPI::GetHomeHp() const
 {
     return logic.GetHomeHp();
 }
 
-int32_t TeamAPI::GetHomeHp()
+int32_t TeamAPI::GetHomeHp() const
 {
     return logic.GetHomeHp();
 }
@@ -190,22 +190,22 @@ std::shared_ptr<const THUAI7::GameInfo> TeamAPI::GetGameInfo() const
     return logic.GetGameInfo();
 }
 
-std::vector<int64_t> ShipAPI::GetPlayerGUIDs()
+std::vector<int64_t> ShipAPI::GetPlayerGUIDs() const
 {
     return logic.GetPlayerGUIDs();
 }
 
-std::vector<int64_t> TeamAPI::GetPlayerGUIDs()
+std::vector<int64_t> TeamAPI::GetPlayerGUIDs() const
 {
     return logic.GetPlayerGUIDs();
 }
 
-std::shared_ptr<const THUAI7::Ship> ShipAPI::GetSelfInfo()
+std::shared_ptr<const THUAI7::Ship> ShipAPI::GetSelfInfo() const
 {
     return logic.ShipGetSelfInfo();
 }
 
-std::shared_ptr<const THUAI7::Team> TeamAPI::GetSelfInfo()
+std::shared_ptr<const THUAI7::Team> TeamAPI::GetSelfInfo() const
 {
     return logic.TeamGetSelfInfo();
 }
@@ -278,19 +278,19 @@ std::future<bool> ShipAPI::Produce()
 std::future<bool> ShipAPI::Rebuild(THUAI7::ConstructionType constructionType)
 {
     return std::async(std::launch::async, [=]()
-                      { return logic.Rebuild(ConstructionType); });
+                      { return logic.Rebuild(constructionType); });
 }
 
 std::future<bool> ShipAPI::Construct(THUAI7::ConstructionType constructionType)
 {
     return std::async(std::launch::async, [=]()
-                      { return logic.Construct(ConstructionType); });
+                      { return logic.Construct(constructionType); });
 }
 
 bool ShipAPI::HaveView(int32_t gridX, int32_t gridY) const
 {
     auto selfInfo = GetSelfInfo();
-    return logic.HaveView(gridX, gridY, selfInfo->x, selfInfo->y);
+    return logic.HaveView(gridX, gridY, selfInfo->x, selfInfo->y, selfInfo->viewRange);
 }
 
 // Team独有

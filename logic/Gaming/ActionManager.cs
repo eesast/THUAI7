@@ -18,19 +18,19 @@ namespace Gaming
                     gameMap: gameMap,
                     OnCollision: (obj, collisionObj, moveVec) =>
                     {
-                        Ship ship = (Ship)obj;
-                        switch (collisionObj.Type)
-                        {
-                            case GameObjType.Bullet:
-                                if (((Bullet)collisionObj).Parent != ship)
-                                {
-                                    // TODO
-                                    gameMap.Remove((GameObj)collisionObj);
-                                }
-                                break;
-                            default:
-                                break;
-                        }
+                        //Ship ship = (Ship)obj;
+                        //switch (collisionObj.Type)
+                        //{
+                        //    case GameObjType.Bullet:
+                        //        if (((Bullet)collisionObj).Parent != ship)
+                        //        {
+                        //            // TODO
+                        //            gameMap.Remove((GameObj)collisionObj);
+                        //        }
+                        //        break;
+                        //    default:
+                        //        break;
+                        //}
                         return MoveEngine.AfterCollision.MoveMax;
                     },
                     EndMove: obj =>

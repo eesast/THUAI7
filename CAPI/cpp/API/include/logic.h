@@ -90,43 +90,43 @@ private:
 
     // 提供给API使用的函数
 
-    [[nodiscard]] virtual std::vector<std::shared_ptr<const THUAI7::Ship>> GetShips() const = 0;
-    [[nodiscard]] virtual std::vector<std::shared_ptr<const THUAI7::Ship>> GetEnemyShips() const = 0;
-    [[nodiscard]] virtual std::vector<std::shared_ptr<const THUAI7::Bullet>> GetBullets() const = 0;
-    [[nodiscard]] virtual std::shared_ptr<const THUAI7::Ship> ShipGetSelfInfo() const = 0;
-    [[nodiscard]] virtual std::shared_ptr<const THUAI7::Team> TeamGetSelfInfo() const = 0;
-    [[nodiscard]] virtual std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const = 0;
-    [[nodiscard]] virtual std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const = 0;
-    [[nodiscard]] virtual THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const = 0;
-    [[nodiscard]] virtual std::vector<int64_t> GetPlayerGUIDs() const = 0;
-    [[nodiscard]] virtual int32_t GetConstructionHp(int32_t cellX, int32_t cellY) const = 0;
-    [[nodiscard]] virtual int32_t GetWormHp(int32_t cellX, int32_t cellY) const = 0;
-    [[nodiscard]] virtual int32_t GetResourceState(int32_t cellX, int32_t cellY) const = 0;
-    [[nodiscard]] virtual int32_t GetHomeHp() const = 0;
-    [[nodiscard]] virtual int32_t GetMoney() const = 0;
-    [[nodiscard]] virtual int32_t GetScore() const = 0;
+    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Ship>> GetShips() const;
+    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Ship>> GetEnemyShips() const;
+    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Bullet>> GetBullets() const;
+    [[nodiscard]] std::shared_ptr<const THUAI7::Ship> ShipGetSelfInfo() const;
+    [[nodiscard]] std::shared_ptr<const THUAI7::Team> TeamGetSelfInfo() const;
+    [[nodiscard]] std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const;
+    [[nodiscard]] std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const;
+    [[nodiscard]] THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const;
+    [[nodiscard]] std::vector<int64_t> GetPlayerGUIDs() const;
+    [[nodiscard]] int32_t GetConstructionHp(int32_t cellX, int32_t cellY) const;
+    [[nodiscard]] int32_t GetWormHp(int32_t cellX, int32_t cellY) const;
+    [[nodiscard]] int32_t GetResourceState(int32_t cellX, int32_t cellY) const;
+    [[nodiscard]] int32_t GetHomeHp() const;
+    [[nodiscard]] int32_t GetMoney() const;
+    [[nodiscard]] int32_t GetScore() const;
 
     // 供IAPI使用的操作相关的部分
-    virtual bool Send(int64_t toPlayerID, std::string message, bool binary) = 0;
-    virtual bool HaveMessage() = 0;
-    virtual std::pair<int64_t, std::string> GetMessage() = 0;
-    virtual bool WaitThread() = 0;
-    virtual int32_t GetCounter() const = 0;
-    virtual bool EndAllAction() = 0;
+    bool Send(int64_t toPlayerID, std::string message, bool binary);
+    bool HaveMessage();
+    std::pair<int64_t, std::string> GetMessage();
+    bool WaitThread();
+    int32_t GetCounter() const;
+    bool EndAllAction();
 
     // IShipAPI使用的部分
-    virtual bool Move(int64_t time, double angle) = 0;
-    virtual bool Recover() = 0;
-    virtual bool Produce() = 0;
-    virtual bool ReBuild(THUAI7::ConstructionType constructionType) = 0;
-    virtual bool Construct(THUAI7::ConstructionType constructionType) = 0;
-    virtual bool Attack(double angle) = 0;
-    [[nodiscard]] virtual bool HaveView(int32_t gridX, int32_t gridY, int32_t selfX, int32_t selfY, int32_t viewRange) const = 0;
+    bool Move(int64_t time, double angle);
+    bool Recover();
+    bool Produce();
+    bool Rebuild(THUAI7::ConstructionType constructionType);
+    bool Construct(THUAI7::ConstructionType constructionType);
+    bool Attack(double angle);
+    [[nodiscard]] bool HaveView(int32_t gridX, int32_t gridY, int32_t selfX, int32_t selfY, int32_t viewRange) const;
 
     // ITeamAPI
-    virtual bool Recycle(int64_t playerID) = 0;
-    virtual bool InstallModule(int64_t playerID, THUAI7::ModuleType moduleType) = 0;
-    virtual bool BuildShip(THUAI7::ShipType shipType, int32_t playerID, int32_t cellX, int32_t cellY) = 0;
+    bool Recycle(int64_t playerID);
+    bool InstallModule(int64_t playerID, THUAI7::ModuleType moduleType);
+    bool BuildShip(THUAI7::ShipType shipType, int32_t cellX, int32_t cellY);
 
     bool TryConnection();
     void ProcessMessage();

@@ -157,6 +157,7 @@ public static class ModuleFactory
             ModuleType.MissileGun => GameData.FlagShipMissileGunCost,
             ModuleType.ArcGun => GameData.FlagShipArcGunCost,
             _ => int.MaxValue
-        }
+        },
+        _ => int.MaxValue
     };
 }
