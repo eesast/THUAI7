@@ -148,10 +148,10 @@ std::future<bool> ShipDebugAPI::Produce()
     return std::async(std::launch::async, [=]()
                       { return logic.Produce(); });
 }
-std::future<bool> ShipDebugAPI::ReBuild(THUAI7::ConstructionType constructionType)
+std::future<bool> ShipDebugAPI::Rebuild(THUAI7::ConstructionType constructionType)
 {
     return std::async(std::launch::async, [=]()
-                      { return logic.ReBuild(constructionType); });
+                      { return logic.Rebuild(constructionType); });
 }
 
 std::future<bool> ShipDebugAPI::Construct(THUAI7::ConstructionType constructionType)
@@ -259,6 +259,12 @@ void ShipDebugAPI::PrintSelfInfo() const
     logger->info("type={}, playerID={}, GUID={}, x={}, y={}", THUAI7::shipTypeDict[Ship->shipType], Ship->playerID, Ship->guid, Ship->x, Ship->y);
     logger->info("state={},speed={}, view range={},facing direction={}", THUAI7::shipStateDict[Ship->shipState], Ship->speed, Ship->viewRange, Ship->facingDirection);
     logger->info("*********************\n");
+}
+
+std::future<bool> ShipDebugAPI::EndAllAction()
+{
+    return std::async(std::launch::async, [this]()
+                      { return logic.EndAllAction(); });
 }
 
 TeamDebugAPI::TeamDebugAPI(ILogic& logic, bool file, bool print, bool warnOnly, int64_t playerID) :
@@ -423,6 +429,19 @@ std::future<bool> TeamDebugAPI::InstallModule(int64_t playerID, THUAI7::ModuleTy
     return std::async(std::launch::async, [=]()
                       { return logic.InstallModule(playerID, moduleType); });
 }
+
+std::future<bool> TeamDebugAPI::Recycle(int64_t playerID)
+{
+    return std::async(std::launch::async, [=]()
+                      { return logic.Recycle(playerID); });
+}
+
+std::future<bool> TeamDebugAPI::BuildShip(THUAI7::ShipType shipType, int32_t x, int32_t y)
+{
+    return std::async(std::launch::async, [=]()
+                      { return logic.BuildShip(shipType, x, y); });
+}
+
 void TeamDebugAPI::PrintSelfInfo() const
 {
     auto Team = logic.TeamGetSelfInfo();
@@ -439,4 +458,15 @@ void ShipDebugAPI::Play(IAI& ai)
 void TeamDebugAPI::Play(IAI& ai)
 {
     ai.play(*this);
+}
+
+void TeamDebugAPI::Print(std::string str) const
+{
+    logger->info(str);
+}
+
+std::future<bool> TeamDebugAPI::EndAllAction()
+{
+    return std::async(std::launch::async, [this]()
+                      { return logic.EndAllAction(); });
 }
