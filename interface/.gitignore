@@ -12,9 +12,7 @@
 /Assets/Materials/
 /Assets/Plugins/
 /Assets/Prefabs/
-# /Assets/Scenes/
-# /Assets/Scripts/
-/Assets/TextMesh Pro/
+# /Assets/TextMesh Pro/。
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
