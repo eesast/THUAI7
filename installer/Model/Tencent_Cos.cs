@@ -7,6 +7,7 @@ using System.IO.Compression;
 using System.Formats.Tar;
 using COSXML.Common;
 using COSXML.Transfer;
+using System;
 
 // 禁用对没有调用异步API的异步函数的警告
 #pragma warning disable CS1998
@@ -38,6 +39,8 @@ namespace installer.Model
                         .SetRegion(Region)  // 设置一个默认的存储桶地域
                         .SetDebugLog(true)  // 显示日志
                         .Build();           // 创建 CosXmlConfig 对象
+            QCloudCredentialProvider cosCredentialProvider = new DefaultQCloudCredentialProvider("***", "***", 1000);
+            cosXml = new CosXmlServer(config, cosCredentialProvider);
         }
 
         public void UpdateSecret(string secretId, string secretKey, long durationSecond = 1000)
@@ -93,30 +96,34 @@ namespace installer.Model
         {
             int thID = Log.StartNew();
             Log.LogInfo(thID, "Batch download task started.");
-            int count = queue.Count();
+            var array = queue.ToArray();
+            int count = array.Count();
             int finished = 0;
-            foreach (var item in queue)
+            var partitionar = Partitioner.Create(0, count);
+            Parallel.ForEach(partitionar, (range, loopState) =>
             {
-                string local = Path.Combine(basePath, item);
-                int subID = -1;
-                ThreadPool.QueueUserWorkItem(_ =>
+                for (int i = range.Item1; i < range.Item2; i++)
                 {
+                    if (!loopState.IsStopped)
+                        break;
+                    string local = Path.Combine(basePath, array[i]);
+                    int subID = -1;
                     try
                     {
-                        subID = DownloadFileAsync(local, item).Result;
+                        subID = DownloadFileAsync(local, array[i]).Result;
                     }
                     catch (Exception ex)
                     {
-                        downloadFailed.Enqueue(item);
+                        downloadFailed.Enqueue(array[i]);
+                        Exceptions.Push(ex);
                     }
                     finally
                     {
                         Interlocked.Increment(ref finished);
                         Log.LogInfo(thID, $"Child process: {subID} finished.");
                     }
-                });
-            }
-            while (finished < count) ;
+                }
+            });
             Log.LogInfo(thID, "Batch download task finished.");
             return thID;
         }

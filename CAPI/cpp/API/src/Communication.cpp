@@ -74,7 +74,7 @@ bool Communication::EndAllAction(int64_t playerID, int64_t teamID)
         return false;
 }
 
-bool Communication::Recover(int64_t playerID, int64_t teamID)
+bool Communication::Recover(int64_t playerID, int64_t recover, int64_t teamID)
 {
     {
         std::lock_guard<std::mutex> lock(mtxLimit);
@@ -85,7 +85,7 @@ bool Communication::Recover(int64_t playerID, int64_t teamID)
     }
     protobuf::BoolRes recoverResult;
     ClientContext context;
-    auto request = THUAI72Proto::THUAI72ProtobufIDMsg(playerID, teamID);
+    auto request = THUAI72Proto::THUAI72ProtobufRecoverMsg(playerID, recover, teamID);
     auto status = THUAI7Stub->Recover(&context, request, &recoverResult);
     if (status.ok())
         return recoverResult.act_success();
@@ -193,6 +193,18 @@ bool Communication::BuildShip(int64_t teamID, THUAI7::ShipType shipType, int32_t
     ClientContext context;
     auto request = THUAI72Proto::THUAI72ProtobufBuildShipMsg(teamID, shipType, x, y);
     auto status = THUAI7Stub->BuildShip(&context, request, &reply);
+    if (status.ok())
+        return true;
+    else
+        return false;
+}
+
+bool Communication::Recycle(int64_t playerID, int64_t teamID)
+{
+    protobuf::BoolRes reply;
+    ClientContext context;
+    auto request = THUAI72Proto::THUAI72ProtobufIDMsg(playerID, teamID);
+    auto status = THUAI7Stub->Recycle(&context, request, &reply);
     if (status.ok())
         return true;
     else

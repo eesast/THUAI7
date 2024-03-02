@@ -64,7 +64,7 @@ public:
     virtual bool Move(int64_t time, double angle) = 0;
     virtual bool Recover() = 0;
     virtual bool Produce() = 0;
-    virtual bool ReBuild(THUAI7::ConstructionType constructionType) = 0;
+    virtual bool Rebuild(THUAI7::ConstructionType constructionType) = 0;
     virtual bool Construct(THUAI7::ConstructionType constructionType) = 0;
     virtual bool Attack(double angle) = 0;
     [[nodiscard]] virtual bool HaveView(int32_t gridX, int32_t gridY, int32_t selfX, int32_t selfY, int32_t viewRange) const = 0;
@@ -139,7 +139,7 @@ public:
     virtual std::future<bool> Attack(double angleInRadian) = 0;
     virtual std::future<bool> Recover() = 0;
     virtual std::future<bool> Produce() = 0;
-    virtual std::future<bool> ReBuild(THUAI7::ConstructionType constructionType) = 0;
+    virtual std::future<bool> Rebuild(THUAI7::ConstructionType constructionType) = 0;
     virtual std::future<bool> Construct(THUAI7::ConstructionType constructionType) = 0;
     virtual std::shared_ptr<const THUAI7::Ship> GetSelfInfo() const = 0;
     virtual bool HaveView(int32_t gridX, int32_t gridY) const = 0;
@@ -165,6 +165,7 @@ public:
 
 class ShipAPI : public IShipAPI, public IGameTimer
 {
+public:
     ShipAPI(ILogic& logic) :
         logic(logic)
     {
@@ -194,7 +195,7 @@ class ShipAPI : public IShipAPI, public IGameTimer
     std::future<bool> Attack(double angleInRadian) override;
     std::future<bool> Recover() override;
     std::future<bool> Produce() override;
-    std::future<bool> ReBuild(THUAI7::ConstructionType constructionType) override;
+    std::future<bool> Rebuild(THUAI7::ConstructionType constructionType) override;
     std::future<bool> Construct(THUAI7::ConstructionType constructionType) override;
 
     [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Ship>> GetShips() const override;
@@ -212,14 +213,16 @@ class ShipAPI : public IShipAPI, public IGameTimer
     [[nodiscard]] bool HaveView(int32_t gridX, int32_t gridY) const override;
     [[nodiscard]] int32_t GetMoney() const override;
     [[nodiscard]] int32_t GetScore() const override;
-
-    void Print(std::string str) const override
+    void Print(std::string str) const
     {
     }
-    void PrintShip() const override
+    void PrintShip() const
     {
     }
-    void PrintSelfInfo() const override
+    void PrintTeam() const
+    {
+    }
+    void PrintSelfInfo() const
     {
     }
 
@@ -229,6 +232,7 @@ private:
 
 class TeamAPI : public ITeamAPI, public IGameTimer
 {
+public:
     TeamAPI(ILogic& logic) :
         logic(logic)
     {
@@ -268,14 +272,16 @@ class TeamAPI : public ITeamAPI, public IGameTimer
     std::future<bool> InstallModule(int64_t playerID, THUAI7::ModuleType moduleType) override;
     std::future<bool> Recycle(int64_t playerID) override;
     std::future<bool> BuildShip(THUAI7::ShipType shipType, int32_t cellX, int32_t cellY) override;
-
-    void Print(std::string str) const override
+    void Print(std::string str) const
     {
     }
-    void PrintTeam() const override
+    void PrintShip() const
     {
     }
-    void PrintSelfInfo() const override
+    void PrintTeam() const
+    {
+    }
+    void PrintSelfInfo() const
     {
     }
 
@@ -285,13 +291,10 @@ private:
 
 class ShipDebugAPI : public IShipAPI, public IGameTimer
 {
+public:
     ShipDebugAPI(ILogic& logic, bool file, bool print, bool warnOnly, int64_t shipID);
-    void StartTimer() override
-    {
-    }
-    void EndTimer() override
-    {
-    }
+    void StartTimer() override;
+    void EndTimer() override;
     void Play(IAI& ai) override;
     std::future<bool> SendTextMessage(int64_t, std::string) override;
     std::future<bool> SendBinaryMessage(int64_t, std::string) override;
@@ -309,7 +312,7 @@ class ShipDebugAPI : public IShipAPI, public IGameTimer
     std::future<bool> Attack(double angleInRadian) override;
     std::future<bool> Recover() override;
     std::future<bool> Produce() override;
-    std::future<bool> ReBuild(THUAI7::ConstructionType constructionType) override;
+    std::future<bool> Rebuild(THUAI7::ConstructionType constructionType) override;
     std::future<bool> Construct(THUAI7::ConstructionType constructionType) override;
 
     [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Ship>> GetShips() const override;
@@ -328,13 +331,10 @@ class ShipDebugAPI : public IShipAPI, public IGameTimer
     [[nodiscard]] int32_t GetMoney() const override;
     [[nodiscard]] int32_t GetScore() const override;
 
-    void Print(std::string str) const override
-    {
-    }
-    void PrintShip() const override
-    {
-    }
-    void PrintSelfInfo() const override
+    void Print(std::string str) const override;
+    void PrintShip() const override;
+    void PrintSelfInfo() const override;
+    void PrintTeam() const
     {
     }
 
@@ -346,13 +346,10 @@ private:
 
 class TeamDebugAPI : public ITeamAPI, public IGameTimer
 {
+public:
     TeamDebugAPI(ILogic& logic, bool file, bool print, bool warnOnly, int64_t TeamID);
-    void StartTimer() override
-    {
-    }
-    void EndTimer() override
-    {
-    }
+    void StartTimer() override;
+    void EndTimer() override;
     void Play(IAI& ai) override;
 
     std::future<bool> SendTextMessage(int64_t, std::string) override;
@@ -382,10 +379,13 @@ class TeamDebugAPI : public ITeamAPI, public IGameTimer
     std::future<bool> InstallModule(int64_t playerID, THUAI7::ModuleType moduleType) override;
     std::future<bool> Recycle(int64_t playerID) override;
     std::future<bool> BuildShip(THUAI7::ShipType shipType, int32_t cellX, int32_t cellY) override;
-    void Print(std::string str) const override
+    void Print(std::string str) const override;
+    void PrintSelfInfo() const override;
+    // TODO
+    void PrintTeam() const
     {
     }
-    void PrintSelfInfo() const override
+    void PrintShip() const
     {
     }
 

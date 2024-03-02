@@ -290,6 +290,7 @@ namespace Proto2THUAI7
         gameInfo->gameTime = allMsg.game_time();
         gameInfo->redScore = allMsg.red_team_score();
         gameInfo->blueScore = allMsg.blue_team_score();
+        return gameInfo;
     }
 }  // namespace Proto2THUAI7
 // 辅助函数，用于将proto信息转换为THUAI7信息
@@ -464,6 +465,15 @@ namespace THUAI72Proto
         IDMsg.set_player_id(playerID);
         IDMsg.set_team_id(teamID);
         return IDMsg;
+    }
+
+    inline protobuf::RecoverMsg THUAI72ProtobufRecoverMsg(int64_t playerID, int64_t recover, int64_t teamID)
+    {
+        protobuf::RecoverMsg RecoverMsg;
+        RecoverMsg.set_player_id(playerID);
+        RecoverMsg.set_recover(recover);
+        RecoverMsg.set_team_id(teamID);
+        return RecoverMsg;
     }
 
     inline protobuf::ConstructMsg THUAI72ProtobufConstructMsg(int64_t playerID, int64_t teamID, THUAI7::ConstructionType constructionType)

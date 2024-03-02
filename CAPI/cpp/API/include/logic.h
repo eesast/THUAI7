@@ -118,7 +118,7 @@ private:
     bool Move(int64_t time, double angle);
     bool Recover();
     bool Produce();
-    bool ReBuild(THUAI7::ConstructionType constructionType);
+    bool Rebuild(THUAI7::ConstructionType constructionType);
     bool Construct(THUAI7::ConstructionType constructionType);
     bool Attack(double angle);
     [[nodiscard]] bool HaveView(int32_t gridX, int32_t gridY, int32_t selfX, int32_t selfY, int32_t viewRange) const;

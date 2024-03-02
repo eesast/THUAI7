@@ -1,27 +1,29 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Maui;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Maui.Storage;
 
 namespace installer.ViewModel
 {
-    internal class InstallViewModel : BaseViewModel
+    public class InstallViewModel : BaseViewModel
     {
-        public InstallViewModel()
+        private readonly Model.Downloader Downloader;
+        private readonly IFolderPicker FolderPicker;
+
+        public InstallViewModel(IFolderPicker folderPicker, Model.Downloader downloader)
         {
+            Downloader = downloader;
+            FolderPicker = folderPicker;
             downloadPath = Downloader.Data.InstallPath;
             installEnabled = false;
-            BrowseBtnClickedCommand = new RelayCommand(BrowseBtnClicked);
+            BrowseBtnClickedCommand = new AsyncRelayCommand(BrowseBtnClicked);
             CheckUpdBtnClickedCommand = new RelayCommand(CheckUpdBtnClicked);
-            DownloadBtnClickedCommand = new RelayCommand(DownloadBtnClicked);
-        }
-
-        public Model.Downloader Downloader
-        {
-            get => MauiProgram.Downloader;
+            DownloadBtnClickedCommand = new AsyncRelayCommand(DownloadBtnClicked);
         }
 
         private string? debugAlert;
@@ -41,15 +43,26 @@ namespace installer.ViewModel
             set
             {
                 downloadPath = value;
-                InstallEnabled = (value != Downloader.Data.InstallPath);
+                InstallEnabled = (value != Downloader.Data.InstallPath && Directory.Exists(value));
                 OnPropertyChanged();
             }
         }
 
         public ICommand BrowseBtnClickedCommand { get; }
-        private void BrowseBtnClicked()
+        private async Task BrowseBtnClicked()
         {
             DebugAlert = "Browse Button Clicked";
+            var b = InstallEnabled;
+            InstallEnabled = false;
+            var result = await FolderPicker.PickAsync(downloadPath);
+            if (result.IsSuccessful)
+            {
+                DownloadPath = result.Folder.Path;
+            }
+            else
+            {
+                InstallEnabled = b;
+            }
         }
         public ICommand CheckUpdBtnClickedCommand { get; }
         private async void CheckUpdBtnClicked()
@@ -58,20 +71,24 @@ namespace installer.ViewModel
             bool updated = await Task.Run(() => Downloader.CheckUpdate());
             if (updated)
             {
-
+                DebugAlert = "Need to update.";
             }
             else
             {
-
+                DebugAlert = "Nothing to update.";
             }
         }
         public ICommand DownloadBtnClickedCommand { get; }
-        private async void DownloadBtnClicked()
+        private async Task DownloadBtnClicked()
         {
+            if (!InstallEnabled)
+                return;
+            InstallEnabled = false;
             DebugAlert = "Download Button Clicked";
             await Task.Run(() => Downloader.ResetInstallPath(downloadPath));
             await Task.Run(() => Downloader.Install());
             DownloadPath = Downloader.Data.InstallPath;
+            InstallEnabled = true;
         }
 
         private bool installEnabled;
