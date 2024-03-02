@@ -1,9 +1,12 @@
+using installer.ViewModel;
+
 namespace installer.Page;
 
 public partial class LaunchPage : ContentPage
 {
-    public LaunchPage()
+    public LaunchPage(LaunchViewModel viewModel)
     {
         InitializeComponent();
+        BindingContext = viewModel;
     }
 }

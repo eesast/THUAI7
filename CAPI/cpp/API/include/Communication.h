@@ -33,7 +33,7 @@ public:
     bool EndAllAction(int64_t playerID, int64_t teamID);
     // Ship
     bool Move(int64_t playerID, int64_t teamID, int64_t time, double angle);
-    bool Recover(int64_t playerID, int64_t teamID);
+    bool Recover(int64_t playerID, int64_t recover, int64_t teamID);
     bool Produce(int64_t playerID, int64_t teamID);
     bool Rebuild(int64_t playerID, int64_t teamID, THUAI7::ConstructionType constructionType);
     bool Construct(int64_t playerID, int64_t teamID, THUAI7::ConstructionType constructionType);

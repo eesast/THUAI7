@@ -232,7 +232,21 @@ bool Logic::Attack(double angle)
 bool Logic::Recover()
 {
     logger->debug("Called Recover");
-    return pComm->Recover(playerID, teamID);
+    // TODO recover
+    int64_t recover = 1;
+    return pComm->Recover(playerID, recover, teamID);
+}
+
+bool Logic::Construct(THUAI7::ConstructionType constructiontype)
+{
+    logger->debug("Called Construct");
+    return pComm->Construct(playerID, teamID, constructiontype);
+}
+
+bool Logic::BuildShip(THUAI7::ShipType shiptype, int32_t x, int32_t y)
+{
+    logger->debug("Called BuildShip");
+    return pComm->BuildShip(teamID, shiptype, x, y);
 }
 
 // 等待完成
@@ -300,14 +314,14 @@ void Logic::ProcessMessage()
                             {
                                 auto map = std::vector<std::vector<THUAI7::PlaceType>>();
                                 auto mapResult = item.map_message();
-                                for (int32_t i = 0; i < item.map_message().row_size(); i++)
+                                for (int32_t i = 0; i < item.map_message().rows_size(); i++)
                                 {
                                     std::vector<THUAI7::PlaceType> row;
-                                    for (int32_t j = 0; j < mapResult.row(i).col_size(); j++)
+                                    for (int32_t j = 0; j < mapResult.rows(i).cols_size(); j++)
                                     {
-                                        if (Proto2THUAI7::placeTypeDict.count(mapResult.row(i).col(j)) == 0)
+                                        if (Proto2THUAI7::placeTypeDict.count(mapResult.rows(i).cols(j)) == 0)
                                             logger->error("Unknown place type!");
-                                        row.push_back(Proto2THUAI7::placeTypeDict[mapResult.row(i).col(j)]);
+                                        row.push_back(Proto2THUAI7::placeTypeDict[mapResult.rows(i).cols(j)]);
                                     }
                                     map.push_back(std::move(row));
                                 }
