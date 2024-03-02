@@ -4,9 +4,6 @@
              xmlns:viewModels="clr-namespace:installer.ViewModel"
              x:Class="installer.Page.LoginPage"
              Title="Login">
-    <ContentPage.BindingContext>
-        <viewModels:LoginViewModel/>
-    </ContentPage.BindingContext>
 
     <VerticalStackLayout
         HorizontalOptions="Center"
