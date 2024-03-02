@@ -328,6 +328,12 @@ namespace installer.Model
                 foreach (var d in Directory.GetDirectories(cur))
                     stack.Push(d);
             }
+            if (files.Count == 0)
+            {
+                MD5Data.Clear();
+                SaveMD5Data();
+                return;
+            }
             // 并行计算hash值
             var partitioner = Partitioner.Create(0, files.Count);
             Parallel.ForEach(partitioner, (range, loopState) =>

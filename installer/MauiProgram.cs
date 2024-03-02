@@ -14,6 +14,8 @@ namespace installer
         // public static Model.Logger logger = Model.LoggerProvider.FromFile(@"E:\bin\log\123.log");
         public static bool ErrorTrigger_WhileDebug = true;
         public static bool RefreshLogs_WhileDebug = false;
+        public static string SecretID = "***";
+        public static string SecretKey = "***";
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
@@ -28,8 +30,6 @@ namespace installer
                 });
 
             var c = builder.Services.AddSingleton<Downloader>().First();
-            // 此处填写Secret ID和Secret Key
-            ((Downloader?)c.ServiceKey)?.Cloud.UpdateSecret("***", "***");
 
             builder.Services.AddSingleton(FolderPicker.Default);
 
