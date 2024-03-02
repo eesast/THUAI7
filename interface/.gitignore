@@ -9,7 +9,12 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
-/Assets/
+/Assets/Materials/
+/Assets/Plugins/
+/Assets/Prefabs/
+# /Assets/Scenes/
+# /Assets/Scripts/
+/Assets/TextMesh Pro/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
