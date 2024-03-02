@@ -275,10 +275,10 @@ std::future<bool> ShipAPI::Produce()
                       { return logic.Produce(); });
 }
 
-std::future<bool> ShipAPI::ReBuild(THUAI7::ConstructionType constructionType)
+std::future<bool> ShipAPI::Rebuild(THUAI7::ConstructionType constructionType)
 {
     return std::async(std::launch::async, [=]()
-                      { return logic.ReBuild(constructionType); });
+                      { return logic.Rebuild(constructionType); });
 }
 
 std::future<bool> ShipAPI::Construct(THUAI7::ConstructionType constructionType)
