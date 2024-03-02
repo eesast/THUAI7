@@ -505,3 +505,5 @@ class THUAI72Proto:
             y=y,
             ship_type=THUAI72Proto.shipTypeDict[shipType]
         )
+    
+   

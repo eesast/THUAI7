@@ -113,7 +113,7 @@ message MessageOfTeam
     int64 player_id = 2;
 	int32 score = 3;
     int32 money = 4;
-
+    int64 guid=5;
 }
 
 message MessageOfObj
