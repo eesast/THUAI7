@@ -324,9 +324,16 @@ namespace installer.Model
             {
                 string cur = stack.Pop();
                 files.AddRange(from f in Directory.GetFiles(cur)
-                               where !IsUserFile(f) select f);
+                               where !IsUserFile(f)
+                               select f);
                 foreach (var d in Directory.GetDirectories(cur))
                     stack.Push(d);
+            }
+            if (files.Count == 0)
+            {
+                MD5Data.Clear();
+                SaveMD5Data();
+                return;
             }
             // 并行计算hash值
             var partitioner = Partitioner.Create(0, files.Count);
@@ -335,7 +342,7 @@ namespace installer.Model
                 for (int i = range.Item1; i < range.Item2; i++)
                 {
                     if (loopState.IsStopped)
-                       break;
+                        break;
                     var file = files[i];
                     var relFile = Helper.ConvertAbsToRel(InstallPath, file);
                     var hash = Helper.GetFileMd5Hash(file);
