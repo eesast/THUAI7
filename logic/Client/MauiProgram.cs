@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Client.ViewModel;
+using Microsoft.Extensions.Logging;
 
 namespace Client
 {
@@ -18,7 +19,8 @@ namespace Client
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
-
+            builder.Services.AddSingleton<GeneralViewModel>();
+            builder.Services.AddSingleton<MainPage>();
             return builder.Build();
         }
     }
