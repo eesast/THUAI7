@@ -19,8 +19,8 @@ public class MessageReceiverLive : SingletonDontDestory<MessageReceiverLive>
         {
             var channel = new Channel(IP + ":" + Port, ChannelCredentials.Insecure);
             var client = new AvailableService.AvailableServiceClient(channel);
-            Debug.Log(channel);
-            Debug.Log(client);
+            // Debug.Log(channel);
+            // Debug.Log(client);
             PlayerMsg msg = new PlayerMsg()
             {
                 PlayerId = 2024,
@@ -29,12 +29,18 @@ public class MessageReceiverLive : SingletonDontDestory<MessageReceiverLive>
                 X = 0,
                 Y = 0,
             };
+
+            Debug.Log("ReadyAddSpectator");
             var response = client.AddPlayer(msg);
+            Debug.Log("AddSpectatorSuccess");
+            MapControl.GetInstance().DrawMap(client.GetMap(new NullRequest()));
             if (await response.ResponseStream.MoveNext())
             {
+                Debug.Log("ReadyDrawMap");
                 var responseVal = response.ResponseStream.Current;
                 ParaDefine.GetInstance().map = responseVal.ObjMessage[0].MapMessage;
                 MapControl.GetInstance().DrawMap(ParaDefine.GetInstance().map);
+                Debug.Log("DrawMapSuccess");
             }
             while (await response.ResponseStream.MoveNext())
             {
