@@ -1,9 +1,4 @@
-from ast import Constant
-from asyncio import constants
-
-
-    
-class Constants(NoInstance):
+class Constants:
     frameDuration = 50
     numofGridPerCell = 1000
     rows = 50
