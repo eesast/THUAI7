@@ -436,7 +436,6 @@ class THUAI72Proto:
 
     @staticmethod
     def THUAI72ProtobufAttackMsg(
-    def THUAI72ProtobufAttackMsg(
         playerID: int, teamID: int, angle: float
     ) -> Message2Server.AttackMsg:
         return Message2Server.AttackMsg(
@@ -506,11 +505,7 @@ class THUAI72Proto:
             y=y,
             ship_type=THUAI72Proto.shipTypeDict[shipType]
         )
-    
-   
-    
-    @staticmethod
-    def THUAI72ProtobufRecoverMsg(playerID:int,recover:int,teamID:int)->Message2Server.RecoverMsg:
-        return Message2Server.RecoverMsg(player_id=playerID,team_id=teamID,recover=recover)
-    
 
+    @staticmethod
+    def THUAI72ProtobufRecoverMsg(playerID: int, recover: int, teamID: int) -> Message2Server.RecoverMsg:
+        return Message2Server.RecoverMsg(player_id=playerID, team_id=teamID, recover=recover)
