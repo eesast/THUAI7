@@ -73,6 +73,7 @@ namespace Playback
             if (Disposed) return;
             if (disposing)
             {
+                br.Dispose();
                 cis.Dispose();
                 gzs.Dispose();
             }

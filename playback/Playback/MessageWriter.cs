@@ -41,6 +41,13 @@ namespace Playback
             cos.WriteMessage(msg);
         }
 
+        public void Flush()
+        {
+            bw.Flush();
+            cos.Flush();
+            gzs.Flush();
+        }
+
         public void Dispose()
         {
             Dispose(true);
@@ -52,6 +59,7 @@ namespace Playback
             if (Disposed) return;
             if (disposing)
             {
+                bw.Dispose();
                 cos.Dispose();
                 gzs.Dispose();
             }
