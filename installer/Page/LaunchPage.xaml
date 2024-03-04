@@ -4,9 +4,6 @@
              xmlns:viewModels="clr-namespace:installer.ViewModel"
              x:Class="installer.Page.LaunchPage"
              Title="Launcher">
-    <ContentPage.BindingContext>
-        <viewModels:LaunchViewModel/>
-    </ContentPage.BindingContext>
     
     <VerticalStackLayout>
         <Label

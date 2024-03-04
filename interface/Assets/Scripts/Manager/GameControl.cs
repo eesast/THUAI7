@@ -13,25 +13,25 @@ public class GameControl : SingletonDontDestory<GameControl>
     public bool initialized = false;
     public void LoadLiveScene()
     {
-        GameControl.GetInstance().gameState = GameControl.GameState.Live;
+        gameState = GameControl.GameState.Live;
         SceneManager.LoadScene("Gaming");
         initialized = false;
     }
     public void LoadPlaybackScene()
     {
-        GameControl.GetInstance().gameState = GameControl.GameState.Playback;
+        gameState = GameControl.GameState.Playback;
         SceneManager.LoadScene("Gaming");
         initialized = false;
     }
     public void LoadPlayScene()
     {
-        GameControl.GetInstance().gameState = GameControl.GameState.Play;
+        gameState = GameControl.GameState.Play;
         SceneManager.LoadScene("Gaming");
         initialized = false;
     }
     public void LoadTestScene()
     {
-        GameControl.GetInstance().gameState = GameControl.GameState.Test;
+        gameState = GameControl.GameState.Test;
         SceneManager.LoadScene("TestScene");
         initialized = false;
     }

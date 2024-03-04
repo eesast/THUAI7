@@ -25,10 +25,10 @@ namespace installer.Model
         {
             get; protected set;
         } = new Dictionary<string, string>();
-        public Dictionary<string, string> MD5Data
+        public ConcurrentDictionary<string, string> MD5Data
         {
             get; protected set;
-        } = new Dictionary<string, string>();   // 路径为尽可能相对路径
+        } = new ConcurrentDictionary<string, string>();   // 路径为尽可能相对路径
         public ConcurrentBag<(DataRowState state, string name)> MD5Update
         {
             get; set;
@@ -249,7 +249,7 @@ namespace installer.Model
                 }
                 else
                 {
-                    newMD5Data = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+                    newMD5Data = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? new Dictionary<string, string>();
                 }
                 r.Close(); r.Dispose();
             }
@@ -270,19 +270,16 @@ namespace installer.Model
             foreach (var item in newMD5Data)
             {
                 var key = item.Key.Replace('/', Path.DirectorySeparatorChar);
-                if (MD5Data.ContainsKey(key))
+                MD5Data.AddOrUpdate(key, (k) =>
                 {
-                    if (MD5Data[key] != item.Value)
-                    {
-                        MD5Data[key] = item.Value;
-                        MD5Update.Add((DataRowState.Modified, key));
-                    }
-                }
-                else
-                {
-                    MD5Data.Add(key, item.Value);
                     MD5Update.Add((DataRowState.Added, key));
-                }
+                    return item.Value;
+                }, (k, v) =>
+                {
+                    if (v != item.Value)
+                        MD5Update.Add((DataRowState.Modified, key));
+                    return item.Value;
+                });
             }
         }
 
@@ -314,41 +311,54 @@ namespace installer.Model
                     continue;
                 var file = _file.StartsWith('.') ?
                     Path.Combine(InstallPath, _file) : _file;
-                if (!File.Exists(file))
+                if (!File.Exists(file) && MD5Data.TryRemove(_file, out _))
                 {
-                    MD5Data.Remove(_file);
                     MD5Update.Add((DataRowState.Deleted, _file));
                 }
             }
-            ScanDir(InstallPath);
-            SaveMD5Data();
-        }
-
-        public void ScanDir(string dir)
-        {
-            var d = new DirectoryInfo(dir);
-            foreach (var file in d.GetFiles())
+            // 层序遍历文件树
+            Stack<string> stack = new Stack<string>();
+            List<string> files = new List<string>();
+            stack.Push(InstallPath);
+            while (stack.Count > 0)
             {
-                var relFile = Helper.ConvertAbsToRel(InstallPath, file.FullName);
-                // 用户自己的文件不会被计入更新hash数据中
-                if (IsUserFile(relFile))
-                    continue;
-                var hash = Helper.GetFileMd5Hash(file.FullName);
-                if (MD5Data.Keys.Contains(relFile))
-                {
-                    if (MD5Data[relFile] != hash)
-                    {
-                        MD5Data[relFile] = hash;
-                        MD5Update.Add((DataRowState.Modified, relFile));
-                    }
-                }
-                else
-                {
-                    MD5Data.Add(relFile, hash);
-                    MD5Update.Add((DataRowState.Added, relFile));
-                }
+                string cur = stack.Pop();
+                files.AddRange(from f in Directory.GetFiles(cur)
+                               where !IsUserFile(f)
+                               select f);
+                foreach (var d in Directory.GetDirectories(cur))
+                    stack.Push(d);
             }
-            foreach (var d1 in d.GetDirectories()) { ScanDir(d1.FullName); }
+            if (files.Count == 0)
+            {
+                MD5Data.Clear();
+                SaveMD5Data();
+                return;
+            }
+            // 并行计算hash值
+            var partitioner = Partitioner.Create(0, files.Count);
+            Parallel.ForEach(partitioner, (range, loopState) =>
+            {
+                for (int i = range.Item1; i < range.Item2; i++)
+                {
+                    if (loopState.IsStopped)
+                        break;
+                    var file = files[i];
+                    var relFile = Helper.ConvertAbsToRel(InstallPath, file);
+                    var hash = Helper.GetFileMd5Hash(file);
+                    MD5Data.AddOrUpdate(relFile, (k) =>
+                    {
+                        MD5Update.Add((DataRowState.Added, relFile));
+                        return hash;
+                    }, (k, v) =>
+                    {
+                        if (v != hash)
+                            MD5Update.Add((DataRowState.Modified, relFile));
+                        return hash;
+                    });
+                }
+            });
+            SaveMD5Data();
         }
     }
 }

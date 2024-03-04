@@ -4,9 +4,6 @@
              xmlns:viewModels="clr-namespace:installer.ViewModel"
              x:Class="installer.Page.InstallPage"
              Title="Installer">
-    <ContentPage.BindingContext>
-        <viewModels:InstallViewModel/>
-    </ContentPage.BindingContext>
 
     <VerticalStackLayout
         HorizontalOptions="Center"
