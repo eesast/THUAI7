@@ -224,10 +224,10 @@ class Communication:
             self.__haveNewMessage = False
             return self.__message2Client
 
-    def AddPlayer(self, playerID: int, teamID: int,  cellX: int, cellY: int,shipType: THUAI7.ShipType) -> None:
+    def AddPlayer(self, playerID: int, teamID: int, cellX: int, cellY: int, shipType: THUAI7.ShipType) -> None:
         def tMessage():
             try:
-                if playerID==0:
+                if playerID == 0:
                     playerMsg = THUAI72Proto.THUAI72ProtobufPlayerMsg(playerID, teamID, shipType, cellX, cellY)
                     for msg in self.__THUAI7Stub.AddPlayer(playerMsg):
                         with self.__cvMessage:
@@ -237,8 +237,8 @@ class Communication:
                             with self.__mtxLimit:
                                 self.__counter = 0
                                 self.__counterMove = 0
-                elif playerID>=1 and playerID<=8:
-                    playerMsg = THUAI72Proto.THUAI72ProtobufPlayerMsg(playerID, teamID,shipType,cellX,cellY)
+                elif playerID >= 1 and playerID <= 8:
+                    playerMsg = THUAI72Proto.THUAI72ProtobufPlayerMsg(playerID, teamID, shipType, cellX, cellY)
                     for msg in self.__THUAI7Stub.AddPlayer(playerMsg):
                         with self.__cvMessage:
                             self.__haveNewMessage = True
