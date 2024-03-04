@@ -163,6 +163,11 @@ class IAPI(metaclass=ABCMeta):
         pass
 
     @abstractmethod
+    def Move(self,timeInMilliseconds:int,angle:float)->Future[bool]:
+        pass
+
+    # 获取游戏目前所进行的帧数
+    @abstractmethod
     def GetFrameCount(self) -> int:
         '获取游戏目前所进行的帧数'
         pass
@@ -244,6 +249,9 @@ class IAPI(metaclass=ABCMeta):
     def PrintSelfInfo(self) -> None:
         pass
 
+    @abstractmethod
+    def GetSelfInfo(self) -> Union[THUAI7.Ship, THUAI7.Team]:
+        pass
 
 class IShipAPI(IAPI, metaclass=ABCMeta):
     @abstractmethod
