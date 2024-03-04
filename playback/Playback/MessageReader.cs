@@ -4,136 +4,84 @@ using System.IO.Compression;
 
 namespace Playback
 {
-    using PBConst = PlayBackConstant;
     public class FileFormatNotLegalException(string fileName) : Exception
     {
-        private readonly string fileName = fileName;
-        public override string Message => $"The file: {fileName} is not a legal playback file for THUAI{PBConst.Version}.";
+        public string FileName { get; } = fileName;
+        public override string Message { get; }
+            = $"The file: {fileName} is not a legal playback file for THUAI{Constants.Version}.";
     }
 
     public class MessageReader : IDisposable
     {
-        private readonly FileStream fs;
-        private CodedInputStream cis;
-        private readonly GZipStream gzs;
-        private byte[] buffer;
-        public bool Finished { get; private set; } = false;
+        /// <summary>
+        /// 回放文件绝对路径
+        /// </summary>
+        public string FileName { get; }
 
         public readonly uint teamCount;
         public readonly uint playerCount;
 
+        private readonly BinaryReader br;       // 基础类型二进制输入流
+        private readonly CodedInputStream cis;  // Protobuf类型二进制输入流
+        private readonly GZipStream gzs;        // 解压缩输入流
+
+        public bool Disposed { get; private set; } = false;
+
         public MessageReader(string fileName)
         {
-            if (!fileName.EndsWith(PBConst.ExtendedName))
-            {
-                fileName += PBConst.ExtendedName;
-            }
+            Utils.FileNameRegular(ref fileName);
+            FileStream fs = File.OpenRead(fileName);
+            FileName = fs.Name;
+            br = new(fs);
+            (teamCount, playerCount) = ReadHeader();
+            gzs = new(fs, CompressionMode.Decompress);
+            cis = new(gzs);
+        }
 
-            fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-
-            try
-            {
-                var headerLen = PBConst.FileHeader.Length;
-                byte[] bt = new byte[headerLen + sizeof(uint) * 2];
-                fs.Read(bt, 0, bt.Length);
-                for (int i = 0; i < headerLen; ++i)
-                {
-                    if (bt[i] != PBConst.FileHeader[i]) throw new FileFormatNotLegalException(fileName);
-                }
-
-                teamCount = BitConverter.ToUInt32(bt, headerLen);
-                playerCount = BitConverter.ToUInt32(bt, headerLen + sizeof(uint));
-            }
-            catch
-            {
-                throw new FileFormatNotLegalException(fileName);
-            }
-
-            gzs = new GZipStream(fs, CompressionMode.Decompress);
-            var tmpBuffer = new byte[PBConst.BufferMaxSize];
-            var bufferSize = gzs.Read(tmpBuffer);
-            if (bufferSize == 0)
-            {
-                buffer = tmpBuffer;
-                Finished = true;
-            }
-            else if (bufferSize != PBConst.BufferMaxSize)       // 不留空位，防止 CodedInputStream 获取信息错误
-            {
-                if (bufferSize == 0)
-                {
-                    Finished = true;
-                }
-                buffer = new byte[bufferSize];
-                Array.Copy(tmpBuffer, buffer, bufferSize);
-            }
-            else
-            {
-                buffer = tmpBuffer;
-            }
-            cis = new CodedInputStream(buffer);
+        private (uint teamCount, uint playerCount) ReadHeader()
+        {
+            if (!br.ReadBytes(Constants.FileHeader.Length)      // 判断文件头
+                   .SequenceEqual(Constants.FileHeader))
+                throw new FileFormatNotLegalException(FileName);
+            return (br.ReadUInt32(), br.ReadUInt32());          // 读取队伍数和每队玩家人数
         }
 
         public MessageToClient? ReadOne()
         {
-        beginRead:
-            if (Finished)
-                return null;
-            var pos = cis.Position;
+            if (Disposed) return null;
+            if (cis.IsAtEnd) return null;
+            MessageToClient ret = new();
             try
             {
-                MessageToClient? msg = new();
-                cis.ReadMessage(msg);
-                return msg;
+                cis.ReadMessage(ret);
+                return ret;
             }
-            catch (InvalidProtocolBufferException)
+            catch
             {
-                var leftByte = buffer.Length - pos;     // 上次读取剩余的字节
-                if (buffer.Length < PBConst.BufferMaxSize / 2)
-                {
-                    var newBuffer = new byte[PBConst.BufferMaxSize];
-                    for (int i = 0; i < leftByte; i++)
-                    {
-                        newBuffer[i] = buffer[pos + i];
-                    }
-                    buffer = newBuffer;
-                }
-                else
-                {
-                    for (int i = 0; i < leftByte; ++i)
-                    {
-                        buffer[i] = buffer[pos + i];
-                    }
-                }
-                var bufferSize = gzs.Read(buffer, (int)leftByte, (int)(buffer.Length - leftByte)) + leftByte;
-                if (bufferSize == leftByte)
-                {
-                    Finished = true;
-                    return null;
-                }
-                if (bufferSize != buffer.Length)        // 不留空位，防止 CodedInputStream 获取信息错误
-                {
-                    var tmpBuffer = new byte[bufferSize];
-                    Array.Copy(buffer, tmpBuffer, bufferSize);
-                    buffer = tmpBuffer;
-                }
-                cis = new CodedInputStream(buffer);
-                goto beginRead;
+                return null;
             }
         }
 
         public void Dispose()
         {
-            Finished = true;
-            if (fs.CanRead)
-            {
-                fs.Close();
-            }
+            Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (Disposed) return;
+            if (disposing)
+            {
+                cis.Dispose();
+                gzs.Dispose();
+            }
+            Disposed = true;
         }
 
         ~MessageReader()
         {
-            Dispose();
+            Dispose(false);
         }
     }
 }
