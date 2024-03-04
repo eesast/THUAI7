@@ -436,7 +436,6 @@ class THUAI72Proto:
 
     @staticmethod
     def THUAI72ProtobufAttackMsg(
-    def THUAI72ProtobufAttackMsg(
         playerID: int, teamID: int, angle: float
     ) -> Message2Server.AttackMsg:
         return Message2Server.AttackMsg(

@@ -1,9 +1,6 @@
 from ast import Constant
 from asyncio import constants
 
-class NoInstance:
-    def __call__(self):
-        raise TypeError("This class cannot be instantiated")
     
 class Constants(NoInstance):
     frameDuration=50
