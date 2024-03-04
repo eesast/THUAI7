@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
+using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Storage;
 using installer.ViewModel;
-using System.Runtime.CompilerServices;
 using installer.Model;
 
 namespace installer
@@ -18,6 +19,16 @@ namespace installer
         public static string SecretKey = "***";
         public static MauiApp CreateMauiApp()
         {
+
+            // read SecretID & SecretKey from filePath
+            var filePath = @"D:\SecretKey.csv";
+            var lines = File.ReadAllLines(filePath);
+            if (lines.Length > 0)
+            {
+                SecretID = lines[1];
+                SecretKey = lines[2];
+            }
+
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
