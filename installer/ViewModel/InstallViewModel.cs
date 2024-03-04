@@ -94,7 +94,7 @@ namespace installer.ViewModel
                 OnPropertyChanged();
             }
         }
-        
+
         private bool updateEnabled = false;
         public bool UpdateEnabled
         {
@@ -105,7 +105,7 @@ namespace installer.ViewModel
                 OnPropertyChanged();
             }
         }
-        
+
         public ICommand BrowseBtnClickedCommand { get; }
         private async Task BrowseBtnClicked()
         {
