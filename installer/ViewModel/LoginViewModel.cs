@@ -8,17 +8,16 @@ using System.Windows.Input;
 
 namespace installer.ViewModel
 {
-    internal class LoginViewModel : BaseViewModel
+    public class LoginViewModel : BaseViewModel
     {
-        public LoginViewModel()
+        private readonly Model.Downloader Downloader;
+
+        public LoginViewModel(Model.Downloader downloader)
         {
+            Downloader = downloader;
             LoginBtnClickedCommand = new RelayCommand(LoginBtnClicked);
         }
 
-        Model.Downloader Downloader
-        {
-            get => MauiProgram.Downloader;
-        }
         public string Username
         {
             get => Downloader.Username;

@@ -128,6 +128,7 @@ namespace installer.Model
                         Password = temp;
                 }
             }
+            Cloud.UpdateSecret(MauiProgram.SecretID, MauiProgram.SecretKey);
         }
 
         public void LoggerBinding()
