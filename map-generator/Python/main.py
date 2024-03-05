@@ -10,7 +10,7 @@ from System import String
 from GameClass.MapGenerator import MapStruct
 from Classes.MapRenderer import MapRenderer
 from Classes.RandomCores.PerlinRandomCore import PerlinRandomCore
-from Classes.RandomCores.СюйЧэнRandomCore import СюйЧэнRandomCore
+from Classes.RandomCores.XuchengRandomCore import XuchengRandomCore
 
 # 获取路径
 path: str = multenterbox(msg='', title=SETTINGS.title, fields=[f'Path(*{SETTINGS.file_suffix})'])[0]
@@ -25,7 +25,7 @@ if not os.path.exists(path):
 else:
     mapStruct = MapStruct.FromFile(String(path))
 # 随机核加载
-randomCores = [СюйЧэнRandomCore(SETTINGS.title), PerlinRandomCore(SETTINGS.title)]
+randomCores = [XuchengRandomCore(SETTINGS.title), PerlinRandomCore(SETTINGS.title)]
 # 地图渲染
 mapRenderer = MapRenderer(SETTINGS.title, mapStruct, SETTINGS.areas, String(path), randomCores)
 mapRenderer.MainFrame()
