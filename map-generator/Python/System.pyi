@@ -7,11 +7,11 @@ from __future__ import annotations
 
 
 class UInt32:
-    def __init__(self, i: int) -> None: ...
+    def __init__(self, _: int) -> None: ...
 
 
 class String:
-    def __init__(self, s: str) -> None: ...
+    def __init__(self, _: str) -> None: ...
 
 
 class Array[T]:

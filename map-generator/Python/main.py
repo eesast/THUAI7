@@ -6,7 +6,6 @@ from easygui import multenterbox
 
 import CLR_IMPORT
 import SETTINGS
-from System import String
 from GameClass.MapGenerator import MapStruct
 from Classes.MapRenderer import MapRenderer
 from Classes.RandomCores.PerlinRandomCore import PerlinRandomCore
@@ -21,11 +20,11 @@ if not os.path.exists(path):
     height, width = [int(x)
                      for x in multenterbox(msg='Create new map', title=SETTINGS.title, fields=['Height', 'Width'])]
     mapStruct = MapStruct(height, width)
-    MapStruct.ToFile(String(path), mapStruct)
+    MapStruct.ToFile(path, mapStruct)
 else:
-    mapStruct = MapStruct.FromFile(String(path))
+    mapStruct = MapStruct.FromFile(path)
 # 随机核加载
 randomCores = [XuchengRandomCore(SETTINGS.title), PerlinRandomCore(SETTINGS.title)]
 # 地图渲染
-mapRenderer = MapRenderer(SETTINGS.title, mapStruct, SETTINGS.areas, String(path), randomCores)
+mapRenderer = MapRenderer(SETTINGS.title, mapStruct, SETTINGS.areas, path, randomCores)
 mapRenderer.MainFrame()

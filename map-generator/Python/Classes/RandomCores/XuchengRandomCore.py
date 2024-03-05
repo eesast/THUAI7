@@ -126,7 +126,7 @@ class XuchengRandomCore(RandomCore):
 
     @property
     def Name(self) -> str:
-        return 'СюйЧэн'
+        return 'Xucheng'
 
     def Menu(self) -> bool:
         try:
