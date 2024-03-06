@@ -27,9 +27,9 @@ Logic::Logic(int64_t pID, int64_t tID, THUAI7::PlayerType pType, THUAI7::ShipTyp
     currentState->mapInfo = std::make_shared<THUAI7::GameMap>();
     bufferState->gameInfo = std::make_shared<THUAI7::GameInfo>();
     bufferState->mapInfo = std::make_shared<THUAI7::GameMap>();
-    if (teamID == 0)
+    if (teamID == 1)
         playerTeam = THUAI7::PlayerTeam::Red;
-    else
+    if (teamID == 2)
         playerTeam = THUAI7::PlayerTeam::Blue;
 }
 
@@ -41,7 +41,7 @@ std::vector<std::shared_ptr<const THUAI7::Ship>> Logic::GetShips() const
     return temp;
 }
 
-std::vector<std::shared_ptr<const THUAI7::Ship>> Logic::GetEnemyShips()
+std::vector<std::shared_ptr<const THUAI7::Ship>> Logic::GetEnemyShips() const
 {
     std::unique_lock<std::mutex> lock(mtxState);
     std::vector<std::shared_ptr<const THUAI7::Ship>> temp(currentState->enemyships.begin(), currentState->enemyships.end());
@@ -57,14 +57,14 @@ std::vector<std::shared_ptr<const THUAI7::Bullet>> Logic::GetBullets() const
     return temp;
 }
 
-std::shared_ptr<const THUAI7::Ship> Logic::ShipGetSelfInfo()
+std::shared_ptr<const THUAI7::Ship> Logic::ShipGetSelfInfo() const
 {
     std::unique_lock<std::mutex> lock(mtxState);
     logger->debug("Called ShipGetSelfInfo");
     return currentState->shipSelf;
 }
 
-std::shared_ptr<const THUAI7::Team> Logic::TeamGetSelfInfo()
+std::shared_ptr<const THUAI7::Team> Logic::TeamGetSelfInfo() const
 {
     std::unique_lock<std::mutex> lock(mtxState);
     logger->debug("Called TeamGetSelfInfo");
@@ -113,7 +113,7 @@ int32_t Logic::GetConstructionHp(int32_t cellX, int32_t cellY) const
     }
 }
 
-int32_t Logic::GetWormHp(int32_t cellX, int32_t cellY)
+int32_t Logic::GetWormHp(int32_t cellX, int32_t cellY) const
 {
     std::unique_lock<std::mutex> lock(mtxState);
     logger->debug("Called GetWormHp");
@@ -129,17 +129,17 @@ int32_t Logic::GetWormHp(int32_t cellX, int32_t cellY)
         return -1;
     }
 }
-int32_t Logic::GetHomeHp()
+int32_t Logic::GetHomeHp() const
 {
     std::unique_lock<std::mutex> lock(mtxState);
     logger->debug("Called GetHomeHp");
     if (playerTeam == THUAI7::PlayerTeam::Red)
         return currentState->gameInfo->redHomeHp;
     else
-        return curretState->gameInfo->blueHomeHp;
+        return currentState->gameInfo->blueHomeHp;
 }
 
-int32_t Logic::GetResourceState(int32_t cellX, int32_t cellY)
+int32_t Logic::GetResourceState(int32_t cellX, int32_t cellY) const
 {
     std::unique_lock<std::mutex> lock(mtxState);
     logger->debug("Called GetResourceState");
@@ -156,7 +156,7 @@ int32_t Logic::GetResourceState(int32_t cellX, int32_t cellY)
     }
 }
 
-int32_t Logic::GetMoney()
+int32_t Logic::GetMoney() const
 {
     std::unique_lock<std::mutex> lock(mtxState);
     logger->debug("Called GetMoney");
@@ -170,7 +170,7 @@ int32_t Logic::GetMoney()
         return -1;
     }
 }
-int32_t Logic::GetScore()
+int32_t Logic::GetScore() const
 {
     std::unique_lock<std::mutex> lock(mtxState);
     logger->debug("Called GetScore");
@@ -198,10 +198,10 @@ bool Logic::Move(int64_t time, double angle)
     return pComm->Move(playerID, teamID, time, angle);
 }
 
-bool Logic::SendMessage(int64_t toID, std::string message, bool binary)
+bool Logic::Send(int64_t toID, std::string message, bool binary)
 {
     logger->debug("Called SendMessage");
-    return pComm->SendMessage(playerID, teamID, toID, std::move(message), binary);
+    return pComm->Send(playerID, teamID, toID, std::move(message), binary);
 }
 
 bool Logic::HaveMessage()
@@ -232,17 +232,31 @@ bool Logic::Attack(double angle)
 bool Logic::Recover()
 {
     logger->debug("Called Recover");
-    return pComm->Recover(playerID, teamID);
+    // TODO recover
+    int64_t recover = 1;
+    return pComm->Recover(playerID, recover, teamID);
+}
+
+bool Logic::Construct(THUAI7::ConstructionType constructiontype)
+{
+    logger->debug("Called Construct");
+    return pComm->Construct(playerID, teamID, constructiontype);
+}
+
+bool Logic::BuildShip(THUAI7::ShipType shiptype, int32_t x, int32_t y)
+{
+    logger->debug("Called BuildShip");
+    return pComm->BuildShip(teamID, shiptype, x, y);
 }
 
 // 等待完成
-bool Logic::Recycle()
+bool Logic::Recycle(int64_t targetID)
 {
     logger->debug("Called Recycle");
-    return pComm->Recycle(playerID, teamID);
+    return pComm->Recycle(targetID, teamID);
 }
 
-bool Logic::Produce();
+bool Logic::Produce()
 {
     logger->debug("Called Produce");
     return pComm->Produce(playerID, teamID);
@@ -278,6 +292,9 @@ void Logic::ProcessMessage()
     {
         try
         {
+            // TODO
+            int32_t x = 0;
+            int32_t y = 0;
             logger->info("Message thread start!");
             pComm->AddPlayer(playerID, teamID, shipType, x, y);
             while (gameState != THUAI7::GameState::GameEnd)
@@ -297,14 +314,14 @@ void Logic::ProcessMessage()
                             {
                                 auto map = std::vector<std::vector<THUAI7::PlaceType>>();
                                 auto mapResult = item.map_message();
-                                for (int32_t i = 0; i < item.map_message().row_size(); i++)
+                                for (int32_t i = 0; i < item.map_message().rows_size(); i++)
                                 {
                                     std::vector<THUAI7::PlaceType> row;
-                                    for (int32_t j = 0; j < mapResult.row(i).col_size(); j++)
+                                    for (int32_t j = 0; j < mapResult.rows(i).cols_size(); j++)
                                     {
-                                        if (Proto2THUAI7::placeTypeDict.count(mapResult.row(i).col(j)) == 0)
+                                        if (Proto2THUAI7::placeTypeDict.count(mapResult.rows(i).cols(j)) == 0)
                                             logger->error("Unknown place type!");
-                                        row.push_back(Proto2THUAI7::placeTypeDict[mapResult.row(i).col(j)]);
+                                        row.push_back(Proto2THUAI7::placeTypeDict[mapResult.rows(i).cols(j)]);
                                     }
                                     map.push_back(std::move(row));
                                 }
@@ -399,137 +416,133 @@ void Logic::LoadBufferSelf(const protobuf::MessageToClient& message)
 
 void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
 {
-    int32_t x, y, viewRange;
-    if (isShip)
-        x = bufferState->shipSelf->x, y = bufferState->shipSelf->y;
-    else
-        x = bufferState->homeSelf->x, y = bufferState->homeSelf->y;
-
-    if (isShip && Proto2THUAI7::messageOfObjDict[item.message_of_obj_case()] == THUAI7::MessageOfObj::ShipMessage)
+    if (playerType == THUAI7::PlayerType::Ship)
     {
-        if (playerTeam != item.ship_message().team())
+        int32_t x, y, viewRange;
+        x = bufferState->shipSelf->x, y = bufferState->shipSelf->y, viewRange = bufferState->shipSelf->viewRange;
+        switch (Proto2THUAI7::messageOfObjDict[item.message_of_obj_case()])
         {
-            if (AssistFunction::HaveView(x, y, item.ship_message().x(), item.ship_message().y(), bufferState->gameMap))
-            {
-                bufferState->enemyships.push_back(Proto2THUAI7::Protobuf2THUAI7Ship(item.ship_message()));
-                logger->debug("Add Enemyship!");
-            }
-            return;
-        }
-    }
-
-    switch (Proto2THUAI7::messageOfObjDict[item.message_of_obj_case()])
-    {
-        case THUAI7::MessageOfObj::BulletMessage:
-            if (AssistFunction::HaveView(x, y, item.bullet_message().x(), item.bullet_message().y(), bufferState->gameMap))
-            {
-                bufferState->bullets.push_back(Proto2THUAI7::Protobuf2THUAI7Bullet(item.bullet_message()));
-                logger->debug("Add Bullet!");
-            }
-            break;
-        case THUAI7::MessageOfObj::FactoryMessage:
-            if (AssistFunction::HaveView(x, y, item.factory_message().x(), item.factory_message().y(), bufferState->gameMap))
-            {
-                auto pos = std::make_pair(AssistFunction::GridToCell(item.factory_message().x()), AssistFunction::GridToCell(item.factory_message().y()));
-                if (bufferState->mapInfo->factoryState.count(pos) == 0)
+            case THUAI7::MessageOfObj::ShipMessage:
+                if (teamID != item.ship_message().team_id())
                 {
-                    bufferState->mapInfo->factoryState.emplace(pos, {item.factory_message().hp(), item.factory_message().team()});
-                    logger->debug("Add Factory!");
-                }
-                else
-                {
-                    bufferState->mapInfo->factoryState[pos].first = item.factory_message().hp();
-                    logger->debug("Update Factory!");
-                }
-            }
-            break;
-        case THUAI7::MessageOfObj::CommunityMessage:
-            if (AssistFunction::HaveView(x, y, item.community_message().x(), item.community_message().y(), bufferState->gameMap))
-            {
-                auto pos = std::make_pair(AssistFunction::GridToCell(item.community_message().x()), AssistFunction::GridToCell(item.community_message().y()));
-                if (bufferState->mapInfo->communityState.count(pos) == 0)
-                {
-                    bufferState->mapInfo->communityState.emplace(pos, {item.community_message().hp(), item.community_message().team()});
-                    logger->debug("Add Community!");
-                }
-                else
-                {
-                    bufferState->mapInfo->communityState[pos].first = item.community_message().hp();
-                    logger->debug("Update Community!");
-                }
-            }
-            break;
-        case THUAI7::MessageOfObj::FortMessage:
-            if (AssistFunction::HaveView(x, y, item.fort_message().x(), item.fort_message().y(), bufferState->gameMap))
-            {
-                auto pos = std::make_pair(AssistFunction::GridToCell(item.fort_message().x()), AssistFunction::GridToCell(item.fort_message().y()));
-                if (bufferState->mapInfo->fortState.count(pos) == 0)
-                {
-                    bufferState->mapInfo->fortState.emplace(pos, {item.fort_message().hp(), item.fort_message().team()});
-                    logger->debug("Add Fort!");
-                }
-                else
-                {
-                    bufferState->mapInfo->fortState[pos].first = item.fort_message().hp();
-                    logger->debug("Update Fort!");
-                }
-            }
-            break;
-        case THUAI7::MessageOfObj::WormholeMessage:
-            if (AssistFunction::HaveView(x, y, item.wormhole_message().x(), item.wormhole_message().y(), bufferState->gameMap))
-            {
-                auto pos = std::make_pair(AssistFunction::GridToCell(item.wormhole_message().x()), AssistFunction::GridToCell(item.wormhole_message().y()));
-                if (bufferState->mapInfo->wormholeState.count(pos) == 0)
-                {
-                    bufferState->mapInfo->wormholeState.emplace(pos, item.wormhole_message().hp());
-                    logger->debug("Add Wormhole!");
-                }
-                else
-                {
-                    bufferState->mapInfo->wormholeState[pos] = item.wormhole_message().hp();
-                    logger->debug("Update Wormhole!");
-                }
-            }
-            break;
-        case THUAI7::MessageOfObj::ResourceMessage:
-            if (AssistFunction::HaveView(x, y, item.resource_message().x(), item.resource_message().y(), bufferState->gameMap))
-            {
-                auto pos = std::make_pair(AssistFunction::GridToCell(item.resource_message().x()), AssistFunction::GridToCell(item.resource_message().y()));
-                if (bufferState->mapInfo->resourceState.count(pos) == 0)
-                {
-                    bufferState->mapInfo->resourceState.emplace(pos, item.resource_message().progress());
-                    logger->debug("Add Resouce!");
-                }
-                else
-                {
-                    bufferState->mapInfo->resourceState[pos].first = item.resouce_message().progress();
-                    logger->debug("Update Resource!");
-                }
-            }
-            break;
-        case THUAI7::MessageOfObj::NewsMessage:
-            {
-                auto news = item.news_message();
-                if (news.to_id() == APIid)
-                {
-                    if (Proto2THUAI7::newsTypeDict[news.news_case()] == THUAI7::NewsType::TextMessage)
+                    if (AssistFunction::HaveView(x, y, item.ship_message().x(), item.ship_message().y(), viewRange, bufferState->gameMap))
                     {
-                        messageQueue.emplace(std::make_pair(news.from_id(), news.text_message()));
-                        logger->debug("Add News!");
+                        bufferState->enemyships.push_back(Proto2THUAI7::Protobuf2THUAI7Ship(item.ship_message()));
+                        logger->debug("Add Enemyship!");
                     }
-                    else if (Proto2THUAI7::newsTypeDict[news.news_case()] == THUAI7::NewsType::BinaryMessage)
-                    {
-                        messageQueue.emplace(std::make_pair(news.from_id(), news.binary_message()));
-                        logger->debug("Add Binary News!");
-                    }
-                    else
-                        logger->error("Unknown NewsType!");
                 }
                 break;
-            }
-        case THUAI7::MessageOfObj::NullMessageOfObj:
-        default:
-            break;
+            case THUAI7::MessageOfObj::BulletMessage:
+                if (AssistFunction::HaveView(x, y, item.bullet_message().x(), item.bullet_message().y(), viewRange, bufferState->gameMap))
+                {
+                    bufferState->bullets.push_back(Proto2THUAI7::Protobuf2THUAI7Bullet(item.bullet_message()));
+                    logger->debug("Add Bullet!");
+                }
+                break;
+            case THUAI7::MessageOfObj::FactoryMessage:
+                if (AssistFunction::HaveView(x, y, item.factory_message().x(), item.factory_message().y(), viewRange, bufferState->gameMap))
+                {
+                    auto pos = std::make_pair(AssistFunction::GridToCell(item.factory_message().x()), AssistFunction::GridToCell(item.factory_message().y()));
+                    if (bufferState->mapInfo->factoryState.count(pos) == 0)
+                    {
+                        bufferState->mapInfo->factoryState.emplace(pos, std::make_pair(item.factory_message().team_id(), item.factory_message().hp()));
+                        logger->debug("Add Factory!");
+                    }
+                    else
+                    {
+                        bufferState->mapInfo->factoryState[pos].first = item.factory_message().hp();
+                        logger->debug("Update Factory!");
+                    }
+                }
+                break;
+            case THUAI7::MessageOfObj::CommunityMessage:
+                if (AssistFunction::HaveView(x, y, item.community_message().x(), item.community_message().y(), viewRange, bufferState->gameMap))
+                {
+                    auto pos = std::make_pair(AssistFunction::GridToCell(item.community_message().x()), AssistFunction::GridToCell(item.community_message().y()));
+                    if (bufferState->mapInfo->communityState.count(pos) == 0)
+                    {
+                        bufferState->mapInfo->communityState.emplace(pos, std::make_pair(item.community_message().team_id(), item.community_message().hp()));
+                        logger->debug("Add Community!");
+                    }
+                    else
+                    {
+                        bufferState->mapInfo->communityState[pos].first = item.community_message().hp();
+                        logger->debug("Update Community!");
+                    }
+                }
+                break;
+            case THUAI7::MessageOfObj::FortMessage:
+                if (AssistFunction::HaveView(x, y, item.fort_message().x(), item.fort_message().y(), viewRange, bufferState->gameMap))
+                {
+                    auto pos = std::make_pair(AssistFunction::GridToCell(item.fort_message().x()), AssistFunction::GridToCell(item.fort_message().y()));
+                    if (bufferState->mapInfo->fortState.count(pos) == 0)
+                    {
+                        bufferState->mapInfo->fortState.emplace(pos, std::make_pair(item.fort_message().team_id(), item.fort_message().hp()));
+                        logger->debug("Add Fort!");
+                    }
+                    else
+                    {
+                        bufferState->mapInfo->fortState[pos].first = item.fort_message().hp();
+                        logger->debug("Update Fort!");
+                    }
+                }
+                break;
+            case THUAI7::MessageOfObj::WormholeMessage:
+                if (AssistFunction::HaveView(x, y, item.wormhole_message().x(), item.wormhole_message().y(), viewRange, bufferState->gameMap))
+                {
+                    auto pos = std::make_pair(AssistFunction::GridToCell(item.wormhole_message().x()), AssistFunction::GridToCell(item.wormhole_message().y()));
+                    if (bufferState->mapInfo->wormholeState.count(pos) == 0)
+                    {
+                        bufferState->mapInfo->wormholeState.emplace(pos, item.wormhole_message().hp());
+                        logger->debug("Add Wormhole!");
+                    }
+                    else
+                    {
+                        bufferState->mapInfo->wormholeState[pos] = item.wormhole_message().hp();
+                        logger->debug("Update Wormhole!");
+                    }
+                }
+                break;
+            case THUAI7::MessageOfObj::ResourceMessage:
+                if (AssistFunction::HaveView(x, y, item.resource_message().x(), item.resource_message().y(), viewRange, bufferState->gameMap))
+                {
+                    auto pos = std::make_pair(AssistFunction::GridToCell(item.resource_message().x()), AssistFunction::GridToCell(item.resource_message().y()));
+                    if (bufferState->mapInfo->resourceState.count(pos) == 0)
+                    {
+                        bufferState->mapInfo->resourceState.emplace(pos, item.resource_message().progress());
+                        logger->debug("Add Resouce!");
+                    }
+                    else
+                    {
+                        bufferState->mapInfo->resourceState[pos] = item.resource_message().progress();
+                        logger->debug("Update Resource!");
+                    }
+                }
+                break;
+            case THUAI7::MessageOfObj::NewsMessage:
+                {
+                    auto news = item.news_message();
+                    if (news.to_id() == playerID)
+                    {
+                        if (Proto2THUAI7::newsTypeDict[news.news_case()] == THUAI7::NewsType::TextMessage)
+                        {
+                            messageQueue.emplace(std::make_pair(news.from_id(), news.text_message()));
+                            logger->debug("Add News!");
+                        }
+                        else if (Proto2THUAI7::newsTypeDict[news.news_case()] == THUAI7::NewsType::BinaryMessage)
+                        {
+                            messageQueue.emplace(std::make_pair(news.from_id(), news.binary_message()));
+                            logger->debug("Add Binary News!");
+                        }
+                        else
+                            logger->error("Unknown NewsType!");
+                    }
+                    break;
+                }
+            case THUAI7::MessageOfObj::NullMessageOfObj:
+            default:
+                break;
+        }
     }
 }
 
@@ -542,7 +555,7 @@ void Logic::LoadBuffer(const protobuf::MessageToClient& message)
         // 清空原有信息
         bufferState->ships.clear();
         bufferState->enemyships.clear();
-        bufferState->homes.clear();
+        bufferState->teams.clear();
         bufferState->bullets.clear();
         bufferState->guids.clear();
 
@@ -551,8 +564,9 @@ void Logic::LoadBuffer(const protobuf::MessageToClient& message)
         for (const auto& obj : message.obj_message())
             if (Proto2THUAI7::messageOfObjDict[obj.message_of_obj_case()] == THUAI7::MessageOfObj::ShipMessage)
                 bufferState->guids.push_back(obj.ship_message().guid());
-            else if (Proto2THUAI7::messageOfObjDict[obj.message_of_obj_case()] == THUAI7::MessageOfObj::HomeMessage)
-                bufferState->guids.push_back(obj.home_message().guid());
+        // TODO
+        // else if (Proto2THUAI7::messageOfObjDict[obj.message_of_obj_case()] == THUAI7::MessageOfObj::HomeMessage)
+        //     bufferState->guids.push_back(obj.home_message().guid());
         bufferState->gameInfo = Proto2THUAI7::Protobuf2THUAI7GameInfo(message.all_message());
         LoadBufferSelf(message);
         for (const auto& item : message.obj_message())
@@ -628,13 +642,13 @@ std::vector<int64_t> Logic::GetPlayerGUIDs() const
 bool Logic::TryConnection()
 {
     logger->info("Try to connect to server...");
-    return pComm->TryConnection(APIid);
+    return pComm->TryConnection(playerID, teamID);
 }
 
-bool Logic::HaveView(int32_t gridX, int32_t gridY, int32_t selfX, int32_t selfY) const
+bool Logic::HaveView(int32_t gridX, int32_t gridY, int32_t selfX, int32_t selfY, int32_t viewRange) const
 {
     std::unique_lock<std::mutex> lock(mtxState);
-    return AssistFunction::HaveView(selfX, selfY, gridX, gridY, currentState->gameMap);
+    return AssistFunction::HaveView(selfX, selfY, gridX, gridY, viewRange, currentState->gameMap);
 }
 
 void Logic::Main(CreateAIFunc createAI, std::string IP, std::string port, bool file, bool print, bool warnOnly)
@@ -662,10 +676,10 @@ void Logic::Main(CreateAIFunc createAI, std::string IP, std::string port, bool f
     logger->info("*********Basic Info*********");
     logger->info("asynchronous: {}", asynchronous);
     logger->info("server: {}:{}", IP, port);
-    if (isShip)
-        logger->info("ship ID: {}", APIid);
+    if (playerType == THUAI7::PlayerType::Ship)
+        logger->info("ship ID: {}", playerID);
     else
-        logger->info("home ID: {}", APIid);
+        logger->info("home ID: {}", playerID);
     logger->info("player team: {}", THUAI7::playerTeamDict[playerTeam]);
     logger->info("****************************");
 
@@ -673,38 +687,38 @@ void Logic::Main(CreateAIFunc createAI, std::string IP, std::string port, bool f
     pComm = std::make_unique<Communication>(IP, port);
 
     // 构造timer
-    if (playerTeam == THUAI7::PlayerTeam::Up)
+    if (playerTeam == THUAI7::PlayerTeam::Red)
     {
-        if (isShip)
+        if (playerType == THUAI7::PlayerType::Ship)
         {
             if (!file && !print)
                 timer = std::make_unique<ShipAPI>(*this);
             else
-                timer = std::make_unique<ShipDebugAPI>(*this, file, print, warnOnly, APIid);
+                timer = std::make_unique<ShipDebugAPI>(*this, file, print, warnOnly, playerID);
         }
         else
         {
             if (!file && !print)
-                timer = std::make_unique<HomeAPI>(*this);
+                timer = std::make_unique<TeamAPI>(*this);
             else
-                timer = std::make_unique<HomeDebugAPI>(*this, file, print, warnOnly, APIid);
+                timer = std::make_unique<TeamDebugAPI>(*this, file, print, warnOnly, playerID);
         }
     }
-    else if (playerTeam == THUAI7::PlayerTeam::Down)
+    else if (playerTeam == THUAI7::PlayerTeam::Blue)
     {
-        if (isShip)
+        if (playerType == THUAI7::PlayerType::Ship)
         {
             if (!file && !print)
                 timer = std::make_unique<ShipAPI>(*this);
             else
-                timer = std::make_unique<ShipDebugAPI>(*this, file, print, warnOnly, APIid);
+                timer = std::make_unique<ShipDebugAPI>(*this, file, print, warnOnly, playerID);
         }
         else
         {
             if (!file && !print)
-                timer = std::make_unique<HomeAPI>(*this);
+                timer = std::make_unique<TeamAPI>(*this);
             else
-                timer = std::make_unique<HomeDebugAPI>(*this, file, print, warnOnly, APIid);
+                timer = std::make_unique<TeamDebugAPI>(*this, file, print, warnOnly, playerID);
         }
     }
 
@@ -718,7 +732,7 @@ void Logic::Main(CreateAIFunc createAI, std::string IP, std::string port, bool f
                 cvAI.wait(lock, [this]()
                           { return AIStart; });
             }
-            auto ai = createAI(APIid);
+            auto ai = createAI(playerID);
 
             while (AILoop)
             {

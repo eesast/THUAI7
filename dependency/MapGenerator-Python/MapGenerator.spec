@@ -5,7 +5,9 @@ a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[('Settings.json', '.')],
+    datas=[('../../logic/Preparation/bin/Debug/net8.0/Preparation.dll', '.'),
+           ('../../logic/GameClass/bin/Debug/net8.0/GameClass.dll', '.')
+    ],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

@@ -4,14 +4,9 @@ from typing import Any
 from easygui import multenterbox
 from perlin_noise import PerlinNoise
 
-from Classes.MapStruct import MapStruct
+from GameClass.MapGenerator import MapStruct
+from Preparation.Utility import PlaceType as PT
 from Classes.RandomCore import RandomCore
-
-dict_place2num = {
-    'Space': 0,
-    'Ruin': 1,
-    'Shadow': 2
-}
 
 
 class PerlinRandomCore(RandomCore):
@@ -87,15 +82,15 @@ class PerlinRandomCore(RandomCore):
         for i in range(mp.height):
             for j in range(mp.width):
                 if i == 0 or i == mp.height - 1:
-                    mp[i, j] = dict_place2num['Ruin']
+                    mp[i, j] = PT.Ruin
                     continue
                 elif j == 0 or j == mp.width - 1:
-                    mp[i, j] = dict_place2num['Ruin']
+                    mp[i, j] = PT.Ruin
                     continue
                 cur = arr[i][j]
                 if arr0 < cur < arr1:
-                    mp[i, j] = dict_place2num['Shadow']
+                    mp[i, j] = PT.Shadow
                 elif arr1 < cur < arr2:
-                    mp[i, j] = dict_place2num['Space']
+                    mp[i, j] = PT.Null
                 else:
-                    mp[i, j] = dict_place2num['Ruin']
+                    mp[i, j] = PT.Ruin
