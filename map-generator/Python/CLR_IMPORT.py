@@ -6,13 +6,15 @@ PREPARATION_IMPORT = [r'../../logic/Preparation/bin/Debug/net8.0/',
                       r'../../logic/Preparation/bin/Release/net8.0/',
                       r'../../../logic/Preparation/bin/Debug/net8.0/',
                       r'../../../logic/Preparation/bin/Release/net8.0/',
-                      r'_internal/']
+                      r'./',
+                      r'./_internal/']
 PREPARATION = 'Preparation'
 GAMECLASS_IMPORT = [r'../../logic/GameClass/bin/Debug/net8.0/',
                     r'../../logic/GameClass/bin/Release/net8.0/',
                     r'../../../logic/GameClass/bin/Debug/net8.0/',
                     r'../../../logic/GameClass/bin/Release/net8.0/',
-                    r'_internal/']
+                    r'./',
+                    r'./_internal/']
 GAMECLASS = 'GameClass'
 
 
