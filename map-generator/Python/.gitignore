@@ -2,3 +2,4 @@
 *.map
 build/
 dist/
+*__pycache__

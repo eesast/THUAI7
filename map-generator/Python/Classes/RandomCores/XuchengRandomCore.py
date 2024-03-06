@@ -9,7 +9,7 @@ from Preparation.Utility import PlaceType as PT
 from Classes.RandomCore import RandomCore
 
 
-class DefaultСюйЧэнRandomSettings:
+class DefaultXuchengRandomSettings:
     asteroidWidth = 2
     resourceNum = 7
     constructionNum = 5
@@ -19,7 +19,7 @@ class DefaultСюйЧэнRandomSettings:
     ruinCrossBonus = 40
 
 
-class СюйЧэнRandomCore(RandomCore):
+class XuchengRandomCore(RandomCore):
     title: str
     asteroidWidth: int
     resourceNum: int
@@ -36,7 +36,7 @@ class СюйЧэнRandomCore(RandomCore):
     @AsteroidWidth.setter
     def AsteroidWidth(self, value: int) -> None:
         if value < 1 or value > 4:
-            self.asteroidWidth = DefaultСюйЧэнRandomSettings.asteroidWidth
+            self.asteroidWidth = DefaultXuchengRandomSettings.asteroidWidth
         else:
             self.asteroidWidth = value
 
@@ -47,7 +47,7 @@ class СюйЧэнRandomCore(RandomCore):
     @ResourceNum.setter
     def ResourceNum(self, value: int) -> None:
         if value < 1 or value > 10:
-            self.resourceNum = DefaultСюйЧэнRandomSettings.resourceNum
+            self.resourceNum = DefaultXuchengRandomSettings.resourceNum
         else:
             self.resourceNum = value
 
@@ -58,7 +58,7 @@ class СюйЧэнRandomCore(RandomCore):
     @ConstructionNum.setter
     def ConstructionNum(self, value: int) -> None:
         if value < 1 or value > 10:
-            self.constructionNum = DefaultСюйЧэнRandomSettings.constructionNum
+            self.constructionNum = DefaultXuchengRandomSettings.constructionNum
         else:
             self.constructionNum = value
 
@@ -69,7 +69,7 @@ class СюйЧэнRandomCore(RandomCore):
     @ShadowProb.setter
     def ShadowProb(self, value: float) -> None:
         if value < 0 or value > 0.1:
-            self.shadowProb = DefaultСюйЧэнRandomSettings.shadowProb
+            self.shadowProb = DefaultXuchengRandomSettings.shadowProb
         else:
             self.shadowProb = value
 
@@ -80,7 +80,7 @@ class СюйЧэнRandomCore(RandomCore):
     @ShadowCrossBonus.setter
     def ShadowCrossBonus(self, value: int) -> None:
         if value < 1 or value > 50:
-            self.shadowCrossBonus = DefaultСюйЧэнRandomSettings.shadowCrossBonus
+            self.shadowCrossBonus = DefaultXuchengRandomSettings.shadowCrossBonus
         else:
             self.shadowCrossBonus = value
 
@@ -91,7 +91,7 @@ class СюйЧэнRandomCore(RandomCore):
     @RuinProb.setter
     def RuinProb(self, value: float) -> None:
         if value < 0 or value > 0.1:
-            self.ruinProb = DefaultСюйЧэнRandomSettings.ruinProb
+            self.ruinProb = DefaultXuchengRandomSettings.ruinProb
         else:
             self.ruinProb = value
 
@@ -102,19 +102,19 @@ class СюйЧэнRandomCore(RandomCore):
     @RuinCrossBonus.setter
     def RuinCrossBonus(self, value: int) -> None:
         if value < 1 or value > 50:
-            self.ruinCrossBonus = DefaultСюйЧэнRandomSettings.ruinCrossBonus
+            self.ruinCrossBonus = DefaultXuchengRandomSettings.ruinCrossBonus
         else:
             self.ruinCrossBonus = value
 
     def __init__(self,
                  title,
-                 asteroidWidth: int = DefaultСюйЧэнRandomSettings.asteroidWidth,
-                 resourceNum: int = DefaultСюйЧэнRandomSettings.resourceNum,
-                 constructionNum: int = DefaultСюйЧэнRandomSettings.constructionNum,
-                 shadowProb: float = DefaultСюйЧэнRandomSettings.shadowProb,
-                 shadowCrossBonus: int = DefaultСюйЧэнRandomSettings.shadowCrossBonus,
-                 ruinProb: float = DefaultСюйЧэнRandomSettings.ruinProb,
-                 ruinCrossBonus: int = DefaultСюйЧэнRandomSettings.ruinCrossBonus) -> None:
+                 asteroidWidth: int = DefaultXuchengRandomSettings.asteroidWidth,
+                 resourceNum: int = DefaultXuchengRandomSettings.resourceNum,
+                 constructionNum: int = DefaultXuchengRandomSettings.constructionNum,
+                 shadowProb: float = DefaultXuchengRandomSettings.shadowProb,
+                 shadowCrossBonus: int = DefaultXuchengRandomSettings.shadowCrossBonus,
+                 ruinProb: float = DefaultXuchengRandomSettings.ruinProb,
+                 ruinCrossBonus: int = DefaultXuchengRandomSettings.ruinCrossBonus) -> None:
         self.title = title
         self.AsteroidWidth = asteroidWidth
         self.ResourceNum = resourceNum
@@ -126,7 +126,7 @@ class СюйЧэнRandomCore(RandomCore):
 
     @property
     def Name(self) -> str:
-        return 'СюйЧэн'
+        return 'Xucheng'
 
     def Menu(self) -> bool:
         try:
@@ -163,14 +163,14 @@ class СюйЧэнRandomCore(RandomCore):
 
     def Random(self, mp: MapStruct) -> None:
         mp.Clear()
-        СюйЧэнRandomCore.generateBorderRuin(mp)
-        СюйЧэнRandomCore.generateHome(mp)
-        СюйЧэнRandomCore.generateAsteroid(mp, self.asteroidWidth)
-        СюйЧэнRandomCore.generateResource(mp, self.resourceNum)
-        СюйЧэнRandomCore.generateConstruction(mp, self.constructionNum)
-        СюйЧэнRandomCore.generateShadow(mp, self.shadowProb, self.shadowCrossBonus)
-        СюйЧэнRandomCore.generateRuin(mp, self.ruinProb, self.ruinCrossBonus)
-        СюйЧэнRandomCore.generateWormhole(mp)
+        XuchengRandomCore.generateBorderRuin(mp)
+        XuchengRandomCore.generateHome(mp)
+        XuchengRandomCore.generateAsteroid(mp, self.asteroidWidth)
+        XuchengRandomCore.generateResource(mp, self.resourceNum)
+        XuchengRandomCore.generateConstruction(mp, self.constructionNum)
+        XuchengRandomCore.generateShadow(mp, self.shadowProb, self.shadowCrossBonus)
+        XuchengRandomCore.generateRuin(mp, self.ruinProb, self.ruinCrossBonus)
+        XuchengRandomCore.generateWormhole(mp)
 
     @staticmethod
     def isEmptyNearby(mp: MapStruct, x: int, y: int, r: int) -> bool:
@@ -214,7 +214,7 @@ class СюйЧэнRandomCore(RandomCore):
         mp[46, 3] = PT.Home
 
     @staticmethod
-    def generateAsteroid(mp: MapStruct, width: int = DefaultСюйЧэнRandomSettings.asteroidWidth) -> None:
+    def generateAsteroid(mp: MapStruct, width: int = DefaultXuchengRandomSettings.asteroidWidth) -> None:
         for i in range(1, 49):
             for j in range(24, 24 - width, -1):
                 mp[i, j] = PT.Asteroid
@@ -227,12 +227,12 @@ class СюйЧэнRandomCore(RandomCore):
                 mp[49 - i, 25 - width] = PT.Null
 
     @staticmethod
-    def generateResource(mp: MapStruct, num: int = DefaultСюйЧэнRandomSettings.resourceNum) -> None:
+    def generateResource(mp: MapStruct, num: int = DefaultXuchengRandomSettings.resourceNum) -> None:
         i = 0
         while i < num:
             x = floor(random() * 48) + 1
             y = floor(random() * 23) + 1
-            if СюйЧэнRandomCore.isEmptyNearby(mp, x, y, 2):
+            if XuchengRandomCore.isEmptyNearby(mp, x, y, 2):
                 mp[x, y] = PT.Resource
                 mp[49 - x, 49 - y] = PT.Resource
             else:
@@ -240,12 +240,12 @@ class СюйЧэнRandomCore(RandomCore):
             i += 1
 
     @staticmethod
-    def generateConstruction(mp: MapStruct, num: int = DefaultСюйЧэнRandomSettings.constructionNum) -> None:
+    def generateConstruction(mp: MapStruct, num: int = DefaultXuchengRandomSettings.constructionNum) -> None:
         i = 0
         while i < num:
             x = floor(random() * 48) + 1
             y = floor(random() * 23) + 1
-            if СюйЧэнRandomCore.isEmptyNearby(mp, x, y, 1):
+            if XuchengRandomCore.isEmptyNearby(mp, x, y, 1):
                 mp[x, y] = PT.Construction
                 mp[49 - x, 49 - y] = PT.Construction
             else:
@@ -253,26 +253,26 @@ class СюйЧэнRandomCore(RandomCore):
             i += 1
 
     @staticmethod
-    def generateShadow(mp: MapStruct, prob: float = DefaultСюйЧэнRandomSettings.shadowProb,
-                       crossBonus: int = DefaultСюйЧэнRandomSettings.shadowCrossBonus) -> None:
+    def generateShadow(mp: MapStruct, prob: float = DefaultXuchengRandomSettings.shadowProb,
+                       crossBonus: int = DefaultXuchengRandomSettings.shadowCrossBonus) -> None:
         for i in range(50):
             for j in range(50):
                 if (mp[i, j] == PT.Null and
-                        random() < prob * (СюйЧэнRandomCore.haveSthCross(mp, i, j, 1, PT.Shadow) * crossBonus + 1)):
+                        random() < prob * (XuchengRandomCore.haveSthCross(mp, i, j, 1, PT.Shadow) * crossBonus + 1)):
                     mp[i, j] = PT.Shadow
                     mp[49 - i, 49 - j] = PT.Shadow
 
     @staticmethod
-    def generateRuin(mp: MapStruct, prob: float = DefaultСюйЧэнRandomSettings.ruinProb,
-                     crossBonus: int = DefaultСюйЧэнRandomSettings.ruinCrossBonus) -> None:
+    def generateRuin(mp: MapStruct, prob: float = DefaultXuchengRandomSettings.ruinProb,
+                     crossBonus: int = DefaultXuchengRandomSettings.ruinCrossBonus) -> None:
         for i in range(2, 48):
             for j in range(2, 48):
                 if ((mp[i, j] == PT.Null or mp[i, j] == PT.Shadow) and
-                    not СюйЧэнRandomCore.haveSthNearby(mp, i, j, 1, PT.Asteroid) and
-                    not СюйЧэнRandomCore.haveSthNearby(mp, i, j, 1, PT.Home) and
+                    not XuchengRandomCore.haveSthNearby(mp, i, j, 1, PT.Asteroid) and
+                    not XuchengRandomCore.haveSthNearby(mp, i, j, 1, PT.Home) and
                         random() < prob
-                        * (СюйЧэнRandomCore.haveSthCross(mp, i, j, 1, PT.Ruin)
-                           * (0 if СюйЧэнRandomCore.haveSthCross(mp, i, j, 1, PT.Ruin) > 1
+                        * (XuchengRandomCore.haveSthCross(mp, i, j, 1, PT.Ruin)
+                           * (0 if XuchengRandomCore.haveSthCross(mp, i, j, 1, PT.Ruin) > 1
                               else crossBonus) + 1)):
                     mp[i, j] = PT.Ruin
                     mp[49 - i, 49 - j] = PT.Ruin
