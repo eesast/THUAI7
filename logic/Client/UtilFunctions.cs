@@ -25,5 +25,11 @@ namespace Client
                 lengthOfSlide = parentGridWidth;
             }
         }
+        public static int getIndex(int i, int j)
+        {
+            return 50 * i + j;
+        }
     }
+
+
 }

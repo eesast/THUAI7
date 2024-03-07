@@ -114,12 +114,33 @@ namespace Client.ViewModel
             isClientStocked = false;
         }
 
+        int testcounter = 0;
         private void UpdateTest(object sender, EventArgs e)
         {
             counterViewModelTest++;
             MapPatchesList[5].Text = "SS";
             MapPatchesList[4].Text = "SS";
             MapPatchesList[2].Text = counterViewModelTest.ToString();
+            if (!hasDrawn)
+            {
+                PureDrawMap(GameMap.GameMapArray);
+                hasDrawn = true;
+            }
+            if (testcounter < 30)
+            {
+                testcounter++;
+                if (testcounter % 3 == 0)
+                {
+                    Ship ship = new Ship
+                    {
+                        Type_s = "CivilShip",
+                        State_s = "Idle",
+                        ArmorModule_s = "LightArmor"
+                    };
+                    RedPlayer.Ships.Add(ship);
+                    BluePlayer.Ships.Add(ship);
+                }
+            }
         }
 
         public GeneralViewModel()

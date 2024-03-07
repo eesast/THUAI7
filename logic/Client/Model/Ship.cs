@@ -56,7 +56,7 @@ namespace Client.Model
 
     }
 
-    public class Ship
+    public class Ship : BindableObject
     {
         private TeamEnum team;
         private TypeEnum type;
@@ -77,82 +77,130 @@ namespace Client.Model
         public TeamEnum Team
         {
             get => team;
-            set => team = value;
+            set {
+                team = value;
+                OnPropertyChanged();
+            }
         }
         public TypeEnum Type
         {
             get => type;
-            set => type = value;
+            set {
+                type = value;
+                OnPropertyChanged();
+            }
         }
         public StateEnum State
         {
             get => state;
-            set => state = value;
+            set {
+                state = value;
+                OnPropertyChanged();
+            }
         }
         public int HP
         {
             get => Hp;
-            set => Hp = value;
+            set {
+                Hp = value;
+                OnPropertyChanged();
+            }
         }
         public ProducerModuleEnum ProducerModule
         {
             get => producerModule;
-            set => producerModule = value;
+            set {
+                producerModule = value;
+                OnPropertyChanged();
+            }
         }
         public ConstuctorModuleEnum ConstuctorModule
         {
             get => constuctorModule;
-            set => constuctorModule = value;
+            set {
+                constuctorModule = value;
+                OnPropertyChanged();
+            }
         }
         public ArmorModuleEnum ArmorModule
         {
             get => armorModule;
-            set => armorModule = value;
+            set {
+                armorModule = value;
+                OnPropertyChanged();
+            }
         }
         public ShieldModuleEnum ShieldModule
         {
             get => shieldModule;
-            set => shieldModule = value;
+            set {
+                shieldModule = value;
+                OnPropertyChanged();
+            }
         }
         public AttackerModuleEnum AttackerModule
         {
             get => attackerModule;
-            set => attackerModule = value;
+            set {
+                attackerModule = value;
+                OnPropertyChanged();
+            }
         }
         public string Type_s
         {
             get => type_s;
-            set => type_s = value;
+            set {
+                type_s = value;
+                OnPropertyChanged();
+            }
         }
         public string State_s
         {
             get => state_s;
-            set => state_s = value;
+            set {
+                state_s = value;
+                OnPropertyChanged();
+            }
         }
         public string ProducerModule_s
         {
             get => producerModule_s;
-            set => producerModule_s = value;
+            set {
+                producerModule_s = value;
+                OnPropertyChanged();
+            }
         }
         public string ConstuctorModule_s
         {
             get => constuctorModule_s;
-            set => constuctorModule_s = value;
+            set {
+                constuctorModule_s = value;
+                OnPropertyChanged();
+            }
         }
         public string ArmorModule_s
         {
             get => armorModule_s;
-            set => armorModule_s = value;
+            set {
+                armorModule_s = value;
+                OnPropertyChanged();
+            }
         }
         public string ShieldModule_s
         {
             get => shieldModule_s;
-            set => shieldModule_s = value;
+            set {
+                shieldModule_s = value;
+                OnPropertyChanged();
+            }
         }
         public string AttackerModule_s
         {
             get => attackerModule_s;
-            set => attackerModule_s = value;
+            set {
+                attackerModule_s = value;
+                OnPropertyChanged();
+            }
         }
     }
 }

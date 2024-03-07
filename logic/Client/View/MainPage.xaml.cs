@@ -13,7 +13,6 @@ using System.Linq.Expressions;
 using Client.ViewModel;
 using Client.Model;
 using System.Reflection;
-using Windows.Gaming.Input;
 
 namespace Client
 {
@@ -37,7 +36,7 @@ namespace Client
             {
                 for (int j = 0; j < 50; j++)
                 {
-                    mapPatches[i, j] = new()
+                    mapPatches_[i, j] = new()
                     {
                         WidthRequest = unitWidth,
                         HeightRequest = unitHeight,
@@ -47,17 +46,18 @@ namespace Client
                         FontSize = 7
                     };
                     int index = i * 50 + j;
-                    mapPatches[i, j].SetBinding(Label.BackgroundColorProperty, new Binding($"MapPatchesList[{index}].PatchColor"));
-                    mapPatches[i, j].SetBinding(Label.TextProperty, new Binding($"MapPatchesList[{index}].Text"));
-                    MapGrid.Children.Add(mapPatches[i, j]);
-                    MapGrid.SetColumn(mapPatches[i, j], i);
-                    MapGrid.SetRow(mapPatches[i, j], j);
+                    mapPatches_[i, j].SetBinding(Label.BackgroundColorProperty, new Binding($"MapPatchesList[{index}].PatchColor"));
+                    mapPatches_[i, j].SetBinding(Label.TextProperty, new Binding($"MapPatchesList[{index}].Text"));
+                    MapGrid.Children.Add(mapPatches_[i, j]);
+                    MapGrid.SetColumn(mapPatches_[i, j], i);
+                    MapGrid.SetRow(mapPatches_[i, j], j);
                 }
             }
-            PureDrawMap(viewModel);
+            //PureDrawMap(viewModel);
             //InitiateObjects();
             UIinitiated = true;
         }
+        private Label[,] mapPatches_ = new Label[50, 50];
         private readonly IDispatcherTimer timer;
         private long counter;
         private int unitWidth = 10;
@@ -67,43 +67,39 @@ namespace Client
             counter++;
         }
 
+        //private void PureDrawMap(GeneralViewModel viewModel)
+        //{
+        //    for (int i = 0; i < 50; i++)
+        //    {
+        //        for (int j = 0; j < 50; j++)
+        //        {
+        //            switch ((MapPatchType)GameMap.GameMapArray[i, j])
+        //            {
+        //                case MapPatchType.RedHome:
+        //                    mapPatches_[i, j].BackgroundColor = Colors.Red; break;  //Red Home
+        //                case MapPatchType.BlueHome:
+        //                    mapPatches_[i, j].BackgroundColor = Colors.Blue; break; //Blue Home
+        //                case MapPatchType.Ruin:
+        //                    mapPatches_[i, j].BackgroundColor = Colors.Black; break; // Ruin
+        //                case MapPatchType.Shadow:
+        //                    mapPatches_[i, j].BackgroundColor = Colors.Gray; break; // Shadow
+        //                case MapPatchType.Asteroid:
+        //                    mapPatches_[i, j].BackgroundColor = Colors.Brown; break; // Asteroid
+        //                case MapPatchType.Resource:
+        //                    mapPatches_[i, j].BackgroundColor = Colors.Yellow; break; //Resource
+        //                case MapPatchType.Factory:
+        //                    mapPatches_[i, j].BackgroundColor = Colors.Orange; break; //Factiry
+        //                case MapPatchType.Community:
+        //                    mapPatches_[i, j].BackgroundColor = Colors.Chocolate; break; //Community
+        //                case MapPatchType.Fort:
+        //                    mapPatches_[i, j].BackgroundColor = Colors.Azure; break; //Fort
+        //                default:
+        //                    break;
+        //            }
 
-        private void PureDrawMap(GeneralViewModel viewModel)
-        {
-            for (int i = 0; i < 50; i++)
-            {
-                for (int j = 0; j < 50; j++)
-                {
-                    switch ((MapPatchType)GameMap.GameMapArray[i, j])
-                    {
-                        case MapPatchType.RedHome:
-                            mapPatches[i, j].BackgroundColor = Colors.Red; break;  //Red Home
-                        case MapPatchType.BlueHome:
-                            mapPatches[i, j].BackgroundColor = Colors.Blue; break; //Blue Home
-                        case MapPatchType.Ruin:
-                            mapPatches[i, j].BackgroundColor = Colors.Black; break; // Ruin
-                        case MapPatchType.Shadow:
-                            mapPatches[i, j].BackgroundColor = Colors.Gray; break; // Shadow
-                        case MapPatchType.Asteroid:
-                            mapPatches[i, j].BackgroundColor = Colors.Brown; break; // Asteroid
-                        case MapPatchType.Resource:
-                            mapPatches[i, j].BackgroundColor = Colors.Yellow; break; //Resource
-                        case MapPatchType.Factory:
-                            mapPatches[i, j].BackgroundColor = Colors.Orange; break; //Factiry
-                        case MapPatchType.Community:
-                            mapPatches[i, j].BackgroundColor = Colors.Chocolate; break; //Community
-                        case MapPatchType.Fort:
-                            mapPatches[i, j].BackgroundColor = Colors.Azure; break; //Fort
-                        default:
-                            break;
-                    }
-
-                }
-            }
-        }
-
-        private Label[,] mapPatches = new Label[50, 50];
-
+        //        }
+        //    }
+        //}
 
         //private void DrawMap()
         //{
