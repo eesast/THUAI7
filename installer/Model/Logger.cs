@@ -182,8 +182,12 @@ namespace installer.Model
             var option = new FileStreamOptions();
             option.Mode = FileMode.Append;
             option.Access = FileAccess.Write;
-            option.Share = FileShare.Read;
+            option.Share = FileShare.ReadWrite;
             writer = new StreamWriter(path, Encoding.UTF8, option);
+        }
+        ~FileLogger()
+        {
+            writer.Dispose();
         }
         protected override bool IsEnabled(LogLevel logLevel)
         {
