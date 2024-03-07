@@ -49,43 +49,43 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Remove="View\uhlobqco.ueo~" />
+	</ItemGroup>
+
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="Google.Protobuf" Version="3.25.3" />
 		<PackageReference Include="Grpc" Version="2.46.6" />
-		<PackageReference Include="Grpc.Tools" Version="2.62.0">
+		<PackageReference Include="Grpc.Tools" Version="2.60.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.6" />
+		<PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
 	</ItemGroup>
 
 
 	<ItemGroup>
-		<Compile Update="MainPage.xaml.cs">
+		<Compile Update="View\MainPage.xaml.cs">
 			<DependentUpon>MainPage.xaml</DependentUpon>
 		</Compile>
-		<Compile Update="Map.xaml.cs">
-			<DependentUpon>Map.xaml</DependentUpon>
-		</Compile>
-		<Compile Update="GameStatusBar.xaml.cs">
+		<Compile Update="Old\GameStatusBar.xaml.cs">
 			<DependentUpon>GameStatusBar.xaml</DependentUpon>
 		</Compile>
-		<Compile Update="PlayerStatusBar.xaml.cs">
+		<Compile Update="Old\PlayerStatusBar.xaml.cs">
 			<DependentUpon>PlayerStatusBar.xaml</DependentUpon>
 		</Compile>
 	</ItemGroup>
 
 
 	<ItemGroup>
-		<MauiXaml Update="Map.xaml">
+		<MauiXaml Update="Old\GameStatusBar.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="GameStatusBar.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="PlayerStatusBar.xaml">
+		<MauiXaml Update="Old\PlayerStatusBar.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 	</ItemGroup>

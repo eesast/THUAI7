@@ -113,7 +113,7 @@ message MessageOfTeam
     int64 player_id = 2;
 	int32 score = 3;
     int32 money = 4;
-
+    int64 guid=5;
 }
 
 message MessageOfObj
@@ -140,6 +140,10 @@ message MessageOfAll
     int32 game_time = 1;
     int32 red_team_score=2;
     int32 blue_team_score=3;
+    int32 red_team_money=4;
+    int32 blue_team_money=5;
+    int32 red_home_hp=6;
+    int32 blue_home_hp=7;
 }
 
 message MessageToClient

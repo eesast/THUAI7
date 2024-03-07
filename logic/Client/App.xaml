@@ -16,6 +16,7 @@
                 <Setter Property="HorizontalOptions" Value="Start" />
                 <Setter Property="FontSize" Value="Micro" />
             </Style>
+
         </ResourceDictionary>
 
 

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Client.PlayerStatusBar">
+    <Grid x:Name="PlayerBarGrid" RowSpacing="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="200"/>
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="PlayerAttributesGrid" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Grid x:Name="PlayerRoleInfoGrid" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="8*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <BoxView x:Name="MyColor" Grid.Row="0" Grid.Column="0" HeightRequest="15" WidthRequest="15" HorizontalOptions="Center" VerticalOptions="Center" />
+                <Label x:Name="MyName" Text="Name" Grid.Row="0" Grid.Column="1" FontSize="15" HorizontalOptions="Start" HorizontalTextAlignment="Start" WidthRequest="300" VerticalOptions="Center" />
+                <Label x:Name="MyHpData" Text="100/100" Grid.Row="0" Grid.Column="2" FontSize="15" HorizontalOptions="End" HorizontalTextAlignment="Start" VerticalOptions="Center" />
+                <BoxView x:Name="MyHpSlide" Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="0" HorizontalOptions="Start" WidthRequest="260"/>
+            </Grid>
+            <Label x:Name="MyMoney" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3" Text="  💰总经济：" Style="{StaticResource littleAttributes}" />
+        </Grid>
+
+        <Grid x:Name="ShipStatusAttributesGrid" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Label x:Name="ShipItem" Grid.Row="1" Grid.Column="0" Text="单位👾" FontSize="Micro"/>
+            <Label x:Name="ShipMining" Grid.Row="1" Grid.Column="1" Text="采集模块" FontSize="Micro"/>
+            <Label x:Name="ShipBuild" Grid.Row="1" Grid.Column="2" Text="建造模块" FontSize="Micro"/>
+            <Label x:Name="ShipArmor" Grid.Row="1" Grid.Column="3" Text="装甲模块" FontSize="Micro"/>
+            <Label x:Name="ShipShield" Grid.Row="1" Grid.Column="4" Text="护盾模块" FontSize="Micro"/>
+            <Label x:Name="ShipAttack" Grid.Row="1" Grid.Column="5" Text="攻击模块" FontSize="Micro"/>
+            <Label x:Name="ShipState" Grid.Row="1" Grid.Column="6" Text="状态✨️" FontSize="Micro"/>
+        </Grid>
+
+        <Grid x:Name="ShipAllAttributesGrid" Grid.Row="2" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+        </Grid>
+    </Grid>
+
+</ContentView>

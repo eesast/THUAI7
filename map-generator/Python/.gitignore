@@ -1,0 +1,5 @@
+.vscode/
+*.map
+build/
+dist/
+*__pycache__

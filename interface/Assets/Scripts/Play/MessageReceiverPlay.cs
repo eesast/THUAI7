@@ -19,7 +19,7 @@ public class MessageReceiverPlay : SingletonDontDestory<MessageReceiverPlay>
         {
             var channel = new Channel(IP + ":" + Port, ChannelCredentials.Insecure);
             var client = new AvailableService.AvailableServiceClient(channel);
-            PlayerMsg msg = new PlayerMsg()
+            PlayerMsg msgCivilShip = new PlayerMsg()
             {
                 PlayerId = 0,
                 TeamId = 0,
@@ -27,50 +27,29 @@ public class MessageReceiverPlay : SingletonDontDestory<MessageReceiverPlay>
                 X = 16000,
                 Y = 30000,
             };
-            var response = client.AddPlayer(msg);
-            // var client2 = new AvailableService.AvailableServiceClient(channel);
-            // Debug.Log(client2);
-            // PlayerMsg msg2 = new PlayerMsg() {
-            //     PlayerId = 0,
-            //     TeamId = 1,
-            //     ShipType = ShipType.NullShipType,
-            //     X = 46000,
-            //     Y = 30000,
-            // };
-            // var response2 = client.AddPlayer(msg2);
-            // var client3 = new AvailableService.AvailableServiceClient(channel);
-            // Debug.Log(client3);
-            // PlayerMsg msg3 = new PlayerMsg() {
-            //     PlayerId = 1,
-            //     TeamId = 0,
-            //     ShipType = ShipType.CivilianShip,
-            //     X = 30000,
-            //     Y = 46000,
-            // };
-            // var response3 = client.AddPlayer(msg3);
-            // var client4 = new AvailableService.AvailableServiceClient(channel);
-            // Debug.Log(client4);
-            // PlayerMsg msg4 = new PlayerMsg() {
-            //     PlayerId = 1,
-            //     TeamId = 0,
-            //     ShipType = ShipType.CivilianShip,
-            //     X = 30000,
-            //     Y = 16000,
-            // };
-            // var response4 = client.AddPlayer(msg4);
-            MapControl.GetInstance().DrawMap(client.GetMap(new NullRequest()));
-            if (await response.ResponseStream.MoveNext())
+            PlayerMsg msgSpectator = new PlayerMsg()
             {
-                var responseVal = response.ResponseStream.Current;
-                Debug.Log("recieve further info");
-                ParaDefine.GetInstance().map = responseVal.ObjMessage[0].MapMessage;
-                MapControl.GetInstance().DrawMap(ParaDefine.GetInstance().map);
-            }
-            while (await response.ResponseStream.MoveNext())
-            {
-                var responseVal = response.ResponseStream.Current;
-                Receive(responseVal);
-            }
+                PlayerId = 2024,
+                TeamId = 0,
+                ShipType = ShipType.NullShipType,
+                X = 16000,
+                Y = 30000,
+            };
+            Debug.Log("ReadyAddPlayer");
+            var response = client.AddPlayer(msgCivilShip);
+            Debug.Log("AddPlayerSuccess");
+            // if (await response.ResponseStream.MoveNext())
+            // {
+            //     var responseVal = response.ResponseStream.Current;
+            //     Debug.Log("recieve further info");
+            //     ParaDefine.GetInstance().map = responseVal.ObjMessage[0].MapMessage;
+            //     MapControl.GetInstance().DrawMap(ParaDefine.GetInstance().map);
+            // }
+            // while (await response.ResponseStream.MoveNext())
+            // {
+            //     var responseVal = response.ResponseStream.Current;
+            //     Receive(responseVal);
+            // }
             IP = null;
             Port = null;
         }
