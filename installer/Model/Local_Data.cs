@@ -121,10 +121,10 @@ namespace installer.Model
 
         public void ResetInstallPath(string newPath)
         {
-            if (Installed)
+            // 移动已有文件夹至新位置
+            try
             {
-                // 移动已有文件夹至新位置
-                try
+                if (InstallPath != newPath)
                 {
                     if (!Directory.Exists(newPath))
                     {
@@ -154,32 +154,32 @@ namespace installer.Model
                     moveTask(new DirectoryInfo(InstallPath));
                     Directory.Delete(InstallPath, true);
                     InstallPath = newPath;
-                    if (Config.ContainsKey("InstallPath"))
-                        Config["InstallPath"] = InstallPath;
-                    else
-                        Config.Add("InstallPath", InstallPath);
-                    MD5DataPath = Config["MD5DataPath"].StartsWith('.') ?
-                        Path.Combine(InstallPath, Config["MD5DataPath"]) :
-                        Config["MD5DataPath"];
-                    SaveConfig();
-                    SaveMD5Data();
-                    Installed = true;
                 }
-                catch (Exception e)
+                if (Config.ContainsKey("InstallPath"))
+                    Config["InstallPath"] = InstallPath;
+                else
+                    Config.Add("InstallPath", InstallPath);
+                MD5DataPath = Config["MD5DataPath"].StartsWith('.') ?
+                    Path.Combine(InstallPath, Config["MD5DataPath"]) :
+                    Config["MD5DataPath"];
+                SaveConfig();
+                SaveMD5Data();
+                Installed = true;
+            }
+            catch (Exception e)
+            {
+                Exceptions.Push(e);
+            }
+            finally
+            {
+                if (!Directory.Exists(LogPath))
                 {
-                    Exceptions.Push(e);
+                    Directory.CreateDirectory(LogPath);
                 }
-                finally
-                {
-                    if (!Directory.Exists(LogPath))
-                    {
-                        Directory.CreateDirectory(LogPath);
-                    }
-                    Log = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.log"));
-                    LogError = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.error.log"));
-                    Exceptions = new ExceptionStack(LogError, this);
-                    Log.LogInfo($"Move work finished: {InstallPath} -> {newPath}");
-                }
+                Log = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.log"));
+                LogError = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.error.log"));
+                Exceptions = new ExceptionStack(LogError, this);
+                Log.LogInfo($"Move work finished: {InstallPath} -> {newPath}");
             }
         }
 
