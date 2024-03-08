@@ -61,7 +61,7 @@ namespace Client.ViewModel
         private Dictionary<int, int> countMap;
 
 
-        private int[,] defaultMap; 
+        private int[,] defaultMap;
         ///* Get the Map to default map */
         private void GetMap(MessageOfMap obj)
         {
@@ -97,7 +97,7 @@ namespace Client.ViewModel
             canvas.FillEllipse(ballX, ballY, 20, 20);
         }
 
-        private Dictionary<MapPatchType, Color>PatchColorDict = new Dictionary<MapPatchType, Color>
+        private Dictionary<MapPatchType, Color> PatchColorDict = new Dictionary<MapPatchType, Color>
         {
             {MapPatchType.RedHome, Colors.Red},
             {MapPatchType.BlueHome, Colors.Blue},
@@ -636,7 +636,7 @@ namespace Client.ViewModel
                     MapPatchesList[index].TextColor = Colors.Blue;
                     break;
 
-                default :
+                default:
                     MapPatchesList[index].PatchColor = Colors.Black;
                     MapPatchesList[index].TextColor = Colors.White;
                     break;
