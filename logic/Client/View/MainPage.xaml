@@ -13,7 +13,7 @@
             <Setter Property="HorizontalOptions" Value="Start" />
             <Setter Property="FontSize" Value="Micro" />
         </Style>
-        <viewmodel:GraphicsDrawable x:Key="drawable" />
+        <viewmodel:GeneralViewModel x:Key="drawable" />
     </ContentPage.Resources>
 
 
@@ -242,7 +242,7 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>-->
 
-                <GraphicsView WidthRequest="530" Drawable="{StaticResource drawable}" HeightRequest="530" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" BackgroundColor="Blue" />
+                <GraphicsView x:Name ="DrawGraphicsView" WidthRequest="530" Drawable="{StaticResource drawable}" HeightRequest="530" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" BackgroundColor="Blue" />
 
             </Grid>
 

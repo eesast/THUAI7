@@ -6,19 +6,27 @@ using System.Threading.Tasks;
 
 namespace Client.Model
 {
-    public class Link
+    public class Link : BindableObject
     {
         private string name;
         private string url;
         public string Name
         {
             get => name;
-            set => name = value;
+            set
+            {
+                name = value;
+                OnPropertyChanged();
+            }
         }
         public string Url
         {
             get => url;
-            set => url = value;
+            set
+            {
+                url = value;
+                OnPropertyChanged();
+            }
         }
     }
 }
