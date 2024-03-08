@@ -77,7 +77,8 @@ namespace Client.Model
         public TeamEnum Team
         {
             get => team;
-            set {
+            set
+            {
                 team = value;
                 OnPropertyChanged();
             }
@@ -85,7 +86,8 @@ namespace Client.Model
         public TypeEnum Type
         {
             get => type;
-            set {
+            set
+            {
                 type = value;
                 OnPropertyChanged();
             }
@@ -93,7 +95,8 @@ namespace Client.Model
         public StateEnum State
         {
             get => state;
-            set {
+            set
+            {
                 state = value;
                 OnPropertyChanged();
             }
@@ -101,7 +104,8 @@ namespace Client.Model
         public int HP
         {
             get => Hp;
-            set {
+            set
+            {
                 Hp = value;
                 OnPropertyChanged();
             }
@@ -109,7 +113,8 @@ namespace Client.Model
         public ProducerModuleEnum ProducerModule
         {
             get => producerModule;
-            set {
+            set
+            {
                 producerModule = value;
                 OnPropertyChanged();
             }
@@ -117,7 +122,8 @@ namespace Client.Model
         public ConstuctorModuleEnum ConstuctorModule
         {
             get => constuctorModule;
-            set {
+            set
+            {
                 constuctorModule = value;
                 OnPropertyChanged();
             }
@@ -125,7 +131,8 @@ namespace Client.Model
         public ArmorModuleEnum ArmorModule
         {
             get => armorModule;
-            set {
+            set
+            {
                 armorModule = value;
                 OnPropertyChanged();
             }
@@ -133,7 +140,8 @@ namespace Client.Model
         public ShieldModuleEnum ShieldModule
         {
             get => shieldModule;
-            set {
+            set
+            {
                 shieldModule = value;
                 OnPropertyChanged();
             }
@@ -141,7 +149,8 @@ namespace Client.Model
         public AttackerModuleEnum AttackerModule
         {
             get => attackerModule;
-            set {
+            set
+            {
                 attackerModule = value;
                 OnPropertyChanged();
             }
@@ -149,7 +158,8 @@ namespace Client.Model
         public string Type_s
         {
             get => type_s;
-            set {
+            set
+            {
                 type_s = value;
                 OnPropertyChanged();
             }
@@ -157,7 +167,8 @@ namespace Client.Model
         public string State_s
         {
             get => state_s;
-            set {
+            set
+            {
                 state_s = value;
                 OnPropertyChanged();
             }
@@ -165,7 +176,8 @@ namespace Client.Model
         public string ProducerModule_s
         {
             get => producerModule_s;
-            set {
+            set
+            {
                 producerModule_s = value;
                 OnPropertyChanged();
             }
@@ -173,7 +185,8 @@ namespace Client.Model
         public string ConstuctorModule_s
         {
             get => constuctorModule_s;
-            set {
+            set
+            {
                 constuctorModule_s = value;
                 OnPropertyChanged();
             }
@@ -181,7 +194,8 @@ namespace Client.Model
         public string ArmorModule_s
         {
             get => armorModule_s;
-            set {
+            set
+            {
                 armorModule_s = value;
                 OnPropertyChanged();
             }
@@ -189,7 +203,8 @@ namespace Client.Model
         public string ShieldModule_s
         {
             get => shieldModule_s;
-            set {
+            set
+            {
                 shieldModule_s = value;
                 OnPropertyChanged();
             }
@@ -197,7 +212,8 @@ namespace Client.Model
         public string AttackerModule_s
         {
             get => attackerModule_s;
-            set {
+            set
+            {
                 attackerModule_s = value;
                 OnPropertyChanged();
             }

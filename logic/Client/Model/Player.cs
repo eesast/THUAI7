@@ -13,7 +13,8 @@ namespace Client.Model
         public bool Team
         {
             get => team;
-            set {
+            set
+            {
                 team = value;
                 OnPropertyChanged();
             }
@@ -22,7 +23,8 @@ namespace Client.Model
         public int Hp
         {
             get => hp;
-            set {
+            set
+            {
                 hp = value;
                 OnPropertyChanged();
             }
@@ -31,7 +33,8 @@ namespace Client.Model
         public int Money
         {
             get => money;
-            set {
+            set
+            {
                 money = value;
                 OnPropertyChanged();
             }
