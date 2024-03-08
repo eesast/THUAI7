@@ -44,20 +44,6 @@ namespace Client.ViewModel
             }
         }
 
-        private TestClass testClass;
-        public TestClass TestClass
-        {
-            get
-            {
-                return testClass;
-            }
-            set
-            {
-                testClass = value;
-                OnPropertyChanged();
-            }
-        }
-
 
         private List<Link> links;
         public List<Link> Links
@@ -118,9 +104,6 @@ namespace Client.ViewModel
         private void UpdateTest(object sender, EventArgs e)
         {
             counterViewModelTest++;
-            MapPatchesList[5].Text = "SS";
-            MapPatchesList[4].Text = "SS";
-            MapPatchesList[2].Text = counterViewModelTest.ToString();
             if (!hasDrawn)
             {
                 PureDrawMap(GameMap.GameMapArray);
@@ -141,6 +124,31 @@ namespace Client.ViewModel
                     BluePlayer.Ships.Add(ship);
                 }
             }
+            DrawHome(new MessageOfHome
+            {
+                X = 10,
+                Y = 10,
+                Hp = 100,
+                TeamId = 1
+            });
+
+            //DrawFactory(new MessageOfFactory
+            //{
+            //    X = 11,
+            //    Y = 11,
+            //    Hp = 100,
+            //    TeamId = 2
+            //});
+
+            DrawWormHole(new MessageOfWormhole
+            {
+                X = 12,
+                Y = 12,
+                Hp = 100
+            });
+
+            ballX += 1;
+            ballY += 1;
         }
 
         public GeneralViewModel()
@@ -174,16 +182,12 @@ namespace Client.ViewModel
                     MapPatchesList.Add(new MapPatch
                     {
                         PatchColor = Colors.AliceBlue,
-                        Text = Convert.ToString(i) + Convert.ToString(j)
                     });
                 }
             }
 
-            testPatch = new MapPatch();
-            TestPatch.PatchColor = Colors.Black;
-            TestPatch.Text = "SS";
-            testClass = new TestClass();
-            TestClass.Name = "Test";
+
+
             timerViewModel = Dispatcher.CreateTimer();
             timerViewModel.Interval = TimeSpan.FromMilliseconds(5);
             timerViewModel.Tick += new EventHandler(UpdateTest);

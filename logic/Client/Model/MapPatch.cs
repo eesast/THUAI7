@@ -19,12 +19,14 @@ namespace Client.Model
         Factory = 7,
         Community = 8,
         Fort = 9,
-        Null = 10
+        WormHole = 10,
+        Null = 11
     };
 
     public class MapPatch : BindableObject
     {
         private Color patchColor;
+        private Color textColor;
         private int x;
         private int y;
         private int unitWidth;
@@ -37,6 +39,16 @@ namespace Client.Model
             set
             {
                 patchColor = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Color TextColor
+        {
+            get => textColor;
+            set
+            {
+                textColor = value;
                 OnPropertyChanged();
             }
         }

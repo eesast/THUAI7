@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Maui.Dispatching;
+using Grpc.Core;
 
 
 namespace Client.ViewModel
@@ -17,12 +18,13 @@ namespace Client.ViewModel
     {
         public void Draw(ICanvas canvas, RectF dirtyRect)
         {
-            canvas.StrokeColor = Colors.Red;
-            canvas.StrokeSize = 6;
-            canvas.DrawLine(10, 10, 90, 100);
+            //canvas.FillColor = Colors.Red;
+
+            //// 绘制小球
+            //canvas.FillEllipse(ballX, 10, 20, 20);
         }
     }
-    public partial class GeneralViewModel : BindableObject
+    public partial class GeneralViewModel : BindableObject, IDrawable
     {
 
         private List<MessageOfAll> listOfAll;
@@ -85,6 +87,31 @@ namespace Client.ViewModel
             }
         }
 
+        int ballX = 0;
+        int ballY = 0;
+        public void Draw(ICanvas canvas, RectF dirtyRect)
+        {
+            canvas.FillColor = Colors.Red;
+
+            // 绘制小球
+            canvas.FillEllipse(ballX, ballY, 20, 20);
+        }
+
+        private Dictionary<MapPatchType, Color>PatchColorDict = new Dictionary<MapPatchType, Color>
+        {
+            {MapPatchType.RedHome, Colors.Red},
+            {MapPatchType.BlueHome, Colors.Blue},
+            {MapPatchType.Ruin, Colors.Black},
+            {MapPatchType.Shadow, Colors.Gray},
+            {MapPatchType.Asteroid, Colors.Brown},
+            {MapPatchType.Resource, Colors.Yellow},
+            {MapPatchType.Factory, Colors.Orange},
+            {MapPatchType.Community, Colors.Chocolate},
+            {MapPatchType.Fort, Colors.Azure},
+            {MapPatchType.WormHole, Colors.Purple},
+            {MapPatchType.Null, Colors.White}
+        };
+
         private void PureDrawMap(int[,] Map)
         {
             for (int i = 0; i < 50; i++)
@@ -106,7 +133,7 @@ namespace Client.ViewModel
                         case MapPatchType.Resource:
                             MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Yellow; break; //Resource
                         case MapPatchType.Factory:
-                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Orange; break; //Factiry
+                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Orange; break; //Factory
                         case MapPatchType.Community:
                             MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Chocolate; break; //Community
                         case MapPatchType.Fort:
@@ -562,61 +589,136 @@ namespace Client.ViewModel
         //    //counter++;
         //}
 
-        //private void DrawHome(MessageOfHome data)
-        //{
-        //    //Ellipse iconOfHome = new()
-        //    //{
-        //    //    WidthRequest = 2 * characterRadiusTimes * unitWidth,
-        //    //    HeightRequest = 2 * characterRadiusTimes * unitHeight,
-        //    //    HorizontalOptions = LayoutOptions.Start,
-        //    //    VerticalOptions = LayoutOptions.Start,
-        //    //    Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0),
-        //    //    Fill = (data.TeamId == (long)PlayerTeam.Red) ? Colors.Red : Colors.Blue
-        //    //};
-        //    //MapGrid.Children.Add(iconOfHome);
-        //}
+        private void DrawHome(MessageOfHome data)
+        {
+            int x = data.X;
+            int y = data.Y;
+            int hp = data.Hp;
+            long team_id = data.TeamId;
+            int index = UtilFunctions.getIndex(x, y);
+            MapPatchesList[index].Text = Convert.ToString(hp);
+            switch (team_id)
+            {
+                case (long)PlayerTeam.Red:
+                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.RedHome];
+                    MapPatchesList[index].TextColor = Colors.White;
+                    break;
 
-        //private void DrawFactory(MessageOfFactory data)
-        //{
-        //    int hp = data.Hp;
-        //    //TODO: calculate the percentage of Hp
-        //    int idx = FindIndexOfFactory(data);
-        //    //factoryArray[idx].FontSize = unitFontSize;
-        //    //factoryArray[idx].WidthRequest = unitWidth;
-        //    //factoryArray[idx].HeightRequest = unitHeight;
-        //    //factoryArray[idx].Text = Convert.ToString(hp);
-        //    //factoryArray[idx].Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0);
-        //    //factoryArray[idx].BackgroundColor = Colors.Chocolate;
-        //    ////MapGrid.Children.Add(factoryArray[idx]);
-        //}
+                case (long)PlayerTeam.Blue:
+                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.BlueHome];
+                    MapPatchesList[index].TextColor = Colors.White;
+                    break;
 
-        //private void DrawCommunity(MessageOfCommunity data)
-        //{
-        //    int hp = data.Hp;
-        //    //TODO: calculate the percentage of Hp
-        //    int idx = FindIndexOfCommunity(data);
-        //    //communityArray[idx].FontSize = unitFontSize;
-        //    //communityArray[idx].WidthRequest = unitWidth;
-        //    //communityArray[idx].HeightRequest = unitHeight;
-        //    //communityArray[idx].Text = Convert.ToString(hp);
-        //    //communityArray[idx].Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0);
-        //    //communityArray[idx].BackgroundColor = Colors.Green;
-        //    //MapGrid.Children.Add(communityArray[idx]);
-        //}
+                default:
+                    MapPatchesList[index].PatchColor = Colors.Black;
+                    MapPatchesList[index].TextColor = Colors.White;
+                    break;
+            }
+        }
 
-        //private void DrawFort(MessageOfFort data)
-        //{
-        //    int hp = data.Hp;
-        //    //TODO: calculate the percentage of Hp
-        //    int idx = FindIndexOfFort(data);
-        //    //fortArray[idx].FontSize = unitFontSize;
-        //    //fortArray[idx].WidthRequest = unitWidth;
-        //    //fortArray[idx].HeightRequest = unitHeight;
-        //    //fortArray[idx].Text = Convert.ToString(hp);
-        //    //fortArray[idx].Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0);
-        //    //fortArray[idx].BackgroundColor = Colors.Azure;
-        //    //MapGrid.Children.Add(fortArray[idx]);
-        //}
+        private void DrawFactory(MessageOfFactory data)
+        {
+            int x = data.X;
+            int y = data.Y;
+            int hp = data.Hp;
+            long team_id = data.TeamId;
+            int index = UtilFunctions.getIndex(x, y);
+            MapPatchesList[index].Text = Convert.ToString(hp);
+            switch (team_id)
+            {
+                case (long)PlayerTeam.Red:
+                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Factory];
+                    MapPatchesList[index].TextColor = Colors.Red;
+                    break;
+
+                case (long)PlayerTeam.Blue:
+                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Factory];
+                    MapPatchesList[index].TextColor = Colors.Blue;
+                    break;
+
+                default :
+                    MapPatchesList[index].PatchColor = Colors.Black;
+                    MapPatchesList[index].TextColor = Colors.White;
+                    break;
+            }
+        }
+
+        private void DrawCommunity(MessageOfCommunity data)
+        {
+            int x = data.X;
+            int y = data.Y;
+            int hp = data.Hp;
+            long team_id = data.TeamId;
+            int index = UtilFunctions.getIndex(x, y);
+            MapPatchesList[index].Text = Convert.ToString(hp);
+            switch (team_id)
+            {
+                case (long)PlayerTeam.Red:
+                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Community];
+                    MapPatchesList[index].TextColor = Colors.Red;
+                    break;
+
+                case (long)PlayerTeam.Blue:
+                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Community];
+                    MapPatchesList[index].TextColor = Colors.Blue;
+                    break;
+
+                default:
+                    MapPatchesList[index].PatchColor = Colors.Black;
+                    MapPatchesList[index].TextColor = Colors.White;
+                    break;
+            }
+        }
+
+        private void DrawFort(MessageOfFort data)
+        {
+            int x = data.X;
+            int y = data.Y;
+            int hp = data.Hp;
+            long team_id = data.TeamId;
+            int index = UtilFunctions.getIndex(x, y);
+            MapPatchesList[index].Text = Convert.ToString(hp);
+            switch (team_id)
+            {
+                case (long)PlayerTeam.Red:
+                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Fort];
+                    MapPatchesList[index].TextColor = Colors.Red;
+                    break;
+
+                case (long)PlayerTeam.Blue:
+                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Fort];
+                    MapPatchesList[index].TextColor = Colors.Blue;
+                    break;
+
+                default:
+                    MapPatchesList[index].PatchColor = Colors.Black;
+                    MapPatchesList[index].TextColor = Colors.White;
+                    break;
+            }
+        }
+
+        private void DrawWormHole(MessageOfWormhole data)
+        {
+            int x = data.X;
+            int y = data.Y;
+            int hp = data.Hp;
+            int index = UtilFunctions.getIndex(x, y);
+            MapPatchesList[index].Text = Convert.ToString(hp);
+            MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.WormHole];
+            MapPatchesList[index].TextColor = Colors.White;
+        }
+
+        private void DrawResource(MessageOfResource data)
+        {
+            int x = data.X;
+            int y = data.Y;
+            int hp = data.Progress;
+            int index = UtilFunctions.getIndex(x, y);
+            MapPatchesList[index].Text = Convert.ToString(hp);
+            MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Resource];
+            MapPatchesList[index].TextColor = Colors.White;
+        }
+
         //private void DrawBullet(MessageOfBullet data)
         //{
         //    //Ellipse iconOfBullet = new()
@@ -774,10 +876,6 @@ namespace Client.ViewModel
         //private readonly BoxView[,] mapPatches = new BoxView[50, 50];
         private readonly double characterRadiusTimes = 400;
         private readonly double bulletRadiusTimes = 200;
-
-
-
- 
 
     }
 }

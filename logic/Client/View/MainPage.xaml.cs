@@ -43,11 +43,12 @@ namespace Client
                         HorizontalOptions = LayoutOptions.Start,
                         VerticalOptions = LayoutOptions.Start,
                         Margin = new Thickness(unitWidth * j, unitHeight * i, 0, 0),
-                        FontSize = 7
+                        FontSize = 5
                     };
                     int index = i * 50 + j;
                     mapPatches_[i, j].SetBinding(Label.BackgroundColorProperty, new Binding($"MapPatchesList[{index}].PatchColor"));
                     mapPatches_[i, j].SetBinding(Label.TextProperty, new Binding($"MapPatchesList[{index}].Text"));
+                    mapPatches_[i, j].SetBinding(Label.TextColorProperty, new Binding($"MapPatchesList[{index}].TextColor"));
                     MapGrid.Children.Add(mapPatches_[i, j]);
                     MapGrid.SetColumn(mapPatches_[i, j], i);
                     MapGrid.SetRow(mapPatches_[i, j], j);
@@ -65,7 +66,10 @@ namespace Client
         private void TestRefresh(object sender, EventArgs e)
         {
             counter++;
+            DrawGraphicsView.Invalidate();
         }
+
+
 
         //private void PureDrawMap(GeneralViewModel viewModel)
         //{
