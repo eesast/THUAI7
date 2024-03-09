@@ -183,23 +183,6 @@ namespace installer.Model
             }
         }
 
-        public static bool IsUserFile(string filename)
-        {
-            if (filename.Contains("git") || filename.Contains("bin") || filename.Contains("obj"))
-                return true;
-            if (filename.EndsWith("sh") || filename.EndsWith("cmd"))
-                return true;
-            if (filename.EndsWith("gz"))
-                return true;
-            if (filename.Contains("AI.cpp") || filename.Contains("AI.py"))
-                return true;
-            if (filename.Contains("hash.json"))
-                return true;
-            if (filename.EndsWith("log"))
-                return true;
-            return false;
-        }
-
         public void ReadConfig()
         {
             try
@@ -359,6 +342,35 @@ namespace installer.Model
                 }
             });
             SaveMD5Data();
+        }
+
+
+        public static bool IsUserFile(string filename)
+        {
+            if (filename.Contains("git") || filename.Contains("bin") || filename.Contains("obj"))
+                return true;
+            if (filename.EndsWith("sh") || filename.EndsWith("cmd"))
+                return true;
+            if (filename.EndsWith("gz"))
+                return true;
+            if (filename.Contains("AI.cpp") || filename.Contains("AI.py"))
+                return true;
+            if (filename.Contains("hash.json"))
+                return true;
+            if (filename.EndsWith("log"))
+                return true;
+            return false;
+        }
+
+        public static int CountFile(string folder)
+        {
+            int result = (from f in Directory.EnumerateDirectories(folder)
+                          where !IsUserFile(f) select f).Count();
+            foreach (var d in Directory.EnumerateDirectories(folder))
+            {
+                result += CountFile(d);
+            }
+            return result;
         }
     }
 }

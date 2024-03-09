@@ -68,10 +68,10 @@ namespace installer.ViewModel
                 downloadPath = value;
                 DownloadEnabled =
                        Directory.Exists(value)
-                    && Directory.GetFiles(value).Length == 0 && Directory.GetDirectories(value).Length == 0;
+                    && Local_Data.CountFile(value) == 0 && Local_Data.CountFile(value) == 0;
                 CheckEnabled =
                        Directory.Exists(value)
-                    && (Directory.GetFiles(value).Length > 0 || Directory.GetDirectories(value).Length > 0);
+                    && (Local_Data.CountFile(value) > 0 || Local_Data.CountFile(value) > 0);
                 OnPropertyChanged();
             }
         }
