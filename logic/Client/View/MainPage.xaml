@@ -230,7 +230,7 @@
                     <BoxView x:Name="WormHole3HpSlide" Color="Green" HeightRequest="3" WidthRequest="{Binding WormHole3Length}"  Grid.Row="7" HorizontalOptions="Start" VerticalOptions="End"/>
                 </Grid>
 
-                <Grid x:Name="MapGrid" x:FieldModifier="public" WidthRequest="500" HeightRequest="500" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" BackgroundColor="Yellow" VerticalOptions="Center" HorizontalOptions="Center"/>
+                <Grid x:Name="MapGrid" x:FieldModifier="public" WidthRequest="{Binding MapWidth}" HeightRequest="{Binding MapHeight}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" BackgroundColor="Yellow" VerticalOptions="Center" HorizontalOptions="Center"/>
                 <!--<CollectionView ItemsSource="{Binding MapPatchesList}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" >
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout Orientation="Vertical" Span="50" />
@@ -242,7 +242,7 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>-->
 
-                <GraphicsView x:Name ="DrawGraphicsView" WidthRequest="530" Drawable="{StaticResource drawable}" HeightRequest="530" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" BackgroundColor="Blue" />
+                <GraphicsView x:Name ="DrawGraphicsView" WidthRequest="{Binding MapWidth}" Drawable="{StaticResource drawable}" HeightRequest="{Binding MapHeight}" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" BackgroundColor="Blue" />
 
             </Grid>
 

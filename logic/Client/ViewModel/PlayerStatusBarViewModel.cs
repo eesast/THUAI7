@@ -36,7 +36,6 @@ namespace Client.ViewModel
             }
         }
 
-
     }
 
 }
