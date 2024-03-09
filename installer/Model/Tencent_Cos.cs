@@ -75,6 +75,7 @@ namespace installer.Model
                 string localDir = Path.GetDirectoryName(savePath)     // 本地文件夹
                     ?? throw new Exception("本地文件夹路径获取失败");
                 string localFileName = Path.GetFileName(savePath);    // 指定本地保存的文件名
+                remotePath = remotePath?.Replace('\\', '/')?.TrimStart('.', '/');
                 GetObjectRequest request = new GetObjectRequest(bucket, remotePath ?? localFileName, localDir, localFileName);
 
                 Dictionary<string, string> test = request.GetRequestHeaders();
@@ -99,12 +100,14 @@ namespace installer.Model
             var array = queue.ToArray();
             int count = array.Count();
             int finished = 0;
+            if (count == 0)
+                return 0;
             var partitionar = Partitioner.Create(0, count);
             Parallel.ForEach(partitionar, (range, loopState) =>
             {
                 for (int i = range.Item1; i < range.Item2; i++)
                 {
-                    if (!loopState.IsStopped)
+                    if (loopState.IsStopped)
                         break;
                     string local = Path.Combine(basePath, array[i]);
                     int subID = -1;

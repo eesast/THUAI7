@@ -289,7 +289,11 @@ namespace Proto2THUAI7
         auto gameInfo = std::make_shared<THUAI7::GameInfo>();
         gameInfo->gameTime = allMsg.game_time();
         gameInfo->redScore = allMsg.red_team_score();
+        gameInfo->redMoney = allMsg.red_team_score();
+        gameInfo->redHomeHp = allMsg.red_home_hp();
         gameInfo->blueScore = allMsg.blue_team_score();
+        gameInfo->blueMoney = allMsg.blue_team_score();
+        gameInfo->blueHomeHp = allMsg.blue_home_hp();
         return gameInfo;
     }
 }  // namespace Proto2THUAI7

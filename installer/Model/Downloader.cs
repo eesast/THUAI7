@@ -39,7 +39,7 @@ namespace installer.Model
         {
             success, unarchieving, downloading, hash_computing, error
         }
-        public UpdateStatus Status;                         // 当前工作状态
+        public UpdateStatus Status = UpdateStatus.success;                         // 当前工作状态
 
         public ConcurrentQueue<string> downloadFailed = new ConcurrentQueue<string>();
         public string Route { get; set; }
@@ -188,6 +188,7 @@ namespace installer.Model
                 return;
             }
             Data.ReadMD5Data();
+            Status = UpdateStatus.success;
         }
 
         /// <summary>
@@ -223,6 +224,17 @@ namespace installer.Model
             File.Delete(zp);
 
             Data.ResetInstallPath(Data.InstallPath);
+            Cloud.Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.log"));
+            Cloud.LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.error.log"));
+            Cloud.Exceptions = new ExceptionStack(Cloud.LogError, Cloud);
+            Web.Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.log"));
+            Web.LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.error.log"));
+            Web.Exceptions = new ExceptionStack(Web.LogError, Web);
+            Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.log"));
+            LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.error.log"));
+            Exceptions = new ExceptionStack(LogError, this);
+            LoggerBinding();
+
             Status = UpdateStatus.hash_computing;
             Data.ScanDir();
             if (Data.MD5Update.Count != 0)
@@ -263,6 +275,7 @@ namespace installer.Model
                 Exceptions = new ExceptionStack(LogError, this);
                 LoggerBinding();
             }
+            Update();
         }
 
         /// <summary>
@@ -276,6 +289,7 @@ namespace installer.Model
             Data.MD5Update.Clear();
             Status = UpdateStatus.hash_computing;
             Data.ScanDir();
+            Status = UpdateStatus.success;
             return Data.MD5Update.Count != 0;
         }
 
@@ -288,8 +302,15 @@ namespace installer.Model
             {
                 Status = UpdateStatus.downloading;
                 Cloud.DownloadQueueAsync(Data.InstallPath,
-                    from item in Data.MD5Update select item.name,
+                    from item in Data.MD5Update where item.state != System.Data.DataRowState.Added select item.name,
                     downloadFailed).Wait();
+                foreach (var item in Data.MD5Update.Where((s) => s.state == System.Data.DataRowState.Added))
+                {
+                    var _file = item.name;
+                    var file = _file.StartsWith('.') ?
+                        Path.Combine(Data.InstallPath, _file) : _file;
+                    File.Delete(file);
+                }
                 if (downloadFailed.Count == 0)
                 {
                     Data.MD5Update.Clear();
