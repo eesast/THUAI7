@@ -39,8 +39,6 @@ namespace ClientTest
                 //if (boolRes.ActSuccess == false) break;
                 tot++;
                 if (tot % 10 == 0) moveMsg.Angle += 1;
-
-                Console.WriteLine("Move!");
             }
             return Task.CompletedTask;
         }
