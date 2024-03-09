@@ -196,6 +196,7 @@ namespace installer.Model
         /// </summary>
         public void Install()
         {
+            Data.Installed = false;
             UpdateMD5();
             if (Status == UpdateStatus.error) return;
 
@@ -215,14 +216,6 @@ namespace installer.Model
             action = deleteTask;
             deleteTask(new DirectoryInfo(Data.InstallPath));
 
-            Data.Installed = false;
-            string zp = Path.Combine(Data.InstallPath, "THUAI7.tar.gz");
-            Status = UpdateStatus.downloading;
-            Cloud.DownloadFileAsync(zp, "THUAI7.tar.gz").Wait();
-            Status = UpdateStatus.unarchieving;
-            Cloud.ArchieveUnzip(zp, Data.InstallPath);
-            File.Delete(zp);
-
             Data.ResetInstallPath(Data.InstallPath);
             Cloud.Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.log"));
             Cloud.LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.error.log"));
@@ -234,6 +227,13 @@ namespace installer.Model
             LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.error.log"));
             Exceptions = new ExceptionStack(LogError, this);
             LoggerBinding();
+
+            string zp = Path.Combine(Data.InstallPath, "THUAI7.tar.gz");
+            Status = UpdateStatus.downloading;
+            Cloud.DownloadFileAsync(zp, "THUAI7.tar.gz").Wait();
+            Status = UpdateStatus.unarchieving;
+            Cloud.ArchieveUnzip(zp, Data.InstallPath);
+            File.Delete(zp);
 
             Status = UpdateStatus.hash_computing;
             Data.ScanDir();

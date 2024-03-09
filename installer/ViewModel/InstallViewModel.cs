@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Maui.Storage;
+using installer.Model;
 
 namespace installer.ViewModel
 {
@@ -20,22 +21,44 @@ namespace installer.ViewModel
             Downloader = downloader;
             FolderPicker = folderPicker;
             downloadPath = Downloader.Data.InstallPath;
-            installEnabled = false;
+            DebugAlert3 = Downloader.Data.Installed.ToString();
             BrowseBtnClickedCommand = new AsyncRelayCommand(BrowseBtnClicked);
             CheckUpdBtnClickedCommand = new RelayCommand(CheckUpdBtnClicked);
             DownloadBtnClickedCommand = new AsyncRelayCommand(DownloadBtnClicked);
+            UpdateBtnClickedCommand = new AsyncRelayCommand(UpdateBtnClicked);
         }
 
-        private string? debugAlert;
-        public string? DebugAlert
+        private string? debugAlert1;
+        public string? DebugAlert1
         {
-            get => debugAlert;
+            get => debugAlert1;
             set
             {
-                debugAlert = value;
+                debugAlert1 = value;
                 OnPropertyChanged();
             }
         }
+        private string? debugAlert2;
+        public string? DebugAlert2
+        {
+            get => debugAlert2;
+            set
+            {
+                debugAlert2 = value;
+                OnPropertyChanged();
+            }
+        }
+        private string? debugAlert3;
+        public string? DebugAlert3
+        {
+            get => debugAlert3;
+            set
+            {
+                debugAlert3 = value;
+                OnPropertyChanged();
+            }
+        }
+
         private string downloadPath;
         public string DownloadPath
         {
@@ -43,7 +66,53 @@ namespace installer.ViewModel
             set
             {
                 downloadPath = value;
-                InstallEnabled = (value != Downloader.Data.InstallPath && Directory.Exists(value));
+                DownloadEnabled =
+                       Directory.Exists(value)
+                    && Local_Data.CountFile(value) == 0 && Local_Data.CountFile(value) == 0;
+                CheckEnabled =
+                       Directory.Exists(value)
+                    && (Local_Data.CountFile(value) > 0 || Local_Data.CountFile(value) > 0);
+                OnPropertyChanged();
+            }
+        }
+        private bool browseEnabled = true;
+        public bool BrowseEnabled
+        {
+            get => browseEnabled;
+            set
+            {
+                browseEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+        private bool checkEnabled = false;
+        public bool CheckEnabled
+        {
+            get => checkEnabled;
+            set
+            {
+                checkEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+        private bool downloadEnabled = false;
+        public bool DownloadEnabled
+        {
+            get => downloadEnabled;
+            set
+            {
+                downloadEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool updateEnabled = false;
+        public bool UpdateEnabled
+        {
+            get => updateEnabled;
+            set
+            {
+                updateEnabled = value;
                 OnPropertyChanged();
             }
         }
@@ -51,60 +120,77 @@ namespace installer.ViewModel
         public ICommand BrowseBtnClickedCommand { get; }
         private async Task BrowseBtnClicked()
         {
-            DebugAlert = "Browse Button Clicked";
-            var b = InstallEnabled;
-            InstallEnabled = false;
-            var result = await FolderPicker.PickAsync(downloadPath);
+            DebugAlert1 = "Browse Button Clicked";
+            BrowseEnabled = false;
+            CheckEnabled = false;
+            DownloadEnabled = false;
+            UpdateEnabled = false;
+            var result = await FolderPicker.PickAsync(DownloadPath);
             if (result.IsSuccessful)
             {
                 DownloadPath = result.Folder.Path;
+                // DebugAlert2 = result.Folder.Path.ToString();
             }
             else
             {
-                InstallEnabled = b;
+                DownloadPath = DownloadPath;
             }
+            BrowseEnabled = true;
+
         }
         public ICommand CheckUpdBtnClickedCommand { get; }
         private async void CheckUpdBtnClicked()
         {
-            DebugAlert = "Check Button Clicked";
+            DebugAlert1 = "Check Button Clicked";
+            BrowseEnabled = false;
+            CheckEnabled = false;
+            DownloadEnabled = false;
+            UpdateEnabled = false;
             bool updated = await Task.Run(() => Downloader.CheckUpdate());
             if (updated)
             {
-                DebugAlert = "Need to update.";
+                DebugAlert1 = "Need to update.";
+                UpdateEnabled = true;
             }
             else
             {
-                DebugAlert = "Nothing to update.";
+                DebugAlert1 = "Nothing to update.";
+                UpdateEnabled = false;
             }
+            BrowseEnabled = true;
+            CheckEnabled = true;
         }
         public ICommand DownloadBtnClickedCommand { get; }
         private async Task DownloadBtnClicked()
         {
-            if (!InstallEnabled)
-                return;
-            InstallEnabled = false;
-            DebugAlert = "Download Button Clicked";
-            await Task.Run(() => Downloader.ResetInstallPath(downloadPath));
-            await Task.Run(() => Downloader.Install());
-            DownloadPath = Downloader.Data.InstallPath;
-            InstallEnabled = true;
-        }
-
-        private bool installEnabled;
-        public bool InstallEnabled
-        {
-            get => installEnabled;
-            set
+            DebugAlert1 = "Download Button Clicked";
+            BrowseEnabled = false;
+            CheckEnabled = false;
+            DownloadEnabled = false;
+            UpdateEnabled = false;
+            if (Downloader.Data.Installed)
             {
-                installEnabled = value;
-                OnPropertyChanged("CheckEnabled");
-                OnPropertyChanged();
+                await Task.Run(() => Downloader.ResetInstallPath(DownloadPath));
             }
+            else
+            {
+                await Task.Run(() => Downloader.Install());
+            }
+            DebugAlert2 = Downloader.Data.InstallPath;
+            CheckEnabled = true;
+            BrowseEnabled = true;
         }
-        public bool CheckEnabled
+        public ICommand UpdateBtnClickedCommand { get; }
+        private async Task UpdateBtnClicked()
         {
-            get => !installEnabled;
+            DebugAlert1 = "Update Button Clicked";
+            BrowseEnabled = false;
+            CheckEnabled = false;
+            DownloadEnabled = false;
+            UpdateEnabled = false;
+            await Task.Run(() => Downloader.Update());
+            CheckEnabled = true;
+            BrowseEnabled = true;
         }
     }
 }
