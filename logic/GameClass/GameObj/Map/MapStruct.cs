@@ -17,7 +17,7 @@ public class MapStreamError(Stream str) : Exception
 #endregion
 
 /// <summary>
-/// 地图结构体
+/// 地图结构体，本结构将会被MapGenerator-Python引用——asdawej
 /// </summary>
 public readonly struct MapStruct
 {

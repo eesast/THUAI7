@@ -65,7 +65,7 @@ int THUAI7Main(int argc, char** argv, CreateAIFunc AIBuilder)
         TCLAP::ValueArg<int> teamID("t", "teamID", "Team ID 0,1 valid only", true, -1, &teamIdConstraint);
         cmd.add(teamID);
 
-        std::vector<int> validPlayerIDs{0, 1, 2, 3, 4};
+        std::vector<int> validPlayerIDs{0, 1, 2, 3, 4};  // 0代表team
         TCLAP::ValuesConstraint<int> playerIdConstraint(validPlayerIDs);
         TCLAP::ValueArg<int> playerID("p", "playerID", "Player ID 0,1,2,3,4 valid only", true, -1, &playerIdConstraint);
         cmd.add(playerID);
