@@ -33,10 +33,8 @@ class Communication:
     def Move(self, time: int, angle: float, playerID: int) -> bool:
         try:
             with self.__mtxLimit:
-                if (
-                    self.__counter >= self.__limit
-                    or self.__counterMove >= self.__moveLimit
-                ):
+                if (self.__counter >= self.__limit
+                        or self.__counterMove >= self.__moveLimit):
                     return False
                 self.__counter += 1
                 self.__counterMove += 1
@@ -55,8 +53,8 @@ class Communication:
                     return False
                 self.__counter += 1
             sendResult: Message2Clients.BoolRes = self.__THUAI7Stub.Send(
-                THUAI72Proto.THUAI72ProtobufSendMsg(
-                    playerID, toID, teamID, message, True if isinstance(message, bytes) else False)
+                THUAI72Proto.THUAI72ProtobufSendMsg(playerID, toID, teamID, message,
+                                                    True if isinstance(message, bytes) else False)
             )
         except grpc.RpcError:
             return False
@@ -136,10 +134,8 @@ class Communication:
     def EndAllAction(self, playerID: int, teamID: int) -> bool:
         try:
             with self.__mtxLimit:
-                if (
-                    self.__counter >= self.__limit
-                    or self.__counterMove >= self.__moveLimit
-                ):
+                if (self.__counter >= self.__limit
+                        or self.__counterMove >= self.__moveLimit):
                     return False
                 self.__counter += 1
                 self.__counterMove += 1
@@ -158,8 +154,8 @@ class Communication:
                     return False
                 self.__counter += 1
             sendResult: Message2Clients.BoolRes = self.__THUAI7Stub.Send(
-                THUAI72Proto.THUAI72ProtobufSendMsg(
-                    playerID, toID, teamID, message, True if isinstance(message, bytes) else False)
+                THUAI72Proto.THUAI72ProtobufSendMsg(playerID, toID, teamID, message,
+                                                    True if isinstance(message, bytes) else False)
             )
         except grpc.RpcError:
             return False

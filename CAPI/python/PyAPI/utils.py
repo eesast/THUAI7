@@ -44,10 +44,8 @@ class AssistFunction:
                 for _ in range(divide):
                     selfX += dx
                     selfY += dy
-                    if (
-                        map[AssistFunction.GridToCell(int(selfX))][AssistFunction.GridToCell(int(selfY))]
-                        != THUAI7.PlaceType.Shadow
-                    ):
+                    if (map[AssistFunction.GridToCell(int(selfX))][AssistFunction.GridToCell(int(selfY))]
+                            != THUAI7.PlaceType.Shadow):
                         return False
                 else:
                     return True
@@ -55,10 +53,8 @@ class AssistFunction:
                 for _ in range(divide):
                     selfX += dx
                     selfY += dy
-                    if (
-                        map[AssistFunction.GridToCell(int(selfX))][AssistFunction.GridToCell(int(selfY))]
-                        == THUAI7.PlaceType.Ruin
-                    ):
+                    if (map[AssistFunction.GridToCell(int(selfX))][AssistFunction.GridToCell(int(selfY))]
+                            == THUAI7.PlaceType.Ruin):
                         return False
                 else:
                     return True
@@ -507,5 +503,7 @@ class THUAI72Proto:
         )
 
     @staticmethod
-    def THUAI72ProtobufRecoverMsg(playerID: int, recover: int, teamID: int) -> Message2Server.RecoverMsg:
+    def THUAI72ProtobufRecoverMsg(
+        playerID: int, recover: int, teamID: int
+    ) -> Message2Server.RecoverMsg:
         return Message2Server.RecoverMsg(player_id=playerID, team_id=teamID, recover=recover)

@@ -295,10 +295,7 @@ class Logic(ILogic):
                 self.__LoadBufferCase(item)
             if Setting.asynchronous():
                 with self.__mtxState:
-                    self.__currentState, self.__bufferState = (
-                        self.__bufferState,
-                        self.__currentState,
-                    )
+                    self.__currentState, self.__bufferState = self.__bufferState, self.__currentState
                     self.__counterState = self.__counterBuffer
                     self.__logger.info("Update state!")
                 self.__freshed = True
@@ -345,18 +342,14 @@ class Logic(ILogic):
                 item.bullet_message.y,
                 self.__bufferState.gameMap,
             ):
-                self.__bufferState.bullets.append(
-                    Proto2THUAI7.Protobuf2THUAI7Bullet(item.bullet_message)
-                )
+                self.__bufferState.bullets.append(Proto2THUAI7.Protobuf2THUAI7Bullet(item.bullet_message))
                 self.__logger.debug("Add Bullet!")
 
         elif item.WhichOneof("message_of_obj") == "factory_message":
             if AssistFunction.HaveView(self.__bufferState.self.viewRange, self.__bufferState.self.x,
                                        self.__bufferState.self.y, item.factory_message.x, item.factory_message.y, self.__bufferState.gameMap):
-                pos = (
-                    AssistFunction.GridToCell(
-                        item.factory_message.x), AssistFunction.GridToCell(
-                        item.factory_message.y))
+                pos = (AssistFunction.GridToCell(item.factory_message.x),
+                       AssistFunction.GridToCell(item.factory_message.y))
                 if pos not in self.__bufferState.mapInfo.factoryState:
                     self.__bufferState.mapInfo.factoryState[pos] = item.factory_message.hp
                     self.__logger.debug("New Factory")
@@ -373,10 +366,8 @@ class Logic(ILogic):
                 item.community_message.y,
                 self.__bufferState.gameMap,
             ):
-                pos = (
-                    AssistFunction.GridToCell(
-                        item.community_message.x), AssistFunction.GridToCell(
-                        item.community_message.y))
+                pos = (AssistFunction.GridToCell(item.community_message.x),
+                       AssistFunction.GridToCell(item.community_message.y))
                 if pos not in self.__bufferState.mapInfo.communityState:
                     self.__bufferState.mapInfo.communityState[pos] = item.community_message.hp
                     self.__logger.debug("New Community")
@@ -385,9 +376,12 @@ class Logic(ILogic):
                     self.__logger.debug("Update Community")
 
         elif item.WhichOneof("message_of_obj") == "fort_message":
-            if AssistFunction.HaveView(self.__bufferState.self.viewRange, self.__bufferState.self.x,
-                                       self.__bufferState.self.y, item.fort_message.x, item.fort_message.y, self.__bufferState.gameMap):
-                pos = (AssistFunction.GridToCell(item.fort_message.x), AssistFunction.GridToCell(item.fort_message.y))
+            if AssistFunction.HaveView(self.__bufferState.self.viewRange,
+                                       self.__bufferState.self.x, self.__bufferState.self.y,
+                                       item.fort_message.x, item.fort_message.y,
+                                       self.__bufferState.gameMap):
+                pos = (AssistFunction.GridToCell(item.fort_message.x),
+                       AssistFunction.GridToCell(item.fort_message.y))
                 if pos not in self.__bufferState.mapInfo.fortState:
                     self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
                     self.__logger.debug("New Fort")
@@ -396,41 +390,38 @@ class Logic(ILogic):
                     self.__logger.debug("Update Fort")
 
         elif item.WhichOneof("message_of_obj") == "wormhole_message":
-            pos = (
-                AssistFunction.GridToCell(
-                    item.wormhole_message.x), AssistFunction.GridToCell(
-                    item.wormhole_message.y))
+            pos = (AssistFunction.GridToCell(item.wormhole_message.x),
+                   AssistFunction.GridToCell(item.wormhole_message.y))
             self.__bufferState.mapInfo.wormholeState[pos] = item.wormhole_message.hp
             self.__logger.debug("Update Wormhole")
 
         elif item.WhichOneof("message_of_obj") == "home_message":
-            if AssistFunction.HaveView(self.__bufferState.self.viewRange, self.__bufferState.self.x,
-                                       self.__bufferState.self.y, item.home_message.x, item.home_message.y, self.__bufferState.gameMap):
-                pos = (AssistFunction.GridToCell(item.home_message.x), AssistFunction.GridToCell(item.home_message.y))
+            if AssistFunction.HaveView(self.__bufferState.self.viewRange,
+                                       self.__bufferState.self.x, self.__bufferState.self.y,
+                                       item.home_message.x, item.home_message.y,
+                                       self.__bufferState.gameMap):
+                pos = (AssistFunction.GridToCell(item.home_message.x),
+                       AssistFunction.GridToCell(item.home_message.y))
                 self.__bufferState.mapInfo.homeState[pos] = item.home_message.hp
                 self.__logger.debug("Update Home")
 
         elif item.WhichOneof("message_of_obj") == "resource_message":
-            if AssistFunction.HaveView(self.__bufferState.self.viewRange, self.__bufferState.self.x,
-                                       self.__bufferState.self.y, item.resource_message.x, item.resource_message.y, self.__bufferState.gameMap):
-                pos = (
-                    AssistFunction.GridToCell(
-                        item.resource_message.x), AssistFunction.GridToCell(
-                        item.resource_message.y))
+            if AssistFunction.HaveView(self.__bufferState.self.viewRange,
+                                       self.__bufferState.self.x, self.__bufferState.self.y,
+                                       item.resource_message.x, item.resource_message.y,
+                                       self.__bufferState.gameMap):
+                pos = (AssistFunction.GridToCell(item.resource_message.x),
+                       AssistFunction.GridToCell(item.resource_message.y))
                 self.__bufferState.mapInfo.resourceState[pos] = item.resource_message.progress
                 self.__logger.debug("Update Resource")
 
         elif item.WhichOneof("message_of_obj") == "news_message":
             if item.news_message.to_id == self.__playerID:
                 if item.news_message.WhichOneof("news") == "text_message":
-                    self.__messageQueue.put(
-                        (item.news_message.from_id, item.news_message.text_message)
-                    )
+                    self.__messageQueue.put((item.news_message.from_id, item.news_message.text_message))
                     self.__logger.debug("Add News!")
                 elif item.news_message.WhichOneof("news") == "binary_message":
-                    self.__messageQueue.put(
-                        (item.news_message.from_id, item.news_message.binary_message)
-                    )
+                    self.__messageQueue.put((item.news_message.from_id, item.news_message.binary_message))
                     self.__logger.debug("Add News!")
                 else:
                     self.__logger.error("Unknown News!")
@@ -465,10 +456,7 @@ class Logic(ILogic):
             with self.__cvBuffer:
                 self.__cvBuffer.wait_for(lambda: self.__bufferUpdated)
                 with self.__mtxState:
-                    self.__bufferState, self.__currentState = (
-                        self.__currentState,
-                        self.__bufferState,
-                    )
+                    self.__bufferState, self.__currentState = self.__currentState, self.__bufferState
                     self.__counterState = self.__counterBuffer
                 self.__bufferUpdated = False
                 self.__logger.info("Update state!")
@@ -499,13 +487,9 @@ class Logic(ILogic):
         #         os.path.realpath(__file__))) + "/logs")
 
         if platform.system().lower() == "windows":
-            os.system(
-                f'mkdir "{os.path.dirname(os.path.dirname(os.path.realpath(__file__)))}\\logs"'
-            )
+            os.system(f'mkdir "{os.path.dirname(os.path.dirname(os.path.realpath(__file__)))}\\logs"')
         else:
-            os.system(
-                f'mkdir -p "{os.path.dirname(os.path.dirname(os.path.realpath(__file__)))}/logs"'
-            )
+            os.system(f'mkdir -p "{os.path.dirname(os.path.dirname(os.path.realpath(__file__)))}/logs"')
 
         fileHandler = logging.FileHandler(
             os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -565,9 +549,7 @@ class Logic(ILogic):
                     self.__timer.EndTimer()
 
         if self.__TryConnection():
-            self.__logger.info(
-                "Connect to the server successfully, AI thread will be started."
-            )
+            self.__logger.info("Connect to the server successfully, AI thread will be started.")
             self.__threadAI = threading.Thread(target=AIThread)
             self.__threadAI.start()
             self.__ProcessMessage()
