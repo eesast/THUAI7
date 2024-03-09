@@ -23,26 +23,26 @@ namespace Server
         [Option("civilShipNum", Required = false, HelpText = "The number of civil ship num, 1 by default")]
         public ushort CivilShipCount { get; set; } = 1;
 
-        [Option("MaxCivilShipNum", Required = false, HelpText = "The number of max civil ship num, 3 by default")]
-        public ushort MaxCivilShipCount { get; set; } = 3;
+        [Option("MaxCivilShipNum", Required = false, HelpText = "The number of max civil ship num, 2 by default")]
+        public ushort MaxCivilShipCount { get; set; } = 2;
 
-        [Option("MaxPlayerNumPerTeam", Required = false, HelpText = "The max player number of team, 5 by defualt")]
-        public ushort MaxPlayerNumPerTeam { get; set; } = 5;
+        [Option("MaxPlayerNumPerTeam", Required = false, HelpText = "The max player number of team, 4 by defualt")]
+        public ushort MaxPlayerNumPerTeam { get; set; } = 6;
 
-        [Option("warShipNum", Required = false, HelpText = "The number of civil ship num, 0 by default")]
+        [Option("warShipNum", Required = false, HelpText = "The number of war ship num, 0 by default")]
         public ushort WarShipCount { get; set; } = 0;
 
-        [Option("MaxWarShipNum", Required = false, HelpText = "The number of civil ship num, 4 by default")]
-        public ushort MaxWarShipCount { get; set; } = 4;
+        [Option("MaxWarShipNum", Required = false, HelpText = "The number of war ship num, 2 by default")]
+        public ushort MaxWarShipCount { get; set; } = 2;
 
-        [Option("flagShipNum", Required = false, HelpText = "The number of civil ship num, 0 by default")]
+        [Option("flagShipNum", Required = false, HelpText = "The number of flag ship num, 0 by default")]
         public ushort FlagShipCount { get; set; } = 0;
 
-        [Option("MaxFlagShipNum", Required = false, HelpText = "The number of civil ship num, 1 by default")]
+        [Option("MaxFlagShipNum", Required = false, HelpText = "The number of flag ship num, 1 by default")]
         public ushort MaxFlagShipCount { get; set; } = 1;
 
-        [Option("MaxShipNum", Required = false, HelpText = "The max number of Ship, 8 by default")]
-        public ushort MaxShipCount { get; set; } = 8;
+        [Option("MaxShipNum", Required = false, HelpText = "The max number of Ship, 3 by default")]
+        public ushort MaxShipCount { get; set; } = 5;
 
         [Option("homeNum", Required = false, HelpText = "The number of Home , 1 by default")]
         public ushort HomeCount { get; set; } = 1;
@@ -64,7 +64,7 @@ namespace Server
         [Option('u', "url", Required = false, HelpText = "Web Url")]
         public string Url { get; set; } = "114514";
         [Option('m', "mapResource", Required = false, HelpText = "Map Resource Path")]
-        public string mapResource { get; set; } = "114514";
+        public string mapResource { get; set; } = DefaultArgumentOptions.MapResource;
         [Option("requestOnly", Required = false, HelpText = "Only send web requests")]
         public bool RequestOnly { get; set; } = false;
         [Option("finalGame", Required = false, HelpText = "Whether it is the final game")]

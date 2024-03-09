@@ -1,75 +1,60 @@
 using Google.Protobuf;
 using Protobuf;
-using System;
-using System.IO;
 using System.IO.Compression;
 
 namespace Playback
 {
     public class MessageWriter : IDisposable
     {
-        private FileStream fs;
-        private CodedOutputStream cos;
-        private MemoryStream ms;
-        private GZipStream gzs;
-        private const int memoryCapacity = 10 * 1024 * 1024;    // 10M
+        /// <summary>
+        /// 回放文件绝对路径
+        /// </summary>
+        public string FileName { get; }
 
-        private static void ClearMemoryStream(MemoryStream msToClear)
-        {
-            msToClear.Position = 0;
-            msToClear.SetLength(0);
-        }
+        private readonly CodedOutputStream cos; // Protobuf类型二进制输出流
+
+        public bool Disposed { get; private set; } = false;
 
         public MessageWriter(string fileName, uint teamCount, uint playerCount)
         {
-            if (!fileName.EndsWith(PlayBackConstant.ExtendedName))
-            {
-                fileName += PlayBackConstant.ExtendedName;
-            }
-
-            fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-            fs.Write(PlayBackConstant.Prefix);      // 写入前缀
-
-            fs.Write(BitConverter.GetBytes((UInt32)teamCount));    // 写入队伍数
-            fs.Write(BitConverter.GetBytes((UInt32)playerCount));    // 写入每队的玩家人数
-            ms = new MemoryStream(memoryCapacity);
-            cos = new CodedOutputStream(ms);
-            gzs = new GZipStream(fs, CompressionMode.Compress);
+            Utils.FileNameRegular(ref fileName);
+            FileStream fs = File.Create(fileName);
+            FileName = fs.Name;
+            fs.WriteHeader(teamCount, playerCount);
+            GZipStream gzs = new(fs, CompressionMode.Compress);
+            cos = new(gzs);
         }
 
         public void WriteOne(MessageToClient msg)
         {
+            if (Disposed) return;
             cos.WriteMessage(msg);
-            if (ms.Length > memoryCapacity)
-                Flush();
         }
 
         public void Flush()
         {
-            if (fs.CanWrite)
-            {
-                cos.Flush();
-                gzs.Write(ms.GetBuffer(), 0, (int)ms.Length);
-                gzs.Flush();
-                ClearMemoryStream(ms);
-                fs.Flush();
-            }
+            cos.Flush();
         }
 
         public void Dispose()
         {
-            if (fs.CanWrite)
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (Disposed) return;
+            if (disposing)
             {
-                Flush();
                 cos.Dispose();
-                gzs.Dispose();
-                fs.Dispose();
             }
+            Disposed = true;
         }
 
         ~MessageWriter()
         {
-            Dispose();
+            Dispose(false);
         }
     }
 }
