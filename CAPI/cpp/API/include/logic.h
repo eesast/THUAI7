@@ -51,7 +51,6 @@ private:
     int64_t teamID;
     THUAI7::PlayerTeam playerTeam;
     THUAI7::ShipType shipType;
-
     std::unique_ptr<IGameTimer> timer;
     std::thread tAI;  // 用于运行AI的线程
 
