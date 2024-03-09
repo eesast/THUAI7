@@ -301,11 +301,13 @@ namespace Client.ViewModel
         {
             try
             {
-                CancellationToken cts = new CancellationToken();
-                while (responseStream != null && await responseStream.ResponseStream.MoveNext(cts))
+                while (responseStream != null && await responseStream.ResponseStream.MoveNext())
                 {
                     lock (drawPicLock)
                     {
+                        ballX += 20;
+                        ballY += 20;
+
                         listOfAll.Clear();
                         listOfShip.Clear();
                         listOfBullet.Clear();
@@ -805,104 +807,6 @@ namespace Client.ViewModel
             canvas.FontColor = Colors.White;
             canvas.DrawString(Convert.ToString(hp), x - 5, y - 5, 10, 10, HorizontalAlignment.Left, VerticalAlignment.Top);
         }
-
-        //private void DrawBullet(MessageOfBullet data)
-        //{
-        //    //Ellipse iconOfBullet = new()
-        //    //{
-        //    //    WidthRequest = 2 * bulletRadiusTimes * unitWidth,
-        //    //    HeightRequest = 2 * bulletRadiusTimes * unitHeight,
-        //    //    HorizontalOptions = LayoutOptions.Start,
-        //    //    VerticalOptions = LayoutOptions.Start,
-        //    //    Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * bulletRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * bulletRadiusTimes, 0, 0),
-        //    //    Fill = (data.TeamId == (long)PlayerTeam.Red) ? Colors.Red : Colors.Blue
-        //    //};
-        //    //switch (data.Type)
-        //    //{
-        //    //    case BulletType.Plasma:
-        //    //        iconOfBullet.Fill = Colors.Yellow;
-        //    //        break;
-        //    //    case BulletType.Laser:
-        //    //        iconOfBullet.Fill = Colors.Orange;
-        //    //        break;
-        //    //    case BulletType.Missile:
-        //    //        iconOfBullet.Fill = Colors.Purple;
-        //    //        break;
-        //    //    case BulletType.Arc:
-        //    //        iconOfBullet.Fill = Colors.Green;
-        //    //        break;
-        //    //}
-        //    //MapGrid.Children.Add(iconOfBullet);
-        //}
-
-        //private void DrawBombedBullet(MessageOfBombedBullet data)
-        //{
-        //    //Ellipse iconOfBombedBullet = new()
-        //    //{
-        //    //    WidthRequest = 2 * bulletRadiusTimes * unitWidth,
-        //    //    HeightRequest = 2 * bulletRadiusTimes * unitHeight,
-        //    //    HorizontalOptions = LayoutOptions.Start,
-        //    //    VerticalOptions = LayoutOptions.Start,
-        //    //    Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * bulletRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * bulletRadiusTimes, 0, 0),
-        //    //    Fill = (data.MappingId == (long)PlayerTeam.Red) ? Colors.Red : Colors.Blue
-        //    //};
-        //    //switch (data.Type)
-        //    //{
-        //    //    case BulletType.Plasma:
-        //    //        iconOfBombedBullet.Fill = Colors.Yellow;
-        //    //        break;
-        //    //    case BulletType.Laser:
-        //    //        iconOfBombedBullet.Fill = Colors.Orange;
-        //    //        break;
-        //    //    case BulletType.Missile:
-        //    //        iconOfBombedBullet.Fill = Colors.Purple;
-        //    //        break;
-        //    //    case BulletType.Arc:
-        //    //        iconOfBombedBullet.Fill = Colors.Green;
-        //    //        break;
-        //    //}
-        //    //MapGrid.Children.Add(iconOfBombedBullet);
-        //}
-
-        //private void DrawResource(MessageOfResource data)
-        //{
-        //    int idx = FindIndexOfResource(data);
-        //    //resourceArray[idx].FontSize = unitFontSize;
-        //    //resourceArray[idx].WidthRequest = unitWidth;
-        //    //resourceArray[idx].HeightRequest = unitHeight;
-        //    //resourceArray[idx].Text = Convert.ToString(data.Progress);
-        //    //resourceArray[idx].Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0);
-        //    //MapGrid.Children.Add(resourceArray[idx]);
-        //}
-
-        //private void DrawShip(MessageOfShip data)
-        //{
-        //    //Ellipse iconOfShip = new()
-        //    //{
-        //    //    WidthRequest = 2 * characterRadiusTimes * unitWidth,
-        //    //    HeightRequest = 2 * characterRadiusTimes * unitHeight,
-        //    //    HorizontalOptions = LayoutOptions.Start,
-        //    //    VerticalOptions = LayoutOptions.Start,
-        //    //    Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0),
-        //    //    Fill = (data.TeamId == (long)PlayerTeam.Red) ? Colors.Red : Colors.Blue
-        //    //};
-        //    Label nameOfShip = new()
-        //    {
-        //        FontSize = unitFontSize,
-        //        WidthRequest = unitWidth,
-        //        HeightRequest = unitHeight,
-        //        Text = data.ShipType.ToString()[0] + data.PlayerId.ToString(),
-        //        HorizontalOptions = LayoutOptions.Start,
-        //        VerticalOptions = LayoutOptions.Start,
-        //        HorizontalTextAlignment = TextAlignment.Center,
-        //        VerticalTextAlignment = TextAlignment.Center,
-        //        BackgroundColor = Colors.Transparent,
-        //        Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0)
-        //    };
-        //    //MapGrid.Children.Add(iconOfShip);
-        //    //MapGrid.Children.Add(nameOfShip);
-        //}
-
 
         private bool isClientStocked = false;
         private bool hasDrawn = false;

@@ -104,9 +104,9 @@ namespace Client.ViewModel
         private void UpdateTest(object sender, EventArgs e)
         {
             counterViewModelTest++;
-            if (!hasDrawn)
+            if (!hasDrawn && getMapFlag)
             {
-                PureDrawMap(GameMap.GameMapArray);
+                PureDrawMap(defaultMap);
                 hasDrawn = true;
             }
             if (testcounter < 30)
@@ -147,8 +147,8 @@ namespace Client.ViewModel
                 Hp = 100
             });
 
-            ballX += 1;
-            ballY += 1;
+            //ballX += 1;
+            //ballY += 1;
         }
 
         public GeneralViewModel()
@@ -186,12 +186,20 @@ namespace Client.ViewModel
                 }
             }
 
-
+            ConnectToServer(new string[]{
+                "127.0.0.1",
+                "8888",
+                "1",
+                "1",
+                "1"
+            });
 
             timerViewModel = Dispatcher.CreateTimer();
             timerViewModel.Interval = TimeSpan.FromMilliseconds(5);
             timerViewModel.Tick += new EventHandler(UpdateTest);
             timerViewModel.Start();
+
+            OnReceive();
         }
     }
 }
