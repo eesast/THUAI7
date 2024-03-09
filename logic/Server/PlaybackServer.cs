@@ -1,4 +1,5 @@
-﻿using Playback;
+﻿using Grpc.Core;
+using Playback;
 using Protobuf;
 using System.Collections.Concurrent;
 using Timothy.FrameRateTask;
@@ -45,66 +46,66 @@ namespace Server
         public override int[] GetMoney() => new int[0];
         public override int[] GetScore() => FinalScore;
 
-        //public override async Task AddPlayer(PlayerMsg request, IServerStreamWriter<MessageToClient> responseStream, ServerCallContext context)
-        //{
-        //    Console.WriteLine($"AddPlayer: {request.PlayerId}");
-        //    if (request.PlayerId >= spectatorMinPlayerID && options.NotAllowSpectator == false)
-        //    {
-        //        // 观战模式
-        //        lock (spectatorJoinLock) // 具体原因见另一个上锁的地方
-        //        {
-        //            if (semaDict.TryAdd(request.PlayerId, (new SemaphoreSlim(0, 1), new SemaphoreSlim(0, 1))))
-        //            {
-        //                Console.WriteLine("A new spectator comes to watch this game.");
-        //                IsSpectatorJoin = true;
-        //            }
-        //            else
-        //            {
-        //                Console.WriteLine($"Duplicated Spectator ID {request.PlayerId}");
-        //                return;
-        //            }
-        //        }
-        //        do
-        //        {
-        //            semaDict[request.PlayerId].Item1.Wait();
-        //            try
-        //            {
-        //                if (currentGameInfo != null)
-        //                {
-        //                    await responseStream.WriteAsync(currentGameInfo);
-        //                    Console.WriteLine("Send!");
-        //                }
-        //            }
-        //            catch (InvalidOperationException)
-        //            {
-        //                if (semaDict.TryRemove(request.PlayerId, out var semas))
-        //                {
-        //                    try
-        //                    {
-        //                        semas.Item1.Release();
-        //                        semas.Item2.Release();
-        //                    }
-        //                    catch { }
-        //                    Console.WriteLine($"The spectator {request.PlayerId} exited");
-        //                    return;
-        //                }
-        //            }
-        //            catch (Exception)
-        //            {
-        //                // Console.WriteLine(ex);
-        //            }
-        //            finally
-        //            {
-        //                try
-        //                {
-        //                    semaDict[request.PlayerId].Item2.Release();
-        //                }
-        //                catch { }
-        //            }
-        //        } while (IsGaming);
-        //        return;
-        //    }
-        //}
+        public override async Task AddPlayer(PlayerMsg request, IServerStreamWriter<MessageToClient> responseStream, ServerCallContext context)
+        {
+            Console.WriteLine($"AddPlayer: {request.PlayerId}");
+            if (request.PlayerId >= spectatorMinPlayerID && options.NotAllowSpectator == false)
+            {
+                // 观战模式
+                lock (spectatorJoinLock) // 具体原因见另一个上锁的地方
+                {
+                    if (semaDict.TryAdd(request.PlayerId, (new SemaphoreSlim(0, 1), new SemaphoreSlim(0, 1))))
+                    {
+                        Console.WriteLine("A new spectator comes to watch this game.");
+                        IsSpectatorJoin = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Duplicated Spectator ID {request.PlayerId}");
+                        return;
+                    }
+                }
+                do
+                {
+                    semaDict[request.PlayerId].Item1.Wait();
+                    try
+                    {
+                        if (currentGameInfo != null)
+                        {
+                            await responseStream.WriteAsync(currentGameInfo);
+                            Console.WriteLine("Send!");
+                        }
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        if (semaDict.TryRemove(request.PlayerId, out var semas))
+                        {
+                            try
+                            {
+                                semas.Item1.Release();
+                                semas.Item2.Release();
+                            }
+                            catch { }
+                            Console.WriteLine($"The spectator {request.PlayerId} exited");
+                            return;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        // Console.WriteLine(ex);
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            semaDict[request.PlayerId].Item2.Release();
+                        }
+                        catch { }
+                    }
+                } while (IsGaming);
+                return;
+            }
+        }
 
         public void ReportGame(MessageToClient? msg)
         {
