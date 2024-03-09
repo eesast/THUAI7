@@ -64,7 +64,7 @@ namespace Server
         [Option('u', "url", Required = false, HelpText = "Web Url")]
         public string Url { get; set; } = "114514";
         [Option('m', "mapResource", Required = false, HelpText = "Map Resource Path")]
-        public string mapResource { get; set; } = "114514";
+        public string mapResource { get; set; } = DefaultArgumentOptions.MapResource;
         [Option("requestOnly", Required = false, HelpText = "Only send web requests")]
         public bool RequestOnly { get; set; } = false;
         [Option("finalGame", Required = false, HelpText = "Whether it is the final game")]

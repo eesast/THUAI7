@@ -46,7 +46,6 @@ namespace Server
             Console.WriteLine("Game starts!");
             CreateStartFile();
             game.StartGame((int)options.GameTimeInSecond * 1000);
-            Console.WriteLine($"IsGaming:{game.GameMap.Timer.IsGaming}");
             Thread.Sleep(1);
             new Thread(() =>
             {
