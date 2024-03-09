@@ -37,7 +37,8 @@ namespace Preparation.Utility
     }
 
     /// <summary>
-    /// 参数要求倍率speed（默认1）以及AtomicInt类的Score，
+    /// 参数要求倍率speed（默认1）
+    /// 可（在构造时）使用SetScore以设定AtomicInt类的Score
     /// 在发生正向的变化时，自动给Score加上正向变化的差乘以speed。
     /// 注意：AtomicIntOnlyAddScore本身为AtomicInt，提供的Score可能构成环而死锁。
     /// </summary>
@@ -46,11 +47,12 @@ namespace Preparation.Utility
         public AtomicInt Score { get; set; }
         public AtomicDouble speed;
         public AtomicDouble remainder = new(0);
-        public AtomicIntOnlyAddScore(int x, AtomicInt Score, double speed = 1.0) : base(x)
+        public AtomicIntOnlyAddScore(int x, double speed = 1.0) : base(x)
         {
-            this.Score = Score;
             this.speed = new(speed);
+            this.Score = new(0);
         }
+        public void SetScore(AtomicInt score) => Score = score;
         private int DealWithRemainder(int v)
         {
             double q = speed * v + remainder;
@@ -129,7 +131,8 @@ namespace Preparation.Utility
     }
 
     /// <summary>
-    /// 参数要求倍率speed（默认1）以及AtomicLong类的Score，
+    /// 参数要求倍率speed（默认1）
+    /// 可（在构造时）使用SetScore以设定AtomicLong类的Score
     /// 在发生正向的变化时，自动给Score加上正向变化的差乘以speed。
     /// </summary>
     public class AtomicIntOnlyAddLongScore : AtomicInt
@@ -137,11 +140,12 @@ namespace Preparation.Utility
         public AtomicLong Score { get; set; }
         public AtomicDouble speed;
         public AtomicDouble remainder = new(0);
-        public AtomicIntOnlyAddLongScore(int x, AtomicLong Score, double speed = 1.0) : base(x)
+        public AtomicIntOnlyAddLongScore(int x, double speed = 1.0) : base(x)
         {
-            this.Score = Score;
+            this.Score = new(0);
             this.speed = new(speed);
         }
+        public void SetScore(AtomicLong score) => Score = score;
         private long DealWithRemainder(int v)
         {
             double q = speed * v + remainder;
@@ -213,7 +217,8 @@ namespace Preparation.Utility
     }
 
     /// <summary>
-    /// 参数要求倍率speed（默认1）以及AtomicInt类的Score，
+    /// 参数要求倍率speed（默认1）
+    /// 可（在构造时）使用SetScore以设定AtomicInt类的Score
     /// 在发生变化时，自动给Score加上变化的差乘以speed取整。
     /// 注意：AtomicIntChangeAffectScore本身为AtomicInt，提供的Score可能构成环而死锁。
     /// </summary>
@@ -222,11 +227,12 @@ namespace Preparation.Utility
         public AtomicInt Score { get; set; }
         public AtomicDouble speed;
         public AtomicDouble remainder = new(0);
-        public AtomicIntChangeAffectScore(int x, AtomicInt Score, double speed = 1.0) : base(x)
+        public AtomicIntChangeAffectScore(int x, double speed = 1.0) : base(x)
         {
-            this.Score = Score;
+            this.Score = new(0);
             this.speed = new(speed);
         }
+        public void SetScore(AtomicInt score) => Score = score;
         private int DealWithRemainder(int v)
         {
             double q = speed * v + remainder;
@@ -341,7 +347,8 @@ namespace Preparation.Utility
     }
 
     /// <summary>
-    /// 参数要求倍率speed（默认1）以及AtomicLong类的Score，
+    /// 参数要求倍率speed（默认1）
+    /// 可（在构造时）使用SetScore以设定AtomicLong类的Score
     /// 在发生正向的变化时，自动给Score加上正向变化的差乘以speed取整。
     /// 注意：AtomicLongOnlyAddScore本身为AtomicLong，提供的Score可能构成环而死锁。
     /// </summary>
@@ -350,11 +357,12 @@ namespace Preparation.Utility
         public AtomicLong Score { get; set; }
         public AtomicDouble speed;
         public AtomicDouble remainder = new(0);
-        public AtomicLongOnlyAddScore(long x, AtomicLong score, double speed = 1.0) : base(x)
+        public AtomicLongOnlyAddScore(long x, double speed = 1.0) : base(x)
         {
-            this.Score = score;
+            this.Score = new(0);
             this.speed = new(speed);
         }
+        public void SetScore(AtomicLong score) => Score = score;
         private long DealWithRemainder(long v)
         {
             double q = speed * v + remainder;
