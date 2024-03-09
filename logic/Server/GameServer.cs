@@ -27,7 +27,7 @@ namespace Server
         private readonly uint spectatorMinPlayerID = 2023;
         public int playerNum;
         public int TeamCount => options.TeamCount;
-        protected long[][] communicationToGameID; // 通信用的ID映射到游戏内的ID，0指向队伍1，1指向队伍2，通信中0-2为民船，3-6为军用船，7为旗舰，8为大本营
+        protected long[][] communicationToGameID; // 通信用的ID映射到游戏内的ID，0指向队伍1，1指向队伍2，通信中0为大本营，1-5为船
         private readonly object messageToAllClientsLock = new();
         public static readonly long SendMessageToClientIntervalInMilliseconds = 50;
         private MessageWriter? mwr = null;
@@ -46,6 +46,7 @@ namespace Server
             Console.WriteLine("Game starts!");
             CreateStartFile();
             game.StartGame((int)options.GameTimeInSecond * 1000);
+            Console.WriteLine($"IsGaming:{game.GameMap.Timer.IsGaming}");
             Thread.Sleep(1);
             new Thread(() =>
             {

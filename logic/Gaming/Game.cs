@@ -39,8 +39,8 @@ namespace Gaming
                     break;
                 }
             }
-            if (gameMap.ProtoGameMap[pos.x, pos.y] != PlaceType.Null &&
-                gameMap.ProtoGameMap[pos.x, pos.y] != PlaceType.Shadow)
+            if (gameMap.ProtoGameMap[pos.x / 1000, pos.y / 1000] != PlaceType.Null &&
+                gameMap.ProtoGameMap[pos.x / 1000, pos.y / 1000] != PlaceType.Shadow)
             {
                 validBirthPoint = false;
             }

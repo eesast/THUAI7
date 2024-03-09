@@ -32,15 +32,19 @@ namespace ClientTest
                 var currentGameInfo = call.ResponseStream.Current;
                 if (currentGameInfo.GameState == GameState.GameStart) break;
             }*/
+            Thread.Sleep(50);
+            MoveRes boolRes = client.Move(moveMsg);
+            //if (boolRes.ActSuccess == false) break;
+            tot++;
+            if (tot % 10 == 0) moveMsg.Angle += 1;
+
             while (true)
             {
-                Thread.Sleep(50);
-                MoveRes boolRes = client.Move(moveMsg);
-                //if (boolRes.ActSuccess == false) break;
-                tot++;
-                if (tot % 10 == 0) moveMsg.Angle += 1;
-
-                Console.WriteLine("Move!");
+                //Thread.Sleep(50);
+                //MoveRes boolRes = client.Move(moveMsg);
+                ////if (boolRes.ActSuccess == false) break;
+                //tot++;
+                //if (tot % 10 == 0) moveMsg.Angle += 1;
             }
             return Task.CompletedTask;
         }
