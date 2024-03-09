@@ -20,7 +20,7 @@ namespace installer
         public static MauiApp CreateMauiApp()
         {
 
-            // read SecretID & SecretKey from filePath
+            // read SecretID & SecretKey from filePath for debug
             var filePath = @"D:\SecretKey.csv";
             var lines = File.ReadAllLines(filePath);
             if (lines.Length > 0)

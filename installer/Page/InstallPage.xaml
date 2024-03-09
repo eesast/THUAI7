@@ -58,6 +58,8 @@
             Text="{Binding DebugAlert1}"/>
         <Label
             Text="{Binding DebugAlert2}"/>
+        <Label
+            Text="{Binding DebugAlert3}"/>
     </VerticalStackLayout>
 
 </ContentPage>

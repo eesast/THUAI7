@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Maui.Storage;
+using installer.Model;
 
 namespace installer.ViewModel
 {
@@ -20,7 +21,7 @@ namespace installer.ViewModel
             Downloader = downloader;
             FolderPicker = folderPicker;
             downloadPath = Downloader.Data.InstallPath;
-            downloadEnabled = false;
+            DebugAlert3 = Downloader.Data.Installed.ToString();
             BrowseBtnClickedCommand = new AsyncRelayCommand(BrowseBtnClicked);
             CheckUpdBtnClickedCommand = new RelayCommand(CheckUpdBtnClicked);
             DownloadBtnClickedCommand = new AsyncRelayCommand(DownloadBtnClicked);
@@ -44,6 +45,16 @@ namespace installer.ViewModel
             set
             {
                 debugAlert2 = value;
+                OnPropertyChanged();
+            }
+        }
+        private string? debugAlert3;
+        public string? DebugAlert3
+        {
+            get => debugAlert3;
+            set
+            {
+                debugAlert3 = value;
                 OnPropertyChanged();
             }
         }
@@ -114,11 +125,11 @@ namespace installer.ViewModel
             CheckEnabled = false;
             DownloadEnabled = false;
             UpdateEnabled = false;
-            var result = await FolderPicker.PickAsync(downloadPath);
+            var result = await FolderPicker.PickAsync(DownloadPath);
             if (result.IsSuccessful)
             {
                 DownloadPath = result.Folder.Path;
-                DebugAlert2 = result.Folder.Path.ToString();
+                // DebugAlert2 = result.Folder.Path.ToString();
             }
             else
             {
@@ -153,12 +164,19 @@ namespace installer.ViewModel
         private async Task DownloadBtnClicked()
         {
             DebugAlert1 = "Download Button Clicked";
-            DownloadEnabled = false;
-            CheckEnabled = false;
             BrowseEnabled = false;
+            CheckEnabled = false;
+            DownloadEnabled = false;
             UpdateEnabled = false;
-            await Task.Run(() => Downloader.ResetInstallPath(DownloadPath));
-            DownloadPath = Downloader.Data.InstallPath;
+            if (Downloader.Data.Installed)
+            {
+                await Task.Run(() => Downloader.ResetInstallPath(DownloadPath));
+            }
+            else
+            {
+                await Task.Run(() => Downloader.Install());
+            }
+            DebugAlert2 = Downloader.Data.InstallPath;
             CheckEnabled = true;
             BrowseEnabled = true;
         }
@@ -166,9 +184,9 @@ namespace installer.ViewModel
         private async Task UpdateBtnClicked()
         {
             DebugAlert1 = "Update Button Clicked";
-            DownloadEnabled = false;
-            CheckEnabled = false;
             BrowseEnabled = false;
+            CheckEnabled = false;
+            DownloadEnabled = false;
             UpdateEnabled = false;
             await Task.Run(() => Downloader.Update());
             CheckEnabled = true;

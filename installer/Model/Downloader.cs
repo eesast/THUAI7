@@ -245,7 +245,7 @@ namespace installer.Model
         {
             newPath = newPath.EndsWith(Path.DirectorySeparatorChar) ? newPath[0..-1] : newPath;
             var installPath = Data.InstallPath.EndsWith(Path.DirectorySeparatorChar) ? Data.InstallPath[0..-1] : Data.InstallPath;
-            if (newPath != Data.InstallPath)
+            if (newPath != installPath)
             {
                 Log.Dispose(); LogError.Dispose(); Exceptions.logger.Dispose();
                 Cloud.Log.Dispose(); Cloud.LogError.Dispose(); Cloud.Exceptions.logger.Dispose();
