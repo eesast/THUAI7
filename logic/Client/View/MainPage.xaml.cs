@@ -32,6 +32,7 @@ namespace Client
             timer.Start();
             Application.Current.UserAppTheme = AppTheme.Light;  //Light Theme Mode
             InitializeComponent();
+
             for (int i = 0; i < 50; i++)
             {
                 for (int j = 0; j < 50; j++)
@@ -61,8 +62,8 @@ namespace Client
         private Label[,] mapPatches_ = new Label[50, 50];
         private readonly IDispatcherTimer timer;
         private long counter;
-        private int unitWidth = 10;
-        private int unitHeight = 10;
+        private double unitWidth = 10;
+        private double unitHeight = 10;
         private void TestRefresh(object sender, EventArgs e)
         {
             counter++;
