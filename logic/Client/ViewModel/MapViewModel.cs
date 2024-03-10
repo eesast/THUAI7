@@ -95,6 +95,37 @@ namespace Client.ViewModel
 
             // 绘制小球
             canvas.FillEllipse(ballX, ballY, 20, 20);
+            DrawBullet(new MessageOfBullet
+            {
+                X = 10,
+                Y = 10,
+                Type = BulletType.NullBulletType,
+                BombRange = 5
+            }, canvas);
+
+            DrawShip(new MessageOfShip
+            {
+                X = 10,
+                Y = 11,
+                Hp = 100,
+                TeamId = 0
+            }, canvas);
+
+            DrawBullet(new MessageOfBullet
+            {
+                X = 9,
+                Y = 11,
+                Type = BulletType.NullBulletType,
+                BombRange = 5
+            }, canvas);
+
+            DrawShip(new MessageOfShip
+            {
+                X = 10,
+                Y = 12,
+                Hp = 100,
+                TeamId = 1
+            }, canvas);
         }
 
         private Dictionary<MapPatchType, Color> PatchColorDict = new Dictionary<MapPatchType, Color>
@@ -719,6 +750,62 @@ namespace Client.ViewModel
             MapPatchesList[index].TextColor = Colors.White;
         }
 
+        private void DrawBullet(MessageOfBullet data, ICanvas canvas)
+        {
+            PointF point = UtilFunctions.getMapCenter(data.X, data.Y);
+            float x = point.X;
+            float y = point.Y;
+            switch (data.Type)
+            {
+                case BulletType.Plasma:
+                    canvas.FillColor = Colors.Red;
+                    break;
+                case BulletType.Laser:
+                    canvas.FillColor = Colors.Orange;
+                    break;
+                case BulletType.Missile:
+                    canvas.FillColor = Colors.Yellow;
+                    break;
+                case BulletType.Arc:
+                    canvas.FillColor = Colors.Green;
+                    break;
+                case BulletType.Shell:
+                    canvas.FillColor = Colors.Green;
+                    break;
+                default:
+                    canvas.FillColor = Colors.Black;
+                    break;
+            }
+            canvas.FillCircle(x, y, 2);
+        }
+
+        private void DrawShip(MessageOfShip data, ICanvas canvas)
+        {
+            PointF point = UtilFunctions.getMapCenter(data.X, data.Y);
+            float x = point.X;
+            float y = point.Y;
+            int hp = data.Hp;
+            long team_id = data.TeamId;
+            switch (team_id)
+            {
+                case (long)PlayerTeam.Red:
+                    canvas.FillColor = Colors.Red;
+                    break;
+
+                case (long)PlayerTeam.Blue:
+                    canvas.FillColor = Colors.Blue;
+                    break;
+
+                default:
+                    canvas.FillColor = Colors.Black;
+                    break;
+            }
+            canvas.FillCircle(x, y, (float)4.5);
+            canvas.FontSize = 5.5F;
+            canvas.FontColor = Colors.White;
+            canvas.DrawString(Convert.ToString(hp), x - 5, y - 5, 10, 10, HorizontalAlignment.Left, VerticalAlignment.Top);
+        }
+
         //private void DrawBullet(MessageOfBullet data)
         //{
         //    //Ellipse iconOfBullet = new()
@@ -876,6 +963,34 @@ namespace Client.ViewModel
         //private readonly BoxView[,] mapPatches = new BoxView[50, 50];
         private readonly double characterRadiusTimes = 400;
         private readonly double bulletRadiusTimes = 200;
+
+        private int mapHeight = 500;
+        public int MapHeight
+        {
+            get
+            {
+                return mapHeight;
+            }
+            set
+            {
+                mapHeight = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int mapWidth = 500;
+        public int MapWidth
+        {
+            get
+            {
+                return mapWidth;
+            }
+            set
+            {
+                mapWidth = value;
+                OnPropertyChanged();
+            }
+        }
 
     }
 }
