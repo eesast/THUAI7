@@ -171,7 +171,7 @@ class Logic(ILogic):
             return copy.deepcopy(self.__currentState.gameInfo.blueMoney
                                  if self.__teamID == 1
                                  else self.__currentState.gameInfo.redMoney)
-        
+
     def GetScore(self) -> int:
         with self.__mtxState:
             self.__logger.debug("Called GetScore")

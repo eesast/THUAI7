@@ -23,7 +23,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetSelfInfo(self)->Union[THUAI7.Ship, THUAI7.Team]:
+    def GetSelfInfo(self) -> Union[THUAI7.Ship, THUAI7.Team]:
         pass
 
     @abstractmethod
