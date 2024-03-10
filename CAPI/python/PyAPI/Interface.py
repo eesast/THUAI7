@@ -23,11 +23,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def ShipGetSelfInfo(self) -> THUAI7.Ship:
-        pass
-
-    @abstractmethod
-    def TeamGetSelfInfo(self) -> THUAI7.Team:
+    def GetSelfInfo(self)->Union[THUAI7.Ship, THUAI7.Team]:
         pass
 
     @abstractmethod
@@ -71,7 +67,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def Send(self, toPlayerID: int, message: str, binary: bool) -> bool:
+    def SendMessage(self, toID: int, message: Union[str, bytes]) -> bool:
         pass
 
     @abstractmethod
