@@ -14,10 +14,10 @@ namespace Constants
 {
     SCCI int32_t frameDuration = 50;  // 每帧毫秒数
     // 地图相关
-    SCCI int32_t numOfGridPerCell = 1000;   // 单位坐标数
-    SCCI int32_t rows = 50;                 // 地图行数
-    SCCI int32_t cols = 50;                 // 地图列数
-    SCCI int32_t maxGarbageProgress = 200;  // 大门最大进度
+    SCCI int32_t numOfGridPerCell = 1000;  // 单位坐标数
+    SCCI int32_t rows = 50;                // 地图行数
+    SCCI int32_t cols = 50;                // 地图列数
+    SCCI int32_t maxGarbageProgress = 200;
     SCCI int32_t maxBridgeHp = 18000;
     SCCI double robPercent = 0.2;  // 击杀获得经济比率
     SCCI int32_t DestroyBuildingBonus = 200;
