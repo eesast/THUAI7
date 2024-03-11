@@ -53,9 +53,9 @@ namespace protobuf
     class AttackMsg;
     struct AttackMsgDefaultTypeInternal;
     extern AttackMsgDefaultTypeInternal _AttackMsg_default_instance_;
-    class BuildShipMsg;
-    struct BuildShipMsgDefaultTypeInternal;
-    extern BuildShipMsgDefaultTypeInternal _BuildShipMsg_default_instance_;
+    class BuildSweeperMsg;
+    struct BuildSweeperMsgDefaultTypeInternal;
+    extern BuildSweeperMsgDefaultTypeInternal _BuildSweeperMsg_default_instance_;
     class ConstructMsg;
     struct ConstructMsgDefaultTypeInternal;
     extern ConstructMsgDefaultTypeInternal _ConstructMsg_default_instance_;
@@ -85,7 +85,7 @@ PROTOBUF_NAMESPACE_OPEN
 template<>
 ::protobuf::AttackMsg* Arena::CreateMaybeMessage<::protobuf::AttackMsg>(Arena*);
 template<>
-::protobuf::BuildShipMsg* Arena::CreateMaybeMessage<::protobuf::BuildShipMsg>(Arena*);
+::protobuf::BuildSweeperMsg* Arena::CreateMaybeMessage<::protobuf::BuildSweeperMsg>(Arena*);
 template<>
 ::protobuf::ConstructMsg* Arena::CreateMaybeMessage<::protobuf::ConstructMsg>(Arena*);
 template<>
@@ -625,7 +625,7 @@ namespace protobuf
         {
             kPlayerIdFieldNumber = 1,
             kTeamIdFieldNumber = 2,
-            kShipTypeFieldNumber = 3,
+            kSweeperTypeFieldNumber = 3,
             kXFieldNumber = 4,
             kYFieldNumber = 5,
         };
@@ -649,14 +649,14 @@ namespace protobuf
         void _internal_set_team_id(int64_t value);
 
     public:
-        // .protobuf.ShipType ship_type = 3;
-        void clear_ship_type();
-        ::protobuf::ShipType ship_type() const;
-        void set_ship_type(::protobuf::ShipType value);
+        // .protobuf.SweeperType sweeper_type = 3;
+        void clear_sweeper_type();
+        ::protobuf::SweeperType sweeper_type() const;
+        void set_sweeper_type(::protobuf::SweeperType value);
 
     private:
-        ::protobuf::ShipType _internal_ship_type() const;
-        void _internal_set_ship_type(::protobuf::ShipType value);
+        ::protobuf::SweeperType _internal_sweeper_type() const;
+        void _internal_set_sweeper_type(::protobuf::SweeperType value);
 
     public:
         // int32 x = 4;
@@ -692,7 +692,7 @@ namespace protobuf
         {
             int64_t player_id_;
             int64_t team_id_;
-            int ship_type_;
+            int sweeper_type_;
             int32_t x_;
             int32_t y_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -2082,31 +2082,31 @@ namespace protobuf
     };
     // -------------------------------------------------------------------
 
-    class BuildShipMsg final :
-        public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protobuf.BuildShipMsg) */
+    class BuildSweeperMsg final :
+        public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protobuf.BuildSweeperMsg) */
     {
     public:
-        inline BuildShipMsg() :
-            BuildShipMsg(nullptr)
+        inline BuildSweeperMsg() :
+            BuildSweeperMsg(nullptr)
         {
         }
-        ~BuildShipMsg() override;
-        explicit PROTOBUF_CONSTEXPR BuildShipMsg(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+        ~BuildSweeperMsg() override;
+        explicit PROTOBUF_CONSTEXPR BuildSweeperMsg(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-        BuildShipMsg(const BuildShipMsg& from);
-        BuildShipMsg(BuildShipMsg&& from) noexcept
+        BuildSweeperMsg(const BuildSweeperMsg& from);
+        BuildSweeperMsg(BuildSweeperMsg&& from) noexcept
             :
-            BuildShipMsg()
+            BuildSweeperMsg()
         {
             *this = ::std::move(from);
         }
 
-        inline BuildShipMsg& operator=(const BuildShipMsg& from)
+        inline BuildSweeperMsg& operator=(const BuildSweeperMsg& from)
         {
             CopyFrom(from);
             return *this;
         }
-        inline BuildShipMsg& operator=(BuildShipMsg&& from) noexcept
+        inline BuildSweeperMsg& operator=(BuildSweeperMsg&& from) noexcept
         {
             if (this == &from)
                 return *this;
@@ -2137,24 +2137,24 @@ namespace protobuf
         {
             return default_instance().GetMetadata().reflection;
         }
-        static const BuildShipMsg& default_instance()
+        static const BuildSweeperMsg& default_instance()
         {
             return *internal_default_instance();
         }
-        static inline const BuildShipMsg* internal_default_instance()
+        static inline const BuildSweeperMsg* internal_default_instance()
         {
-            return reinterpret_cast<const BuildShipMsg*>(
-                &_BuildShipMsg_default_instance_
+            return reinterpret_cast<const BuildSweeperMsg*>(
+                &_BuildSweeperMsg_default_instance_
             );
         }
         static constexpr int kIndexInFileMessages =
             9;
 
-        friend void swap(BuildShipMsg& a, BuildShipMsg& b)
+        friend void swap(BuildSweeperMsg& a, BuildSweeperMsg& b)
         {
             a.Swap(&b);
         }
-        inline void Swap(BuildShipMsg* other)
+        inline void Swap(BuildSweeperMsg* other)
         {
             if (other == this)
                 return;
@@ -2173,7 +2173,7 @@ namespace protobuf
                 ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
             }
         }
-        void UnsafeArenaSwap(BuildShipMsg* other)
+        void UnsafeArenaSwap(BuildSweeperMsg* other)
         {
             if (other == this)
                 return;
@@ -2183,16 +2183,16 @@ namespace protobuf
 
         // implements Message ----------------------------------------------
 
-        BuildShipMsg* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final
+        BuildSweeperMsg* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final
         {
-            return CreateMaybeMessage<BuildShipMsg>(arena);
+            return CreateMaybeMessage<BuildSweeperMsg>(arena);
         }
         using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-        void CopyFrom(const BuildShipMsg& from);
+        void CopyFrom(const BuildSweeperMsg& from);
         using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-        void MergeFrom(const BuildShipMsg& from)
+        void MergeFrom(const BuildSweeperMsg& from)
         {
-            BuildShipMsg::MergeImpl(*this, from);
+            BuildSweeperMsg::MergeImpl(*this, from);
         }
 
     private:
@@ -2216,17 +2216,17 @@ namespace protobuf
         void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
         void SharedDtor();
         void SetCachedSize(int size) const final;
-        void InternalSwap(BuildShipMsg* other);
+        void InternalSwap(BuildSweeperMsg* other);
 
     private:
         friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
         static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName()
         {
-            return "protobuf.BuildShipMsg";
+            return "protobuf.BuildSweeperMsg";
         }
 
     protected:
-        explicit BuildShipMsg(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned = false);
+        explicit BuildSweeperMsg(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned = false);
 
     public:
         static const ClassData _class_data_;
@@ -2243,7 +2243,7 @@ namespace protobuf
             kXFieldNumber = 1,
             kYFieldNumber = 2,
             kTeamIdFieldNumber = 4,
-            kShipTypeFieldNumber = 3,
+            kSweeperTypeFieldNumber = 3,
         };
         // int32 x = 1;
         void clear_x();
@@ -2275,17 +2275,17 @@ namespace protobuf
         void _internal_set_team_id(int64_t value);
 
     public:
-        // .protobuf.ShipType ship_type = 3;
-        void clear_ship_type();
-        ::protobuf::ShipType ship_type() const;
-        void set_ship_type(::protobuf::ShipType value);
+        // .protobuf.SweeperType sweeper_type = 3;
+        void clear_sweeper_type();
+        ::protobuf::SweeperType sweeper_type() const;
+        void set_sweeper_type(::protobuf::SweeperType value);
 
     private:
-        ::protobuf::ShipType _internal_ship_type() const;
-        void _internal_set_ship_type(::protobuf::ShipType value);
+        ::protobuf::SweeperType _internal_sweeper_type() const;
+        void _internal_set_sweeper_type(::protobuf::SweeperType value);
 
     public:
-        // @@protoc_insertion_point(class_scope:protobuf.BuildShipMsg)
+        // @@protoc_insertion_point(class_scope:protobuf.BuildSweeperMsg)
 
     private:
         class _Internal;
@@ -2299,7 +2299,7 @@ namespace protobuf
             int32_t x_;
             int32_t y_;
             int64_t team_id_;
-            int ship_type_;
+            int sweeper_type_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
         union
@@ -2422,28 +2422,28 @@ namespace protobuf
         // @@protoc_insertion_point(field_set:protobuf.PlayerMsg.team_id)
     }
 
-    // .protobuf.ShipType ship_type = 3;
-    inline void PlayerMsg::clear_ship_type()
+    // .protobuf.SweeperType sweeper_type = 3;
+    inline void PlayerMsg::clear_sweeper_type()
     {
-        _impl_.ship_type_ = 0;
+        _impl_.sweeper_type_ = 0;
     }
-    inline ::protobuf::ShipType PlayerMsg::_internal_ship_type() const
+    inline ::protobuf::SweeperType PlayerMsg::_internal_sweeper_type() const
     {
-        return static_cast<::protobuf::ShipType>(_impl_.ship_type_);
+        return static_cast<::protobuf::SweeperType>(_impl_.sweeper_type_);
     }
-    inline ::protobuf::ShipType PlayerMsg::ship_type() const
+    inline ::protobuf::SweeperType PlayerMsg::sweeper_type() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.PlayerMsg.ship_type)
-        return _internal_ship_type();
+        // @@protoc_insertion_point(field_get:protobuf.PlayerMsg.sweeper_type)
+        return _internal_sweeper_type();
     }
-    inline void PlayerMsg::_internal_set_ship_type(::protobuf::ShipType value)
+    inline void PlayerMsg::_internal_set_sweeper_type(::protobuf::SweeperType value)
     {
-        _impl_.ship_type_ = value;
+        _impl_.sweeper_type_ = value;
     }
-    inline void PlayerMsg::set_ship_type(::protobuf::ShipType value)
+    inline void PlayerMsg::set_sweeper_type(::protobuf::SweeperType value)
     {
-        _internal_set_ship_type(value);
-        // @@protoc_insertion_point(field_set:protobuf.PlayerMsg.ship_type)
+        _internal_set_sweeper_type(value);
+        // @@protoc_insertion_point(field_set:protobuf.PlayerMsg.sweeper_type)
     }
 
     // int32 x = 4;
@@ -3186,102 +3186,102 @@ namespace protobuf
 
     // -------------------------------------------------------------------
 
-    // BuildShipMsg
+    // BuildSweeperMsg
 
     // int32 x = 1;
-    inline void BuildShipMsg::clear_x()
+    inline void BuildSweeperMsg::clear_x()
     {
         _impl_.x_ = 0;
     }
-    inline int32_t BuildShipMsg::_internal_x() const
+    inline int32_t BuildSweeperMsg::_internal_x() const
     {
         return _impl_.x_;
     }
-    inline int32_t BuildShipMsg::x() const
+    inline int32_t BuildSweeperMsg::x() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.BuildShipMsg.x)
+        // @@protoc_insertion_point(field_get:protobuf.BuildSweeperMsg.x)
         return _internal_x();
     }
-    inline void BuildShipMsg::_internal_set_x(int32_t value)
+    inline void BuildSweeperMsg::_internal_set_x(int32_t value)
     {
         _impl_.x_ = value;
     }
-    inline void BuildShipMsg::set_x(int32_t value)
+    inline void BuildSweeperMsg::set_x(int32_t value)
     {
         _internal_set_x(value);
-        // @@protoc_insertion_point(field_set:protobuf.BuildShipMsg.x)
+        // @@protoc_insertion_point(field_set:protobuf.BuildSweeperMsg.x)
     }
 
     // int32 y = 2;
-    inline void BuildShipMsg::clear_y()
+    inline void BuildSweeperMsg::clear_y()
     {
         _impl_.y_ = 0;
     }
-    inline int32_t BuildShipMsg::_internal_y() const
+    inline int32_t BuildSweeperMsg::_internal_y() const
     {
         return _impl_.y_;
     }
-    inline int32_t BuildShipMsg::y() const
+    inline int32_t BuildSweeperMsg::y() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.BuildShipMsg.y)
+        // @@protoc_insertion_point(field_get:protobuf.BuildSweeperMsg.y)
         return _internal_y();
     }
-    inline void BuildShipMsg::_internal_set_y(int32_t value)
+    inline void BuildSweeperMsg::_internal_set_y(int32_t value)
     {
         _impl_.y_ = value;
     }
-    inline void BuildShipMsg::set_y(int32_t value)
+    inline void BuildSweeperMsg::set_y(int32_t value)
     {
         _internal_set_y(value);
-        // @@protoc_insertion_point(field_set:protobuf.BuildShipMsg.y)
+        // @@protoc_insertion_point(field_set:protobuf.BuildSweeperMsg.y)
     }
 
-    // .protobuf.ShipType ship_type = 3;
-    inline void BuildShipMsg::clear_ship_type()
+    // .protobuf.SweeperType sweeper_type = 3;
+    inline void BuildSweeperMsg::clear_sweeper_type()
     {
-        _impl_.ship_type_ = 0;
+        _impl_.sweeper_type_ = 0;
     }
-    inline ::protobuf::ShipType BuildShipMsg::_internal_ship_type() const
+    inline ::protobuf::SweeperType BuildSweeperMsg::_internal_sweeper_type() const
     {
-        return static_cast<::protobuf::ShipType>(_impl_.ship_type_);
+        return static_cast<::protobuf::SweeperType>(_impl_.sweeper_type_);
     }
-    inline ::protobuf::ShipType BuildShipMsg::ship_type() const
+    inline ::protobuf::SweeperType BuildSweeperMsg::sweeper_type() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.BuildShipMsg.ship_type)
-        return _internal_ship_type();
+        // @@protoc_insertion_point(field_get:protobuf.BuildSweeperMsg.sweeper_type)
+        return _internal_sweeper_type();
     }
-    inline void BuildShipMsg::_internal_set_ship_type(::protobuf::ShipType value)
+    inline void BuildSweeperMsg::_internal_set_sweeper_type(::protobuf::SweeperType value)
     {
-        _impl_.ship_type_ = value;
+        _impl_.sweeper_type_ = value;
     }
-    inline void BuildShipMsg::set_ship_type(::protobuf::ShipType value)
+    inline void BuildSweeperMsg::set_sweeper_type(::protobuf::SweeperType value)
     {
-        _internal_set_ship_type(value);
-        // @@protoc_insertion_point(field_set:protobuf.BuildShipMsg.ship_type)
+        _internal_set_sweeper_type(value);
+        // @@protoc_insertion_point(field_set:protobuf.BuildSweeperMsg.sweeper_type)
     }
 
     // int64 team_id = 4;
-    inline void BuildShipMsg::clear_team_id()
+    inline void BuildSweeperMsg::clear_team_id()
     {
         _impl_.team_id_ = int64_t{0};
     }
-    inline int64_t BuildShipMsg::_internal_team_id() const
+    inline int64_t BuildSweeperMsg::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t BuildShipMsg::team_id() const
+    inline int64_t BuildSweeperMsg::team_id() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.BuildShipMsg.team_id)
+        // @@protoc_insertion_point(field_get:protobuf.BuildSweeperMsg.team_id)
         return _internal_team_id();
     }
-    inline void BuildShipMsg::_internal_set_team_id(int64_t value)
+    inline void BuildSweeperMsg::_internal_set_team_id(int64_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void BuildShipMsg::set_team_id(int64_t value)
+    inline void BuildSweeperMsg::set_team_id(int64_t value)
     {
         _internal_set_team_id(value);
-        // @@protoc_insertion_point(field_set:protobuf.BuildShipMsg.team_id)
+        // @@protoc_insertion_point(field_set:protobuf.BuildSweeperMsg.team_id)
     }
 
 #ifdef __GNUC__

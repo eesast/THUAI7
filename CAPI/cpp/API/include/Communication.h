@@ -29,9 +29,9 @@ public:
     }
     bool TryConnection(int64_t playerID, int64_t teamID);
     protobuf::MessageToClient GetMessage2Client();
-    void AddPlayer(int64_t playerID, int64_t teamID, THUAI7::ShipType shipType, int32_t x, int32_t y);
+    void AddPlayer(int64_t playerID, int64_t teamID, THUAI7::SweeperType SweeperType, int32_t x, int32_t y);
     bool EndAllAction(int64_t playerID, int64_t teamID);
-    // Ship
+    // Sweeper
     bool Move(int64_t playerID, int64_t teamID, int64_t time, double angle);
     bool Recover(int64_t playerID, int64_t recover, int64_t teamID);
     bool Produce(int64_t playerID, int64_t teamID);
@@ -41,7 +41,7 @@ public:
     bool Send(int64_t playerID, int64_t toPlayerID, int64_t teamID, std::string message, bool binary);
     // Team
     bool InstallModule(int64_t playerID, int64_t teamID, THUAI7::ModuleType moduleType);
-    bool BuildShip(int64_t teamID, THUAI7::ShipType shipType, int32_t x, int32_t y);
+    bool BuildSweeper(int64_t teamID, THUAI7::SweeperType SweeperType, int32_t x, int32_t y);
     bool Recycle(int64_t playerID, int64_t teamID);
 
 private:

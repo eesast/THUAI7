@@ -22,6 +22,6 @@ service AvailableService
     // 大本营
     rpc InstallModule(InstallMsg) returns (BoolRes);
     rpc Recycle(IDMsg) returns (BoolRes);
-    rpc BuildShip(BuildShipMsg) returns (BoolRes);
+    rpc BuildSweeper(BuildSweeperMsg) returns (BoolRes);
     rpc EndAllAction(IDMsg) returns (BoolRes); // 结束所有动作
 }

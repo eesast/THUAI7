@@ -61,18 +61,18 @@ namespace protobuf
     class MessageOfBombedBullet;
     struct MessageOfBombedBulletDefaultTypeInternal;
     extern MessageOfBombedBulletDefaultTypeInternal _MessageOfBombedBullet_default_instance_;
+    class MessageOfBridge;
+    struct MessageOfBridgeDefaultTypeInternal;
+    extern MessageOfBridgeDefaultTypeInternal _MessageOfBridge_default_instance_;
     class MessageOfBullet;
     struct MessageOfBulletDefaultTypeInternal;
     extern MessageOfBulletDefaultTypeInternal _MessageOfBullet_default_instance_;
-    class MessageOfCommunity;
-    struct MessageOfCommunityDefaultTypeInternal;
-    extern MessageOfCommunityDefaultTypeInternal _MessageOfCommunity_default_instance_;
-    class MessageOfFactory;
-    struct MessageOfFactoryDefaultTypeInternal;
-    extern MessageOfFactoryDefaultTypeInternal _MessageOfFactory_default_instance_;
-    class MessageOfFort;
-    struct MessageOfFortDefaultTypeInternal;
-    extern MessageOfFortDefaultTypeInternal _MessageOfFort_default_instance_;
+    class MessageOfChargeStation;
+    struct MessageOfChargeStationDefaultTypeInternal;
+    extern MessageOfChargeStationDefaultTypeInternal _MessageOfChargeStation_default_instance_;
+    class MessageOfGarbage;
+    struct MessageOfGarbageDefaultTypeInternal;
+    extern MessageOfGarbageDefaultTypeInternal _MessageOfGarbage_default_instance_;
     class MessageOfHome;
     struct MessageOfHomeDefaultTypeInternal;
     extern MessageOfHomeDefaultTypeInternal _MessageOfHome_default_instance_;
@@ -88,27 +88,27 @@ namespace protobuf
     class MessageOfObj;
     struct MessageOfObjDefaultTypeInternal;
     extern MessageOfObjDefaultTypeInternal _MessageOfObj_default_instance_;
-    class MessageOfResource;
-    struct MessageOfResourceDefaultTypeInternal;
-    extern MessageOfResourceDefaultTypeInternal _MessageOfResource_default_instance_;
-    class MessageOfShip;
-    struct MessageOfShipDefaultTypeInternal;
-    extern MessageOfShipDefaultTypeInternal _MessageOfShip_default_instance_;
+    class MessageOfRecycleBank;
+    struct MessageOfRecycleBankDefaultTypeInternal;
+    extern MessageOfRecycleBankDefaultTypeInternal _MessageOfRecycleBank_default_instance_;
+    class MessageOfSignalTower;
+    struct MessageOfSignalTowerDefaultTypeInternal;
+    extern MessageOfSignalTowerDefaultTypeInternal _MessageOfSignalTower_default_instance_;
+    class MessageOfSweeper;
+    struct MessageOfSweeperDefaultTypeInternal;
+    extern MessageOfSweeperDefaultTypeInternal _MessageOfSweeper_default_instance_;
     class MessageOfTeam;
     struct MessageOfTeamDefaultTypeInternal;
     extern MessageOfTeamDefaultTypeInternal _MessageOfTeam_default_instance_;
-    class MessageOfWormhole;
-    struct MessageOfWormholeDefaultTypeInternal;
-    extern MessageOfWormholeDefaultTypeInternal _MessageOfWormhole_default_instance_;
     class MessageToClient;
     struct MessageToClientDefaultTypeInternal;
     extern MessageToClientDefaultTypeInternal _MessageToClient_default_instance_;
     class MoveRes;
     struct MoveResDefaultTypeInternal;
     extern MoveResDefaultTypeInternal _MoveRes_default_instance_;
-    class ShipInfoRes;
-    struct ShipInfoResDefaultTypeInternal;
-    extern ShipInfoResDefaultTypeInternal _ShipInfoRes_default_instance_;
+    class SweeperInfoRes;
+    struct SweeperInfoResDefaultTypeInternal;
+    extern SweeperInfoResDefaultTypeInternal _SweeperInfoRes_default_instance_;
 }  // namespace protobuf
 PROTOBUF_NAMESPACE_OPEN
 template<>
@@ -120,13 +120,13 @@ template<>
 template<>
 ::protobuf::MessageOfBombedBullet* Arena::CreateMaybeMessage<::protobuf::MessageOfBombedBullet>(Arena*);
 template<>
+::protobuf::MessageOfBridge* Arena::CreateMaybeMessage<::protobuf::MessageOfBridge>(Arena*);
+template<>
 ::protobuf::MessageOfBullet* Arena::CreateMaybeMessage<::protobuf::MessageOfBullet>(Arena*);
 template<>
-::protobuf::MessageOfCommunity* Arena::CreateMaybeMessage<::protobuf::MessageOfCommunity>(Arena*);
+::protobuf::MessageOfChargeStation* Arena::CreateMaybeMessage<::protobuf::MessageOfChargeStation>(Arena*);
 template<>
-::protobuf::MessageOfFactory* Arena::CreateMaybeMessage<::protobuf::MessageOfFactory>(Arena*);
-template<>
-::protobuf::MessageOfFort* Arena::CreateMaybeMessage<::protobuf::MessageOfFort>(Arena*);
+::protobuf::MessageOfGarbage* Arena::CreateMaybeMessage<::protobuf::MessageOfGarbage>(Arena*);
 template<>
 ::protobuf::MessageOfHome* Arena::CreateMaybeMessage<::protobuf::MessageOfHome>(Arena*);
 template<>
@@ -138,50 +138,50 @@ template<>
 template<>
 ::protobuf::MessageOfObj* Arena::CreateMaybeMessage<::protobuf::MessageOfObj>(Arena*);
 template<>
-::protobuf::MessageOfResource* Arena::CreateMaybeMessage<::protobuf::MessageOfResource>(Arena*);
+::protobuf::MessageOfRecycleBank* Arena::CreateMaybeMessage<::protobuf::MessageOfRecycleBank>(Arena*);
 template<>
-::protobuf::MessageOfShip* Arena::CreateMaybeMessage<::protobuf::MessageOfShip>(Arena*);
+::protobuf::MessageOfSignalTower* Arena::CreateMaybeMessage<::protobuf::MessageOfSignalTower>(Arena*);
+template<>
+::protobuf::MessageOfSweeper* Arena::CreateMaybeMessage<::protobuf::MessageOfSweeper>(Arena*);
 template<>
 ::protobuf::MessageOfTeam* Arena::CreateMaybeMessage<::protobuf::MessageOfTeam>(Arena*);
-template<>
-::protobuf::MessageOfWormhole* Arena::CreateMaybeMessage<::protobuf::MessageOfWormhole>(Arena*);
 template<>
 ::protobuf::MessageToClient* Arena::CreateMaybeMessage<::protobuf::MessageToClient>(Arena*);
 template<>
 ::protobuf::MoveRes* Arena::CreateMaybeMessage<::protobuf::MoveRes>(Arena*);
 template<>
-::protobuf::ShipInfoRes* Arena::CreateMaybeMessage<::protobuf::ShipInfoRes>(Arena*);
+::protobuf::SweeperInfoRes* Arena::CreateMaybeMessage<::protobuf::SweeperInfoRes>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace protobuf
 {
 
     // ===================================================================
 
-    class MessageOfShip final :
-        public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protobuf.MessageOfShip) */
+    class MessageOfSweeper final :
+        public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protobuf.MessageOfSweeper) */
     {
     public:
-        inline MessageOfShip() :
-            MessageOfShip(nullptr)
+        inline MessageOfSweeper() :
+            MessageOfSweeper(nullptr)
         {
         }
-        ~MessageOfShip() override;
-        explicit PROTOBUF_CONSTEXPR MessageOfShip(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+        ~MessageOfSweeper() override;
+        explicit PROTOBUF_CONSTEXPR MessageOfSweeper(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-        MessageOfShip(const MessageOfShip& from);
-        MessageOfShip(MessageOfShip&& from) noexcept
+        MessageOfSweeper(const MessageOfSweeper& from);
+        MessageOfSweeper(MessageOfSweeper&& from) noexcept
             :
-            MessageOfShip()
+            MessageOfSweeper()
         {
             *this = ::std::move(from);
         }
 
-        inline MessageOfShip& operator=(const MessageOfShip& from)
+        inline MessageOfSweeper& operator=(const MessageOfSweeper& from)
         {
             CopyFrom(from);
             return *this;
         }
-        inline MessageOfShip& operator=(MessageOfShip&& from) noexcept
+        inline MessageOfSweeper& operator=(MessageOfSweeper&& from) noexcept
         {
             if (this == &from)
                 return *this;
@@ -212,24 +212,24 @@ namespace protobuf
         {
             return default_instance().GetMetadata().reflection;
         }
-        static const MessageOfShip& default_instance()
+        static const MessageOfSweeper& default_instance()
         {
             return *internal_default_instance();
         }
-        static inline const MessageOfShip* internal_default_instance()
+        static inline const MessageOfSweeper* internal_default_instance()
         {
-            return reinterpret_cast<const MessageOfShip*>(
-                &_MessageOfShip_default_instance_
+            return reinterpret_cast<const MessageOfSweeper*>(
+                &_MessageOfSweeper_default_instance_
             );
         }
         static constexpr int kIndexInFileMessages =
             0;
 
-        friend void swap(MessageOfShip& a, MessageOfShip& b)
+        friend void swap(MessageOfSweeper& a, MessageOfSweeper& b)
         {
             a.Swap(&b);
         }
-        inline void Swap(MessageOfShip* other)
+        inline void Swap(MessageOfSweeper* other)
         {
             if (other == this)
                 return;
@@ -248,7 +248,7 @@ namespace protobuf
                 ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
             }
         }
-        void UnsafeArenaSwap(MessageOfShip* other)
+        void UnsafeArenaSwap(MessageOfSweeper* other)
         {
             if (other == this)
                 return;
@@ -258,16 +258,16 @@ namespace protobuf
 
         // implements Message ----------------------------------------------
 
-        MessageOfShip* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final
+        MessageOfSweeper* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final
         {
-            return CreateMaybeMessage<MessageOfShip>(arena);
+            return CreateMaybeMessage<MessageOfSweeper>(arena);
         }
         using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-        void CopyFrom(const MessageOfShip& from);
+        void CopyFrom(const MessageOfSweeper& from);
         using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-        void MergeFrom(const MessageOfShip& from)
+        void MergeFrom(const MessageOfSweeper& from)
         {
-            MessageOfShip::MergeImpl(*this, from);
+            MessageOfSweeper::MergeImpl(*this, from);
         }
 
     private:
@@ -291,17 +291,17 @@ namespace protobuf
         void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
         void SharedDtor();
         void SetCachedSize(int size) const final;
-        void InternalSwap(MessageOfShip* other);
+        void InternalSwap(MessageOfSweeper* other);
 
     private:
         friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
         static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName()
         {
-            return "protobuf.MessageOfShip";
+            return "protobuf.MessageOfSweeper";
         }
 
     protected:
-        explicit MessageOfShip(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned = false);
+        explicit MessageOfSweeper(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned = false);
 
     public:
         static const ClassData _class_data_;
@@ -324,8 +324,8 @@ namespace protobuf
             kTeamIdFieldNumber = 7,
             kPlayerIdFieldNumber = 8,
             kGuidFieldNumber = 9,
-            kShipStateFieldNumber = 10,
-            kShipTypeFieldNumber = 11,
+            kSweeperStateFieldNumber = 10,
+            kSweeperTypeFieldNumber = 11,
             kViewRangeFieldNumber = 12,
             kProducerTypeFieldNumber = 13,
             kConstructorTypeFieldNumber = 14,
@@ -424,24 +424,24 @@ namespace protobuf
         void _internal_set_guid(int64_t value);
 
     public:
-        // .protobuf.ShipState ship_state = 10;
-        void clear_ship_state();
-        ::protobuf::ShipState ship_state() const;
-        void set_ship_state(::protobuf::ShipState value);
+        // .protobuf.SweeperState sweeper_state = 10;
+        void clear_sweeper_state();
+        ::protobuf::SweeperState sweeper_state() const;
+        void set_sweeper_state(::protobuf::SweeperState value);
 
     private:
-        ::protobuf::ShipState _internal_ship_state() const;
-        void _internal_set_ship_state(::protobuf::ShipState value);
+        ::protobuf::SweeperState _internal_sweeper_state() const;
+        void _internal_set_sweeper_state(::protobuf::SweeperState value);
 
     public:
-        // .protobuf.ShipType ship_type = 11;
-        void clear_ship_type();
-        ::protobuf::ShipType ship_type() const;
-        void set_ship_type(::protobuf::ShipType value);
+        // .protobuf.SweeperType sweeper_type = 11;
+        void clear_sweeper_type();
+        ::protobuf::SweeperType sweeper_type() const;
+        void set_sweeper_type(::protobuf::SweeperType value);
 
     private:
-        ::protobuf::ShipType _internal_ship_type() const;
-        void _internal_set_ship_type(::protobuf::ShipType value);
+        ::protobuf::SweeperType _internal_sweeper_type() const;
+        void _internal_set_sweeper_type(::protobuf::SweeperType value);
 
     public:
         // int32 view_range = 12;
@@ -514,7 +514,7 @@ namespace protobuf
         void _internal_set_facing_direction(double value);
 
     public:
-        // @@protoc_insertion_point(class_scope:protobuf.MessageOfShip)
+        // @@protoc_insertion_point(class_scope:protobuf.MessageOfSweeper)
 
     private:
         class _Internal;
@@ -534,8 +534,8 @@ namespace protobuf
             int64_t team_id_;
             int64_t player_id_;
             int64_t guid_;
-            int ship_state_;
-            int ship_type_;
+            int sweeper_state_;
+            int sweeper_type_;
             int32_t view_range_;
             int producer_type_;
             int constructor_type_;
@@ -1093,31 +1093,31 @@ namespace protobuf
     };
     // -------------------------------------------------------------------
 
-    class MessageOfFactory final :
-        public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protobuf.MessageOfFactory) */
+    class MessageOfRecycleBank final :
+        public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protobuf.MessageOfRecycleBank) */
     {
     public:
-        inline MessageOfFactory() :
-            MessageOfFactory(nullptr)
+        inline MessageOfRecycleBank() :
+            MessageOfRecycleBank(nullptr)
         {
         }
-        ~MessageOfFactory() override;
-        explicit PROTOBUF_CONSTEXPR MessageOfFactory(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+        ~MessageOfRecycleBank() override;
+        explicit PROTOBUF_CONSTEXPR MessageOfRecycleBank(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-        MessageOfFactory(const MessageOfFactory& from);
-        MessageOfFactory(MessageOfFactory&& from) noexcept
+        MessageOfRecycleBank(const MessageOfRecycleBank& from);
+        MessageOfRecycleBank(MessageOfRecycleBank&& from) noexcept
             :
-            MessageOfFactory()
+            MessageOfRecycleBank()
         {
             *this = ::std::move(from);
         }
 
-        inline MessageOfFactory& operator=(const MessageOfFactory& from)
+        inline MessageOfRecycleBank& operator=(const MessageOfRecycleBank& from)
         {
             CopyFrom(from);
             return *this;
         }
-        inline MessageOfFactory& operator=(MessageOfFactory&& from) noexcept
+        inline MessageOfRecycleBank& operator=(MessageOfRecycleBank&& from) noexcept
         {
             if (this == &from)
                 return *this;
@@ -1148,24 +1148,24 @@ namespace protobuf
         {
             return default_instance().GetMetadata().reflection;
         }
-        static const MessageOfFactory& default_instance()
+        static const MessageOfRecycleBank& default_instance()
         {
             return *internal_default_instance();
         }
-        static inline const MessageOfFactory* internal_default_instance()
+        static inline const MessageOfRecycleBank* internal_default_instance()
         {
-            return reinterpret_cast<const MessageOfFactory*>(
-                &_MessageOfFactory_default_instance_
+            return reinterpret_cast<const MessageOfRecycleBank*>(
+                &_MessageOfRecycleBank_default_instance_
             );
         }
         static constexpr int kIndexInFileMessages =
             3;
 
-        friend void swap(MessageOfFactory& a, MessageOfFactory& b)
+        friend void swap(MessageOfRecycleBank& a, MessageOfRecycleBank& b)
         {
             a.Swap(&b);
         }
-        inline void Swap(MessageOfFactory* other)
+        inline void Swap(MessageOfRecycleBank* other)
         {
             if (other == this)
                 return;
@@ -1184,7 +1184,7 @@ namespace protobuf
                 ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
             }
         }
-        void UnsafeArenaSwap(MessageOfFactory* other)
+        void UnsafeArenaSwap(MessageOfRecycleBank* other)
         {
             if (other == this)
                 return;
@@ -1194,16 +1194,16 @@ namespace protobuf
 
         // implements Message ----------------------------------------------
 
-        MessageOfFactory* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final
+        MessageOfRecycleBank* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final
         {
-            return CreateMaybeMessage<MessageOfFactory>(arena);
+            return CreateMaybeMessage<MessageOfRecycleBank>(arena);
         }
         using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-        void CopyFrom(const MessageOfFactory& from);
+        void CopyFrom(const MessageOfRecycleBank& from);
         using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-        void MergeFrom(const MessageOfFactory& from)
+        void MergeFrom(const MessageOfRecycleBank& from)
         {
-            MessageOfFactory::MergeImpl(*this, from);
+            MessageOfRecycleBank::MergeImpl(*this, from);
         }
 
     private:
@@ -1227,17 +1227,17 @@ namespace protobuf
         void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
         void SharedDtor();
         void SetCachedSize(int size) const final;
-        void InternalSwap(MessageOfFactory* other);
+        void InternalSwap(MessageOfRecycleBank* other);
 
     private:
         friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
         static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName()
         {
-            return "protobuf.MessageOfFactory";
+            return "protobuf.MessageOfRecycleBank";
         }
 
     protected:
-        explicit MessageOfFactory(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned = false);
+        explicit MessageOfRecycleBank(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned = false);
 
     public:
         static const ClassData _class_data_;
@@ -1296,7 +1296,7 @@ namespace protobuf
         void _internal_set_hp(int32_t value);
 
     public:
-        // @@protoc_insertion_point(class_scope:protobuf.MessageOfFactory)
+        // @@protoc_insertion_point(class_scope:protobuf.MessageOfRecycleBank)
 
     private:
         class _Internal;
@@ -1321,31 +1321,31 @@ namespace protobuf
     };
     // -------------------------------------------------------------------
 
-    class MessageOfCommunity final :
-        public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protobuf.MessageOfCommunity) */
+    class MessageOfChargeStation final :
+        public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protobuf.MessageOfChargeStation) */
     {
     public:
-        inline MessageOfCommunity() :
-            MessageOfCommunity(nullptr)
+        inline MessageOfChargeStation() :
+            MessageOfChargeStation(nullptr)
         {
         }
-        ~MessageOfCommunity() override;
-        explicit PROTOBUF_CONSTEXPR MessageOfCommunity(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+        ~MessageOfChargeStation() override;
+        explicit PROTOBUF_CONSTEXPR MessageOfChargeStation(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-        MessageOfCommunity(const MessageOfCommunity& from);
-        MessageOfCommunity(MessageOfCommunity&& from) noexcept
+        MessageOfChargeStation(const MessageOfChargeStation& from);
+        MessageOfChargeStation(MessageOfChargeStation&& from) noexcept
             :
-            MessageOfCommunity()
+            MessageOfChargeStation()
         {
             *this = ::std::move(from);
         }
 
-        inline MessageOfCommunity& operator=(const MessageOfCommunity& from)
+        inline MessageOfChargeStation& operator=(const MessageOfChargeStation& from)
         {
             CopyFrom(from);
             return *this;
         }
-        inline MessageOfCommunity& operator=(MessageOfCommunity&& from) noexcept
+        inline MessageOfChargeStation& operator=(MessageOfChargeStation&& from) noexcept
         {
             if (this == &from)
                 return *this;
@@ -1376,24 +1376,24 @@ namespace protobuf
         {
             return default_instance().GetMetadata().reflection;
         }
-        static const MessageOfCommunity& default_instance()
+        static const MessageOfChargeStation& default_instance()
         {
             return *internal_default_instance();
         }
-        static inline const MessageOfCommunity* internal_default_instance()
+        static inline const MessageOfChargeStation* internal_default_instance()
         {
-            return reinterpret_cast<const MessageOfCommunity*>(
-                &_MessageOfCommunity_default_instance_
+            return reinterpret_cast<const MessageOfChargeStation*>(
+                &_MessageOfChargeStation_default_instance_
             );
         }
         static constexpr int kIndexInFileMessages =
             4;
 
-        friend void swap(MessageOfCommunity& a, MessageOfCommunity& b)
+        friend void swap(MessageOfChargeStation& a, MessageOfChargeStation& b)
         {
             a.Swap(&b);
         }
-        inline void Swap(MessageOfCommunity* other)
+        inline void Swap(MessageOfChargeStation* other)
         {
             if (other == this)
                 return;
@@ -1412,7 +1412,7 @@ namespace protobuf
                 ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
             }
         }
-        void UnsafeArenaSwap(MessageOfCommunity* other)
+        void UnsafeArenaSwap(MessageOfChargeStation* other)
         {
             if (other == this)
                 return;
@@ -1422,16 +1422,16 @@ namespace protobuf
 
         // implements Message ----------------------------------------------
 
-        MessageOfCommunity* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final
+        MessageOfChargeStation* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final
         {
-            return CreateMaybeMessage<MessageOfCommunity>(arena);
+            return CreateMaybeMessage<MessageOfChargeStation>(arena);
         }
         using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-        void CopyFrom(const MessageOfCommunity& from);
+        void CopyFrom(const MessageOfChargeStation& from);
         using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-        void MergeFrom(const MessageOfCommunity& from)
+        void MergeFrom(const MessageOfChargeStation& from)
         {
-            MessageOfCommunity::MergeImpl(*this, from);
+            MessageOfChargeStation::MergeImpl(*this, from);
         }
 
     private:
@@ -1455,17 +1455,17 @@ namespace protobuf
         void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
         void SharedDtor();
         void SetCachedSize(int size) const final;
-        void InternalSwap(MessageOfCommunity* other);
+        void InternalSwap(MessageOfChargeStation* other);
 
     private:
         friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
         static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName()
         {
-            return "protobuf.MessageOfCommunity";
+            return "protobuf.MessageOfChargeStation";
         }
 
     protected:
-        explicit MessageOfCommunity(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned = false);
+        explicit MessageOfChargeStation(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned = false);
 
     public:
         static const ClassData _class_data_;
@@ -1524,7 +1524,7 @@ namespace protobuf
         void _internal_set_hp(int32_t value);
 
     public:
-        // @@protoc_insertion_point(class_scope:protobuf.MessageOfCommunity)
+        // @@protoc_insertion_point(class_scope:protobuf.MessageOfChargeStation)
 
     private:
         class _Internal;
@@ -1549,31 +1549,31 @@ namespace protobuf
     };
     // -------------------------------------------------------------------
 
-    class MessageOfFort final :
-        public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protobuf.MessageOfFort) */
+    class MessageOfSignalTower final :
+        public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protobuf.MessageOfSignalTower) */
     {
     public:
-        inline MessageOfFort() :
-            MessageOfFort(nullptr)
+        inline MessageOfSignalTower() :
+            MessageOfSignalTower(nullptr)
         {
         }
-        ~MessageOfFort() override;
-        explicit PROTOBUF_CONSTEXPR MessageOfFort(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+        ~MessageOfSignalTower() override;
+        explicit PROTOBUF_CONSTEXPR MessageOfSignalTower(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-        MessageOfFort(const MessageOfFort& from);
-        MessageOfFort(MessageOfFort&& from) noexcept
+        MessageOfSignalTower(const MessageOfSignalTower& from);
+        MessageOfSignalTower(MessageOfSignalTower&& from) noexcept
             :
-            MessageOfFort()
+            MessageOfSignalTower()
         {
             *this = ::std::move(from);
         }
 
-        inline MessageOfFort& operator=(const MessageOfFort& from)
+        inline MessageOfSignalTower& operator=(const MessageOfSignalTower& from)
         {
             CopyFrom(from);
             return *this;
         }
-        inline MessageOfFort& operator=(MessageOfFort&& from) noexcept
+        inline MessageOfSignalTower& operator=(MessageOfSignalTower&& from) noexcept
         {
             if (this == &from)
                 return *this;
@@ -1604,24 +1604,24 @@ namespace protobuf
         {
             return default_instance().GetMetadata().reflection;
         }
-        static const MessageOfFort& default_instance()
+        static const MessageOfSignalTower& default_instance()
         {
             return *internal_default_instance();
         }
-        static inline const MessageOfFort* internal_default_instance()
+        static inline const MessageOfSignalTower* internal_default_instance()
         {
-            return reinterpret_cast<const MessageOfFort*>(
-                &_MessageOfFort_default_instance_
+            return reinterpret_cast<const MessageOfSignalTower*>(
+                &_MessageOfSignalTower_default_instance_
             );
         }
         static constexpr int kIndexInFileMessages =
             5;
 
-        friend void swap(MessageOfFort& a, MessageOfFort& b)
+        friend void swap(MessageOfSignalTower& a, MessageOfSignalTower& b)
         {
             a.Swap(&b);
         }
-        inline void Swap(MessageOfFort* other)
+        inline void Swap(MessageOfSignalTower* other)
         {
             if (other == this)
                 return;
@@ -1640,7 +1640,7 @@ namespace protobuf
                 ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
             }
         }
-        void UnsafeArenaSwap(MessageOfFort* other)
+        void UnsafeArenaSwap(MessageOfSignalTower* other)
         {
             if (other == this)
                 return;
@@ -1650,16 +1650,16 @@ namespace protobuf
 
         // implements Message ----------------------------------------------
 
-        MessageOfFort* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final
+        MessageOfSignalTower* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final
         {
-            return CreateMaybeMessage<MessageOfFort>(arena);
+            return CreateMaybeMessage<MessageOfSignalTower>(arena);
         }
         using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-        void CopyFrom(const MessageOfFort& from);
+        void CopyFrom(const MessageOfSignalTower& from);
         using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-        void MergeFrom(const MessageOfFort& from)
+        void MergeFrom(const MessageOfSignalTower& from)
         {
-            MessageOfFort::MergeImpl(*this, from);
+            MessageOfSignalTower::MergeImpl(*this, from);
         }
 
     private:
@@ -1683,17 +1683,17 @@ namespace protobuf
         void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
         void SharedDtor();
         void SetCachedSize(int size) const final;
-        void InternalSwap(MessageOfFort* other);
+        void InternalSwap(MessageOfSignalTower* other);
 
     private:
         friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
         static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName()
         {
-            return "protobuf.MessageOfFort";
+            return "protobuf.MessageOfSignalTower";
         }
 
     protected:
-        explicit MessageOfFort(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned = false);
+        explicit MessageOfSignalTower(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned = false);
 
     public:
         static const ClassData _class_data_;
@@ -1752,7 +1752,7 @@ namespace protobuf
         void _internal_set_hp(int32_t value);
 
     public:
-        // @@protoc_insertion_point(class_scope:protobuf.MessageOfFort)
+        // @@protoc_insertion_point(class_scope:protobuf.MessageOfSignalTower)
 
     private:
         class _Internal;
@@ -1777,31 +1777,31 @@ namespace protobuf
     };
     // -------------------------------------------------------------------
 
-    class MessageOfWormhole final :
-        public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protobuf.MessageOfWormhole) */
+    class MessageOfBridge final :
+        public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protobuf.MessageOfBridge) */
     {
     public:
-        inline MessageOfWormhole() :
-            MessageOfWormhole(nullptr)
+        inline MessageOfBridge() :
+            MessageOfBridge(nullptr)
         {
         }
-        ~MessageOfWormhole() override;
-        explicit PROTOBUF_CONSTEXPR MessageOfWormhole(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+        ~MessageOfBridge() override;
+        explicit PROTOBUF_CONSTEXPR MessageOfBridge(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-        MessageOfWormhole(const MessageOfWormhole& from);
-        MessageOfWormhole(MessageOfWormhole&& from) noexcept
+        MessageOfBridge(const MessageOfBridge& from);
+        MessageOfBridge(MessageOfBridge&& from) noexcept
             :
-            MessageOfWormhole()
+            MessageOfBridge()
         {
             *this = ::std::move(from);
         }
 
-        inline MessageOfWormhole& operator=(const MessageOfWormhole& from)
+        inline MessageOfBridge& operator=(const MessageOfBridge& from)
         {
             CopyFrom(from);
             return *this;
         }
-        inline MessageOfWormhole& operator=(MessageOfWormhole&& from) noexcept
+        inline MessageOfBridge& operator=(MessageOfBridge&& from) noexcept
         {
             if (this == &from)
                 return *this;
@@ -1832,24 +1832,24 @@ namespace protobuf
         {
             return default_instance().GetMetadata().reflection;
         }
-        static const MessageOfWormhole& default_instance()
+        static const MessageOfBridge& default_instance()
         {
             return *internal_default_instance();
         }
-        static inline const MessageOfWormhole* internal_default_instance()
+        static inline const MessageOfBridge* internal_default_instance()
         {
-            return reinterpret_cast<const MessageOfWormhole*>(
-                &_MessageOfWormhole_default_instance_
+            return reinterpret_cast<const MessageOfBridge*>(
+                &_MessageOfBridge_default_instance_
             );
         }
         static constexpr int kIndexInFileMessages =
             6;
 
-        friend void swap(MessageOfWormhole& a, MessageOfWormhole& b)
+        friend void swap(MessageOfBridge& a, MessageOfBridge& b)
         {
             a.Swap(&b);
         }
-        inline void Swap(MessageOfWormhole* other)
+        inline void Swap(MessageOfBridge* other)
         {
             if (other == this)
                 return;
@@ -1868,7 +1868,7 @@ namespace protobuf
                 ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
             }
         }
-        void UnsafeArenaSwap(MessageOfWormhole* other)
+        void UnsafeArenaSwap(MessageOfBridge* other)
         {
             if (other == this)
                 return;
@@ -1878,16 +1878,16 @@ namespace protobuf
 
         // implements Message ----------------------------------------------
 
-        MessageOfWormhole* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final
+        MessageOfBridge* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final
         {
-            return CreateMaybeMessage<MessageOfWormhole>(arena);
+            return CreateMaybeMessage<MessageOfBridge>(arena);
         }
         using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-        void CopyFrom(const MessageOfWormhole& from);
+        void CopyFrom(const MessageOfBridge& from);
         using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-        void MergeFrom(const MessageOfWormhole& from)
+        void MergeFrom(const MessageOfBridge& from)
         {
-            MessageOfWormhole::MergeImpl(*this, from);
+            MessageOfBridge::MergeImpl(*this, from);
         }
 
     private:
@@ -1911,17 +1911,17 @@ namespace protobuf
         void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
         void SharedDtor();
         void SetCachedSize(int size) const final;
-        void InternalSwap(MessageOfWormhole* other);
+        void InternalSwap(MessageOfBridge* other);
 
     private:
         friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
         static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName()
         {
-            return "protobuf.MessageOfWormhole";
+            return "protobuf.MessageOfBridge";
         }
 
     protected:
-        explicit MessageOfWormhole(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned = false);
+        explicit MessageOfBridge(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned = false);
 
     public:
         static const ClassData _class_data_;
@@ -1969,7 +1969,7 @@ namespace protobuf
         void _internal_set_hp(int32_t value);
 
     public:
-        // @@protoc_insertion_point(class_scope:protobuf.MessageOfWormhole)
+        // @@protoc_insertion_point(class_scope:protobuf.MessageOfBridge)
 
     private:
         class _Internal;
@@ -1993,31 +1993,31 @@ namespace protobuf
     };
     // -------------------------------------------------------------------
 
-    class MessageOfResource final :
-        public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protobuf.MessageOfResource) */
+    class MessageOfGarbage final :
+        public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protobuf.MessageOfGarbage) */
     {
     public:
-        inline MessageOfResource() :
-            MessageOfResource(nullptr)
+        inline MessageOfGarbage() :
+            MessageOfGarbage(nullptr)
         {
         }
-        ~MessageOfResource() override;
-        explicit PROTOBUF_CONSTEXPR MessageOfResource(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+        ~MessageOfGarbage() override;
+        explicit PROTOBUF_CONSTEXPR MessageOfGarbage(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-        MessageOfResource(const MessageOfResource& from);
-        MessageOfResource(MessageOfResource&& from) noexcept
+        MessageOfGarbage(const MessageOfGarbage& from);
+        MessageOfGarbage(MessageOfGarbage&& from) noexcept
             :
-            MessageOfResource()
+            MessageOfGarbage()
         {
             *this = ::std::move(from);
         }
 
-        inline MessageOfResource& operator=(const MessageOfResource& from)
+        inline MessageOfGarbage& operator=(const MessageOfGarbage& from)
         {
             CopyFrom(from);
             return *this;
         }
-        inline MessageOfResource& operator=(MessageOfResource&& from) noexcept
+        inline MessageOfGarbage& operator=(MessageOfGarbage&& from) noexcept
         {
             if (this == &from)
                 return *this;
@@ -2048,24 +2048,24 @@ namespace protobuf
         {
             return default_instance().GetMetadata().reflection;
         }
-        static const MessageOfResource& default_instance()
+        static const MessageOfGarbage& default_instance()
         {
             return *internal_default_instance();
         }
-        static inline const MessageOfResource* internal_default_instance()
+        static inline const MessageOfGarbage* internal_default_instance()
         {
-            return reinterpret_cast<const MessageOfResource*>(
-                &_MessageOfResource_default_instance_
+            return reinterpret_cast<const MessageOfGarbage*>(
+                &_MessageOfGarbage_default_instance_
             );
         }
         static constexpr int kIndexInFileMessages =
             7;
 
-        friend void swap(MessageOfResource& a, MessageOfResource& b)
+        friend void swap(MessageOfGarbage& a, MessageOfGarbage& b)
         {
             a.Swap(&b);
         }
-        inline void Swap(MessageOfResource* other)
+        inline void Swap(MessageOfGarbage* other)
         {
             if (other == this)
                 return;
@@ -2084,7 +2084,7 @@ namespace protobuf
                 ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
             }
         }
-        void UnsafeArenaSwap(MessageOfResource* other)
+        void UnsafeArenaSwap(MessageOfGarbage* other)
         {
             if (other == this)
                 return;
@@ -2094,16 +2094,16 @@ namespace protobuf
 
         // implements Message ----------------------------------------------
 
-        MessageOfResource* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final
+        MessageOfGarbage* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final
         {
-            return CreateMaybeMessage<MessageOfResource>(arena);
+            return CreateMaybeMessage<MessageOfGarbage>(arena);
         }
         using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-        void CopyFrom(const MessageOfResource& from);
+        void CopyFrom(const MessageOfGarbage& from);
         using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-        void MergeFrom(const MessageOfResource& from)
+        void MergeFrom(const MessageOfGarbage& from)
         {
-            MessageOfResource::MergeImpl(*this, from);
+            MessageOfGarbage::MergeImpl(*this, from);
         }
 
     private:
@@ -2127,17 +2127,17 @@ namespace protobuf
         void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
         void SharedDtor();
         void SetCachedSize(int size) const final;
-        void InternalSwap(MessageOfResource* other);
+        void InternalSwap(MessageOfGarbage* other);
 
     private:
         friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
         static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName()
         {
-            return "protobuf.MessageOfResource";
+            return "protobuf.MessageOfGarbage";
         }
 
     protected:
-        explicit MessageOfResource(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned = false);
+        explicit MessageOfGarbage(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned = false);
 
     public:
         static const ClassData _class_data_;
@@ -2185,7 +2185,7 @@ namespace protobuf
         void _internal_set_progress(int32_t value);
 
     public:
-        // @@protoc_insertion_point(class_scope:protobuf.MessageOfResource)
+        // @@protoc_insertion_point(class_scope:protobuf.MessageOfGarbage)
 
     private:
         class _Internal;
@@ -3172,14 +3172,14 @@ namespace protobuf
         }
         enum MessageOfObjCase
         {
-            kShipMessage = 1,
+            kSweeperMessage = 1,
             kBulletMessage = 2,
-            kFactoryMessage = 3,
-            kCommunityMessage = 4,
-            kFortMessage = 5,
-            kWormholeMessage = 6,
+            kRecyclebankMessage = 3,
+            kChargestationMessage = 4,
+            kSignaltowerMessage = 5,
+            kBridgeMessage = 6,
             kHomeMessage = 7,
-            kResourceMessage = 8,
+            kGarbageMessage = 8,
             kMapMessage = 9,
             kNewsMessage = 10,
             kBombedBulletMessage = 11,
@@ -3286,41 +3286,41 @@ namespace protobuf
 
         enum : int
         {
-            kShipMessageFieldNumber = 1,
+            kSweeperMessageFieldNumber = 1,
             kBulletMessageFieldNumber = 2,
-            kFactoryMessageFieldNumber = 3,
-            kCommunityMessageFieldNumber = 4,
-            kFortMessageFieldNumber = 5,
-            kWormholeMessageFieldNumber = 6,
+            kRecyclebankMessageFieldNumber = 3,
+            kChargestationMessageFieldNumber = 4,
+            kSignaltowerMessageFieldNumber = 5,
+            kBridgeMessageFieldNumber = 6,
             kHomeMessageFieldNumber = 7,
-            kResourceMessageFieldNumber = 8,
+            kGarbageMessageFieldNumber = 8,
             kMapMessageFieldNumber = 9,
             kNewsMessageFieldNumber = 10,
             kBombedBulletMessageFieldNumber = 11,
             kTeamMessageFieldNumber = 12,
         };
-        // .protobuf.MessageOfShip ship_message = 1;
-        bool has_ship_message() const;
+        // .protobuf.MessageOfSweeper sweeper_message = 1;
+        bool has_sweeper_message() const;
 
     private:
-        bool _internal_has_ship_message() const;
+        bool _internal_has_sweeper_message() const;
 
     public:
-        void clear_ship_message();
-        const ::protobuf::MessageOfShip& ship_message() const;
-        PROTOBUF_NODISCARD ::protobuf::MessageOfShip* release_ship_message();
-        ::protobuf::MessageOfShip* mutable_ship_message();
-        void set_allocated_ship_message(::protobuf::MessageOfShip* ship_message);
+        void clear_sweeper_message();
+        const ::protobuf::MessageOfSweeper& sweeper_message() const;
+        PROTOBUF_NODISCARD ::protobuf::MessageOfSweeper* release_sweeper_message();
+        ::protobuf::MessageOfSweeper* mutable_sweeper_message();
+        void set_allocated_sweeper_message(::protobuf::MessageOfSweeper* sweeper_message);
 
     private:
-        const ::protobuf::MessageOfShip& _internal_ship_message() const;
-        ::protobuf::MessageOfShip* _internal_mutable_ship_message();
+        const ::protobuf::MessageOfSweeper& _internal_sweeper_message() const;
+        ::protobuf::MessageOfSweeper* _internal_mutable_sweeper_message();
 
     public:
-        void unsafe_arena_set_allocated_ship_message(
-            ::protobuf::MessageOfShip* ship_message
+        void unsafe_arena_set_allocated_sweeper_message(
+            ::protobuf::MessageOfSweeper* sweeper_message
         );
-        ::protobuf::MessageOfShip* unsafe_arena_release_ship_message();
+        ::protobuf::MessageOfSweeper* unsafe_arena_release_sweeper_message();
 
         // .protobuf.MessageOfBullet bullet_message = 2;
         bool has_bullet_message() const;
@@ -3345,97 +3345,97 @@ namespace protobuf
         );
         ::protobuf::MessageOfBullet* unsafe_arena_release_bullet_message();
 
-        // .protobuf.MessageOfFactory factory_message = 3;
-        bool has_factory_message() const;
+        // .protobuf.MessageOfRecycleBank recyclebank_message = 3;
+        bool has_recyclebank_message() const;
 
     private:
-        bool _internal_has_factory_message() const;
+        bool _internal_has_recyclebank_message() const;
 
     public:
-        void clear_factory_message();
-        const ::protobuf::MessageOfFactory& factory_message() const;
-        PROTOBUF_NODISCARD ::protobuf::MessageOfFactory* release_factory_message();
-        ::protobuf::MessageOfFactory* mutable_factory_message();
-        void set_allocated_factory_message(::protobuf::MessageOfFactory* factory_message);
+        void clear_recyclebank_message();
+        const ::protobuf::MessageOfRecycleBank& recyclebank_message() const;
+        PROTOBUF_NODISCARD ::protobuf::MessageOfRecycleBank* release_recyclebank_message();
+        ::protobuf::MessageOfRecycleBank* mutable_recyclebank_message();
+        void set_allocated_recyclebank_message(::protobuf::MessageOfRecycleBank* recyclebank_message);
 
     private:
-        const ::protobuf::MessageOfFactory& _internal_factory_message() const;
-        ::protobuf::MessageOfFactory* _internal_mutable_factory_message();
+        const ::protobuf::MessageOfRecycleBank& _internal_recyclebank_message() const;
+        ::protobuf::MessageOfRecycleBank* _internal_mutable_recyclebank_message();
 
     public:
-        void unsafe_arena_set_allocated_factory_message(
-            ::protobuf::MessageOfFactory* factory_message
+        void unsafe_arena_set_allocated_recyclebank_message(
+            ::protobuf::MessageOfRecycleBank* recyclebank_message
         );
-        ::protobuf::MessageOfFactory* unsafe_arena_release_factory_message();
+        ::protobuf::MessageOfRecycleBank* unsafe_arena_release_recyclebank_message();
 
-        // .protobuf.MessageOfCommunity community_message = 4;
-        bool has_community_message() const;
-
-    private:
-        bool _internal_has_community_message() const;
-
-    public:
-        void clear_community_message();
-        const ::protobuf::MessageOfCommunity& community_message() const;
-        PROTOBUF_NODISCARD ::protobuf::MessageOfCommunity* release_community_message();
-        ::protobuf::MessageOfCommunity* mutable_community_message();
-        void set_allocated_community_message(::protobuf::MessageOfCommunity* community_message);
+        // .protobuf.MessageOfChargeStation chargestation_message = 4;
+        bool has_chargestation_message() const;
 
     private:
-        const ::protobuf::MessageOfCommunity& _internal_community_message() const;
-        ::protobuf::MessageOfCommunity* _internal_mutable_community_message();
+        bool _internal_has_chargestation_message() const;
 
     public:
-        void unsafe_arena_set_allocated_community_message(
-            ::protobuf::MessageOfCommunity* community_message
+        void clear_chargestation_message();
+        const ::protobuf::MessageOfChargeStation& chargestation_message() const;
+        PROTOBUF_NODISCARD ::protobuf::MessageOfChargeStation* release_chargestation_message();
+        ::protobuf::MessageOfChargeStation* mutable_chargestation_message();
+        void set_allocated_chargestation_message(::protobuf::MessageOfChargeStation* chargestation_message);
+
+    private:
+        const ::protobuf::MessageOfChargeStation& _internal_chargestation_message() const;
+        ::protobuf::MessageOfChargeStation* _internal_mutable_chargestation_message();
+
+    public:
+        void unsafe_arena_set_allocated_chargestation_message(
+            ::protobuf::MessageOfChargeStation* chargestation_message
         );
-        ::protobuf::MessageOfCommunity* unsafe_arena_release_community_message();
+        ::protobuf::MessageOfChargeStation* unsafe_arena_release_chargestation_message();
 
-        // .protobuf.MessageOfFort fort_message = 5;
-        bool has_fort_message() const;
-
-    private:
-        bool _internal_has_fort_message() const;
-
-    public:
-        void clear_fort_message();
-        const ::protobuf::MessageOfFort& fort_message() const;
-        PROTOBUF_NODISCARD ::protobuf::MessageOfFort* release_fort_message();
-        ::protobuf::MessageOfFort* mutable_fort_message();
-        void set_allocated_fort_message(::protobuf::MessageOfFort* fort_message);
+        // .protobuf.MessageOfSignalTower signaltower_message = 5;
+        bool has_signaltower_message() const;
 
     private:
-        const ::protobuf::MessageOfFort& _internal_fort_message() const;
-        ::protobuf::MessageOfFort* _internal_mutable_fort_message();
+        bool _internal_has_signaltower_message() const;
 
     public:
-        void unsafe_arena_set_allocated_fort_message(
-            ::protobuf::MessageOfFort* fort_message
+        void clear_signaltower_message();
+        const ::protobuf::MessageOfSignalTower& signaltower_message() const;
+        PROTOBUF_NODISCARD ::protobuf::MessageOfSignalTower* release_signaltower_message();
+        ::protobuf::MessageOfSignalTower* mutable_signaltower_message();
+        void set_allocated_signaltower_message(::protobuf::MessageOfSignalTower* signaltower_message);
+
+    private:
+        const ::protobuf::MessageOfSignalTower& _internal_signaltower_message() const;
+        ::protobuf::MessageOfSignalTower* _internal_mutable_signaltower_message();
+
+    public:
+        void unsafe_arena_set_allocated_signaltower_message(
+            ::protobuf::MessageOfSignalTower* signaltower_message
         );
-        ::protobuf::MessageOfFort* unsafe_arena_release_fort_message();
+        ::protobuf::MessageOfSignalTower* unsafe_arena_release_signaltower_message();
 
-        // .protobuf.MessageOfWormhole wormhole_message = 6;
-        bool has_wormhole_message() const;
-
-    private:
-        bool _internal_has_wormhole_message() const;
-
-    public:
-        void clear_wormhole_message();
-        const ::protobuf::MessageOfWormhole& wormhole_message() const;
-        PROTOBUF_NODISCARD ::protobuf::MessageOfWormhole* release_wormhole_message();
-        ::protobuf::MessageOfWormhole* mutable_wormhole_message();
-        void set_allocated_wormhole_message(::protobuf::MessageOfWormhole* wormhole_message);
+        // .protobuf.MessageOfBridge bridge_message = 6;
+        bool has_bridge_message() const;
 
     private:
-        const ::protobuf::MessageOfWormhole& _internal_wormhole_message() const;
-        ::protobuf::MessageOfWormhole* _internal_mutable_wormhole_message();
+        bool _internal_has_bridge_message() const;
 
     public:
-        void unsafe_arena_set_allocated_wormhole_message(
-            ::protobuf::MessageOfWormhole* wormhole_message
+        void clear_bridge_message();
+        const ::protobuf::MessageOfBridge& bridge_message() const;
+        PROTOBUF_NODISCARD ::protobuf::MessageOfBridge* release_bridge_message();
+        ::protobuf::MessageOfBridge* mutable_bridge_message();
+        void set_allocated_bridge_message(::protobuf::MessageOfBridge* bridge_message);
+
+    private:
+        const ::protobuf::MessageOfBridge& _internal_bridge_message() const;
+        ::protobuf::MessageOfBridge* _internal_mutable_bridge_message();
+
+    public:
+        void unsafe_arena_set_allocated_bridge_message(
+            ::protobuf::MessageOfBridge* bridge_message
         );
-        ::protobuf::MessageOfWormhole* unsafe_arena_release_wormhole_message();
+        ::protobuf::MessageOfBridge* unsafe_arena_release_bridge_message();
 
         // .protobuf.MessageOfHome home_message = 7;
         bool has_home_message() const;
@@ -3460,28 +3460,28 @@ namespace protobuf
         );
         ::protobuf::MessageOfHome* unsafe_arena_release_home_message();
 
-        // .protobuf.MessageOfResource resource_message = 8;
-        bool has_resource_message() const;
+        // .protobuf.MessageOfGarbage garbage_message = 8;
+        bool has_garbage_message() const;
 
     private:
-        bool _internal_has_resource_message() const;
+        bool _internal_has_garbage_message() const;
 
     public:
-        void clear_resource_message();
-        const ::protobuf::MessageOfResource& resource_message() const;
-        PROTOBUF_NODISCARD ::protobuf::MessageOfResource* release_resource_message();
-        ::protobuf::MessageOfResource* mutable_resource_message();
-        void set_allocated_resource_message(::protobuf::MessageOfResource* resource_message);
+        void clear_garbage_message();
+        const ::protobuf::MessageOfGarbage& garbage_message() const;
+        PROTOBUF_NODISCARD ::protobuf::MessageOfGarbage* release_garbage_message();
+        ::protobuf::MessageOfGarbage* mutable_garbage_message();
+        void set_allocated_garbage_message(::protobuf::MessageOfGarbage* garbage_message);
 
     private:
-        const ::protobuf::MessageOfResource& _internal_resource_message() const;
-        ::protobuf::MessageOfResource* _internal_mutable_resource_message();
+        const ::protobuf::MessageOfGarbage& _internal_garbage_message() const;
+        ::protobuf::MessageOfGarbage* _internal_mutable_garbage_message();
 
     public:
-        void unsafe_arena_set_allocated_resource_message(
-            ::protobuf::MessageOfResource* resource_message
+        void unsafe_arena_set_allocated_garbage_message(
+            ::protobuf::MessageOfGarbage* garbage_message
         );
-        ::protobuf::MessageOfResource* unsafe_arena_release_resource_message();
+        ::protobuf::MessageOfGarbage* unsafe_arena_release_garbage_message();
 
         // .protobuf.MessageOfMap map_message = 9;
         bool has_map_message() const;
@@ -3581,14 +3581,14 @@ namespace protobuf
 
     private:
         class _Internal;
-        void set_has_ship_message();
+        void set_has_sweeper_message();
         void set_has_bullet_message();
-        void set_has_factory_message();
-        void set_has_community_message();
-        void set_has_fort_message();
-        void set_has_wormhole_message();
+        void set_has_recyclebank_message();
+        void set_has_chargestation_message();
+        void set_has_signaltower_message();
+        void set_has_bridge_message();
         void set_has_home_message();
-        void set_has_resource_message();
+        void set_has_garbage_message();
         void set_has_map_message();
         void set_has_news_message();
         void set_has_bombed_bullet_message();
@@ -3610,14 +3610,14 @@ namespace protobuf
                 {
                 }
                 ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized _constinit_;
-                ::protobuf::MessageOfShip* ship_message_;
+                ::protobuf::MessageOfSweeper* sweeper_message_;
                 ::protobuf::MessageOfBullet* bullet_message_;
-                ::protobuf::MessageOfFactory* factory_message_;
-                ::protobuf::MessageOfCommunity* community_message_;
-                ::protobuf::MessageOfFort* fort_message_;
-                ::protobuf::MessageOfWormhole* wormhole_message_;
+                ::protobuf::MessageOfRecycleBank* recyclebank_message_;
+                ::protobuf::MessageOfChargeStation* chargestation_message_;
+                ::protobuf::MessageOfSignalTower* signaltower_message_;
+                ::protobuf::MessageOfBridge* bridge_message_;
                 ::protobuf::MessageOfHome* home_message_;
-                ::protobuf::MessageOfResource* resource_message_;
+                ::protobuf::MessageOfGarbage* garbage_message_;
                 ::protobuf::MessageOfMap* map_message_;
                 ::protobuf::MessageOfNews* news_message_;
                 ::protobuf::MessageOfBombedBullet* bombed_bullet_message_;
@@ -4547,31 +4547,31 @@ namespace protobuf
     };
     // -------------------------------------------------------------------
 
-    class ShipInfoRes final :
-        public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protobuf.ShipInfoRes) */
+    class SweeperInfoRes final :
+        public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protobuf.SweeperInfoRes) */
     {
     public:
-        inline ShipInfoRes() :
-            ShipInfoRes(nullptr)
+        inline SweeperInfoRes() :
+            SweeperInfoRes(nullptr)
         {
         }
-        ~ShipInfoRes() override;
-        explicit PROTOBUF_CONSTEXPR ShipInfoRes(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+        ~SweeperInfoRes() override;
+        explicit PROTOBUF_CONSTEXPR SweeperInfoRes(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-        ShipInfoRes(const ShipInfoRes& from);
-        ShipInfoRes(ShipInfoRes&& from) noexcept
+        SweeperInfoRes(const SweeperInfoRes& from);
+        SweeperInfoRes(SweeperInfoRes&& from) noexcept
             :
-            ShipInfoRes()
+            SweeperInfoRes()
         {
             *this = ::std::move(from);
         }
 
-        inline ShipInfoRes& operator=(const ShipInfoRes& from)
+        inline SweeperInfoRes& operator=(const SweeperInfoRes& from)
         {
             CopyFrom(from);
             return *this;
         }
-        inline ShipInfoRes& operator=(ShipInfoRes&& from) noexcept
+        inline SweeperInfoRes& operator=(SweeperInfoRes&& from) noexcept
         {
             if (this == &from)
                 return *this;
@@ -4602,24 +4602,24 @@ namespace protobuf
         {
             return default_instance().GetMetadata().reflection;
         }
-        static const ShipInfoRes& default_instance()
+        static const SweeperInfoRes& default_instance()
         {
             return *internal_default_instance();
         }
-        static inline const ShipInfoRes* internal_default_instance()
+        static inline const SweeperInfoRes* internal_default_instance()
         {
-            return reinterpret_cast<const ShipInfoRes*>(
-                &_ShipInfoRes_default_instance_
+            return reinterpret_cast<const SweeperInfoRes*>(
+                &_SweeperInfoRes_default_instance_
             );
         }
         static constexpr int kIndexInFileMessages =
             17;
 
-        friend void swap(ShipInfoRes& a, ShipInfoRes& b)
+        friend void swap(SweeperInfoRes& a, SweeperInfoRes& b)
         {
             a.Swap(&b);
         }
-        inline void Swap(ShipInfoRes* other)
+        inline void Swap(SweeperInfoRes* other)
         {
             if (other == this)
                 return;
@@ -4638,7 +4638,7 @@ namespace protobuf
                 ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
             }
         }
-        void UnsafeArenaSwap(ShipInfoRes* other)
+        void UnsafeArenaSwap(SweeperInfoRes* other)
         {
             if (other == this)
                 return;
@@ -4648,16 +4648,16 @@ namespace protobuf
 
         // implements Message ----------------------------------------------
 
-        ShipInfoRes* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final
+        SweeperInfoRes* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final
         {
-            return CreateMaybeMessage<ShipInfoRes>(arena);
+            return CreateMaybeMessage<SweeperInfoRes>(arena);
         }
         using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-        void CopyFrom(const ShipInfoRes& from);
+        void CopyFrom(const SweeperInfoRes& from);
         using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-        void MergeFrom(const ShipInfoRes& from)
+        void MergeFrom(const SweeperInfoRes& from)
         {
-            ShipInfoRes::MergeImpl(*this, from);
+            SweeperInfoRes::MergeImpl(*this, from);
         }
 
     private:
@@ -4681,17 +4681,17 @@ namespace protobuf
         void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
         void SharedDtor();
         void SetCachedSize(int size) const final;
-        void InternalSwap(ShipInfoRes* other);
+        void InternalSwap(SweeperInfoRes* other);
 
     private:
         friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
         static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName()
         {
-            return "protobuf.ShipInfoRes";
+            return "protobuf.SweeperInfoRes";
         }
 
     protected:
-        explicit ShipInfoRes(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned = false);
+        explicit SweeperInfoRes(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned = false);
 
     public:
         static const ClassData _class_data_;
@@ -4705,31 +4705,31 @@ namespace protobuf
 
         enum : int
         {
-            kShipInfoFieldNumber = 1,
+            kSweeperInfoFieldNumber = 1,
         };
-        // repeated .protobuf.MessageOfShip ship_info = 1;
-        int ship_info_size() const;
+        // repeated .protobuf.MessageOfSweeper sweeper_info = 1;
+        int sweeper_info_size() const;
 
     private:
-        int _internal_ship_info_size() const;
+        int _internal_sweeper_info_size() const;
 
     public:
-        void clear_ship_info();
-        ::protobuf::MessageOfShip* mutable_ship_info(int index);
-        ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<::protobuf::MessageOfShip>*
-            mutable_ship_info();
+        void clear_sweeper_info();
+        ::protobuf::MessageOfSweeper* mutable_sweeper_info(int index);
+        ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<::protobuf::MessageOfSweeper>*
+            mutable_sweeper_info();
 
     private:
-        const ::protobuf::MessageOfShip& _internal_ship_info(int index) const;
-        ::protobuf::MessageOfShip* _internal_add_ship_info();
+        const ::protobuf::MessageOfSweeper& _internal_sweeper_info(int index) const;
+        ::protobuf::MessageOfSweeper* _internal_add_sweeper_info();
 
     public:
-        const ::protobuf::MessageOfShip& ship_info(int index) const;
-        ::protobuf::MessageOfShip* add_ship_info();
-        const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<::protobuf::MessageOfShip>&
-            ship_info() const;
+        const ::protobuf::MessageOfSweeper& sweeper_info(int index) const;
+        ::protobuf::MessageOfSweeper* add_sweeper_info();
+        const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<::protobuf::MessageOfSweeper>&
+            sweeper_info() const;
 
-        // @@protoc_insertion_point(class_scope:protobuf.ShipInfoRes)
+        // @@protoc_insertion_point(class_scope:protobuf.SweeperInfoRes)
 
     private:
         class _Internal;
@@ -4740,7 +4740,7 @@ namespace protobuf
         typedef void DestructorSkippable_;
         struct Impl_
         {
-            ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<::protobuf::MessageOfShip> ship_info_;
+            ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<::protobuf::MessageOfSweeper> sweeper_info_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
         union
@@ -5222,438 +5222,438 @@ namespace protobuf
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-    // MessageOfShip
+    // MessageOfSweeper
 
     // int32 x = 1;
-    inline void MessageOfShip::clear_x()
+    inline void MessageOfSweeper::clear_x()
     {
         _impl_.x_ = 0;
     }
-    inline int32_t MessageOfShip::_internal_x() const
+    inline int32_t MessageOfSweeper::_internal_x() const
     {
         return _impl_.x_;
     }
-    inline int32_t MessageOfShip::x() const
+    inline int32_t MessageOfSweeper::x() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfShip.x)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSweeper.x)
         return _internal_x();
     }
-    inline void MessageOfShip::_internal_set_x(int32_t value)
+    inline void MessageOfSweeper::_internal_set_x(int32_t value)
     {
         _impl_.x_ = value;
     }
-    inline void MessageOfShip::set_x(int32_t value)
+    inline void MessageOfSweeper::set_x(int32_t value)
     {
         _internal_set_x(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.x)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSweeper.x)
     }
 
     // int32 y = 2;
-    inline void MessageOfShip::clear_y()
+    inline void MessageOfSweeper::clear_y()
     {
         _impl_.y_ = 0;
     }
-    inline int32_t MessageOfShip::_internal_y() const
+    inline int32_t MessageOfSweeper::_internal_y() const
     {
         return _impl_.y_;
     }
-    inline int32_t MessageOfShip::y() const
+    inline int32_t MessageOfSweeper::y() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfShip.y)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSweeper.y)
         return _internal_y();
     }
-    inline void MessageOfShip::_internal_set_y(int32_t value)
+    inline void MessageOfSweeper::_internal_set_y(int32_t value)
     {
         _impl_.y_ = value;
     }
-    inline void MessageOfShip::set_y(int32_t value)
+    inline void MessageOfSweeper::set_y(int32_t value)
     {
         _internal_set_y(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.y)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSweeper.y)
     }
 
     // int32 speed = 3;
-    inline void MessageOfShip::clear_speed()
+    inline void MessageOfSweeper::clear_speed()
     {
         _impl_.speed_ = 0;
     }
-    inline int32_t MessageOfShip::_internal_speed() const
+    inline int32_t MessageOfSweeper::_internal_speed() const
     {
         return _impl_.speed_;
     }
-    inline int32_t MessageOfShip::speed() const
+    inline int32_t MessageOfSweeper::speed() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfShip.speed)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSweeper.speed)
         return _internal_speed();
     }
-    inline void MessageOfShip::_internal_set_speed(int32_t value)
+    inline void MessageOfSweeper::_internal_set_speed(int32_t value)
     {
         _impl_.speed_ = value;
     }
-    inline void MessageOfShip::set_speed(int32_t value)
+    inline void MessageOfSweeper::set_speed(int32_t value)
     {
         _internal_set_speed(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.speed)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSweeper.speed)
     }
 
     // int32 hp = 4;
-    inline void MessageOfShip::clear_hp()
+    inline void MessageOfSweeper::clear_hp()
     {
         _impl_.hp_ = 0;
     }
-    inline int32_t MessageOfShip::_internal_hp() const
+    inline int32_t MessageOfSweeper::_internal_hp() const
     {
         return _impl_.hp_;
     }
-    inline int32_t MessageOfShip::hp() const
+    inline int32_t MessageOfSweeper::hp() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfShip.hp)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSweeper.hp)
         return _internal_hp();
     }
-    inline void MessageOfShip::_internal_set_hp(int32_t value)
+    inline void MessageOfSweeper::_internal_set_hp(int32_t value)
     {
         _impl_.hp_ = value;
     }
-    inline void MessageOfShip::set_hp(int32_t value)
+    inline void MessageOfSweeper::set_hp(int32_t value)
     {
         _internal_set_hp(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.hp)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSweeper.hp)
     }
 
     // int32 armor = 5;
-    inline void MessageOfShip::clear_armor()
+    inline void MessageOfSweeper::clear_armor()
     {
         _impl_.armor_ = 0;
     }
-    inline int32_t MessageOfShip::_internal_armor() const
+    inline int32_t MessageOfSweeper::_internal_armor() const
     {
         return _impl_.armor_;
     }
-    inline int32_t MessageOfShip::armor() const
+    inline int32_t MessageOfSweeper::armor() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfShip.armor)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSweeper.armor)
         return _internal_armor();
     }
-    inline void MessageOfShip::_internal_set_armor(int32_t value)
+    inline void MessageOfSweeper::_internal_set_armor(int32_t value)
     {
         _impl_.armor_ = value;
     }
-    inline void MessageOfShip::set_armor(int32_t value)
+    inline void MessageOfSweeper::set_armor(int32_t value)
     {
         _internal_set_armor(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.armor)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSweeper.armor)
     }
 
     // int32 shield = 6;
-    inline void MessageOfShip::clear_shield()
+    inline void MessageOfSweeper::clear_shield()
     {
         _impl_.shield_ = 0;
     }
-    inline int32_t MessageOfShip::_internal_shield() const
+    inline int32_t MessageOfSweeper::_internal_shield() const
     {
         return _impl_.shield_;
     }
-    inline int32_t MessageOfShip::shield() const
+    inline int32_t MessageOfSweeper::shield() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfShip.shield)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSweeper.shield)
         return _internal_shield();
     }
-    inline void MessageOfShip::_internal_set_shield(int32_t value)
+    inline void MessageOfSweeper::_internal_set_shield(int32_t value)
     {
         _impl_.shield_ = value;
     }
-    inline void MessageOfShip::set_shield(int32_t value)
+    inline void MessageOfSweeper::set_shield(int32_t value)
     {
         _internal_set_shield(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.shield)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSweeper.shield)
     }
 
     // int64 team_id = 7;
-    inline void MessageOfShip::clear_team_id()
+    inline void MessageOfSweeper::clear_team_id()
     {
         _impl_.team_id_ = int64_t{0};
     }
-    inline int64_t MessageOfShip::_internal_team_id() const
+    inline int64_t MessageOfSweeper::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t MessageOfShip::team_id() const
+    inline int64_t MessageOfSweeper::team_id() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfShip.team_id)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSweeper.team_id)
         return _internal_team_id();
     }
-    inline void MessageOfShip::_internal_set_team_id(int64_t value)
+    inline void MessageOfSweeper::_internal_set_team_id(int64_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void MessageOfShip::set_team_id(int64_t value)
+    inline void MessageOfSweeper::set_team_id(int64_t value)
     {
         _internal_set_team_id(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.team_id)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSweeper.team_id)
     }
 
     // int64 player_id = 8;
-    inline void MessageOfShip::clear_player_id()
+    inline void MessageOfSweeper::clear_player_id()
     {
         _impl_.player_id_ = int64_t{0};
     }
-    inline int64_t MessageOfShip::_internal_player_id() const
+    inline int64_t MessageOfSweeper::_internal_player_id() const
     {
         return _impl_.player_id_;
     }
-    inline int64_t MessageOfShip::player_id() const
+    inline int64_t MessageOfSweeper::player_id() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfShip.player_id)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSweeper.player_id)
         return _internal_player_id();
     }
-    inline void MessageOfShip::_internal_set_player_id(int64_t value)
+    inline void MessageOfSweeper::_internal_set_player_id(int64_t value)
     {
         _impl_.player_id_ = value;
     }
-    inline void MessageOfShip::set_player_id(int64_t value)
+    inline void MessageOfSweeper::set_player_id(int64_t value)
     {
         _internal_set_player_id(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.player_id)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSweeper.player_id)
     }
 
     // int64 guid = 9;
-    inline void MessageOfShip::clear_guid()
+    inline void MessageOfSweeper::clear_guid()
     {
         _impl_.guid_ = int64_t{0};
     }
-    inline int64_t MessageOfShip::_internal_guid() const
+    inline int64_t MessageOfSweeper::_internal_guid() const
     {
         return _impl_.guid_;
     }
-    inline int64_t MessageOfShip::guid() const
+    inline int64_t MessageOfSweeper::guid() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfShip.guid)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSweeper.guid)
         return _internal_guid();
     }
-    inline void MessageOfShip::_internal_set_guid(int64_t value)
+    inline void MessageOfSweeper::_internal_set_guid(int64_t value)
     {
         _impl_.guid_ = value;
     }
-    inline void MessageOfShip::set_guid(int64_t value)
+    inline void MessageOfSweeper::set_guid(int64_t value)
     {
         _internal_set_guid(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.guid)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSweeper.guid)
     }
 
-    // .protobuf.ShipState ship_state = 10;
-    inline void MessageOfShip::clear_ship_state()
+    // .protobuf.SweeperState sweeper_state = 10;
+    inline void MessageOfSweeper::clear_sweeper_state()
     {
-        _impl_.ship_state_ = 0;
+        _impl_.sweeper_state_ = 0;
     }
-    inline ::protobuf::ShipState MessageOfShip::_internal_ship_state() const
+    inline ::protobuf::SweeperState MessageOfSweeper::_internal_sweeper_state() const
     {
-        return static_cast<::protobuf::ShipState>(_impl_.ship_state_);
+        return static_cast<::protobuf::SweeperState>(_impl_.sweeper_state_);
     }
-    inline ::protobuf::ShipState MessageOfShip::ship_state() const
+    inline ::protobuf::SweeperState MessageOfSweeper::sweeper_state() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfShip.ship_state)
-        return _internal_ship_state();
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSweeper.sweeper_state)
+        return _internal_sweeper_state();
     }
-    inline void MessageOfShip::_internal_set_ship_state(::protobuf::ShipState value)
+    inline void MessageOfSweeper::_internal_set_sweeper_state(::protobuf::SweeperState value)
     {
-        _impl_.ship_state_ = value;
+        _impl_.sweeper_state_ = value;
     }
-    inline void MessageOfShip::set_ship_state(::protobuf::ShipState value)
+    inline void MessageOfSweeper::set_sweeper_state(::protobuf::SweeperState value)
     {
-        _internal_set_ship_state(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.ship_state)
+        _internal_set_sweeper_state(value);
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSweeper.sweeper_state)
     }
 
-    // .protobuf.ShipType ship_type = 11;
-    inline void MessageOfShip::clear_ship_type()
+    // .protobuf.SweeperType sweeper_type = 11;
+    inline void MessageOfSweeper::clear_sweeper_type()
     {
-        _impl_.ship_type_ = 0;
+        _impl_.sweeper_type_ = 0;
     }
-    inline ::protobuf::ShipType MessageOfShip::_internal_ship_type() const
+    inline ::protobuf::SweeperType MessageOfSweeper::_internal_sweeper_type() const
     {
-        return static_cast<::protobuf::ShipType>(_impl_.ship_type_);
+        return static_cast<::protobuf::SweeperType>(_impl_.sweeper_type_);
     }
-    inline ::protobuf::ShipType MessageOfShip::ship_type() const
+    inline ::protobuf::SweeperType MessageOfSweeper::sweeper_type() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfShip.ship_type)
-        return _internal_ship_type();
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSweeper.sweeper_type)
+        return _internal_sweeper_type();
     }
-    inline void MessageOfShip::_internal_set_ship_type(::protobuf::ShipType value)
+    inline void MessageOfSweeper::_internal_set_sweeper_type(::protobuf::SweeperType value)
     {
-        _impl_.ship_type_ = value;
+        _impl_.sweeper_type_ = value;
     }
-    inline void MessageOfShip::set_ship_type(::protobuf::ShipType value)
+    inline void MessageOfSweeper::set_sweeper_type(::protobuf::SweeperType value)
     {
-        _internal_set_ship_type(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.ship_type)
+        _internal_set_sweeper_type(value);
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSweeper.sweeper_type)
     }
 
     // int32 view_range = 12;
-    inline void MessageOfShip::clear_view_range()
+    inline void MessageOfSweeper::clear_view_range()
     {
         _impl_.view_range_ = 0;
     }
-    inline int32_t MessageOfShip::_internal_view_range() const
+    inline int32_t MessageOfSweeper::_internal_view_range() const
     {
         return _impl_.view_range_;
     }
-    inline int32_t MessageOfShip::view_range() const
+    inline int32_t MessageOfSweeper::view_range() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfShip.view_range)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSweeper.view_range)
         return _internal_view_range();
     }
-    inline void MessageOfShip::_internal_set_view_range(int32_t value)
+    inline void MessageOfSweeper::_internal_set_view_range(int32_t value)
     {
         _impl_.view_range_ = value;
     }
-    inline void MessageOfShip::set_view_range(int32_t value)
+    inline void MessageOfSweeper::set_view_range(int32_t value)
     {
         _internal_set_view_range(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.view_range)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSweeper.view_range)
     }
 
     // .protobuf.ProducerType producer_type = 13;
-    inline void MessageOfShip::clear_producer_type()
+    inline void MessageOfSweeper::clear_producer_type()
     {
         _impl_.producer_type_ = 0;
     }
-    inline ::protobuf::ProducerType MessageOfShip::_internal_producer_type() const
+    inline ::protobuf::ProducerType MessageOfSweeper::_internal_producer_type() const
     {
         return static_cast<::protobuf::ProducerType>(_impl_.producer_type_);
     }
-    inline ::protobuf::ProducerType MessageOfShip::producer_type() const
+    inline ::protobuf::ProducerType MessageOfSweeper::producer_type() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfShip.producer_type)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSweeper.producer_type)
         return _internal_producer_type();
     }
-    inline void MessageOfShip::_internal_set_producer_type(::protobuf::ProducerType value)
+    inline void MessageOfSweeper::_internal_set_producer_type(::protobuf::ProducerType value)
     {
         _impl_.producer_type_ = value;
     }
-    inline void MessageOfShip::set_producer_type(::protobuf::ProducerType value)
+    inline void MessageOfSweeper::set_producer_type(::protobuf::ProducerType value)
     {
         _internal_set_producer_type(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.producer_type)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSweeper.producer_type)
     }
 
     // .protobuf.ConstructorType constructor_type = 14;
-    inline void MessageOfShip::clear_constructor_type()
+    inline void MessageOfSweeper::clear_constructor_type()
     {
         _impl_.constructor_type_ = 0;
     }
-    inline ::protobuf::ConstructorType MessageOfShip::_internal_constructor_type() const
+    inline ::protobuf::ConstructorType MessageOfSweeper::_internal_constructor_type() const
     {
         return static_cast<::protobuf::ConstructorType>(_impl_.constructor_type_);
     }
-    inline ::protobuf::ConstructorType MessageOfShip::constructor_type() const
+    inline ::protobuf::ConstructorType MessageOfSweeper::constructor_type() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfShip.constructor_type)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSweeper.constructor_type)
         return _internal_constructor_type();
     }
-    inline void MessageOfShip::_internal_set_constructor_type(::protobuf::ConstructorType value)
+    inline void MessageOfSweeper::_internal_set_constructor_type(::protobuf::ConstructorType value)
     {
         _impl_.constructor_type_ = value;
     }
-    inline void MessageOfShip::set_constructor_type(::protobuf::ConstructorType value)
+    inline void MessageOfSweeper::set_constructor_type(::protobuf::ConstructorType value)
     {
         _internal_set_constructor_type(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.constructor_type)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSweeper.constructor_type)
     }
 
     // .protobuf.ArmorType armor_type = 15;
-    inline void MessageOfShip::clear_armor_type()
+    inline void MessageOfSweeper::clear_armor_type()
     {
         _impl_.armor_type_ = 0;
     }
-    inline ::protobuf::ArmorType MessageOfShip::_internal_armor_type() const
+    inline ::protobuf::ArmorType MessageOfSweeper::_internal_armor_type() const
     {
         return static_cast<::protobuf::ArmorType>(_impl_.armor_type_);
     }
-    inline ::protobuf::ArmorType MessageOfShip::armor_type() const
+    inline ::protobuf::ArmorType MessageOfSweeper::armor_type() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfShip.armor_type)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSweeper.armor_type)
         return _internal_armor_type();
     }
-    inline void MessageOfShip::_internal_set_armor_type(::protobuf::ArmorType value)
+    inline void MessageOfSweeper::_internal_set_armor_type(::protobuf::ArmorType value)
     {
         _impl_.armor_type_ = value;
     }
-    inline void MessageOfShip::set_armor_type(::protobuf::ArmorType value)
+    inline void MessageOfSweeper::set_armor_type(::protobuf::ArmorType value)
     {
         _internal_set_armor_type(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.armor_type)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSweeper.armor_type)
     }
 
     // .protobuf.ShieldType shield_type = 16;
-    inline void MessageOfShip::clear_shield_type()
+    inline void MessageOfSweeper::clear_shield_type()
     {
         _impl_.shield_type_ = 0;
     }
-    inline ::protobuf::ShieldType MessageOfShip::_internal_shield_type() const
+    inline ::protobuf::ShieldType MessageOfSweeper::_internal_shield_type() const
     {
         return static_cast<::protobuf::ShieldType>(_impl_.shield_type_);
     }
-    inline ::protobuf::ShieldType MessageOfShip::shield_type() const
+    inline ::protobuf::ShieldType MessageOfSweeper::shield_type() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfShip.shield_type)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSweeper.shield_type)
         return _internal_shield_type();
     }
-    inline void MessageOfShip::_internal_set_shield_type(::protobuf::ShieldType value)
+    inline void MessageOfSweeper::_internal_set_shield_type(::protobuf::ShieldType value)
     {
         _impl_.shield_type_ = value;
     }
-    inline void MessageOfShip::set_shield_type(::protobuf::ShieldType value)
+    inline void MessageOfSweeper::set_shield_type(::protobuf::ShieldType value)
     {
         _internal_set_shield_type(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.shield_type)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSweeper.shield_type)
     }
 
     // .protobuf.WeaponType weapon_type = 17;
-    inline void MessageOfShip::clear_weapon_type()
+    inline void MessageOfSweeper::clear_weapon_type()
     {
         _impl_.weapon_type_ = 0;
     }
-    inline ::protobuf::WeaponType MessageOfShip::_internal_weapon_type() const
+    inline ::protobuf::WeaponType MessageOfSweeper::_internal_weapon_type() const
     {
         return static_cast<::protobuf::WeaponType>(_impl_.weapon_type_);
     }
-    inline ::protobuf::WeaponType MessageOfShip::weapon_type() const
+    inline ::protobuf::WeaponType MessageOfSweeper::weapon_type() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfShip.weapon_type)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSweeper.weapon_type)
         return _internal_weapon_type();
     }
-    inline void MessageOfShip::_internal_set_weapon_type(::protobuf::WeaponType value)
+    inline void MessageOfSweeper::_internal_set_weapon_type(::protobuf::WeaponType value)
     {
         _impl_.weapon_type_ = value;
     }
-    inline void MessageOfShip::set_weapon_type(::protobuf::WeaponType value)
+    inline void MessageOfSweeper::set_weapon_type(::protobuf::WeaponType value)
     {
         _internal_set_weapon_type(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.weapon_type)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSweeper.weapon_type)
     }
 
     // double facing_direction = 18;
-    inline void MessageOfShip::clear_facing_direction()
+    inline void MessageOfSweeper::clear_facing_direction()
     {
         _impl_.facing_direction_ = 0;
     }
-    inline double MessageOfShip::_internal_facing_direction() const
+    inline double MessageOfSweeper::_internal_facing_direction() const
     {
         return _impl_.facing_direction_;
     }
-    inline double MessageOfShip::facing_direction() const
+    inline double MessageOfSweeper::facing_direction() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfShip.facing_direction)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSweeper.facing_direction)
         return _internal_facing_direction();
     }
-    inline void MessageOfShip::_internal_set_facing_direction(double value)
+    inline void MessageOfSweeper::_internal_set_facing_direction(double value)
     {
         _impl_.facing_direction_ = value;
     }
-    inline void MessageOfShip::set_facing_direction(double value)
+    inline void MessageOfSweeper::set_facing_direction(double value)
     {
         _internal_set_facing_direction(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.facing_direction)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSweeper.facing_direction)
     }
 
     // -------------------------------------------------------------------
@@ -6026,454 +6026,454 @@ namespace protobuf
 
     // -------------------------------------------------------------------
 
-    // MessageOfFactory
+    // MessageOfRecycleBank
 
     // int32 x = 1;
-    inline void MessageOfFactory::clear_x()
+    inline void MessageOfRecycleBank::clear_x()
     {
         _impl_.x_ = 0;
     }
-    inline int32_t MessageOfFactory::_internal_x() const
+    inline int32_t MessageOfRecycleBank::_internal_x() const
     {
         return _impl_.x_;
     }
-    inline int32_t MessageOfFactory::x() const
+    inline int32_t MessageOfRecycleBank::x() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfFactory.x)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfRecycleBank.x)
         return _internal_x();
     }
-    inline void MessageOfFactory::_internal_set_x(int32_t value)
+    inline void MessageOfRecycleBank::_internal_set_x(int32_t value)
     {
         _impl_.x_ = value;
     }
-    inline void MessageOfFactory::set_x(int32_t value)
+    inline void MessageOfRecycleBank::set_x(int32_t value)
     {
         _internal_set_x(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfFactory.x)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfRecycleBank.x)
     }
 
     // int32 y = 2;
-    inline void MessageOfFactory::clear_y()
+    inline void MessageOfRecycleBank::clear_y()
     {
         _impl_.y_ = 0;
     }
-    inline int32_t MessageOfFactory::_internal_y() const
+    inline int32_t MessageOfRecycleBank::_internal_y() const
     {
         return _impl_.y_;
     }
-    inline int32_t MessageOfFactory::y() const
+    inline int32_t MessageOfRecycleBank::y() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfFactory.y)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfRecycleBank.y)
         return _internal_y();
     }
-    inline void MessageOfFactory::_internal_set_y(int32_t value)
+    inline void MessageOfRecycleBank::_internal_set_y(int32_t value)
     {
         _impl_.y_ = value;
     }
-    inline void MessageOfFactory::set_y(int32_t value)
+    inline void MessageOfRecycleBank::set_y(int32_t value)
     {
         _internal_set_y(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfFactory.y)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfRecycleBank.y)
     }
 
     // int32 hp = 3;
-    inline void MessageOfFactory::clear_hp()
+    inline void MessageOfRecycleBank::clear_hp()
     {
         _impl_.hp_ = 0;
     }
-    inline int32_t MessageOfFactory::_internal_hp() const
+    inline int32_t MessageOfRecycleBank::_internal_hp() const
     {
         return _impl_.hp_;
     }
-    inline int32_t MessageOfFactory::hp() const
+    inline int32_t MessageOfRecycleBank::hp() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfFactory.hp)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfRecycleBank.hp)
         return _internal_hp();
     }
-    inline void MessageOfFactory::_internal_set_hp(int32_t value)
+    inline void MessageOfRecycleBank::_internal_set_hp(int32_t value)
     {
         _impl_.hp_ = value;
     }
-    inline void MessageOfFactory::set_hp(int32_t value)
+    inline void MessageOfRecycleBank::set_hp(int32_t value)
     {
         _internal_set_hp(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfFactory.hp)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfRecycleBank.hp)
     }
 
     // int64 team_id = 4;
-    inline void MessageOfFactory::clear_team_id()
+    inline void MessageOfRecycleBank::clear_team_id()
     {
         _impl_.team_id_ = int64_t{0};
     }
-    inline int64_t MessageOfFactory::_internal_team_id() const
+    inline int64_t MessageOfRecycleBank::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t MessageOfFactory::team_id() const
+    inline int64_t MessageOfRecycleBank::team_id() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfFactory.team_id)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfRecycleBank.team_id)
         return _internal_team_id();
     }
-    inline void MessageOfFactory::_internal_set_team_id(int64_t value)
+    inline void MessageOfRecycleBank::_internal_set_team_id(int64_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void MessageOfFactory::set_team_id(int64_t value)
+    inline void MessageOfRecycleBank::set_team_id(int64_t value)
     {
         _internal_set_team_id(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfFactory.team_id)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfRecycleBank.team_id)
     }
 
     // -------------------------------------------------------------------
 
-    // MessageOfCommunity
+    // MessageOfChargeStation
 
     // int32 x = 1;
-    inline void MessageOfCommunity::clear_x()
+    inline void MessageOfChargeStation::clear_x()
     {
         _impl_.x_ = 0;
     }
-    inline int32_t MessageOfCommunity::_internal_x() const
+    inline int32_t MessageOfChargeStation::_internal_x() const
     {
         return _impl_.x_;
     }
-    inline int32_t MessageOfCommunity::x() const
+    inline int32_t MessageOfChargeStation::x() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfCommunity.x)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfChargeStation.x)
         return _internal_x();
     }
-    inline void MessageOfCommunity::_internal_set_x(int32_t value)
+    inline void MessageOfChargeStation::_internal_set_x(int32_t value)
     {
         _impl_.x_ = value;
     }
-    inline void MessageOfCommunity::set_x(int32_t value)
+    inline void MessageOfChargeStation::set_x(int32_t value)
     {
         _internal_set_x(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfCommunity.x)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfChargeStation.x)
     }
 
     // int32 y = 2;
-    inline void MessageOfCommunity::clear_y()
+    inline void MessageOfChargeStation::clear_y()
     {
         _impl_.y_ = 0;
     }
-    inline int32_t MessageOfCommunity::_internal_y() const
+    inline int32_t MessageOfChargeStation::_internal_y() const
     {
         return _impl_.y_;
     }
-    inline int32_t MessageOfCommunity::y() const
+    inline int32_t MessageOfChargeStation::y() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfCommunity.y)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfChargeStation.y)
         return _internal_y();
     }
-    inline void MessageOfCommunity::_internal_set_y(int32_t value)
+    inline void MessageOfChargeStation::_internal_set_y(int32_t value)
     {
         _impl_.y_ = value;
     }
-    inline void MessageOfCommunity::set_y(int32_t value)
+    inline void MessageOfChargeStation::set_y(int32_t value)
     {
         _internal_set_y(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfCommunity.y)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfChargeStation.y)
     }
 
     // int32 hp = 3;
-    inline void MessageOfCommunity::clear_hp()
+    inline void MessageOfChargeStation::clear_hp()
     {
         _impl_.hp_ = 0;
     }
-    inline int32_t MessageOfCommunity::_internal_hp() const
+    inline int32_t MessageOfChargeStation::_internal_hp() const
     {
         return _impl_.hp_;
     }
-    inline int32_t MessageOfCommunity::hp() const
+    inline int32_t MessageOfChargeStation::hp() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfCommunity.hp)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfChargeStation.hp)
         return _internal_hp();
     }
-    inline void MessageOfCommunity::_internal_set_hp(int32_t value)
+    inline void MessageOfChargeStation::_internal_set_hp(int32_t value)
     {
         _impl_.hp_ = value;
     }
-    inline void MessageOfCommunity::set_hp(int32_t value)
+    inline void MessageOfChargeStation::set_hp(int32_t value)
     {
         _internal_set_hp(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfCommunity.hp)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfChargeStation.hp)
     }
 
     // int64 team_id = 4;
-    inline void MessageOfCommunity::clear_team_id()
+    inline void MessageOfChargeStation::clear_team_id()
     {
         _impl_.team_id_ = int64_t{0};
     }
-    inline int64_t MessageOfCommunity::_internal_team_id() const
+    inline int64_t MessageOfChargeStation::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t MessageOfCommunity::team_id() const
+    inline int64_t MessageOfChargeStation::team_id() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfCommunity.team_id)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfChargeStation.team_id)
         return _internal_team_id();
     }
-    inline void MessageOfCommunity::_internal_set_team_id(int64_t value)
+    inline void MessageOfChargeStation::_internal_set_team_id(int64_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void MessageOfCommunity::set_team_id(int64_t value)
+    inline void MessageOfChargeStation::set_team_id(int64_t value)
     {
         _internal_set_team_id(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfCommunity.team_id)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfChargeStation.team_id)
     }
 
     // -------------------------------------------------------------------
 
-    // MessageOfFort
+    // MessageOfSignalTower
 
     // int32 x = 1;
-    inline void MessageOfFort::clear_x()
+    inline void MessageOfSignalTower::clear_x()
     {
         _impl_.x_ = 0;
     }
-    inline int32_t MessageOfFort::_internal_x() const
+    inline int32_t MessageOfSignalTower::_internal_x() const
     {
         return _impl_.x_;
     }
-    inline int32_t MessageOfFort::x() const
+    inline int32_t MessageOfSignalTower::x() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfFort.x)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSignalTower.x)
         return _internal_x();
     }
-    inline void MessageOfFort::_internal_set_x(int32_t value)
+    inline void MessageOfSignalTower::_internal_set_x(int32_t value)
     {
         _impl_.x_ = value;
     }
-    inline void MessageOfFort::set_x(int32_t value)
+    inline void MessageOfSignalTower::set_x(int32_t value)
     {
         _internal_set_x(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfFort.x)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSignalTower.x)
     }
 
     // int32 y = 2;
-    inline void MessageOfFort::clear_y()
+    inline void MessageOfSignalTower::clear_y()
     {
         _impl_.y_ = 0;
     }
-    inline int32_t MessageOfFort::_internal_y() const
+    inline int32_t MessageOfSignalTower::_internal_y() const
     {
         return _impl_.y_;
     }
-    inline int32_t MessageOfFort::y() const
+    inline int32_t MessageOfSignalTower::y() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfFort.y)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSignalTower.y)
         return _internal_y();
     }
-    inline void MessageOfFort::_internal_set_y(int32_t value)
+    inline void MessageOfSignalTower::_internal_set_y(int32_t value)
     {
         _impl_.y_ = value;
     }
-    inline void MessageOfFort::set_y(int32_t value)
+    inline void MessageOfSignalTower::set_y(int32_t value)
     {
         _internal_set_y(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfFort.y)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSignalTower.y)
     }
 
     // int32 hp = 3;
-    inline void MessageOfFort::clear_hp()
+    inline void MessageOfSignalTower::clear_hp()
     {
         _impl_.hp_ = 0;
     }
-    inline int32_t MessageOfFort::_internal_hp() const
+    inline int32_t MessageOfSignalTower::_internal_hp() const
     {
         return _impl_.hp_;
     }
-    inline int32_t MessageOfFort::hp() const
+    inline int32_t MessageOfSignalTower::hp() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfFort.hp)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSignalTower.hp)
         return _internal_hp();
     }
-    inline void MessageOfFort::_internal_set_hp(int32_t value)
+    inline void MessageOfSignalTower::_internal_set_hp(int32_t value)
     {
         _impl_.hp_ = value;
     }
-    inline void MessageOfFort::set_hp(int32_t value)
+    inline void MessageOfSignalTower::set_hp(int32_t value)
     {
         _internal_set_hp(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfFort.hp)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSignalTower.hp)
     }
 
     // int64 team_id = 4;
-    inline void MessageOfFort::clear_team_id()
+    inline void MessageOfSignalTower::clear_team_id()
     {
         _impl_.team_id_ = int64_t{0};
     }
-    inline int64_t MessageOfFort::_internal_team_id() const
+    inline int64_t MessageOfSignalTower::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t MessageOfFort::team_id() const
+    inline int64_t MessageOfSignalTower::team_id() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfFort.team_id)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfSignalTower.team_id)
         return _internal_team_id();
     }
-    inline void MessageOfFort::_internal_set_team_id(int64_t value)
+    inline void MessageOfSignalTower::_internal_set_team_id(int64_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void MessageOfFort::set_team_id(int64_t value)
+    inline void MessageOfSignalTower::set_team_id(int64_t value)
     {
         _internal_set_team_id(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfFort.team_id)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfSignalTower.team_id)
     }
 
     // -------------------------------------------------------------------
 
-    // MessageOfWormhole
+    // MessageOfBridge
 
     // int32 x = 1;
-    inline void MessageOfWormhole::clear_x()
+    inline void MessageOfBridge::clear_x()
     {
         _impl_.x_ = 0;
     }
-    inline int32_t MessageOfWormhole::_internal_x() const
+    inline int32_t MessageOfBridge::_internal_x() const
     {
         return _impl_.x_;
     }
-    inline int32_t MessageOfWormhole::x() const
+    inline int32_t MessageOfBridge::x() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfWormhole.x)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfBridge.x)
         return _internal_x();
     }
-    inline void MessageOfWormhole::_internal_set_x(int32_t value)
+    inline void MessageOfBridge::_internal_set_x(int32_t value)
     {
         _impl_.x_ = value;
     }
-    inline void MessageOfWormhole::set_x(int32_t value)
+    inline void MessageOfBridge::set_x(int32_t value)
     {
         _internal_set_x(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfWormhole.x)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfBridge.x)
     }
 
     // int32 y = 2;
-    inline void MessageOfWormhole::clear_y()
+    inline void MessageOfBridge::clear_y()
     {
         _impl_.y_ = 0;
     }
-    inline int32_t MessageOfWormhole::_internal_y() const
+    inline int32_t MessageOfBridge::_internal_y() const
     {
         return _impl_.y_;
     }
-    inline int32_t MessageOfWormhole::y() const
+    inline int32_t MessageOfBridge::y() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfWormhole.y)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfBridge.y)
         return _internal_y();
     }
-    inline void MessageOfWormhole::_internal_set_y(int32_t value)
+    inline void MessageOfBridge::_internal_set_y(int32_t value)
     {
         _impl_.y_ = value;
     }
-    inline void MessageOfWormhole::set_y(int32_t value)
+    inline void MessageOfBridge::set_y(int32_t value)
     {
         _internal_set_y(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfWormhole.y)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfBridge.y)
     }
 
     // int32 hp = 3;
-    inline void MessageOfWormhole::clear_hp()
+    inline void MessageOfBridge::clear_hp()
     {
         _impl_.hp_ = 0;
     }
-    inline int32_t MessageOfWormhole::_internal_hp() const
+    inline int32_t MessageOfBridge::_internal_hp() const
     {
         return _impl_.hp_;
     }
-    inline int32_t MessageOfWormhole::hp() const
+    inline int32_t MessageOfBridge::hp() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfWormhole.hp)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfBridge.hp)
         return _internal_hp();
     }
-    inline void MessageOfWormhole::_internal_set_hp(int32_t value)
+    inline void MessageOfBridge::_internal_set_hp(int32_t value)
     {
         _impl_.hp_ = value;
     }
-    inline void MessageOfWormhole::set_hp(int32_t value)
+    inline void MessageOfBridge::set_hp(int32_t value)
     {
         _internal_set_hp(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfWormhole.hp)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfBridge.hp)
     }
 
     // -------------------------------------------------------------------
 
-    // MessageOfResource
+    // MessageOfGarbage
 
     // int32 x = 1;
-    inline void MessageOfResource::clear_x()
+    inline void MessageOfGarbage::clear_x()
     {
         _impl_.x_ = 0;
     }
-    inline int32_t MessageOfResource::_internal_x() const
+    inline int32_t MessageOfGarbage::_internal_x() const
     {
         return _impl_.x_;
     }
-    inline int32_t MessageOfResource::x() const
+    inline int32_t MessageOfGarbage::x() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfResource.x)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfGarbage.x)
         return _internal_x();
     }
-    inline void MessageOfResource::_internal_set_x(int32_t value)
+    inline void MessageOfGarbage::_internal_set_x(int32_t value)
     {
         _impl_.x_ = value;
     }
-    inline void MessageOfResource::set_x(int32_t value)
+    inline void MessageOfGarbage::set_x(int32_t value)
     {
         _internal_set_x(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfResource.x)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfGarbage.x)
     }
 
     // int32 y = 2;
-    inline void MessageOfResource::clear_y()
+    inline void MessageOfGarbage::clear_y()
     {
         _impl_.y_ = 0;
     }
-    inline int32_t MessageOfResource::_internal_y() const
+    inline int32_t MessageOfGarbage::_internal_y() const
     {
         return _impl_.y_;
     }
-    inline int32_t MessageOfResource::y() const
+    inline int32_t MessageOfGarbage::y() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfResource.y)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfGarbage.y)
         return _internal_y();
     }
-    inline void MessageOfResource::_internal_set_y(int32_t value)
+    inline void MessageOfGarbage::_internal_set_y(int32_t value)
     {
         _impl_.y_ = value;
     }
-    inline void MessageOfResource::set_y(int32_t value)
+    inline void MessageOfGarbage::set_y(int32_t value)
     {
         _internal_set_y(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfResource.y)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfGarbage.y)
     }
 
     // int32 progress = 3;
-    inline void MessageOfResource::clear_progress()
+    inline void MessageOfGarbage::clear_progress()
     {
         _impl_.progress_ = 0;
     }
-    inline int32_t MessageOfResource::_internal_progress() const
+    inline int32_t MessageOfGarbage::_internal_progress() const
     {
         return _impl_.progress_;
     }
-    inline int32_t MessageOfResource::progress() const
+    inline int32_t MessageOfGarbage::progress() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfResource.progress)
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfGarbage.progress)
         return _internal_progress();
     }
-    inline void MessageOfResource::_internal_set_progress(int32_t value)
+    inline void MessageOfGarbage::_internal_set_progress(int32_t value)
     {
         _impl_.progress_ = value;
     }
-    inline void MessageOfResource::set_progress(int32_t value)
+    inline void MessageOfGarbage::set_progress(int32_t value)
     {
         _internal_set_progress(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfResource.progress)
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfGarbage.progress)
     }
 
     // -------------------------------------------------------------------
@@ -6864,42 +6864,42 @@ namespace protobuf
 
     // MessageOfObj
 
-    // .protobuf.MessageOfShip ship_message = 1;
-    inline bool MessageOfObj::_internal_has_ship_message() const
+    // .protobuf.MessageOfSweeper sweeper_message = 1;
+    inline bool MessageOfObj::_internal_has_sweeper_message() const
     {
-        return message_of_obj_case() == kShipMessage;
+        return message_of_obj_case() == kSweeperMessage;
     }
-    inline bool MessageOfObj::has_ship_message() const
+    inline bool MessageOfObj::has_sweeper_message() const
     {
-        return _internal_has_ship_message();
+        return _internal_has_sweeper_message();
     }
-    inline void MessageOfObj::set_has_ship_message()
+    inline void MessageOfObj::set_has_sweeper_message()
     {
-        _impl_._oneof_case_[0] = kShipMessage;
+        _impl_._oneof_case_[0] = kSweeperMessage;
     }
-    inline void MessageOfObj::clear_ship_message()
+    inline void MessageOfObj::clear_sweeper_message()
     {
-        if (_internal_has_ship_message())
+        if (_internal_has_sweeper_message())
         {
             if (GetArenaForAllocation() == nullptr)
             {
-                delete _impl_.message_of_obj_.ship_message_;
+                delete _impl_.message_of_obj_.sweeper_message_;
             }
             clear_has_message_of_obj();
         }
     }
-    inline ::protobuf::MessageOfShip* MessageOfObj::release_ship_message()
+    inline ::protobuf::MessageOfSweeper* MessageOfObj::release_sweeper_message()
     {
-        // @@protoc_insertion_point(field_release:protobuf.MessageOfObj.ship_message)
-        if (_internal_has_ship_message())
+        // @@protoc_insertion_point(field_release:protobuf.MessageOfObj.sweeper_message)
+        if (_internal_has_sweeper_message())
         {
             clear_has_message_of_obj();
-            ::protobuf::MessageOfShip* temp = _impl_.message_of_obj_.ship_message_;
+            ::protobuf::MessageOfSweeper* temp = _impl_.message_of_obj_.sweeper_message_;
             if (GetArenaForAllocation() != nullptr)
             {
                 temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
             }
-            _impl_.message_of_obj_.ship_message_ = nullptr;
+            _impl_.message_of_obj_.sweeper_message_ = nullptr;
             return temp;
         }
         else
@@ -6907,23 +6907,23 @@ namespace protobuf
             return nullptr;
         }
     }
-    inline const ::protobuf::MessageOfShip& MessageOfObj::_internal_ship_message() const
+    inline const ::protobuf::MessageOfSweeper& MessageOfObj::_internal_sweeper_message() const
     {
-        return _internal_has_ship_message() ? *_impl_.message_of_obj_.ship_message_ : reinterpret_cast<::protobuf::MessageOfShip&>(::protobuf::_MessageOfShip_default_instance_);
+        return _internal_has_sweeper_message() ? *_impl_.message_of_obj_.sweeper_message_ : reinterpret_cast<::protobuf::MessageOfSweeper&>(::protobuf::_MessageOfSweeper_default_instance_);
     }
-    inline const ::protobuf::MessageOfShip& MessageOfObj::ship_message() const
+    inline const ::protobuf::MessageOfSweeper& MessageOfObj::sweeper_message() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfObj.ship_message)
-        return _internal_ship_message();
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfObj.sweeper_message)
+        return _internal_sweeper_message();
     }
-    inline ::protobuf::MessageOfShip* MessageOfObj::unsafe_arena_release_ship_message()
+    inline ::protobuf::MessageOfSweeper* MessageOfObj::unsafe_arena_release_sweeper_message()
     {
-        // @@protoc_insertion_point(field_unsafe_arena_release:protobuf.MessageOfObj.ship_message)
-        if (_internal_has_ship_message())
+        // @@protoc_insertion_point(field_unsafe_arena_release:protobuf.MessageOfObj.sweeper_message)
+        if (_internal_has_sweeper_message())
         {
             clear_has_message_of_obj();
-            ::protobuf::MessageOfShip* temp = _impl_.message_of_obj_.ship_message_;
-            _impl_.message_of_obj_.ship_message_ = nullptr;
+            ::protobuf::MessageOfSweeper* temp = _impl_.message_of_obj_.sweeper_message_;
+            _impl_.message_of_obj_.sweeper_message_ = nullptr;
             return temp;
         }
         else
@@ -6931,30 +6931,30 @@ namespace protobuf
             return nullptr;
         }
     }
-    inline void MessageOfObj::unsafe_arena_set_allocated_ship_message(::protobuf::MessageOfShip* ship_message)
+    inline void MessageOfObj::unsafe_arena_set_allocated_sweeper_message(::protobuf::MessageOfSweeper* sweeper_message)
     {
         clear_message_of_obj();
-        if (ship_message)
+        if (sweeper_message)
         {
-            set_has_ship_message();
-            _impl_.message_of_obj_.ship_message_ = ship_message;
+            set_has_sweeper_message();
+            _impl_.message_of_obj_.sweeper_message_ = sweeper_message;
         }
-        // @@protoc_insertion_point(field_unsafe_arena_set_allocated:protobuf.MessageOfObj.ship_message)
+        // @@protoc_insertion_point(field_unsafe_arena_set_allocated:protobuf.MessageOfObj.sweeper_message)
     }
-    inline ::protobuf::MessageOfShip* MessageOfObj::_internal_mutable_ship_message()
+    inline ::protobuf::MessageOfSweeper* MessageOfObj::_internal_mutable_sweeper_message()
     {
-        if (!_internal_has_ship_message())
+        if (!_internal_has_sweeper_message())
         {
             clear_message_of_obj();
-            set_has_ship_message();
-            _impl_.message_of_obj_.ship_message_ = CreateMaybeMessage<::protobuf::MessageOfShip>(GetArenaForAllocation());
+            set_has_sweeper_message();
+            _impl_.message_of_obj_.sweeper_message_ = CreateMaybeMessage<::protobuf::MessageOfSweeper>(GetArenaForAllocation());
         }
-        return _impl_.message_of_obj_.ship_message_;
+        return _impl_.message_of_obj_.sweeper_message_;
     }
-    inline ::protobuf::MessageOfShip* MessageOfObj::mutable_ship_message()
+    inline ::protobuf::MessageOfSweeper* MessageOfObj::mutable_sweeper_message()
     {
-        ::protobuf::MessageOfShip* _msg = _internal_mutable_ship_message();
-        // @@protoc_insertion_point(field_mutable:protobuf.MessageOfObj.ship_message)
+        ::protobuf::MessageOfSweeper* _msg = _internal_mutable_sweeper_message();
+        // @@protoc_insertion_point(field_mutable:protobuf.MessageOfObj.sweeper_message)
         return _msg;
     }
 
@@ -7052,42 +7052,42 @@ namespace protobuf
         return _msg;
     }
 
-    // .protobuf.MessageOfFactory factory_message = 3;
-    inline bool MessageOfObj::_internal_has_factory_message() const
+    // .protobuf.MessageOfRecycleBank recyclebank_message = 3;
+    inline bool MessageOfObj::_internal_has_recyclebank_message() const
     {
-        return message_of_obj_case() == kFactoryMessage;
+        return message_of_obj_case() == kRecyclebankMessage;
     }
-    inline bool MessageOfObj::has_factory_message() const
+    inline bool MessageOfObj::has_recyclebank_message() const
     {
-        return _internal_has_factory_message();
+        return _internal_has_recyclebank_message();
     }
-    inline void MessageOfObj::set_has_factory_message()
+    inline void MessageOfObj::set_has_recyclebank_message()
     {
-        _impl_._oneof_case_[0] = kFactoryMessage;
+        _impl_._oneof_case_[0] = kRecyclebankMessage;
     }
-    inline void MessageOfObj::clear_factory_message()
+    inline void MessageOfObj::clear_recyclebank_message()
     {
-        if (_internal_has_factory_message())
+        if (_internal_has_recyclebank_message())
         {
             if (GetArenaForAllocation() == nullptr)
             {
-                delete _impl_.message_of_obj_.factory_message_;
+                delete _impl_.message_of_obj_.recyclebank_message_;
             }
             clear_has_message_of_obj();
         }
     }
-    inline ::protobuf::MessageOfFactory* MessageOfObj::release_factory_message()
+    inline ::protobuf::MessageOfRecycleBank* MessageOfObj::release_recyclebank_message()
     {
-        // @@protoc_insertion_point(field_release:protobuf.MessageOfObj.factory_message)
-        if (_internal_has_factory_message())
+        // @@protoc_insertion_point(field_release:protobuf.MessageOfObj.recyclebank_message)
+        if (_internal_has_recyclebank_message())
         {
             clear_has_message_of_obj();
-            ::protobuf::MessageOfFactory* temp = _impl_.message_of_obj_.factory_message_;
+            ::protobuf::MessageOfRecycleBank* temp = _impl_.message_of_obj_.recyclebank_message_;
             if (GetArenaForAllocation() != nullptr)
             {
                 temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
             }
-            _impl_.message_of_obj_.factory_message_ = nullptr;
+            _impl_.message_of_obj_.recyclebank_message_ = nullptr;
             return temp;
         }
         else
@@ -7095,23 +7095,23 @@ namespace protobuf
             return nullptr;
         }
     }
-    inline const ::protobuf::MessageOfFactory& MessageOfObj::_internal_factory_message() const
+    inline const ::protobuf::MessageOfRecycleBank& MessageOfObj::_internal_recyclebank_message() const
     {
-        return _internal_has_factory_message() ? *_impl_.message_of_obj_.factory_message_ : reinterpret_cast<::protobuf::MessageOfFactory&>(::protobuf::_MessageOfFactory_default_instance_);
+        return _internal_has_recyclebank_message() ? *_impl_.message_of_obj_.recyclebank_message_ : reinterpret_cast<::protobuf::MessageOfRecycleBank&>(::protobuf::_MessageOfRecycleBank_default_instance_);
     }
-    inline const ::protobuf::MessageOfFactory& MessageOfObj::factory_message() const
+    inline const ::protobuf::MessageOfRecycleBank& MessageOfObj::recyclebank_message() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfObj.factory_message)
-        return _internal_factory_message();
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfObj.recyclebank_message)
+        return _internal_recyclebank_message();
     }
-    inline ::protobuf::MessageOfFactory* MessageOfObj::unsafe_arena_release_factory_message()
+    inline ::protobuf::MessageOfRecycleBank* MessageOfObj::unsafe_arena_release_recyclebank_message()
     {
-        // @@protoc_insertion_point(field_unsafe_arena_release:protobuf.MessageOfObj.factory_message)
-        if (_internal_has_factory_message())
+        // @@protoc_insertion_point(field_unsafe_arena_release:protobuf.MessageOfObj.recyclebank_message)
+        if (_internal_has_recyclebank_message())
         {
             clear_has_message_of_obj();
-            ::protobuf::MessageOfFactory* temp = _impl_.message_of_obj_.factory_message_;
-            _impl_.message_of_obj_.factory_message_ = nullptr;
+            ::protobuf::MessageOfRecycleBank* temp = _impl_.message_of_obj_.recyclebank_message_;
+            _impl_.message_of_obj_.recyclebank_message_ = nullptr;
             return temp;
         }
         else
@@ -7119,69 +7119,69 @@ namespace protobuf
             return nullptr;
         }
     }
-    inline void MessageOfObj::unsafe_arena_set_allocated_factory_message(::protobuf::MessageOfFactory* factory_message)
+    inline void MessageOfObj::unsafe_arena_set_allocated_recyclebank_message(::protobuf::MessageOfRecycleBank* recyclebank_message)
     {
         clear_message_of_obj();
-        if (factory_message)
+        if (recyclebank_message)
         {
-            set_has_factory_message();
-            _impl_.message_of_obj_.factory_message_ = factory_message;
+            set_has_recyclebank_message();
+            _impl_.message_of_obj_.recyclebank_message_ = recyclebank_message;
         }
-        // @@protoc_insertion_point(field_unsafe_arena_set_allocated:protobuf.MessageOfObj.factory_message)
+        // @@protoc_insertion_point(field_unsafe_arena_set_allocated:protobuf.MessageOfObj.recyclebank_message)
     }
-    inline ::protobuf::MessageOfFactory* MessageOfObj::_internal_mutable_factory_message()
+    inline ::protobuf::MessageOfRecycleBank* MessageOfObj::_internal_mutable_recyclebank_message()
     {
-        if (!_internal_has_factory_message())
+        if (!_internal_has_recyclebank_message())
         {
             clear_message_of_obj();
-            set_has_factory_message();
-            _impl_.message_of_obj_.factory_message_ = CreateMaybeMessage<::protobuf::MessageOfFactory>(GetArenaForAllocation());
+            set_has_recyclebank_message();
+            _impl_.message_of_obj_.recyclebank_message_ = CreateMaybeMessage<::protobuf::MessageOfRecycleBank>(GetArenaForAllocation());
         }
-        return _impl_.message_of_obj_.factory_message_;
+        return _impl_.message_of_obj_.recyclebank_message_;
     }
-    inline ::protobuf::MessageOfFactory* MessageOfObj::mutable_factory_message()
+    inline ::protobuf::MessageOfRecycleBank* MessageOfObj::mutable_recyclebank_message()
     {
-        ::protobuf::MessageOfFactory* _msg = _internal_mutable_factory_message();
-        // @@protoc_insertion_point(field_mutable:protobuf.MessageOfObj.factory_message)
+        ::protobuf::MessageOfRecycleBank* _msg = _internal_mutable_recyclebank_message();
+        // @@protoc_insertion_point(field_mutable:protobuf.MessageOfObj.recyclebank_message)
         return _msg;
     }
 
-    // .protobuf.MessageOfCommunity community_message = 4;
-    inline bool MessageOfObj::_internal_has_community_message() const
+    // .protobuf.MessageOfChargeStation chargestation_message = 4;
+    inline bool MessageOfObj::_internal_has_chargestation_message() const
     {
-        return message_of_obj_case() == kCommunityMessage;
+        return message_of_obj_case() == kChargestationMessage;
     }
-    inline bool MessageOfObj::has_community_message() const
+    inline bool MessageOfObj::has_chargestation_message() const
     {
-        return _internal_has_community_message();
+        return _internal_has_chargestation_message();
     }
-    inline void MessageOfObj::set_has_community_message()
+    inline void MessageOfObj::set_has_chargestation_message()
     {
-        _impl_._oneof_case_[0] = kCommunityMessage;
+        _impl_._oneof_case_[0] = kChargestationMessage;
     }
-    inline void MessageOfObj::clear_community_message()
+    inline void MessageOfObj::clear_chargestation_message()
     {
-        if (_internal_has_community_message())
+        if (_internal_has_chargestation_message())
         {
             if (GetArenaForAllocation() == nullptr)
             {
-                delete _impl_.message_of_obj_.community_message_;
+                delete _impl_.message_of_obj_.chargestation_message_;
             }
             clear_has_message_of_obj();
         }
     }
-    inline ::protobuf::MessageOfCommunity* MessageOfObj::release_community_message()
+    inline ::protobuf::MessageOfChargeStation* MessageOfObj::release_chargestation_message()
     {
-        // @@protoc_insertion_point(field_release:protobuf.MessageOfObj.community_message)
-        if (_internal_has_community_message())
+        // @@protoc_insertion_point(field_release:protobuf.MessageOfObj.chargestation_message)
+        if (_internal_has_chargestation_message())
         {
             clear_has_message_of_obj();
-            ::protobuf::MessageOfCommunity* temp = _impl_.message_of_obj_.community_message_;
+            ::protobuf::MessageOfChargeStation* temp = _impl_.message_of_obj_.chargestation_message_;
             if (GetArenaForAllocation() != nullptr)
             {
                 temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
             }
-            _impl_.message_of_obj_.community_message_ = nullptr;
+            _impl_.message_of_obj_.chargestation_message_ = nullptr;
             return temp;
         }
         else
@@ -7189,23 +7189,23 @@ namespace protobuf
             return nullptr;
         }
     }
-    inline const ::protobuf::MessageOfCommunity& MessageOfObj::_internal_community_message() const
+    inline const ::protobuf::MessageOfChargeStation& MessageOfObj::_internal_chargestation_message() const
     {
-        return _internal_has_community_message() ? *_impl_.message_of_obj_.community_message_ : reinterpret_cast<::protobuf::MessageOfCommunity&>(::protobuf::_MessageOfCommunity_default_instance_);
+        return _internal_has_chargestation_message() ? *_impl_.message_of_obj_.chargestation_message_ : reinterpret_cast<::protobuf::MessageOfChargeStation&>(::protobuf::_MessageOfChargeStation_default_instance_);
     }
-    inline const ::protobuf::MessageOfCommunity& MessageOfObj::community_message() const
+    inline const ::protobuf::MessageOfChargeStation& MessageOfObj::chargestation_message() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfObj.community_message)
-        return _internal_community_message();
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfObj.chargestation_message)
+        return _internal_chargestation_message();
     }
-    inline ::protobuf::MessageOfCommunity* MessageOfObj::unsafe_arena_release_community_message()
+    inline ::protobuf::MessageOfChargeStation* MessageOfObj::unsafe_arena_release_chargestation_message()
     {
-        // @@protoc_insertion_point(field_unsafe_arena_release:protobuf.MessageOfObj.community_message)
-        if (_internal_has_community_message())
+        // @@protoc_insertion_point(field_unsafe_arena_release:protobuf.MessageOfObj.chargestation_message)
+        if (_internal_has_chargestation_message())
         {
             clear_has_message_of_obj();
-            ::protobuf::MessageOfCommunity* temp = _impl_.message_of_obj_.community_message_;
-            _impl_.message_of_obj_.community_message_ = nullptr;
+            ::protobuf::MessageOfChargeStation* temp = _impl_.message_of_obj_.chargestation_message_;
+            _impl_.message_of_obj_.chargestation_message_ = nullptr;
             return temp;
         }
         else
@@ -7213,69 +7213,69 @@ namespace protobuf
             return nullptr;
         }
     }
-    inline void MessageOfObj::unsafe_arena_set_allocated_community_message(::protobuf::MessageOfCommunity* community_message)
+    inline void MessageOfObj::unsafe_arena_set_allocated_chargestation_message(::protobuf::MessageOfChargeStation* chargestation_message)
     {
         clear_message_of_obj();
-        if (community_message)
+        if (chargestation_message)
         {
-            set_has_community_message();
-            _impl_.message_of_obj_.community_message_ = community_message;
+            set_has_chargestation_message();
+            _impl_.message_of_obj_.chargestation_message_ = chargestation_message;
         }
-        // @@protoc_insertion_point(field_unsafe_arena_set_allocated:protobuf.MessageOfObj.community_message)
+        // @@protoc_insertion_point(field_unsafe_arena_set_allocated:protobuf.MessageOfObj.chargestation_message)
     }
-    inline ::protobuf::MessageOfCommunity* MessageOfObj::_internal_mutable_community_message()
+    inline ::protobuf::MessageOfChargeStation* MessageOfObj::_internal_mutable_chargestation_message()
     {
-        if (!_internal_has_community_message())
+        if (!_internal_has_chargestation_message())
         {
             clear_message_of_obj();
-            set_has_community_message();
-            _impl_.message_of_obj_.community_message_ = CreateMaybeMessage<::protobuf::MessageOfCommunity>(GetArenaForAllocation());
+            set_has_chargestation_message();
+            _impl_.message_of_obj_.chargestation_message_ = CreateMaybeMessage<::protobuf::MessageOfChargeStation>(GetArenaForAllocation());
         }
-        return _impl_.message_of_obj_.community_message_;
+        return _impl_.message_of_obj_.chargestation_message_;
     }
-    inline ::protobuf::MessageOfCommunity* MessageOfObj::mutable_community_message()
+    inline ::protobuf::MessageOfChargeStation* MessageOfObj::mutable_chargestation_message()
     {
-        ::protobuf::MessageOfCommunity* _msg = _internal_mutable_community_message();
-        // @@protoc_insertion_point(field_mutable:protobuf.MessageOfObj.community_message)
+        ::protobuf::MessageOfChargeStation* _msg = _internal_mutable_chargestation_message();
+        // @@protoc_insertion_point(field_mutable:protobuf.MessageOfObj.chargestation_message)
         return _msg;
     }
 
-    // .protobuf.MessageOfFort fort_message = 5;
-    inline bool MessageOfObj::_internal_has_fort_message() const
+    // .protobuf.MessageOfSignalTower signaltower_message = 5;
+    inline bool MessageOfObj::_internal_has_signaltower_message() const
     {
-        return message_of_obj_case() == kFortMessage;
+        return message_of_obj_case() == kSignaltowerMessage;
     }
-    inline bool MessageOfObj::has_fort_message() const
+    inline bool MessageOfObj::has_signaltower_message() const
     {
-        return _internal_has_fort_message();
+        return _internal_has_signaltower_message();
     }
-    inline void MessageOfObj::set_has_fort_message()
+    inline void MessageOfObj::set_has_signaltower_message()
     {
-        _impl_._oneof_case_[0] = kFortMessage;
+        _impl_._oneof_case_[0] = kSignaltowerMessage;
     }
-    inline void MessageOfObj::clear_fort_message()
+    inline void MessageOfObj::clear_signaltower_message()
     {
-        if (_internal_has_fort_message())
+        if (_internal_has_signaltower_message())
         {
             if (GetArenaForAllocation() == nullptr)
             {
-                delete _impl_.message_of_obj_.fort_message_;
+                delete _impl_.message_of_obj_.signaltower_message_;
             }
             clear_has_message_of_obj();
         }
     }
-    inline ::protobuf::MessageOfFort* MessageOfObj::release_fort_message()
+    inline ::protobuf::MessageOfSignalTower* MessageOfObj::release_signaltower_message()
     {
-        // @@protoc_insertion_point(field_release:protobuf.MessageOfObj.fort_message)
-        if (_internal_has_fort_message())
+        // @@protoc_insertion_point(field_release:protobuf.MessageOfObj.signaltower_message)
+        if (_internal_has_signaltower_message())
         {
             clear_has_message_of_obj();
-            ::protobuf::MessageOfFort* temp = _impl_.message_of_obj_.fort_message_;
+            ::protobuf::MessageOfSignalTower* temp = _impl_.message_of_obj_.signaltower_message_;
             if (GetArenaForAllocation() != nullptr)
             {
                 temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
             }
-            _impl_.message_of_obj_.fort_message_ = nullptr;
+            _impl_.message_of_obj_.signaltower_message_ = nullptr;
             return temp;
         }
         else
@@ -7283,23 +7283,23 @@ namespace protobuf
             return nullptr;
         }
     }
-    inline const ::protobuf::MessageOfFort& MessageOfObj::_internal_fort_message() const
+    inline const ::protobuf::MessageOfSignalTower& MessageOfObj::_internal_signaltower_message() const
     {
-        return _internal_has_fort_message() ? *_impl_.message_of_obj_.fort_message_ : reinterpret_cast<::protobuf::MessageOfFort&>(::protobuf::_MessageOfFort_default_instance_);
+        return _internal_has_signaltower_message() ? *_impl_.message_of_obj_.signaltower_message_ : reinterpret_cast<::protobuf::MessageOfSignalTower&>(::protobuf::_MessageOfSignalTower_default_instance_);
     }
-    inline const ::protobuf::MessageOfFort& MessageOfObj::fort_message() const
+    inline const ::protobuf::MessageOfSignalTower& MessageOfObj::signaltower_message() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfObj.fort_message)
-        return _internal_fort_message();
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfObj.signaltower_message)
+        return _internal_signaltower_message();
     }
-    inline ::protobuf::MessageOfFort* MessageOfObj::unsafe_arena_release_fort_message()
+    inline ::protobuf::MessageOfSignalTower* MessageOfObj::unsafe_arena_release_signaltower_message()
     {
-        // @@protoc_insertion_point(field_unsafe_arena_release:protobuf.MessageOfObj.fort_message)
-        if (_internal_has_fort_message())
+        // @@protoc_insertion_point(field_unsafe_arena_release:protobuf.MessageOfObj.signaltower_message)
+        if (_internal_has_signaltower_message())
         {
             clear_has_message_of_obj();
-            ::protobuf::MessageOfFort* temp = _impl_.message_of_obj_.fort_message_;
-            _impl_.message_of_obj_.fort_message_ = nullptr;
+            ::protobuf::MessageOfSignalTower* temp = _impl_.message_of_obj_.signaltower_message_;
+            _impl_.message_of_obj_.signaltower_message_ = nullptr;
             return temp;
         }
         else
@@ -7307,69 +7307,69 @@ namespace protobuf
             return nullptr;
         }
     }
-    inline void MessageOfObj::unsafe_arena_set_allocated_fort_message(::protobuf::MessageOfFort* fort_message)
+    inline void MessageOfObj::unsafe_arena_set_allocated_signaltower_message(::protobuf::MessageOfSignalTower* signaltower_message)
     {
         clear_message_of_obj();
-        if (fort_message)
+        if (signaltower_message)
         {
-            set_has_fort_message();
-            _impl_.message_of_obj_.fort_message_ = fort_message;
+            set_has_signaltower_message();
+            _impl_.message_of_obj_.signaltower_message_ = signaltower_message;
         }
-        // @@protoc_insertion_point(field_unsafe_arena_set_allocated:protobuf.MessageOfObj.fort_message)
+        // @@protoc_insertion_point(field_unsafe_arena_set_allocated:protobuf.MessageOfObj.signaltower_message)
     }
-    inline ::protobuf::MessageOfFort* MessageOfObj::_internal_mutable_fort_message()
+    inline ::protobuf::MessageOfSignalTower* MessageOfObj::_internal_mutable_signaltower_message()
     {
-        if (!_internal_has_fort_message())
+        if (!_internal_has_signaltower_message())
         {
             clear_message_of_obj();
-            set_has_fort_message();
-            _impl_.message_of_obj_.fort_message_ = CreateMaybeMessage<::protobuf::MessageOfFort>(GetArenaForAllocation());
+            set_has_signaltower_message();
+            _impl_.message_of_obj_.signaltower_message_ = CreateMaybeMessage<::protobuf::MessageOfSignalTower>(GetArenaForAllocation());
         }
-        return _impl_.message_of_obj_.fort_message_;
+        return _impl_.message_of_obj_.signaltower_message_;
     }
-    inline ::protobuf::MessageOfFort* MessageOfObj::mutable_fort_message()
+    inline ::protobuf::MessageOfSignalTower* MessageOfObj::mutable_signaltower_message()
     {
-        ::protobuf::MessageOfFort* _msg = _internal_mutable_fort_message();
-        // @@protoc_insertion_point(field_mutable:protobuf.MessageOfObj.fort_message)
+        ::protobuf::MessageOfSignalTower* _msg = _internal_mutable_signaltower_message();
+        // @@protoc_insertion_point(field_mutable:protobuf.MessageOfObj.signaltower_message)
         return _msg;
     }
 
-    // .protobuf.MessageOfWormhole wormhole_message = 6;
-    inline bool MessageOfObj::_internal_has_wormhole_message() const
+    // .protobuf.MessageOfBridge bridge_message = 6;
+    inline bool MessageOfObj::_internal_has_bridge_message() const
     {
-        return message_of_obj_case() == kWormholeMessage;
+        return message_of_obj_case() == kBridgeMessage;
     }
-    inline bool MessageOfObj::has_wormhole_message() const
+    inline bool MessageOfObj::has_bridge_message() const
     {
-        return _internal_has_wormhole_message();
+        return _internal_has_bridge_message();
     }
-    inline void MessageOfObj::set_has_wormhole_message()
+    inline void MessageOfObj::set_has_bridge_message()
     {
-        _impl_._oneof_case_[0] = kWormholeMessage;
+        _impl_._oneof_case_[0] = kBridgeMessage;
     }
-    inline void MessageOfObj::clear_wormhole_message()
+    inline void MessageOfObj::clear_bridge_message()
     {
-        if (_internal_has_wormhole_message())
+        if (_internal_has_bridge_message())
         {
             if (GetArenaForAllocation() == nullptr)
             {
-                delete _impl_.message_of_obj_.wormhole_message_;
+                delete _impl_.message_of_obj_.bridge_message_;
             }
             clear_has_message_of_obj();
         }
     }
-    inline ::protobuf::MessageOfWormhole* MessageOfObj::release_wormhole_message()
+    inline ::protobuf::MessageOfBridge* MessageOfObj::release_bridge_message()
     {
-        // @@protoc_insertion_point(field_release:protobuf.MessageOfObj.wormhole_message)
-        if (_internal_has_wormhole_message())
+        // @@protoc_insertion_point(field_release:protobuf.MessageOfObj.bridge_message)
+        if (_internal_has_bridge_message())
         {
             clear_has_message_of_obj();
-            ::protobuf::MessageOfWormhole* temp = _impl_.message_of_obj_.wormhole_message_;
+            ::protobuf::MessageOfBridge* temp = _impl_.message_of_obj_.bridge_message_;
             if (GetArenaForAllocation() != nullptr)
             {
                 temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
             }
-            _impl_.message_of_obj_.wormhole_message_ = nullptr;
+            _impl_.message_of_obj_.bridge_message_ = nullptr;
             return temp;
         }
         else
@@ -7377,23 +7377,23 @@ namespace protobuf
             return nullptr;
         }
     }
-    inline const ::protobuf::MessageOfWormhole& MessageOfObj::_internal_wormhole_message() const
+    inline const ::protobuf::MessageOfBridge& MessageOfObj::_internal_bridge_message() const
     {
-        return _internal_has_wormhole_message() ? *_impl_.message_of_obj_.wormhole_message_ : reinterpret_cast<::protobuf::MessageOfWormhole&>(::protobuf::_MessageOfWormhole_default_instance_);
+        return _internal_has_bridge_message() ? *_impl_.message_of_obj_.bridge_message_ : reinterpret_cast<::protobuf::MessageOfBridge&>(::protobuf::_MessageOfBridge_default_instance_);
     }
-    inline const ::protobuf::MessageOfWormhole& MessageOfObj::wormhole_message() const
+    inline const ::protobuf::MessageOfBridge& MessageOfObj::bridge_message() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfObj.wormhole_message)
-        return _internal_wormhole_message();
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfObj.bridge_message)
+        return _internal_bridge_message();
     }
-    inline ::protobuf::MessageOfWormhole* MessageOfObj::unsafe_arena_release_wormhole_message()
+    inline ::protobuf::MessageOfBridge* MessageOfObj::unsafe_arena_release_bridge_message()
     {
-        // @@protoc_insertion_point(field_unsafe_arena_release:protobuf.MessageOfObj.wormhole_message)
-        if (_internal_has_wormhole_message())
+        // @@protoc_insertion_point(field_unsafe_arena_release:protobuf.MessageOfObj.bridge_message)
+        if (_internal_has_bridge_message())
         {
             clear_has_message_of_obj();
-            ::protobuf::MessageOfWormhole* temp = _impl_.message_of_obj_.wormhole_message_;
-            _impl_.message_of_obj_.wormhole_message_ = nullptr;
+            ::protobuf::MessageOfBridge* temp = _impl_.message_of_obj_.bridge_message_;
+            _impl_.message_of_obj_.bridge_message_ = nullptr;
             return temp;
         }
         else
@@ -7401,30 +7401,30 @@ namespace protobuf
             return nullptr;
         }
     }
-    inline void MessageOfObj::unsafe_arena_set_allocated_wormhole_message(::protobuf::MessageOfWormhole* wormhole_message)
+    inline void MessageOfObj::unsafe_arena_set_allocated_bridge_message(::protobuf::MessageOfBridge* bridge_message)
     {
         clear_message_of_obj();
-        if (wormhole_message)
+        if (bridge_message)
         {
-            set_has_wormhole_message();
-            _impl_.message_of_obj_.wormhole_message_ = wormhole_message;
+            set_has_bridge_message();
+            _impl_.message_of_obj_.bridge_message_ = bridge_message;
         }
-        // @@protoc_insertion_point(field_unsafe_arena_set_allocated:protobuf.MessageOfObj.wormhole_message)
+        // @@protoc_insertion_point(field_unsafe_arena_set_allocated:protobuf.MessageOfObj.bridge_message)
     }
-    inline ::protobuf::MessageOfWormhole* MessageOfObj::_internal_mutable_wormhole_message()
+    inline ::protobuf::MessageOfBridge* MessageOfObj::_internal_mutable_bridge_message()
     {
-        if (!_internal_has_wormhole_message())
+        if (!_internal_has_bridge_message())
         {
             clear_message_of_obj();
-            set_has_wormhole_message();
-            _impl_.message_of_obj_.wormhole_message_ = CreateMaybeMessage<::protobuf::MessageOfWormhole>(GetArenaForAllocation());
+            set_has_bridge_message();
+            _impl_.message_of_obj_.bridge_message_ = CreateMaybeMessage<::protobuf::MessageOfBridge>(GetArenaForAllocation());
         }
-        return _impl_.message_of_obj_.wormhole_message_;
+        return _impl_.message_of_obj_.bridge_message_;
     }
-    inline ::protobuf::MessageOfWormhole* MessageOfObj::mutable_wormhole_message()
+    inline ::protobuf::MessageOfBridge* MessageOfObj::mutable_bridge_message()
     {
-        ::protobuf::MessageOfWormhole* _msg = _internal_mutable_wormhole_message();
-        // @@protoc_insertion_point(field_mutable:protobuf.MessageOfObj.wormhole_message)
+        ::protobuf::MessageOfBridge* _msg = _internal_mutable_bridge_message();
+        // @@protoc_insertion_point(field_mutable:protobuf.MessageOfObj.bridge_message)
         return _msg;
     }
 
@@ -7522,42 +7522,42 @@ namespace protobuf
         return _msg;
     }
 
-    // .protobuf.MessageOfResource resource_message = 8;
-    inline bool MessageOfObj::_internal_has_resource_message() const
+    // .protobuf.MessageOfGarbage garbage_message = 8;
+    inline bool MessageOfObj::_internal_has_garbage_message() const
     {
-        return message_of_obj_case() == kResourceMessage;
+        return message_of_obj_case() == kGarbageMessage;
     }
-    inline bool MessageOfObj::has_resource_message() const
+    inline bool MessageOfObj::has_garbage_message() const
     {
-        return _internal_has_resource_message();
+        return _internal_has_garbage_message();
     }
-    inline void MessageOfObj::set_has_resource_message()
+    inline void MessageOfObj::set_has_garbage_message()
     {
-        _impl_._oneof_case_[0] = kResourceMessage;
+        _impl_._oneof_case_[0] = kGarbageMessage;
     }
-    inline void MessageOfObj::clear_resource_message()
+    inline void MessageOfObj::clear_garbage_message()
     {
-        if (_internal_has_resource_message())
+        if (_internal_has_garbage_message())
         {
             if (GetArenaForAllocation() == nullptr)
             {
-                delete _impl_.message_of_obj_.resource_message_;
+                delete _impl_.message_of_obj_.garbage_message_;
             }
             clear_has_message_of_obj();
         }
     }
-    inline ::protobuf::MessageOfResource* MessageOfObj::release_resource_message()
+    inline ::protobuf::MessageOfGarbage* MessageOfObj::release_garbage_message()
     {
-        // @@protoc_insertion_point(field_release:protobuf.MessageOfObj.resource_message)
-        if (_internal_has_resource_message())
+        // @@protoc_insertion_point(field_release:protobuf.MessageOfObj.garbage_message)
+        if (_internal_has_garbage_message())
         {
             clear_has_message_of_obj();
-            ::protobuf::MessageOfResource* temp = _impl_.message_of_obj_.resource_message_;
+            ::protobuf::MessageOfGarbage* temp = _impl_.message_of_obj_.garbage_message_;
             if (GetArenaForAllocation() != nullptr)
             {
                 temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
             }
-            _impl_.message_of_obj_.resource_message_ = nullptr;
+            _impl_.message_of_obj_.garbage_message_ = nullptr;
             return temp;
         }
         else
@@ -7565,23 +7565,23 @@ namespace protobuf
             return nullptr;
         }
     }
-    inline const ::protobuf::MessageOfResource& MessageOfObj::_internal_resource_message() const
+    inline const ::protobuf::MessageOfGarbage& MessageOfObj::_internal_garbage_message() const
     {
-        return _internal_has_resource_message() ? *_impl_.message_of_obj_.resource_message_ : reinterpret_cast<::protobuf::MessageOfResource&>(::protobuf::_MessageOfResource_default_instance_);
+        return _internal_has_garbage_message() ? *_impl_.message_of_obj_.garbage_message_ : reinterpret_cast<::protobuf::MessageOfGarbage&>(::protobuf::_MessageOfGarbage_default_instance_);
     }
-    inline const ::protobuf::MessageOfResource& MessageOfObj::resource_message() const
+    inline const ::protobuf::MessageOfGarbage& MessageOfObj::garbage_message() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfObj.resource_message)
-        return _internal_resource_message();
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfObj.garbage_message)
+        return _internal_garbage_message();
     }
-    inline ::protobuf::MessageOfResource* MessageOfObj::unsafe_arena_release_resource_message()
+    inline ::protobuf::MessageOfGarbage* MessageOfObj::unsafe_arena_release_garbage_message()
     {
-        // @@protoc_insertion_point(field_unsafe_arena_release:protobuf.MessageOfObj.resource_message)
-        if (_internal_has_resource_message())
+        // @@protoc_insertion_point(field_unsafe_arena_release:protobuf.MessageOfObj.garbage_message)
+        if (_internal_has_garbage_message())
         {
             clear_has_message_of_obj();
-            ::protobuf::MessageOfResource* temp = _impl_.message_of_obj_.resource_message_;
-            _impl_.message_of_obj_.resource_message_ = nullptr;
+            ::protobuf::MessageOfGarbage* temp = _impl_.message_of_obj_.garbage_message_;
+            _impl_.message_of_obj_.garbage_message_ = nullptr;
             return temp;
         }
         else
@@ -7589,30 +7589,30 @@ namespace protobuf
             return nullptr;
         }
     }
-    inline void MessageOfObj::unsafe_arena_set_allocated_resource_message(::protobuf::MessageOfResource* resource_message)
+    inline void MessageOfObj::unsafe_arena_set_allocated_garbage_message(::protobuf::MessageOfGarbage* garbage_message)
     {
         clear_message_of_obj();
-        if (resource_message)
+        if (garbage_message)
         {
-            set_has_resource_message();
-            _impl_.message_of_obj_.resource_message_ = resource_message;
+            set_has_garbage_message();
+            _impl_.message_of_obj_.garbage_message_ = garbage_message;
         }
-        // @@protoc_insertion_point(field_unsafe_arena_set_allocated:protobuf.MessageOfObj.resource_message)
+        // @@protoc_insertion_point(field_unsafe_arena_set_allocated:protobuf.MessageOfObj.garbage_message)
     }
-    inline ::protobuf::MessageOfResource* MessageOfObj::_internal_mutable_resource_message()
+    inline ::protobuf::MessageOfGarbage* MessageOfObj::_internal_mutable_garbage_message()
     {
-        if (!_internal_has_resource_message())
+        if (!_internal_has_garbage_message())
         {
             clear_message_of_obj();
-            set_has_resource_message();
-            _impl_.message_of_obj_.resource_message_ = CreateMaybeMessage<::protobuf::MessageOfResource>(GetArenaForAllocation());
+            set_has_garbage_message();
+            _impl_.message_of_obj_.garbage_message_ = CreateMaybeMessage<::protobuf::MessageOfGarbage>(GetArenaForAllocation());
         }
-        return _impl_.message_of_obj_.resource_message_;
+        return _impl_.message_of_obj_.garbage_message_;
     }
-    inline ::protobuf::MessageOfResource* MessageOfObj::mutable_resource_message()
+    inline ::protobuf::MessageOfGarbage* MessageOfObj::mutable_garbage_message()
     {
-        ::protobuf::MessageOfResource* _msg = _internal_mutable_resource_message();
-        // @@protoc_insertion_point(field_mutable:protobuf.MessageOfObj.resource_message)
+        ::protobuf::MessageOfGarbage* _msg = _internal_mutable_garbage_message();
+        // @@protoc_insertion_point(field_mutable:protobuf.MessageOfObj.garbage_message)
         return _msg;
     }
 
@@ -8471,56 +8471,56 @@ namespace protobuf
 
     // -------------------------------------------------------------------
 
-    // ShipInfoRes
+    // SweeperInfoRes
 
-    // repeated .protobuf.MessageOfShip ship_info = 1;
-    inline int ShipInfoRes::_internal_ship_info_size() const
+    // repeated .protobuf.MessageOfSweeper sweeper_info = 1;
+    inline int SweeperInfoRes::_internal_sweeper_info_size() const
     {
-        return _impl_.ship_info_.size();
+        return _impl_.sweeper_info_.size();
     }
-    inline int ShipInfoRes::ship_info_size() const
+    inline int SweeperInfoRes::sweeper_info_size() const
     {
-        return _internal_ship_info_size();
+        return _internal_sweeper_info_size();
     }
-    inline void ShipInfoRes::clear_ship_info()
+    inline void SweeperInfoRes::clear_sweeper_info()
     {
-        _impl_.ship_info_.Clear();
+        _impl_.sweeper_info_.Clear();
     }
-    inline ::protobuf::MessageOfShip* ShipInfoRes::mutable_ship_info(int index)
+    inline ::protobuf::MessageOfSweeper* SweeperInfoRes::mutable_sweeper_info(int index)
     {
-        // @@protoc_insertion_point(field_mutable:protobuf.ShipInfoRes.ship_info)
-        return _impl_.ship_info_.Mutable(index);
+        // @@protoc_insertion_point(field_mutable:protobuf.SweeperInfoRes.sweeper_info)
+        return _impl_.sweeper_info_.Mutable(index);
     }
-    inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<::protobuf::MessageOfShip>*
-        ShipInfoRes::mutable_ship_info()
+    inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<::protobuf::MessageOfSweeper>*
+        SweeperInfoRes::mutable_sweeper_info()
     {
-        // @@protoc_insertion_point(field_mutable_list:protobuf.ShipInfoRes.ship_info)
-        return &_impl_.ship_info_;
+        // @@protoc_insertion_point(field_mutable_list:protobuf.SweeperInfoRes.sweeper_info)
+        return &_impl_.sweeper_info_;
     }
-    inline const ::protobuf::MessageOfShip& ShipInfoRes::_internal_ship_info(int index) const
+    inline const ::protobuf::MessageOfSweeper& SweeperInfoRes::_internal_sweeper_info(int index) const
     {
-        return _impl_.ship_info_.Get(index);
+        return _impl_.sweeper_info_.Get(index);
     }
-    inline const ::protobuf::MessageOfShip& ShipInfoRes::ship_info(int index) const
+    inline const ::protobuf::MessageOfSweeper& SweeperInfoRes::sweeper_info(int index) const
     {
-        // @@protoc_insertion_point(field_get:protobuf.ShipInfoRes.ship_info)
-        return _internal_ship_info(index);
+        // @@protoc_insertion_point(field_get:protobuf.SweeperInfoRes.sweeper_info)
+        return _internal_sweeper_info(index);
     }
-    inline ::protobuf::MessageOfShip* ShipInfoRes::_internal_add_ship_info()
+    inline ::protobuf::MessageOfSweeper* SweeperInfoRes::_internal_add_sweeper_info()
     {
-        return _impl_.ship_info_.Add();
+        return _impl_.sweeper_info_.Add();
     }
-    inline ::protobuf::MessageOfShip* ShipInfoRes::add_ship_info()
+    inline ::protobuf::MessageOfSweeper* SweeperInfoRes::add_sweeper_info()
     {
-        ::protobuf::MessageOfShip* _add = _internal_add_ship_info();
-        // @@protoc_insertion_point(field_add:protobuf.ShipInfoRes.ship_info)
+        ::protobuf::MessageOfSweeper* _add = _internal_add_sweeper_info();
+        // @@protoc_insertion_point(field_add:protobuf.SweeperInfoRes.sweeper_info)
         return _add;
     }
-    inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<::protobuf::MessageOfShip>&
-        ShipInfoRes::ship_info() const
+    inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<::protobuf::MessageOfSweeper>&
+        SweeperInfoRes::sweeper_info() const
     {
-        // @@protoc_insertion_point(field_list:protobuf.ShipInfoRes.ship_info)
-        return _impl_.ship_info_;
+        // @@protoc_insertion_point(field_list:protobuf.SweeperInfoRes.sweeper_info)
+        return _impl_.sweeper_info_;
     }
 
     // -------------------------------------------------------------------

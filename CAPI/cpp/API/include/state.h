@@ -17,10 +17,10 @@
 struct State
 {
     // 自身信息，根据playerType的不同，可以调用的值也不同。
-    std::shared_ptr<THUAI7::Ship> shipSelf;
+    std::shared_ptr<THUAI7::Sweeper> SweeperSelf;
     std::shared_ptr<THUAI7::Team> teamSelf;
-    std::vector<std::shared_ptr<THUAI7::Ship>> ships;
-    std::vector<std::shared_ptr<THUAI7::Ship>> enemyShips;
+    std::vector<std::shared_ptr<THUAI7::Sweeper>> Sweepers;
+    std::vector<std::shared_ptr<THUAI7::Sweeper>> enemySweepers;
     std::shared_ptr<THUAI7::Team> enemyTeam;
 
     std::vector<std::shared_ptr<THUAI7::Bullet>> bullets;

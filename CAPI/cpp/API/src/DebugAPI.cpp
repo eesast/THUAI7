@@ -11,7 +11,7 @@
 
 #define PI 3.14159265358979323846
 
-ShipDebugAPI::ShipDebugAPI(ILogic& logic, bool file, bool print, bool warnOnly, int64_t playerID) :
+SweeperDebugAPI::SweeperDebugAPI(ILogic& logic, bool file, bool print, bool warnOnly, int64_t playerID) :
     logic(logic)
 {
     std::string fileName = "logs/api-" + std::to_string(playerID) + "-log.txt";
@@ -34,7 +34,7 @@ ShipDebugAPI::ShipDebugAPI(ILogic& logic, bool file, bool print, bool warnOnly, 
     logger->flush_on(spdlog::level::warn);
 }
 
-void ShipDebugAPI::StartTimer()
+void SweeperDebugAPI::StartTimer()
 {
     startPoint = std::chrono::system_clock::now();
     std::time_t t = std::chrono::system_clock::to_time_t(startPoint);
@@ -42,17 +42,17 @@ void ShipDebugAPI::StartTimer()
     logger->info("StartTimer: {}", std::ctime(&t));
 }
 
-void ShipDebugAPI::EndTimer()
+void SweeperDebugAPI::EndTimer()
 {
     logger->info("Time elapsed: {}ms", Time::TimeSinceStart(startPoint));
 }
 
-int32_t ShipDebugAPI::GetFrameCount() const
+int32_t SweeperDebugAPI::GetFrameCount() const
 {
     return logic.GetCounter();
 }
 
-std::future<bool> ShipDebugAPI::SendTextMessage(int64_t toID, std::string message)
+std::future<bool> SweeperDebugAPI::SendTextMessage(int64_t toID, std::string message)
 {
     logger->info("SendTextMessage: toID = {}, message = {}, called at {}ms", toID, message, Time::TimeSinceStart(startPoint));
     return std::async(std::launch::async, [=, message = std::move(message)]()
@@ -62,7 +62,7 @@ std::future<bool> ShipDebugAPI::SendTextMessage(int64_t toID, std::string messag
                         return result; });
 }
 
-std::future<bool> ShipDebugAPI::SendBinaryMessage(int64_t toID, std::string message)
+std::future<bool> SweeperDebugAPI::SendBinaryMessage(int64_t toID, std::string message)
 {
     logger->info("SendBinaryMessage: toID = {}, message = {}, called at {}ms", toID, message, Time::TimeSinceStart(startPoint));
     return std::async(std::launch::async, [=, message = std::move(message)]()
@@ -72,7 +72,7 @@ std::future<bool> ShipDebugAPI::SendBinaryMessage(int64_t toID, std::string mess
                         return result; });
 }
 
-bool ShipDebugAPI::HaveMessage()
+bool SweeperDebugAPI::HaveMessage()
 {
     logger->info("HaveMessage: called at {}ms", Time::TimeSinceStart(startPoint));
     auto result = logic.HaveMessage();
@@ -81,7 +81,7 @@ bool ShipDebugAPI::HaveMessage()
     return result;
 }
 
-std::pair<int64_t, std::string> ShipDebugAPI::GetMessage()
+std::pair<int64_t, std::string> SweeperDebugAPI::GetMessage()
 {
     logger->info("GetMessage: called at {}ms", Time::TimeSinceStart(startPoint));
     auto result = logic.GetMessage();
@@ -90,7 +90,7 @@ std::pair<int64_t, std::string> ShipDebugAPI::GetMessage()
     return result;
 }
 
-bool ShipDebugAPI::Wait()
+bool SweeperDebugAPI::Wait()
 {
     logger->info("Wait: called at {}ms", Time::TimeSinceStart(startPoint));
     if (logic.GetCounter() == -1)
@@ -98,7 +98,7 @@ bool ShipDebugAPI::Wait()
     else
         return logic.WaitThread();
 }
-std::future<bool> ShipDebugAPI::Move(int64_t timeInMilliseconds, double angleInRadian)
+std::future<bool> SweeperDebugAPI::Move(int64_t timeInMilliseconds, double angleInRadian)
 {
     logger->info("Move: timeInMilliseconds = {}, angleInRadian = {}, called at {}ms", timeInMilliseconds, angleInRadian, Time::TimeSinceStart(startPoint));
     return std::async(std::launch::async, [=]()
@@ -108,27 +108,27 @@ std::future<bool> ShipDebugAPI::Move(int64_t timeInMilliseconds, double angleInR
                         return result; });
 }
 
-std::future<bool> ShipDebugAPI::MoveDown(int64_t timeInMilliseconds)
+std::future<bool> SweeperDebugAPI::MoveDown(int64_t timeInMilliseconds)
 {
     return Move(timeInMilliseconds, 0);
 }
 
-std::future<bool> ShipDebugAPI::MoveRight(int64_t timeInMilliseconds)
+std::future<bool> SweeperDebugAPI::MoveRight(int64_t timeInMilliseconds)
 {
     return Move(timeInMilliseconds, PI * 0.5);
 }
 
-std::future<bool> ShipDebugAPI::MoveUp(int64_t timeInMilliseconds)
+std::future<bool> SweeperDebugAPI::MoveUp(int64_t timeInMilliseconds)
 {
     return Move(timeInMilliseconds, PI);
 }
 
-std::future<bool> ShipDebugAPI::MoveLeft(int64_t timeInMilliseconds)
+std::future<bool> SweeperDebugAPI::MoveLeft(int64_t timeInMilliseconds)
 {
     return Move(timeInMilliseconds, PI * 1.5);
 }
 
-std::future<bool> ShipDebugAPI::Attack(double angleInRadian)
+std::future<bool> SweeperDebugAPI::Attack(double angleInRadian)
 {
     logger->info("Attack: angleInRadian = {}, called at {}ms", angleInRadian, Time::TimeSinceStart(startPoint));
     return std::async(std::launch::async, [=]()
@@ -138,130 +138,130 @@ std::future<bool> ShipDebugAPI::Attack(double angleInRadian)
                         return result; });
 }
 
-std::future<bool> ShipDebugAPI::Recover()
+std::future<bool> SweeperDebugAPI::Recover()
 {
     return std::async(std::launch::async, [=]()
                       { return logic.Recover(); });
 }
-std::future<bool> ShipDebugAPI::Produce()
+std::future<bool> SweeperDebugAPI::Produce()
 {
     return std::async(std::launch::async, [=]()
                       { return logic.Produce(); });
 }
-std::future<bool> ShipDebugAPI::Rebuild(THUAI7::ConstructionType constructionType)
+std::future<bool> SweeperDebugAPI::Rebuild(THUAI7::ConstructionType constructionType)
 {
     return std::async(std::launch::async, [=]()
                       { return logic.Rebuild(constructionType); });
 }
 
-std::future<bool> ShipDebugAPI::Construct(THUAI7::ConstructionType constructionType)
+std::future<bool> SweeperDebugAPI::Construct(THUAI7::ConstructionType constructionType)
 {
     return std::async(std::launch::async, [=]()
                       { return logic.Construct(constructionType); });
 }
 
-std::vector<std::shared_ptr<const THUAI7::Ship>> ShipDebugAPI::GetShips() const
+std::vector<std::shared_ptr<const THUAI7::Sweeper>> SweeperDebugAPI::GetSweepers() const
 {
-    return logic.GetShips();
+    return logic.GetSweepers();
 }
 
-std::vector<std::shared_ptr<const THUAI7::Ship>> ShipDebugAPI::GetEnemyShips() const
+std::vector<std::shared_ptr<const THUAI7::Sweeper>> SweeperDebugAPI::GetEnemySweepers() const
 {
-    return logic.GetEnemyShips();
+    return logic.GetEnemySweepers();
 }
 
-std::vector<std::shared_ptr<const THUAI7::Bullet>> ShipDebugAPI::GetBullets() const
+std::vector<std::shared_ptr<const THUAI7::Bullet>> SweeperDebugAPI::GetBullets() const
 {
     return logic.GetBullets();
 }
 
-std::vector<std::vector<THUAI7::PlaceType>> ShipDebugAPI::GetFullMap() const
+std::vector<std::vector<THUAI7::PlaceType>> SweeperDebugAPI::GetFullMap() const
 {
     return logic.GetFullMap();
 }
 
-THUAI7::PlaceType ShipDebugAPI::GetPlaceType(int32_t cellX, int32_t cellY) const
+THUAI7::PlaceType SweeperDebugAPI::GetPlaceType(int32_t cellX, int32_t cellY) const
 {
     return logic.GetPlaceType(cellX, cellY);
 }
 
-int32_t ShipDebugAPI::GetConstructionHp(int32_t cellX, int32_t cellY) const
+int32_t SweeperDebugAPI::GetConstructionHp(int32_t cellX, int32_t cellY) const
 {
     return logic.GetConstructionHp(cellX, cellY);
 }
 
-int32_t ShipDebugAPI::GetWormHp(int32_t cellX, int32_t cellY) const
+int32_t SweeperDebugAPI::GetBridgeHp(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetWormHp(cellX, cellY);
+    return logic.GetBridgeHp(cellX, cellY);
 }
 
-int32_t ShipDebugAPI::GetResourceState(int32_t cellX, int32_t cellY) const
+int32_t SweeperDebugAPI::GetGarbageState(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetResourceState(cellX, cellY);
+    return logic.GetGarbageState(cellX, cellY);
 }
 
-int32_t ShipDebugAPI::GetHomeHp() const
+int32_t SweeperDebugAPI::GetHomeHp() const
 {
     return logic.GetHomeHp();
 }
 
-std::shared_ptr<const THUAI7::GameInfo> ShipDebugAPI::GetGameInfo() const
+std::shared_ptr<const THUAI7::GameInfo> SweeperDebugAPI::GetGameInfo() const
 {
     return logic.GetGameInfo();
 }
 
-std::vector<int64_t> ShipDebugAPI::GetPlayerGUIDs() const
+std::vector<int64_t> SweeperDebugAPI::GetPlayerGUIDs() const
 {
     return logic.GetPlayerGUIDs();
 }
 
-std::shared_ptr<const THUAI7::Ship> ShipDebugAPI::GetSelfInfo() const
+std::shared_ptr<const THUAI7::Sweeper> SweeperDebugAPI::GetSelfInfo() const
 {
-    return logic.ShipGetSelfInfo();
+    return logic.SweeperGetSelfInfo();
 }
 
-bool ShipDebugAPI::HaveView(int32_t gridX, int32_t gridY) const
+bool SweeperDebugAPI::HaveView(int32_t gridX, int32_t gridY) const
 {
     auto selfInfo = GetSelfInfo();
     return logic.HaveView(gridX, gridY, selfInfo->x, selfInfo->y, selfInfo->viewRange);
 }
 
-int32_t ShipDebugAPI::GetMoney() const
+int32_t SweeperDebugAPI::GetMoney() const
 {
     return logic.GetMoney();
 }
 
-int32_t ShipDebugAPI::GetScore() const
+int32_t SweeperDebugAPI::GetScore() const
 {
     return logic.GetScore();
 }
 
-void ShipDebugAPI::Print(std::string str) const
+void SweeperDebugAPI::Print(std::string str) const
 {
     logger->info(str);
 }
 
-void ShipDebugAPI::PrintShip() const
+void SweeperDebugAPI::PrintSweeper() const
 {
-    for (const auto& Ship : logic.GetShips())
+    for (const auto& Sweeper : logic.GetSweepers())
     {
-        logger->info("******Ship Info******");
-        logger->info("type={}, playerID={}, GUID={}, x={}, y={}", THUAI7::shipTypeDict[Ship->shipType], Ship->playerID, Ship->guid, Ship->x, Ship->y);
-        logger->info("state={},speed={}, view range={},facing direction={}", THUAI7::shipStateDict[Ship->shipState], Ship->speed, Ship->viewRange, Ship->facingDirection);
+        logger->info("******Sweeper Info******");
+        logger->info("type={}, playerID={}, GUID={}, x={}, y={}", THUAI7::SweeperTypeDict[Sweeper->sweeperType], Sweeper->playerID, Sweeper->guid, Sweeper->x, Sweeper->y);
+        logger->info("state={},speed={}, view range={},facing direction={}", THUAI7::sweeperStateDict[Sweeper->sweeperState], Sweeper->speed, Sweeper->viewRange, Sweeper->facingDirection);
         logger->info("************************\n");
     }
 }
 
-void ShipDebugAPI::PrintSelfInfo() const
+void SweeperDebugAPI::PrintSelfInfo() const
 {
-    auto Ship = logic.ShipGetSelfInfo();
+    auto Sweeper = logic.SweeperGetSelfInfo();
     logger->info("******Self Info******");
-    logger->info("type={}, playerID={}, GUID={}, x={}, y={}", THUAI7::shipTypeDict[Ship->shipType], Ship->playerID, Ship->guid, Ship->x, Ship->y);
-    logger->info("state={},speed={}, view range={},facing direction={}", THUAI7::shipStateDict[Ship->shipState], Ship->speed, Ship->viewRange, Ship->facingDirection);
+    logger->info("type={}, playerID={}, GUID={}, x={}, y={}", THUAI7::SweeperTypeDict[Sweeper->sweeperType], Sweeper->playerID, Sweeper->guid, Sweeper->x, Sweeper->y);
+    logger->info("state={},speed={}, view range={},facing direction={}", THUAI7::sweeperStateDict[Sweeper->sweeperState], Sweeper->speed, Sweeper->viewRange, Sweeper->facingDirection);
     logger->info("*********************\n");
 }
 
-std::future<bool> ShipDebugAPI::EndAllAction()
+std::future<bool> SweeperDebugAPI::EndAllAction()
 {
     return std::async(std::launch::async, [this]()
                       { return logic.EndAllAction(); });
@@ -354,14 +354,14 @@ bool TeamDebugAPI::Wait()
         return logic.WaitThread();
 }
 
-std::vector<std::shared_ptr<const THUAI7::Ship>> TeamDebugAPI::GetShips() const
+std::vector<std::shared_ptr<const THUAI7::Sweeper>> TeamDebugAPI::GetSweepers() const
 {
-    return logic.GetShips();
+    return logic.GetSweepers();
 }
 
-std::vector<std::shared_ptr<const THUAI7::Ship>> TeamDebugAPI::GetEnemyShips() const
+std::vector<std::shared_ptr<const THUAI7::Sweeper>> TeamDebugAPI::GetEnemySweepers() const
 {
-    return logic.GetEnemyShips();
+    return logic.GetEnemySweepers();
 }
 
 std::vector<std::shared_ptr<const THUAI7::Bullet>> TeamDebugAPI::GetBullets() const
@@ -384,14 +384,14 @@ int32_t TeamDebugAPI::GetConstructionHp(int32_t cellX, int32_t cellY) const
     return logic.GetConstructionHp(cellX, cellY);
 }
 
-int32_t TeamDebugAPI::GetWormHp(int32_t cellX, int32_t cellY) const
+int32_t TeamDebugAPI::GetBridgeHp(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetWormHp(cellX, cellY);
+    return logic.GetBridgeHp(cellX, cellY);
 }
 
-int32_t TeamDebugAPI::GetResourceState(int32_t cellX, int32_t cellY) const
+int32_t TeamDebugAPI::GetGarbageState(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetResourceState(cellX, cellY);
+    return logic.GetGarbageState(cellX, cellY);
 }
 
 int32_t TeamDebugAPI::GetHomeHp() const
@@ -436,10 +436,10 @@ std::future<bool> TeamDebugAPI::Recycle(int64_t playerID)
                       { return logic.Recycle(playerID); });
 }
 
-std::future<bool> TeamDebugAPI::BuildShip(THUAI7::ShipType shipType, int32_t x, int32_t y)
+std::future<bool> TeamDebugAPI::BuildSweeper(THUAI7::SweeperType SweeperType, int32_t x, int32_t y)
 {
     return std::async(std::launch::async, [=]()
-                      { return logic.BuildShip(shipType, x, y); });
+                      { return logic.BuildSweeper(SweeperType, x, y); });
 }
 
 void TeamDebugAPI::PrintSelfInfo() const
@@ -450,7 +450,7 @@ void TeamDebugAPI::PrintSelfInfo() const
     logger->info("*********************\n");
 }
 
-void ShipDebugAPI::Play(IAI& ai)
+void SweeperDebugAPI::Play(IAI& ai)
 {
     ai.play(*this);
 }

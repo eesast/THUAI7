@@ -39,7 +39,7 @@ namespace AssistFunction
         double distance = deltaX * deltaX + deltaY * deltaY;
         THUAI7::PlaceType myPlace = map[GridToCell(x)][GridToCell(y)];
         THUAI7::PlaceType newPlace = map[GridToCell(newX)][GridToCell(newY)];
-        if (newPlace == THUAI7::PlaceType::Shadow && myPlace != THUAI7::PlaceType::Shadow)
+        if (newPlace == THUAI7::PlaceType::Grass && myPlace != THUAI7::PlaceType::Grass)
             return false;
         int32_t divide = std::max(std::abs(deltaX), std::abs(deltaY)) / 100;
         if (divide == 0)
@@ -48,12 +48,12 @@ namespace AssistFunction
         double dy = deltaY / divide;
         double myX = double(x);
         double myY = double(y);
-        if (newPlace == THUAI7::PlaceType::Shadow && myPlace == THUAI7::PlaceType::Shadow)
+        if (newPlace == THUAI7::PlaceType::Grass && myPlace == THUAI7::PlaceType::Grass)
             for (int32_t i = 0; i < divide; i++)
             {
                 myX += dx;
                 myY += dy;
-                if (map[GridToCell(myX)][GridToCell(myY)] != THUAI7::PlaceType::Shadow)
+                if (map[GridToCell(myX)][GridToCell(myY)] != THUAI7::PlaceType::Grass)
                     return false;
             }
         else
@@ -61,7 +61,7 @@ namespace AssistFunction
             {
                 myX += dx;
                 myY += dy;
-                if (map[GridToCell(myX)][GridToCell(myY)] == THUAI7::PlaceType::Ruin)
+                if (map[GridToCell(myX)][GridToCell(myY)] == THUAI7::PlaceType::Wall)
                     return false;
             }
         return true;
@@ -82,13 +82,13 @@ namespace Proto2THUAI7
     inline std::map<protobuf::PlaceType, THUAI7::PlaceType> placeTypeDict{
         {protobuf::PlaceType::NULL_PLACE_TYPE, THUAI7::PlaceType::NullPlaceType},
         {protobuf::PlaceType::HOME, THUAI7::PlaceType::Home},
-        {protobuf::PlaceType::SPACE, THUAI7::PlaceType::Space},
-        {protobuf::PlaceType::RUIN, THUAI7::PlaceType::Ruin},
-        {protobuf::PlaceType::SHADOW, THUAI7::PlaceType::Shadow},
-        {protobuf::PlaceType::ASTEROID, THUAI7::PlaceType::Asteroid},
-        {protobuf::PlaceType::RESOURCE, THUAI7::PlaceType::Resource},
+        {protobuf::PlaceType::GROUND, THUAI7::PlaceType::Ground},
+        {protobuf::PlaceType::WALL, THUAI7::PlaceType::Wall},
+        {protobuf::PlaceType::GRASS, THUAI7::PlaceType::Grass},
+        {protobuf::PlaceType::RIVER, THUAI7::PlaceType::River},
+        {protobuf::PlaceType::GARBAGE, THUAI7::PlaceType::Garbage},
         {protobuf::PlaceType::CONSTRUCTION, THUAI7::PlaceType::Construction},
-        {protobuf::PlaceType::WORMHOLE, THUAI7::PlaceType::Wormhole},
+        {protobuf::PlaceType::BRIDGE, THUAI7::PlaceType::Bridge},
     };
 
     inline std::map<protobuf::ShapeType, THUAI7::ShapeType> shapeTypeDict{
@@ -99,28 +99,28 @@ namespace Proto2THUAI7
 
     inline std::map<protobuf::PlayerType, THUAI7::PlayerType> playerTypeDict{
         {protobuf::PlayerType::NULL_PLAYER_TYPE, THUAI7::PlayerType::NullPlayerType},
-        {protobuf::PlayerType::SHIP, THUAI7::PlayerType::Ship},
+        {protobuf::PlayerType::SWEEPER, THUAI7::PlayerType::Sweeper},
         {protobuf::PlayerType::TEAM, THUAI7::PlayerType::Team},
     };
 
-    inline std::map<protobuf::ShipType, THUAI7::ShipType> shipTypeDict{
-        {protobuf::ShipType::NULL_SHIP_TYPE, THUAI7::ShipType::NullShipType},
-        {protobuf::ShipType::CIVILIAN_SHIP, THUAI7::ShipType::CivilianShip},
-        {protobuf::ShipType::MILITARY_SHIP, THUAI7::ShipType::MilitaryShip},
-        {protobuf::ShipType::FLAG_SHIP, THUAI7::ShipType::FlagShip},
+    inline std::map<protobuf::SweeperType, THUAI7::SweeperType> SweeperTypeDict{
+        {protobuf::SweeperType::NULL_SWEEPER_TYPE, THUAI7::SweeperType::NullSweeperType},
+        {protobuf::SweeperType::CIVILIAN_SWEEPER, THUAI7::SweeperType::CivilianSweeper},
+        {protobuf::SweeperType::MILITARY_SWEEPER, THUAI7::SweeperType::MilitarySweeper},
+        {protobuf::SweeperType::FLAG_SWEEPER, THUAI7::SweeperType::FlagSweeper},
     };
 
-    inline std::map<protobuf::ShipState, THUAI7::ShipState> shipStateDict{
-        {protobuf::ShipState::NULL_STATUS, THUAI7::ShipState::NullStatus},
-        {protobuf::ShipState::IDLE, THUAI7::ShipState::Idle},
-        {protobuf::ShipState::PRODUCING, THUAI7::ShipState::Producing},
-        {protobuf::ShipState::CONSTRUCTING, THUAI7::ShipState::Constructing},
-        {protobuf::ShipState::RECOVERING, THUAI7::ShipState::Recovering},
-        {protobuf::ShipState::RECYCLING, THUAI7::ShipState::Recycling},
-        {protobuf::ShipState::ATTACKING, THUAI7::ShipState::Attacking},
-        {protobuf::ShipState::SWINGING, THUAI7::ShipState::Swinging},
-        {protobuf::ShipState::STUNNED, THUAI7::ShipState::Stunned},
-        {protobuf::ShipState::MOVING, THUAI7::ShipState::Moving},
+    inline std::map<protobuf::SweeperState, THUAI7::SweeperState> SweeperStateDict{
+        {protobuf::SweeperState::NULL_STATUS, THUAI7::SweeperState::NullStatus},
+        {protobuf::SweeperState::IDLE, THUAI7::SweeperState::Idle},
+        {protobuf::SweeperState::PRODUCING, THUAI7::SweeperState::Producing},
+        {protobuf::SweeperState::CONSTRUCTING, THUAI7::SweeperState::Constructing},
+        {protobuf::SweeperState::RECOVERING, THUAI7::SweeperState::Recovering},
+        {protobuf::SweeperState::RECYCLING, THUAI7::SweeperState::Recycling},
+        {protobuf::SweeperState::ATTACKING, THUAI7::SweeperState::Attacking},
+        {protobuf::SweeperState::SWINGING, THUAI7::SweeperState::Swinging},
+        {protobuf::SweeperState::STUNNED, THUAI7::SweeperState::Stunned},
+        {protobuf::SweeperState::MOVING, THUAI7::SweeperState::Moving},
     };
 
     inline std::map<protobuf::WeaponType, THUAI7::WeaponType> weaponTypeDict{
@@ -192,9 +192,9 @@ namespace Proto2THUAI7
 
     inline std::map<protobuf::ConstructionType, THUAI7::ConstructionType> constructionTypeDict{
         {protobuf::ConstructionType::NULL_CONSTRUCTION_TYPE, THUAI7::ConstructionType::NullConstructionType},
-        {protobuf::ConstructionType::FACTORY, THUAI7::ConstructionType::Factory},
-        {protobuf::ConstructionType::COMMUNITY, THUAI7::ConstructionType::Community},
-        {protobuf::ConstructionType::FORT, THUAI7::ConstructionType::Fort},
+        {protobuf::ConstructionType::RECYCLEBANK, THUAI7::ConstructionType::RecycleBank},
+        {protobuf::ConstructionType::CHARGESTATION, THUAI7::ConstructionType::ChargeStation},
+        {protobuf::ConstructionType::SIGNALTOWER, THUAI7::ConstructionType::SignalTower},
     };
 
     inline std::map<protobuf::PlayerTeam, THUAI7::PlayerTeam> playerTeamDict{
@@ -204,14 +204,14 @@ namespace Proto2THUAI7
     };
 
     inline std::map<protobuf::MessageOfObj::MessageOfObjCase, THUAI7::MessageOfObj> messageOfObjDict{
-        {protobuf::MessageOfObj::MessageOfObjCase::kShipMessage, THUAI7::MessageOfObj::ShipMessage},
+        {protobuf::MessageOfObj::MessageOfObjCase::kSweeperMessage, THUAI7::MessageOfObj::SweeperMessage},
         {protobuf::MessageOfObj::MessageOfObjCase::kBulletMessage, THUAI7::MessageOfObj::BulletMessage},
-        {protobuf::MessageOfObj::MessageOfObjCase::kFactoryMessage, THUAI7::MessageOfObj::FactoryMessage},
-        {protobuf::MessageOfObj::MessageOfObjCase::kCommunityMessage, THUAI7::MessageOfObj::CommunityMessage},
-        {protobuf::MessageOfObj::MessageOfObjCase::kFortMessage, THUAI7::MessageOfObj::FortMessage},
-        {protobuf::MessageOfObj::MessageOfObjCase::kWormholeMessage, THUAI7::MessageOfObj::WormholeMessage},
+        {protobuf::MessageOfObj::MessageOfObjCase::kRecyclebankMessage, THUAI7::MessageOfObj::RecycleBankMessage},
+        {protobuf::MessageOfObj::MessageOfObjCase::kChargestationMessage, THUAI7::MessageOfObj::ChargeStationMessage},
+        {protobuf::MessageOfObj::MessageOfObjCase::kSignaltowerMessage, THUAI7::MessageOfObj::SignalTowerMessage},
+        {protobuf::MessageOfObj::MessageOfObjCase::kBridgeMessage, THUAI7::MessageOfObj::BridgeMessage},
         {protobuf::MessageOfObj::MessageOfObjCase::kHomeMessage, THUAI7::MessageOfObj::HomeMessage},
-        {protobuf::MessageOfObj::MessageOfObjCase::kResourceMessage, THUAI7::MessageOfObj::ResourceMessage},
+        {protobuf::MessageOfObj::MessageOfObjCase::kGarbageMessage, THUAI7::MessageOfObj::GarbageMessage},
         {protobuf::MessageOfObj::MessageOfObjCase::kMapMessage, THUAI7::MessageOfObj::MapMessage},
         {protobuf::MessageOfObj::MessageOfObjCase::kNewsMessage, THUAI7::MessageOfObj::NewsMessage},
         {protobuf::MessageOfObj::MessageOfObjCase::kBombedBulletMessage, THUAI7::MessageOfObj::BombedBulletMessage},
@@ -225,28 +225,28 @@ namespace Proto2THUAI7
     };
 
     // 用于将Protobuf中的类转换为THUAI7的类
-    inline std::shared_ptr<THUAI7::Ship> Protobuf2THUAI7Ship(const protobuf::MessageOfShip& shipMsg)
+    inline std::shared_ptr<THUAI7::Sweeper> Protobuf2THUAI7Sweeper(const protobuf::MessageOfSweeper& SweeperMsg)
     {
-        auto ship = std::make_shared<THUAI7::Ship>();
-        ship->x = shipMsg.x();
-        ship->y = shipMsg.y();
-        ship->speed = shipMsg.speed();
-        ship->hp = shipMsg.hp();
-        ship->armor = shipMsg.armor();
-        ship->shield = shipMsg.shield();
-        ship->teamID = shipMsg.team_id();
-        ship->playerID = shipMsg.player_id();
-        ship->guid = shipMsg.guid();
-        ship->shipState = shipStateDict[shipMsg.ship_state()];
-        ship->shipType = shipTypeDict[shipMsg.ship_type()];
-        ship->viewRange = shipMsg.view_range();
-        ship->producerType = producerTypeDict[shipMsg.producer_type()];
-        ship->constructorType = constructorTypeDict[shipMsg.constructor_type()];
-        ship->armorType = armorTypeDict[shipMsg.armor_type()];
-        ship->shieldType = shieldTypeDict[shipMsg.shield_type()];
-        ship->weaponType = weaponTypeDict[shipMsg.weapon_type()];
-        ship->facingDirection = shipMsg.facing_direction();
-        return ship;
+        auto Sweeper = std::make_shared<THUAI7::Sweeper>();
+        Sweeper->x = SweeperMsg.x();
+        Sweeper->y = SweeperMsg.y();
+        Sweeper->speed = SweeperMsg.speed();
+        Sweeper->hp = SweeperMsg.hp();
+        Sweeper->armor = SweeperMsg.armor();
+        Sweeper->shield = SweeperMsg.shield();
+        Sweeper->teamID = SweeperMsg.team_id();
+        Sweeper->playerID = SweeperMsg.player_id();
+        Sweeper->guid = SweeperMsg.guid();
+        Sweeper->sweeperState = SweeperStateDict[SweeperMsg.sweeper_state()];
+        Sweeper->sweeperType = SweeperTypeDict[SweeperMsg.sweeper_type()];
+        Sweeper->viewRange = SweeperMsg.view_range();
+        Sweeper->producerType = producerTypeDict[SweeperMsg.producer_type()];
+        Sweeper->constructorType = constructorTypeDict[SweeperMsg.constructor_type()];
+        Sweeper->armorType = armorTypeDict[SweeperMsg.armor_type()];
+        Sweeper->shieldType = shieldTypeDict[SweeperMsg.shield_type()];
+        Sweeper->weaponType = weaponTypeDict[SweeperMsg.weapon_type()];
+        Sweeper->facingDirection = SweeperMsg.facing_direction();
+        return Sweeper;
     }
 
     inline std::shared_ptr<THUAI7::Bullet> Protobuf2THUAI7Bullet(const protobuf::MessageOfBullet& bulletMsg)
@@ -311,13 +311,13 @@ namespace THUAI72Proto
     inline std::map<THUAI7::PlaceType, protobuf::PlaceType> placeTypeDict{
         {THUAI7::PlaceType::NullPlaceType, protobuf::PlaceType::NULL_PLACE_TYPE},
         {THUAI7::PlaceType::Home, protobuf::PlaceType::HOME},
-        {THUAI7::PlaceType::Space, protobuf::PlaceType::SPACE},
-        {THUAI7::PlaceType::Ruin, protobuf::PlaceType::RUIN},
-        {THUAI7::PlaceType::Shadow, protobuf::PlaceType::SHADOW},
-        {THUAI7::PlaceType::Asteroid, protobuf::PlaceType::ASTEROID},
-        {THUAI7::PlaceType::Resource, protobuf::PlaceType::RESOURCE},
+        {THUAI7::PlaceType::Ground, protobuf::PlaceType::GROUND},
+        {THUAI7::PlaceType::Wall, protobuf::PlaceType::WALL},
+        {THUAI7::PlaceType::Grass, protobuf::PlaceType::GRASS},
+        {THUAI7::PlaceType::River, protobuf::PlaceType::RIVER},
+        {THUAI7::PlaceType::Garbage, protobuf::PlaceType::GARBAGE},
         {THUAI7::PlaceType::Construction, protobuf::PlaceType::CONSTRUCTION},
-        {THUAI7::PlaceType::Wormhole, protobuf::PlaceType::WORMHOLE},
+        {THUAI7::PlaceType::Bridge, protobuf::PlaceType::BRIDGE},
     };
 
     inline std::map<THUAI7::ShapeType, protobuf::ShapeType> shapeTypeDict{
@@ -328,28 +328,28 @@ namespace THUAI72Proto
 
     inline std::map<THUAI7::PlayerType, protobuf::PlayerType> playerTypeDict{
         {THUAI7::PlayerType::NullPlayerType, protobuf::PlayerType::NULL_PLAYER_TYPE},
-        {THUAI7::PlayerType::Ship, protobuf::PlayerType::SHIP},
+        {THUAI7::PlayerType::Sweeper, protobuf::PlayerType::SWEEPER},
         {THUAI7::PlayerType::Team, protobuf::PlayerType::TEAM},
     };
 
-    inline std::map<THUAI7::ShipType, protobuf::ShipType> shipTypeDict{
-        {THUAI7::ShipType::NullShipType, protobuf::ShipType::NULL_SHIP_TYPE},
-        {THUAI7::ShipType::CivilianShip, protobuf::ShipType::CIVILIAN_SHIP},
-        {THUAI7::ShipType::MilitaryShip, protobuf::ShipType::MILITARY_SHIP},
-        {THUAI7::ShipType::FlagShip, protobuf::ShipType::FLAG_SHIP},
+    inline std::map<THUAI7::SweeperType, protobuf::SweeperType> SweeperTypeDict{
+        {THUAI7::SweeperType::NullSweeperType, protobuf::SweeperType::NULL_SWEEPER_TYPE},
+        {THUAI7::SweeperType::CivilianSweeper, protobuf::SweeperType::CIVILIAN_SWEEPER},
+        {THUAI7::SweeperType::MilitarySweeper, protobuf::SweeperType::MILITARY_SWEEPER},
+        {THUAI7::SweeperType::FlagSweeper, protobuf::SweeperType::FLAG_SWEEPER},
     };
 
-    inline std::map<THUAI7::ShipState, protobuf::ShipState> shipStateDict{
-        {THUAI7::ShipState::NullStatus, protobuf::ShipState::NULL_STATUS},
-        {THUAI7::ShipState::Idle, protobuf::ShipState::IDLE},
-        {THUAI7::ShipState::Producing, protobuf::ShipState::PRODUCING},
-        {THUAI7::ShipState::Constructing, protobuf::ShipState::CONSTRUCTING},
-        {THUAI7::ShipState::Recovering, protobuf::ShipState::RECOVERING},
-        {THUAI7::ShipState::Recycling, protobuf::ShipState::RECYCLING},
-        {THUAI7::ShipState::Attacking, protobuf::ShipState::ATTACKING},
-        {THUAI7::ShipState::Swinging, protobuf::ShipState::SWINGING},
-        {THUAI7::ShipState::Stunned, protobuf::ShipState::STUNNED},
-        {THUAI7::ShipState::Moving, protobuf::ShipState::MOVING},
+    inline std::map<THUAI7::SweeperState, protobuf::SweeperState> SweeperStateDict{
+        {THUAI7::SweeperState::NullStatus, protobuf::SweeperState::NULL_STATUS},
+        {THUAI7::SweeperState::Idle, protobuf::SweeperState::IDLE},
+        {THUAI7::SweeperState::Producing, protobuf::SweeperState::PRODUCING},
+        {THUAI7::SweeperState::Constructing, protobuf::SweeperState::CONSTRUCTING},
+        {THUAI7::SweeperState::Recovering, protobuf::SweeperState::RECOVERING},
+        {THUAI7::SweeperState::Recycling, protobuf::SweeperState::RECYCLING},
+        {THUAI7::SweeperState::Attacking, protobuf::SweeperState::ATTACKING},
+        {THUAI7::SweeperState::Swinging, protobuf::SweeperState::SWINGING},
+        {THUAI7::SweeperState::Stunned, protobuf::SweeperState::STUNNED},
+        {THUAI7::SweeperState::Moving, protobuf::SweeperState::MOVING},
     };
 
     inline std::map<THUAI7::WeaponType, protobuf::WeaponType> weaponTypeDict{
@@ -421,9 +421,9 @@ namespace THUAI72Proto
 
     inline std::map<THUAI7::ConstructionType, protobuf::ConstructionType> constructionTypeDict{
         {THUAI7::ConstructionType::NullConstructionType, protobuf::ConstructionType::NULL_CONSTRUCTION_TYPE},
-        {THUAI7::ConstructionType::Factory, protobuf::ConstructionType::FACTORY},
-        {THUAI7::ConstructionType::Community, protobuf::ConstructionType::COMMUNITY},
-        {THUAI7::ConstructionType::Fort, protobuf::ConstructionType::FORT},
+        {THUAI7::ConstructionType::RecycleBank, protobuf::ConstructionType::RECYCLEBANK},
+        {THUAI7::ConstructionType::ChargeStation, protobuf::ConstructionType::CHARGESTATION},
+        {THUAI7::ConstructionType::SignalTower, protobuf::ConstructionType::SIGNALTOWER},
     };
 
     inline std::map<THUAI7::PlayerTeam, protobuf::PlayerTeam> playerTeamDict{
@@ -433,14 +433,14 @@ namespace THUAI72Proto
     };
 
     inline std::map<THUAI7::MessageOfObj, protobuf::MessageOfObj::MessageOfObjCase> messageOfObjDict{
-        {THUAI7::MessageOfObj::ShipMessage, protobuf::MessageOfObj::MessageOfObjCase::kShipMessage},
+        {THUAI7::MessageOfObj::SweeperMessage, protobuf::MessageOfObj::MessageOfObjCase::kSweeperMessage},
         {THUAI7::MessageOfObj::BulletMessage, protobuf::MessageOfObj::MessageOfObjCase::kBulletMessage},
-        {THUAI7::MessageOfObj::FactoryMessage, protobuf::MessageOfObj::MessageOfObjCase::kFactoryMessage},
-        {THUAI7::MessageOfObj::CommunityMessage, protobuf::MessageOfObj::MessageOfObjCase::kCommunityMessage},
-        {THUAI7::MessageOfObj::FortMessage, protobuf::MessageOfObj::MessageOfObjCase::kFortMessage},
-        {THUAI7::MessageOfObj::WormholeMessage, protobuf::MessageOfObj::MessageOfObjCase::kWormholeMessage},
+        {THUAI7::MessageOfObj::RecycleBankMessage, protobuf::MessageOfObj::MessageOfObjCase::kRecyclebankMessage},
+        {THUAI7::MessageOfObj::ChargeStationMessage, protobuf::MessageOfObj::MessageOfObjCase::kChargestationMessage},
+        {THUAI7::MessageOfObj::SignalTowerMessage, protobuf::MessageOfObj::MessageOfObjCase::kSignaltowerMessage},
+        {THUAI7::MessageOfObj::BridgeMessage, protobuf::MessageOfObj::MessageOfObjCase::kBridgeMessage},
         {THUAI7::MessageOfObj::HomeMessage, protobuf::MessageOfObj::MessageOfObjCase::kHomeMessage},
-        {THUAI7::MessageOfObj::ResourceMessage, protobuf::MessageOfObj::MessageOfObjCase::kResourceMessage},
+        {THUAI7::MessageOfObj::GarbageMessage, protobuf::MessageOfObj::MessageOfObjCase::kGarbageMessage},
         {THUAI7::MessageOfObj::MapMessage, protobuf::MessageOfObj::MessageOfObjCase::kMapMessage},
         {THUAI7::MessageOfObj::NewsMessage, protobuf::MessageOfObj::MessageOfObjCase::kNewsMessage},
         {THUAI7::MessageOfObj::BombedBulletMessage, protobuf::MessageOfObj::MessageOfObjCase::kBombedBulletMessage},
@@ -520,22 +520,22 @@ namespace THUAI72Proto
         return installMsg;
     }
 
-    inline protobuf::BuildShipMsg THUAI72ProtobufBuildShipMsg(int64_t teamID, THUAI7::ShipType shipType, int32_t x, int32_t y)
+    inline protobuf::BuildSweeperMsg THUAI72ProtobufBuildSweeperMsg(int64_t teamID, THUAI7::SweeperType SweeperType, int32_t x, int32_t y)
     {
-        protobuf::BuildShipMsg buildShipMsg;
-        buildShipMsg.set_team_id(teamID);
-        buildShipMsg.set_x(x);
-        buildShipMsg.set_y(y);
-        buildShipMsg.set_ship_type(THUAI72Proto::shipTypeDict[shipType]);
-        return buildShipMsg;
+        protobuf::BuildSweeperMsg buildSweeperMsg;
+        buildSweeperMsg.set_team_id(teamID);
+        buildSweeperMsg.set_x(x);
+        buildSweeperMsg.set_y(y);
+        buildSweeperMsg.set_sweeper_type(THUAI72Proto::SweeperTypeDict[SweeperType]);
+        return buildSweeperMsg;
     }
 
-    inline protobuf::PlayerMsg THUAI72ProtobufPlayerMsg(int64_t playerID, int64_t teamID, THUAI7::ShipType shipType, int32_t x, int32_t y)
+    inline protobuf::PlayerMsg THUAI72ProtobufPlayerMsg(int64_t playerID, int64_t teamID, THUAI7::SweeperType SweeperType, int32_t x, int32_t y)
     {
         protobuf::PlayerMsg playerMsg;
         playerMsg.set_player_id(playerID);
         playerMsg.set_team_id(teamID);
-        playerMsg.set_ship_type(THUAI72Proto::shipTypeDict[shipType]);
+        playerMsg.set_sweeper_type(THUAI72Proto::SweeperTypeDict[SweeperType]);
         playerMsg.set_x(x);
         playerMsg.set_y(y);
         return playerMsg;
