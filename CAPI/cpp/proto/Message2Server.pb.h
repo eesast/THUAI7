@@ -626,8 +626,6 @@ namespace protobuf
             kPlayerIdFieldNumber = 1,
             kTeamIdFieldNumber = 2,
             kSweeperTypeFieldNumber = 3,
-            kXFieldNumber = 4,
-            kYFieldNumber = 5,
         };
         // int64 player_id = 1;
         void clear_player_id();
@@ -659,26 +657,6 @@ namespace protobuf
         void _internal_set_sweeper_type(::protobuf::SweeperType value);
 
     public:
-        // int32 x = 4;
-        void clear_x();
-        int32_t x() const;
-        void set_x(int32_t value);
-
-    private:
-        int32_t _internal_x() const;
-        void _internal_set_x(int32_t value);
-
-    public:
-        // int32 y = 5;
-        void clear_y();
-        int32_t y() const;
-        void set_y(int32_t value);
-
-    private:
-        int32_t _internal_y() const;
-        void _internal_set_y(int32_t value);
-
-    public:
         // @@protoc_insertion_point(class_scope:protobuf.PlayerMsg)
 
     private:
@@ -693,8 +671,6 @@ namespace protobuf
             int64_t player_id_;
             int64_t team_id_;
             int sweeper_type_;
-            int32_t x_;
-            int32_t y_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
         union
@@ -2444,54 +2420,6 @@ namespace protobuf
     {
         _internal_set_sweeper_type(value);
         // @@protoc_insertion_point(field_set:protobuf.PlayerMsg.sweeper_type)
-    }
-
-    // int32 x = 4;
-    inline void PlayerMsg::clear_x()
-    {
-        _impl_.x_ = 0;
-    }
-    inline int32_t PlayerMsg::_internal_x() const
-    {
-        return _impl_.x_;
-    }
-    inline int32_t PlayerMsg::x() const
-    {
-        // @@protoc_insertion_point(field_get:protobuf.PlayerMsg.x)
-        return _internal_x();
-    }
-    inline void PlayerMsg::_internal_set_x(int32_t value)
-    {
-        _impl_.x_ = value;
-    }
-    inline void PlayerMsg::set_x(int32_t value)
-    {
-        _internal_set_x(value);
-        // @@protoc_insertion_point(field_set:protobuf.PlayerMsg.x)
-    }
-
-    // int32 y = 5;
-    inline void PlayerMsg::clear_y()
-    {
-        _impl_.y_ = 0;
-    }
-    inline int32_t PlayerMsg::_internal_y() const
-    {
-        return _impl_.y_;
-    }
-    inline int32_t PlayerMsg::y() const
-    {
-        // @@protoc_insertion_point(field_get:protobuf.PlayerMsg.y)
-        return _internal_y();
-    }
-    inline void PlayerMsg::_internal_set_y(int32_t value)
-    {
-        _impl_.y_ = value;
-    }
-    inline void PlayerMsg::set_y(int32_t value)
-    {
-        _internal_set_y(value);
-        // @@protoc_insertion_point(field_set:protobuf.PlayerMsg.y)
     }
 
     // -------------------------------------------------------------------

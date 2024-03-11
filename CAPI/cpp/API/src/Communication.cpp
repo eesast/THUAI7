@@ -223,11 +223,11 @@ bool Communication::TryConnection(int64_t playerID, int64_t teamID)
         return false;
 }
 
-void Communication::AddPlayer(int64_t playerID, int64_t teamID, THUAI7::SweeperType SweeperType, int32_t x, int32_t y)
+void Communication::AddPlayer(int64_t playerID, int64_t teamID, THUAI7::SweeperType SweeperType)
 {
     auto tMessage = [=]()
     {
-        protobuf::PlayerMsg playerMsg = THUAI72Proto::THUAI72ProtobufPlayerMsg(playerID, teamID, SweeperType, x, y);
+        protobuf::PlayerMsg playerMsg = THUAI72Proto::THUAI72ProtobufPlayerMsg(playerID, teamID, SweeperType);
         grpc::ClientContext context;
         auto MessageReader = THUAI7Stub->AddPlayer(&context, playerMsg);
 

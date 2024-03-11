@@ -29,7 +29,7 @@ public:
     }
     bool TryConnection(int64_t playerID, int64_t teamID);
     protobuf::MessageToClient GetMessage2Client();
-    void AddPlayer(int64_t playerID, int64_t teamID, THUAI7::SweeperType SweeperType, int32_t x, int32_t y);
+    void AddPlayer(int64_t playerID, int64_t teamID, THUAI7::SweeperType SweeperType);
     bool EndAllAction(int64_t playerID, int64_t teamID);
     // Sweeper
     bool Move(int64_t playerID, int64_t teamID, int64_t time, double angle);
