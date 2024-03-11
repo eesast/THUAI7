@@ -280,7 +280,7 @@ namespace Proto2THUAI7
         team->playerID = teamMsg.player_id();
         team->teamID = teamMsg.team_id();
         team->score = teamMsg.score();
-        team->money = teamMsg.money();
+        team->energy = teamMsg.energy();
         return team;
     }
 
@@ -289,10 +289,10 @@ namespace Proto2THUAI7
         auto gameInfo = std::make_shared<THUAI7::GameInfo>();
         gameInfo->gameTime = allMsg.game_time();
         gameInfo->redScore = allMsg.red_team_score();
-        gameInfo->redMoney = allMsg.red_team_score();
+        gameInfo->redEnergy = allMsg.red_team_energy();
         gameInfo->redHomeHp = allMsg.red_home_hp();
         gameInfo->blueScore = allMsg.blue_team_score();
-        gameInfo->blueMoney = allMsg.blue_team_score();
+        gameInfo->blueEnergy = allMsg.blue_team_energy();
         gameInfo->blueHomeHp = allMsg.blue_home_hp();
         return gameInfo;
     }
@@ -530,14 +530,12 @@ namespace THUAI72Proto
         return buildSweeperMsg;
     }
 
-    inline protobuf::PlayerMsg THUAI72ProtobufPlayerMsg(int64_t playerID, int64_t teamID, THUAI7::SweeperType SweeperType, int32_t x, int32_t y)
+    inline protobuf::PlayerMsg THUAI72ProtobufPlayerMsg(int64_t playerID, int64_t teamID, THUAI7::SweeperType SweeperType)
     {
         protobuf::PlayerMsg playerMsg;
         playerMsg.set_player_id(playerID);
         playerMsg.set_team_id(teamID);
         playerMsg.set_sweeper_type(THUAI72Proto::SweeperTypeDict[SweeperType]);
-        playerMsg.set_x(x);
-        playerMsg.set_y(y);
         return playerMsg;
     }
 

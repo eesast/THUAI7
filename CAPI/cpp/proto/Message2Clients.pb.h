@@ -3032,7 +3032,7 @@ namespace protobuf
             kTeamIdFieldNumber = 1,
             kPlayerIdFieldNumber = 2,
             kScoreFieldNumber = 3,
-            kMoneyFieldNumber = 4,
+            kEnergyFieldNumber = 4,
             kGuidFieldNumber = 5,
         };
         // int64 team_id = 1;
@@ -3065,14 +3065,14 @@ namespace protobuf
         void _internal_set_score(int32_t value);
 
     public:
-        // int32 money = 4;
-        void clear_money();
-        int32_t money() const;
-        void set_money(int32_t value);
+        // int32 energy = 4;
+        void clear_energy();
+        int32_t energy() const;
+        void set_energy(int32_t value);
 
     private:
-        int32_t _internal_money() const;
-        void _internal_set_money(int32_t value);
+        int32_t _internal_energy() const;
+        void _internal_set_energy(int32_t value);
 
     public:
         // int64 guid = 5;
@@ -3099,7 +3099,7 @@ namespace protobuf
             int64_t team_id_;
             int64_t player_id_;
             int32_t score_;
-            int32_t money_;
+            int32_t energy_;
             int64_t guid_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
@@ -3795,8 +3795,8 @@ namespace protobuf
             kGameTimeFieldNumber = 1,
             kRedTeamScoreFieldNumber = 2,
             kBlueTeamScoreFieldNumber = 3,
-            kRedTeamMoneyFieldNumber = 4,
-            kBlueTeamMoneyFieldNumber = 5,
+            kRedTeamEnergyFieldNumber = 4,
+            kBlueTeamEnergyFieldNumber = 5,
             kRedHomeHpFieldNumber = 6,
             kBlueHomeHpFieldNumber = 7,
         };
@@ -3830,24 +3830,24 @@ namespace protobuf
         void _internal_set_blue_team_score(int32_t value);
 
     public:
-        // int32 red_team_money = 4;
-        void clear_red_team_money();
-        int32_t red_team_money() const;
-        void set_red_team_money(int32_t value);
+        // int32 red_team_energy = 4;
+        void clear_red_team_energy();
+        int32_t red_team_energy() const;
+        void set_red_team_energy(int32_t value);
 
     private:
-        int32_t _internal_red_team_money() const;
-        void _internal_set_red_team_money(int32_t value);
+        int32_t _internal_red_team_energy() const;
+        void _internal_set_red_team_energy(int32_t value);
 
     public:
-        // int32 blue_team_money = 5;
-        void clear_blue_team_money();
-        int32_t blue_team_money() const;
-        void set_blue_team_money(int32_t value);
+        // int32 blue_team_energy = 5;
+        void clear_blue_team_energy();
+        int32_t blue_team_energy() const;
+        void set_blue_team_energy(int32_t value);
 
     private:
-        int32_t _internal_blue_team_money() const;
-        void _internal_set_blue_team_money(int32_t value);
+        int32_t _internal_blue_team_energy() const;
+        void _internal_set_blue_team_energy(int32_t value);
 
     public:
         // int32 red_home_hp = 6;
@@ -3884,8 +3884,8 @@ namespace protobuf
             int32_t game_time_;
             int32_t red_team_score_;
             int32_t blue_team_score_;
-            int32_t red_team_money_;
-            int32_t blue_team_money_;
+            int32_t red_team_energy_;
+            int32_t blue_team_energy_;
             int32_t red_home_hp_;
             int32_t blue_home_hp_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -6812,28 +6812,28 @@ namespace protobuf
         // @@protoc_insertion_point(field_set:protobuf.MessageOfTeam.score)
     }
 
-    // int32 money = 4;
-    inline void MessageOfTeam::clear_money()
+    // int32 energy = 4;
+    inline void MessageOfTeam::clear_energy()
     {
-        _impl_.money_ = 0;
+        _impl_.energy_ = 0;
     }
-    inline int32_t MessageOfTeam::_internal_money() const
+    inline int32_t MessageOfTeam::_internal_energy() const
     {
-        return _impl_.money_;
+        return _impl_.energy_;
     }
-    inline int32_t MessageOfTeam::money() const
+    inline int32_t MessageOfTeam::energy() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfTeam.money)
-        return _internal_money();
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfTeam.energy)
+        return _internal_energy();
     }
-    inline void MessageOfTeam::_internal_set_money(int32_t value)
+    inline void MessageOfTeam::_internal_set_energy(int32_t value)
     {
-        _impl_.money_ = value;
+        _impl_.energy_ = value;
     }
-    inline void MessageOfTeam::set_money(int32_t value)
+    inline void MessageOfTeam::set_energy(int32_t value)
     {
-        _internal_set_money(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfTeam.money)
+        _internal_set_energy(value);
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfTeam.energy)
     }
 
     // int64 guid = 5;
@@ -8080,52 +8080,52 @@ namespace protobuf
         // @@protoc_insertion_point(field_set:protobuf.MessageOfAll.blue_team_score)
     }
 
-    // int32 red_team_money = 4;
-    inline void MessageOfAll::clear_red_team_money()
+    // int32 red_team_energy = 4;
+    inline void MessageOfAll::clear_red_team_energy()
     {
-        _impl_.red_team_money_ = 0;
+        _impl_.red_team_energy_ = 0;
     }
-    inline int32_t MessageOfAll::_internal_red_team_money() const
+    inline int32_t MessageOfAll::_internal_red_team_energy() const
     {
-        return _impl_.red_team_money_;
+        return _impl_.red_team_energy_;
     }
-    inline int32_t MessageOfAll::red_team_money() const
+    inline int32_t MessageOfAll::red_team_energy() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfAll.red_team_money)
-        return _internal_red_team_money();
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfAll.red_team_energy)
+        return _internal_red_team_energy();
     }
-    inline void MessageOfAll::_internal_set_red_team_money(int32_t value)
+    inline void MessageOfAll::_internal_set_red_team_energy(int32_t value)
     {
-        _impl_.red_team_money_ = value;
+        _impl_.red_team_energy_ = value;
     }
-    inline void MessageOfAll::set_red_team_money(int32_t value)
+    inline void MessageOfAll::set_red_team_energy(int32_t value)
     {
-        _internal_set_red_team_money(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfAll.red_team_money)
+        _internal_set_red_team_energy(value);
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfAll.red_team_energy)
     }
 
-    // int32 blue_team_money = 5;
-    inline void MessageOfAll::clear_blue_team_money()
+    // int32 blue_team_energy = 5;
+    inline void MessageOfAll::clear_blue_team_energy()
     {
-        _impl_.blue_team_money_ = 0;
+        _impl_.blue_team_energy_ = 0;
     }
-    inline int32_t MessageOfAll::_internal_blue_team_money() const
+    inline int32_t MessageOfAll::_internal_blue_team_energy() const
     {
-        return _impl_.blue_team_money_;
+        return _impl_.blue_team_energy_;
     }
-    inline int32_t MessageOfAll::blue_team_money() const
+    inline int32_t MessageOfAll::blue_team_energy() const
     {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfAll.blue_team_money)
-        return _internal_blue_team_money();
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfAll.blue_team_energy)
+        return _internal_blue_team_energy();
     }
-    inline void MessageOfAll::_internal_set_blue_team_money(int32_t value)
+    inline void MessageOfAll::_internal_set_blue_team_energy(int32_t value)
     {
-        _impl_.blue_team_money_ = value;
+        _impl_.blue_team_energy_ = value;
     }
-    inline void MessageOfAll::set_blue_team_money(int32_t value)
+    inline void MessageOfAll::set_blue_team_energy(int32_t value)
     {
-        _internal_set_blue_team_money(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfAll.blue_team_money)
+        _internal_set_blue_team_energy(value);
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfAll.blue_team_energy)
     }
 
     // int32 red_home_hp = 6;

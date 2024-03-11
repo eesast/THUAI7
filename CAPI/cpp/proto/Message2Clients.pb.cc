@@ -268,7 +268,7 @@ namespace protobuf
         ::_pbi::ConstantInitialized
     ) :
         _impl_{
-            /*decltype(_impl_.team_id_)*/ int64_t{0}, /*decltype(_impl_.player_id_)*/ int64_t{0}, /*decltype(_impl_.score_)*/ 0, /*decltype(_impl_.money_)*/ 0, /*decltype(_impl_.guid_)*/ int64_t{0}, /*decltype(_impl_._cached_size_)*/ {}}
+            /*decltype(_impl_.team_id_)*/ int64_t{0}, /*decltype(_impl_.player_id_)*/ int64_t{0}, /*decltype(_impl_.score_)*/ 0, /*decltype(_impl_.energy_)*/ 0, /*decltype(_impl_.guid_)*/ int64_t{0}, /*decltype(_impl_._cached_size_)*/ {}}
     {
     }
     struct MessageOfTeamDefaultTypeInternal
@@ -312,7 +312,7 @@ namespace protobuf
         ::_pbi::ConstantInitialized
     ) :
         _impl_{
-            /*decltype(_impl_.game_time_)*/ 0, /*decltype(_impl_.red_team_score_)*/ 0, /*decltype(_impl_.blue_team_score_)*/ 0, /*decltype(_impl_.red_team_money_)*/ 0, /*decltype(_impl_.blue_team_money_)*/ 0, /*decltype(_impl_.red_home_hp_)*/ 0, /*decltype(_impl_.blue_home_hp_)*/ 0, /*decltype(_impl_._cached_size_)*/ {}}
+            /*decltype(_impl_.game_time_)*/ 0, /*decltype(_impl_.red_team_score_)*/ 0, /*decltype(_impl_.blue_team_score_)*/ 0, /*decltype(_impl_.red_team_energy_)*/ 0, /*decltype(_impl_.blue_team_energy_)*/ 0, /*decltype(_impl_.red_home_hp_)*/ 0, /*decltype(_impl_.blue_home_hp_)*/ 0, /*decltype(_impl_._cached_size_)*/ {}}
     {
     }
     struct MessageOfAllDefaultTypeInternal
@@ -602,7 +602,7 @@ const uint32_t TableStruct_Message2Clients_2eproto::offsets[] PROTOBUF_SECTION_V
     PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfTeam, _impl_.team_id_),
     PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfTeam, _impl_.player_id_),
     PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfTeam, _impl_.score_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfTeam, _impl_.money_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfTeam, _impl_.energy_),
     PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfTeam, _impl_.guid_),
     ~0u,  // no _has_bits_
     PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfObj, _internal_metadata_),
@@ -632,8 +632,8 @@ const uint32_t TableStruct_Message2Clients_2eproto::offsets[] PROTOBUF_SECTION_V
     PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfAll, _impl_.game_time_),
     PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfAll, _impl_.red_team_score_),
     PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfAll, _impl_.blue_team_score_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfAll, _impl_.red_team_money_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfAll, _impl_.blue_team_money_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfAll, _impl_.red_team_energy_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfAll, _impl_.blue_team_energy_),
     PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfAll, _impl_.red_home_hp_),
     PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfAll, _impl_.blue_home_hp_),
     ~0u,  // no _has_bits_
@@ -770,43 +770,43 @@ const char descriptor_table_protodef_Message2Clients_2eproto[] PROTOBUF_SECTION_
     "sageOfMap\022\016\n\006height\030\001 \001(\r\022\r\n\005width\030\002 \001(\r"
     "\022(\n\004rows\030\003 \003(\0132\032.protobuf.MessageOfMap.R"
     "ow\032(\n\003Row\022!\n\004cols\030\001 \003(\0162\023.protobuf.Place"
-    "Type\"_\n\rMessageOfTeam\022\017\n\007team_id\030\001 \001(\003\022\021"
-    "\n\tplayer_id\030\002 \001(\003\022\r\n\005score\030\003 \001(\005\022\r\n\005mone"
-    "y\030\004 \001(\005\022\014\n\004guid\030\005 \001(\003\"\275\005\n\014MessageOfObj\0225"
-    "\n\017sweeper_message\030\001 \001(\0132\032.protobuf.Messa"
-    "geOfSweeperH\000\0223\n\016bullet_message\030\002 \001(\0132\031."
-    "protobuf.MessageOfBulletH\000\022=\n\023recycleban"
-    "k_message\030\003 \001(\0132\036.protobuf.MessageOfRecy"
-    "cleBankH\000\022A\n\025chargestation_message\030\004 \001(\013"
-    "2 .protobuf.MessageOfChargeStationH\000\022=\n\023"
-    "signaltower_message\030\005 \001(\0132\036.protobuf.Mes"
-    "sageOfSignalTowerH\000\0223\n\016bridge_message\030\006 "
-    "\001(\0132\031.protobuf.MessageOfBridgeH\000\022/\n\014home"
-    "_message\030\007 \001(\0132\027.protobuf.MessageOfHomeH"
-    "\000\0225\n\017garbage_message\030\010 \001(\0132\032.protobuf.Me"
-    "ssageOfGarbageH\000\022-\n\013map_message\030\t \001(\0132\026."
-    "protobuf.MessageOfMapH\000\022/\n\014news_message\030"
-    "\n \001(\0132\027.protobuf.MessageOfNewsH\000\022@\n\025bomb"
-    "ed_bullet_message\030\013 \001(\0132\037.protobuf.Messa"
-    "geOfBombedBulletH\000\022/\n\014team_message\030\014 \001(\013"
-    "2\027.protobuf.MessageOfTeamH\000B\020\n\016message_o"
-    "f_obj\"\256\001\n\014MessageOfAll\022\021\n\tgame_time\030\001 \001("
-    "\005\022\026\n\016red_team_score\030\002 \001(\005\022\027\n\017blue_team_s"
-    "core\030\003 \001(\005\022\026\n\016red_team_money\030\004 \001(\005\022\027\n\017bl"
-    "ue_team_money\030\005 \001(\005\022\023\n\013red_home_hp\030\006 \001(\005"
-    "\022\024\n\014blue_home_hp\030\007 \001(\005\"\224\001\n\017MessageToClie"
-    "nt\022+\n\013obj_message\030\001 \003(\0132\026.protobuf.Messa"
-    "geOfObj\022\'\n\ngame_state\030\002 \001(\0162\023.protobuf.G"
-    "ameState\022+\n\013all_message\030\003 \001(\0132\026.protobuf"
-    ".MessageOfAll\"J\n\007MoveRes\022\024\n\014actual_speed"
-    "\030\001 \001(\003\022\024\n\014actual_angle\030\002 \001(\001\022\023\n\013act_succ"
-    "ess\030\003 \001(\010\"\036\n\007BoolRes\022\023\n\013act_success\030\001 \001("
-    "\010\"B\n\016SweeperInfoRes\0220\n\014sweeper_info\030\001 \003("
-    "\0132\032.protobuf.MessageOfSweeper\"\031\n\006EcoRes\022"
-    "\017\n\007economy\030\001 \001(\003\"i\n\rMessageOfNews\022\026\n\014tex"
-    "t_message\030\001 \001(\tH\000\022\030\n\016binary_message\030\004 \001("
-    "\014H\000\022\017\n\007from_id\030\002 \001(\003\022\r\n\005to_id\030\003 \001(\003B\006\n\004n"
-    "ewsb\006proto3";
+    "Type\"`\n\rMessageOfTeam\022\017\n\007team_id\030\001 \001(\003\022\021"
+    "\n\tplayer_id\030\002 \001(\003\022\r\n\005score\030\003 \001(\005\022\016\n\006ener"
+    "gy\030\004 \001(\005\022\014\n\004guid\030\005 \001(\003\"\275\005\n\014MessageOfObj\022"
+    "5\n\017sweeper_message\030\001 \001(\0132\032.protobuf.Mess"
+    "ageOfSweeperH\000\0223\n\016bullet_message\030\002 \001(\0132\031"
+    ".protobuf.MessageOfBulletH\000\022=\n\023recycleba"
+    "nk_message\030\003 \001(\0132\036.protobuf.MessageOfRec"
+    "ycleBankH\000\022A\n\025chargestation_message\030\004 \001("
+    "\0132 .protobuf.MessageOfChargeStationH\000\022=\n"
+    "\023signaltower_message\030\005 \001(\0132\036.protobuf.Me"
+    "ssageOfSignalTowerH\000\0223\n\016bridge_message\030\006"
+    " \001(\0132\031.protobuf.MessageOfBridgeH\000\022/\n\014hom"
+    "e_message\030\007 \001(\0132\027.protobuf.MessageOfHome"
+    "H\000\0225\n\017garbage_message\030\010 \001(\0132\032.protobuf.M"
+    "essageOfGarbageH\000\022-\n\013map_message\030\t \001(\0132\026"
+    ".protobuf.MessageOfMapH\000\022/\n\014news_message"
+    "\030\n \001(\0132\027.protobuf.MessageOfNewsH\000\022@\n\025bom"
+    "bed_bullet_message\030\013 \001(\0132\037.protobuf.Mess"
+    "ageOfBombedBulletH\000\022/\n\014team_message\030\014 \001("
+    "\0132\027.protobuf.MessageOfTeamH\000B\020\n\016message_"
+    "of_obj\"\260\001\n\014MessageOfAll\022\021\n\tgame_time\030\001 \001"
+    "(\005\022\026\n\016red_team_score\030\002 \001(\005\022\027\n\017blue_team_"
+    "score\030\003 \001(\005\022\027\n\017red_team_energy\030\004 \001(\005\022\030\n\020"
+    "blue_team_energy\030\005 \001(\005\022\023\n\013red_home_hp\030\006 "
+    "\001(\005\022\024\n\014blue_home_hp\030\007 \001(\005\"\224\001\n\017MessageToC"
+    "lient\022+\n\013obj_message\030\001 \003(\0132\026.protobuf.Me"
+    "ssageOfObj\022\'\n\ngame_state\030\002 \001(\0162\023.protobu"
+    "f.GameState\022+\n\013all_message\030\003 \001(\0132\026.proto"
+    "buf.MessageOfAll\"J\n\007MoveRes\022\024\n\014actual_sp"
+    "eed\030\001 \001(\003\022\024\n\014actual_angle\030\002 \001(\001\022\023\n\013act_s"
+    "uccess\030\003 \001(\010\"\036\n\007BoolRes\022\023\n\013act_success\030\001"
+    " \001(\010\"B\n\016SweeperInfoRes\0220\n\014sweeper_info\030\001"
+    " \003(\0132\032.protobuf.MessageOfSweeper\"\031\n\006EcoR"
+    "es\022\017\n\007economy\030\001 \001(\003\"i\n\rMessageOfNews\022\026\n\014"
+    "text_message\030\001 \001(\tH\000\022\030\n\016binary_message\030\004"
+    " \001(\014H\000\022\017\n\007from_id\030\002 \001(\003\022\r\n\005to_id\030\003 \001(\003B\006"
+    "\n\004newsb\006proto3";
 static const ::_pbi::DescriptorTable* const descriptor_table_Message2Clients_2eproto_deps[1] = {
     &::descriptor_table_MessageType_2eproto,
 };
@@ -814,7 +814,7 @@ static ::_pbi::once_flag descriptor_table_Message2Clients_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Message2Clients_2eproto = {
     false,
     false,
-    2891,
+    2894,
     descriptor_table_protodef_Message2Clients_2eproto,
     "Message2Clients.proto",
     &descriptor_table_Message2Clients_2eproto_once,
@@ -4633,7 +4633,7 @@ namespace protobuf
         MessageOfTeam* const _this = this;
         (void)_this;
         new (&_impl_) Impl_{
-            decltype(_impl_.team_id_){}, decltype(_impl_.player_id_){}, decltype(_impl_.score_){}, decltype(_impl_.money_){}, decltype(_impl_.guid_){}, /*decltype(_impl_._cached_size_)*/ {}};
+            decltype(_impl_.team_id_){}, decltype(_impl_.player_id_){}, decltype(_impl_.score_){}, decltype(_impl_.energy_){}, decltype(_impl_.guid_){}, /*decltype(_impl_._cached_size_)*/ {}};
 
         _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
         ::memcpy(&_impl_.team_id_, &from._impl_.team_id_, static_cast<size_t>(reinterpret_cast<char*>(&_impl_.guid_) - reinterpret_cast<char*>(&_impl_.team_id_)) + sizeof(_impl_.guid_));
@@ -4647,7 +4647,7 @@ namespace protobuf
         (void)arena;
         (void)is_message_owned;
         new (&_impl_) Impl_{
-            decltype(_impl_.team_id_){int64_t{0}}, decltype(_impl_.player_id_){int64_t{0}}, decltype(_impl_.score_){0}, decltype(_impl_.money_){0}, decltype(_impl_.guid_){int64_t{0}}, /*decltype(_impl_._cached_size_)*/ {}};
+            decltype(_impl_.team_id_){int64_t{0}}, decltype(_impl_.player_id_){int64_t{0}}, decltype(_impl_.score_){0}, decltype(_impl_.energy_){0}, decltype(_impl_.guid_){int64_t{0}}, /*decltype(_impl_._cached_size_)*/ {}};
     }
 
     MessageOfTeam::~MessageOfTeam()
@@ -4723,11 +4723,11 @@ namespace protobuf
                     else
                         goto handle_unusual;
                     continue;
-                // int32 money = 4;
+                // int32 energy = 4;
                 case 4:
                     if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32))
                     {
-                        _impl_.money_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+                        _impl_.energy_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
                         CHK_(ptr);
                     }
                     else
@@ -4798,11 +4798,11 @@ namespace protobuf
             target = ::_pbi::WireFormatLite::WriteInt32ToArray(3, this->_internal_score(), target);
         }
 
-        // int32 money = 4;
-        if (this->_internal_money() != 0)
+        // int32 energy = 4;
+        if (this->_internal_energy() != 0)
         {
             target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteInt32ToArray(4, this->_internal_money(), target);
+            target = ::_pbi::WireFormatLite::WriteInt32ToArray(4, this->_internal_energy(), target);
         }
 
         // int64 guid = 5;
@@ -4849,10 +4849,10 @@ namespace protobuf
             total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_score());
         }
 
-        // int32 money = 4;
-        if (this->_internal_money() != 0)
+        // int32 energy = 4;
+        if (this->_internal_energy() != 0)
         {
-            total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_money());
+            total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_energy());
         }
 
         // int64 guid = 5;
@@ -4893,9 +4893,9 @@ namespace protobuf
         {
             _this->_internal_set_score(from._internal_score());
         }
-        if (from._internal_money() != 0)
+        if (from._internal_energy() != 0)
         {
-            _this->_internal_set_money(from._internal_money());
+            _this->_internal_set_energy(from._internal_energy());
         }
         if (from._internal_guid() != 0)
         {
@@ -6054,7 +6054,7 @@ namespace protobuf
         MessageOfAll* const _this = this;
         (void)_this;
         new (&_impl_) Impl_{
-            decltype(_impl_.game_time_){}, decltype(_impl_.red_team_score_){}, decltype(_impl_.blue_team_score_){}, decltype(_impl_.red_team_money_){}, decltype(_impl_.blue_team_money_){}, decltype(_impl_.red_home_hp_){}, decltype(_impl_.blue_home_hp_){}, /*decltype(_impl_._cached_size_)*/ {}};
+            decltype(_impl_.game_time_){}, decltype(_impl_.red_team_score_){}, decltype(_impl_.blue_team_score_){}, decltype(_impl_.red_team_energy_){}, decltype(_impl_.blue_team_energy_){}, decltype(_impl_.red_home_hp_){}, decltype(_impl_.blue_home_hp_){}, /*decltype(_impl_._cached_size_)*/ {}};
 
         _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
         ::memcpy(&_impl_.game_time_, &from._impl_.game_time_, static_cast<size_t>(reinterpret_cast<char*>(&_impl_.blue_home_hp_) - reinterpret_cast<char*>(&_impl_.game_time_)) + sizeof(_impl_.blue_home_hp_));
@@ -6068,7 +6068,7 @@ namespace protobuf
         (void)arena;
         (void)is_message_owned;
         new (&_impl_) Impl_{
-            decltype(_impl_.game_time_){0}, decltype(_impl_.red_team_score_){0}, decltype(_impl_.blue_team_score_){0}, decltype(_impl_.red_team_money_){0}, decltype(_impl_.blue_team_money_){0}, decltype(_impl_.red_home_hp_){0}, decltype(_impl_.blue_home_hp_){0}, /*decltype(_impl_._cached_size_)*/ {}};
+            decltype(_impl_.game_time_){0}, decltype(_impl_.red_team_score_){0}, decltype(_impl_.blue_team_score_){0}, decltype(_impl_.red_team_energy_){0}, decltype(_impl_.blue_team_energy_){0}, decltype(_impl_.red_home_hp_){0}, decltype(_impl_.blue_home_hp_){0}, /*decltype(_impl_._cached_size_)*/ {}};
     }
 
     MessageOfAll::~MessageOfAll()
@@ -6144,21 +6144,21 @@ namespace protobuf
                     else
                         goto handle_unusual;
                     continue;
-                // int32 red_team_money = 4;
+                // int32 red_team_energy = 4;
                 case 4:
                     if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32))
                     {
-                        _impl_.red_team_money_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+                        _impl_.red_team_energy_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
                         CHK_(ptr);
                     }
                     else
                         goto handle_unusual;
                     continue;
-                // int32 blue_team_money = 5;
+                // int32 blue_team_energy = 5;
                 case 5:
                     if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40))
                     {
-                        _impl_.blue_team_money_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+                        _impl_.blue_team_energy_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
                         CHK_(ptr);
                     }
                     else
@@ -6239,18 +6239,18 @@ namespace protobuf
             target = ::_pbi::WireFormatLite::WriteInt32ToArray(3, this->_internal_blue_team_score(), target);
         }
 
-        // int32 red_team_money = 4;
-        if (this->_internal_red_team_money() != 0)
+        // int32 red_team_energy = 4;
+        if (this->_internal_red_team_energy() != 0)
         {
             target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteInt32ToArray(4, this->_internal_red_team_money(), target);
+            target = ::_pbi::WireFormatLite::WriteInt32ToArray(4, this->_internal_red_team_energy(), target);
         }
 
-        // int32 blue_team_money = 5;
-        if (this->_internal_blue_team_money() != 0)
+        // int32 blue_team_energy = 5;
+        if (this->_internal_blue_team_energy() != 0)
         {
             target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteInt32ToArray(5, this->_internal_blue_team_money(), target);
+            target = ::_pbi::WireFormatLite::WriteInt32ToArray(5, this->_internal_blue_team_energy(), target);
         }
 
         // int32 red_home_hp = 6;
@@ -6304,16 +6304,16 @@ namespace protobuf
             total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_blue_team_score());
         }
 
-        // int32 red_team_money = 4;
-        if (this->_internal_red_team_money() != 0)
+        // int32 red_team_energy = 4;
+        if (this->_internal_red_team_energy() != 0)
         {
-            total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_red_team_money());
+            total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_red_team_energy());
         }
 
-        // int32 blue_team_money = 5;
-        if (this->_internal_blue_team_money() != 0)
+        // int32 blue_team_energy = 5;
+        if (this->_internal_blue_team_energy() != 0)
         {
-            total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_blue_team_money());
+            total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_blue_team_energy());
         }
 
         // int32 red_home_hp = 6;
@@ -6360,13 +6360,13 @@ namespace protobuf
         {
             _this->_internal_set_blue_team_score(from._internal_blue_team_score());
         }
-        if (from._internal_red_team_money() != 0)
+        if (from._internal_red_team_energy() != 0)
         {
-            _this->_internal_set_red_team_money(from._internal_red_team_money());
+            _this->_internal_set_red_team_energy(from._internal_red_team_energy());
         }
-        if (from._internal_blue_team_money() != 0)
+        if (from._internal_blue_team_energy() != 0)
         {
-            _this->_internal_set_blue_team_money(from._internal_blue_team_money());
+            _this->_internal_set_blue_team_energy(from._internal_blue_team_energy());
         }
         if (from._internal_red_home_hp() != 0)
         {

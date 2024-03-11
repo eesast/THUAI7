@@ -155,14 +155,14 @@ int32_t Logic::GetGarbageState(int32_t cellX, int32_t cellY) const
     }
 }
 
-int32_t Logic::GetMoney() const
+int32_t Logic::GetEnergy() const
 {
     std::unique_lock<std::mutex> lock(mtxState);
-    logger->debug("Called GetMoney");
+    logger->debug("Called GetEnergy");
     if (playerTeam == THUAI7::PlayerTeam::Red)
-        return currentState->gameInfo->redMoney;
+        return currentState->gameInfo->redEnergy;
     else if (playerTeam == THUAI7::PlayerTeam::Blue)
-        return currentState->gameInfo->blueMoney;
+        return currentState->gameInfo->blueEnergy;
     else
     {
         logger->warn("Invalid playerTeam");
@@ -292,10 +292,8 @@ void Logic::ProcessMessage()
         try
         {
             // TODO
-            int32_t x = 0;
-            int32_t y = 0;
             logger->info("Message thread start!");
-            pComm->AddPlayer(playerID, teamID, SweeperType, x, y);
+            pComm->AddPlayer(playerID, teamID, SweeperType);
             while (gameState != THUAI7::GameState::GameEnd)
             {
                 auto clientMsg = pComm->GetMessage2Client();  // 在获得新消息之前阻塞
@@ -430,7 +428,8 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                 {
                     if (AssistFunction::HaveView(x, y, item.sweeper_message().x(), item.sweeper_message().y(), viewRange, bufferState->gameMap))
                     {
-                        bufferState->enemySweepers.push_back(Proto2THUAI7::Protobuf2THUAI7Sweeper(item.sweeper_message()));
+                        std::shared_ptr<THUAI7::Sweeper> Sweeper = Proto2THUAI7::Protobuf2THUAI7Sweeper(item.sweeper_message());
+                        bufferState->enemySweepers.push_back(Sweeper);
                         logger->debug("Add EnemySweeper!");
                     }
                 }

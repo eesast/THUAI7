@@ -49,7 +49,7 @@ public:
     [[nodiscard]] virtual int32_t GetBridgeHp(int32_t cellX, int32_t cellY) const = 0;
     [[nodiscard]] virtual int32_t GetGarbageState(int32_t cellX, int32_t cellY) const = 0;
     [[nodiscard]] virtual int32_t GetHomeHp() const = 0;
-    [[nodiscard]] virtual int32_t GetMoney() const = 0;
+    [[nodiscard]] virtual int32_t GetEnergy() const = 0;
     [[nodiscard]] virtual int32_t GetScore() const = 0;
 
     // 供IAPI使用的操作相关的公共部分
@@ -101,7 +101,7 @@ public:
     [[nodiscard]] virtual int32_t GetBridgeHp(int32_t cellX, int32_t cellY) const = 0;
     [[nodiscard]] virtual int32_t GetGarbageState(int32_t cellX, int32_t cellY) const = 0;
     [[nodiscard]] virtual int32_t GetHomeHp() const = 0;
-    [[nodiscard]] virtual int32_t GetMoney() const = 0;
+    [[nodiscard]] virtual int32_t GetEnergy() const = 0;
     [[nodiscard]] virtual int32_t GetScore() const = 0;
     [[nodiscard]] virtual std::vector<int64_t> GetPlayerGUIDs() const = 0;
 
@@ -211,7 +211,7 @@ public:
     [[nodiscard]] std::vector<int64_t> GetPlayerGUIDs() const override;
     [[nodiscard]] std::shared_ptr<const THUAI7::Sweeper> GetSelfInfo() const override;
     [[nodiscard]] bool HaveView(int32_t gridX, int32_t gridY) const override;
-    [[nodiscard]] int32_t GetMoney() const override;
+    [[nodiscard]] int32_t GetEnergy() const override;
     [[nodiscard]] int32_t GetScore() const override;
     void Print(std::string str) const
     {
@@ -268,7 +268,7 @@ public:
     [[nodiscard]] std::shared_ptr<const THUAI7::Team> GetSelfInfo() const override;
 
     [[nodiscard]] int32_t GetScore() const override;
-    [[nodiscard]] int32_t GetMoney() const override;
+    [[nodiscard]] int32_t GetEnergy() const override;
     std::future<bool> InstallModule(int64_t playerID, THUAI7::ModuleType moduleType) override;
     std::future<bool> Recycle(int64_t playerID) override;
     std::future<bool> BuildSweeper(THUAI7::SweeperType SweeperType, int32_t cellX, int32_t cellY) override;
@@ -328,7 +328,7 @@ public:
     [[nodiscard]] std::vector<int64_t> GetPlayerGUIDs() const override;
     [[nodiscard]] std::shared_ptr<const THUAI7::Sweeper> GetSelfInfo() const override;
     [[nodiscard]] bool HaveView(int32_t gridX, int32_t gridY) const override;
-    [[nodiscard]] int32_t GetMoney() const override;
+    [[nodiscard]] int32_t GetEnergy() const override;
     [[nodiscard]] int32_t GetScore() const override;
 
     void Print(std::string str) const override;
@@ -375,7 +375,7 @@ public:
     [[nodiscard]] std::shared_ptr<const THUAI7::Team> GetSelfInfo() const override;
 
     [[nodiscard]] int32_t GetScore() const override;
-    [[nodiscard]] int32_t GetMoney() const override;
+    [[nodiscard]] int32_t GetEnergy() const override;
     std::future<bool> InstallModule(int64_t playerID, THUAI7::ModuleType moduleType) override;
     std::future<bool> Recycle(int64_t playerID) override;
     std::future<bool> BuildSweeper(THUAI7::SweeperType SweeperType, int32_t cellX, int32_t cellY) override;

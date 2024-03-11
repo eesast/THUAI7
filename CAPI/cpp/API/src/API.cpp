@@ -220,14 +220,14 @@ int32_t TeamAPI::GetScore() const
     return logic.GetScore();
 }
 
-int32_t SweeperAPI::GetMoney() const
+int32_t SweeperAPI::GetEnergy() const
 {
-    return logic.GetMoney();
+    return logic.GetEnergy();
 }
 
-int32_t TeamAPI::GetMoney() const
+int32_t TeamAPI::GetEnergy() const
 {
-    return logic.GetMoney();
+    return logic.GetEnergy();
 }
 
 // Sweeper独有

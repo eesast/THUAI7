@@ -216,7 +216,7 @@ namespace THUAI7
         int64_t playerID;
         int64_t teamID;
         int32_t score;
-        int32_t money;
+        int32_t energy;
     };
 
     struct Home
@@ -268,10 +268,10 @@ namespace THUAI7
     {
         int32_t gameTime;
         int32_t redScore;
-        int32_t redMoney;
+        int32_t redEnergy;
         int32_t redHomeHp;
         int32_t blueScore;
-        int32_t blueMoney;
+        int32_t blueEnergy;
         int32_t blueHomeHp;
     };
 

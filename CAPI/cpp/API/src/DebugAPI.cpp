@@ -226,9 +226,9 @@ bool SweeperDebugAPI::HaveView(int32_t gridX, int32_t gridY) const
     return logic.HaveView(gridX, gridY, selfInfo->x, selfInfo->y, selfInfo->viewRange);
 }
 
-int32_t SweeperDebugAPI::GetMoney() const
+int32_t SweeperDebugAPI::GetEnergy() const
 {
-    return logic.GetMoney();
+    return logic.GetEnergy();
 }
 
 int32_t SweeperDebugAPI::GetScore() const
@@ -414,9 +414,9 @@ std::shared_ptr<const THUAI7::Team> TeamDebugAPI::GetSelfInfo() const
     return logic.TeamGetSelfInfo();
 }
 
-int32_t TeamDebugAPI::GetMoney() const
+int32_t TeamDebugAPI::GetEnergy() const
 {
-    return logic.GetMoney();
+    return logic.GetEnergy();
 }
 
 int32_t TeamDebugAPI::GetScore() const
@@ -446,7 +446,7 @@ void TeamDebugAPI::PrintSelfInfo() const
 {
     auto Team = logic.TeamGetSelfInfo();
     logger->info("******Self Info******");
-    logger->info("playerID={}, teamID={}, score={}, money={}", Team->playerID, Team->teamID, Team->score, Team->money);
+    logger->info("playerID={}, teamID={}, score={}, energy={}", Team->playerID, Team->teamID, Team->score, Team->energy);
     logger->info("*********************\n");
 }
 

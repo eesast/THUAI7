@@ -102,7 +102,7 @@ private:
     [[nodiscard]] int32_t GetBridgeHp(int32_t cellX, int32_t cellY) const;
     [[nodiscard]] int32_t GetGarbageState(int32_t cellX, int32_t cellY) const;
     [[nodiscard]] int32_t GetHomeHp() const;
-    [[nodiscard]] int32_t GetMoney() const;
+    [[nodiscard]] int32_t GetEnergy() const;
     [[nodiscard]] int32_t GetScore() const;
 
     // 供IAPI使用的操作相关的部分

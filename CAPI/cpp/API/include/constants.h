@@ -26,12 +26,12 @@ namespace Constants
     struct Home
     {
         SCCI int32_t maxHp = 24000;
-        SCCI int32_t moneySpeed = 1;
+        SCCI int32_t energySpeed = 1;
     };
     struct RecycleBank
     {
         SCCI int32_t maxHp = 8000;
-        SCCI int32_t moneySpeed = 3;
+        SCCI int32_t energySpeed = 3;
     };
     struct ChargeStation
     {
@@ -74,9 +74,9 @@ namespace Constants
     // 模块
     struct Producer
     {
-        SCCI int32_t moneySpeed1 = 5;
-        SCCI int32_t moneySpeed2 = 7;
-        SCCI int32_t moneySpeed3 = 10;
+        SCCI int32_t energySpeed1 = 5;
+        SCCI int32_t energySpeed2 = 7;
+        SCCI int32_t energySpeed3 = 10;
         SCCI int32_t Cost1 = 0;
         SCCI int32_t Cost2 = 40;
         SCCI int32_t Cost3 = 80;
