@@ -14,7 +14,7 @@ namespace ClientTest
             {
                 PlayerId = 0,
                 TeamId = 0,
-                ShipType = ShipType.CivilianShip,
+                SweeperType = SweeperType.CivilianSweeper,
                 X = 30000,
                 Y = 46000
             };
