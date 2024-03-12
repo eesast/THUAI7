@@ -272,20 +272,20 @@ namespace Client
         //                                    listOfBombedBullet.Add(obj.BombedBulletMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
-        //                                    listOfFactory.Add(obj.FactoryMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
+        //                                    listOfFactory.Add(obj.RecyclebankMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
-        //                                    listOfCommunity.Add(obj.CommunityMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
+        //                                    listOfCommunity.Add(obj.ChargestationMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.FortMessage:
-        //                                    listOfFort.Add(obj.FortMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
+        //                                    listOfFort.Add(obj.SignaltowerMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
-        //                                    listOfResource.Add(obj.ResourceMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
+        //                                    listOfResource.Add(obj.GarbageMessage);
         //                                    break;
 
         //                                case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
@@ -315,16 +315,16 @@ namespace Client
         //                                    listOfShip.Add(obj.ShipMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
-        //                                    listOfFactory.Add(obj.FactoryMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
+        //                                    listOfFactory.Add(obj.RecyclebankMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
-        //                                    listOfCommunity.Add(obj.CommunityMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
+        //                                    listOfCommunity.Add(obj.ChargestationMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.FortMessage:
-        //                                    listOfFort.Add(obj.FortMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
+        //                                    listOfFort.Add(obj.SignaltowerMessage);
         //                                    break;
 
         //                                //case MessageOfObj.MessageOfObjOneofCase.BuildingMessage:
@@ -339,8 +339,8 @@ namespace Client
         //                                    listOfBombedBullet.Add(obj.BombedBulletMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
-        //                                    listOfResource.Add(obj.ResourceMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
+        //                                    listOfResource.Add(obj.GarbageMessage);
         //                                    break;
 
         //                                case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
@@ -380,16 +380,16 @@ namespace Client
         //                                //    listOfBuilding.Add(obj.BuildingMessage);
         //                                //    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
-        //                                    listOfFactory.Add(obj.FactoryMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
+        //                                    listOfFactory.Add(obj.RecyclebankMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
-        //                                    listOfCommunity.Add(obj.CommunityMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
+        //                                    listOfCommunity.Add(obj.ChargestationMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.FortMessage:
-        //                                    listOfFort.Add(obj.FortMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
+        //                                    listOfFort.Add(obj.SignaltowerMessage);
         //                                    break;
 
         //                                case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
@@ -400,8 +400,8 @@ namespace Client
         //                                    listOfBombedBullet.Add(obj.BombedBulletMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
-        //                                    listOfResource.Add(obj.ResourceMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
+        //                                    listOfResource.Add(obj.GarbageMessage);
         //                                    break;
 
         //                                case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
@@ -432,7 +432,7 @@ namespace Client
         //    }
         //}
 
-        //private int FindIndexOfResource(MessageOfResource obj)
+        //private int FindIndexOfResource(MessageOfGarbage obj)
         //{
         //    for (int i = 0; i < listOfResource.Count; i++)
         //    {
@@ -444,7 +444,7 @@ namespace Client
         //    return -1;
         //}
 
-        //private int FindIndexOfFactory(MessageOfFactory obj)
+        //private int FindIndexOfFactory(MessageOfRecycleBank obj)
         //{
         //    for (int i = 0; i < listOfFactory.Count; i++)
         //    {
@@ -456,7 +456,7 @@ namespace Client
         //    return -1;
         //}
 
-        //private int FindIndexOfCommunity(MessageOfCommunity obj)
+        //private int FindIndexOfCommunity(MessageOfChargeStation obj)
         //{
         //    for (int i = 0; i < listOfCommunity.Count; i++)
         //    {
@@ -468,7 +468,7 @@ namespace Client
         //    return -1;
         //}
 
-        //private int FindIndexOfFort(MessageOfFort obj)
+        //private int FindIndexOfFort(MessageOfSignalTower obj)
         //{
         //    for (int i = 0; i < listOfFort.Count; i++)
         //    {
@@ -579,7 +579,7 @@ namespace Client
         //    //MapGrid.Children.Add(iconOfHome);
         //}
 
-        //private void DrawFactory(MessageOfFactory data)
+        //private void DrawFactory(MessageOfRecycleBank data)
         //{
         //    int hp = data.Hp;
         //    //TODO: calculate the percentage of Hp
@@ -593,7 +593,7 @@ namespace Client
         //    //MapGrid.Children.Add(factoryArray[idx]);
         //}
 
-        //private void DrawCommunity(MessageOfCommunity data)
+        //private void DrawCommunity(MessageOfChargeStation data)
         //{
         //    int hp = data.Hp;
         //    //TODO: calculate the percentage of Hp
@@ -607,7 +607,7 @@ namespace Client
         //    //MapGrid.Children.Add(communityArray[idx]);
         //}
 
-        //private void DrawFort(MessageOfFort data)
+        //private void DrawFort(MessageOfSignalTower data)
         //{
         //    int hp = data.Hp;
         //    //TODO: calculate the percentage of Hp
@@ -678,7 +678,7 @@ namespace Client
         //    //MapGrid.Children.Add(iconOfBombedBullet);
         //}
 
-        //private void DrawResource(MessageOfResource data)
+        //private void DrawResource(MessageOfGarbage data)
         //{
         //    int idx = FindIndexOfResource(data);
         //    resourceArray[idx].FontSize = unitFontSize;
