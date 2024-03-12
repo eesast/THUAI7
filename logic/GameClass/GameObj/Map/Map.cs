@@ -187,7 +187,6 @@ namespace GameClass.GameObj
             {
                 for (int j = 0; j < width; ++j)
                 {
-                    bool hasWormhole = false;
                     switch (mapResource.map[i, j])
                     {
                         case PlaceType.Resource:

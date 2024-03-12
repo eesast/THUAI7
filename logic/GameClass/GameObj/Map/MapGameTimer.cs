@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Preparation.Interface;
+using Preparation.Utility;
 using ITimer = Preparation.Interface.ITimer;
 
 namespace GameClass.GameObj
@@ -16,30 +17,16 @@ namespace GameClass.GameObj
             private long startTime;
             public int nowTime() => (int)(Environment.TickCount64 - startTime);
 
-            private bool isGaming = false;
-            public bool IsGaming
-            {
-                get => isGaming;
-                set
-                {
-                    lock (isGamingLock)
-                        isGaming = value;
-                }
-            }
-
-            readonly object isGamingLock = new();
+            private AtomicBool isGaming = new(false);
+            public AtomicBool IsGaming => isGaming;
 
             public bool StartGame(int timeInMilliseconds)
             {
-                lock (isGamingLock)
-                {
-                    if (isGaming)
-                        return false;
-                    isGaming = true;
-                    startTime = Environment.TickCount64;
-                }
+                if (!IsGaming.TrySet(true))
+                    return false;
+                startTime = Environment.TickCount64;
                 Thread.Sleep(timeInMilliseconds);
-                isGaming = false;
+                IsGaming.SetReturnOri(false);
                 return true;
             }
         }
