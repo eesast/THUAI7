@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace Preparation.Utility
@@ -55,6 +57,10 @@ namespace Preparation.Utility
         public void Add(T item)
         {
             WriteLock(() => { list.Add(item); });
+        }
+        public void AddRange(IEnumerable<T> lt)
+        {
+            WriteLock(() => { list.AddRange(lt); });
         }
 
         public void Insert(int index, T item)
@@ -159,6 +165,22 @@ namespace Preparation.Utility
         public int FindIndex(Predicate<T> match) => ReadLock(() => { return list.FindIndex(match); });
 
         public void ForEach(Action<T> action) => ReadLock(() => { list.ForEach(action); });
+
+        public Array ToArray()
+        {
+            return ReadLock(() => { return list.ToArray(); });
+        }
+        public List<T> ToNewList()
+        {
+            List<T> lt = new();
+            return ReadLock(() => { lt.AddRange(list); return lt; });
+        }
+
+        public LockedClassList<TResult> Cast<TResult>() where TResult : class
+        {
+            LockedClassList<TResult> lt = new();
+            return ReadLock(() => { lt.AddRange(list.Cast<TResult>()); return lt; });
+        }
         #endregion
     }
 }

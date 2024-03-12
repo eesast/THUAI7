@@ -13,7 +13,6 @@ using System.Linq.Expressions;
 using Client.ViewModel;
 using Client.Model;
 using System.Reflection;
-using Windows.Gaming.Input;
 
 namespace Client
 {
