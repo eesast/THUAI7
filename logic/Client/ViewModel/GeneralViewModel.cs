@@ -60,7 +60,7 @@ namespace Client.ViewModel
         }
 
         private long playerID;
-        private ShipType shipType;
+        private SweeperType shipType;
         private long teamID;
         AvailableService.AvailableServiceClient? client;
         AsyncServerStreamingCall<MessageToClient>? responseStream;
@@ -82,19 +82,19 @@ namespace Client.ViewModel
             PlayerMsg playerMsg = new PlayerMsg();
             playerMsg.PlayerId = playerID;
             playerMsg.TeamId = teamID;
-            playerMsg.X = 0;
-            playerMsg.Y = 0;
+            //playerMsg.X = 0;
+            //playerMsg.Y = 0;
             if (!isSpectatorMode)
             {
                 shipType = Convert.ToInt64(comInfo[4]) switch
                 {
-                    0 => ShipType.NullShipType,
-                    1 => ShipType.CivilianShip,
-                    2 => ShipType.MilitaryShip,
-                    3 => ShipType.FlagShip,
-                    _ => ShipType.NullShipType
+                    0 => SweeperType.NullSweeperType,
+                    1 => SweeperType.CivilianSweeper,
+                    2 => SweeperType.MilitarySweeper,
+                    3 => SweeperType.FlagSweeper,
+                    _ => SweeperType.NullSweeperType
                 };
-                playerMsg.ShipType = shipType;
+                playerMsg.SweeperType = shipType;
             }
             responseStream = client.AddPlayer(playerMsg);
             isClientStocked = false;
@@ -132,7 +132,7 @@ namespace Client.ViewModel
                 TeamId = 1
             });
 
-            //DrawFactory(new MessageOfFactory
+            //DrawFactory(new MessageOfRecycleBank
             //{
             //    X = 11,
             //    Y = 11,
@@ -140,7 +140,7 @@ namespace Client.ViewModel
             //    TeamId = 2
             //});
 
-            DrawWormHole(new MessageOfWormhole
+            DrawWormHole(new MessageOfBridge
             {
                 X = 12,
                 Y = 12,

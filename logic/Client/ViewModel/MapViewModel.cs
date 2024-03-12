@@ -28,29 +28,29 @@ namespace Client.ViewModel
     {
 
         private List<MessageOfAll> listOfAll;
-        private List<MessageOfShip> listOfShip;
+        private List<MessageOfSweeper> listOfShip;
         private List<MessageOfBullet> listOfBullet;
         private List<MessageOfBombedBullet> listOfBombedBullet;
-        private List<MessageOfFactory> listOfFactory;
-        private List<MessageOfCommunity> listOfCommunity;
-        private List<MessageOfFort> listOfFort;
-        private List<MessageOfWormhole> listOfWormhole;
-        private List<MessageOfResource> listOfResource;
+        private List<MessageOfRecycleBank> listOfFactory;
+        private List<MessageOfChargeStation> listOfCommunity;
+        private List<MessageOfSignalTower> listOfFort;
+        private List<MessageOfBridge> listOfWormhole;
+        private List<MessageOfGarbage> listOfResource;
         private List<MessageOfHome> listOfHome;
 
         /* initiate the Lists of Objects and CountList */
         private void InitiateObjects()
         {
             listOfAll = new List<MessageOfAll>();
-            listOfShip = new List<MessageOfShip>(); ;
+            listOfShip = new List<MessageOfSweeper>(); ;
             listOfBullet = new List<MessageOfBullet>();
             listOfBombedBullet = new List<MessageOfBombedBullet>();
-            listOfFactory = new List<MessageOfFactory>();
-            listOfCommunity = new List<MessageOfCommunity>();
-            listOfFort = new List<MessageOfFort>();
-            listOfResource = new List<MessageOfResource>();
+            listOfFactory = new List<MessageOfRecycleBank>();
+            listOfCommunity = new List<MessageOfChargeStation>();
+            listOfFort = new List<MessageOfSignalTower>();
+            listOfResource = new List<MessageOfGarbage>();
             listOfHome = new List<MessageOfHome>();
-            listOfWormhole = new List<MessageOfWormhole>();
+            listOfWormhole = new List<MessageOfBridge>();
             countMap = new Dictionary<int, int>();
         }
         private (int x, int y)[] resourcePositionIndex;
@@ -103,7 +103,7 @@ namespace Client.ViewModel
                 BombRange = 5
             }, canvas);
 
-            DrawShip(new MessageOfShip
+            DrawShip(new MessageOfSweeper
             {
                 X = 10,
                 Y = 11,
@@ -119,7 +119,7 @@ namespace Client.ViewModel
                 BombRange = 5
             }, canvas);
 
-            DrawShip(new MessageOfShip
+            DrawShip(new MessageOfSweeper
             {
                 X = 10,
                 Y = 12,
@@ -326,8 +326,8 @@ namespace Client.ViewModel
                                 {
                                     switch (obj.MessageOfObjCase)
                                     {
-                                        case MessageOfObj.MessageOfObjOneofCase.ShipMessage:
-                                            listOfShip.Add(obj.ShipMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.SweeperMessage:
+                                            listOfShip.Add(obj.SweeperMessage);
                                             break;
 
                                         case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
@@ -338,20 +338,20 @@ namespace Client.ViewModel
                                             listOfBombedBullet.Add(obj.BombedBulletMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
-                                            listOfFactory.Add(obj.FactoryMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
+                                            listOfFactory.Add(obj.RecyclebankMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
-                                            listOfCommunity.Add(obj.CommunityMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
+                                            listOfCommunity.Add(obj.ChargestationMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.FortMessage:
-                                            listOfFort.Add(obj.FortMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
+                                            listOfFort.Add(obj.SignaltowerMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
-                                            listOfResource.Add(obj.ResourceMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
+                                            listOfResource.Add(obj.GarbageMessage);
                                             break;
 
                                         case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
@@ -376,20 +376,20 @@ namespace Client.ViewModel
                                 {
                                     switch (obj.MessageOfObjCase)
                                     {
-                                        case MessageOfObj.MessageOfObjOneofCase.ShipMessage:
-                                            listOfShip.Add(obj.ShipMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.SweeperMessage:
+                                            listOfShip.Add(obj.SweeperMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
-                                            listOfFactory.Add(obj.FactoryMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
+                                            listOfFactory.Add(obj.RecyclebankMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
-                                            listOfCommunity.Add(obj.CommunityMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
+                                            listOfCommunity.Add(obj.ChargestationMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.FortMessage:
-                                            listOfFort.Add(obj.FortMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
+                                            listOfFort.Add(obj.SignaltowerMessage);
                                             break;
 
                                         case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
@@ -400,8 +400,8 @@ namespace Client.ViewModel
                                             listOfBombedBullet.Add(obj.BombedBulletMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
-                                            listOfResource.Add(obj.ResourceMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
+                                            listOfResource.Add(obj.GarbageMessage);
                                             break;
 
                                         case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
@@ -433,24 +433,24 @@ namespace Client.ViewModel
                                 {
                                     switch (obj.MessageOfObjCase)
                                     {
-                                        case MessageOfObj.MessageOfObjOneofCase.ShipMessage:
-                                            listOfShip.Add(obj.ShipMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.SweeperMessage:
+                                            listOfShip.Add(obj.SweeperMessage);
                                             break;
 
                                         //case MessageOfObj.MessageOfObjOneofCase.BuildingMessage:
                                         //    listOfBuilding.Add(obj.BuildingMessage);
                                         //    break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
-                                            listOfFactory.Add(obj.FactoryMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
+                                            listOfFactory.Add(obj.RecyclebankMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
-                                            listOfCommunity.Add(obj.CommunityMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
+                                            listOfCommunity.Add(obj.ChargestationMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.FortMessage:
-                                            listOfFort.Add(obj.FortMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
+                                            listOfFort.Add(obj.SignaltowerMessage);
                                             break;
 
                                         case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
@@ -461,8 +461,8 @@ namespace Client.ViewModel
                                             listOfBombedBullet.Add(obj.BombedBulletMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
-                                            listOfResource.Add(obj.ResourceMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
+                                            listOfResource.Add(obj.GarbageMessage);
                                             break;
 
                                         case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
@@ -493,7 +493,7 @@ namespace Client.ViewModel
             }
         }
 
-        //private int FindIndexOfResource(MessageOfResource obj)
+        //private int FindIndexOfResource(MessageOfGarbage obj)
         //{
         //    for (int i = 0; i < listOfResource.Count; i++)
         //    {
@@ -505,7 +505,7 @@ namespace Client.ViewModel
         //    return -1;
         //}
 
-        //private int FindIndexOfFactory(MessageOfFactory obj)
+        //private int FindIndexOfFactory(MessageOfRecycleBank obj)
         //{
         //    for (int i = 0; i < listOfFactory.Count; i++)
         //    {
@@ -517,7 +517,7 @@ namespace Client.ViewModel
         //    return -1;
         //}
 
-        //private int FindIndexOfCommunity(MessageOfCommunity obj)
+        //private int FindIndexOfCommunity(MessageOfChargeStation obj)
         //{
         //    for (int i = 0; i < listOfCommunity.Count; i++)
         //    {
@@ -529,7 +529,7 @@ namespace Client.ViewModel
         //    return -1;
         //}
 
-        //private int FindIndexOfFort(MessageOfFort obj)
+        //private int FindIndexOfFort(MessageOfSignalTower obj)
         //{
         //    for (int i = 0; i < listOfFort.Count; i++)
         //    {
@@ -647,7 +647,7 @@ namespace Client.ViewModel
             }
         }
 
-        private void DrawFactory(MessageOfFactory data)
+        private void DrawFactory(MessageOfRecycleBank data)
         {
             int x = data.X;
             int y = data.Y;
@@ -674,7 +674,7 @@ namespace Client.ViewModel
             }
         }
 
-        private void DrawCommunity(MessageOfCommunity data)
+        private void DrawCommunity(MessageOfChargeStation data)
         {
             int x = data.X;
             int y = data.Y;
@@ -701,7 +701,7 @@ namespace Client.ViewModel
             }
         }
 
-        private void DrawFort(MessageOfFort data)
+        private void DrawFort(MessageOfSignalTower data)
         {
             int x = data.X;
             int y = data.Y;
@@ -728,7 +728,7 @@ namespace Client.ViewModel
             }
         }
 
-        private void DrawWormHole(MessageOfWormhole data)
+        private void DrawWormHole(MessageOfBridge data)
         {
             int x = data.X;
             int y = data.Y;
@@ -739,7 +739,7 @@ namespace Client.ViewModel
             MapPatchesList[index].TextColor = Colors.White;
         }
 
-        private void DrawResource(MessageOfResource data)
+        private void DrawResource(MessageOfGarbage data)
         {
             int x = data.X;
             int y = data.Y;
@@ -779,7 +779,7 @@ namespace Client.ViewModel
             canvas.FillCircle(x, y, 2);
         }
 
-        private void DrawShip(MessageOfShip data, ICanvas canvas)
+        private void DrawShip(MessageOfSweeper data, ICanvas canvas)
         {
             PointF point = UtilFunctions.getMapCenter(data.X, data.Y);
             float x = point.X;
@@ -864,7 +864,7 @@ namespace Client.ViewModel
         //    //MapGrid.Children.Add(iconOfBombedBullet);
         //}
 
-        //private void DrawResource(MessageOfResource data)
+        //private void DrawResource(MessageOfGarbage data)
         //{
         //    int idx = FindIndexOfResource(data);
         //    //resourceArray[idx].FontSize = unitFontSize;
