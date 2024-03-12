@@ -72,20 +72,20 @@ namespace GameClass.GameObj
             return (Ship?)GameObjDict[GameObjType.Ship].Find(gameObj => (shipID == ((Ship)gameObj).ShipID));
         }
 
-        public bool WormholeInteract(Wormhole gameObj, XY Pos) 
+        public bool WormholeInteract(Wormhole gameObj, XY Pos)
         {
             foreach (XY xy in gameObj.Grids)
             {
                 if (GameData.ApproachToInteract(xy, Pos))
-                return true;
+                    return true;
             }
             return false;
         }
         public GameObj? OneForInteract(XY Pos, GameObjType gameObjType)
         {
-            return (GameObj?)GameObjDict[gameObjType].Find(gameObj => 
-                ((GameData.ApproachToInteract(gameObj.Position, Pos))||
-                (gameObjType == GameObjType.Wormhole||WormholeInteract((Wormhole)gameObj, Pos)))
+            return (GameObj?)GameObjDict[gameObjType].Find(gameObj =>
+                ((GameData.ApproachToInteract(gameObj.Position, Pos)) ||
+                (gameObjType == GameObjType.Wormhole && WormholeInteract((Wormhole)gameObj, Pos)))
                 );
         }
 
@@ -151,9 +151,10 @@ namespace GameClass.GameObj
         }
         public bool Remove(GameObj gameObj)
         {
-            if (GameObjDict[gameObj.Type].RemoveOne(obj => gameObj.ID == obj.ID))
+            GameObj? ans = (GameObj?)GameObjDict[gameObj.Type].RemoveOne(obj => gameObj.ID == obj.ID);
+            if (ans != null)
             {
-                gameObj.TryToRemove();
+                ans.TryToRemove();
                 return true;
             }
             return false;
@@ -177,9 +178,7 @@ namespace GameClass.GameObj
             foreach (GameObjType idx in Enum.GetValues(typeof(GameObjType)))
             {
                 if (idx != GameObjType.Null)
-                {
                     gameObjDict.TryAdd(idx, new LockedClassList<IGameObj>());
-                }
             }
             height = mapResource.height;
             width = mapResource.width;
@@ -213,7 +212,7 @@ namespace GameClass.GameObj
                                 return false;
                             };
 
-                            if (GameObjDict[GameObjType.Wormhole].Cast<Wormhole>().Find(wormhole=>HasWormhole(wormhole))==null)
+                            if (GameObjDict[GameObjType.Wormhole].Cast<Wormhole>().Find(wormhole => HasWormhole(wormhole)) == null)
                             {
                                 List<XY> grids = [new XY(i, j)];
                                 Add(new Wormhole(GameData.GetCellCenterPos(i, j), grids));

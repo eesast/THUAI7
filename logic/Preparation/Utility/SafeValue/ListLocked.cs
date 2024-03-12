@@ -80,13 +80,14 @@ namespace Preparation.Utility
 
         public int RemoveAll(T item) => WriteLock(() => { return list.RemoveAll((t) => { return t == item; }); });
 
-        public bool RemoveOne(Predicate<T> match) =>
+        public T? RemoveOne(Predicate<T> match) =>
             WriteLock(() =>
             {
                 int index = list.FindIndex(match);
-                if (index == -1) return false;
+                if (index == -1) return null;
+                T ans = list[index];
                 list.RemoveAt(index);
-                return true;
+                return ans;
             });
 
         public int RemoveAll(Predicate<T> match) => WriteLock(() => { return list.RemoveAll(match); });

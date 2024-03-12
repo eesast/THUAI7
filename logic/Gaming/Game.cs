@@ -236,7 +236,7 @@ namespace Gaming
         public void UpdateBirthPoint()
         {
             gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>().ForEach(
-                delegate(Construction construction)
+                delegate (Construction construction)
                 {
                     if (construction.ConstructionType == ConstructionType.Community)
                     {
@@ -261,7 +261,7 @@ namespace Gaming
                 foreach (XY birthPoint in team.BirthPointList)
                 {
                     gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>().ForEach(
-                        delegate(Construction construction) 
+                        delegate (Construction construction)
                     {
                         if (construction.Position == birthPoint)
                         {
@@ -292,10 +292,10 @@ namespace Gaming
                         teamList.Last().BirthPointList.Add(gameObj.Position);
                         teamList.Last().AddMoney(GameData.InitialMoney);
                     }
-           /*         if (teamList.Count == numOfTeam)
-                    {
-                        break;
-                    }*/
+                    /*         if (teamList.Count == numOfTeam)
+                             {
+                                 break;
+                             }*/
                 }
                 );
 

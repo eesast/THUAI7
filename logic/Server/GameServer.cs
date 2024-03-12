@@ -179,7 +179,7 @@ namespace Server
         {
             return game.GameMap.GameObjDict[GameObjType.Ship].Cast<Ship>().Find(
                 ship => ship.ShipID == playerID && ship.ShipState == ShipStateType.Deceased
-                )!=null;
+                ) != null;
         }
 
         public override int[] GetMoney()
