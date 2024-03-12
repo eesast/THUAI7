@@ -23,11 +23,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def ShipGetSelfInfo(self) -> THUAI7.Ship:
-        pass
-
-    @abstractmethod
-    def TeamGetSelfInfo(self) -> THUAI7.Team:
+    def GetSelfInfo(self) -> Union[THUAI7.Ship, THUAI7.Team]:
         pass
 
     @abstractmethod
@@ -71,7 +67,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def Send(self, toPlayerID: int, message: str, binary: bool) -> bool:
+    def SendMessage(self, toID: int, message: Union[str, bytes]) -> bool:
         pass
 
     @abstractmethod
@@ -119,9 +115,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def HaveView(
-        self, gridX: int, gridY: int, selfX: int, selfY: int, viewRange: int
-    ) -> bool:
+    def HaveView(self, gridX: int, gridY: int, selfX: int, selfY: int, viewRange: int) -> bool:
         pass
 
     @abstractmethod
@@ -162,6 +156,11 @@ class IAPI(metaclass=ABCMeta):
     def GetMessage(self) -> Tuple[int, str]:
         pass
 
+    @abstractmethod
+    def Move(self, timeInMilliseconds: int, angle: float) -> Future[bool]:
+        pass
+
+    # 获取游戏目前所进行的帧数
     @abstractmethod
     def GetFrameCount(self) -> int:
         '获取游戏目前所进行的帧数'
@@ -244,6 +243,10 @@ class IAPI(metaclass=ABCMeta):
     def PrintSelfInfo(self) -> None:
         pass
 
+    @abstractmethod
+    def GetSelfInfo(self) -> Union[THUAI7.Ship, THUAI7.Team]:
+        pass
+
 
 class IShipAPI(IAPI, metaclass=ABCMeta):
     @abstractmethod
@@ -287,7 +290,7 @@ class IShipAPI(IAPI, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetSelfInfo(self) -> Union[THUAI7.Student, THUAI7.Tricker]:
+    def GetSelfInfo(self) -> THUAI7.Ship:
         pass
 
     @abstractmethod

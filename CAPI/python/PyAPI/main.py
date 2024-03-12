@@ -1,15 +1,16 @@
-import PyAPI.structures as THUAI7
-import platform
-import argparse
 from typing import List, Callable
-from PyAPI.logic import Logic
-from PyAPI.AI import AI
-from PyAPI.Interface import IAI
+import argparse
+import platform
 import os
 import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/proto")
+
+import PyAPI.structures as THUAI7  # NOQA: E402
+from PyAPI.logic import Logic  # NOQA: E402
+from PyAPI.AI import AI  # NOQA: E402
+from PyAPI.Interface import IAI  # NOQA: E402
 
 
 def PrintWelcomeString() -> None:
@@ -92,11 +93,11 @@ def THUAI7Main(argv: List[str], AIBuilder: Callable) -> None:
     file = args.file
     screen = args.screen
     warnOnly = args.warnOnly
-    playerType = THUAI7.PlayerType(0)
+    playerType = THUAI7.PlayerType.NullPlayerType
     if pID == 4:
-        playerType = THUAI7.PlayerType(1)
+        playerType = THUAI7.PlayerType.Ship
     else:
-        playerType = THUAI7.PlayerType(2)
+        playerType = THUAI7.PlayerType.Team
 
     if platform.system().lower() == "windows":
         PrintWelcomeString()

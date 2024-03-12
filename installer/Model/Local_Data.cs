@@ -121,10 +121,10 @@ namespace installer.Model
 
         public void ResetInstallPath(string newPath)
         {
-            if (Installed)
+            // 移动已有文件夹至新位置
+            try
             {
-                // 移动已有文件夹至新位置
-                try
+                if (InstallPath != newPath)
                 {
                     if (!Directory.Exists(newPath))
                     {
@@ -154,50 +154,33 @@ namespace installer.Model
                     moveTask(new DirectoryInfo(InstallPath));
                     Directory.Delete(InstallPath, true);
                     InstallPath = newPath;
-                    if (Config.ContainsKey("InstallPath"))
-                        Config["InstallPath"] = InstallPath;
-                    else
-                        Config.Add("InstallPath", InstallPath);
-                    MD5DataPath = Config["MD5DataPath"].StartsWith('.') ?
-                        Path.Combine(InstallPath, Config["MD5DataPath"]) :
-                        Config["MD5DataPath"];
-                    SaveConfig();
-                    SaveMD5Data();
-                    Installed = true;
                 }
-                catch (Exception e)
-                {
-                    Exceptions.Push(e);
-                }
-                finally
-                {
-                    if (!Directory.Exists(LogPath))
-                    {
-                        Directory.CreateDirectory(LogPath);
-                    }
-                    Log = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.log"));
-                    LogError = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.error.log"));
-                    Exceptions = new ExceptionStack(LogError, this);
-                    Log.LogInfo($"Move work finished: {InstallPath} -> {newPath}");
-                }
+                if (Config.ContainsKey("InstallPath"))
+                    Config["InstallPath"] = InstallPath;
+                else
+                    Config.Add("InstallPath", InstallPath);
+                MD5DataPath = Config["MD5DataPath"].StartsWith('.') ?
+                    Path.Combine(InstallPath, Config["MD5DataPath"]) :
+                    Config["MD5DataPath"];
+                SaveConfig();
+                SaveMD5Data();
+                Installed = true;
             }
-        }
-
-        public static bool IsUserFile(string filename)
-        {
-            if (filename.Contains("git") || filename.Contains("bin") || filename.Contains("obj"))
-                return true;
-            if (filename.EndsWith("sh") || filename.EndsWith("cmd"))
-                return true;
-            if (filename.EndsWith("gz"))
-                return true;
-            if (filename.Contains("AI.cpp") || filename.Contains("AI.py"))
-                return true;
-            if (filename.Contains("hash.json"))
-                return true;
-            if (filename.EndsWith("log"))
-                return true;
-            return false;
+            catch (Exception e)
+            {
+                Exceptions.Push(e);
+            }
+            finally
+            {
+                if (!Directory.Exists(LogPath))
+                {
+                    Directory.CreateDirectory(LogPath);
+                }
+                Log = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.log"));
+                LogError = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.error.log"));
+                Exceptions = new ExceptionStack(LogError, this);
+                Log.LogInfo($"Move work finished: {InstallPath} -> {newPath}");
+            }
         }
 
         public void ReadConfig()
@@ -359,6 +342,36 @@ namespace installer.Model
                 }
             });
             SaveMD5Data();
+        }
+
+
+        public static bool IsUserFile(string filename)
+        {
+            if (filename.Contains("git") || filename.Contains("bin") || filename.Contains("obj"))
+                return true;
+            if (filename.EndsWith("sh") || filename.EndsWith("cmd"))
+                return true;
+            if (filename.EndsWith("gz"))
+                return true;
+            if (filename.Contains("AI.cpp") || filename.Contains("AI.py"))
+                return true;
+            if (filename.Contains("hash.json"))
+                return true;
+            if (filename.EndsWith("log"))
+                return true;
+            return false;
+        }
+
+        public static int CountFile(string folder)
+        {
+            int result = (from f in Directory.EnumerateDirectories(folder)
+                          where !IsUserFile(f)
+                          select f).Count();
+            foreach (var d in Directory.EnumerateDirectories(folder))
+            {
+                result += CountFile(d);
+            }
+            return result;
         }
     }
 }

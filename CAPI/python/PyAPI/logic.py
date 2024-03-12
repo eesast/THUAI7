@@ -18,6 +18,7 @@ from PyAPI.Interface import ILogic, IGameTimer
 
 
 class Logic(ILogic):
+    # TODO: Mismatch between logic.py & main.py
     def __init__(self, playerID: int, shipType: THUAI7.ShipType, teamID: int, x: int, y: int) -> None:
         self.__playerID: int = playerID
         self.__teamID: int = teamID
@@ -42,7 +43,7 @@ class Logic(ILogic):
         self.__counterState: int = 0
         self.__counterBuffer: int = 0
 
-        self.__gameState: THUAI7.GameState = THUAI7.GameState(0)
+        self.__gameState: THUAI7.GameState = THUAI7.GameState.NullGameState
 
         self.__AILoop: bool = True
 
@@ -171,6 +172,13 @@ class Logic(ILogic):
                                  if self.__teamID == 1
                                  else self.__currentState.gameInfo.redMoney)
 
+    def GetScore(self) -> int:
+        with self.__mtxState:
+            self.__logger.debug("Called GetScore")
+            return copy.deepcopy(self.__currentState.gameInfo.blueScore
+                                 if self.__teamID == 1
+                                 else self.__currentState.gameInfo.redScore)
+
     def Attack(self, angle: float) -> int:
         self.__logger.debug("Called Attack")
         return self.__comm.Attack(angle, self.__playerID, self.__teamID)
@@ -216,18 +224,22 @@ class Logic(ILogic):
         self.__logger.debug("Called BuildShip")
         return self.__comm.BuildShip(cellX, cellY, shipType, self.__teamID)
 
+    def __TryConnection(self) -> bool:
+        self.__logger.info("Try to connect to the server.")
+        return self.__comm.TryConnection(self.__playerID, self.__teamID)
+
     def __ProcessMessage(self) -> None:
         def messageThread():
             self.__logger.info("Message thread started")
             self.__comm.AddPlayer(self.__playerID, self.__teamID, self.__shipType, self.__x, self.__y)
             self.__logger.info("Player added")
 
-            while self.__gameState != THUAI7.GameState(3):
+            while self.__gameState != THUAI7.GameState.GameEnd:
                 clientMsg = self.__comm.GetMessage2Client()
                 self.__logger.debug("Get message from server")
                 self.__gameState = Proto2THUAI7.gameStateDict[clientMsg.game_state]
 
-                if self.__gameState == THUAI7.GameState(1):
+                if self.__gameState == THUAI7.GameState.GameStart:
                     self.__logger.info("Game start!")
 
                     for obj in clientMsg.obj_message:
@@ -249,7 +261,7 @@ class Logic(ILogic):
                     self.__AILoop = True
                     self.__UnBlockAI()
 
-                elif self.__gameState == THUAI7.GameState(2):
+                elif self.__gameState == THUAI7.GameState.GameRunning:
                     # 读取玩家的GUID
                     self.__LoadBuffer(clientMsg)
                 else:
@@ -275,9 +287,14 @@ class Logic(ILogic):
             self.__bufferState.guids.clear()
             self.__logger.debug("Buffer cleared")
 
-            for obj in message.obj_message:
-                if obj.WhichOneof("message_of_obj") == "ship_message":
-                    self.__bufferState.guids.append(obj.ship_message.guid)
+            if self.__playerID != 0:
+                for obj in message.obj_message:
+                    if obj.WhichOneof("message_of_obj") == "ship_message":
+                        self.__bufferState.guids.append(obj.ship_message.guid)
+            else:
+                for obj in message.obj_message:
+                    if obj.WhichOneof("message_of_obj") == "team_message":
+                        self.__bufferState.guids.append(obj.team_message.guid)
 
             self.__bufferState.gameInfo = Proto2THUAI7.Protobuf2THUAI7GameInfo(message.all_message)
 
@@ -286,10 +303,7 @@ class Logic(ILogic):
                 self.__LoadBufferCase(item)
             if Setting.asynchronous():
                 with self.__mtxState:
-                    self.__currentState, self.__bufferState = (
-                        self.__bufferState,
-                        self.__currentState,
-                    )
+                    self.__currentState, self.__bufferState = self.__bufferState, self.__currentState
                     self.__counterState = self.__counterBuffer
                     self.__logger.info("Update state!")
                 self.__freshed = True
@@ -298,48 +312,47 @@ class Logic(ILogic):
             self.__counterBuffer += 1
             self.__cvBuffer.notify()
 
-    def LoadBufferSelf(self, message: Message2Clients.MessageToClient) -> None:
-        for item in message.obj_message:
-            if item.WhichOneof("message_of_obj") == "ship_message":
-                if item.ship_message.player_id == self.__playerID:
-                    self.__bufferState.self = Proto2THUAI7.Protobuf2THUAI7Ship(item.ship_message)
-                    self.__bufferState.ships.append(self.__bufferState.self)
-                else:
-                    self.__bufferState.ships.append(Proto2THUAI7.Protobuf2THUAI7Ship(item.ship_message))
-                self.__logger.debug("Load ship")
+    def __LoadBufferSelf(self, message: Message2Clients.MessageToClient) -> None:
+        if self.__playerID != 0:
+            for item in message.obj_message:
+                if item.WhichOneof("message_of_obj") == "ship_message":
+                    if item.ship_message.player_id == self.__playerID:
+                        self.__bufferState.self = Proto2THUAI7.Protobuf2THUAI7Ship(item.ship_message)
+                        self.__bufferState.ships.append(self.__bufferState.self)
+                    else:
+                        self.__bufferState.ships.append(Proto2THUAI7.Protobuf2THUAI7Ship(item.ship_message))
+                    self.__logger.debug("Load ship")
+        else:
+            for item in message.obj_message:
+                if item.WhichOneof("message_of_obj") == "team_message":
+                    self.__bufferState.self = Proto2THUAI7.Protobuf2THUAI7Team(item.team_message)
+                    self.__bufferState.teams.append(self.__bufferState.self)
+                    self.__logger.debug("Load team")
 
-    def LoadBufferCase(self, item: Message2Clients.MessageOfObj) -> None:
+    def __LoadBufferCase(self, item: Message2Clients.MessageOfObj) -> None:
         if item.WhichOneof("message_of_obj") == "ship_message":
-            if AssistFunction.HaveView(self.__bufferState.self.viewRange,
-                                       self.__bufferState.self.x,
-                                       self.__bufferState.self.y,
-                                       item.ship_message.x,
-                                       item.ship_message.y,
-                                       self.__bufferState.gameMap):
-                if item.ship_message.team_id != self.__teamID:
+            if item.ship_message.team_id != self.__teamID:
+                if AssistFunction.HaveView(self.__bufferState.self.viewRange,
+                                           self.__bufferState.self.x, self.__bufferState.self.y,
+                                           item.ship_message.x, item.ship_message.y,
+                                           self.__bufferState.gameMap):
                     self.__bufferState.enemyShips.append(Proto2THUAI7.Protobuf2THUAI7Ship(item.ship_message))
                     self.__logger.debug("Load enemy ship")
 
         elif item.WhichOneof("message_of_obj") == "bullet_message":
-            if AssistFunction.HaveView(
-                self.__bufferState.self.viewRange,
-                self.__bufferState.self.x,
-                self.__bufferState.self.y,
-                item.bullet_message.x,
-                item.bullet_message.y,
-                self.__bufferState.gameMap,
-            ):
-                self.__bufferState.bullets.append(
-                    Proto2THUAI7.Protobuf2THUAI7Bullet(item.bullet_message)
-                )
+            if AssistFunction.HaveView(self.__bufferState.self.viewRange,
+                                       self.__bufferState.self.x, self.__bufferState.self.y,
+                                       item.bullet_message.x, item.bullet_message.y,
+                                       self.__bufferState.gameMap):
+                self.__bufferState.bullets.append(Proto2THUAI7.Protobuf2THUAI7Bullet(item.bullet_message))
                 self.__logger.debug("Add Bullet!")
 
         elif item.WhichOneof("message_of_obj") == "factory_message":
-            if item.factory_message.team_id == self.__teamID:
-                pos = (
-                    AssistFunction.GridToCell(
-                        item.factory_message.x), AssistFunction.GridToCell(
-                        item.factory_message.y))
+            if AssistFunction.HaveView(self.__bufferState.self.viewRange, self.__bufferState.self.x,
+                                       self.__bufferState.self.y, item.factory_message.x, item.factory_message.y,
+                                       self.__bufferState.gameMap):
+                pos = (AssistFunction.GridToCell(item.factory_message.x),
+                       AssistFunction.GridToCell(item.factory_message.y))
                 if pos not in self.__bufferState.mapInfo.factoryState:
                     self.__bufferState.mapInfo.factoryState[pos] = item.factory_message.hp
                     self.__logger.debug("New Factory")
@@ -348,11 +361,12 @@ class Logic(ILogic):
                     self.__logger.debug("Update Factory")
 
         elif item.WhichOneof("message_of_obj") == "community_message":
-            if item.community_message.team_id == self.__teamID:
-                pos = (
-                    AssistFunction.GridToCell(
-                        item.community_message.x), AssistFunction.GridToCell(
-                        item.community_message.y))
+            if AssistFunction.HaveView(self.__bufferState.self.viewRange,
+                                       self.__bufferState.self.x, self.__bufferState.self.y,
+                                       item.community_message.x, item.community_message.y,
+                                       self.__bufferState.gameMap):
+                pos = (AssistFunction.GridToCell(item.community_message.x),
+                       AssistFunction.GridToCell(item.community_message.y))
                 if pos not in self.__bufferState.mapInfo.communityState:
                     self.__bufferState.mapInfo.communityState[pos] = item.community_message.hp
                     self.__logger.debug("New Community")
@@ -361,8 +375,12 @@ class Logic(ILogic):
                     self.__logger.debug("Update Community")
 
         elif item.WhichOneof("message_of_obj") == "fort_message":
-            if item.fort_message.team_id == self.__teamID:
-                pos = (AssistFunction.GridToCell(item.fort_message.x), AssistFunction.GridToCell(item.fort_message.y))
+            if AssistFunction.HaveView(self.__bufferState.self.viewRange,
+                                       self.__bufferState.self.x, self.__bufferState.self.y,
+                                       item.fort_message.x, item.fort_message.y,
+                                       self.__bufferState.gameMap):
+                pos = (AssistFunction.GridToCell(item.fort_message.x),
+                       AssistFunction.GridToCell(item.fort_message.y))
                 if pos not in self.__bufferState.mapInfo.fortState:
                     self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
                     self.__logger.debug("New Fort")
@@ -371,37 +389,38 @@ class Logic(ILogic):
                     self.__logger.debug("Update Fort")
 
         elif item.WhichOneof("message_of_obj") == "wormhole_message":
-            pos = (
-                AssistFunction.GridToCell(
-                    item.wormhole_message.x), AssistFunction.GridToCell(
-                    item.wormhole_message.y))
+            pos = (AssistFunction.GridToCell(item.wormhole_message.x),
+                   AssistFunction.GridToCell(item.wormhole_message.y))
             self.__bufferState.mapInfo.wormholeState[pos] = item.wormhole_message.hp
             self.__logger.debug("Update Wormhole")
 
         elif item.WhichOneof("message_of_obj") == "home_message":
-            pos = (AssistFunction.GridToCell(item.home_message.x), AssistFunction.GridToCell(item.home_message.y))
-            self.__bufferState.mapInfo.homeState[pos] = item.home_message.hp
-            self.__logger.debug("Update Home")
+            if AssistFunction.HaveView(self.__bufferState.self.viewRange,
+                                       self.__bufferState.self.x, self.__bufferState.self.y,
+                                       item.home_message.x, item.home_message.y,
+                                       self.__bufferState.gameMap):
+                pos = (AssistFunction.GridToCell(item.home_message.x),
+                       AssistFunction.GridToCell(item.home_message.y))
+                self.__bufferState.mapInfo.homeState[pos] = item.home_message.hp
+                self.__logger.debug("Update Home")
 
         elif item.WhichOneof("message_of_obj") == "resource_message":
-            pos = (
-                AssistFunction.GridToCell(
-                    item.resource_message.x), AssistFunction.GridToCell(
-                    item.resource_message.y))
-            self.__bufferState.mapInfo.resourceState[pos] = item.resource_message.progress
-            self.__logger.debug("Update Resource")
+            if AssistFunction.HaveView(self.__bufferState.self.viewRange,
+                                       self.__bufferState.self.x, self.__bufferState.self.y,
+                                       item.resource_message.x, item.resource_message.y,
+                                       self.__bufferState.gameMap):
+                pos = (AssistFunction.GridToCell(item.resource_message.x),
+                       AssistFunction.GridToCell(item.resource_message.y))
+                self.__bufferState.mapInfo.resourceState[pos] = item.resource_message.progress
+                self.__logger.debug("Update Resource")
 
         elif item.WhichOneof("message_of_obj") == "news_message":
             if item.news_message.to_id == self.__playerID:
                 if item.news_message.WhichOneof("news") == "text_message":
-                    self.__messageQueue.put(
-                        (item.news_message.from_id, item.news_message.text_message)
-                    )
+                    self.__messageQueue.put((item.news_message.from_id, item.news_message.text_message))
                     self.__logger.debug("Add News!")
                 elif item.news_message.WhichOneof("news") == "binary_message":
-                    self.__messageQueue.put(
-                        (item.news_message.from_id, item.news_message.binary_message)
-                    )
+                    self.__messageQueue.put((item.news_message.from_id, item.news_message.binary_message))
                     self.__logger.debug("Add News!")
                 else:
                     self.__logger.error("Unknown News!")
@@ -419,8 +438,9 @@ class Logic(ILogic):
         #         self.__logger.debug("Add Bombed Bullet!")
 
         elif item.WhichOneof("message_of_obj") == "team_message":
-            self.__bufferState.teams.append(Proto2THUAI7.Protobuf2THUAI7Team(item.team_message))
-            self.__logger.debug("Add Team!")
+            if item.team_message.team_id != self.__teamID:
+                self.__bufferState.teams.append(Proto2THUAI7.Protobuf2THUAI7Team(item.team_message))
+                self.__logger.debug("Add Team!")
 
         else:
             self.__logger.error("Unknown message!")
@@ -435,10 +455,7 @@ class Logic(ILogic):
             with self.__cvBuffer:
                 self.__cvBuffer.wait_for(lambda: self.__bufferUpdated)
                 with self.__mtxState:
-                    self.__bufferState, self.__currentState = (
-                        self.__currentState,
-                        self.__bufferState,
-                    )
+                    self.__bufferState, self.__currentState = self.__currentState, self.__bufferState
                     self.__counterState = self.__counterBuffer
                 self.__bufferUpdated = False
                 self.__logger.info("Update state!")
@@ -469,13 +486,9 @@ class Logic(ILogic):
         #         os.path.realpath(__file__))) + "/logs")
 
         if platform.system().lower() == "windows":
-            os.system(
-                f'mkdir "{os.path.dirname(os.path.dirname(os.path.realpath(__file__)))}\\logs"'
-            )
+            os.system(f'mkdir "{os.path.dirname(os.path.dirname(os.path.realpath(__file__)))}\\logs"')
         else:
-            os.system(
-                f'mkdir -p "{os.path.dirname(os.path.dirname(os.path.realpath(__file__)))}/logs"'
-            )
+            os.system(f'mkdir -p "{os.path.dirname(os.path.dirname(os.path.realpath(__file__)))}/logs"')
 
         fileHandler = logging.FileHandler(
             os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -535,9 +548,7 @@ class Logic(ILogic):
                     self.__timer.EndTimer()
 
         if self.__TryConnection():
-            self.__logger.info(
-                "Connect to the server successfully, AI thread will be started."
-            )
+            self.__logger.info("Connect to the server successfully, AI thread will be started.")
             self.__threadAI = threading.Thread(target=AIThread)
             self.__threadAI.start()
             self.__ProcessMessage()

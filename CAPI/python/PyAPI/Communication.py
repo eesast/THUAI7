@@ -33,10 +33,8 @@ class Communication:
     def Move(self, time: int, angle: float, playerID: int) -> bool:
         try:
             with self.__mtxLimit:
-                if (
-                    self.__counter >= self.__limit
-                    or self.__counterMove >= self.__moveLimit
-                ):
+                if (self.__counter >= self.__limit
+                        or self.__counterMove >= self.__moveLimit):
                     return False
                 self.__counter += 1
                 self.__counterMove += 1
@@ -55,8 +53,8 @@ class Communication:
                     return False
                 self.__counter += 1
             sendResult: Message2Clients.BoolRes = self.__THUAI7Stub.Send(
-                THUAI72Proto.THUAI72ProtobufSendMsg(
-                    playerID, toID, teamID, message, True if isinstance(message, bytes) else False)
+                THUAI72Proto.THUAI72ProtobufSendMsg(playerID, toID, teamID, message,
+                                                    True if isinstance(message, bytes) else False)
             )
         except grpc.RpcError:
             return False
@@ -136,10 +134,8 @@ class Communication:
     def EndAllAction(self, playerID: int, teamID: int) -> bool:
         try:
             with self.__mtxLimit:
-                if (
-                    self.__counter >= self.__limit
-                    or self.__counterMove >= self.__moveLimit
-                ):
+                if (self.__counter >= self.__limit
+                        or self.__counterMove >= self.__moveLimit):
                     return False
                 self.__counter += 1
                 self.__counterMove += 1
@@ -158,8 +154,8 @@ class Communication:
                     return False
                 self.__counter += 1
             sendResult: Message2Clients.BoolRes = self.__THUAI7Stub.Send(
-                THUAI72Proto.THUAI72ProtobufSendMsg(
-                    playerID, toID, teamID, message, True if isinstance(message, bytes) else False)
+                THUAI72Proto.THUAI72ProtobufSendMsg(playerID, toID, teamID, message,
+                                                    True if isinstance(message, bytes) else False)
             )
         except grpc.RpcError:
             return False
@@ -224,18 +220,29 @@ class Communication:
             self.__haveNewMessage = False
             return self.__message2Client
 
-    def AddPlayer(self, playerID: int, teamID: int, shipType: THUAI7.ShipType, cellX: int, cellY: int) -> None:
+    def AddPlayer(self, playerID: int, teamID: int, cellX: int, cellY: int, shipType: THUAI7.ShipType) -> None:
         def tMessage():
             try:
-                playerMsg = THUAI72Proto.THUAI72ProtobufPlayerMsg(playerID, teamID, shipType, cellX, cellY)
-                for msg in self.__THUAI7Stub.AddPlayer(playerMsg):
-                    with self.__cvMessage:
-                        self.__haveNewMessage = True
-                        self.__message2Client = msg
-                        self.__cvMessage.notify()
-                        with self.__mtxLimit:
-                            self.__counter = 0
-                            self.__counterMove = 0
+                if playerID == 0:
+                    playerMsg = THUAI72Proto.THUAI72ProtobufPlayerMsg(playerID, teamID, shipType, cellX, cellY)
+                    for msg in self.__THUAI7Stub.AddPlayer(playerMsg):
+                        with self.__cvMessage:
+                            self.__haveNewMessage = True
+                            self.__message2Client = msg
+                            self.__cvMessage.notify()
+                            with self.__mtxLimit:
+                                self.__counter = 0
+                                self.__counterMove = 0
+                elif playerID >= 1 and playerID <= 8:
+                    playerMsg = THUAI72Proto.THUAI72ProtobufPlayerMsg(playerID, teamID, shipType, cellX, cellY)
+                    for msg in self.__THUAI7Stub.AddPlayer(playerMsg):
+                        with self.__cvMessage:
+                            self.__haveNewMessage = True
+                            self.__message2Client = msg
+                            self.__cvMessage.notify()
+                            with self.__mtxLimit:
+                                self.__counter = 0
+                                self.__counterMove = 0
             except grpc.RpcError:
                 return
 
