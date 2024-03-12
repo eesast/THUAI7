@@ -177,20 +177,9 @@ namespace Server
 
         private bool PlayerDeceased(int playerID)    //# 这里需要判断大本营deceased吗？
         {
-            game.GameMap.GameObjLockDict[GameObjType.Ship].EnterReadLock();
-            try
-            {
-                foreach (Ship ship in game.GameMap.GameObjDict[GameObjType.Ship].Cast<Ship>())
-                {
-                    if (ship.ShipID == playerID && ship.ShipState == ShipStateType.Deceased) return true;
-                }
-            }
-            finally
-            {
-                game.GameMap.GameObjLockDict[GameObjType.Ship].ExitReadLock();
-            }
-
-            return false;
+            return game.GameMap.GameObjDict[GameObjType.Ship].Cast<Ship>().Find(
+                ship => ship.ShipID == playerID && ship.ShipState == ShipStateType.Deceased
+                ) != null;
         }
 
         public override int[] GetMoney()
