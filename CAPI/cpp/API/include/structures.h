@@ -285,7 +285,7 @@ namespace THUAI7
         {GameState::GameEnd, "GameEnd"},
     };
 
-    inline std::map<SweeperType, std::string> SweeperTypeDict{
+    inline std::map<SweeperType, std::string> sweeperTypeDict{
         {SweeperType::NullSweeperType, "NullSweeperType"},
         {SweeperType::CivilianSweeper, "CivilianSweeper"},
         {SweeperType::MilitarySweeper, "MilitarySweeper"},

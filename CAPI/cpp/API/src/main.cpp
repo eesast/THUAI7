@@ -27,8 +27,8 @@ static constexpr std::string_view welcomeString = R"welcome(
             /   _____//  |______ _______  /  \    /  \_____ _______ 
             \_____  \\   __\__  \\_  __ \ \   \/\/   /\__  \\_  __ \
             /        \|  |  / __ \|  | \/  \        /  / __ \|  | \/
-          /_______  /|__| (____  /__|      \__/\  /  (____  /__|   
-                  \/           \/               \/        \/    
+           /_______  /|__| (____  /__|      \__/\  /  (____  /__|   
+                   \/           \/               \/        \/    
 )welcome"sv;
 
 int THUAI7Main(int argc, char** argv, CreateAIFunc AIBuilder)

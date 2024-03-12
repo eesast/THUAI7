@@ -35,7 +35,7 @@ Logic::Logic(int64_t pID, int64_t tID, THUAI7::PlayerType pType, THUAI7::Sweeper
 std::vector<std::shared_ptr<const THUAI7::Sweeper>> Logic::GetSweepers() const
 {
     std::unique_lock<std::mutex> lock(mtxState);
-    std::vector<std::shared_ptr<const THUAI7::Sweeper>> temp(currentState->Sweepers.begin(), currentState->Sweepers.end());
+    std::vector<std::shared_ptr<const THUAI7::Sweeper>> temp(currentState->sweepers.begin(), currentState->sweepers.end());
     logger->debug("Called GetSweepers");
     return temp;
 }
@@ -60,7 +60,7 @@ std::shared_ptr<const THUAI7::Sweeper> Logic::SweeperGetSelfInfo() const
 {
     std::unique_lock<std::mutex> lock(mtxState);
     logger->debug("Called SweeperGetSelfInfo");
-    return currentState->SweeperSelf;
+    return currentState->sweeperSelf;
 }
 
 std::shared_ptr<const THUAI7::Team> Logic::TeamGetSelfInfo() const
@@ -381,14 +381,14 @@ void Logic::LoadBufferSelf(const protobuf::MessageToClient& message)
             {
                 if (item.sweeper_message().player_id() == playerID)
                 {
-                    bufferState->SweeperSelf = Proto2THUAI7::Protobuf2THUAI7Sweeper(item.sweeper_message());
-                    bufferState->Sweepers.push_back(bufferState->SweeperSelf);
+                    bufferState->sweeperSelf = Proto2THUAI7::Protobuf2THUAI7Sweeper(item.sweeper_message());
+                    bufferState->sweepers.push_back(bufferState->sweeperSelf);
                     logger->debug("Add Self Sweeper!");
                 }
                 else
                 {
                     std::shared_ptr<THUAI7::Sweeper> Sweeper = Proto2THUAI7::Protobuf2THUAI7Sweeper(item.sweeper_message());
-                    bufferState->Sweepers.push_back(Sweeper);
+                    bufferState->sweepers.push_back(Sweeper);
                     logger->debug("Add Sweeper!");
                 }
             }
@@ -420,7 +420,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
     if (playerType == THUAI7::PlayerType::Sweeper)
     {
         int32_t x, y, viewRange;
-        x = bufferState->SweeperSelf->x, y = bufferState->SweeperSelf->y, viewRange = bufferState->SweeperSelf->viewRange;
+        x = bufferState->sweeperSelf->x, y = bufferState->sweeperSelf->y, viewRange = bufferState->sweeperSelf->viewRange;
         switch (Proto2THUAI7::messageOfObjDict[item.message_of_obj_case()])
         {
             case THUAI7::MessageOfObj::SweeperMessage:
@@ -597,7 +597,7 @@ void Logic::LoadBuffer(const protobuf::MessageToClient& message)
         std::lock_guard<std::mutex> lock(mtxBuffer);
 
         // 清空原有信息
-        bufferState->Sweepers.clear();
+        bufferState->sweepers.clear();
         bufferState->enemySweepers.clear();
         bufferState->bullets.clear();
         bufferState->guids.clear();

@@ -103,14 +103,14 @@ namespace Proto2THUAI7
         {protobuf::PlayerType::TEAM, THUAI7::PlayerType::Team},
     };
 
-    inline std::map<protobuf::SweeperType, THUAI7::SweeperType> SweeperTypeDict{
+    inline std::map<protobuf::SweeperType, THUAI7::SweeperType> sweeperTypeDict{
         {protobuf::SweeperType::NULL_SWEEPER_TYPE, THUAI7::SweeperType::NullSweeperType},
         {protobuf::SweeperType::CIVILIAN_SWEEPER, THUAI7::SweeperType::CivilianSweeper},
         {protobuf::SweeperType::MILITARY_SWEEPER, THUAI7::SweeperType::MilitarySweeper},
         {protobuf::SweeperType::FLAG_SWEEPER, THUAI7::SweeperType::FlagSweeper},
     };
 
-    inline std::map<protobuf::SweeperState, THUAI7::SweeperState> SweeperStateDict{
+    inline std::map<protobuf::SweeperState, THUAI7::SweeperState> sweeperStateDict{
         {protobuf::SweeperState::NULL_STATUS, THUAI7::SweeperState::NullStatus},
         {protobuf::SweeperState::IDLE, THUAI7::SweeperState::Idle},
         {protobuf::SweeperState::PRODUCING, THUAI7::SweeperState::Producing},
@@ -237,8 +237,8 @@ namespace Proto2THUAI7
         Sweeper->teamID = SweeperMsg.team_id();
         Sweeper->playerID = SweeperMsg.player_id();
         Sweeper->guid = SweeperMsg.guid();
-        Sweeper->sweeperState = SweeperStateDict[SweeperMsg.sweeper_state()];
-        Sweeper->sweeperType = SweeperTypeDict[SweeperMsg.sweeper_type()];
+        Sweeper->sweeperState = sweeperStateDict[SweeperMsg.sweeper_state()];
+        Sweeper->sweeperType = sweeperTypeDict[SweeperMsg.sweeper_type()];
         Sweeper->viewRange = SweeperMsg.view_range();
         Sweeper->producerType = producerTypeDict[SweeperMsg.producer_type()];
         Sweeper->constructorType = constructorTypeDict[SweeperMsg.constructor_type()];
@@ -332,14 +332,14 @@ namespace THUAI72Proto
         {THUAI7::PlayerType::Team, protobuf::PlayerType::TEAM},
     };
 
-    inline std::map<THUAI7::SweeperType, protobuf::SweeperType> SweeperTypeDict{
+    inline std::map<THUAI7::SweeperType, protobuf::SweeperType> sweeperTypeDict{
         {THUAI7::SweeperType::NullSweeperType, protobuf::SweeperType::NULL_SWEEPER_TYPE},
         {THUAI7::SweeperType::CivilianSweeper, protobuf::SweeperType::CIVILIAN_SWEEPER},
         {THUAI7::SweeperType::MilitarySweeper, protobuf::SweeperType::MILITARY_SWEEPER},
         {THUAI7::SweeperType::FlagSweeper, protobuf::SweeperType::FLAG_SWEEPER},
     };
 
-    inline std::map<THUAI7::SweeperState, protobuf::SweeperState> SweeperStateDict{
+    inline std::map<THUAI7::SweeperState, protobuf::SweeperState> sweeperStateDict{
         {THUAI7::SweeperState::NullStatus, protobuf::SweeperState::NULL_STATUS},
         {THUAI7::SweeperState::Idle, protobuf::SweeperState::IDLE},
         {THUAI7::SweeperState::Producing, protobuf::SweeperState::PRODUCING},
@@ -526,7 +526,7 @@ namespace THUAI72Proto
         buildSweeperMsg.set_team_id(teamID);
         buildSweeperMsg.set_x(x);
         buildSweeperMsg.set_y(y);
-        buildSweeperMsg.set_sweeper_type(THUAI72Proto::SweeperTypeDict[SweeperType]);
+        buildSweeperMsg.set_sweeper_type(THUAI72Proto::sweeperTypeDict[SweeperType]);
         return buildSweeperMsg;
     }
 
@@ -535,7 +535,7 @@ namespace THUAI72Proto
         protobuf::PlayerMsg playerMsg;
         playerMsg.set_player_id(playerID);
         playerMsg.set_team_id(teamID);
-        playerMsg.set_sweeper_type(THUAI72Proto::SweeperTypeDict[SweeperType]);
+        playerMsg.set_sweeper_type(THUAI72Proto::sweeperTypeDict[SweeperType]);
         return playerMsg;
     }
 

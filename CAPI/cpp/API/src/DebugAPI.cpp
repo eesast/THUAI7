@@ -246,7 +246,7 @@ void SweeperDebugAPI::PrintSweeper() const
     for (const auto& Sweeper : logic.GetSweepers())
     {
         logger->info("******Sweeper Info******");
-        logger->info("type={}, playerID={}, GUID={}, x={}, y={}", THUAI7::SweeperTypeDict[Sweeper->sweeperType], Sweeper->playerID, Sweeper->guid, Sweeper->x, Sweeper->y);
+        logger->info("type={}, playerID={}, GUID={}, x={}, y={}", THUAI7::sweeperTypeDict[Sweeper->sweeperType], Sweeper->playerID, Sweeper->guid, Sweeper->x, Sweeper->y);
         logger->info("state={},speed={}, view range={},facing direction={}", THUAI7::sweeperStateDict[Sweeper->sweeperState], Sweeper->speed, Sweeper->viewRange, Sweeper->facingDirection);
         logger->info("************************\n");
     }
@@ -256,7 +256,7 @@ void SweeperDebugAPI::PrintSelfInfo() const
 {
     auto Sweeper = logic.SweeperGetSelfInfo();
     logger->info("******Self Info******");
-    logger->info("type={}, playerID={}, GUID={}, x={}, y={}", THUAI7::SweeperTypeDict[Sweeper->sweeperType], Sweeper->playerID, Sweeper->guid, Sweeper->x, Sweeper->y);
+    logger->info("type={}, playerID={}, GUID={}, x={}, y={}", THUAI7::sweeperTypeDict[Sweeper->sweeperType], Sweeper->playerID, Sweeper->guid, Sweeper->x, Sweeper->y);
     logger->info("state={},speed={}, view range={},facing direction={}", THUAI7::sweeperStateDict[Sweeper->sweeperState], Sweeper->speed, Sweeper->viewRange, Sweeper->facingDirection);
     logger->info("*********************\n");
 }
