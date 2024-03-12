@@ -14,11 +14,11 @@ namespace Constants
 {
     SCCI int32_t frameDuration = 50;  // 每帧毫秒数
     // 地图相关
-    SCCI int32_t numOfGridPerCell = 1000;    // 单位坐标数
-    SCCI int32_t rows = 50;                  // 地图行数
-    SCCI int32_t cols = 50;                  // 地图列数
-    SCCI int32_t maxResourceProgress = 200;  // 大门最大进度
-    SCCI int32_t maxWormholeHp = 18000;
+    SCCI int32_t numOfGridPerCell = 1000;  // 单位坐标数
+    SCCI int32_t rows = 50;                // 地图行数
+    SCCI int32_t cols = 50;                // 地图列数
+    SCCI int32_t maxGarbageProgress = 200;
+    SCCI int32_t maxBridgeHp = 18000;
     SCCI double robPercent = 0.2;  // 击杀获得经济比率
     SCCI int32_t DestroyBuildingBonus = 200;
     SCCI double recoverMultiplier = 1.2;
@@ -26,18 +26,18 @@ namespace Constants
     struct Home
     {
         SCCI int32_t maxHp = 24000;
-        SCCI int32_t moneySpeed = 1;
+        SCCI int32_t energySpeed = 1;
     };
-    struct Factory
+    struct RecycleBank
     {
         SCCI int32_t maxHp = 8000;
-        SCCI int32_t moneySpeed = 3;
+        SCCI int32_t energySpeed = 3;
     };
-    struct Community
+    struct ChargeStation
     {
         SCCI int32_t maxHp = 6000;
     };
-    struct Fort
+    struct SignalTower
     {
         SCCI int32_t maxHp = 12000;
         SCCI int32_t attackRange = 8000;
@@ -45,8 +45,8 @@ namespace Constants
     };
 
     // 船
-    SCCI int32_t sizeofShip = 800;
-    struct CivilianShip
+    SCCI int32_t sizeofSweeper = 800;
+    struct CivilianSweeper
     {
         SCCI int32_t maxHp = 3000;
         SCCI int32_t basicArmor = 0;
@@ -54,7 +54,7 @@ namespace Constants
         SCCI int32_t Speed = 3000;
         SCCI int32_t Cost = 40;
     };
-    struct MilitaryShip
+    struct MilitarySweeper
     {
         SCCI int32_t maxHp = 4000;
         SCCI int32_t basicArmor = 400;
@@ -62,7 +62,7 @@ namespace Constants
         SCCI int32_t Speed = 2800;
         SCCI int32_t Cost = 120;
     };
-    struct FlagShip
+    struct FlagSweeper
     {
         SCCI int32_t maxHp = 12000;
         SCCI int32_t basicArmor = 800;
@@ -74,9 +74,9 @@ namespace Constants
     // 模块
     struct Producer
     {
-        SCCI int32_t moneySpeed1 = 5;
-        SCCI int32_t moneySpeed2 = 7;
-        SCCI int32_t moneySpeed3 = 10;
+        SCCI int32_t energySpeed1 = 5;
+        SCCI int32_t energySpeed2 = 7;
+        SCCI int32_t energySpeed3 = 10;
         SCCI int32_t Cost1 = 0;
         SCCI int32_t Cost2 = 40;
         SCCI int32_t Cost3 = 80;
