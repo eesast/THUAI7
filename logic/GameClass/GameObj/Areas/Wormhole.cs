@@ -8,7 +8,7 @@ namespace GameClass.GameObj.Areas;
 public class Wormhole : Immovable, IWormhole
 {
     public LongInTheVariableRange HP = new LongInTheVariableRange(GameData.WormholeHP);
-    private List<XY> grids = new();
+    private readonly List<XY> grids = new();
     public List<XY> Grids => grids;
     public override bool IsRigid => HP > GameData.WormholeHP / 2;
     public override ShapeType Shape => ShapeType.Square;

@@ -201,22 +201,11 @@ namespace Gaming
             {
                 if (!GameData.NeedCopy(keyValuePair.Key))
                 {
-                    gameMap.GameObjLockDict[keyValuePair.Key].EnterWriteLock();
-                    try
+                    gameMap.GameObjDict[GameObjType.Ship].ForEach(delegate (IGameObj ship)
                     {
-                        if (keyValuePair.Key == GameObjType.Ship)
-                        {
-                            foreach (Ship ship in gameMap.GameObjDict[GameObjType.Ship].Cast<Ship>())
-                            {
-                                ship.CanMove.SetReturnOri(false);
-                            }
-                        }
-                        gameMap.GameObjDict[keyValuePair.Key].Clear();
-                    }
-                    finally
-                    {
-                        gameMap.GameObjLockDict[keyValuePair.Key].ExitWriteLock();
-                    }
+                        ((Ship)ship).CanMove.SetReturnOri(false);
+                    });
+                    gameMap.GameObjDict[keyValuePair.Key].Clear();
                 }
             }
         }
@@ -239,45 +228,40 @@ namespace Gaming
             {
                 if (GameData.NeedCopy(keyValuePair.Key))
                 {
-                    gameMap.GameObjLockDict[keyValuePair.Key].EnterReadLock();
-                    try
-                    {
-                        gameObjList.AddRange(gameMap.GameObjDict[keyValuePair.Key]);
-                    }
-                    finally
-                    {
-                        gameMap.GameObjLockDict[keyValuePair.Key].ExitReadLock();
-                    }
+                    gameObjList.AddRange(gameMap.GameObjDict[keyValuePair.Key].ToNewList());
                 }
             }
             return gameObjList;
         }
         public void UpdateBirthPoint()
         {
-            foreach (Construction construction in gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>())
-            {
-                if (construction.ConstructionType == ConstructionType.Community)
+            gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>().ForEach(
+                delegate (Construction construction)
                 {
-                    bool exist = false;
-                    foreach (XY birthPoint in teamList[(int)construction.TeamID].BirthPointList)
+                    if (construction.ConstructionType == ConstructionType.Community)
                     {
-                        if (construction.Position == birthPoint)
+                        bool exist = false;
+                        foreach (XY birthPoint in teamList[(int)construction.TeamID].BirthPointList)
                         {
-                            exist = true;
-                            break;
+                            if (construction.Position == birthPoint)
+                            {
+                                exist = true;
+                                break;
+                            }
+                        }
+                        if (!exist)
+                        {
+                            teamList[(int)construction.TeamID].BirthPointList.Add(construction.Position);
                         }
                     }
-                    if (!exist)
-                    {
-                        teamList[(int)construction.TeamID].BirthPointList.Add(construction.Position);
-                    }
                 }
-            }
+            );
             foreach (Team team in teamList)
             {
                 foreach (XY birthPoint in team.BirthPointList)
                 {
-                    foreach (Construction construction in gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>())
+                    gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>().ForEach(
+                        delegate (Construction construction)
                     {
                         if (construction.Position == birthPoint)
                         {
@@ -287,6 +271,7 @@ namespace Gaming
                             }
                         }
                     }
+                    );
                 }
             }
         }
@@ -298,19 +283,22 @@ namespace Gaming
             actionManager = new(gameMap, shipManager);
             attackManager = new(gameMap, shipManager);
             teamList = [];
-            foreach (GameObj gameObj in gameMap.GameObjDict[GameObjType.Home].Cast<GameObj>())
-            {
-                if (gameObj.Type == GameObjType.Home)
+            gameMap.GameObjDict[GameObjType.Home].Cast<GameObj>().ForEach(
+                delegate (GameObj gameObj)
                 {
-                    teamList.Add(new Team((Home)gameObj));
-                    teamList.Last().BirthPointList.Add(gameObj.Position);
-                    teamList.Last().AddMoney(GameData.InitialMoney);
+                    if (gameObj.Type == GameObjType.Home)
+                    {
+                        teamList.Add(new Team((Home)gameObj));
+                        teamList.Last().BirthPointList.Add(gameObj.Position);
+                        teamList.Last().AddMoney(GameData.InitialMoney);
+                    }
+                    /*         if (teamList.Count == numOfTeam)
+                             {
+                                 break;
+                             }*/
                 }
-                if (teamList.Count == numOfTeam)
-                {
-                    break;
-                }
-            }
+                );
+
         }
     }
 }
