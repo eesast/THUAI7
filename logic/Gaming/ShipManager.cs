@@ -18,10 +18,9 @@ namespace Gaming
                 newShip.ShipID.SetReturnOri(shipID);
                 return newShip;
             }
-
             public bool ActivateShip(Ship ship, XY pos)
             {
-                if (ship == null || ship.ShipState != ShipStateType.Deceased)
+                if (ship.ShipState != ShipStateType.Deceased)
                 {
                     return false;
                 }
@@ -29,9 +28,9 @@ namespace Gaming
                 ship.Position.y = pos.y;
                 long stateNum = ship.SetShipState(RunningStateType.RunningActively, ShipStateType.Null);
                 ship.ResetShipState(stateNum);
+                ship.CanMove.SetReturnOri(true);
                 return true;
             }
-
             public void BeAttacked(Ship ship, Bullet bullet)
             {
                 if (bullet!.Parent!.TeamID == ship.TeamID)

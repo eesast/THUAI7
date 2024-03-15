@@ -385,7 +385,7 @@ public class Ship : Movable, IShip
     public Ship(int initRadius, ShipType shipType, MoneyPool moneyPool) :
         base(GameData.PosNotInGame, initRadius, GameObjType.Ship)
     {
-        this.CanMove.SetReturnOri(true);
+        this.CanMove.SetReturnOri(false);
         this.Occupation = OccupationFactory.FindIOccupation(this.ShipType = shipType);
         this.ViewRange = this.Occupation.ViewRange;
         this.HP = new(this.Occupation.MaxHp);

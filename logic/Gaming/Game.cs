@@ -39,8 +39,7 @@ namespace Gaming
         }
         public bool ActivateShip(long teamID, ShipType shipType, int birthPointIndex = 0)
         {
-            Ship? ship;
-            ship = teamList[(int)teamID].GetNewShip(shipType);
+            Ship? ship = teamList[(int)teamID].GetNewShip(shipType);
             if (ship == null)
                 return false;
             if (birthPointIndex < 0)
@@ -63,7 +62,6 @@ namespace Gaming
                 {
                     if (!gameMap.Timer.StartGame(milliSeconds))
                         return;
-
                     EndGame();  // 游戏结束时要做的事
                 }
             )
