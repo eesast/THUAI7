@@ -25,6 +25,13 @@ namespace GameClass.GameObj
             }
             return null;
         }
+        public Ship? GetNewShip(ShipType shipType) => shipType switch
+        {
+            ShipType.CivilShip => GetNewCivilShipIndex() == -1 ? null : shipList[GetNewCivilShipIndex()],
+            ShipType.WarShip => GetNewWarShipIndex() == -1 ? null : shipList[GetNewWarShipIndex()],
+            ShipType.FlagShip => GetNewFlagShipIndex() == -1 ? null : shipList[GetNewFlagShipIndex()],
+            _ => null
+        };
         public bool AddShip(Ship ship)
         {
             switch (ship.ShipType)
@@ -62,37 +69,70 @@ namespace GameClass.GameObj
         }
         public int GetShipNum()
         {
-            return shipList.Count;
+            int num = 0;
+            foreach (Ship ship in shipList)
+            {
+                if (!ship.IsRemoved)
+                    num++;
+            }
+            return num;
         }
         public int GetCivilShipNum()
         {
             int num = 0;
             foreach (Ship ship in shipList)
             {
-                if (ship.ShipType == ShipType.CivilShip)
+                if (ship.ShipType == ShipType.CivilShip && !ship.IsRemoved)
                     num++;
             }
             return num;
+        }
+        public int GetNewCivilShipIndex()
+        {
+            for (int index = 1; index < 1 + GameData.MaxCivilShipNum; index++)
+            {
+                if (shipList[index].IsRemoved)
+                    return index;
+            }
+            return -1;
         }
         public int GetWarShipNum()
         {
             int num = 0;
             foreach (Ship ship in shipList)
             {
-                if (ship.ShipType == ShipType.WarShip)
+                if (ship.ShipType == ShipType.WarShip && !ship.IsRemoved)
                     num++;
             }
             return num;
+        }
+        public int GetNewWarShipIndex()
+        {
+            for (int index = 1 + GameData.MaxCivilShipNum; index < 1 + GameData.MaxCivilShipNum + GameData.MaxWarShipNum; index++)
+            {
+                if (shipList[index].IsRemoved)
+                    return index;
+            }
+            return -1;
         }
         public int GetFlagShipNum()
         {
             int num = 0;
             foreach (Ship ship in shipList)
             {
-                if (ship.ShipType == ShipType.FlagShip)
+                if (ship.ShipType == ShipType.FlagShip && !ship.IsRemoved)
                     num++;
             }
             return num;
+        }
+        public int GetNewFlagShipIndex()
+        {
+            for (int index = 1 + GameData.MaxCivilShipNum + GameData.MaxWarShipNum; index < 1 + GameData.MaxCivilShipNum + GameData.MaxWarShipNum + GameData.MaxFlagShipNum; index++)
+            {
+                if (shipList[index].IsRemoved)
+                    return index;
+            }
+            return -1;
         }
         public void RemoveShip(Ship ship)
         {

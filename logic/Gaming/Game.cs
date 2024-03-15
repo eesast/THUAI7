@@ -12,67 +12,45 @@ namespace Gaming
 {
     public partial class Game
     {
-        public struct ShipInitInfo(long teamID, long playerID, XY birthPoint, ShipType shipType)
+        public struct PlayerInitInfo(long teamID, long playerID, ShipType shipType)
         {
             public long teamID = teamID;
             public long playerID = playerID;
-            public XY birthPoint = birthPoint;
             public ShipType shipType = shipType;
         }
         private readonly List<Team> teamList;
         public List<Team> TeamList => teamList;
         private readonly Map gameMap;
         public Map GameMap => gameMap;
-        public long AddShip(ShipInitInfo shipInitInfo)
+        public long AddPlayer(PlayerInitInfo playerInitInfo)
         {
-            if (!gameMap.TeamExists(shipInitInfo.teamID))
+            if (!gameMap.TeamExists(playerInitInfo.teamID))
             {
                 return GameObj.invalidID;
             }
-            XY pos = shipInitInfo.birthPoint;
-            bool validBirthPoint = false;
-            foreach (XY birthPoint in teamList[(int)shipInitInfo.teamID].BirthPointList)
-            {
-                if (GameData.ApproachToInteract(pos, birthPoint) && pos != birthPoint)
-                {
-                    validBirthPoint = true;
-                    break;
-                }
-            }
-            if (gameMap.GetPlaceType(pos) != PlaceType.Null &&
-                gameMap.GetPlaceType(pos) != PlaceType.Shadow)
-            {
-                validBirthPoint = false;
-            }
-            if (!validBirthPoint)
-            {
-                // 如果出生点不合法，就找一个合法的出生点
-                XY defaultBirthPoint = teamList[(int)shipInitInfo.teamID].BirthPointList[0];
-                Random random = new();
-                pos = defaultBirthPoint + new XY((random.Next() & 2) - 1, (random.Next() & 2) - 1);
-            }
-            Ship? newShip = shipManager.AddShip(pos, shipInitInfo.teamID, shipInitInfo.playerID,
-                shipInitInfo.shipType, teamList[(int)shipInitInfo.teamID].MoneyPool);
+            Ship? newShip = shipManager.AddShip(playerInitInfo.teamID, playerInitInfo.playerID,
+                playerInitInfo.shipType, teamList[(int)playerInitInfo.teamID].MoneyPool);
             if (newShip == null)
             {
                 return GameObj.invalidID;
             }
-            teamList[(int)shipInitInfo.teamID].AddShip(newShip);
-            long subMoney = 0;
-            switch (newShip.ShipType)
-            {
-                case ShipType.CivilShip:
-                    subMoney = GameData.CivilShipCost;
-                    break;
-                case ShipType.WarShip:
-                    subMoney = GameData.WarShipCost;
-                    break;
-                case ShipType.FlagShip:
-                    subMoney = GameData.FlagShipCost;
-                    break;
-            }
-            teamList[(int)shipInitInfo.teamID].SubMoney(subMoney);
+            teamList[(int)playerInitInfo.teamID].AddShip(newShip);
             return newShip.ShipID;
+        }
+        public bool ActivateShip(long teamID, ShipType shipType, int birthPointIndex = 0)
+        {
+            Ship? ship;
+            ship = teamList[(int)teamID].GetNewShip(shipType);
+            if (ship == null)
+                return false;
+            if (birthPointIndex < 0)
+                birthPointIndex = 0;
+            if (birthPointIndex >= teamList[(int)teamID].BirthPointList.Count)
+                birthPointIndex = teamList[(int)teamID].BirthPointList.Count - 1;
+            XY pos = teamList[(int)teamID].BirthPointList[birthPointIndex];
+            Random random = new();
+            pos += new XY(((random.Next() & 2) - 1) * 1000, ((random.Next() & 2) - 1) * 1000);
+            return shipManager.ActivateShip(ship, pos);
         }
         public bool StartGame(int milliSeconds)
         {

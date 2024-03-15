@@ -133,9 +133,8 @@ namespace Server
 #endif
             lock (addPlayerLock)
             {
-                XY birthPoint = new(0, 0);
-                Game.ShipInitInfo playerInitInfo = new(request.TeamId, request.PlayerId, birthPoint, Transformation.ShipTypeFromProto(request.SweeperType));
-                long newPlayerID = game.AddShip(playerInitInfo);
+                Game.PlayerInitInfo playerInitInfo = new(request.TeamId, request.PlayerId, Transformation.ShipTypeFromProto(request.SweeperType));
+                long newPlayerID = game.AddPlayer(playerInitInfo);
                 if (newPlayerID == GameObj.invalidID)
                 {
 #if DEBUG

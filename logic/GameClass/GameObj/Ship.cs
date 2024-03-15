@@ -382,8 +382,8 @@ public class Ship : Movable, IShip
                 && shipState != ShipStateType.Attacking);
         }
     }
-    public Ship(XY initPos, int initRadius, ShipType shipType, MoneyPool moneyPool) :
-        base(initPos, initRadius, GameObjType.Ship)
+    public Ship(int initRadius, ShipType shipType, MoneyPool moneyPool) :
+        base(GameData.PosNotInGame, initRadius, GameObjType.Ship)
     {
         this.CanMove.SetReturnOri(true);
         this.Occupation = OccupationFactory.FindIOccupation(this.ShipType = shipType);
