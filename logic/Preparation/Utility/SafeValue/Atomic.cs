@@ -39,33 +39,25 @@ namespace Preparation.Utility
     /// <summary>
     /// 参数要求倍率speed（默认1）
     /// 可（在构造时）使用SetScore以设定AtomicInt类的Score
-    /// 在发生正向的变化时，自动给Score加上正向变化的差乘以speed。
+    /// 在发生正向的变化时，自动给Score加上正向变化的差乘以speed（取整）。
     /// 注意：AtomicIntOnlyAddScore本身为AtomicInt，提供的Score可能构成环而死锁。
     /// </summary>
     public class AtomicIntOnlyAddScore : AtomicInt
     {
         public AtomicInt Score { get; set; }
         public AtomicDouble speed;
-        public AtomicDouble remainder = new(0);
         public AtomicIntOnlyAddScore(int x, double speed = 1.0) : base(x)
         {
             this.speed = new(speed);
             this.Score = new(0);
         }
         public void SetScore(AtomicInt score) => Score = score;
-        private int DealWithRemainder(int v)
-        {
-            double q = speed * v + remainder;
-            int ans = (int)(q);
-            remainder.SetReturnOri(q - ans);
-            return ans;
-        }
         /// <returns>返回操作前的值</returns>
         public override int SetReturnOri(int value)
         {
             int previousV = Interlocked.Exchange(ref v, value);
             if (value - previousV > 0)
-                Score.AddPositive((DealWithRemainder(value - previousV)));
+                Score.AddPositive(Convert.ToInt32((value - previousV) * speed));
             return previousV;
         }
         /// <returns>返回操作前的值</returns>
@@ -75,7 +67,7 @@ namespace Preparation.Utility
         }
         public override int Add(int x)
         {
-            if (x > 0) Score.AddPositive(DealWithRemainder(x));
+            if (x > 0) Score.AddPositive(Convert.ToInt32(x * speed));
             return Interlocked.Add(ref v, x);
         }
         public int AddNotAddScore(int x)
@@ -87,12 +79,12 @@ namespace Preparation.Utility
         /// </summary>
         public override int AddPositive(int x)
         {
-            Score.AddPositive(DealWithRemainder(x));
+            Score.AddPositive(Convert.ToInt32(x * speed));
             return Interlocked.Add(ref v, x);
         }
         public override int Sub(int x)
         {
-            if (x < 0) Score.AddPositive(DealWithRemainder(-x));
+            if (x < 0) Score.AddPositive(Convert.ToInt32((-x) * speed));
             return Interlocked.Add(ref v, -x);
         }
         public int SubNotAddScore(int x)
@@ -108,7 +100,7 @@ namespace Preparation.Utility
         }
         public override int Inc()
         {
-            Score.AddPositive(DealWithRemainder(1));
+            Score.AddPositive(Convert.ToInt32(speed));
             return Interlocked.Increment(ref v);
         }
         public int IncNotAddScore()
@@ -120,7 +112,7 @@ namespace Preparation.Utility
         {
             int previousV = Interlocked.CompareExchange(ref v, newV, compareTo);
             if (newV - previousV > 0)
-                Score.AddPositive(DealWithRemainder(newV - previousV));
+                Score.AddPositive(Convert.ToInt32((newV - previousV) * speed));
             return previousV;
         }
         /// <returns>返回操作前的值</returns>
@@ -132,33 +124,25 @@ namespace Preparation.Utility
 
     /// <summary>
     /// 参数要求倍率speed（默认1）
-    /// 可（在构造时）使用SetScore以设定AtomicLong类的Score
+    /// 可（在构造时）使用SetScore以设定AtomicLong类的Score（取整）
     /// 在发生正向的变化时，自动给Score加上正向变化的差乘以speed。
     /// </summary>
     public class AtomicIntOnlyAddLongScore : AtomicInt
     {
         public AtomicLong Score { get; set; }
         public AtomicDouble speed;
-        public AtomicDouble remainder = new(0);
         public AtomicIntOnlyAddLongScore(int x, double speed = 1.0) : base(x)
         {
             this.Score = new(0);
             this.speed = new(speed);
         }
         public void SetScore(AtomicLong score) => Score = score;
-        private long DealWithRemainder(int v)
-        {
-            double q = speed * v + remainder;
-            long ans = (long)(q);
-            remainder.SetReturnOri(q - ans);
-            return ans;
-        }
         /// <returns>返回操作前的值</returns>
         public override int SetReturnOri(int value)
         {
             int previousV = Interlocked.Exchange(ref v, value);
             if (value - previousV > 0)
-                Score.AddPositive((DealWithRemainder(value - previousV)));
+                Score.AddPositive((Convert.ToInt32((value - previousV) * speed)));
             return previousV;
         }
         /// <returns>返回操作前的值</returns>
@@ -168,7 +152,7 @@ namespace Preparation.Utility
         }
         public override int Add(int x)
         {
-            if (x > 0) Score.AddPositive(DealWithRemainder(x));
+            if (x > 0) Score.AddPositive(Convert.ToInt32(x * speed));
             return Interlocked.Add(ref v, x);
         }
         public int AddNotAddScore(int x)
@@ -180,12 +164,12 @@ namespace Preparation.Utility
         /// </summary>
         public override int AddPositive(int x)
         {
-            Score.AddPositive(DealWithRemainder(x));
+            Score.AddPositive(Convert.ToInt32((x) * speed));
             return Interlocked.Add(ref v, x);
         }
         public override int Sub(int x)
         {
-            if (x < 0) Score.AddPositive(DealWithRemainder(-x));
+            if (x < 0) Score.AddPositive(Convert.ToInt32((-x) * speed));
             return Interlocked.Add(ref v, -x);
         }
         public int SubNotAddScore(int x)
@@ -194,7 +178,7 @@ namespace Preparation.Utility
         }
         public override int Inc()
         {
-            Score.AddPositive(DealWithRemainder(1));
+            Score.AddPositive(Convert.ToInt32(speed));
             return Interlocked.Increment(ref v);
         }
         public int IncNotAddScore()
@@ -206,7 +190,7 @@ namespace Preparation.Utility
         {
             int previousV = Interlocked.CompareExchange(ref v, newV, compareTo);
             if (newV - previousV > 0)
-                Score.AddPositive(DealWithRemainder(newV - previousV));
+                Score.AddPositive(Convert.ToInt32((newV - previousV) * speed));
             return previousV;
         }
         /// <returns>返回操作前的值</returns>
@@ -226,25 +210,17 @@ namespace Preparation.Utility
     {
         public AtomicInt Score { get; set; }
         public AtomicDouble speed;
-        public AtomicDouble remainder = new(0);
         public AtomicIntChangeAffectScore(int x, double speed = 1.0) : base(x)
         {
             this.Score = new(0);
             this.speed = new(speed);
         }
         public void SetScore(AtomicInt score) => Score = score;
-        private int DealWithRemainder(int v)
-        {
-            double q = speed * v + remainder;
-            int ans = (int)(q);
-            remainder.SetReturnOri(q - ans);
-            return ans;
-        }
         /// <returns>返回操作前的值</returns>
         public override int SetReturnOri(int value)
         {
             int previousV = Interlocked.Exchange(ref v, value);
-            Score.Add(DealWithRemainder(value - previousV));
+            Score.Add(Convert.ToInt32((value - previousV) * speed));
             return previousV;
         }
         /// <returns>返回操作前的值</returns>
@@ -254,7 +230,7 @@ namespace Preparation.Utility
         }
         public override int Add(int x)
         {
-            Score.Add(DealWithRemainder(x));
+            Score.Add(Convert.ToInt32((x) * speed));
             return Interlocked.Add(ref v, x);
         }
         public int AddNotAddScore(int x)
@@ -266,12 +242,12 @@ namespace Preparation.Utility
         /// </summary>
         public override int AddPositive(int x)
         {
-            Score.AddPositive(DealWithRemainder(x));
+            Score.AddPositive(Convert.ToInt32((x) * speed));
             return Interlocked.Add(ref v, x);
         }
         public override int Sub(int x)
         {
-            Score.Sub(DealWithRemainder(x));
+            Score.Sub(Convert.ToInt32((x) * speed));
             return Interlocked.Add(ref v, -x);
         }
         public int SubNotAddScore(int x)
@@ -283,12 +259,12 @@ namespace Preparation.Utility
         /// </summary>
         public override int SubPositive(int x)
         {
-            Score.SubPositive(DealWithRemainder(x));
+            Score.SubPositive(Convert.ToInt32((x) * speed));
             return Interlocked.Add(ref v, -x);
         }
         public override int Inc()
         {
-            Score.AddPositive(DealWithRemainder(1));
+            Score.AddPositive(Convert.ToInt32(speed));
             return Interlocked.Increment(ref v);
         }
         public int IncNotAddScore()
@@ -297,7 +273,7 @@ namespace Preparation.Utility
         }
         public override int Dec()
         {
-            Score.SubPositive(DealWithRemainder(1));
+            Score.SubPositive(Convert.ToInt32(speed));
             return Interlocked.Decrement(ref v);
         }
         public int DecNotAddScore()
@@ -308,7 +284,7 @@ namespace Preparation.Utility
         public override int CompareExReturnOri(int newV, int compareTo)
         {
             int previousV = Interlocked.CompareExchange(ref v, newV, compareTo);
-            Score.Add(DealWithRemainder(newV - previousV));
+            Score.Add(Convert.ToInt32((newV - previousV) * speed));
             return previousV;
         }
         /// <returns>返回操作前的值</returns>
@@ -356,27 +332,19 @@ namespace Preparation.Utility
     {
         public AtomicLong Score { get; set; }
         public AtomicDouble speed;
-        public AtomicDouble remainder = new(0);
         public AtomicLongOnlyAddScore(long x, double speed = 1.0) : base(x)
         {
             this.Score = new(0);
             this.speed = new(speed);
         }
         public void SetScore(AtomicLong score) => Score = score;
-        private long DealWithRemainder(long v)
-        {
-            double q = speed * v + remainder;
-            long ans = (long)(q);
-            remainder.SetReturnOri(q - ans);
-            return ans;
-        }
 
         /// <returns>返回操作前的值</returns>
         public override long SetReturnOri(long value)
         {
             long previousV = Interlocked.Exchange(ref v, value);
             if (value - previousV > 0)
-                Score.AddPositive(DealWithRemainder(value - previousV));
+                Score.AddPositive(Convert.ToInt32((value - previousV) * speed));
             return previousV;
         }
         /// <returns>返回操作前的值</returns>
@@ -386,7 +354,7 @@ namespace Preparation.Utility
         }
         public override long Add(long x)
         {
-            if (x > 0) Score.AddPositive(DealWithRemainder(x));
+            if (x > 0) Score.AddPositive(Convert.ToInt32((x) * speed));
             return Interlocked.Add(ref v, x);
         }
         public long AddNotAddScore(long x)
@@ -398,12 +366,12 @@ namespace Preparation.Utility
         /// </summary>
         public override long AddPositive(long x)
         {
-            Score.AddPositive(DealWithRemainder(x));
+            Score.AddPositive(Convert.ToInt32((x) * speed));
             return Interlocked.Add(ref v, x);
         }
         public override long Sub(long x)
         {
-            if (x < 0) Score.AddPositive(DealWithRemainder(-x));
+            if (x < 0) Score.AddPositive(Convert.ToInt32((-x) * speed));
             return Interlocked.Add(ref v, -x);
         }
         public long SubNotAddScore(long x)
@@ -412,7 +380,7 @@ namespace Preparation.Utility
         }
         public override long Inc()
         {
-            Score.AddPositive(DealWithRemainder(1));
+            Score.AddPositive(Convert.ToInt32(speed));
             return Interlocked.Increment(ref v);
         }
         public long IncNotAddScore()
@@ -424,7 +392,7 @@ namespace Preparation.Utility
         {
             long previousV = Interlocked.CompareExchange(ref v, newV, compareTo);
             if (newV - previousV > 0)
-                Score.AddPositive(DealWithRemainder(newV - previousV));
+                Score.AddPositive(Convert.ToInt32((newV - previousV) * speed));
             return previousV;
         }
         /// <returns>返回操作前的值</returns>
