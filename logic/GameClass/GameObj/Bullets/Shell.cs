@@ -7,7 +7,7 @@ internal sealed class Shell : Bullet
     public Shell(Ship ship, XY pos, int radius = GameData.BulletRadius) :
         base(ship, radius, pos)
     {
-        this.AP.SetReturnOri(GameData.ShellDamage);
+        AP.SetReturnOri(GameData.ShellDamage);
     }
     public override double BulletBombRange => 0;
     public override double AttackDistance => GameData.ShellRange;

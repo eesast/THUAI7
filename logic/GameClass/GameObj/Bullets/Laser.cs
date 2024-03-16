@@ -10,7 +10,7 @@ internal sealed class Laser : Bullet
     public Laser(Ship ship, XY pos, int radius = GameData.BulletRadius) :
         base(ship, radius, pos)
     {
-        this.AP.SetReturnOri(GameData.LaserDamage);
+        AP.SetReturnOri(GameData.LaserDamage);
     }
     public override double BulletBombRange => 0;
     public override double AttackDistance => GameData.LaserRange;

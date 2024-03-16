@@ -4,7 +4,8 @@ using System.Threading;
 
 namespace GameClass.GameObj
 {
-    public abstract class Movable : GameObj, IMovable
+    public abstract class Movable(XY initPos, int initRadius, GameObjType initType)
+        : GameObj(initPos, initRadius, initType), IMovable
     {
         protected readonly object actionLock = new();
         /// <summary>
@@ -92,10 +93,10 @@ namespace GameClass.GameObj
                 this.position = position;
             }
         }
-        private AtomicBool canMove = new(false);
+        private readonly AtomicBool canMove = new(false);
         public AtomicBool CanMove { get => canMove; }
         public bool IsAvailableForMove => !IsMoving && CanMove && !IsRemoved; // 是否能接收移动指令
-        private AtomicInt moveSpeed = new(0);
+        private readonly AtomicInt moveSpeed = new(0);
         /// <summary>
         /// 移动速度
         /// </summary>
@@ -105,23 +106,21 @@ namespace GameClass.GameObj
         /// 原初移动速度
         /// </summary>
         public int OrgMoveSpeed => orgMoveSpeed;
-        /*       /// <summary>
-               /// 复活时数据重置
-               /// </summary>
-               public virtual void Reset(PlaceType place)
-               {
-                   lock (gameObjLock)
-                   {
-                       this.FacingDirection = new XY(1, 0);
-                       isMoving = false;
-                       CanMove = false;
-                       IsRemoved = true;
-                       this.Position = birthPos;
-                       this.Place= place;
-                   }
-               }*/
-        public Movable(XY initPos, int initRadius, GameObjType initType) : base(initPos, initRadius, initType)
+
+        /*/// <summary>
+        /// 复活时数据重置
+        /// </summary>
+        public virtual void Reset(PlaceType place)
         {
-        }
+            lock (gameObjLock)
+            {
+                this.FacingDirection = new XY(1, 0);
+                isMoving = false;
+                CanMove = false;
+                IsRemoved = true;
+                this.Position = birthPos;
+                this.Place = place;
+            }
+        }*/
     }
 }

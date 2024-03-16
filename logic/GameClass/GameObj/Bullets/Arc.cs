@@ -9,7 +9,7 @@ internal sealed class Arc : Bullet
         base(ship, radius, pos)
     {
         Random random = new();
-        this.AP.SetReturnOri(random.Next(GameData.ArcDamageMin, GameData.ArcDamageMax));
+        AP.SetReturnOri(random.Next(GameData.ArcDamageMin, GameData.ArcDamageMax));
     }
     public override double BulletBombRange => 0;
     public override double AttackDistance => GameData.ArcRange;

@@ -2,12 +2,9 @@
 
 namespace GameClass.GameObj.Areas;
 
-public class NullArea : Immovable
+public class NullArea(XY initPos)
+    : Immovable(initPos, int.MaxValue, GameObjType.Null)
 {
     public override bool IsRigid => false;
     public override ShapeType Shape => ShapeType.Null;
-    public NullArea(XY initPos)
-        : base(initPos, int.MaxValue, GameObjType.Null)
-    {
-    }
 }
