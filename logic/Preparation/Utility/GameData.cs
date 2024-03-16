@@ -40,8 +40,8 @@ namespace Preparation.Utility
         }
         public static XY GetCellCenterPos(int x, int y)  // 求格子的中心坐标
         {
-            XY ret = new(x * NumOfPosGridPerCell + NumOfPosGridPerCell / 2, y * NumOfPosGridPerCell + NumOfPosGridPerCell / 2);
-            return ret;
+            return new XY(x * NumOfPosGridPerCell + NumOfPosGridPerCell / 2,
+                         y * NumOfPosGridPerCell + NumOfPosGridPerCell / 2);
         }
         public static int PosGridToCellX(XY pos)  // 求坐标所在的格子的x坐标
         {
@@ -51,9 +51,9 @@ namespace Preparation.Utility
         {
             return pos.y / NumOfPosGridPerCell;
         }
-        public static XY PosGridToCellXY(XY pos)  // 求坐标所在的格子的xy坐标
+        public static CellXY PosGridToCellXY(XY pos)  // 求坐标所在的格子的xy坐标
         {
-            return new XY(pos.x / NumOfPosGridPerCell, pos.y / NumOfPosGridPerCell);
+            return new CellXY(PosGridToCellX(pos), pos.y / PosGridToCellY(pos));
         }
         public static bool IsInTheSameCell(XY pos1, XY pos2)
         {

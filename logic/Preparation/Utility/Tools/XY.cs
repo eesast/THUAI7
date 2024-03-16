@@ -74,8 +74,15 @@ public readonly struct XY
     public XY Perpendicular() => new(-y, x);
 
     public override bool Equals(object? obj) => (obj is not null) && (obj is XY xy) && (this == xy);
-
     public override int GetHashCode() => x.GetHashCode() ^ y.GetHashCode();
+
+    /// <summary>
+    /// 解包
+    /// </summary>
+    public void Deconstruct(out int x, out int y)
+    {
+        x = this.x; y = this.y;
+    }
 }
 
 public readonly struct CellXY
@@ -150,6 +157,13 @@ public readonly struct CellXY
     public CellXY Perpendicular() => new(-y, x);
 
     public override bool Equals(object? obj) => (obj is not null) && (obj is CellXY xy) && (this == xy);
-
     public override int GetHashCode() => x.GetHashCode() ^ y.GetHashCode();
+
+    /// <summary>
+    /// 解包
+    /// </summary>
+    public void Deconstruct(out int x, out int y)
+    {
+        x = this.x; y = this.y;
+    }
 }
