@@ -106,5 +106,21 @@ namespace GameClass.GameObj
         /// 原初移动速度
         /// </summary>
         public int OrgMoveSpeed => orgMoveSpeed;
+
+        /*/// <summary>
+        /// 复活时数据重置
+        /// </summary>
+        public virtual void Reset(PlaceType place)
+        {
+            lock (gameObjLock)
+            {
+                this.FacingDirection = new XY(1, 0);
+                isMoving = false;
+                CanMove = false;
+                IsRemoved = true;
+                this.Position = birthPos;
+                this.Place = place;
+            }
+        }*/
     }
 }

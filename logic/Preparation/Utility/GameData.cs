@@ -36,10 +36,8 @@ namespace Preparation.Utility
                    gameObjType != GameObjType.OutOfBoundBlock;
         }
         public static XY GetCellCenterPos(int x, int y)  // 求格子的中心坐标
-        {
-            return new XY(x * NumOfPosGridPerCell + NumOfPosGridPerCell / 2,
-                          y * NumOfPosGridPerCell + NumOfPosGridPerCell / 2);
-        }
+            => new(x * NumOfPosGridPerCell + NumOfPosGridPerCell / 2,
+                   y * NumOfPosGridPerCell + NumOfPosGridPerCell / 2);
 
         public static int PosGridToCellX(XY pos)  // 求坐标所在的格子的x坐标
             => pos.x / NumOfPosGridPerCell;
@@ -48,10 +46,7 @@ namespace Preparation.Utility
         public static CellXY PosGridToCellXY(XY pos)  // 求坐标所在的格子的xy坐标
             => new(PosGridToCellX(pos), PosGridToCellY(pos));
 
-        public static bool IsInTheSameCell(XY pos1, XY pos2)
-        {
-            return PosGridToCellXY(pos1) == PosGridToCellXY(pos2);
-        }
+        public static bool IsInTheSameCell(XY pos1, XY pos2) => PosGridToCellXY(pos1) == PosGridToCellXY(pos2);
         public static bool PartInTheSameCell(XY pos1, XY pos2)
         {
             return Math.Abs((pos1 - pos2).x) < ShipRadius + (NumOfPosGridPerCell / 2)

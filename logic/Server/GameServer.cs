@@ -97,7 +97,7 @@ namespace Server
             result.Add("BlueTeam", score[1]);
             JsonSerializer serializer = new();
             using StreamWriter sw = new(path);
-            using JsonWriter writer = new JsonTextWriter(sw);
+            using JsonTextWriter writer = new(sw);
             serializer.Serialize(writer, result);
         }
 
