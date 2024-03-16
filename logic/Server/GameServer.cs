@@ -210,7 +210,7 @@ namespace Server
 
         private bool ValidPlayerID(long playerID)
         {
-            if (playerID==0 || (1 <= playerID && playerID <= options.ShipCount))
+            if (playerID == 0 || (1 <= playerID && playerID <= options.MaxShipCount))
                 return true;
             return false;
         }
@@ -307,7 +307,7 @@ namespace Server
             //创建server时先设定待加入对象都是invalid
             for (int team = 0; team < TeamCount; team++)
             {
-                communicationToGameID[team][0]= GameObj.invalidID; // team
+                communicationToGameID[team][0] = GameObj.invalidID; // team
                 for (int i = 1; i <= options.MaxShipCount; i++)
                 {
                     communicationToGameID[team][i] = GameObj.invalidID; //sweeper
