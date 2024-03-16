@@ -5,7 +5,7 @@ import sys
 
 from easygui import multenterbox
 
-import CLR_IMPORT
+import CLR_IMPORT  # NOQA: E402
 import SETTINGS
 from GameClass.MapGenerator import MapStruct
 from Classes.MapRenderer import MapRenderer

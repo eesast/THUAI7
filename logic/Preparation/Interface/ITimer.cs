@@ -1,8 +1,10 @@
-﻿namespace Preparation.Interface
+﻿using Preparation.Utility;
+
+namespace Preparation.Interface
 {
     public interface ITimer
     {
-        bool IsGaming { get; set; }
+        AtomicBool IsGaming { get; }
         public int nowTime();
         public bool StartGame(int timeInMilliseconds);
     }

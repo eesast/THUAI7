@@ -48,7 +48,7 @@ namespace Server
         {
             MessageOfObj msg = new()
             {
-                ShipMessage = new()
+                SweeperMessage = new()
                 {
                     X = player.Position.x,
                     Y = player.Position.y,
@@ -59,8 +59,8 @@ namespace Server
                     TeamId = player.TeamID,
                     PlayerId = player.ShipID,
                     Guid = player.ID,
-                    ShipState = Transformation.ShipStateToProto(player.ShipState),
-                    ShipType = Transformation.ShipTypeToProto(player.ShipType),
+                    SweeperState = Transformation.ShipStateToProto(player.ShipState),
+                    SweeperType = Transformation.ShipTypeToProto(player.ShipType),
                     ViewRange = player.ViewRange,
                     ConstructorType = Transformation.ConstructorToProto(player.ConstructorModuleType),
                     ArmorType = Transformation.ArmorToProto(player.ArmorModuleType),
@@ -129,7 +129,7 @@ namespace Server
         {
             MessageOfObj msg = new()
             {
-                ResourceMessage = new()
+                GarbageMessage = new()
                 {
                     X = resource.Position.x,
                     Y = resource.Position.y,
@@ -142,7 +142,7 @@ namespace Server
         {
             MessageOfObj msg = new()
             {
-                FactoryMessage = new()
+                RecyclebankMessage = new()
                 {
                     X = construction.Position.x,
                     Y = construction.Position.y,
@@ -157,7 +157,7 @@ namespace Server
         {
             MessageOfObj msg = new()
             {
-                CommunityMessage = new()
+                ChargestationMessage = new()
                 {
                     X = construction.Position.x,
                     Y = construction.Position.y,
@@ -172,7 +172,7 @@ namespace Server
         {
             MessageOfObj msg = new()
             {
-                FortMessage = new()
+                SignaltowerMessage = new()
                 {
                     X = construction.Position.x,
                     Y = construction.Position.y,
@@ -186,7 +186,7 @@ namespace Server
         {
             MessageOfObj msg = new()
             {
-                WormholeMessage = new()
+                BridgeMessage = new()
                 {
                     X = wormhole.Position.x,
                     Y = wormhole.Position.y,

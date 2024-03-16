@@ -1,4 +1,4 @@
-﻿using Client.Model;
+using Client.Model;
 using Protobuf;
 using System;
 using System.Collections.Generic;

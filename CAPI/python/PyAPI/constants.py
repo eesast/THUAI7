@@ -15,12 +15,12 @@ class Constants:
 
 class Home:
     maxHp = 24000
-    moneySpeed = 1
+    energySpeed = 1
 
 
 class Factory:
     maxHp = 8000
-    moneySpeed = 3
+    energySpeed = 3
 
 
 class Community:
@@ -58,9 +58,9 @@ class FlagShip:
 
 
 class Producer:
-    moneySpeed1 = 5
-    moneySpeed2 = 7
-    moneySpeed3 = 10
+    energySpeed1 = 5
+    energySpeed2 = 7
+    energySpeed3 = 10
     Cost1 = 0
     Cost2 = 40
     Cost3 = 80

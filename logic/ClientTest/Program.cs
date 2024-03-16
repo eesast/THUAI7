@@ -14,9 +14,7 @@ namespace ClientTest
             {
                 PlayerId = 0,
                 TeamId = 0,
-                ShipType = ShipType.CivilianShip,
-                X = 30000,
-                Y = 46000
+                SweeperType = SweeperType.CivilianSweeper
             };
             var call = client.AddPlayer(playerInfo);
             MoveMsg moveMsg = new()
