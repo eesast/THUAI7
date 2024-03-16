@@ -330,7 +330,7 @@ namespace Client.ViewModel
         //    }
         //}
 
-       
+
 
         //private int FindIndexOfResource(MessageOfResource obj)
         //{
@@ -380,7 +380,7 @@ namespace Client.ViewModel
         //    return -1;
         //}
 
-        
+
 
         private void DrawHome(MessageOfHome data)
         {
