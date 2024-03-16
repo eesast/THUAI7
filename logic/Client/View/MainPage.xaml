@@ -121,7 +121,7 @@
                                     <Label Grid.Column="2" Text="{Binding ConstuctorModule_s}"></Label>
                                     <Label Grid.Column="3" Text="{Binding ArmorModule_s}"></Label>
                                     <Label Grid.Column="4" Text="{Binding ShieldModule_s}"></Label>
-                                    <Label Grid.Column="5" Text="{Binding AttackerModule_s}"></Label>
+                                    <Label Grid.Column="5" Text="{Binding WeaponModule_s}"></Label>
                                     <Label Grid.Column="6" Text="{Binding State_s}"></Label>
                                 </Grid>
                             </DataTemplate>
@@ -200,7 +200,7 @@
                                     <Label Grid.Column="2" Text="{Binding ConstuctorModule_s}"></Label>
                                     <Label Grid.Column="3" Text="{Binding ArmorModule_s}"></Label>
                                     <Label Grid.Column="4" Text="{Binding ShieldModule_s}"></Label>
-                                    <Label Grid.Column="5" Text="{Binding AttackerModule_s}"></Label>
+                                    <Label Grid.Column="5" Text="{Binding WeaponModule_s}"></Label>
                                     <Label Grid.Column="6" Text="{Binding State_s}"></Label>
                                 </Grid>
                             </DataTemplate>
