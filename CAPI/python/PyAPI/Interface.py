@@ -141,11 +141,7 @@ class IAPI(metaclass=ABCMeta):
     '''
 
     @abstractmethod
-    def SendTextMessage(self, toPlayerID: int, message: str) -> Future[bool]:
-        pass
-
-    @abstractmethod
-    def SendBinaryMessage(self, toPlayerID: int, message: str) -> Future[bool]:
+    def SendMessage(self, toPlayerID: int, message: Union[str, bytes]) -> Future[bool]:
         pass
 
     @abstractmethod

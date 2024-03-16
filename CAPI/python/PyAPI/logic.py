@@ -18,13 +18,11 @@ from PyAPI.Interface import ILogic, IGameTimer
 
 
 class Logic(ILogic):
-    # TODO: Mismatch between logic.py & main.py
-    def __init__(self, playerID: int, shipType: THUAI7.ShipType, teamID: int, x: int, y: int) -> None:
+    def __init__(self, playerID: int, teamID: int, playerType: THUAI7.PlayerType, shipType: THUAI7.ShipType) -> None:
         self.__playerID: int = playerID
         self.__teamID: int = teamID
+        self.__playerType: THUAI7.PlayerType = playerType
         self.__shipType: THUAI7.ShipType = shipType
-        self.__x: int = x
-        self.__y: int = y
 
         self.__comm: Communication
 
@@ -231,7 +229,7 @@ class Logic(ILogic):
     def __ProcessMessage(self) -> None:
         def messageThread():
             self.__logger.info("Message thread started")
-            self.__comm.AddPlayer(self.__playerID, self.__teamID, self.__shipType, self.__x, self.__y)
+            self.__comm.AddPlayer(self.__playerID, self.__teamID, self.__shipType)
             self.__logger.info("Player added")
 
             while self.__gameState != THUAI7.GameState.GameEnd:
@@ -301,7 +299,7 @@ class Logic(ILogic):
             self.__LoadBufferSelf(message)
             for item in message.obj_message:
                 self.__LoadBufferCase(item)
-            if Setting.asynchronous():
+            if Setting.Asynchronous():
                 with self.__mtxState:
                     self.__currentState, self.__bufferState = self.__bufferState, self.__currentState
                     self.__counterState = self.__counterBuffer
@@ -451,7 +449,7 @@ class Logic(ILogic):
             self.__cvAI.notify()
 
     def __Update(self) -> None:
-        if not Setting.asynchronous():
+        if not Setting.Asynchronous():
             with self.__cvBuffer:
                 self.__cvBuffer.wait_for(lambda: self.__bufferUpdated)
                 with self.__mtxState:
@@ -512,7 +510,7 @@ class Logic(ILogic):
             self.__logger.addHandler(screenHandler)
 
         self.__logger.info("*********Basic Info*********")
-        self.__logger.info("asynchronous: %s", Setting.asynchronous())
+        self.__logger.info("asynchronous: %s", Setting.Asynchronous())
         self.__logger.info("server: %s:%s", IP, port)
         self.__logger.info("playerID: %s", self.__playerID)
         self.__logger.info("player type: %s", self.__playerType.name)
@@ -536,7 +534,7 @@ class Logic(ILogic):
 
             ai = createAI(self.__playerID)
             while self.__AILoop:
-                if Setting.asynchronous():
+                if Setting.Asynchronous():
                     self.__Wait()
                     self.__timer.StartTimer()
                     self.__timer.Play(ai)

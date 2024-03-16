@@ -492,13 +492,11 @@ class THUAI72Proto:
 
     @staticmethod
     def THUAI72ProtobufPlayerMsg(
-        playerID: int, teamID: int, shipType: THUAI7.ShipType, x: int, y: int
+        playerID: int, teamID: int, shipType: THUAI7.ShipType
     ) -> Message2Server.PlayerMsg:
         return Message2Server.PlayerMsg(
             player_id=playerID,
             team_id=teamID,
-            x=x,
-            y=y,
             ship_type=THUAI72Proto.shipTypeDict[shipType]
         )
 

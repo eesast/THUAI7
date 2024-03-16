@@ -82,8 +82,8 @@ class ShipAPI(IShipAPI, IGameTimer):
     def GetWormHp(self, cellX: int, cellY: int) -> int:
         return self.__logic.GetWormHp(cellX, cellY)
 
-    def GetResouceState(self, cellX: int, cellY: int) -> int:
-        return self.__logic.GetResouceState(cellX, cellY)
+    def GetResourceState(self, cellX: int, cellY: int) -> int:
+        return self.__logic.GetResourceState(cellX, cellY)
 
     def GetHomeHp(self) -> int:
         return self.__logic.GetHomeHp()
@@ -112,6 +112,9 @@ class ShipAPI(IShipAPI, IGameTimer):
         pass
 
     def PrintShip(self) -> None:
+        pass
+
+    def PrintTeam(self) -> None:
         pass
 
     def PrintSelfInfo(self) -> None:
