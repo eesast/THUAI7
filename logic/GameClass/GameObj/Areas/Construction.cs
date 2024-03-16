@@ -3,10 +3,11 @@ using System;
 
 namespace GameClass.GameObj.Areas;
 
-public class Construction : Immovable
+public class Construction(XY initPos)
+    : Immovable(initPos, GameData.NumOfPosGridPerCell / 2, GameObjType.Construction)
 {
     public AtomicLong TeamID { get; } = new(long.MaxValue);
-    public LongInTheVariableRange HP { get; } = new LongInTheVariableRange(0, GameData.CommunityHP);
+    public LongInTheVariableRange HP { get; } = new(0, GameData.CommunityHP);
     public override bool IsRigid => constructionType == ConstructionType.Community;
     public override ShapeType Shape => ShapeType.Square;
     private ConstructionType constructionType = ConstructionType.Null;
@@ -18,13 +19,13 @@ public class Construction : Immovable
         {
             return false;
         }
-        if (this.constructionType != ConstructionType.Null && this.constructionType != constructionType && this.HP > 0)
+        if (this.constructionType != ConstructionType.Null && this.constructionType != constructionType && HP > 0)
         {
             return false;
         }
-        if (this.constructionType == ConstructionType.Null || this.HP == 0)
+        if (this.constructionType == ConstructionType.Null || HP == 0)
         {
-            this.TeamID.SetReturnOri(ship.TeamID);
+            TeamID.SetReturnOri(ship.TeamID);
             this.constructionType = constructionType;
             switch (constructionType)
             {
@@ -45,12 +46,11 @@ public class Construction : Immovable
     }
     public void BeAttacked(Bullet bullet)
     {
-        if (bullet!.Parent!.TeamID == this.TeamID)
+        if (bullet!.Parent!.TeamID != TeamID)
         {
-            return;
+            long subHP = bullet.AP;
+            HP.SubPositiveV(subHP);
         }
-        long subHP = bullet.AP;
-        this.HP.SubPositiveV(subHP);
     }
     public void AddConstructNum(int add = 1)
     {
@@ -59,9 +59,5 @@ public class Construction : Immovable
     public void SubConstructNum(int sub = 1)
     {
         ConstructNum.Sub(sub);
-    }
-    public Construction(XY initPos)
-        : base(initPos, GameData.NumOfPosGridPerCell / 2, GameObjType.Construction)
-    {
     }
 }
