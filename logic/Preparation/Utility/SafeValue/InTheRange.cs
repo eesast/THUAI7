@@ -8,14 +8,66 @@ namespace Preparation.Utility
     public class InTheVariableRange
     {
         protected readonly object vLock = new();
-        public object VLock => vLock;
+        protected object VLock => vLock;
         private static int numOfClass = 0;
         public static int NumOfClass => numOfClass;
         public readonly int idInClass;
         public int IdInClass => idInClass;
+
         public InTheVariableRange()
         {
             idInClass = Interlocked.Increment(ref numOfClass);
+        }
+
+        public TResult? EnterOtherLock<TResult>(InTheVariableRange a, Func<TResult?> func)
+        {
+            if (this.idInClass == a.idInClass) return default(TResult?);
+            bool thisLock = false;
+            bool thatLock = false;
+            try
+            {
+                if (this.idInClass < a.idInClass)
+                {
+                    Monitor.Enter(vLock, ref thisLock);
+                    Monitor.Enter(a.VLock, ref thatLock);
+                }
+                else
+                {
+                    Monitor.Enter(a.VLock, ref thatLock);
+                    Monitor.Enter(vLock, ref thisLock);
+                }
+                return func();
+            }
+            finally
+            {
+                if (thisLock) Monitor.Exit(vLock);
+                if (thatLock) Monitor.Exit(a.VLock);
+            }
+        }
+        public void EnterOtherLock<TResult>(InTheVariableRange a, Action func)
+        {
+            if (this.idInClass == a.idInClass) return;
+            bool thisLock = false;
+            bool thatLock = false;
+            try
+            {
+                if (this.idInClass < a.idInClass)
+                {
+                    Monitor.Enter(vLock, ref thisLock);
+                    Monitor.Enter(a.VLock, ref thatLock);
+                }
+                else
+                {
+                    Monitor.Enter(a.VLock, ref thatLock);
+                    Monitor.Enter(vLock, ref thisLock);
+                }
+                func();
+            }
+            finally
+            {
+                if (thisLock) Monitor.Exit(vLock);
+                if (thatLock) Monitor.Exit(a.VLock);
+            }
         }
     }
 
@@ -164,6 +216,13 @@ namespace Preparation.Utility
                 v = maxV;
             }
         }
+        public void SetVToMaxV(double ratio)
+        {
+            lock (vLock)
+            {
+                v = (int)(maxV * ratio);
+            }
+        }
         public bool Set0IfNotMaxor0()
         {
             lock (vLock)
@@ -309,66 +368,45 @@ namespace Preparation.Utility
                 return -1;
             }
         }
+
+        /// <summary>
+        /// ratio可以为负
+        /// </summary>
+        /// <returns>返回实际改变量</returns>
+        public int VAddPartMaxV(double ratio)
+        {
+            lock (vLock)
+            {
+
+                v += (int)(ratio * maxV);
+                if (v < 0) v = 0;
+                if (v > maxV) v = maxV;
+            }
+        }
         #endregion
 
         #region 与InTheVariableRange类的运算，运算会影响该对象的值
         public int AddV(IntInTheVariableRange a)
         {
-            if (this.idInClass == a.idInClass) return -1;
-            bool thisLock = false;
-            bool thatLock = false;
-            try
+            return EnterOtherLock<int>(a, () =>
             {
-                if (this.idInClass < a.idInClass)
-                {
-                    Monitor.Enter(vLock, ref thisLock);
-                    Monitor.Enter(a.VLock, ref thatLock);
-                }
-                else
-                {
-                    Monitor.Enter(a.VLock, ref thatLock);
-                    Monitor.Enter(vLock, ref thisLock);
-                }
                 int previousV = v;
                 v += a.GetValue();
                 if (v > maxV) v = maxV;
                 a.SubPositiveV(v - previousV);
                 return v - previousV;
-            }
-            finally
-            {
-                if (thisLock) Monitor.Exit(vLock);
-                if (thatLock) Monitor.Exit(a.VLock);
-            }
+            });
         }
         public int SubV(IntInTheVariableRange a)
         {
-            if (this.idInClass == a.idInClass) return -1;
-            bool thisLock = false;
-            bool thatLock = false;
-            try
+            return EnterOtherLock<int>(a, () =>
             {
-                if (this.idInClass < a.idInClass)
-                {
-                    Monitor.Enter(vLock, ref thisLock);
-                    Monitor.Enter(a.VLock, ref thatLock);
-                }
-                else
-                {
-                    Monitor.Enter(a.VLock, ref thatLock);
-                    Monitor.Enter(vLock, ref thisLock);
-                }
                 int previousV = v;
                 v -= a.GetValue();
                 if (v < 0) v = 0;
                 a.SubPositiveV(previousV - v);
                 return previousV - v;
-            }
-            finally
-            {
-                if (thisLock) Monitor.Exit(vLock);
-                if (thatLock) Monitor.Exit(a.VLock);
-            }
+            });
         }
         #endregion
 
@@ -668,7 +706,13 @@ namespace Preparation.Utility
                 v = maxV;
             }
         }
-
+        public void SetVToMaxV(double ratio)
+        {
+            lock (vLock)
+            {
+                v = (long)(maxV * ratio);
+            }
+        }
         public bool Set0IfNotMax()
         {
             lock (vLock)
@@ -946,7 +990,13 @@ namespace Preparation.Utility
                 v = maxV;
             }
         }
-
+        public void SetVToMaxV(double ratio)
+        {
+            lock (vLock)
+            {
+                v = (double)(maxV * ratio);
+            }
+        }
         public bool Set0IfNotMax()
         {
             lock (vLock)
