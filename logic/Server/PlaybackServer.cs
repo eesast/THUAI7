@@ -46,7 +46,9 @@ namespace Server
         public override int[] GetMoney() => [];
         public override int[] GetScore() => FinalScore;
 
-        public override async Task AddPlayer(PlayerMsg request, IServerStreamWriter<MessageToClient> responseStream, ServerCallContext context)
+        public override async Task AddPlayer(PlayerMsg request,
+                                             IServerStreamWriter<MessageToClient> responseStream,
+                                             ServerCallContext context)
         {
             Console.WriteLine($"AddPlayer: {request.PlayerId}");
             if (request.PlayerId >= spectatorMinPlayerID && options.NotAllowSpectator == false)
