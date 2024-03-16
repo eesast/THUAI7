@@ -194,9 +194,10 @@ namespace installer.Model
         /// <summary>
         /// 全新安装
         /// </summary>
-        public void Install()
+        public void Install(string? path = null)
         {
             Data.Installed = false;
+            Data.InstallPath = path ?? Data.InstallPath;
             UpdateMD5();
             if (Status == UpdateStatus.error) return;
 
