@@ -24,7 +24,7 @@ namespace Gaming
                 {
                     return false;
                 }
-                ship.TeleportTo(pos);
+                ship.ReSetPos(pos);
                 long stateNum = ship.SetShipState(RunningStateType.RunningActively, ShipStateType.Null);
                 ship.ResetShipState(stateNum);
                 ship.CanMove.SetReturnOri(true);

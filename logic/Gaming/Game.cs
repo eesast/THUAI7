@@ -80,11 +80,11 @@ namespace Gaming
         public void EndGame()
         {
         }
-        public bool MoveShip(long shipID, int moveTimeInMilliseconds, double angle)
+        public bool MoveShip(long teamID, long shipID, int moveTimeInMilliseconds, double angle)
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(shipID);
+            Ship? ship = gameMap.FindShipInShipID(teamID, shipID);
             if (ship != null)
             {
                 return actionManager.MoveShip(ship, moveTimeInMilliseconds, angle);
@@ -94,38 +94,38 @@ namespace Gaming
                 return false;
             }
         }
-        public bool Produce(long shipID)
+        public bool Produce(long teamID, long shipID)
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(shipID);
+            Ship? ship = gameMap.FindShipInShipID(teamID, shipID);
             if (ship != null)
                 return actionManager.Produce(ship);
             return false;
         }
-        public bool Construct(long shipID, ConstructionType constructionType)
+        public bool Construct(long teamID, long shipID, ConstructionType constructionType)
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(shipID);
+            Ship? ship = gameMap.FindShipInShipID(teamID, shipID);
             if (ship != null)
                 return actionManager.Construct(ship, constructionType);
             return false;
         }
-        public bool InstallModule(long shipID, ModuleType moduleType)
+        public bool InstallModule(long teamID, long shipID, ModuleType moduleType)
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(shipID);
+            Ship? ship = gameMap.FindShipInShipID(teamID, shipID);
             if (ship != null)
                 return moduleManager.InstallModule(ship, moduleType);
             return false;
         }
-        public bool Recover(long shipID, long recover)
+        public bool Recover(long teamID, long shipID, long recover)
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(shipID);
+            Ship? ship = gameMap.FindShipInShipID(teamID, shipID);
             if (ship != null)
             {
                 bool validRecoverPoint = false;
@@ -144,38 +144,38 @@ namespace Gaming
             }
             return false;
         }
-        public bool Recycle(long shipID)
+        public bool Recycle(long teamID, long shipID)
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(shipID);
+            Ship? ship = gameMap.FindShipInShipID(teamID, shipID);
             if (ship != null)
                 return shipManager.Recycle(ship);
             return false;
         }
-        public bool Repair(long shipID)
+        public bool Repair(long teamID, long shipID)
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(shipID);
+            Ship? ship = gameMap.FindShipInShipID(teamID, shipID);
             if (ship != null)
                 return actionManager.Repair(ship);
             return false;
         }
-        public bool Stop(long shipID)
+        public bool Stop(long teamID, long shipID)
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(shipID);
+            Ship? ship = gameMap.FindShipInShipID(teamID, shipID);
             if (ship != null)
                 return ActionManager.Stop(ship);
             return false;
         }
-        public bool Attack(long shipID, double angle)
+        public bool Attack(long teamID, long shipID, double angle)
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(shipID);
+            Ship? ship = gameMap.FindShipInShipID(teamID, shipID);
             if (ship != null)
                 return attackManager.Attack(ship, angle);
             return false;
