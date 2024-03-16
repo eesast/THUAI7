@@ -18,7 +18,6 @@ public class Home(XY initPos, long id)
         {
             return;
         }
-        long subHP = bullet.AP;
-        this.HP.SubPositiveV(subHP);
+        this.HP.SubPositiveV(bullet.AP);
     }
 }

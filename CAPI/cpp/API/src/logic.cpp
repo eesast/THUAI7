@@ -19,7 +19,6 @@ Logic::Logic(int64_t pID, int64_t tID, THUAI7::PlayerType pType, THUAI7::ShipTyp
     teamID(tID),
     playerType(pType),
     shipType(sType)
-
 {
     currentState = &state[0];
     bufferState = &state[1];
@@ -27,9 +26,9 @@ Logic::Logic(int64_t pID, int64_t tID, THUAI7::PlayerType pType, THUAI7::ShipTyp
     currentState->mapInfo = std::make_shared<THUAI7::GameMap>();
     bufferState->gameInfo = std::make_shared<THUAI7::GameInfo>();
     bufferState->mapInfo = std::make_shared<THUAI7::GameMap>();
-    if (teamID == 1)
+    if (teamID == 0)
         playerTeam = THUAI7::PlayerTeam::Red;
-    if (teamID == 2)
+    if (teamID == 1)
         playerTeam = THUAI7::PlayerTeam::Blue;
 }
 
@@ -44,7 +43,7 @@ std::vector<std::shared_ptr<const THUAI7::Ship>> Logic::GetShips() const
 std::vector<std::shared_ptr<const THUAI7::Ship>> Logic::GetEnemyShips() const
 {
     std::unique_lock<std::mutex> lock(mtxState);
-    std::vector<std::shared_ptr<const THUAI7::Ship>> temp(currentState->enemyships.begin(), currentState->enemyships.end());
+    std::vector<std::shared_ptr<const THUAI7::Ship>> temp(currentState->enemyShips.begin(), currentState->enemyShips.end());
     logger->debug("Called GetEnemyShip");
     return temp;
 }
@@ -380,20 +379,20 @@ void Logic::LoadBufferSelf(const protobuf::MessageToClient& message)
     {
         for (const auto& item : message.obj_message())
         {
-            if (Proto2THUAI7::messageOfObjDict[item.message_of_obj_case()] == THUAI7::MessageOfObj::ShipMessage)
+            if (Proto2THUAI7::messageOfObjDict[item.message_of_obj_case()] == THUAI7::MessageOfObj::ShipMessage && item.ship_message().team_id() == teamID)
             {
                 if (item.ship_message().player_id() == playerID)
                 {
                     bufferState->shipSelf = Proto2THUAI7::Protobuf2THUAI7Ship(item.ship_message());
                     bufferState->ships.push_back(bufferState->shipSelf);
+                    logger->debug("Add Self Ship!");
                 }
                 else
                 {
                     std::shared_ptr<THUAI7::Ship> ship = Proto2THUAI7::Protobuf2THUAI7Ship(item.ship_message());
-                    if (ship->teamID == teamID)
-                        bufferState->ships.push_back(ship);
+                    bufferState->ships.push_back(ship);
+                    logger->debug("Add Ship!");
                 }
-                logger->debug("Add Ship!");
             }
         }
     }
@@ -403,12 +402,16 @@ void Logic::LoadBufferSelf(const protobuf::MessageToClient& message)
         {
             if (Proto2THUAI7::messageOfObjDict[item.message_of_obj_case()] == THUAI7::MessageOfObj::TeamMessage)
             {
-                if (item.team_message().player_id() == playerID)
+                if (item.team_message().team_id() == teamID)
                 {
                     bufferState->teamSelf = Proto2THUAI7::Protobuf2THUAI7Team(item.team_message());
-                    bufferState->teams.push_back(bufferState->teamSelf);
+                    logger->debug("Add Self Team!");
                 }
-                logger->debug("Add Team!");
+                else
+                {
+                    bufferState->enemyTeam = Proto2THUAI7::Protobuf2THUAI7Team(item.team_message());
+                    logger->debug("Add Enemy Team!");
+                }
             }
         }
     }
@@ -427,7 +430,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                 {
                     if (AssistFunction::HaveView(x, y, item.ship_message().x(), item.ship_message().y(), viewRange, bufferState->gameMap))
                     {
-                        bufferState->enemyships.push_back(Proto2THUAI7::Protobuf2THUAI7Ship(item.ship_message()));
+                        bufferState->enemyShips.push_back(Proto2THUAI7::Protobuf2THUAI7Ship(item.ship_message()));
                         logger->debug("Add Enemyship!");
                     }
                 }
@@ -440,7 +443,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                 }
                 break;
             case THUAI7::MessageOfObj::FactoryMessage:
-                if (AssistFunction::HaveView(x, y, item.factory_message().x(), item.factory_message().y(), viewRange, bufferState->gameMap))
+                if (item.factory_message().team_id() == teamID)
                 {
                     auto pos = std::make_pair(AssistFunction::GridToCell(item.factory_message().x()), AssistFunction::GridToCell(item.factory_message().y()));
                     if (bufferState->mapInfo->factoryState.count(pos) == 0)
@@ -450,13 +453,27 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
-                        bufferState->mapInfo->factoryState[pos].first = item.factory_message().hp();
+                        bufferState->mapInfo->factoryState[pos].second = item.factory_message().hp();
+                        logger->debug("Update Factory!");
+                    }
+                }
+                else if (AssistFunction::HaveView(x, y, item.factory_message().x(), item.factory_message().y(), viewRange, bufferState->gameMap))
+                {
+                    auto pos = std::make_pair(AssistFunction::GridToCell(item.factory_message().x()), AssistFunction::GridToCell(item.factory_message().y()));
+                    if (bufferState->mapInfo->factoryState.count(pos) == 0)
+                    {
+                        bufferState->mapInfo->factoryState.emplace(pos, std::make_pair(item.factory_message().team_id(), item.factory_message().hp()));
+                        logger->debug("Add Factory!");
+                    }
+                    else
+                    {
+                        bufferState->mapInfo->factoryState[pos].second = item.factory_message().hp();
                         logger->debug("Update Factory!");
                     }
                 }
                 break;
             case THUAI7::MessageOfObj::CommunityMessage:
-                if (AssistFunction::HaveView(x, y, item.community_message().x(), item.community_message().y(), viewRange, bufferState->gameMap))
+                if (item.community_message().team_id() == teamID)
                 {
                     auto pos = std::make_pair(AssistFunction::GridToCell(item.community_message().x()), AssistFunction::GridToCell(item.community_message().y()));
                     if (bufferState->mapInfo->communityState.count(pos) == 0)
@@ -466,13 +483,27 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
-                        bufferState->mapInfo->communityState[pos].first = item.community_message().hp();
+                        bufferState->mapInfo->communityState[pos].second = item.community_message().hp();
+                        logger->debug("Update Community!");
+                    }
+                }
+                else if (AssistFunction::HaveView(x, y, item.community_message().x(), item.community_message().y(), viewRange, bufferState->gameMap))
+                {
+                    auto pos = std::make_pair(AssistFunction::GridToCell(item.community_message().x()), AssistFunction::GridToCell(item.community_message().y()));
+                    if (bufferState->mapInfo->communityState.count(pos) == 0)
+                    {
+                        bufferState->mapInfo->communityState.emplace(pos, std::make_pair(item.community_message().team_id(), item.community_message().hp()));
+                        logger->debug("Add Community!");
+                    }
+                    else
+                    {
+                        bufferState->mapInfo->communityState[pos].second = item.community_message().hp();
                         logger->debug("Update Community!");
                     }
                 }
                 break;
             case THUAI7::MessageOfObj::FortMessage:
-                if (AssistFunction::HaveView(x, y, item.fort_message().x(), item.fort_message().y(), viewRange, bufferState->gameMap))
+                if (item.fort_message().team_id() == teamID)
                 {
                     auto pos = std::make_pair(AssistFunction::GridToCell(item.fort_message().x()), AssistFunction::GridToCell(item.fort_message().y()));
                     if (bufferState->mapInfo->fortState.count(pos) == 0)
@@ -482,7 +513,21 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
-                        bufferState->mapInfo->fortState[pos].first = item.fort_message().hp();
+                        bufferState->mapInfo->fortState[pos].second = item.fort_message().hp();
+                        logger->debug("Update Fort!");
+                    }
+                }
+                else if (AssistFunction::HaveView(x, y, item.fort_message().x(), item.fort_message().y(), viewRange, bufferState->gameMap))
+                {
+                    auto pos = std::make_pair(AssistFunction::GridToCell(item.fort_message().x()), AssistFunction::GridToCell(item.fort_message().y()));
+                    if (bufferState->mapInfo->fortState.count(pos) == 0)
+                    {
+                        bufferState->mapInfo->fortState.emplace(pos, std::make_pair(item.fort_message().team_id(), item.fort_message().hp()));
+                        logger->debug("Add Fort!");
+                    }
+                    else
+                    {
+                        bufferState->mapInfo->fortState[pos].second = item.fort_message().hp();
                         logger->debug("Update Fort!");
                     }
                 }
@@ -554,8 +599,7 @@ void Logic::LoadBuffer(const protobuf::MessageToClient& message)
 
         // 清空原有信息
         bufferState->ships.clear();
-        bufferState->enemyships.clear();
-        bufferState->teams.clear();
+        bufferState->enemyShips.clear();
         bufferState->bullets.clear();
         bufferState->guids.clear();
 
@@ -678,8 +722,6 @@ void Logic::Main(CreateAIFunc createAI, std::string IP, std::string port, bool f
     logger->info("server: {}:{}", IP, port);
     if (playerType == THUAI7::PlayerType::Ship)
         logger->info("ship ID: {}", playerID);
-    else
-        logger->info("home ID: {}", playerID);
     logger->info("player team: {}", THUAI7::playerTeamDict[playerTeam]);
     logger->info("****************************");
 
@@ -687,39 +729,19 @@ void Logic::Main(CreateAIFunc createAI, std::string IP, std::string port, bool f
     pComm = std::make_unique<Communication>(IP, port);
 
     // 构造timer
-    if (playerTeam == THUAI7::PlayerTeam::Red)
+    if (playerType == THUAI7::PlayerType::Ship)
     {
-        if (playerType == THUAI7::PlayerType::Ship)
-        {
-            if (!file && !print)
-                timer = std::make_unique<ShipAPI>(*this);
-            else
-                timer = std::make_unique<ShipDebugAPI>(*this, file, print, warnOnly, playerID);
-        }
+        if (!file && !print)
+            timer = std::make_unique<ShipAPI>(*this);
         else
-        {
-            if (!file && !print)
-                timer = std::make_unique<TeamAPI>(*this);
-            else
-                timer = std::make_unique<TeamDebugAPI>(*this, file, print, warnOnly, playerID);
-        }
+            timer = std::make_unique<ShipDebugAPI>(*this, file, print, warnOnly, playerID);
     }
-    else if (playerTeam == THUAI7::PlayerTeam::Blue)
+    else
     {
-        if (playerType == THUAI7::PlayerType::Ship)
-        {
-            if (!file && !print)
-                timer = std::make_unique<ShipAPI>(*this);
-            else
-                timer = std::make_unique<ShipDebugAPI>(*this, file, print, warnOnly, playerID);
-        }
+        if (!file && !print)
+            timer = std::make_unique<TeamAPI>(*this);
         else
-        {
-            if (!file && !print)
-                timer = std::make_unique<TeamAPI>(*this);
-            else
-                timer = std::make_unique<TeamDebugAPI>(*this, file, print, warnOnly, playerID);
-        }
+            timer = std::make_unique<TeamDebugAPI>(*this, file, print, warnOnly, playerID);
     }
 
     // 构造AI线程
@@ -770,7 +792,6 @@ void Logic::Main(CreateAIFunc createAI, std::string IP, std::string port, bool f
         if (tAI.joinable())
         {
             logger->info("Join the AI thread!");
-
             // 首先开启处理消息的线程
             ProcessMessage();
             tAI.join();

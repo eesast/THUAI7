@@ -8,24 +8,7 @@
     <VerticalStackLayout
         HorizontalOptions="Center"
         WidthRequest="600">
-        <HorizontalStackLayout>
-            <Button
-                WidthRequest="400"
-                Text="下载"
-                IsEnabled="{Binding InstallEnabled}"
-                Command="{Binding DownloadBtnClickedCommand}"
-                BackgroundColor="{Binding ConstBackgroundColor}"
-                FontSize="{Binding ConstFontSize}"
-                TextColor="{Binding ConstTextColor}"/>
-            <Button
-                WidthRequest="200"
-                Text="检查更新"
-                IsEnabled="{Binding CheckEnabled}"
-                Command="{Binding CheckUpdBtnClickedCommand}"
-                BackgroundColor="{Binding ConstBackgroundColor}"
-                FontSize="{Binding ConstFontSize}"
-                TextColor="{Binding ConstTextColor}"/>
-        </HorizontalStackLayout>
+        
         <HorizontalStackLayout>
             <Label
                 WidthRequest="100"
@@ -39,13 +22,44 @@
                 ReturnCommand="{Binding DownloadBtnClickedCommand}"
                 FontSize="16"/>
             <Button
+                WidthRequest="100"
                 Text="选择文件夹"
                 Command="{Binding BrowseBtnClickedCommand}"
+                IsEnabled="{Binding BrowseEnabled}"
                 BackgroundColor="{Binding ConstBackgroundColor}"
                 TextColor="{Binding ConstTextColor}"/>
         </HorizontalStackLayout>
+        <Button
+            Text="下载"
+            Command="{Binding DownloadBtnClickedCommand}"
+            IsEnabled="{Binding DownloadEnabled}"
+            BackgroundColor="{Binding ConstBackgroundColor}"
+            FontSize="{Binding ConstFontSize}"
+            TextColor="{Binding ConstTextColor}"/>
+        <HorizontalStackLayout>
+            <Button
+                WidthRequest="200"
+                Text="检查更新"
+                Command="{Binding CheckUpdBtnClickedCommand}"
+		        IsEnabled="{Binding CheckEnabled}"
+                BackgroundColor="{Binding ConstBackgroundColor}"
+                FontSize="{Binding ConstFontSize}"
+                TextColor="{Binding ConstTextColor}"/>
+            <Button
+                WidthRequest="400"
+                Text="更新"
+                Command="{Binding UpdateBtnClickedCommand}"
+                IsEnabled="{Binding UpdateEnabled}"
+                BackgroundColor="{Binding ConstBackgroundColor}"
+                FontSize="{Binding ConstFontSize}"
+                TextColor="{Binding ConstTextColor}"/>
+        </HorizontalStackLayout>
         <Label
-            Text="{Binding DebugAlert}"/>
+            Text="{Binding DebugAlert1}"/>
+        <Label
+            Text="{Binding DebugAlert2}"/>
+        <Label
+            Text="{Binding DebugAlert3}"/>
     </VerticalStackLayout>
 
 </ContentPage>

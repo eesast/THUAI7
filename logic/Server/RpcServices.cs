@@ -152,6 +152,8 @@ namespace Server
                     if (semaDict.TryAdd(request.PlayerId, temp))
                     {
                         start = Interlocked.Increment(ref playerCountNow) == playerNum;
+                        Console.WriteLine($"PlayerCountNow: {playerCountNow}");
+                        Console.WriteLine($"PlayerNum: {playerNum}");
                     }
                 }
                 if (start)
@@ -227,7 +229,7 @@ namespace Server
             moveRes.ActSuccess = game.MoveShip(gameID, (int)request.TimeInMilliseconds, request.Angle);
             if (!game.GameMap.Timer.IsGaming) moveRes.ActSuccess = false;
 #if DEBUG
-            Console.WriteLine("END Move");
+            Console.WriteLine($"END Move: {moveRes.ActSuccess}");
 #endif
             return Task.FromResult(moveRes);
         }
