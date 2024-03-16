@@ -210,16 +210,9 @@ namespace Server
 
         private bool ValidPlayerID(long playerID)
         {
-            if ((0 <= playerID && playerID < options.ShipCount) || (options.MaxShipCount <= playerID && playerID < options.MaxShipCount + options.HomeCount))
+            if (playerID==0 || (1 <= playerID && playerID <= options.ShipCount))
                 return true;
             return false;
-        }
-
-        private int PlayerIDToTeamID(long playerID)
-        {
-            if (0 <= playerID && playerID < options.MaxPlayerNumPerTeam) return 0;
-            if (options.MaxPlayerNumPerTeam <= playerID && playerID < options.MaxPlayerNumPerTeam * 2) return 1;
-            return -1;
         }
 
         private MessageOfAll GetMessageOfAll(int time)
@@ -314,13 +307,10 @@ namespace Server
             //创建server时先设定待加入对象都是invalid
             for (int team = 0; team < TeamCount; team++)
             {
-                for (int i = 0; i < options.MaxShipCount; i++)
+                communicationToGameID[team][0]= GameObj.invalidID; // team
+                for (int i = 1; i <= options.MaxShipCount; i++)
                 {
-                    communicationToGameID[team][i] = GameObj.invalidID;
-                }
-                for (int i = options.MaxShipCount; i < options.MaxShipCount + options.HomeCount; i++)
-                {
-                    communicationToGameID[team][i] = GameObj.invalidID;
+                    communicationToGameID[team][i] = GameObj.invalidID; //sweeper
                 }
             }
 

@@ -26,7 +26,7 @@ namespace Server
         [Option("MaxCivilShipNum", Required = false, HelpText = "The number of max civil ship num, 2 by default")]
         public ushort MaxCivilShipCount { get; set; } = 2;
 
-        [Option("MaxPlayerNumPerTeam", Required = false, HelpText = "The max player number of team, 4 by defualt")]
+        [Option("MaxPlayerNumPerTeam", Required = false, HelpText = "The max player number of team, 6 by defualt")]
         public ushort MaxPlayerNumPerTeam { get; set; } = 6;
 
         [Option("warShipNum", Required = false, HelpText = "The number of war ship num, 0 by default")]
@@ -41,7 +41,7 @@ namespace Server
         [Option("MaxFlagShipNum", Required = false, HelpText = "The number of flag ship num, 1 by default")]
         public ushort MaxFlagShipCount { get; set; } = 1;
 
-        [Option("MaxShipNum", Required = false, HelpText = "The max number of Ship, 3 by default")]
+        [Option("MaxShipNum", Required = false, HelpText = "The max number of Ship, 5 by default")]
         public ushort MaxShipCount { get; set; } = 5;
 
         [Option("homeNum", Required = false, HelpText = "The number of Home , 1 by default")]
