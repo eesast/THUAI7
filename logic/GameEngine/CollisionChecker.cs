@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using Preparation.Interface;
 using Preparation.Utility;
 
 namespace GameEngine
 {
-    internal class CollisionChecker
+    internal class CollisionChecker(IMap gameMap)
     {
         public IGameObj? CheckCollision(IMovable obj, XY Pos)
         {
             // 在列表中检查碰撞
-            Func<LockedClassList<IGameObj>, IGameObj?> CheckCollisionInList =
-                (LockedClassList<IGameObj> lst) =>
-                {
-                    return lst.Find(listObj => obj.WillCollideWith(listObj, Pos));
-                };
+            IGameObj? CheckCollisionInList(LockedClassList<IGameObj> lst)
+            {
+                return lst.Find(listObj => obj.WillCollideWith(listObj, Pos));
+            }
 
             IGameObj? collisionObj;
             foreach (var list in lists)
@@ -185,13 +181,7 @@ namespace GameEngine
             return maxDistance;
         }
 
-        readonly IMap gameMap;
-        private readonly LockedClassList<IGameObj>[] lists;
-
-        public CollisionChecker(IMap gameMap)
-        {
-            this.gameMap = gameMap;
-            lists = gameMap.GameObjDict.Values.ToArray();
-        }
+        readonly IMap gameMap = gameMap;
+        private readonly LockedClassList<IGameObj>[] lists = [.. gameMap.GameObjDict.Values];
     }
 }

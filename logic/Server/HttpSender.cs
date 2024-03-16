@@ -4,8 +4,8 @@ namespace Server
 {
     class HttpSender(string url, string token)
     {
-        private string url = url;
-        private string token = token;
+        private readonly string url = url;
+        private readonly string token = token;
 
         // void Test()
         // {

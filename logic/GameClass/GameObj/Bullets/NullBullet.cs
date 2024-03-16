@@ -2,7 +2,8 @@
 
 namespace GameClass.GameObj.Bullets;
 
-internal sealed class NullBullet(Ship ship, XY Position, int radius = GameData.BulletRadius) : Bullet(ship, radius, Position)
+internal sealed class NullBullet(Ship ship, XY Position, int radius = GameData.BulletRadius)
+    : Bullet(ship, radius, Position)
 {
     public override double BulletBombRange => 0;
     public override double AttackDistance => 0;

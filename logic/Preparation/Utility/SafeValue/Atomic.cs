@@ -8,13 +8,10 @@ namespace Preparation.Utility
     {
     }
 
-    public class AtomicInt : Atomic
+    public class AtomicInt(int x) : Atomic
     {
-        protected int v;
-        public AtomicInt(int x)
-        {
-            v = x;
-        }
+        protected int v = x;
+
         public override string ToString() => Interlocked.CompareExchange(ref v, -1, -1).ToString();
         public int Get() => Interlocked.CompareExchange(ref v, -1, -1);
         public static implicit operator int(AtomicInt aint) => Interlocked.CompareExchange(ref aint.v, -1, -1);
@@ -42,15 +39,11 @@ namespace Preparation.Utility
     /// 在发生正向的变化时，自动给Score加上正向变化的差乘以speed（取整）。
     /// 注意：AtomicIntOnlyAddScore本身为AtomicInt，提供的Score可能构成环而死锁。
     /// </summary>
-    public class AtomicIntOnlyAddScore : AtomicInt
+    public class AtomicIntOnlyAddScore(int x, double speed = 1.0) : AtomicInt(x)
     {
-        public AtomicInt Score { get; set; }
-        public AtomicDouble speed;
-        public AtomicIntOnlyAddScore(int x, double speed = 1.0) : base(x)
-        {
-            this.speed = new(speed);
-            this.Score = new(0);
-        }
+        public AtomicInt Score { get; set; } = new(0);
+        public AtomicDouble speed = new(speed);
+
         public void SetScore(AtomicInt score) => Score = score;
         /// <returns>返回操作前的值</returns>
         public override int SetReturnOri(int value)
@@ -127,15 +120,11 @@ namespace Preparation.Utility
     /// 可（在构造时）使用SetScore以设定AtomicLong类的Score（取整）
     /// 在发生正向的变化时，自动给Score加上正向变化的差乘以speed。
     /// </summary>
-    public class AtomicIntOnlyAddLongScore : AtomicInt
+    public class AtomicIntOnlyAddLongScore(int x, double speed = 1.0) : AtomicInt(x)
     {
-        public AtomicLong Score { get; set; }
-        public AtomicDouble speed;
-        public AtomicIntOnlyAddLongScore(int x, double speed = 1.0) : base(x)
-        {
-            this.Score = new(0);
-            this.speed = new(speed);
-        }
+        public AtomicLong Score { get; set; } = new(0);
+        public AtomicDouble speed = new(speed);
+
         public void SetScore(AtomicLong score) => Score = score;
         /// <returns>返回操作前的值</returns>
         public override int SetReturnOri(int value)
@@ -206,15 +195,11 @@ namespace Preparation.Utility
     /// 在发生变化时，自动给Score加上变化的差乘以speed取整。
     /// 注意：AtomicIntChangeAffectScore本身为AtomicInt，提供的Score可能构成环而死锁。
     /// </summary>
-    public class AtomicIntChangeAffectScore : AtomicInt
+    public class AtomicIntChangeAffectScore(int x, double speed = 1.0) : AtomicInt(x)
     {
-        public AtomicInt Score { get; set; }
-        public AtomicDouble speed;
-        public AtomicIntChangeAffectScore(int x, double speed = 1.0) : base(x)
-        {
-            this.Score = new(0);
-            this.speed = new(speed);
-        }
+        public AtomicInt Score { get; set; } = new(0);
+        public AtomicDouble speed = new(speed);
+
         public void SetScore(AtomicInt score) => Score = score;
         /// <returns>返回操作前的值</returns>
         public override int SetReturnOri(int value)
@@ -294,13 +279,10 @@ namespace Preparation.Utility
         }
     }
 
-    public class AtomicLong : Atomic
+    public class AtomicLong(long x) : Atomic
     {
-        protected long v;
-        public AtomicLong(long x)
-        {
-            v = x;
-        }
+        protected long v = x;
+
         public override string ToString() => Interlocked.CompareExchange(ref v, -1, -1).ToString();
         public long Get() => Interlocked.CompareExchange(ref v, -1, -1);
         public static implicit operator long(AtomicLong along) => Interlocked.CompareExchange(ref along.v, -1, -1);
@@ -328,15 +310,11 @@ namespace Preparation.Utility
     /// 在发生正向的变化时，自动给Score加上正向变化的差乘以speed取整。
     /// 注意：AtomicLongOnlyAddScore本身为AtomicLong，提供的Score可能构成环而死锁。
     /// </summary>
-    public class AtomicLongOnlyAddScore : AtomicLong
+    public class AtomicLongOnlyAddScore(long x, double speed = 1.0) : AtomicLong(x)
     {
-        public AtomicLong Score { get; set; }
-        public AtomicDouble speed;
-        public AtomicLongOnlyAddScore(long x, double speed = 1.0) : base(x)
-        {
-            this.Score = new(0);
-            this.speed = new(speed);
-        }
+        public AtomicLong Score { get; set; } = new(0);
+        public AtomicDouble speed = new(speed);
+
         public void SetScore(AtomicLong score) => Score = score;
 
         /// <returns>返回操作前的值</returns>
@@ -402,13 +380,10 @@ namespace Preparation.Utility
         }
     }
 
-    public class AtomicDouble : Atomic
+    public class AtomicDouble(double x) : Atomic
     {
-        private double v;
-        public AtomicDouble(double x)
-        {
-            v = x;
-        }
+        private double v = x;
+
         public override string ToString() => Interlocked.CompareExchange(ref v, -2.0, -2.0).ToString();
         public double Get() => Interlocked.CompareExchange(ref v, -2.0, -2.0);
         public static implicit operator double(AtomicDouble adouble) => Interlocked.CompareExchange(ref adouble.v, -2.0, -2.0);
@@ -418,13 +393,10 @@ namespace Preparation.Utility
         public double CompareExReturnOri(double newV, double compareTo) => Interlocked.CompareExchange(ref v, newV, compareTo);
     }
 
-    public class AtomicBool : Atomic
+    public class AtomicBool(bool x) : Atomic
     {
-        private int v;//v&1==0为false,v&1==1为true
-        public AtomicBool(bool x)
-        {
-            v = x ? 1 : 0;
-        }
+        private int v = x ? 1 : 0;//v&1==0为false,v&1==1为true
+
         public override string ToString() => ((Interlocked.CompareExchange(ref v, -2, -2) & 1) == 0) ? "false" : "true";
         public bool Get() => ((Interlocked.CompareExchange(ref v, -2, -2) & 1) == 1);
         public static implicit operator bool(AtomicBool abool) => abool.Get();

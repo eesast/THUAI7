@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using Preparation.Interface;
 using Preparation.Utility;
 using ITimer = Preparation.Interface.ITimer;
 
@@ -17,7 +16,7 @@ namespace GameClass.GameObj
             private long startTime;
             public int nowTime() => (int)(Environment.TickCount64 - startTime);
 
-            private AtomicBool isGaming = new(false);
+            private readonly AtomicBool isGaming = new(false);
             public AtomicBool IsGaming => isGaming;
 
             public bool StartGame(int timeInMilliseconds)

@@ -26,10 +26,7 @@ namespace Preparation.Utility
 
         public const int InitialMoney = 50;             // 初始金钱
 
-        public static bool IsGameObjMap(GameObjType gameObjType)
-        {
-            return (uint)gameObjType > 3;
-        }
+        public static bool IsGameObjMap(GameObjType gameObjType) => (uint)gameObjType > 3;
         public static bool NeedCopy(GameObjType gameObjType)
         {
             return gameObjType != GameObjType.Null &&
@@ -41,37 +38,35 @@ namespace Preparation.Utility
         public static XY GetCellCenterPos(int x, int y)  // 求格子的中心坐标
         {
             return new XY(x * NumOfPosGridPerCell + NumOfPosGridPerCell / 2,
-                         y * NumOfPosGridPerCell + NumOfPosGridPerCell / 2);
+                          y * NumOfPosGridPerCell + NumOfPosGridPerCell / 2);
         }
+
         public static int PosGridToCellX(XY pos)  // 求坐标所在的格子的x坐标
-        {
-            return pos.x / NumOfPosGridPerCell;
-        }
+            => pos.x / NumOfPosGridPerCell;
         public static int PosGridToCellY(XY pos)  // 求坐标所在的格子的y坐标
-        {
-            return pos.y / NumOfPosGridPerCell;
-        }
+            => pos.y / NumOfPosGridPerCell;
         public static CellXY PosGridToCellXY(XY pos)  // 求坐标所在的格子的xy坐标
-        {
-            return new CellXY(PosGridToCellX(pos), pos.y / PosGridToCellY(pos));
-        }
+            => new(PosGridToCellX(pos), PosGridToCellY(pos));
+        
         public static bool IsInTheSameCell(XY pos1, XY pos2)
         {
-            return PosGridToCellX(pos1) == PosGridToCellX(pos2) && PosGridToCellY(pos1) == PosGridToCellY(pos2);
+            return PosGridToCellXY(pos1) == PosGridToCellXY(pos2);
         }
         public static bool PartInTheSameCell(XY pos1, XY pos2)
         {
             return Math.Abs((pos1 - pos2).x) < ShipRadius + (NumOfPosGridPerCell / 2)
-                        && Math.Abs((pos1 - pos2).y) < ShipRadius + (NumOfPosGridPerCell / 2);
+                && Math.Abs((pos1 - pos2).y) < ShipRadius + (NumOfPosGridPerCell / 2);
         }
         public static bool ApproachToInteract(XY pos1, XY pos2)
         {
-            return Math.Abs(PosGridToCellX(pos1) - PosGridToCellX(pos2)) <= 1 && Math.Abs(PosGridToCellY(pos1) - PosGridToCellY(pos2)) <= 1;
+            return Math.Abs(PosGridToCellX(pos1) - PosGridToCellX(pos2)) <= 1
+                && Math.Abs(PosGridToCellY(pos1) - PosGridToCellY(pos2)) <= 1;
         }
         public static bool ApproachToInteractInACross(XY pos1, XY pos2)
         {
             if (pos1 == pos2) return false;
-            return (Math.Abs(PosGridToCellX(pos1) - PosGridToCellX(pos2)) + Math.Abs(PosGridToCellY(pos1) - PosGridToCellY(pos2))) <= 1;
+            return (Math.Abs(PosGridToCellX(pos1) - PosGridToCellX(pos2))
+                  + Math.Abs(PosGridToCellY(pos1) - PosGridToCellY(pos2))) <= 1;
         }
 
         public const int ShipRadius = 400;
@@ -175,18 +170,9 @@ namespace Preparation.Utility
         public const int ScoreProducer2PerSecond = 7;
         public const int ScoreProducer3PerSecond = 10;
         public const int ScoreConstructionDamaged = 200;
-        public static int ScoreShipKilled(int totalScore)
-        {
-            return totalScore / 5;
-        }
-        public static int ScoreShipRecovered(int totalRecovery)
-        {
-            return totalRecovery * 6 / 5;
-        }
-        public static int ScoreShipRecycled(int remainingHP)
-        {
-            return remainingHP / 2;
-        }
+        public static int ScoreShipKilled(int totalScore) => totalScore / 5;
+        public static int ScoreShipRecovered(int totalRecovery) => totalRecovery * 6 / 5;
+        public static int ScoreShipRecycled(int remainingHP) => remainingHP / 2;
 
         public const int Constructor1Speed = 500;
         public const int Constructor2Speed = 750;

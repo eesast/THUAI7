@@ -24,7 +24,7 @@ namespace GameClass.GameObj
         public abstract bool IsRigid { get; }
         public abstract ShapeType Shape { get; }
 
-        private AtomicBool isRemoved = new(false);
+        private readonly AtomicBool isRemoved = new(false);
         public AtomicBool IsRemoved { get => isRemoved; }
         public virtual bool TryToRemove()
         {
