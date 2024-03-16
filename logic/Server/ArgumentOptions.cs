@@ -4,10 +4,10 @@ namespace Server
 {
     public class DefaultArgumentOptions
     {
-        public static string FileName = "xxxxxxxxxx";//
-        public static string Token = "xxxxxxxxxx";//
-        public static string Url = "xxxxxxxxxx";//
-        public static string MapResource = "xxxxxxxxxx"; //
+        public const string FileName = "xxxxxxxxxx";//
+        public const string Token = "xxxxxxxxxx";//
+        public const string Url = "xxxxxxxxxx";//
+        public const string MapResource = "xxxxxxxxxx"; //
     }
     public class ArgumentOptions
     {
@@ -64,7 +64,7 @@ namespace Server
         [Option('u', "url", Required = false, HelpText = "Web Url")]
         public string Url { get; set; } = "114514";
         [Option('m', "mapResource", Required = false, HelpText = "Map Resource Path")]
-        public string mapResource { get; set; } = DefaultArgumentOptions.MapResource;
+        public string MapResource { get; set; } = DefaultArgumentOptions.MapResource;
         [Option("requestOnly", Required = false, HelpText = "Only send web requests")]
         public bool RequestOnly { get; set; } = false;
         [Option("finalGame", Required = false, HelpText = "Whether it is the final game")]
