@@ -28,14 +28,23 @@ namespace Gaming
             {
                 return GameObj.invalidID;
             }
-            Ship? newShip = shipManager.AddShip(playerInitInfo.teamID, playerInitInfo.playerID,
-                playerInitInfo.shipType, teamList[(int)playerInitInfo.teamID].MoneyPool);
-            if (newShip == null)
+            if (playerInitInfo.shipType != ShipType.Null)
             {
-                return GameObj.invalidID;
+                // Add a ship
+                Ship? newShip = shipManager.AddShip(playerInitInfo.teamID, playerInitInfo.playerID,
+                    playerInitInfo.shipType, teamList[(int)playerInitInfo.teamID].MoneyPool);
+                if (newShip == null)
+                {
+                    return GameObj.invalidID;
+                }
+                teamList[(int)playerInitInfo.teamID].AddShip(newShip);
+                return newShip.ShipID;
             }
-            teamList[(int)playerInitInfo.teamID].AddShip(newShip);
-            return newShip.ShipID;
+            else
+            {
+                // Add a home
+                return playerInitInfo.playerID;
+            }
         }
         public bool ActivateShip(long teamID, ShipType shipType, int birthPointIndex = 0)
         {

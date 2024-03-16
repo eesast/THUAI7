@@ -266,6 +266,13 @@ public class Ship : Movable, IShip
     {
         MoneyPool.Money.Sub(sub);
     }
+    public void TeleportTo(XY newPos)
+    {
+        lock (actionLock)
+        {
+            this.position = newPos;
+        }
+    }
     private long ChangeShipState(RunningStateType running, ShipStateType value = ShipStateType.Null, GameObj? gameObj = null)
     {
         //只能被SetShipState引用

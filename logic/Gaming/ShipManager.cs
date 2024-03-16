@@ -10,12 +10,12 @@ namespace Gaming
         private class ShipManager(Map gameMap)
         {
             readonly Map gameMap = gameMap;
-            public Ship? AddShip(long teamID, long shipID, ShipType shipType, MoneyPool moneyPool)
+            public Ship? AddShip(long teamID, long playerID, ShipType shipType, MoneyPool moneyPool)
             {
                 Ship newShip = new(GameData.ShipRadius, shipType, moneyPool);
                 gameMap.Add(newShip);
                 newShip.TeamID.SetReturnOri(teamID);
-                newShip.ShipID.SetReturnOri(shipID);
+                newShip.ShipID.SetReturnOri(playerID);
                 return newShip;
             }
             public bool ActivateShip(Ship ship, XY pos)
@@ -24,8 +24,7 @@ namespace Gaming
                 {
                     return false;
                 }
-                ship.Position.x = pos.x;
-                ship.Position.y = pos.y;
+                ship.TeleportTo(pos);
                 long stateNum = ship.SetShipState(RunningStateType.RunningActively, ShipStateType.Null);
                 ship.ResetShipState(stateNum);
                 ship.CanMove.SetReturnOri(true);
