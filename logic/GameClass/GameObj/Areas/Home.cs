@@ -14,10 +14,7 @@ public class Home(XY initPos, long id)
 
     public void BeAttacked(Bullet bullet)
     {
-        if (bullet!.Parent!.TeamID == this.TeamID)
-        {
-            return;
-        }
-        this.HP.SubPositiveV(bullet.AP);
+        if (bullet!.Parent!.TeamID != TeamID)
+            HP.SubPositiveV(bullet.AP);
     }
 }

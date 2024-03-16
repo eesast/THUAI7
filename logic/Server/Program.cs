@@ -50,12 +50,12 @@ namespace Server
             {
                 Console.WriteLine(welcome);
             }
-            Console.WriteLine("Server begins to run: " + options.ServerPort.ToString());
+            Console.WriteLine($"Server begins to run: {options.ServerPort}");
 
             try
             {
                 var server = CreateServer(options);
-                Grpc.Core.Server rpcServer = new(new[] { new ChannelOption(ChannelOptions.SoReuseport, 0) })
+                Grpc.Core.Server rpcServer = new([new ChannelOption(ChannelOptions.SoReuseport, 0)])
                 {
                     Services = { AvailableService.BindService(server) },
                     Ports = { new ServerPort(options.ServerIP, options.ServerPort, ServerCredentials.Insecure) }

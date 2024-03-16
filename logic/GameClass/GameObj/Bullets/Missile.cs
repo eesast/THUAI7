@@ -8,7 +8,7 @@ internal sealed class Missile : Bullet
     public Missile(Ship ship, XY pos, int radius = GameData.BulletRadius) :
         base(ship, radius, pos)
     {
-        this.AP.SetReturnOri(GameData.MissileDamage);
+        AP.SetReturnOri(GameData.MissileDamage);
     }
     public override double BulletBombRange => GameData.MissileBombRange;
     public override double AttackDistance => GameData.MissileRange;

@@ -11,7 +11,7 @@ namespace GameClass.GameObj
 {
     public partial class Map : IMap
     {
-        private Dictionary<GameObjType, LockedClassList<IGameObj>> gameObjDict;
+        private readonly Dictionary<GameObjType, LockedClassList<IGameObj>> gameObjDict;
         public Dictionary<GameObjType, LockedClassList<IGameObj>> GameObjDict => gameObjDict;
         private readonly uint height;
         public uint Height => height;
@@ -34,7 +34,8 @@ namespace GameClass.GameObj
         {
             try
             {
-                return protoGameMap[obj.Position.x / GameData.NumOfPosGridPerCell, obj.Position.y / GameData.NumOfPosGridPerCell];
+                var (x, y) = GameData.PosGridToCellXY(obj.Position);
+                return protoGameMap[x, y];
             }
             catch
             {
@@ -45,7 +46,8 @@ namespace GameClass.GameObj
         {
             try
             {
-                return protoGameMap[pos.x / GameData.NumOfPosGridPerCell, pos.y / GameData.NumOfPosGridPerCell];
+                var (x, y) = GameData.PosGridToCellXY(pos);
+                return protoGameMap[x, y];
             }
             catch
             {
@@ -56,7 +58,10 @@ namespace GameClass.GameObj
 
         public bool IsOutOfBound(IGameObj obj)
         {
-            return obj.Position.x >= GameData.MapLength - obj.Radius || obj.Position.x <= obj.Radius || obj.Position.y >= GameData.MapLength - obj.Radius || obj.Position.y <= obj.Radius;
+            return obj.Position.x >= GameData.MapLength - obj.Radius
+                || obj.Position.x <= obj.Radius
+                || obj.Position.y >= GameData.MapLength - obj.Radius
+                || obj.Position.y <= obj.Radius;
         }
         public IOutOfBound GetOutOfBound(XY pos)
         {
@@ -72,7 +77,7 @@ namespace GameClass.GameObj
             return (Ship?)GameObjDict[GameObjType.Ship].Find(gameObj => (shipID == ((Ship)gameObj).ShipID));
         }
 
-        public bool WormholeInteract(Wormhole gameObj, XY Pos)
+        public static bool WormholeInteract(Wormhole gameObj, XY Pos)
         {
             foreach (XY xy in gameObj.Grids)
             {
@@ -111,9 +116,11 @@ namespace GameClass.GameObj
                 return false;
             if (del.x > del.y)
             {
+                var beginx = GameData.PosGridToCellX(pos1) + GameData.NumOfPosGridPerCell;
+                var endx = GameData.PosGridToCellX(pos2);
                 if (GetPlaceType(pos1) == PlaceType.Shadow && GetPlaceType(pos2) == PlaceType.Shadow)
                 {
-                    for (int x = GameData.PosGridToCellX(pos1) + GameData.NumOfPosGridPerCell; x < GameData.PosGridToCellX(pos2); x += GameData.NumOfPosGridPerCell)
+                    for (int x = beginx; x < endx; x += GameData.NumOfPosGridPerCell)
                     {
                         if (GetPlaceType(pos1 + del * (x / del.x)) != PlaceType.Shadow)
                             return false;
@@ -121,7 +128,7 @@ namespace GameClass.GameObj
                 }
                 else
                 {
-                    for (int x = GameData.PosGridToCellX(pos1) + GameData.NumOfPosGridPerCell; x < GameData.PosGridToCellX(pos2); x += GameData.NumOfPosGridPerCell)
+                    for (int x = beginx; x < endx; x += GameData.NumOfPosGridPerCell)
                     {
                         if (GetPlaceType(pos1 + del * (x / del.x)) == PlaceType.Ruin)
                             return false;
@@ -130,9 +137,11 @@ namespace GameClass.GameObj
             }
             else
             {
+                var beginy = GameData.PosGridToCellY(pos1) + GameData.NumOfPosGridPerCell;
+                var endy = GameData.PosGridToCellY(pos2);
                 if (GetPlaceType(pos1) == PlaceType.Shadow && GetPlaceType(pos2) == PlaceType.Shadow)
                 {
-                    for (int y = GameData.PosGridToCellY(pos1) + GameData.NumOfPosGridPerCell; y < GameData.PosGridToCellY(pos2); y += GameData.NumOfPosGridPerCell)
+                    for (int y = beginy; y < endy; y += GameData.NumOfPosGridPerCell)
                     {
                         if (GetPlaceType(pos1 + del * (y / del.y)) != PlaceType.Shadow)
                             return false;
@@ -140,7 +149,7 @@ namespace GameClass.GameObj
                 }
                 else
                 {
-                    for (int y = GameData.PosGridToCellY(pos1) + GameData.NumOfPosGridPerCell; y < GameData.PosGridToCellY(pos2); y += GameData.NumOfPosGridPerCell)
+                    for (int y = beginy; y < endy; y += GameData.NumOfPosGridPerCell)
                     {
                         if (GetPlaceType(pos1 + del * (y / del.y)) == PlaceType.Ruin)
                             return false;
@@ -174,7 +183,7 @@ namespace GameClass.GameObj
         }
         public Map(MapStruct mapResource)
         {
-            gameObjDict = new Dictionary<GameObjType, LockedClassList<IGameObj>>();
+            gameObjDict = [];
             foreach (GameObjType idx in Enum.GetValues(typeof(GameObjType)))
             {
                 if (idx != GameObjType.Null)
