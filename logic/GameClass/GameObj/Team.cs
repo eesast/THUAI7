@@ -25,13 +25,23 @@ namespace GameClass.GameObj
             }
             return null;
         }
-        public Ship? GetNewShip(ShipType shipType) => shipType switch
+        public Ship? GetNewShip(ShipType shipType)
         {
-            ShipType.CivilShip => GetNewCivilShipIndex() == -1 ? null : shipList[GetNewCivilShipIndex()],
-            ShipType.WarShip => GetNewWarShipIndex() == -1 ? null : shipList[GetNewWarShipIndex()],
-            ShipType.FlagShip => GetNewFlagShipIndex() == -1 ? null : shipList[GetNewFlagShipIndex()],
-            _ => null
-        };
+            switch (shipType)
+            {
+                case ShipType.CivilShip:
+                    var civilIndex = GetNewCivilShipIndex();
+                    return civilIndex == -1 ? null : shipList[civilIndex];
+                case ShipType.WarShip:
+                    var warIndex = GetNewWarShipIndex();
+                    return warIndex == -1 ? null : shipList[warIndex];
+                case ShipType.FlagShip:
+                    var flagIndex = GetNewFlagShipIndex();
+                    return flagIndex == -1 ? null : shipList[flagIndex];
+                default:
+                    return null;
+            }
+        }
         public bool AddShip(Ship ship)
         {
             switch (ship.ShipType)
@@ -89,7 +99,9 @@ namespace GameClass.GameObj
         }
         public int GetNewCivilShipIndex()
         {
-            for (int index = 1; index < 1 + GameData.MaxCivilShipNum; index++)
+            var from = 1;
+            var to = 1 + GameData.MaxCivilShipNum;
+            for (int index = from; index < to; index++)
             {
                 if (shipList[index].IsRemoved)
                     return index;
@@ -108,7 +120,9 @@ namespace GameClass.GameObj
         }
         public int GetNewWarShipIndex()
         {
-            for (int index = 1 + GameData.MaxCivilShipNum; index < 1 + GameData.MaxCivilShipNum + GameData.MaxWarShipNum; index++)
+            var from = 1 + GameData.MaxCivilShipNum;
+            var to = 1 + GameData.MaxCivilShipNum + GameData.MaxWarShipNum;
+            for (int index = from; index < to; index++)
             {
                 if (shipList[index].IsRemoved)
                     return index;
@@ -127,7 +141,9 @@ namespace GameClass.GameObj
         }
         public int GetNewFlagShipIndex()
         {
-            for (int index = 1 + GameData.MaxCivilShipNum + GameData.MaxWarShipNum; index < 1 + GameData.MaxCivilShipNum + GameData.MaxWarShipNum + GameData.MaxFlagShipNum; index++)
+            var from = 1 + GameData.MaxCivilShipNum + GameData.MaxWarShipNum;
+            var to = 1 + GameData.MaxCivilShipNum + GameData.MaxWarShipNum + GameData.MaxFlagShipNum;
+            for (int index = from; index < to; index++)
             {
                 if (shipList[index].IsRemoved)
                     return index;
