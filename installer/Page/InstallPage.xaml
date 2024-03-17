@@ -5,11 +5,14 @@
              x:Class="installer.Page.InstallPage"
              Title="Installer">
 
-    <VerticalStackLayout
+    <Grid
         HorizontalOptions="Center"
-        WidthRequest="600">
-        
-        <HorizontalStackLayout>
+        WidthRequest="600"
+        RowDefinitions="*,*,*,*,*,*,*,*,*,*,*,*"
+        ColumnDefinitions="*">
+
+        <HorizontalStackLayout
+            Grid.Row="1">
             <Label
                 WidthRequest="100"
                 Text="文件路径:"
@@ -29,16 +32,18 @@
                 BackgroundColor="{Binding ConstBackgroundColor}"
                 TextColor="{Binding ConstTextColor}"/>
         </HorizontalStackLayout>
-        
+
         <Button
+            Grid.Row="2"
             Text="下载"
             Command="{Binding DownloadBtnClickedCommand}"
             IsEnabled="{Binding DownloadEnabled}"
             BackgroundColor="{Binding ConstBackgroundColor}"
             FontSize="{Binding ConstFontSize}"
             TextColor="{Binding ConstTextColor}"/>
-        
-        <HorizontalStackLayout>
+
+        <HorizontalStackLayout
+            Grid.Row="3">
             <Button
                 WidthRequest="200"
                 Text="检查更新"
@@ -56,23 +61,37 @@
                 FontSize="{Binding ConstFontSize}"
                 TextColor="{Binding ConstTextColor}"/>
         </HorizontalStackLayout>
-        
+
         <Label
+            Grid.Row="4"
             Text="{Binding DebugAlert1}"/>
         <Label
+            Grid.Row="5"
             Text="{Binding DebugAlert2}"/>
 
-        <CollectionView ItemsSource="{Binding Exceptions}">
+        <CollectionView
+            WidthRequest="570"
+            Grid.Row="6"
+            Grid.RowSpan="3"
+            BackgroundColor="Grey"
+            ItemsSource="{Binding Exceptions}"
+            ItemsUpdatingScrollMode="KeepLastItemInView"
+            VerticalScrollBarVisibility="Always">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Padding="10">
+                    <Grid
+                        HorizontalOptions="Center"
+                        WidthRequest="550">
+
                         <Label
-                            Text="{Binding Message}"/>
+                            Text="{Binding Message}"
+                            TextColor="Black"/>
+
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-   
-    </VerticalStackLayout>
+        
+    </Grid>
 
 </ContentPage>

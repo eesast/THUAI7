@@ -17,14 +17,13 @@ namespace installer.ViewModel
     {
         private readonly Model.Downloader Downloader;
         private readonly IFolderPicker FolderPicker;
-        private readonly IList<Exception> ExceptionSource;
         public ObservableCollection<Exception> Exceptions { get; private set; }
 
         public InstallViewModel(IFolderPicker folderPicker, Model.Downloader downloader)
         {
             Downloader = downloader;
             FolderPicker = folderPicker;
-            ExceptionSource = new List<Exception>();
+            Exceptions = new ObservableCollection<Exception>();
 
             downloadPath = Downloader.Data.InstallPath;
             
@@ -133,14 +132,19 @@ namespace installer.ViewModel
             }
         }
         
+        // private int cnt = 1;
         public void UpdateExceptions()
         {
-            var downloadExceptions = Downloader.Exceptions.Exceptions.ToArray();
-            foreach (var exception in downloadExceptions)
+            while (Downloader.Exceptions.Count > 0)
             {
-                ExceptionSource.Add(exception);
+                var exception = Downloader.Exceptions.Pop();
+                if (exception != null)
+                {
+                    Exceptions.Add(exception);
+                }
             }
-            Exceptions = new ObservableCollection<Exception>(ExceptionSource);
+            // Exceptions.Add(new Exception($"exp {cnt}"));
+            // cnt ++;
         }
         
         public ICommand BrowseBtnClickedCommand { get; }
