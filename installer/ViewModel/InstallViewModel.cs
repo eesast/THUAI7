@@ -26,7 +26,7 @@ namespace installer.ViewModel
             Exceptions = new ObservableCollection<Exception>();
 
             downloadPath = Downloader.Data.InstallPath;
-            
+
             BrowseBtnClickedCommand = new AsyncRelayCommand(BrowseBtnClicked);
             CheckUpdBtnClickedCommand = new RelayCommand(CheckUpdBtnClicked);
             DownloadBtnClickedCommand = new AsyncRelayCommand(DownloadBtnClicked);
@@ -131,7 +131,7 @@ namespace installer.ViewModel
                 OnPropertyChanged();
             }
         }
-        
+
         // private int cnt = 1;
         public void UpdateExceptions()
         {
@@ -146,7 +146,7 @@ namespace installer.ViewModel
             // Exceptions.Add(new Exception($"exp {cnt}"));
             // cnt ++;
         }
-        
+
         public ICommand BrowseBtnClickedCommand { get; }
         private async Task BrowseBtnClicked()
         {
