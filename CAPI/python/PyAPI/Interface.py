@@ -11,11 +11,11 @@ class ILogic(metaclass=ABCMeta):
     '''`IAPI` 统一可用的接口'''
 
     @abstractmethod
-    def GetShips(self) -> List[THUAI7.Ship]:
+    def GetShips(self) -> List[THUAI7.Sweeper]:
         pass
 
     @abstractmethod
-    def GetEnemyShips(self) -> List[THUAI7.Ship]:
+    def GetEnemyShips(self) -> List[THUAI7.Sweeper]:
         pass
 
     @abstractmethod
@@ -23,7 +23,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetSelfInfo(self) -> Union[THUAI7.Ship, THUAI7.Team]:
+    def GetSelfInfo(self) -> Union[THUAI7.Sweeper, THUAI7.Team]:
         pass
 
     @abstractmethod
@@ -127,7 +127,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def BuildShip(self, shipType: THUAI7.ShipType, cellX: int, cellY: int) -> bool:
+    def BuildShip(self, shipType: THUAI7.SweeperType, cellX: int, cellY: int) -> bool:
         pass
 
 
@@ -172,11 +172,11 @@ class IAPI(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetShips(self) -> List[THUAI7.Ship]:
+    def GetShips(self) -> List[THUAI7.Sweeper]:
         pass
 
     @abstractmethod
-    def GetEnemyShips(self) -> List[THUAI7.Ship]:
+    def GetEnemyShips(self) -> List[THUAI7.Sweeper]:
         pass
 
     @abstractmethod
@@ -240,7 +240,7 @@ class IAPI(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetSelfInfo(self) -> Union[THUAI7.Ship, THUAI7.Team]:
+    def GetSelfInfo(self) -> Union[THUAI7.Sweeper, THUAI7.Team]:
         pass
 
 
@@ -286,7 +286,7 @@ class IShipAPI(IAPI, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetSelfInfo(self) -> THUAI7.Ship:
+    def GetSelfInfo(self) -> THUAI7.Sweeper:
         pass
 
     @abstractmethod
@@ -308,7 +308,7 @@ class ITeamAPI(IAPI, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def BuildShip(self, shipType: THUAI7.ShipType, cellX: int, cellY: int) -> Future[bool]:
+    def BuildShip(self, shipType: THUAI7.SweeperType, cellX: int, cellY: int) -> Future[bool]:
         pass
 
 

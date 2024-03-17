@@ -14,11 +14,11 @@ class Setting:
         return False
     
     @staticmethod
-    def ShipTypes()->List[THUAI7.ShipType]:
-        return [THUAI7.ShipType.CivilianShip,
-                THUAI7.ShipType.MilitaryShip,
-                THUAI7.ShipType.MilitaryShip,
-                THUAI7.ShipType.FlagShip]
+    def SweeperTypes()->List[THUAI7.SweeperType]:
+        return [THUAI7.SweeperType.CivilianSweeper,
+                THUAI7.SweeperType.MilitarySweeper,
+                THUAI7.SweeperType.MilitarySweeper,
+                THUAI7.SweeperType.FlagSweeper]
 
 
 numOfGridPerCell: Final[int] = 1000
