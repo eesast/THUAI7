@@ -29,6 +29,7 @@
                 BackgroundColor="{Binding ConstBackgroundColor}"
                 TextColor="{Binding ConstTextColor}"/>
         </HorizontalStackLayout>
+        
         <Button
             Text="下载"
             Command="{Binding DownloadBtnClickedCommand}"
@@ -36,6 +37,7 @@
             BackgroundColor="{Binding ConstBackgroundColor}"
             FontSize="{Binding ConstFontSize}"
             TextColor="{Binding ConstTextColor}"/>
+        
         <HorizontalStackLayout>
             <Button
                 WidthRequest="200"
@@ -54,12 +56,23 @@
                 FontSize="{Binding ConstFontSize}"
                 TextColor="{Binding ConstTextColor}"/>
         </HorizontalStackLayout>
+        
         <Label
             Text="{Binding DebugAlert1}"/>
         <Label
             Text="{Binding DebugAlert2}"/>
-        <Label
-            Text="{Binding DebugAlert3}"/>
+
+        <CollectionView ItemsSource="{Binding Exceptions}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10">
+                        <Label
+                            Text="{Binding Message}"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+   
     </VerticalStackLayout>
 
 </ContentPage>
