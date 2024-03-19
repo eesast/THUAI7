@@ -46,10 +46,12 @@ namespace Gaming
                 return playerInitInfo.playerID;
             }
         }
-        public bool ActivateShip(long teamID, ShipType shipType, int birthPointIndex = 0)
+        public bool ActivateShip(long teamID, long playerID, ShipType shipType, int birthPointIndex = 0)
         {
-            Ship? ship = teamList[(int)teamID].GetNewShip(shipType);
+            Ship? ship = teamList[(int)teamID].GetShip(playerID);
             if (ship == null)
+                return false;
+            else if (ship.IsRemoved == false)
                 return false;
             if (birthPointIndex < 0)
                 birthPointIndex = 0;

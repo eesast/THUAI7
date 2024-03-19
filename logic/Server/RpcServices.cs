@@ -469,19 +469,18 @@ namespace Server
             Console.WriteLine($"TRY BuildSweeper: SweeperType {request.SweeperType} from Team {request.TeamId}");
 #endif
             BoolRes boolRes = new();
-            int teamID = (int)request.TeamId;
-            int playerID = (int)request.SweeperType;
-            if (game.TeamList[teamID].GetShip(playerID) == null)
+
+            if (game.TeamList[(int)request.TeamId].GetShip(request.PlayerId) == null)
             {
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
             }
-            else if (game.TeamList[teamID].GetShip(playerID).IsRemoved == false)
+            else if (game.TeamList[(int)request.TeamId].GetShip(request.PlayerId).IsRemoved == false)
             {
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
             }
-            boolRes.ActSuccess = game.ActivateShip(request.TeamId, Transformation.ShipTypeFromProto(request.SweeperType));
+            boolRes.ActSuccess = game.ActivateShip(request.TeamId, request.PlayerId, Transformation.ShipTypeFromProto(request.SweeperType), request.BirthpointIndex);
 #if DEBUG
             Console.WriteLine("END BuildSweeper");
 #endif

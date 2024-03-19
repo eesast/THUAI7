@@ -67,8 +67,8 @@ message InstallMsg
 }
 message BuildSweeperMsg
 {
-    int32 x = 1;
-    int32 y = 2;
+    int64 team_id = 1;
+    int64 player_id = 2;
     SweeperType sweeper_type = 3;
-    int64 team_id = 4;
+    int32 birthpoint_index = 4;
 }
