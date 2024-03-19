@@ -10,7 +10,7 @@ namespace GameClass.GameObj;
 public class Ship : Movable, IShip
 {
     public AtomicLong TeamID { get; } = new(long.MaxValue);
-    public AtomicLong ShipID { get; } = new(long.MaxValue);
+    public AtomicLong PlayerID { get; } = new(long.MaxValue);
     public override bool IsRigid => true;
     public override ShapeType Shape => ShapeType.Circle;
     public int ViewRange { get; }

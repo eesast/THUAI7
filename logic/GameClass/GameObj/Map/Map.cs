@@ -72,9 +72,9 @@ namespace GameClass.GameObj
         {
             return (Ship?)GameObjDict[GameObjType.Ship].Find(gameObj => (ID == ((Ship)gameObj).ID));
         }
-        public Ship? FindShipInShipID(long teamID, long shipID)
+        public Ship? FindShipInPlayerID(long teamID, long playerID)
         {
-            return (Ship?)GameObjDict[GameObjType.Ship].Find(gameObj => (teamID == ((Ship)gameObj).TeamID) && shipID == ((Ship)gameObj).ShipID);
+            return (Ship?)GameObjDict[GameObjType.Ship].Find(gameObj => (teamID == ((Ship)gameObj).TeamID) && playerID == ((Ship)gameObj).PlayerID);
         }
 
         public static bool WormholeInteract(Wormhole gameObj, XY Pos)

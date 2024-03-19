@@ -3,12 +3,14 @@ using Preparation.Utility;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Threading;
+using Preparation.Interface;
 
 namespace GameClass.GameObj
 {
-    public class Team(Home home)
+    public class Team(Home home): IPlayer
     {
-        public long TeamID { get; } = home.TeamID;
+        public AtomicLong TeamID { get; } = new(home.TeamID);
+        public AtomicLong PlayerID { get; } = new(0);
         public const long invalidTeamID = long.MaxValue;
         public const long noneTeamID = long.MinValue;
         private readonly List<Ship> shipList = new(GameData.MaxShipNum);
@@ -20,7 +22,7 @@ namespace GameClass.GameObj
         {
             foreach (Ship ship in shipList)
             {
-                if (ship.ShipID == shipID)
+                if (ship.PlayerID == shipID)
                     return ship;
             }
             return null;
@@ -167,7 +169,7 @@ namespace GameClass.GameObj
             int i = 0;
             foreach (Ship ship in shipList)
             {
-                shipIDs[i++] = ship.ShipID;
+                shipIDs[i++] = ship.PlayerID;
             }
             return shipIDs;
         }

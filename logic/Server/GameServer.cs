@@ -140,6 +140,11 @@ namespace Server
                             MessageOfObj? msg = CopyInfo.Auto(gameObj, time);
                             if (msg != null) currentGameInfo.ObjMessage.Add(msg);
                         }
+                        foreach (Team team in game.TeamList)
+                        {
+                            MessageOfObj? msg = CopyInfo.Auto(team, time);
+                            if (msg != null) currentGameInfo.ObjMessage.Add(msg);
+                        }
                         lock (newsLock)
                         {
                             foreach (var news in currentNews)
@@ -176,7 +181,7 @@ namespace Server
         private bool PlayerDeceased(int playerID)    //# 这里需要判断大本营deceased吗？
         {
             return game.GameMap.GameObjDict[GameObjType.Ship].Cast<Ship>().Find(
-                ship => ship.ShipID == playerID && ship.ShipState == ShipStateType.Deceased
+                ship => ship.PlayerID == playerID && ship.ShipState == ShipStateType.Deceased
                 ) != null;
         }
 

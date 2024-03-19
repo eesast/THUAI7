@@ -37,6 +37,11 @@ namespace Server
                 default: return null;
             }
         }
+
+        public static MessageOfObj? Auto(Team team, long time)
+        {
+            return Team(team, time);
+        }
         public static MessageOfObj? Auto(MessageOfNews news)
         {
             MessageOfObj objMsg = new()
@@ -59,7 +64,7 @@ namespace Server
                     Armor = (int)player.Armor,
                     Shield = (int)player.Shield,
                     TeamId = player.TeamID,
-                    PlayerId = player.ShipID,
+                    PlayerId = player.PlayerID,
                     Guid = player.ID,
                     SweeperState = Transformation.ShipStateToProto(player.ShipState),
                     SweeperType = Transformation.ShipTypeToProto(player.ShipType),
@@ -84,6 +89,21 @@ namespace Server
                     Y = player.Position.y,
                     Hp = (int)player.HP,
                     TeamId = player.TeamID,
+                }
+            };
+            return msg;
+        }
+
+        private static MessageOfObj? Team(Team player, long time)
+        {
+            MessageOfObj msg = new()
+            {
+                TeamMessage = new()
+                {
+                    TeamId = player.TeamID,
+                    PlayerId = player.PlayerID,
+                    Score = player.MoneyPool.Score,
+                    Energy = player.MoneyPool.Money,
                 }
             };
             return msg;

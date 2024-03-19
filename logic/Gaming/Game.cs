@@ -38,7 +38,7 @@ namespace Gaming
                     return GameObj.invalidID;
                 }
                 teamList[(int)playerInitInfo.teamID].AddShip(newShip);
-                return newShip.ShipID;
+                return newShip.PlayerID;
             }
             else
             {
@@ -84,7 +84,7 @@ namespace Gaming
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(teamID, shipID);
+            Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
             if (ship != null)
             {
                 return actionManager.MoveShip(ship, moveTimeInMilliseconds, angle);
@@ -98,7 +98,7 @@ namespace Gaming
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(teamID, shipID);
+            Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
             if (ship != null)
                 return actionManager.Produce(ship);
             return false;
@@ -107,7 +107,7 @@ namespace Gaming
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(teamID, shipID);
+            Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
             if (ship != null)
                 return actionManager.Construct(ship, constructionType);
             return false;
@@ -116,7 +116,7 @@ namespace Gaming
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(teamID, shipID);
+            Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
             if (ship != null)
                 return moduleManager.InstallModule(ship, moduleType);
             return false;
@@ -125,7 +125,7 @@ namespace Gaming
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(teamID, shipID);
+            Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
             if (ship != null)
             {
                 bool validRecoverPoint = false;
@@ -148,7 +148,7 @@ namespace Gaming
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(teamID, shipID);
+            Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
             if (ship != null)
                 return shipManager.Recycle(ship);
             return false;
@@ -157,7 +157,7 @@ namespace Gaming
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(teamID, shipID);
+            Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
             if (ship != null)
                 return actionManager.Repair(ship);
             return false;
@@ -166,7 +166,7 @@ namespace Gaming
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(teamID, shipID);
+            Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
             if (ship != null)
                 return ActionManager.Stop(ship);
             return false;
@@ -175,7 +175,7 @@ namespace Gaming
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
-            Ship? ship = gameMap.FindShipInShipID(teamID, shipID);
+            Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
             if (ship != null)
                 return attackManager.Attack(ship, angle);
             return false;
