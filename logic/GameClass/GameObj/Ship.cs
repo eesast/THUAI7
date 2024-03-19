@@ -10,7 +10,7 @@ namespace GameClass.GameObj;
 public class Ship : Movable, IShip
 {
     public AtomicLong TeamID { get; } = new(long.MaxValue);
-    public AtomicLong ShipID { get; } = new(long.MaxValue);
+    public AtomicLong PlayerID { get; } = new(long.MaxValue);
     public override bool IsRigid => true;
     public override ShapeType Shape => ShapeType.Circle;
     public int ViewRange { get; }
@@ -382,10 +382,11 @@ public class Ship : Movable, IShip
                 && shipState != ShipStateType.Attacking);
         }
     }
-    public Ship(XY initPos, int initRadius, ShipType shipType, MoneyPool moneyPool) :
-        base(initPos, initRadius, GameObjType.Ship)
+    public Ship(int initRadius, ShipType shipType, MoneyPool moneyPool) :
+        base(GameData.PosNotInGame, initRadius, GameObjType.Ship)
     {
-        this.CanMove.SetReturnOri(true);
+        this.CanMove.SetReturnOri(false);
+        this.IsRemoved.SetReturnOri(true);
         this.Occupation = OccupationFactory.FindIOccupation(this.ShipType = shipType);
         this.ViewRange = this.Occupation.ViewRange;
         this.HP = new(this.Occupation.MaxHp);
