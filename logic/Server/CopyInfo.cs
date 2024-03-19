@@ -1,5 +1,7 @@
 using GameClass.GameObj;
+using GameClass.GameObj.Areas;
 using Preparation.Utility;
+using Utility = Preparation.Utility;
 using Protobuf;
 
 namespace Server
@@ -14,26 +16,31 @@ namespace Server
                 case GameObjType.Ship:
                     return Ship((Ship)gameObj, time);
                 case GameObjType.Home:
-                    return Home((GameClass.GameObj.Areas.Home)gameObj, time);
+                    return Home((Home)gameObj, time);
                 case GameObjType.Bullet:
                     return Bullet((Bullet)gameObj);
                 case GameObjType.BombedBullet:
                     return BombedBullet((BombedBullet)gameObj);
                 case GameObjType.Resource:
-                    return Resource((GameClass.GameObj.Areas.Resource)gameObj);
+                    return Resource((Resource)gameObj);
                 case GameObjType.Construction:
-                    GameClass.GameObj.Areas.Construction construction = (GameClass.GameObj.Areas.Construction)gameObj;
-                    if (construction.ConstructionType == Preparation.Utility.ConstructionType.Factory)
+                    Construction construction = (Construction)gameObj;
+                    if (construction.ConstructionType == Utility.ConstructionType.Factory)
                         return Factory(construction);
-                    else if (construction.ConstructionType == Preparation.Utility.ConstructionType.Community)
+                    else if (construction.ConstructionType == Utility.ConstructionType.Community)
                         return Community(construction);
-                    else if (construction.ConstructionType == Preparation.Utility.ConstructionType.Fort)
+                    else if (construction.ConstructionType == Utility.ConstructionType.Fort)
                         return Fort(construction);
                     return null;
                 case GameObjType.Wormhole:
-                    return Wormhole((GameClass.GameObj.Areas.Wormhole)gameObj);
+                    return Wormhole((Wormhole)gameObj);
                 default: return null;
             }
+        }
+
+        public static MessageOfObj? Auto(Team team, long time)
+        {
+            return Team(team, time);
         }
         public static MessageOfObj? Auto(MessageOfNews news)
         {
@@ -57,7 +64,7 @@ namespace Server
                     Armor = (int)player.Armor,
                     Shield = (int)player.Shield,
                     TeamId = player.TeamID,
-                    PlayerId = player.ShipID,
+                    PlayerId = player.PlayerID,
                     Guid = player.ID,
                     SweeperState = Transformation.ShipStateToProto(player.ShipState),
                     SweeperType = Transformation.ShipTypeToProto(player.ShipType),
@@ -72,7 +79,7 @@ namespace Server
             return msg;
         }
 
-        private static MessageOfObj? Home(GameClass.GameObj.Areas.Home player, long time)
+        private static MessageOfObj? Home(Home player, long time)
         {
             MessageOfObj msg = new()
             {
@@ -82,6 +89,21 @@ namespace Server
                     Y = player.Position.y,
                     Hp = (int)player.HP,
                     TeamId = player.TeamID,
+                }
+            };
+            return msg;
+        }
+
+        private static MessageOfObj? Team(Team player, long time)
+        {
+            MessageOfObj msg = new()
+            {
+                TeamMessage = new()
+                {
+                    TeamId = player.TeamID,
+                    PlayerId = player.PlayerID,
+                    Score = player.MoneyPool.Score,
+                    Energy = player.MoneyPool.Money,
                 }
             };
             return msg;
@@ -125,7 +147,7 @@ namespace Server
             return msg;
         }
 
-        private static MessageOfObj Resource(GameClass.GameObj.Areas.Resource resource)
+        private static MessageOfObj Resource(Resource resource)
         {
             MessageOfObj msg = new()
             {
@@ -138,7 +160,7 @@ namespace Server
             };
             return msg;
         }
-        private static MessageOfObj Factory(GameClass.GameObj.Areas.Construction construction)
+        private static MessageOfObj Factory(Construction construction)
         {
             MessageOfObj msg = new()
             {
@@ -153,7 +175,7 @@ namespace Server
             return msg;
         }
 
-        private static MessageOfObj Community(GameClass.GameObj.Areas.Construction construction)
+        private static MessageOfObj Community(Construction construction)
         {
             MessageOfObj msg = new()
             {
@@ -168,7 +190,7 @@ namespace Server
             return msg;
         }
 
-        private static MessageOfObj Fort(GameClass.GameObj.Areas.Construction construction)
+        private static MessageOfObj Fort(Construction construction)
         {
             MessageOfObj msg = new()
             {
@@ -182,7 +204,7 @@ namespace Server
             };
             return msg;
         }
-        private static MessageOfObj Wormhole(GameClass.GameObj.Areas.Wormhole wormhole)
+        private static MessageOfObj Wormhole(Wormhole wormhole)
         {
             MessageOfObj msg = new()
             {

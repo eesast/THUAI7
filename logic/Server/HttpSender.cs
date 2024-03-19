@@ -4,8 +4,8 @@ namespace Server
 {
     class HttpSender(string url, string token)
     {
-        private string url = url;
-        private string token = token;
+        private readonly string url = url;
+        private readonly string token = token;
 
         // void Test()
         // {
@@ -17,19 +17,17 @@ namespace Server
             {
                 var request = new HttpClient();
                 request.DefaultRequestHeaders.Authorization = new("Bearer", token);
-                using (var response = await request.PutAsync(url, JsonContent.Create(new
+                using var response = await request.PutAsync(url, JsonContent.Create(new
                 {
                     result = new TeamScore[]
                     {
-                        new() { team_id = 0, score = scores[0], },
-                        new() { team_id = 1, score = scores[1], },
+                        new() { TeamID = 0, Score = scores[0], },
+                        new() { TeamID = 1, Score = scores[1], },
                     },
-                    mode = mode
-                })))
-                {
-                    Console.WriteLine("Send to web successfully!");
-                    Console.WriteLine($"Web response: {await response.Content.ReadAsStringAsync()}");
-                }
+                    mode
+                }));
+                Console.WriteLine("Send to web successfully!");
+                Console.WriteLine($"Web response: {await response.Content.ReadAsStringAsync()}");
             }
             catch (Exception e)
             {
@@ -41,7 +39,7 @@ namespace Server
 
     internal class TeamScore
     {
-        public int team_id { get; set; } = 0;
-        public int score { get; set; } = 0;
+        public int TeamID { get; set; } = 0;
+        public int Score { get; set; } = 0;
     }
 }
