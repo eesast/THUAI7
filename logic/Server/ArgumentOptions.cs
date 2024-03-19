@@ -20,20 +20,8 @@ namespace Server
         [Option("teamCount", Required = false, HelpText = "The number of teams, 2 by defualt")]
         public ushort TeamCount { get; set; } = 2;
 
-        [Option("civilShipNum", Required = false, HelpText = "The number of civil ship num, 1 by default")]
-        public ushort CivilShipCount { get; set; } = 1;
-
-        [Option("MaxPlayerNumPerTeam", Required = false, HelpText = "The max player number of team, 4 by defualt")]
-        public ushort MaxPlayerNumPerTeam { get; set; } = 6;
-
-        [Option("warShipNum", Required = false, HelpText = "The number of war ship num, 0 by default")]
-        public ushort WarShipCount { get; set; } = 0;
-
-        [Option("flagShipNum", Required = false, HelpText = "The number of flag ship num, 0 by default")]
-        public ushort FlagShipCount { get; set; } = 0;
-
-        [Option("MaxShipNum", Required = false, HelpText = "The max number of Ship, 3 by default")]
-        public ushort MaxShipCount { get; set; } = 5;
+        [Option("shipNum", Required = false, HelpText = "The max number of Ship, 3 by default")]
+        public ushort ShipCount { get; set; } = 3;
 
         [Option("homeNum", Required = false, HelpText = "The number of Home , 1 by default")]
         public ushort HomeCount { get; set; } = 1;
@@ -68,6 +56,5 @@ namespace Server
         public string StartLockFile { get; set; } = "114514";
         [Option("mode", Required = false, HelpText = "Whether to run final competition")]
         public int Mode { get; set; } = 0;
-        public ushort ShipCount => (ushort)(CivilShipCount + WarShipCount + FlagShipCount);
     }
 }
