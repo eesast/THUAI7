@@ -208,6 +208,26 @@ namespace Server
 
         #region 船
 
+        public override Task<BoolRes> Activate(ActivateMsg request, ServerCallContext context)
+        {
+#if DEBUG
+            Console.WriteLine($"TRY Activate: Player {request.PlayerId} from Team {request.TeamId}");
+#endif
+            BoolRes boolRes = new();
+            if (request.PlayerId >= spectatorMinPlayerID)
+            {
+                boolRes.ActSuccess = false;
+                return Task.FromResult(boolRes);
+            }
+            // var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            boolRes.ActSuccess = game.ActivateShip(request.TeamId, Transformation.ShipTypeFromProto(request.SweeperType));
+            if (!game.GameMap.Timer.IsGaming) boolRes.ActSuccess = false;
+#if DEBUG
+            Console.WriteLine($"END Activate: {boolRes.ActSuccess}");
+#endif
+            return Task.FromResult(boolRes);
+        }
+
         public override Task<MoveRes> Move(MoveMsg request, ServerCallContext context)
         {
 #if DEBUG
