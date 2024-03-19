@@ -377,10 +377,11 @@ namespace Preparation.Utility
         {
             lock (vLock)
             {
-
+                int preV = v;
                 v += (int)(ratio * maxV);
                 if (v < 0) v = 0;
                 if (v > maxV) v = maxV;
+                return v-preV;
             }
         }
         #endregion
