@@ -14,7 +14,7 @@ namespace Preparation.Utility
         public const int TolerancesLength = 3;
         public const int AdjustLength = 3;
 
-        public const int MaxShipNum = 4;                // 最大舰船数量
+        public const int MaxShipNum = 5;                // 最大舰船数量
         public const int MaxCivilShipNum = 2;           // 最大民用舰船数量
         public const int MaxWarShipNum = 2;             // 最大军用舰船数量
         public const int MaxFlagShipNum = 1;            // 最大旗舰数量
