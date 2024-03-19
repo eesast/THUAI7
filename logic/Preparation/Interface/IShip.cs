@@ -2,9 +2,8 @@
 
 namespace Preparation.Interface
 {
-    public interface IShip : IMovable
+    public interface IShip : IMovable, IPlayer
     {
-        public AtomicLong TeamID { get; }
         public LongInTheVariableRange HP { get; }
         public LongInTheVariableRange Armor { get; }
         public LongInTheVariableRange Shield { get; }
