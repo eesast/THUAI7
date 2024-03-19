@@ -2,6 +2,8 @@
 using CommunityToolkit.Maui;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,13 +17,16 @@ namespace installer.ViewModel
     {
         private readonly Model.Downloader Downloader;
         private readonly IFolderPicker FolderPicker;
+        public ObservableCollection<Exception> Exceptions { get; private set; }
 
         public InstallViewModel(IFolderPicker folderPicker, Model.Downloader downloader)
         {
             Downloader = downloader;
             FolderPicker = folderPicker;
+            Exceptions = new ObservableCollection<Exception>();
+
             downloadPath = Downloader.Data.InstallPath;
-            DebugAlert3 = Downloader.Data.Installed.ToString();
+
             BrowseBtnClickedCommand = new AsyncRelayCommand(BrowseBtnClicked);
             CheckUpdBtnClickedCommand = new RelayCommand(CheckUpdBtnClicked);
             DownloadBtnClickedCommand = new AsyncRelayCommand(DownloadBtnClicked);
@@ -58,6 +63,16 @@ namespace installer.ViewModel
                 OnPropertyChanged();
             }
         }
+        private string? debugAlert4;
+        public string? DebugAlert4
+        {
+            get => debugAlert4;
+            set
+            {
+                debugAlert4 = value;
+                OnPropertyChanged();
+            }
+        }
 
         private string downloadPath;
         public string DownloadPath
@@ -67,11 +82,11 @@ namespace installer.ViewModel
             {
                 downloadPath = value;
                 DownloadEnabled =
-                       Directory.Exists(value)
-                    && Local_Data.CountFile(value) == 0 && Local_Data.CountFile(value) == 0;
+                       !value.EndsWith(':') && !value.EndsWith('\\')
+                    && Directory.Exists(value) && Local_Data.CountFile(value) == 0;
                 CheckEnabled =
-                       Directory.Exists(value)
-                    && (Local_Data.CountFile(value) > 0 || Local_Data.CountFile(value) > 0);
+                       !value.EndsWith(':') && !value.EndsWith('\\')
+                    && Directory.Exists(value) && Local_Data.CountFile(value) > 0;
                 OnPropertyChanged();
             }
         }
@@ -81,7 +96,7 @@ namespace installer.ViewModel
             get => browseEnabled;
             set
             {
-                browseEnabled = value;
+                browseEnabled = Downloader.Data.Installed && value;
                 OnPropertyChanged();
             }
         }
@@ -117,6 +132,21 @@ namespace installer.ViewModel
             }
         }
 
+        // private int cnt = 1;
+        public void UpdateExceptions()
+        {
+            while (Downloader.Exceptions.Count > 0)
+            {
+                var exception = Downloader.Exceptions.Pop();
+                if (exception != null)
+                {
+                    Exceptions.Add(exception);
+                }
+            }
+            // Exceptions.Add(new Exception($"exp {cnt}"));
+            // cnt ++;
+        }
+
         public ICommand BrowseBtnClickedCommand { get; }
         private async Task BrowseBtnClicked()
         {
@@ -129,14 +159,13 @@ namespace installer.ViewModel
             if (result.IsSuccessful)
             {
                 DownloadPath = result.Folder.Path;
-                // DebugAlert2 = result.Folder.Path.ToString();
             }
             else
             {
                 DownloadPath = DownloadPath;
             }
             BrowseEnabled = true;
-
+            UpdateExceptions();
         }
         public ICommand CheckUpdBtnClickedCommand { get; }
         private async void CheckUpdBtnClicked()
@@ -159,6 +188,7 @@ namespace installer.ViewModel
             }
             BrowseEnabled = true;
             CheckEnabled = true;
+            UpdateExceptions();
         }
         public ICommand DownloadBtnClickedCommand { get; }
         private async Task DownloadBtnClicked()
@@ -174,11 +204,12 @@ namespace installer.ViewModel
             }
             else
             {
-                await Task.Run(() => Downloader.Install());
+                await Task.Run(() => Downloader.Install(DownloadPath));
             }
-            DebugAlert2 = Downloader.Data.InstallPath;
             CheckEnabled = true;
             BrowseEnabled = true;
+            UpdateExceptions();
+            // DebugAlert2 = "Installed" + Downloader.Data.Installed.ToString();
         }
         public ICommand UpdateBtnClickedCommand { get; }
         private async Task UpdateBtnClicked()
@@ -191,6 +222,7 @@ namespace installer.ViewModel
             await Task.Run(() => Downloader.Update());
             CheckEnabled = true;
             BrowseEnabled = true;
+            UpdateExceptions();
         }
     }
 }
