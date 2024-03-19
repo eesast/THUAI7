@@ -7,7 +7,7 @@ using Preparation.Interface;
 
 namespace GameClass.GameObj
 {
-    public class Team(Home home): IPlayer
+    public class Team(Home home) : IPlayer
     {
         public AtomicLong TeamID { get; } = new(home.TeamID);
         public AtomicLong PlayerID { get; } = new(0);
