@@ -4,79 +4,82 @@
 #include "MessageType.pb.h"
 
 #include <algorithm>
-#include "google/protobuf/io/coded_stream.h"
-#include "google/protobuf/extension_set.h"
-#include "google/protobuf/wire_format_lite.h"
-#include "google/protobuf/descriptor.h"
-#include "google/protobuf/generated_message_reflection.h"
-#include "google/protobuf/reflection_ops.h"
-#include "google/protobuf/wire_format.h"
-// @@protoc_insertion_point(includes)
 
-// Must be included last.
-#include "google/protobuf/port_def.inc"
+#include <google/protobuf/io/coded_stream.h>
+#include <google/protobuf/extension_set.h>
+#include <google/protobuf/wire_format_lite.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/generated_message_reflection.h>
+#include <google/protobuf/reflection_ops.h>
+#include <google/protobuf/wire_format.h>
+// @@protoc_insertion_point(includes)
+#include <google/protobuf/port_def.inc>
+
 PROTOBUF_PRAGMA_INIT_SEG
+
 namespace _pb = ::PROTOBUF_NAMESPACE_ID;
-namespace _pbi = ::PROTOBUF_NAMESPACE_ID::internal;
+namespace _pbi = _pb::internal;
+
 namespace protobuf
 {
 }  // namespace protobuf
 static const ::_pb::EnumDescriptor* file_level_enum_descriptors_MessageType_2eproto[16];
-static constexpr const ::_pb::ServiceDescriptor**
-    file_level_service_descriptors_MessageType_2eproto = nullptr;
-const ::uint32_t TableStruct_MessageType_2eproto::offsets[1] = {};
+static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_MessageType_2eproto = nullptr;
+const uint32_t TableStruct_MessageType_2eproto::offsets[1] = {};
 static constexpr ::_pbi::MigrationSchema* schemas = nullptr;
 static constexpr ::_pb::Message* const* file_default_instances = nullptr;
-const char descriptor_table_protodef_MessageType_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+
+const char descriptor_table_protodef_MessageType_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
     "\n\021MessageType.proto\022\010protobuf*P\n\tGameSta"
     "te\022\023\n\017NULL_GAME_STATE\020\000\022\016\n\nGAME_START\020\001\022"
-    "\020\n\014GAME_RUNNING\020\002\022\014\n\010GAME_END\020\003*\207\001\n\tPlac"
-    "eType\022\023\n\017NULL_PLACE_TYPE\020\000\022\010\n\004HOME\020\001\022\t\n\005"
-    "SPACE\020\002\022\010\n\004RUIN\020\003\022\n\n\006SHADOW\020\004\022\014\n\010ASTEROI"
-    "D\020\005\022\014\n\010RESOURCE\020\006\022\020\n\014CONSTRUCTION\020\007\022\014\n\010W"
-    "ORMHOLE\020\010*8\n\tShapeType\022\023\n\017NULL_SHAPE_TYP"
-    "E\020\000\022\n\n\006CIRCLE\020\001\022\n\n\006SQUARE\020\002*6\n\nPlayerTyp"
-    "e\022\024\n\020NULL_PLAYER_TYPE\020\000\022\010\n\004SHIP\020\001\022\010\n\004TEA"
-    "M\020\002*S\n\010ShipType\022\022\n\016NULL_SHIP_TYPE\020\000\022\021\n\rC"
-    "IVILIAN_SHIP\020\001\022\021\n\rMILITARY_SHIP\020\002\022\r\n\tFLA"
-    "G_SHIP\020\003*\234\001\n\tShipState\022\017\n\013NULL_STATUS\020\000\022"
-    "\010\n\004IDLE\020\001\022\r\n\tPRODUCING\020\002\022\020\n\014CONSTRUCTING"
-    "\020\003\022\016\n\nRECOVERING\020\004\022\r\n\tRECYCLING\020\005\022\r\n\tATT"
-    "ACKING\020\006\022\014\n\010SWINGING\020\007\022\013\n\007STUNNED\020\010\022\n\n\006M"
-    "OVING\020\t*i\n\nWeaponType\022\024\n\020NULL_WEAPON_TYP"
-    "E\020\000\022\014\n\010LASERGUN\020\001\022\r\n\tPLASMAGUN\020\002\022\014\n\010SHEL"
-    "LGUN\020\003\022\016\n\nMISSILEGUN\020\004\022\n\n\006ARCGUN\020\005*b\n\017Co"
-    "nstructorType\022\031\n\025NULL_CONSTRUCTOR_TYPE\020\000"
-    "\022\020\n\014CONSTRUCTOR1\020\001\022\020\n\014CONSTRUCTOR2\020\002\022\020\n\014"
-    "CONSTRUCTOR3\020\003*D\n\tArmorType\022\023\n\017NULL_ARMO"
-    "R_TYPE\020\000\022\n\n\006ARMOR1\020\001\022\n\n\006ARMOR2\020\002\022\n\n\006ARMO"
-    "R3\020\003*I\n\nShieldType\022\024\n\020NULL_SHIELD_TYPE\020\000"
-    "\022\013\n\007SHIELD1\020\001\022\013\n\007SHIELD2\020\002\022\013\n\007SHIELD3\020\003*"
-    "S\n\014ProducerType\022\026\n\022NULL_PRODUCER_TYPE\020\000\022"
-    "\r\n\tPRODUCER1\020\001\022\r\n\tPRODUCER2\020\002\022\r\n\tPRODUCE"
-    "R3\020\003*\216\003\n\nModuleType\022\024\n\020NULL_MODULE_TYPE\020"
-    "\000\022\024\n\020MODULE_PRODUCER1\020\001\022\024\n\020MODULE_PRODUC"
-    "ER2\020\002\022\024\n\020MODULE_PRODUCER3\020\003\022\027\n\023MODULE_CO"
-    "NSTRUCTOR1\020\004\022\027\n\023MODULE_CONSTRUCTOR2\020\005\022\027\n"
-    "\023MODULE_CONSTRUCTOR3\020\006\022\021\n\rMODULE_ARMOR1\020"
-    "\007\022\021\n\rMODULE_ARMOR2\020\010\022\021\n\rMODULE_ARMOR3\020\t\022"
-    "\022\n\016MODULE_SHIELD1\020\n\022\022\n\016MODULE_SHIELD2\020\013\022"
-    "\022\n\016MODULE_SHIELD3\020\014\022\023\n\017MODULE_LASERGUN\020\r"
-    "\022\024\n\020MODULE_PLASMAGUN\020\016\022\023\n\017MODULE_SHELLGU"
-    "N\020\017\022\025\n\021MODULE_MISSILEGUN\020\020\022\021\n\rMODULE_ARC"
-    "GUN\020\021*Z\n\nBulletType\022\024\n\020NULL_BULLET_TYPE\020"
-    "\000\022\t\n\005LASER\020\001\022\n\n\006PLASMA\020\002\022\t\n\005SHELL\020\003\022\013\n\007M"
-    "ISSILE\020\004\022\007\n\003ARC\020\005*T\n\020ConstructionType\022\032\n"
-    "\026NULL_CONSTRUCTION_TYPE\020\000\022\013\n\007FACTORY\020\001\022\r"
-    "\n\tCOMMUNITY\020\002\022\010\n\004FORT\020\003*4\n\010NewsType\022\022\n\016N"
-    "ULL_NEWS_TYPE\020\000\022\010\n\004TEXT\020\001\022\n\n\006BINARY\020\002*.\n"
-    "\nPlayerTeam\022\r\n\tNULL_TEAM\020\000\022\007\n\003RED\020\001\022\010\n\004B"
-    "LUE\020\002b\006proto3"};
-static ::absl::once_flag descriptor_table_MessageType_2eproto_once;
+    "\020\n\014GAME_RUNNING\020\002\022\014\n\010GAME_END\020\003*\201\001\n\tPlac"
+    "eType\022\023\n\017NULL_PLACE_TYPE\020\000\022\010\n\004HOME\020\001\022\n\n\006"
+    "GROUND\020\002\022\010\n\004WALL\020\003\022\t\n\005GRASS\020\004\022\t\n\005RIVER\020\005"
+    "\022\013\n\007GARBAGE\020\006\022\020\n\014CONSTRUCTION\020\007\022\n\n\006BRIDG"
+    "E\020\010*8\n\tShapeType\022\023\n\017NULL_SHAPE_TYPE\020\000\022\n\n"
+    "\006CIRCLE\020\001\022\n\n\006SQUARE\020\002*9\n\nPlayerType\022\024\n\020N"
+    "ULL_PLAYER_TYPE\020\000\022\013\n\007SWEEPER\020\001\022\010\n\004TEAM\020\002"
+    "*b\n\013SweeperType\022\025\n\021NULL_SWEEPER_TYPE\020\000\022\024"
+    "\n\020CIVILIAN_SWEEPER\020\001\022\024\n\020MILITARY_SWEEPER"
+    "\020\002\022\020\n\014FLAG_SWEEPER\020\003*\237\001\n\014SweeperState\022\017\n"
+    "\013NULL_STATUS\020\000\022\010\n\004IDLE\020\001\022\r\n\tPRODUCING\020\002\022"
+    "\020\n\014CONSTRUCTING\020\003\022\016\n\nRECOVERING\020\004\022\r\n\tREC"
+    "YCLING\020\005\022\r\n\tATTACKING\020\006\022\014\n\010SWINGING\020\007\022\013\n"
+    "\007STUNNED\020\010\022\n\n\006MOVING\020\t*i\n\nWeaponType\022\024\n\020"
+    "NULL_WEAPON_TYPE\020\000\022\014\n\010LASERGUN\020\001\022\r\n\tPLAS"
+    "MAGUN\020\002\022\014\n\010SHELLGUN\020\003\022\016\n\nMISSILEGUN\020\004\022\n\n"
+    "\006ARCGUN\020\005*b\n\017ConstructorType\022\031\n\025NULL_CON"
+    "STRUCTOR_TYPE\020\000\022\020\n\014CONSTRUCTOR1\020\001\022\020\n\014CON"
+    "STRUCTOR2\020\002\022\020\n\014CONSTRUCTOR3\020\003*D\n\tArmorTy"
+    "pe\022\023\n\017NULL_ARMOR_TYPE\020\000\022\n\n\006ARMOR1\020\001\022\n\n\006A"
+    "RMOR2\020\002\022\n\n\006ARMOR3\020\003*I\n\nShieldType\022\024\n\020NUL"
+    "L_SHIELD_TYPE\020\000\022\013\n\007SHIELD1\020\001\022\013\n\007SHIELD2\020"
+    "\002\022\013\n\007SHIELD3\020\003*S\n\014ProducerType\022\026\n\022NULL_P"
+    "RODUCER_TYPE\020\000\022\r\n\tPRODUCER1\020\001\022\r\n\tPRODUCE"
+    "R2\020\002\022\r\n\tPRODUCER3\020\003*\216\003\n\nModuleType\022\024\n\020NU"
+    "LL_MODULE_TYPE\020\000\022\024\n\020MODULE_PRODUCER1\020\001\022\024"
+    "\n\020MODULE_PRODUCER2\020\002\022\024\n\020MODULE_PRODUCER3"
+    "\020\003\022\027\n\023MODULE_CONSTRUCTOR1\020\004\022\027\n\023MODULE_CO"
+    "NSTRUCTOR2\020\005\022\027\n\023MODULE_CONSTRUCTOR3\020\006\022\021\n"
+    "\rMODULE_ARMOR1\020\007\022\021\n\rMODULE_ARMOR2\020\010\022\021\n\rM"
+    "ODULE_ARMOR3\020\t\022\022\n\016MODULE_SHIELD1\020\n\022\022\n\016MO"
+    "DULE_SHIELD2\020\013\022\022\n\016MODULE_SHIELD3\020\014\022\023\n\017MO"
+    "DULE_LASERGUN\020\r\022\024\n\020MODULE_PLASMAGUN\020\016\022\023\n"
+    "\017MODULE_SHELLGUN\020\017\022\025\n\021MODULE_MISSILEGUN\020"
+    "\020\022\021\n\rMODULE_ARCGUN\020\021*Z\n\nBulletType\022\024\n\020NU"
+    "LL_BULLET_TYPE\020\000\022\t\n\005LASER\020\001\022\n\n\006PLASMA\020\002\022"
+    "\t\n\005SHELL\020\003\022\013\n\007MISSILE\020\004\022\007\n\003ARC\020\005*c\n\020Cons"
+    "tructionType\022\032\n\026NULL_CONSTRUCTION_TYPE\020\000"
+    "\022\017\n\013RECYCLEBANK\020\001\022\021\n\rCHARGESTATION\020\002\022\017\n\013"
+    "SIGNALTOWER\020\003*4\n\010NewsType\022\022\n\016NULL_NEWS_T"
+    "YPE\020\000\022\010\n\004TEXT\020\001\022\n\n\006BINARY\020\002*.\n\nPlayerTea"
+    "m\022\r\n\tNULL_TEAM\020\000\022\007\n\003RED\020\001\022\010\n\004BLUE\020\002b\006pro"
+    "to3";
+static ::_pbi::once_flag descriptor_table_MessageType_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_MessageType_2eproto = {
     false,
     false,
-    1733,
+    1763,
     descriptor_table_protodef_MessageType_2eproto,
     "MessageType.proto",
     &descriptor_table_MessageType_2eproto_once,
@@ -90,25 +93,13 @@ const ::_pbi::DescriptorTable descriptor_table_MessageType_2eproto = {
     file_level_enum_descriptors_MessageType_2eproto,
     file_level_service_descriptors_MessageType_2eproto,
 };
-
-// This function exists to be marked as weak.
-// It can significantly speed up compilation by breaking up LLVM's SCC
-// in the .pb.cc translation units. Large translation units see a
-// reduction of more than 35% of walltime for optimized builds. Without
-// the weak attribute all the messages in the file, including all the
-// vtables and everything they use become part of the same SCC through
-// a cycle like:
-// GetMetadata -> descriptor table -> default instances ->
-//   vtables -> GetMetadata
-// By adding a weak function here we break the connection from the
-// individual vtables back into the descriptor table.
 PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_MessageType_2eproto_getter()
 {
     return &descriptor_table_MessageType_2eproto;
 }
+
 // Force running AddDescriptors() at dynamic initialization time.
-PROTOBUF_ATTRIBUTE_INIT_PRIORITY2
-static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_MessageType_2eproto(&descriptor_table_MessageType_2eproto);
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY2 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_MessageType_2eproto(&descriptor_table_MessageType_2eproto);
 namespace protobuf
 {
     const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* GameState_descriptor()
@@ -129,6 +120,7 @@ namespace protobuf
                 return false;
         }
     }
+
     const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* PlaceType_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
@@ -152,6 +144,7 @@ namespace protobuf
                 return false;
         }
     }
+
     const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ShapeType_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
@@ -169,6 +162,7 @@ namespace protobuf
                 return false;
         }
     }
+
     const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* PlayerType_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
@@ -186,12 +180,13 @@ namespace protobuf
                 return false;
         }
     }
-    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ShipType_descriptor()
+
+    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SweeperType_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
         return file_level_enum_descriptors_MessageType_2eproto[4];
     }
-    bool ShipType_IsValid(int value)
+    bool SweeperType_IsValid(int value)
     {
         switch (value)
         {
@@ -204,12 +199,13 @@ namespace protobuf
                 return false;
         }
     }
-    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ShipState_descriptor()
+
+    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SweeperState_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
         return file_level_enum_descriptors_MessageType_2eproto[5];
     }
-    bool ShipState_IsValid(int value)
+    bool SweeperState_IsValid(int value)
     {
         switch (value)
         {
@@ -228,6 +224,7 @@ namespace protobuf
                 return false;
         }
     }
+
     const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* WeaponType_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
@@ -248,6 +245,7 @@ namespace protobuf
                 return false;
         }
     }
+
     const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ConstructorType_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
@@ -266,6 +264,7 @@ namespace protobuf
                 return false;
         }
     }
+
     const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ArmorType_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
@@ -284,6 +283,7 @@ namespace protobuf
                 return false;
         }
     }
+
     const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ShieldType_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
@@ -302,6 +302,7 @@ namespace protobuf
                 return false;
         }
     }
+
     const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ProducerType_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
@@ -320,6 +321,7 @@ namespace protobuf
                 return false;
         }
     }
+
     const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ModuleType_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
@@ -352,6 +354,7 @@ namespace protobuf
                 return false;
         }
     }
+
     const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* BulletType_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
@@ -372,6 +375,7 @@ namespace protobuf
                 return false;
         }
     }
+
     const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ConstructionType_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
@@ -390,6 +394,7 @@ namespace protobuf
                 return false;
         }
     }
+
     const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* NewsType_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
@@ -407,6 +412,7 @@ namespace protobuf
                 return false;
         }
     }
+
     const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* PlayerTeam_descriptor()
     {
         ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_MessageType_2eproto);
@@ -424,9 +430,11 @@ namespace protobuf
                 return false;
         }
     }
+
     // @@protoc_insertion_point(namespace_scope)
 }  // namespace protobuf
 PROTOBUF_NAMESPACE_OPEN
 PROTOBUF_NAMESPACE_CLOSE
+
 // @@protoc_insertion_point(global_scope)
-#include "google/protobuf/port_undef.inc"
+#include <google/protobuf/port_undef.inc>

@@ -14,9 +14,14 @@ message PlayerMsg
 {
     int64 player_id = 1;
     int64 team_id = 2;
-    ShipType ship_type = 3;
-    int32 x = 4;
-    int32 y = 5;
+    SweeperType sweeper_type = 3;
+}
+
+message ActivateMsg
+{
+    int64 player_id = 1;
+    int64 team_id = 2;
+    SweeperType sweeper_type = 3;
 }
 
 message MoveMsg
@@ -57,7 +62,7 @@ message ConstructMsg //修建建筑
 message RecoverMsg
 {
     int64 player_id = 1;
-	int64 recover = 2;
+    int64 recover = 2;
     int64 team_id = 3;
 }
 
@@ -67,10 +72,10 @@ message InstallMsg
     int64 player_id = 2;
     int64 team_id = 3;
 }
-message BuildShipMsg
+message BuildSweeperMsg
 {
     int32 x = 1;
     int32 y = 2;
-    ShipType ship_type = 3;
+    SweeperType sweeper_type = 3;
     int64 team_id = 4;
 }

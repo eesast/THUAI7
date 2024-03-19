@@ -5,28 +5,14 @@
              x:Class="installer.Page.InstallPage"
              Title="Installer">
 
-    <VerticalStackLayout
+    <Grid
         HorizontalOptions="Center"
-        WidthRequest="600">
-        <HorizontalStackLayout>
-            <Button
-                WidthRequest="400"
-                Text="下载"
-                IsEnabled="{Binding InstallEnabled}"
-                Command="{Binding DownloadBtnClickedCommand}"
-                BackgroundColor="{Binding ConstBackgroundColor}"
-                FontSize="{Binding ConstFontSize}"
-                TextColor="{Binding ConstTextColor}"/>
-            <Button
-                WidthRequest="200"
-                Text="检查更新"
-                IsEnabled="{Binding CheckEnabled}"
-                Command="{Binding CheckUpdBtnClickedCommand}"
-                BackgroundColor="{Binding ConstBackgroundColor}"
-                FontSize="{Binding ConstFontSize}"
-                TextColor="{Binding ConstTextColor}"/>
-        </HorizontalStackLayout>
-        <HorizontalStackLayout>
+        WidthRequest="600"
+        RowDefinitions="*,*,*,*,*,*,*,*,*,*,*,*"
+        ColumnDefinitions="*">
+
+        <HorizontalStackLayout
+            Grid.Row="1">
             <Label
                 WidthRequest="100"
                 Text="文件路径:"
@@ -39,13 +25,73 @@
                 ReturnCommand="{Binding DownloadBtnClickedCommand}"
                 FontSize="16"/>
             <Button
+                WidthRequest="100"
                 Text="选择文件夹"
                 Command="{Binding BrowseBtnClickedCommand}"
+                IsEnabled="{Binding BrowseEnabled}"
                 BackgroundColor="{Binding ConstBackgroundColor}"
                 TextColor="{Binding ConstTextColor}"/>
         </HorizontalStackLayout>
+
+        <Button
+            Grid.Row="2"
+            Text="下载"
+            Command="{Binding DownloadBtnClickedCommand}"
+            IsEnabled="{Binding DownloadEnabled}"
+            BackgroundColor="{Binding ConstBackgroundColor}"
+            FontSize="{Binding ConstFontSize}"
+            TextColor="{Binding ConstTextColor}"/>
+
+        <HorizontalStackLayout
+            Grid.Row="3">
+            <Button
+                WidthRequest="200"
+                Text="检查更新"
+                Command="{Binding CheckUpdBtnClickedCommand}"
+		        IsEnabled="{Binding CheckEnabled}"
+                BackgroundColor="{Binding ConstBackgroundColor}"
+                FontSize="{Binding ConstFontSize}"
+                TextColor="{Binding ConstTextColor}"/>
+            <Button
+                WidthRequest="400"
+                Text="更新"
+                Command="{Binding UpdateBtnClickedCommand}"
+                IsEnabled="{Binding UpdateEnabled}"
+                BackgroundColor="{Binding ConstBackgroundColor}"
+                FontSize="{Binding ConstFontSize}"
+                TextColor="{Binding ConstTextColor}"/>
+        </HorizontalStackLayout>
+
         <Label
-            Text="{Binding DebugAlert}"/>
-    </VerticalStackLayout>
+            Grid.Row="4"
+            Text="{Binding DebugAlert1}"/>
+        <Label
+            Grid.Row="5"
+            Text="{Binding DebugAlert2}"/>
+
+        <CollectionView
+            WidthRequest="570"
+            Grid.Row="6"
+            Grid.RowSpan="3"
+            BackgroundColor="Grey"
+            ItemsSource="{Binding Exceptions}"
+            ItemsUpdatingScrollMode="KeepLastItemInView"
+            VerticalScrollBarVisibility="Always">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid
+                        HorizontalOptions="Center"
+                        WidthRequest="550">
+
+                        <Label
+                            Text="{Binding Message}"
+                            TextColor="Black"/>
+
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        
+    </Grid>
 
 </ContentPage>

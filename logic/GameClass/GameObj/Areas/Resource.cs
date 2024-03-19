@@ -4,7 +4,8 @@ using System.Threading;
 
 namespace GameClass.GameObj.Areas;
 
-public class Resource : Immovable
+public class Resource(XY initPos)
+    : Immovable(initPos, GameData.NumOfPosGridPerCell / 2, GameObjType.Resource)
 {
     public LongInTheVariableRange HP { get; } = new LongInTheVariableRange(GameData.ResourceHP);
     public override bool IsRigid => true;
@@ -12,12 +13,7 @@ public class Resource : Immovable
     public AtomicInt ProduceNum { get; } = new AtomicInt(0);
     public bool Produce(int produceSpeed, Ship ship)
     {
-        if (HP.SubV(produceSpeed) > 0)
-        {
-            ship.MoneyPool.AddMoney(produceSpeed);
-            return true;
-        }
-        return false;
+        return ship.MoneyPool.AddMoney(HP.SubV(produceSpeed)) > 0;
     }
     public void AddProduceNum(int add = 1)
     {
@@ -26,9 +22,5 @@ public class Resource : Immovable
     public void SubProduceNum(int sub = 1)
     {
         ProduceNum.Sub(sub);
-    }
-    public Resource(XY initPos)
-        : base(initPos, GameData.NumOfPosGridPerCell / 2, GameObjType.Resource)
-    {
     }
 }

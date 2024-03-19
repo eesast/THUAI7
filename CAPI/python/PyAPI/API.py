@@ -104,8 +104,9 @@ class ShipAPI(IShipAPI, IGameTimer):
         return self.__logic.GetScore()
 
     def HaveView(self, gridX: int, gridY: int) -> bool:
-        return self.__logic.HaveView(gridX, gridY, self.GetSelfInfo().x,
-                                     self.GetSelfInfo().y, self.GetSelfInfo().viewRange)
+        return self.__logic.HaveView(gridX, gridY,
+                                     self.GetSelfInfo().x, self.GetSelfInfo().y,
+                                     self.GetSelfInfo().viewRange)
 
     def Print(self, cont: str) -> None:
         pass

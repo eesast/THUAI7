@@ -7,7 +7,8 @@ namespace GameClass.GameObj
     /// <summary>
     /// 所有物，具有主人（Parent）（特定玩家）属性的对象
     /// </summary>
-    public abstract class ObjOfShip : Movable, IObjOfShip
+    public abstract class ObjOfShip(XY initPos, int initRadius, GameObjType initType)
+        : Movable(initPos, initRadius, initType), IObjOfShip
     {
         public object ObjOfShipLock { get; } = new();
         private IShip? parent = null;
@@ -23,10 +24,6 @@ namespace GameClass.GameObj
                 lock (ObjOfShipLock)
                     parent = value;
             }
-        }
-        public ObjOfShip(XY initPos, int initRadius, GameObjType initType) :
-            base(initPos, initRadius, initType)
-        {
         }
     }
 }

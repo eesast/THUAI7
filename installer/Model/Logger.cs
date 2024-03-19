@@ -283,7 +283,7 @@ namespace installer.Model
     public class ExceptionStack
     {
         public Logger logger;
-        protected ConcurrentStack<Exception> Exceptions;
+        public ConcurrentStack<Exception> Exceptions;
         protected object? Source;
         public event EventHandler? OnFailed;
         public event EventHandler? OnFailProcessed;

@@ -23,11 +23,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def ShipGetSelfInfo(self) -> THUAI7.Ship:
-        pass
-
-    @abstractmethod
-    def TeamGetSelfInfo(self) -> THUAI7.Team:
+    def GetSelfInfo(self) -> Union[THUAI7.Ship, THUAI7.Team]:
         pass
 
     @abstractmethod
@@ -71,7 +67,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def Send(self, toPlayerID: int, message: str, binary: bool) -> bool:
+    def SendMessage(self, toID: int, message: Union[str, bytes]) -> bool:
         pass
 
     @abstractmethod
@@ -119,9 +115,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def HaveView(
-        self, gridX: int, gridY: int, selfX: int, selfY: int, viewRange: int
-    ) -> bool:
+    def HaveView(self, gridX: int, gridY: int, selfX: int, selfY: int, viewRange: int) -> bool:
         pass
 
     @abstractmethod
@@ -296,7 +290,7 @@ class IShipAPI(IAPI, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetSelfInfo(self) -> Union[THUAI7.Student, THUAI7.Tricker]:
+    def GetSelfInfo(self) -> THUAI7.Ship:
         pass
 
     @abstractmethod

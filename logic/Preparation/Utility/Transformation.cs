@@ -9,8 +9,8 @@ using ProtoPlayer = Protobuf.PlayerType;
 using ProtoProducer = Protobuf.ProducerType;
 using ProtoShape = Protobuf.ShapeType;
 using ProtoShield = Protobuf.ShieldType;
-using ProtoShip = Protobuf.ShipType;
-using ProtoShipState = Protobuf.ShipState;
+using ProtoSweeper = Protobuf.SweeperType;
+using ProtoSweeperState = Protobuf.SweeperState;
 using ProtoWeapon = Protobuf.WeaponType;
 #endregion
 
@@ -57,16 +57,16 @@ public static class Transformation
     #region Construction
     public static ProtoConstruction ConstructionToProto(ConstructionType constructionType) => constructionType switch
     {
-        ConstructionType.Factory => ProtoConstruction.Factory,
-        ConstructionType.Community => ProtoConstruction.Community,
-        ConstructionType.Fort => ProtoConstruction.Fort,
+        ConstructionType.Factory => ProtoConstruction.Recyclebank,
+        ConstructionType.Community => ProtoConstruction.Chargestation,
+        ConstructionType.Fort => ProtoConstruction.Signaltower,
         _ => ProtoConstruction.NullConstructionType
     };
     public static ConstructionType ConstructionFromProto(ProtoConstruction constructionType) => constructionType switch
     {
-        ProtoConstruction.Factory => ConstructionType.Factory,
-        ProtoConstruction.Community => ConstructionType.Community,
-        ProtoConstruction.Fort => ConstructionType.Fort,
+        ProtoConstruction.Recyclebank => ConstructionType.Factory,
+        ProtoConstruction.Chargestation => ConstructionType.Community,
+        ProtoConstruction.Signaltower => ConstructionType.Fort,
         _ => ConstructionType.Null
     };
     #endregion
@@ -133,25 +133,25 @@ public static class Transformation
     #region Place
     public static ProtoPlace PlaceTypeToProto(PlaceType placeType) => placeType switch
     {
-        PlaceType.Null => ProtoPlace.Space,
-        PlaceType.Ruin => ProtoPlace.Ruin,
-        PlaceType.Shadow => ProtoPlace.Shadow,
-        PlaceType.Asteroid => ProtoPlace.Asteroid,
-        PlaceType.Resource => ProtoPlace.Resource,
+        PlaceType.Null => ProtoPlace.Ground,
+        PlaceType.Ruin => ProtoPlace.Wall,
+        PlaceType.Shadow => ProtoPlace.Grass,
+        PlaceType.Asteroid => ProtoPlace.River,
+        PlaceType.Resource => ProtoPlace.Garbage,
         PlaceType.Construction => ProtoPlace.Construction,
-        PlaceType.Wormhole => ProtoPlace.Wormhole,
+        PlaceType.Wormhole => ProtoPlace.Bridge,
         PlaceType.Home => ProtoPlace.Home,
         _ => ProtoPlace.NullPlaceType
     };
     public static PlaceType PlaceTypeFromProto(ProtoPlace placeType) => placeType switch
     {
-        ProtoPlace.Space => PlaceType.Null,
-        ProtoPlace.Ruin => PlaceType.Ruin,
-        ProtoPlace.Shadow => PlaceType.Shadow,
-        ProtoPlace.Asteroid => PlaceType.Asteroid,
-        ProtoPlace.Resource => PlaceType.Resource,
+        ProtoPlace.Ground => PlaceType.Null,
+        ProtoPlace.Wall => PlaceType.Ruin,
+        ProtoPlace.Grass => PlaceType.Shadow,
+        ProtoPlace.River => PlaceType.Asteroid,
+        ProtoPlace.Garbage => PlaceType.Resource,
         ProtoPlace.Construction => PlaceType.Construction,
-        ProtoPlace.Wormhole => PlaceType.Wormhole,
+        ProtoPlace.Bridge => PlaceType.Wormhole,
         ProtoPlace.Home => PlaceType.Home,
         _ => PlaceType.Null
     };
@@ -159,13 +159,13 @@ public static class Transformation
     #region Player
     public static ProtoPlayer PlayerToProto(GameObjType playerType) => playerType switch
     {
-        GameObjType.Ship => ProtoPlayer.Ship,
+        GameObjType.Ship => ProtoPlayer.Sweeper,
         GameObjType.Home => ProtoPlayer.Team,
         _ => ProtoPlayer.NullPlayerType
     };
     public static GameObjType PlayerFromProto(ProtoPlayer playerType) => playerType switch
     {
-        ProtoPlayer.Ship => GameObjType.Ship,
+        ProtoPlayer.Sweeper => GameObjType.Ship,
         ProtoPlayer.Team => GameObjType.Home,
         _ => GameObjType.Null
     };
@@ -217,45 +217,45 @@ public static class Transformation
     };
     #endregion
     #region ShipState
-    public static ProtoShipState ShipStateToProto(ShipStateType shipStateType) => shipStateType switch
+    public static ProtoSweeperState ShipStateToProto(ShipStateType shipStateType) => shipStateType switch
     {
-        ShipStateType.Null => ProtoShipState.Idle,
-        ShipStateType.Producing => ProtoShipState.Producing,
-        ShipStateType.Constructing => ProtoShipState.Constructing,
-        ShipStateType.Recovering => ProtoShipState.Recovering,
-        ShipStateType.Recycling => ProtoShipState.Recycling,
-        ShipStateType.Attacking => ProtoShipState.Attacking,
-        ShipStateType.Swinging => ProtoShipState.Swinging,
-        ShipStateType.Stunned => ProtoShipState.Stunned,
-        ShipStateType.Moving => ProtoShipState.Moving,
-        _ => ProtoShipState.NullStatus
+        ShipStateType.Null => ProtoSweeperState.Idle,
+        ShipStateType.Producing => ProtoSweeperState.Producing,
+        ShipStateType.Constructing => ProtoSweeperState.Constructing,
+        ShipStateType.Recovering => ProtoSweeperState.Recovering,
+        ShipStateType.Recycling => ProtoSweeperState.Recycling,
+        ShipStateType.Attacking => ProtoSweeperState.Attacking,
+        ShipStateType.Swinging => ProtoSweeperState.Swinging,
+        ShipStateType.Stunned => ProtoSweeperState.Stunned,
+        ShipStateType.Moving => ProtoSweeperState.Moving,
+        _ => ProtoSweeperState.NullStatus
     };
-    public static ShipStateType ShipStateFromProto(ProtoShipState shipStateType) => shipStateType switch
+    public static ShipStateType ShipStateFromProto(ProtoSweeperState shipStateType) => shipStateType switch
     {
-        ProtoShipState.Producing => ShipStateType.Producing,
-        ProtoShipState.Constructing => ShipStateType.Constructing,
-        ProtoShipState.Recovering => ShipStateType.Recovering,
-        ProtoShipState.Recycling => ShipStateType.Recycling,
-        ProtoShipState.Attacking => ShipStateType.Attacking,
-        ProtoShipState.Swinging => ShipStateType.Swinging,
-        ProtoShipState.Stunned => ShipStateType.Stunned,
-        ProtoShipState.Moving => ShipStateType.Moving,
+        ProtoSweeperState.Producing => ShipStateType.Producing,
+        ProtoSweeperState.Constructing => ShipStateType.Constructing,
+        ProtoSweeperState.Recovering => ShipStateType.Recovering,
+        ProtoSweeperState.Recycling => ShipStateType.Recycling,
+        ProtoSweeperState.Attacking => ShipStateType.Attacking,
+        ProtoSweeperState.Swinging => ShipStateType.Swinging,
+        ProtoSweeperState.Stunned => ShipStateType.Stunned,
+        ProtoSweeperState.Moving => ShipStateType.Moving,
         _ => ShipStateType.Null
     };
     #endregion
     #region ShipType
-    public static ProtoShip ShipTypeToProto(ShipType shipType) => shipType switch
+    public static ProtoSweeper ShipTypeToProto(ShipType shipType) => shipType switch
     {
-        ShipType.CivilShip => ProtoShip.CivilianShip,
-        ShipType.WarShip => ProtoShip.MilitaryShip,
-        ShipType.FlagShip => ProtoShip.FlagShip,
-        _ => ProtoShip.NullShipType
+        ShipType.CivilShip => ProtoSweeper.CivilianSweeper,
+        ShipType.WarShip => ProtoSweeper.MilitarySweeper,
+        ShipType.FlagShip => ProtoSweeper.FlagSweeper,
+        _ => ProtoSweeper.NullSweeperType
     };
-    public static ShipType ShipTypeFromProto(ProtoShip shipType) => shipType switch
+    public static ShipType ShipTypeFromProto(ProtoSweeper shipType) => shipType switch
     {
-        ProtoShip.CivilianShip => ShipType.CivilShip,
-        ProtoShip.MilitaryShip => ShipType.WarShip,
-        ProtoShip.FlagShip => ShipType.FlagShip,
+        ProtoSweeper.CivilianSweeper => ShipType.CivilShip,
+        ProtoSweeper.MilitarySweeper => ShipType.WarShip,
+        ProtoSweeper.FlagSweeper => ShipType.FlagShip,
         _ => ShipType.Null
     };
     #endregion

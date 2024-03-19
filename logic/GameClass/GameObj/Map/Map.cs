@@ -11,8 +11,8 @@ namespace GameClass.GameObj
 {
     public partial class Map : IMap
     {
-        public Dictionary<GameObjType, IList<IGameObj>> GameObjDict { get; }
-        public Dictionary<GameObjType, ReaderWriterLockSlim> GameObjLockDict { get; }
+        private readonly Dictionary<GameObjType, LockedClassList<IGameObj>> gameObjDict;
+        public Dictionary<GameObjType, LockedClassList<IGameObj>> GameObjDict => gameObjDict;
         private readonly uint height;
         public uint Height => height;
         private readonly uint width;
@@ -34,7 +34,8 @@ namespace GameClass.GameObj
         {
             try
             {
-                return protoGameMap[obj.Position.x / GameData.NumOfPosGridPerCell, obj.Position.y / GameData.NumOfPosGridPerCell];
+                var (x, y) = GameData.PosGridToCellXY(obj.Position);
+                return protoGameMap[x, y];
             }
             catch
             {
@@ -45,7 +46,8 @@ namespace GameClass.GameObj
         {
             try
             {
-                return protoGameMap[pos.x / GameData.NumOfPosGridPerCell, pos.y / GameData.NumOfPosGridPerCell];
+                var (x, y) = GameData.PosGridToCellXY(pos);
+                return protoGameMap[x, y];
             }
             catch
             {
@@ -56,157 +58,54 @@ namespace GameClass.GameObj
 
         public bool IsOutOfBound(IGameObj obj)
         {
-            return obj.Position.x >= GameData.MapLength - obj.Radius || obj.Position.x <= obj.Radius || obj.Position.y >= GameData.MapLength - obj.Radius || obj.Position.y <= obj.Radius;
+            return obj.Position.x >= GameData.MapLength - obj.Radius
+                || obj.Position.x <= obj.Radius
+                || obj.Position.y >= GameData.MapLength - obj.Radius
+                || obj.Position.y <= obj.Radius;
         }
         public IOutOfBound GetOutOfBound(XY pos)
         {
             return new OutOfBoundBlock(pos);
         }
+
         public Ship? FindShipInID(long ID)
         {
-            Ship? ship = null;
-            GameObjLockDict[GameObjType.Ship].EnterReadLock();
-            try
-            {
-                foreach (Ship s in GameObjDict[GameObjType.Ship].Cast<Ship>())
-                {
-                    if (s.ID == ID)
-                    {
-                        ship = s;
-                        break;
-                    }
-                }
-            }
-            finally
-            {
-                GameObjLockDict[GameObjType.Ship].ExitReadLock();
-            }
-            return ship;
+            return (Ship?)GameObjDict[GameObjType.Ship].Find(gameObj => (ID == ((Ship)gameObj).ID));
         }
-        public Ship? FindShipInShipID(long shipID)
+        public Ship? FindShipInPlayerID(long teamID, long playerID)
         {
-            Ship? ship = null;
-            GameObjLockDict[GameObjType.Ship].EnterReadLock();
-            try
+            return (Ship?)GameObjDict[GameObjType.Ship].Find(gameObj => (teamID == ((Ship)gameObj).TeamID) && playerID == ((Ship)gameObj).PlayerID);
+        }
+
+        public static bool WormholeInteract(Wormhole gameObj, XY Pos)
+        {
+            foreach (XY xy in gameObj.Grids)
             {
-                foreach (Ship s in GameObjDict[GameObjType.Ship].Cast<Ship>())
-                {
-                    if (s.ShipID == shipID)
-                    {
-                        ship = s;
-                        break;
-                    }
-                }
+                if (GameData.ApproachToInteract(xy, Pos))
+                    return true;
             }
-            finally
-            {
-                GameObjLockDict[GameObjType.Ship].ExitReadLock();
-            }
-            return ship;
+            return false;
         }
         public GameObj? OneForInteract(XY Pos, GameObjType gameObjType)
         {
-            GameObj? GameObjForInteract = null;
-            GameObjLockDict[gameObjType].EnterReadLock();
-            try
-            {
-                foreach (GameObj gameObj in GameObjDict[gameObjType].Cast<GameObj>())
-                {
-                    if (gameObjType == GameObjType.Wormhole)
-                    {
-                        bool flag = false;
-                        foreach (XY xy in ((Wormhole)gameObj).Grids)
-                        {
-                            if (GameData.ApproachToInteract(xy, Pos))
-                            {
-                                GameObjForInteract = gameObj;
-                                flag = true;
-                                break;
-                            }
-                        }
-                        if (flag)
-                        {
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        if (GameData.ApproachToInteract(gameObj.Position, Pos))
-                        {
-                            GameObjForInteract = gameObj;
-                            break;
-                        }
-                    }
-                }
-            }
-            finally
-            {
-                GameObjLockDict[gameObjType].ExitReadLock();
-            }
-            return GameObjForInteract;
+            return (GameObj?)GameObjDict[gameObjType].Find(gameObj =>
+                ((GameData.ApproachToInteract(gameObj.Position, Pos)) ||
+                (gameObjType == GameObjType.Wormhole && WormholeInteract((Wormhole)gameObj, Pos)))
+                );
         }
+
         public GameObj? OneInTheSameCell(XY Pos, GameObjType gameObjType)
         {
-            GameObj? GameObjForInteract = null;
-            GameObjLockDict[gameObjType].EnterReadLock();
-            try
-            {
-                foreach (GameObj gameObj in GameObjDict[gameObjType].Cast<GameObj>())
-                {
-                    if (GameData.IsInTheSameCell(gameObj.Position, Pos))
-                    {
-                        GameObjForInteract = gameObj;
-                        break;
-                    }
-                }
-            }
-            finally
-            {
-                GameObjLockDict[gameObjType].ExitReadLock();
-            }
-            return GameObjForInteract;
+            return (GameObj?)GameObjDict[gameObjType].Find(gameObj => (GameData.IsInTheSameCell(gameObj.Position, Pos)));
         }
         public GameObj? PartInTheSameCell(XY Pos, GameObjType gameObjType)
         {
-            GameObj? GameObjForInteract = null;
-            GameObjLockDict[gameObjType].EnterReadLock();
-            try
-            {
-                foreach (GameObj gameObj in GameObjDict[gameObjType].Cast<GameObj>())
-                {
-                    if (GameData.PartInTheSameCell(gameObj.Position, Pos))
-                    {
-                        GameObjForInteract = gameObj;
-                        break;
-                    }
-                }
-            }
-            finally
-            {
-                GameObjLockDict[gameObjType].ExitReadLock();
-            }
-            return GameObjForInteract;
+            return (GameObj?)GameObjDict[gameObjType].Find(gameObj => (GameData.PartInTheSameCell(gameObj.Position, Pos)));
         }
         public GameObj? OneForInteractInACross(XY Pos, GameObjType gameObjType)
         {
-            GameObj? GameObjForInteract = null;
-            GameObjLockDict[gameObjType].EnterReadLock();
-            try
-            {
-                foreach (GameObj gameObj in GameObjDict[gameObjType].Cast<GameObj>())
-                {
-                    if (GameData.ApproachToInteractInACross(gameObj.Position, Pos))
-                    {
-                        GameObjForInteract = gameObj;
-                        break;
-                    }
-                }
-            }
-            finally
-            {
-                GameObjLockDict[gameObjType].ExitReadLock();
-            }
-            return GameObjForInteract;
+            return (GameObj?)GameObjDict[gameObjType].Find(gameObj =>
+                GameData.ApproachToInteractInACross(gameObj.Position, Pos));
         }
         public bool CanSee(Ship ship, GameObj gameObj)
         {
@@ -217,9 +116,11 @@ namespace GameClass.GameObj
                 return false;
             if (del.x > del.y)
             {
+                var beginx = GameData.PosGridToCellX(pos1) + GameData.NumOfPosGridPerCell;
+                var endx = GameData.PosGridToCellX(pos2);
                 if (GetPlaceType(pos1) == PlaceType.Shadow && GetPlaceType(pos2) == PlaceType.Shadow)
                 {
-                    for (int x = GameData.PosGridToCellX(pos1) + GameData.NumOfPosGridPerCell; x < GameData.PosGridToCellX(pos2); x += GameData.NumOfPosGridPerCell)
+                    for (int x = beginx; x < endx; x += GameData.NumOfPosGridPerCell)
                     {
                         if (GetPlaceType(pos1 + del * (x / del.x)) != PlaceType.Shadow)
                             return false;
@@ -227,7 +128,7 @@ namespace GameClass.GameObj
                 }
                 else
                 {
-                    for (int x = GameData.PosGridToCellX(pos1) + GameData.NumOfPosGridPerCell; x < GameData.PosGridToCellX(pos2); x += GameData.NumOfPosGridPerCell)
+                    for (int x = beginx; x < endx; x += GameData.NumOfPosGridPerCell)
                     {
                         if (GetPlaceType(pos1 + del * (x / del.x)) == PlaceType.Ruin)
                             return false;
@@ -236,9 +137,11 @@ namespace GameClass.GameObj
             }
             else
             {
+                var beginy = GameData.PosGridToCellY(pos1) + GameData.NumOfPosGridPerCell;
+                var endy = GameData.PosGridToCellY(pos2);
                 if (GetPlaceType(pos1) == PlaceType.Shadow && GetPlaceType(pos2) == PlaceType.Shadow)
                 {
-                    for (int y = GameData.PosGridToCellY(pos1) + GameData.NumOfPosGridPerCell; y < GameData.PosGridToCellY(pos2); y += GameData.NumOfPosGridPerCell)
+                    for (int y = beginy; y < endy; y += GameData.NumOfPosGridPerCell)
                     {
                         if (GetPlaceType(pos1 + del * (y / del.y)) != PlaceType.Shadow)
                             return false;
@@ -246,7 +149,7 @@ namespace GameClass.GameObj
                 }
                 else
                 {
-                    for (int y = GameData.PosGridToCellY(pos1) + GameData.NumOfPosGridPerCell; y < GameData.PosGridToCellY(pos2); y += GameData.NumOfPosGridPerCell)
+                    for (int y = beginy; y < endy; y += GameData.NumOfPosGridPerCell)
                     {
                         if (GetPlaceType(pos1 + del * (y / del.y)) == PlaceType.Ruin)
                             return false;
@@ -257,70 +160,34 @@ namespace GameClass.GameObj
         }
         public bool Remove(GameObj gameObj)
         {
-            GameObj? ToDel = null;
-            GameObjLockDict[gameObj.Type].EnterWriteLock();
-            try
+            GameObj? ans = (GameObj?)GameObjDict[gameObj.Type].RemoveOne(obj => gameObj.ID == obj.ID);
+            if (ans != null)
             {
-                foreach (GameObj obj in GameObjDict[gameObj.Type].Cast<GameObj>())
-                {
-                    if (gameObj.ID == obj.ID)
-                    {
-                        ToDel = obj;
-                        break;
-                    }
-                }
-                if (ToDel != null)
-                {
-                    GameObjDict[gameObj.Type].Remove(ToDel);
-                    ToDel.TryToRemove();
-                }
+                ans.TryToRemove();
+                return true;
             }
-            finally
-            {
-                GameObjLockDict[gameObj.Type].ExitWriteLock();
-            }
-            return ToDel != null;
+            return false;
         }
         public bool RemoveJustFromMap(GameObj gameObj)
         {
-            GameObjLockDict[gameObj.Type].EnterWriteLock();
-            try
+            if (GameObjDict[gameObj.Type].Remove(gameObj))
             {
-                if (GameObjDict[gameObj.Type].Remove(gameObj))
-                {
-                    gameObj.TryToRemove();
-                    return true;
-                }
-                return false;
+                gameObj.TryToRemove();
+                return true;
             }
-            finally
-            {
-                GameObjLockDict[gameObj.Type].ExitWriteLock();
-            }
+            return false;
         }
         public void Add(IGameObj gameObj)
         {
-            GameObjLockDict[gameObj.Type].EnterWriteLock();
-            try
-            {
-                GameObjDict[gameObj.Type].Add(gameObj);
-            }
-            finally
-            {
-                GameObjLockDict[gameObj.Type].ExitWriteLock();
-            }
+            GameObjDict[gameObj.Type].Add(gameObj);
         }
         public Map(MapStruct mapResource)
         {
-            GameObjDict = [];
-            GameObjLockDict = [];
+            gameObjDict = [];
             foreach (GameObjType idx in Enum.GetValues(typeof(GameObjType)))
             {
                 if (idx != GameObjType.Null)
-                {
-                    GameObjDict.Add(idx, new List<IGameObj>());
-                    GameObjLockDict.Add(idx, new ReaderWriterLockSlim());
-                }
+                    gameObjDict.TryAdd(idx, new LockedClassList<IGameObj>());
             }
             height = mapResource.height;
             width = mapResource.width;
@@ -329,7 +196,6 @@ namespace GameClass.GameObj
             {
                 for (int j = 0; j < width; ++j)
                 {
-                    bool hasWormhole = false;
                     switch (mapResource.map[i, j])
                     {
                         case PlaceType.Resource:
@@ -339,31 +205,22 @@ namespace GameClass.GameObj
                             Add(new Construction(GameData.GetCellCenterPos(i, j)));
                             break;
                         case PlaceType.Wormhole:
-                            foreach (Wormhole wormhole in GameObjDict[GameObjType.Wormhole].Cast<Wormhole>())
+                            Func<Wormhole, bool> HasWormhole = (Wormhole wormhole) =>
                             {
                                 if (wormhole.Grids.Contains(new XY(i, j)))
+                                    return true;
+                                foreach (XY xy in wormhole.Grids)
                                 {
-                                    hasWormhole = true;
-                                    break;
-                                }
-                                else
-                                {
-                                    foreach (XY xy in wormhole.Grids)
+                                    if (Math.Abs(xy.x - i) <= 1 && Math.Abs(xy.y - j) <= 1)
                                     {
-                                        if (Math.Abs(xy.x - i) <= 1 && Math.Abs(xy.y - j) <= 1)
-                                        {
-                                            wormhole.Grids.Add(new XY(i, j));
-                                            hasWormhole = true;
-                                            break;
-                                        }
-                                    }
-                                    if (hasWormhole)
-                                    {
-                                        break;
+                                        wormhole.Grids.Add(new XY(i, j));
+                                        return true;
                                     }
                                 }
-                            }
-                            if (!hasWormhole)
+                                return false;
+                            };
+
+                            if (GameObjDict[GameObjType.Wormhole].Cast<Wormhole>().Find(wormhole => HasWormhole(wormhole)) == null)
                             {
                                 List<XY> grids = [new XY(i, j)];
                                 Add(new Wormhole(GameData.GetCellCenterPos(i, j), grids));
@@ -376,7 +233,7 @@ namespace GameClass.GameObj
                     }
                 }
             }
-            Homes = GameObjDict[GameObjType.Home].Cast<Home>().ToList();
+            Homes = GameObjDict[GameObjType.Home].Cast<Home>().ToNewList();
         }
     }
 }

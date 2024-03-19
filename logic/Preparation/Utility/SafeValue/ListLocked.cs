@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace Preparation.Utility
@@ -56,6 +58,10 @@ namespace Preparation.Utility
         {
             WriteLock(() => { list.Add(item); });
         }
+        public void AddRange(IEnumerable<T> lt)
+        {
+            WriteLock(() => { list.AddRange(lt); });
+        }
 
         public void Insert(int index, T item)
         {
@@ -74,13 +80,14 @@ namespace Preparation.Utility
 
         public int RemoveAll(T item) => WriteLock(() => { return list.RemoveAll((t) => { return t == item; }); });
 
-        public bool RemoveOne(Predicate<T> match) =>
+        public T? RemoveOne(Predicate<T> match) =>
             WriteLock(() =>
             {
                 int index = list.FindIndex(match);
-                if (index == -1) return false;
+                if (index == -1) return null;
+                T ans = list[index];
                 list.RemoveAt(index);
-                return true;
+                return ans;
             });
 
         public int RemoveAll(Predicate<T> match) => WriteLock(() => { return list.RemoveAll(match); });
@@ -159,6 +166,22 @@ namespace Preparation.Utility
         public int FindIndex(Predicate<T> match) => ReadLock(() => { return list.FindIndex(match); });
 
         public void ForEach(Action<T> action) => ReadLock(() => { list.ForEach(action); });
+
+        public Array ToArray()
+        {
+            return ReadLock(() => { return list.ToArray(); });
+        }
+        public List<T> ToNewList()
+        {
+            List<T> lt = new();
+            return ReadLock(() => { lt.AddRange(list); return lt; });
+        }
+
+        public LockedClassList<TResult> Cast<TResult>() where TResult : class
+        {
+            LockedClassList<TResult> lt = new();
+            return ReadLock(() => { lt.AddRange(list.Cast<TResult>()); return lt; });
+        }
         #endregion
     }
 }

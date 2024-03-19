@@ -7,6 +7,7 @@ using GameEngine;
 using Preparation.Utility;
 using Preparation.Interface;
 using Timothy.FrameRateTask;
+using System.Linq;
 
 namespace Gaming
 {
@@ -98,24 +99,10 @@ namespace Gaming
                     {
                         if (bullet.CanBeBombed(kvp.Key))
                         {
-                            gameMap.GameObjLockDict[kvp.Key].EnterReadLock();
-                            try
-                            {
-                                foreach (var item in gameMap.GameObjDict[kvp.Key])
-                                {
-                                    if (bullet.CanAttack((GameObj)item))
-                                    {
-                                        beAttackedList.Add(item);
-                                    }
-                                }
-                            }
-                            finally
-                            {
-                                gameMap.GameObjLockDict[kvp.Key].ExitReadLock();
-                            }
+                            beAttackedList.AddRange(gameMap.GameObjDict[kvp.Key].FindAll(gameObj => bullet.CanAttack((GameObj)gameObj)));
                         }
                     }
-                    foreach (GameObj beAttackedObj in beAttackedList)
+                    foreach (GameObj beAttackedObj in beAttackedList.Cast<GameObj>())
                     {
                         BombObj(bullet, beAttackedObj);
                     }

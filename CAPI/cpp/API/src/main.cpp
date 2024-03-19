@@ -27,8 +27,8 @@ static constexpr std::string_view welcomeString = R"welcome(
             /   _____//  |______ _______  /  \    /  \_____ _______ 
             \_____  \\   __\__  \\_  __ \ \   \/\/   /\__  \\_  __ \
             /        \|  |  / __ \|  | \/  \        /  / __ \|  | \/
-          /_______  /|__| (____  /__|      \__/\  /  (____  /__|   
-                  \/           \/               \/        \/    
+           /_______  /|__| (____  /__|      \__/\  /  (____  /__|   
+                   \/           \/               \/        \/    
 )welcome"sv;
 
 int THUAI7Main(int argc, char** argv, CreateAIFunc AIBuilder)
@@ -40,7 +40,7 @@ int THUAI7Main(int argc, char** argv, CreateAIFunc AIBuilder)
     bool file = false;
     bool print = false;
     bool warnOnly = false;
-    extern const std::array<THUAI7::ShipType, 4> shipTypeDict;
+    extern const std::array<THUAI7::SweeperType, 4> SweeperTypeDict;
     // {
     //     file = true;
     //     print = true;
@@ -65,7 +65,7 @@ int THUAI7Main(int argc, char** argv, CreateAIFunc AIBuilder)
         TCLAP::ValueArg<int> teamID("t", "teamID", "Team ID 0,1 valid only", true, -1, &teamIdConstraint);
         cmd.add(teamID);
 
-        std::vector<int> validPlayerIDs{0, 1, 2, 3, 4};
+        std::vector<int> validPlayerIDs{0, 1, 2, 3, 4};  // 0代表team
         TCLAP::ValuesConstraint<int> playerIdConstraint(validPlayerIDs);
         TCLAP::ValueArg<int> playerID("p", "playerID", "Player ID 0,1,2,3,4 valid only", true, -1, &playerIdConstraint);
         cmd.add(playerID);
@@ -101,19 +101,19 @@ int THUAI7Main(int argc, char** argv, CreateAIFunc AIBuilder)
     try
     {
         THUAI7::PlayerType playerType;
-        THUAI7::ShipType shipType = THUAI7::ShipType::NullShipType;
+        THUAI7::SweeperType SweeperType = THUAI7::SweeperType::NullSweeperType;
         if (pID == 0)
             playerType = THUAI7::PlayerType::Team;
         else
         {
-            playerType = THUAI7::PlayerType::Ship;
-            shipType = shipTypeDict[pID];
+            playerType = THUAI7::PlayerType::Sweeper;
+            SweeperType = SweeperTypeDict[pID];
         }
 #ifdef _MSC_VER
         std::cout
             << welcomeString << std::endl;
 #endif
-        Logic logic(pID, tID, playerType, shipType);
+        Logic logic(pID, tID, playerType, SweeperType);
         logic.Main(AIBuilder, sIP, sPort, file, print, warnOnly);
     }
     catch (const std::exception& e)

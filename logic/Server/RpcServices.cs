@@ -133,9 +133,8 @@ namespace Server
 #endif
             lock (addPlayerLock)
             {
-                XY birthPoint = new(request.X, request.Y);
-                Game.ShipInitInfo playerInitInfo = new(request.TeamId, request.PlayerId, birthPoint, Transformation.ShipTypeFromProto(request.ShipType));
-                long newPlayerID = game.AddShip(playerInitInfo);
+                Game.PlayerInitInfo playerInitInfo = new(request.TeamId, request.PlayerId, Transformation.ShipTypeFromProto(request.SweeperType));
+                long newPlayerID = game.AddPlayer(playerInitInfo);
                 if (newPlayerID == GameObj.invalidID)
                 {
 #if DEBUG
@@ -152,6 +151,8 @@ namespace Server
                     if (semaDict.TryAdd(request.PlayerId, temp))
                     {
                         start = Interlocked.Increment(ref playerCountNow) == playerNum;
+                        Console.WriteLine($"PlayerCountNow: {playerCountNow}");
+                        Console.WriteLine($"PlayerNum: {playerNum}");
                     }
                 }
                 if (start)
@@ -207,6 +208,26 @@ namespace Server
 
         #region 船
 
+        public override Task<BoolRes> Activate(ActivateMsg request, ServerCallContext context)
+        {
+#if DEBUG
+            Console.WriteLine($"TRY Activate: Player {request.PlayerId} from Team {request.TeamId}");
+#endif
+            BoolRes boolRes = new();
+            if (request.PlayerId >= spectatorMinPlayerID)
+            {
+                boolRes.ActSuccess = false;
+                return Task.FromResult(boolRes);
+            }
+            // var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            boolRes.ActSuccess = game.ActivateShip(request.TeamId, Transformation.ShipTypeFromProto(request.SweeperType));
+            if (!game.GameMap.Timer.IsGaming) boolRes.ActSuccess = false;
+#if DEBUG
+            Console.WriteLine($"END Activate: {boolRes.ActSuccess}");
+#endif
+            return Task.FromResult(boolRes);
+        }
+
         public override Task<MoveRes> Move(MoveMsg request, ServerCallContext context)
         {
 #if DEBUG
@@ -223,11 +244,11 @@ namespace Server
                 moveRes.ActSuccess = false;
                 return Task.FromResult(moveRes);
             }
-            var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            moveRes.ActSuccess = game.MoveShip(gameID, (int)request.TimeInMilliseconds, request.Angle);
+            // var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            moveRes.ActSuccess = game.MoveShip(request.TeamId, request.PlayerId, (int)request.TimeInMilliseconds, request.Angle);
             if (!game.GameMap.Timer.IsGaming) moveRes.ActSuccess = false;
 #if DEBUG
-            Console.WriteLine("END Move");
+            Console.WriteLine($"END Move: {moveRes.ActSuccess}");
 #endif
             return Task.FromResult(moveRes);
         }
@@ -243,8 +264,8 @@ namespace Server
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
             }
-            var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Recover(gameID, request.Recover);
+            // var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            boolRes.ActSuccess = game.Recover(request.TeamId, request.PlayerId, request.Recover);
 #if DEBUG
             Console.WriteLine("END Recover");
 #endif
@@ -262,8 +283,8 @@ namespace Server
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
             }
-            var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Produce(gameID);
+            // var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            boolRes.ActSuccess = game.Produce(request.TeamId, request.PlayerId);
 #if DEBUG
             Console.WriteLine("END Produce");
 #endif
@@ -281,8 +302,8 @@ namespace Server
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
             }
-            var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Construct(gameID, Transformation.ConstructionFromProto(request.ConstructionType));
+            // var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            boolRes.ActSuccess = game.Construct(request.TeamId, request.PlayerId, Transformation.ConstructionFromProto(request.ConstructionType));
 #if DEBUG
             Console.WriteLine("END Rebuild");
 #endif
@@ -300,8 +321,8 @@ namespace Server
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
             }
-            var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Construct(gameID, Transformation.ConstructionFromProto(request.ConstructionType));
+            // var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            boolRes.ActSuccess = game.Construct(request.TeamId, request.PlayerId, Transformation.ConstructionFromProto(request.ConstructionType));
 #if DEBUG
             Console.WriteLine("END Construct");
 #endif
@@ -324,8 +345,8 @@ namespace Server
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
             }
-            var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Attack(gameID, request.Angle);
+            // var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            boolRes.ActSuccess = game.Attack(request.TeamId, request.PlayerId, request.Angle);
 #if DEBUG
             Console.WriteLine("END Attack");
 #endif
@@ -435,8 +456,8 @@ namespace Server
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
             }
-            var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.InstallModule(gameID, Transformation.ModuleFromProto(request.ModuleType));
+            // var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            boolRes.ActSuccess = game.InstallModule(request.TeamId, request.PlayerId, Transformation.ModuleFromProto(request.ModuleType));
 #if DEBUG
             Console.WriteLine("END InstallModule");
 #endif
@@ -454,8 +475,8 @@ namespace Server
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
             }
-            var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Recycle(gameID);
+            // var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            boolRes.ActSuccess = game.Recycle(request.TeamId, request.PlayerId);
 #if DEBUG
             Console.WriteLine("END Recycle");
 #endif
@@ -473,8 +494,8 @@ namespace Server
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
             }
-            var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.Stop(gameID);
+            // var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            boolRes.ActSuccess = game.Stop(request.TeamId, request.PlayerId);
 #if DEBUG
             Console.WriteLine("END EndAllAction");
 #endif

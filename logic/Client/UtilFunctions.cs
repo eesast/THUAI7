@@ -25,5 +25,16 @@ namespace Client
                 lengthOfSlide = parentGridWidth;
             }
         }
+        public static int getIndex(int i, int j)
+        {
+            return 50 * i + j;
+        }
+
+        public static PointF getMapCenter(float i, float j)
+        {
+            return new PointF(10 * i + 5, 10 * j + 5);
+        }
     }
+
+
 }

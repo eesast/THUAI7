@@ -10,11 +10,46 @@ using System.Diagnostics;
 
 namespace installer.Model
 {
+    public record VersionID
+    {
+        public VersionID(int major, int minor, int build, int revision)
+        {
+            (Major, Minor, Build, Revision) = (major, minor, build, revision);
+        }
+        public int Major, Minor, Build, Revision;
+        public static bool operator >(VersionID left, VersionID right)
+        {
+            return (left.Major > right.Major) |
+                (left.Major == right.Major && left.Minor > right.Minor) |
+                (left.Major == right.Major && left.Minor == right.Minor && left.Build > right.Build) |
+                (left.Major == right.Major && left.Minor == right.Minor && left.Build == right.Build && left.Revision > right.Revision);
+        }
+        public static bool operator <(VersionID left, VersionID right)
+        {
+            return (left.Major < right.Major) |
+                (left.Major == right.Major && left.Minor < right.Minor) |
+                (left.Major == right.Major && left.Minor == right.Minor && left.Build < right.Build) |
+                (left.Major == right.Major && left.Minor == right.Minor && left.Build == right.Build && left.Revision < right.Revision);
+        }
+    }
+    public class MD5DataFile
+    {
+        public Dictionary<string, string> Data { get; set; } = new Dictionary<string, string>();
+        public (int, int, int, int) Version = (1, 0, 0, 0);
+        public string Description { get; set; }
+            = "The Description of the current version.";
+        public string BugFixed { get; set; }
+            = "Bugs had been fixed.";
+        public string BugGenerated { get; set; }
+            = "New bugs found in the new version.";
+    }
+
     public class Local_Data
     {
         public string ConfigPath;       // 标记路径记录文件THUAI7.json的路径
         public string MD5DataPath;      // 标记MD5本地缓存文件的路径
-        public string UserCodePostfix;  // 用户文件后缀(.cpp/.py)
+        public string UserCodePostfix = "cpp";  // 用户文件后缀(.cpp/.py)
+        public MD5DataFile FileData = new MD5DataFile();
         public string UserCodePath
         {
             get => Path.Combine(InstallPath,
@@ -183,23 +218,6 @@ namespace installer.Model
             }
         }
 
-        public static bool IsUserFile(string filename)
-        {
-            if (filename.Contains("git") || filename.Contains("bin") || filename.Contains("obj"))
-                return true;
-            if (filename.EndsWith("sh") || filename.EndsWith("cmd"))
-                return true;
-            if (filename.EndsWith("gz"))
-                return true;
-            if (filename.Contains("AI.cpp") || filename.Contains("AI.py"))
-                return true;
-            if (filename.Contains("hash.json"))
-                return true;
-            if (filename.EndsWith("log"))
-                return true;
-            return false;
-        }
-
         public void ReadConfig()
         {
             try
@@ -238,25 +256,20 @@ namespace installer.Model
 
         public void ReadMD5Data()
         {
-            Dictionary<string, string> newMD5Data;
+            FileData = new MD5DataFile();
             StreamReader r = new StreamReader(MD5DataPath);
             try
             {
                 string json = r.ReadToEnd();
-                if (json is null || json == "")
+                if (!string.IsNullOrEmpty(json))
                 {
-                    newMD5Data = new Dictionary<string, string>();
-                }
-                else
-                {
-                    newMD5Data = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? new Dictionary<string, string>();
+                    FileData = JsonSerializer.Deserialize<MD5DataFile>(json) ?? new MD5DataFile();
                 }
                 r.Close(); r.Dispose();
             }
             catch (JsonException e)
             {
                 // Json反序列化失败，考虑重新创建MD5数据库
-                newMD5Data = new Dictionary<string, string>();
                 r.Close(); r.Dispose();
                 File.Delete(MD5DataPath);
                 File.Create(MD5DataPath);
@@ -264,10 +277,9 @@ namespace installer.Model
             catch (Exception e)
             {
                 Exceptions.Push(e);
-                newMD5Data = new Dictionary<string, string>();
                 r.Close(); r.Dispose();
             }
-            foreach (var item in newMD5Data)
+            foreach (var item in FileData.Data)
             {
                 var key = item.Key.Replace('/', Path.DirectorySeparatorChar);
                 MD5Data.AddOrUpdate(key, (k) =>
@@ -293,7 +305,8 @@ namespace installer.Model
                     fs.SetLength(0);
                     var exp1 = from i in MD5Data
                                select new KeyValuePair<string, string>(i.Key.Replace(Path.DirectorySeparatorChar, '/'), i.Value);
-                    sw.Write(JsonSerializer.Serialize(exp1.ToDictionary<string, string>()));
+                    FileData.Data = exp1.ToDictionary();
+                    sw.Write(JsonSerializer.Serialize(FileData));
                     sw.Flush();
                 }
             }
@@ -359,6 +372,37 @@ namespace installer.Model
                 }
             });
             SaveMD5Data();
+        }
+
+
+        public static bool IsUserFile(string filename)
+        {
+            if (filename.Contains("git") || filename.Contains("bin") || filename.Contains("obj"))
+                return true;
+            if (filename.EndsWith("sh") || filename.EndsWith("cmd"))
+                return true;
+            if (filename.EndsWith("gz"))
+                return true;
+            if (filename.Contains("AI.cpp") || filename.Contains("AI.py"))
+                return true;
+            if (filename.Contains("hash.json"))
+                return true;
+            if (filename.EndsWith("log"))
+                return true;
+            return false;
+        }
+
+        public static int CountFile(string folder, string? root = null)
+        {
+            int result = (from f in Directory.EnumerateFiles(folder)
+                          let t = Helper.ConvertAbsToRel(root ?? folder, f)
+                          where !IsUserFile(t)
+                          select f).Count();
+            foreach (var d in Directory.EnumerateDirectories(folder))
+            {
+                result += CountFile(d, root ?? folder);
+            }
+            return result;
         }
     }
 }

@@ -4,27 +4,22 @@
 #include "AI.h"
 #include "constants.h"
 // 注意不要使用conio.h，Windows.h等非标准库
-
 // 为假则play()期间确保游戏状态不更新，为真则只保证游戏状态在调用相关方法时不更新，大致一帧更新一次
 extern const bool asynchronous = false;
 
 // 选手需要依次将player1到player4的船类型在这里定义
-
-extern const std::array<THUAI7::ShipType, 4> shipTypeDict = {
-    THUAI7::ShipType::CivilianShip,
-    THUAI7::ShipType::MilitaryShip,
-    THUAI7::ShipType::MilitaryShip,
-    THUAI7::ShipType::FlagShip,
+extern const std::array<THUAI7::SweeperType, 4> SweeperTypeDict = {
+    THUAI7::SweeperType::CivilianSweeper,
+    THUAI7::SweeperType::MilitarySweeper,
+    THUAI7::SweeperType::MilitarySweeper,
+    THUAI7::SweeperType::FlagSweeper,
 };
 
 // 可以在AI.cpp内部声明变量与函数
 
-void AI::play(IShipAPI& api)
+void AI::play(ISweeperAPI& api)
 {
-    if (this->playerID == 0)
-    {
-    }
-    else if (this->playerID == 1)
+    if (this->playerID == 1)
     {
         // 玩家1执行操作
     }

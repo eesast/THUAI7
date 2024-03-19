@@ -44,20 +44,6 @@ namespace Client.ViewModel
             }
         }
 
-        private TestClass testClass;
-        public TestClass TestClass
-        {
-            get
-            {
-                return testClass;
-            }
-            set
-            {
-                testClass = value;
-                OnPropertyChanged();
-            }
-        }
-
 
         private List<Link> links;
         public List<Link> Links
@@ -74,7 +60,7 @@ namespace Client.ViewModel
         }
 
         private long playerID;
-        private ShipType shipType;
+        private SweeperType shipType;
         private long teamID;
         AvailableService.AvailableServiceClient? client;
         AsyncServerStreamingCall<MessageToClient>? responseStream;
@@ -96,30 +82,73 @@ namespace Client.ViewModel
             PlayerMsg playerMsg = new PlayerMsg();
             playerMsg.PlayerId = playerID;
             playerMsg.TeamId = teamID;
-            playerMsg.X = 0;
-            playerMsg.Y = 0;
+            //playerMsg.X = 0;
+            //playerMsg.Y = 0;
             if (!isSpectatorMode)
             {
                 shipType = Convert.ToInt64(comInfo[4]) switch
                 {
-                    0 => ShipType.NullShipType,
-                    1 => ShipType.CivilianShip,
-                    2 => ShipType.MilitaryShip,
-                    3 => ShipType.FlagShip,
-                    _ => ShipType.NullShipType
+                    0 => SweeperType.NullSweeperType,
+                    1 => SweeperType.CivilianSweeper,
+                    2 => SweeperType.MilitarySweeper,
+                    3 => SweeperType.FlagSweeper,
+                    _ => SweeperType.NullSweeperType
                 };
-                playerMsg.ShipType = shipType;
+                playerMsg.SweeperType = shipType;
             }
             responseStream = client.AddPlayer(playerMsg);
             isClientStocked = false;
         }
 
+        int testcounter = 0;
         private void UpdateTest(object sender, EventArgs e)
         {
             counterViewModelTest++;
-            MapPatchesList[5].Text = "SS";
-            MapPatchesList[4].Text = "SS";
-            MapPatchesList[2].Text = counterViewModelTest.ToString();
+            if (!hasDrawn)
+            {
+                PureDrawMap(GameMap.GameMapArray);
+                hasDrawn = true;
+            }
+            if (testcounter < 30)
+            {
+                testcounter++;
+                if (testcounter % 3 == 0)
+                {
+                    Ship ship = new Ship
+                    {
+                        Type_s = "CivilShip",
+                        State_s = "Idle",
+                        ArmorModule_s = "LightArmor"
+                    };
+                    RedPlayer.Ships.Add(ship);
+                    BluePlayer.Ships.Add(ship);
+                }
+            }
+            DrawHome(new MessageOfHome
+            {
+                X = 10,
+                Y = 10,
+                Hp = 100,
+                TeamId = 1
+            });
+
+            //DrawFactory(new MessageOfRecycleBank
+            //{
+            //    X = 11,
+            //    Y = 11,
+            //    Hp = 100,
+            //    TeamId = 2
+            //});
+
+            DrawWormHole(new MessageOfBridge
+            {
+                X = 12,
+                Y = 12,
+                Hp = 100
+            });
+
+            ballX += 1;
+            ballY += 1;
         }
 
         public GeneralViewModel()
@@ -153,16 +182,12 @@ namespace Client.ViewModel
                     MapPatchesList.Add(new MapPatch
                     {
                         PatchColor = Colors.AliceBlue,
-                        Text = Convert.ToString(i) + Convert.ToString(j)
                     });
                 }
             }
 
-            testPatch = new MapPatch();
-            TestPatch.PatchColor = Colors.Black;
-            TestPatch.Text = "SS";
-            testClass = new TestClass();
-            TestClass.Name = "Test";
+
+
             timerViewModel = Dispatcher.CreateTimer();
             timerViewModel.Interval = TimeSpan.FromMilliseconds(5);
             timerViewModel.Tick += new EventHandler(UpdateTest);

@@ -9,7 +9,8 @@
         <Label
             Text="敬请期待"
             VerticalOptions="Center"
-            HorizontalOptions="Center"/>
+            HorizontalOptions="Center"
+            FontSize="24"/>
     </VerticalStackLayout>
     
 </ContentPage>

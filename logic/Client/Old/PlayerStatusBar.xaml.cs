@@ -111,18 +111,18 @@ namespace Client
             }
         }
 
-        public void SetShipValue(MessageOfShip ship)
+        public void SetShipValue(MessageOfSweeper ship)
         {
             if (ship.TeamId == (long)PlayerTeam.Red && myRole == PlayerRole.Red || ship.TeamId == (long)PlayerTeam.Blue && myRole == PlayerRole.Blue)
             {
                 ShipLabel shipLabel = new ShipLabel();
-                shipLabel.name.Text = ship.ShipType.ToString() + ship.PlayerId.ToString();
+                shipLabel.name.Text = ship.SweeperType.ToString() + ship.PlayerId.ToString();
                 shipLabel.producer.Text = ship.ProducerType.ToString();
                 shipLabel.armor.Text = ship.ArmorType.ToString();
                 shipLabel.shield.Text = ship.ShieldType.ToString();
                 shipLabel.weapon.Text = ship.WeaponType.ToString();
                 shipLabel.constructor.Text = ship.ConstructorType.ToString();
-                shipLabel.status.Text = ship.ShipState.ToString();
+                shipLabel.status.Text = ship.SweeperState.ToString();
             }
             //TODO: Dynamic change the ships
         }

@@ -4,9 +4,9 @@ namespace Preparation.Interface
 {
     public interface IMoneyPool
     {
-        public AtomicLong Money { get; }
+        public AtomicLongOnlyAddScore Money { get; }
         public AtomicLong Score { get; }
-        public void AddMoney(long add);
+        public long AddMoney(long add);
         public void SubMoney(long sub);
     }
 }

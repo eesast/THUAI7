@@ -1,43 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
 using Preparation.Interface;
 using Preparation.Utility;
 
 namespace GameEngine
 {
-    internal class CollisionChecker
+    internal class CollisionChecker(IMap gameMap)
     {
         public IGameObj? CheckCollision(IMovable obj, XY Pos)
         {
             // 在列表中检查碰撞
-            Func<IEnumerable<IGameObj>, ReaderWriterLockSlim, IGameObj?> CheckCollisionInList =
-                (IEnumerable<IGameObj> lst, ReaderWriterLockSlim listLock) =>
-                {
-                    IGameObj? collisionObj = null;
-                    listLock.EnterReadLock();
-                    try
-                    {
-                        foreach (var listObj in lst)
-                        {
-                            if (obj.WillCollideWith(listObj, Pos))
-                            {
-                                collisionObj = listObj;
-                                break;
-                            }
-                        }
-                    }
-                    finally
-                    {
-                        listLock.ExitReadLock();
-                    }
-                    return collisionObj;
-                };
+            IGameObj? CheckCollisionInList(LockedClassList<IGameObj> lst)
+            {
+                return lst.Find(listObj => obj.WillCollideWith(listObj, Pos));
+            }
 
             IGameObj? collisionObj;
             foreach (var list in lists)
             {
-                if ((collisionObj = CheckCollisionInList(list.Item1, list.Item2)) != null)
+                if ((collisionObj = CheckCollisionInList(list)) != null)
                 {
                     return collisionObj;
                 }
@@ -126,102 +106,80 @@ namespace GameEngine
             double tmpMax = uint.MaxValue;  // 暂存最大值
 
             double maxDistance = uint.MaxValue;
-            foreach (var listWithLock in lists)
+            foreach (var lst in lists)
             {
-                var lst = listWithLock.Item1;
-                var listLock = listWithLock.Item2;
-                listLock.EnterReadLock();
-                try
+                lst.ForEach(listObj =>
                 {
-                    foreach (IGameObj listObj in lst)
+                    // 如果再走一步发生碰撞
+                    if (obj.WillCollideWith(listObj, nextPos))
                     {
-                        // 如果再走一步发生碰撞
-                        if (obj.WillCollideWith(listObj, nextPos))
+                        switch (listObj.Shape)  // 默认obj为圆形
                         {
-                            {
-                                switch (listObj.Shape)  // 默认obj为圆形
+                            case ShapeType.Circle:
                                 {
-                                    case ShapeType.Circle:
-                                        {
-                                            // 计算两者之间的距离
-                                            double mod = XY.DistanceFloor3(listObj.Position, obj.Position);
-                                            int orgDeltaX = listObj.Position.x - obj.Position.x;
-                                            int orgDeltaY = listObj.Position.y - obj.Position.y;
+                                    // 计算两者之间的距离
+                                    double mod = XY.DistanceFloor3(listObj.Position, obj.Position);
+                                    int orgDeltaX = listObj.Position.x - obj.Position.x;
+                                    int orgDeltaY = listObj.Position.y - obj.Position.y;
 
-                                            if (mod < listObj.Radius + obj.Radius)  // 如果两者已经重叠
-                                            {
-                                                tmpMax = 0;
-                                            }
-                                            else
-                                            {
-                                                double tmp = mod - obj.Radius - listObj.Radius;
-                                                // 计算能走的最长距离，好像这么算有一点误差？
-                                                tmp = ((int)(tmp * 1000 / Math.Cos(Math.Atan2(orgDeltaY, orgDeltaX) - moveVec.Angle())));
-                                                if (tmp < 0 || tmp > uint.MaxValue || double.IsNaN(tmp))
-                                                {
-                                                    tmpMax = uint.MaxValue;
-                                                }
-                                                else
-                                                    tmpMax = tmp / 1000.0;
-                                            }
-                                            break;
-                                        }
-                                    case ShapeType.Square:
+                                    if (mod < listObj.Radius + obj.Radius)  // 如果两者已经重叠
+                                    {
+                                        tmpMax = 0;
+                                    }
+                                    else
+                                    {
+                                        double tmp = mod - obj.Radius - listObj.Radius;
+                                        // 计算能走的最长距离，好像这么算有一点误差？
+                                        tmp = (int)(tmp * 1000 / Math.Cos(Math.Atan2(orgDeltaY, orgDeltaX) - moveVec.Angle()));
+                                        if (tmp < 0 || tmp > uint.MaxValue || double.IsNaN(tmp))
                                         {
-                                            // if (obj.WillCollideWith(listObj, obj.Position))
-                                            //     tmpMax = 0;
-                                            // else tmpMax = MaxMoveToSquare(obj, listObj);
-                                            // break;
-                                            if (obj.WillCollideWith(listObj, obj.Position))
-                                                tmpMax = 0;
-                                            else
-                                            {
-                                                // 二分查找最大可能移动距离
-                                                int left = 0, right = (int)moveVec.Length();
-                                                while (left < right - 1)
-                                                {
-                                                    int mid = (right - left) / 2 + left;
-                                                    if (obj.WillCollideWith(listObj, obj.Position + new XY(moveVec, mid)))
-                                                    {
-                                                        right = mid;
-                                                    }
-                                                    else
-                                                        left = mid;
-                                                }
-                                                tmpMax = (uint)left;
-                                            }
-                                            break;
+                                            tmpMax = uint.MaxValue;
                                         }
-                                    default:
-                                        tmpMax = uint.MaxValue;
-                                        break;
+                                        else
+                                            tmpMax = tmp / 1000.0;
+                                    }
+                                    break;
                                 }
-                                if (tmpMax < maxDistance)
-                                    maxDistance = tmpMax;
-                            }
+                            case ShapeType.Square:
+                                {
+                                    // if (obj.WillCollideWith(listObj, obj.Position))
+                                    //     tmpMax = 0;
+                                    // else tmpMax = MaxMoveToSquare(obj, listObj);
+                                    // break;
+                                    if (obj.WillCollideWith(listObj, obj.Position))
+                                        tmpMax = 0;
+                                    else
+                                    {
+                                        // 二分查找最大可能移动距离
+                                        int left = 0, right = (int)moveVec.Length();
+                                        while (left < right - 1)
+                                        {
+                                            int mid = (right - left) / 2 + left;
+                                            if (obj.WillCollideWith(listObj, obj.Position + new XY(moveVec, mid)))
+                                            {
+                                                right = mid;
+                                            }
+                                            else
+                                                left = mid;
+                                        }
+                                        tmpMax = (uint)left;
+                                    }
+                                    break;
+                                }
+                            default:
+                                tmpMax = uint.MaxValue;
+                                break;
                         }
+                        if (tmpMax < maxDistance)
+                            maxDistance = tmpMax;
                     }
                 }
-                finally
-                {
-                    listLock.ExitReadLock();
-                }
+                );
             }
             return maxDistance;
         }
 
-        readonly IMap gameMap;
-        private readonly Tuple<IEnumerable<IGameObj>, ReaderWriterLockSlim>[] lists;
-
-        public CollisionChecker(IMap gameMap)
-        {
-            this.gameMap = gameMap;
-            lists = new Tuple<IEnumerable<IGameObj>, ReaderWriterLockSlim>[gameMap.GameObjDict.Count];
-            int i = 0;
-            foreach (var keyValuePair in gameMap.GameObjDict)
-            {
-                lists[i++] = new Tuple<IEnumerable<IGameObj>, ReaderWriterLockSlim>(keyValuePair.Value as IList<IGameObj>, gameMap.GameObjLockDict[keyValuePair.Key]);
-            }
-        }
+        readonly IMap gameMap = gameMap;
+        private readonly LockedClassList<IGameObj>[] lists = [.. gameMap.GameObjDict.Values];
     }
 }
