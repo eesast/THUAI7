@@ -61,10 +61,10 @@ class ShipAPI(IShipAPI, IGameTimer):
     def GetMessage(self) -> Tuple[int, Union[str, bytes]]:
         return self.__logic.GetMessage()
 
-    def GetShips(self) -> List[THUAI7.Ship]:
+    def GetShips(self) -> List[THUAI7.Sweeper]:
         return self.__logic.GetShips()
 
-    def GetEnemyShips(self) -> List[THUAI7.Ship]:
+    def GetEnemyShips(self) -> List[THUAI7.Sweeper]:
         return self.__logic.GetEnemyShips()
 
     def GetBullets(self) -> List[THUAI7.Bullet]:
@@ -82,8 +82,8 @@ class ShipAPI(IShipAPI, IGameTimer):
     def GetWormHp(self, cellX: int, cellY: int) -> int:
         return self.__logic.GetWormHp(cellX, cellY)
 
-    def GetResouceState(self, cellX: int, cellY: int) -> int:
-        return self.__logic.GetResouceState(cellX, cellY)
+    def GetResourceState(self, cellX: int, cellY: int) -> int:
+        return self.__logic.GetResourceState(cellX, cellY)
 
     def GetHomeHp(self) -> int:
         return self.__logic.GetHomeHp()
@@ -94,7 +94,7 @@ class ShipAPI(IShipAPI, IGameTimer):
     def GetPlayerGUIDs(self) -> List[int]:
         return self.__logic.GetPlayerGUIDs()
 
-    def GetSelfInfo(self) -> THUAI7.Ship:
+    def GetSelfInfo(self) -> THUAI7.Sweeper:
         return cast(THUAI7.Ships, self.__logic.GetSelfInfo())
 
     def GetMoney(self) -> int:
@@ -112,6 +112,9 @@ class ShipAPI(IShipAPI, IGameTimer):
         pass
 
     def PrintShip(self) -> None:
+        pass
+
+    def PrintTeam(self) -> None:
         pass
 
     def PrintSelfInfo(self) -> None:
@@ -165,10 +168,10 @@ class TeamAPI(ITeamAPI, IGameTimer):
     def GetBullets(self) -> List[THUAI7.Bullet]:
         return self.__logic.GetBullets()
 
-    def GetShips(self) -> List[THUAI7.Ship]:
+    def GetShips(self) -> List[THUAI7.Sweeper]:
         return self.__logic.GetShips()
 
-    def GetEnemyShips(self) -> List[THUAI7.Ship]:
+    def GetEnemyShips(self) -> List[THUAI7.Sweeper]:
         return self.__logic.GetEnemyShips()
 
     def GetFullMap(self) -> List[List[THUAI7.PlaceType]]:
@@ -210,7 +213,7 @@ class TeamAPI(ITeamAPI, IGameTimer):
     def Recycle(self, ID: int) -> Future[bool]:
         return self.__pool.submit(self.__logic.Recycle, ID)
 
-    def BuildShip(self, shipType: THUAI7.ShipType, cellX: int, cellY: int) -> Future[bool]:
+    def BuildShip(self, shipType: THUAI7.SweeperType, cellX: int, cellY: int) -> Future[bool]:
         return self.__pool.submit(self.__logic.BuildShip, shipType, cellX, cellY)
 
     def Print(self, string: str) -> None:
