@@ -1,18 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class InteractBase : MonoBehaviour
 {
-
+    public InteractControl.InteractType interactType;
+    public InteractControl.InteractOption interactOption;
     public bool tobeSelected, selected;
     public GameObject selectedSign, tobeSelectedSign, tobeseObj, seObj;
+    public Vector2 moveOption, attackOption;
     void Update()
     {
         if (tobeSelected)
         {
             if (!tobeseObj)
-                tobeseObj = Instantiate(tobeSelectedSign, transform.position, Quaternion.identity);
+                tobeseObj = Instantiate(tobeSelectedSign, transform.position, Quaternion.identity, transform);
         }
         else
         {
@@ -22,7 +25,7 @@ public class InteractBase : MonoBehaviour
         if (selected)
         {
             if (!seObj)
-                seObj = Instantiate(selectedSign, transform.position, Quaternion.identity);
+                seObj = Instantiate(selectedSign, transform.position, Quaternion.identity, transform);
         }
         else
         {

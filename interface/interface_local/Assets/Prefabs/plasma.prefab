@@ -93,6 +93,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3329987006929507500}
+  - component: {fileID: 8590620219904582428}
   - component: {fileID: 1888889249344211522}
   m_Layer: 0
   m_Name: plasma
@@ -110,13 +111,29 @@ Transform:
   m_GameObject: {fileID: 7049118564761611801}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.4685128, y: 1.7885575, z: -0.1775014}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4078562955258069677}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8590620219904582428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7049118564761611801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5141ad9590fdebe40801dacf452415bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletData: {fileID: 11400000, guid: e4f73ad14d0a78244acba6ac3f0b4a8d, type: 2}
+  messageOfBullet:
+    type: 0
+    playerTeam: 0
 --- !u!50 &1888889249344211522
 Rigidbody2D:
   serializedVersion: 4
