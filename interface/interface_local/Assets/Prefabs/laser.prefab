@@ -93,6 +93,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1201941676677779376}
+  - component: {fileID: 7532294776290804330}
   - component: {fileID: 4187446393248317159}
   m_Layer: 0
   m_Name: laser
@@ -111,12 +112,28 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9124837088931925719}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7532294776290804330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5236724725662676995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5141ad9590fdebe40801dacf452415bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletData: {fileID: 11400000, guid: 0a85f800f99969a438015046494079c0, type: 2}
+  messageOfBullet:
+    type: 0
+    playerTeam: 0
 --- !u!50 &4187446393248317159
 Rigidbody2D:
   serializedVersion: 4
