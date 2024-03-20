@@ -18,13 +18,11 @@ from PyAPI.Interface import ILogic, IGameTimer
 
 
 class Logic(ILogic):
-    # TODO: Mismatch between logic.py & main.py
-    def __init__(self, playerID: int, shipType: THUAI7.ShipType, teamID: int, x: int, y: int) -> None:
+    def __init__(self, playerID: int, teamID: int, playerType: THUAI7.PlayerType, shipType: THUAI7.SweeperType) -> None:
         self.__playerID: int = playerID
         self.__teamID: int = teamID
-        self.__shipType: THUAI7.ShipType = shipType
-        self.__x: int = x
-        self.__y: int = y
+        self.__playerType: THUAI7.PlayerType = playerType
+        self.__shipType: THUAI7.SweeperType = shipType
 
         self.__comm: Communication
 
@@ -57,22 +55,22 @@ class Logic(ILogic):
 
         self.__messageQueue: Queue = Queue()
 
-    def GetShips(self) -> List[THUAI7.Ship]:
+    def GetShips(self) -> List[THUAI7.Sweeper]:
         with self.__mtxState:
             self.__logger.debug("Called GetShips")
             return copy.deepcopy(self.__currentState.ships)
 
-    def GetEnemyShips(self) -> List[THUAI7.Ship]:
+    def GetEnemyShips(self) -> List[THUAI7.Sweeper]:
         with self.__mtxState:
             self.__logger.debug("Called GetEnemyShips")
-            return copy.deepcopy(self.__currentState.enemyShips)
+            return copy.deepcopy(self.__currentState.enemySweepers)
 
     def GetBullets(self) -> List[THUAI7.Bullet]:
         with self.__mtxState:
             self.__logger.debug("Called GetBullets")
             return copy.deepcopy(self.__currentState.bullets)
 
-    def GetSelfInfo(self) -> Union[THUAI7.Ship, THUAI7.Team]:
+    def GetSelfInfo(self) -> Union[THUAI7.Sweeper, THUAI7.Team]:
         with self.__mtxState:
             self.__logger.debug("Called GetSelfInfo")
             return copy.deepcopy(self.__currentState.self)
@@ -220,7 +218,7 @@ class Logic(ILogic):
         self.__logger.debug("Called Recycle")
         return self.__comm.Recycle(self.__playerID, self.__playerID, self.__teamID)
 
-    def BuildShip(self, shipType: THUAI7.ShipType, cellX: int, cellY: int) -> bool:
+    def BuildShip(self, shipType: THUAI7.SweeperType, cellX: int, cellY: int) -> bool:
         self.__logger.debug("Called BuildShip")
         return self.__comm.BuildShip(cellX, cellY, shipType, self.__teamID)
 
@@ -231,7 +229,7 @@ class Logic(ILogic):
     def __ProcessMessage(self) -> None:
         def messageThread():
             self.__logger.info("Message thread started")
-            self.__comm.AddPlayer(self.__playerID, self.__teamID, self.__shipType, self.__x, self.__y)
+            self.__comm.AddPlayer(self.__playerID, self.__teamID, self.__shipType)
             self.__logger.info("Player added")
 
             while self.__gameState != THUAI7.GameState.GameEnd:
@@ -280,7 +278,7 @@ class Logic(ILogic):
     def LoadBuffer(self, message: Message2Clients.MessageToClient) -> None:
         with self.__cvBuffer:
             self.__bufferState.ships.clear()
-            self.__bufferState.enemyShips.clear()
+            self.__bufferState.enemySweepers.clear()
             self.__bufferState.teams.clear()
             self.__bufferState.bullets.clear()
             self.__bufferState.bombedBullets.clear()
@@ -301,7 +299,7 @@ class Logic(ILogic):
             self.__LoadBufferSelf(message)
             for item in message.obj_message:
                 self.__LoadBufferCase(item)
-            if Setting.asynchronous():
+            if Setting.Asynchronous():
                 with self.__mtxState:
                     self.__currentState, self.__bufferState = self.__bufferState, self.__currentState
                     self.__counterState = self.__counterBuffer
@@ -317,10 +315,10 @@ class Logic(ILogic):
             for item in message.obj_message:
                 if item.WhichOneof("message_of_obj") == "ship_message":
                     if item.ship_message.player_id == self.__playerID:
-                        self.__bufferState.self = Proto2THUAI7.Protobuf2THUAI7Ship(item.ship_message)
+                        self.__bufferState.self = Proto2THUAI7.Protobuf2THUAI7Sweeper(item.ship_message)
                         self.__bufferState.ships.append(self.__bufferState.self)
                     else:
-                        self.__bufferState.ships.append(Proto2THUAI7.Protobuf2THUAI7Ship(item.ship_message))
+                        self.__bufferState.ships.append(Proto2THUAI7.Protobuf2THUAI7Sweeper(item.ship_message))
                     self.__logger.debug("Load ship")
         else:
             for item in message.obj_message:
@@ -336,7 +334,7 @@ class Logic(ILogic):
                                            self.__bufferState.self.x, self.__bufferState.self.y,
                                            item.ship_message.x, item.ship_message.y,
                                            self.__bufferState.gameMap):
-                    self.__bufferState.enemyShips.append(Proto2THUAI7.Protobuf2THUAI7Ship(item.ship_message))
+                    self.__bufferState.enemySweepers.append(Proto2THUAI7.Protobuf2THUAI7Sweeper(item.ship_message))
                     self.__logger.debug("Load enemy ship")
 
         elif item.WhichOneof("message_of_obj") == "bullet_message":
@@ -451,7 +449,7 @@ class Logic(ILogic):
             self.__cvAI.notify()
 
     def __Update(self) -> None:
-        if not Setting.asynchronous():
+        if not Setting.Asynchronous():
             with self.__cvBuffer:
                 self.__cvBuffer.wait_for(lambda: self.__bufferUpdated)
                 with self.__mtxState:
@@ -512,7 +510,7 @@ class Logic(ILogic):
             self.__logger.addHandler(screenHandler)
 
         self.__logger.info("*********Basic Info*********")
-        self.__logger.info("asynchronous: %s", Setting.asynchronous())
+        self.__logger.info("asynchronous: %s", Setting.Asynchronous())
         self.__logger.info("server: %s:%s", IP, port)
         self.__logger.info("playerID: %s", self.__playerID)
         self.__logger.info("player type: %s", self.__playerType.name)
@@ -536,7 +534,7 @@ class Logic(ILogic):
 
             ai = createAI(self.__playerID)
             while self.__AILoop:
-                if Setting.asynchronous():
+                if Setting.Asynchronous():
                     self.__Wait()
                     self.__timer.StartTimer()
                     self.__timer.Play(ai)
