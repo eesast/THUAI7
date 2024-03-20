@@ -381,7 +381,7 @@ namespace Preparation.Utility
                 v += (int)(ratio * maxV);
                 if (v < 0) v = 0;
                 if (v > maxV) v = maxV;
-                return v-preV;
+                return v - preV;
             }
         }
         #endregion
