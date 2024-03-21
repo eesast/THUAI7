@@ -19,8 +19,21 @@ public class UIControl : MonoBehaviour
     {
         if (!Base)
             Base = GameObject.FindGameObjectWithTag("Base").GetComponent<BaseControl>();
-        healthText.text = "Health: " + Base.health.ToString();
-        healthSlider.value = Base.health / 24000f;
-        ecoText.text = "Eco: " + Base.economy.ToString();
+        healthText.text = "Health: " + Base.messageOfBase.hp.ToString();
+        healthSlider.value = Base.messageOfBase.hp / 24000f;
+        ecoText.text = "Eco: " + Base.messageOfBase.economy.ToString();
+    }
+    public void BuildCivilship()
+    {
+        Debug.Log("button pushed");
+        PlayerControl.GetInstance().selectedOption = InteractControl.InteractOption.BuildCivil;
+    }
+    public void BuildMilitaryship()
+    {
+        PlayerControl.GetInstance().selectedOption = InteractControl.InteractOption.BuildMilitary;
+    }
+    public void BuildFlagship()
+    {
+        PlayerControl.GetInstance().selectedOption = InteractControl.InteractOption.BuildFlag;
     }
 }

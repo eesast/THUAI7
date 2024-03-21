@@ -1,50 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+[System.Serializable]
 public struct MessageOfShip
 {
-    int x;
-    int y;
-    int speed;
-    int hp;
-    int armor;
-    int shield;
-    int team_id;
-    int player_id;
-    int guid;
-    ShipState ship_state;
-    ShipType ship_type;
-    int view_range;
-    ProducerType producer_type;
-    ConstructorType constructor_type;
-    ArmorType armor_type;
-    ShieldType shield_type;
-    WeaponType weapon_type;
-    double facing_direction;
+    // public int x;
+    // public int y;
+    // public int speed;
+    public int hp;
+    public int armor;
+    public int shield;
+    public PlayerTeam playerTeam;
+    // public int playerId;
+    // public ShipState shipState;
+    public ShipType shipType;
+    public int viewRange;
+    public ProducerType producerType;
+    public ConstructorType constructorType;
+    public ArmorType armorType;
+    public ShieldType shieldType;
+    public WeaponType weaponType;
+    // public double facingDirection;
 }
 
 
+[System.Serializable]
 public struct MessageOfBullet
 {
-    BulletType type;
-    int x;
-    int y;
-    double facing_direction;
-    int damage;
-    int team_id;
-    int guid;
-    double bomb_range;
-    int speed;
-}
-
-public struct MessageOfBombedBullet  //for Unity，直接继承自THUAI5
-{
-    BulletType type;
-    int x;
-    int y;
-    double facing_direction;
-    int mapping_id;
-    double bomb_range;
+    public BulletType type;
+    // public int x;
+    // public int y;
+    // public double facing_direction;
+    // public int damage;
+    public PlayerTeam playerTeam;
+    // public int guid;
+    // public double bombRange;
+    // public int speed;
 }
 
 public struct MessageOfFactory
@@ -80,17 +71,18 @@ public struct MessageOfWormhole
 
 public struct MessageOfResource
 {
-    int x;
-    int y;
-    int progress; // 采集进度
+    public int x;
+    public int y;
+    public int progress; // 采集进度
 }
-
-public struct MessageOfHome
+[System.Serializable]
+public struct MessageOfBase
 {
-    int x;
-    int y;
-    int hp;
-    int team_id;
+    public int x;
+    public int y;
+    public int hp;
+    public int economy;
+    public PlayerTeam playerTeam;
 }
 
 public struct MessageOfMap
