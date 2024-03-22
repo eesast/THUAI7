@@ -1,8 +1,6 @@
 ﻿using GameClass.GameObj.Areas;
 using Preparation.Utility;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Threading;
 using Preparation.Interface;
 
 namespace GameClass.GameObj
