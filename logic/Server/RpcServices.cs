@@ -227,7 +227,7 @@ namespace Server
 
         #region 船
 
-        public override Task<BoolRes> Activate(ActivateMsg request, ServerCallContext context)
+        /*public override Task<BoolRes> Activate(ActivateMsg request, ServerCallContext context)
         {
 #if DEBUG
             Console.WriteLine($"TRY Activate: Player {request.PlayerId} from Team {request.TeamId}");
@@ -245,7 +245,7 @@ namespace Server
             Console.WriteLine($"END Activate: {boolRes.ActSuccess}");
 #endif
             return Task.FromResult(boolRes);
-        }
+        }*/
 
         public override Task<MoveRes> Move(MoveMsg request, ServerCallContext context)
         {
