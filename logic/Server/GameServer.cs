@@ -13,7 +13,8 @@ namespace Server
 {
     partial class GameServer : ServerBase
     {
-        private readonly ConcurrentDictionary<long, (SemaphoreSlim, SemaphoreSlim)> semaDict = new();
+        private readonly ConcurrentDictionary<long, (SemaphoreSlim, SemaphoreSlim)> semaDict0 = new(); //for spectator and team0 player
+        private readonly ConcurrentDictionary<long, (SemaphoreSlim, SemaphoreSlim)> semaDict1 = new();
         // private object semaDictLock = new();
         protected readonly ArgumentOptions options;
         private readonly HttpSender? httpSender;
@@ -140,6 +141,11 @@ namespace Server
                             MessageOfObj? msg = CopyInfo.Auto(gameObj, time);
                             if (msg != null) currentGameInfo.ObjMessage.Add(msg);
                         }
+                        foreach (Team team in game.TeamList)
+                        {
+                            MessageOfObj? msg = CopyInfo.Auto(team, time);
+                            if (msg != null) currentGameInfo.ObjMessage.Add(msg);
+                        }
                         lock (newsLock)
                         {
                             foreach (var news in currentNews)
@@ -159,14 +165,21 @@ namespace Server
             }
             lock (spectatorJoinLock)
             {
-                foreach (var kvp in semaDict)
+                foreach (var kvp in semaDict0)
                 {
                     kvp.Value.Item1.Release();
                 }
-
+                foreach (var kvp in semaDict1)
+                {
+                    kvp.Value.Item1.Release();
+                }
                 // 若此时观战者加入，则死锁，所以需要 spectatorJoinLock
 
-                foreach (var kvp in semaDict)
+                foreach (var kvp in semaDict0)
+                {
+                    kvp.Value.Item2.Wait();
+                }
+                foreach (var kvp in semaDict1)
                 {
                     kvp.Value.Item2.Wait();
                 }
@@ -175,8 +188,8 @@ namespace Server
 
         private bool PlayerDeceased(int playerID)    //# 这里需要判断大本营deceased吗？
         {
-            return game.GameMap.GameObjDict[GameObjType.Ship].Cast<Ship>().Find(
-                ship => ship.ShipID == playerID && ship.ShipState == ShipStateType.Deceased
+            return game.GameMap.GameObjDict[GameObjType.Ship].Cast<Ship>()?.Find(
+                ship => ship.PlayerID == playerID && ship.ShipState == ShipStateType.Deceased
                 ) != null;
         }
 
@@ -208,7 +221,7 @@ namespace Server
 
         private bool ValidPlayerID(long playerID)
         {
-            if (playerID == 0 || (1 <= playerID && playerID <= options.MaxShipCount))
+            if (playerID == 0 || (1 <= playerID && playerID <= options.ShipCount))
                 return true;
             return false;
         }
@@ -298,13 +311,13 @@ namespace Server
             communicationToGameID = new long[TeamCount][];
             for (int i = 0; i < TeamCount; i++)
             {
-                communicationToGameID[i] = new long[options.MaxShipCount + options.HomeCount];
+                communicationToGameID[i] = new long[options.ShipCount + options.HomeCount];
             }
             //创建server时先设定待加入对象都是invalid
             for (int team = 0; team < TeamCount; team++)
             {
                 communicationToGameID[team][0] = GameObj.invalidID; // team
-                for (int i = 1; i <= options.MaxShipCount; i++)
+                for (int i = 1; i <= options.ShipCount; i++)
                 {
                     communicationToGameID[team][i] = GameObj.invalidID; //sweeper
                 }

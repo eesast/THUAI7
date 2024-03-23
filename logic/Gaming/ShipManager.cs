@@ -10,15 +10,37 @@ namespace Gaming
         private class ShipManager(Map gameMap)
         {
             readonly Map gameMap = gameMap;
-            public Ship? AddShip(XY pos, long teamID, long shipID, ShipType shipType, MoneyPool moneyPool)
+            public Ship? AddShip(long teamID, long playerID, ShipType shipType, MoneyPool moneyPool)
             {
-                Ship newShip = new(pos, GameData.ShipRadius, shipType, moneyPool);
+                Ship newShip = new(GameData.ShipRadius, shipType, moneyPool);
                 gameMap.Add(newShip);
                 newShip.TeamID.SetReturnOri(teamID);
-                newShip.ShipID.SetReturnOri(shipID);
+                newShip.PlayerID.SetReturnOri(playerID);
                 return newShip;
             }
-
+            public bool ActivateShip(Ship ship, XY pos)
+            {
+                var activateCost = ship.ShipType switch
+                {
+                    ShipType.CivilShip => GameData.CivilShipCost,
+                    ShipType.WarShip => GameData.WarShipCost,
+                    ShipType.FlagShip => GameData.FlagShipCost,
+                    _ => int.MaxValue
+                };
+                if (activateCost > ship.MoneyPool.Money)
+                {
+                    return false;
+                }
+                if (ship.ShipState != ShipStateType.Deceased)
+                {
+                    return false;
+                }
+                ship.ReSetPos(pos);
+                long stateNum = ship.SetShipState(RunningStateType.RunningActively, ShipStateType.Null);
+                ship.ResetShipState(stateNum);
+                ship.CanMove.SetReturnOri(true);
+                return true;
+            }
             public void BeAttacked(Ship ship, Bullet bullet)
             {
                 if (bullet!.Parent!.TeamID == ship.TeamID)
@@ -40,6 +62,8 @@ namespace Gaming
                 }
                 if (ship.HP == 0)
                 {
+                    var money = ship.GetCost();
+                    bullet.Parent.AddMoney(money);
                     Remove(ship);
                 }
             }

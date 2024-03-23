@@ -19,6 +19,7 @@ namespace GameClass.GameObj
         private static long currentMaxID = 0;         // 目前游戏对象的最大ID
         public const long invalidID = long.MaxValue;  // 无效的ID
         public long ID { get; } = Interlocked.Increment(ref currentMaxID);
+
         protected XY position = initPos;
         public abstract XY Position { get; }
         public abstract bool IsRigid { get; }

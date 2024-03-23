@@ -2,7 +2,7 @@
   "profiles": {
     "Server": {
       "commandName": "Project",
-      "commandLineArgs": "--port 8888 --teamCount 1 --homeNum 1 --MaxShipNum 1"
+      "commandLineArgs": "--port 8888"
     }
   }
 }

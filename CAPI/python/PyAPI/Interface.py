@@ -11,11 +11,11 @@ class ILogic(metaclass=ABCMeta):
     '''`IAPI` 统一可用的接口'''
 
     @abstractmethod
-    def GetShips(self) -> List[THUAI7.Ship]:
+    def GetSweepers(self) -> List[THUAI7.Sweeper]:
         pass
 
     @abstractmethod
-    def GetEnemyShips(self) -> List[THUAI7.Ship]:
+    def GetEnemySweepers(self) -> List[THUAI7.Sweeper]:
         pass
 
     @abstractmethod
@@ -23,7 +23,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetSelfInfo(self) -> Union[THUAI7.Ship, THUAI7.Team]:
+    def GetSelfInfo(self) -> Union[THUAI7.Sweeper, THUAI7.Team]:
         pass
 
     @abstractmethod
@@ -47,11 +47,11 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetWormHp(self, cellX: int, cellY: int) -> int:
+    def GetBridgeHp(self, cellX: int, cellY: int) -> int:
         pass
 
     @abstractmethod
-    def GetResourceState(self, cellX: int, cellY: int) -> int:
+    def GetGarbageState(self, cellX: int, cellY: int) -> int:
         pass
 
     @abstractmethod
@@ -59,7 +59,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetMoney(self) -> int:
+    def GetEnergy(self) -> int:
         pass
 
     @abstractmethod
@@ -115,7 +115,9 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def HaveView(self, gridX: int, gridY: int, selfX: int, selfY: int, viewRange: int) -> bool:
+    def HaveView(
+        self, gridX: int, gridY: int, selfX: int, selfY: int, viewRange: int
+    ) -> bool:
         pass
 
     @abstractmethod
@@ -127,7 +129,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def BuildShip(self, shipType: THUAI7.ShipType, cellX: int, cellY: int) -> bool:
+    def BuildSweeper(self, sweeperType: THUAI7.SweeperType) -> bool:
         pass
 
 
@@ -141,11 +143,7 @@ class IAPI(metaclass=ABCMeta):
     '''
 
     @abstractmethod
-    def SendTextMessage(self, toPlayerID: int, message: str) -> Future[bool]:
-        pass
-
-    @abstractmethod
-    def SendBinaryMessage(self, toPlayerID: int, message: str) -> Future[bool]:
+    def SendMessage(self, toPlayerID: int, message: Union[str, bytes]) -> Future[bool]:
         pass
 
     @abstractmethod
@@ -176,11 +174,11 @@ class IAPI(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetShips(self) -> List[THUAI7.Ship]:
+    def GetSweepers(self) -> List[THUAI7.Sweeper]:
         pass
 
     @abstractmethod
-    def GetEnemyShips(self) -> List[THUAI7.Ship]:
+    def GetEnemySweepers(self) -> List[THUAI7.Sweeper]:
         pass
 
     @abstractmethod
@@ -204,11 +202,11 @@ class IAPI(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetWormHp(self, cellX: int, cellY: int) -> int:
+    def GetBridgeHp(self, cellX: int, cellY: int) -> int:
         pass
 
     @abstractmethod
-    def GetResourceState(self, cellX: int, cellY: int) -> int:
+    def GetGarbageState(self, cellX: int, cellY: int) -> int:
         pass
 
     @abstractmethod
@@ -216,7 +214,7 @@ class IAPI(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetMoney(self) -> int:
+    def GetEnergy(self) -> int:
         pass
 
     @abstractmethod
@@ -232,7 +230,7 @@ class IAPI(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def PrintShip(self) -> None:
+    def PrintSweeper(self) -> None:
         pass
 
     @abstractmethod
@@ -244,11 +242,11 @@ class IAPI(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetSelfInfo(self) -> Union[THUAI7.Ship, THUAI7.Team]:
+    def GetSelfInfo(self) -> Union[THUAI7.Sweeper, THUAI7.Team]:
         pass
 
 
-class IShipAPI(IAPI, metaclass=ABCMeta):
+class ISweeperAPI(IAPI, metaclass=ABCMeta):
     @abstractmethod
     def Move(self, timeInMilliseconds: int, angleInRadian: float) -> Future[bool]:
         pass
@@ -290,7 +288,7 @@ class IShipAPI(IAPI, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetSelfInfo(self) -> THUAI7.Ship:
+    def GetSelfInfo(self) -> THUAI7.Sweeper:
         pass
 
     @abstractmethod
@@ -304,7 +302,9 @@ class ITeamAPI(IAPI, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def InstallModule(self, playerID: int, moduleType: THUAI7.ModuleType) -> Future[bool]:
+    def InstallModule(
+        self, playerID: int, moduleType: THUAI7.ModuleType
+    ) -> Future[bool]:
         pass
 
     @abstractmethod
@@ -312,13 +312,13 @@ class ITeamAPI(IAPI, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def BuildShip(self, shipType: THUAI7.ShipType, cellX: int, cellY: int) -> Future[bool]:
+    def BuildSweeper(self, sweeperType: THUAI7.SweeperType) -> Future[bool]:
         pass
 
 
 class IAI(metaclass=ABCMeta):
     @abstractmethod
-    def ShipPlay(self, api: IShipAPI) -> None:
+    def SweeperPlay(self, api: ISweeperAPI) -> None:
         pass
 
     @abstractmethod

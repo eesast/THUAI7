@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4201782037208779027}
+  - component: {fileID: -8537481700179265297}
   - component: {fileID: 787263036322237022}
   m_Layer: 0
   m_Name: missile
@@ -26,13 +27,29 @@ Transform:
   m_GameObject: {fileID: 6742644745694519620}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.4685128, y: 1.7885575, z: -0.1775014}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2044924485689081778}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-8537481700179265297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6742644745694519620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5141ad9590fdebe40801dacf452415bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletData: {fileID: 11400000, guid: bd428ee77f865f147835a80acdfd9fd2, type: 2}
+  messageOfBullet:
+    type: 0
+    playerTeam: 0
 --- !u!50 &787263036322237022
 Rigidbody2D:
   serializedVersion: 4

@@ -3,12 +3,11 @@ import PyAPI.structures as THUAI7
 
 
 class State:
-    def __init__(self, **kwargs) -> None:
+    def __init__(self) -> None:
         self.teamScore = 0
-        self.self = THUAI7.Ship()
-        self.ships = []
-        self.enemyShips = []
-        self.teams = []
+        self.self = THUAI7.Sweeper()
+        self.sweepers = []
+        self.enemySweepers = []
         self.gameMap = []
         self.bullets = []
         self.bombedBullets = []
@@ -17,17 +16,15 @@ class State:
         self.guids = []
 
     teamScore: int
-    self: Union[THUAI7.Ship, THUAI7.Team]
+    self: Union[THUAI7.Sweeper, THUAI7.Team]
 
-    ships: List[THUAI7.Ship]
-    enemyShips: List[THUAI7.Ship]
-
-    teams: List[THUAI7.Team]
+    sweepers: List[THUAI7.Sweeper]
+    enemySweepers: List[THUAI7.Sweeper]
 
     gameMap: List[List[THUAI7.PlaceType]]
 
     bullets: List[THUAI7.Bullet]
-    #bombedBullets: List[THUAI7.BombedBullet]
+    # bombedBullets: List[THUAI7.BombedBullet]
 
     mapInfo: THUAI7.GameMap
 

@@ -178,8 +178,11 @@ GameObject:
   m_Component:
   - component: {fileID: 750574882568330089}
   - component: {fileID: 4697488312729372394}
+  - component: {fileID: 1957944558398049063}
+  - component: {fileID: 6878165467408580569}
   - component: {fileID: 3397589707071195213}
-  m_Layer: 0
+  - component: {fileID: 7800904211505029374}
+  m_Layer: 6
   m_Name: foreshadow_flagship3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -195,7 +198,7 @@ Transform:
   m_GameObject: {fileID: 8427987949455047532}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.0206661, y: -1.0445273, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -255,6 +258,54 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1957944558398049063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8427987949455047532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d5ff6b6f4992b54b9765b7e0aa3fc02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactBase: {fileID: 0}
+  speed: 2.7
+  messageOfShip:
+    hp: 12000
+    armor: 800
+    shield: 800
+    playerTeam: 0
+    shipType: 3
+    viewRange: 0
+    producerType: 0
+    constructorType: 0
+    armorType: 0
+    shieldType: 0
+    weaponType: 1
+--- !u!114 &6878165467408580569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8427987949455047532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 515cf190256e2214ea5daad3164a90b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactType: 1
+  interactOption: 0
+  tobeSelected: 0
+  selected: 0
+  selectedSign: {fileID: 2362405429118444927, guid: d5b0673cd77cb7f43b9b1df36ceb2520, type: 3}
+  tobeSelectedSign: {fileID: 5230180300230231966, guid: c35172cad03b3784c93db13d884b4bbc, type: 3}
+  tobeseObj: {fileID: 0}
+  seObj: {fileID: 0}
+  moveOption: {x: 0, y: 0}
+  attackOption: {x: 0, y: 0}
 --- !u!50 &3397589707071195213
 Rigidbody2D:
   serializedVersion: 4
@@ -281,4 +332,60 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
+--- !u!60 &7800904211505029374
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8427987949455047532}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.6, y: 1.6}
+    newSize: {x: 1.6, y: 1.6}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.223483, y: 0.7550932}
+      - {x: -0.5892876, y: 0.53113854}
+      - {x: -0.7454866, y: 0.14892353}
+      - {x: -0.7455398, y: -0.16528817}
+      - {x: -0.32776636, y: -0.7462833}
+      - {x: 0.3340975, y: -0.7320269}
+      - {x: 0.7405982, y: -0.16136909}
+      - {x: 0.7467126, y: 0.1469028}
+      - {x: 0.57987946, y: 0.52651507}
+      - {x: 0.23184037, y: 0.75532526}
+      - {x: -0.0021837428, y: 0.7553253}
+  m_UseDelaunayMesh: 0

@@ -10,7 +10,7 @@ namespace GameClass.GameObj;
 public class Ship : Movable, IShip
 {
     public AtomicLong TeamID { get; } = new(long.MaxValue);
-    public AtomicLong ShipID { get; } = new(long.MaxValue);
+    public AtomicLong PlayerID { get; } = new(long.MaxValue);
     public override bool IsRigid => true;
     public override ShapeType Shape => ShapeType.Circle;
     public int ViewRange { get; }
@@ -257,14 +257,37 @@ public class Ship : Movable, IShip
             }
         }
     }
-    public void AddMoney(long add)
+    public long AddMoney(long add)
     {
-        MoneyPool.Money.Add(add);
-        MoneyPool.Score.Add(add);
+        return MoneyPool.AddMoney(add);
     }
-    public void SubMoney(long sub)
+    public long SubMoney(long sub)
     {
-        MoneyPool.Money.Sub(sub);
+        return MoneyPool.SubMoney(sub);
+    }
+    public long GetCost()
+    {
+        var cost = 0;
+        switch (ShipType)
+        {
+            case ShipType.CivilShip:
+                cost += GameData.CivilShipCost;
+                break;
+            case ShipType.WarShip:
+                cost += GameData.WarShipCost;
+                break;
+            case ShipType.FlagShip:
+                cost += GameData.FlagShipCost;
+                break;
+            default:
+                return 0;
+        }
+        cost += producer.Cost;
+        cost += constructor.Cost;
+        cost += armor.Cost;
+        cost += shield.Cost;
+        cost += weapon.Cost;
+        return cost;
     }
     private long ChangeShipState(RunningStateType running, ShipStateType value = ShipStateType.Null, GameObj? gameObj = null)
     {
@@ -382,10 +405,11 @@ public class Ship : Movable, IShip
                 && shipState != ShipStateType.Attacking);
         }
     }
-    public Ship(XY initPos, int initRadius, ShipType shipType, MoneyPool moneyPool) :
-        base(initPos, initRadius, GameObjType.Ship)
+    public Ship(int initRadius, ShipType shipType, MoneyPool moneyPool) :
+        base(GameData.PosNotInGame, initRadius, GameObjType.Ship)
     {
-        this.CanMove.SetReturnOri(true);
+        this.CanMove.SetReturnOri(false);
+        this.IsRemoved.SetReturnOri(true);
         this.Occupation = OccupationFactory.FindIOccupation(this.ShipType = shipType);
         this.ViewRange = this.Occupation.ViewRange;
         this.HP = new(this.Occupation.MaxHp);

@@ -12,7 +12,7 @@ namespace Server
     public class ArgumentOptions
     {
         [Option("ip", Required = false, HelpText = "Server listening ip")]
-        public string ServerIP { get; set; } = "0.0.0.0";
+        public string ServerIP { get; set; } = "172.28.192.1";
 
         [Option('p', "port", Required = true, HelpText = "Server listening port")]
         public ushort ServerPort { get; set; } = 8888;
@@ -20,29 +20,8 @@ namespace Server
         [Option("teamCount", Required = false, HelpText = "The number of teams, 2 by defualt")]
         public ushort TeamCount { get; set; } = 2;
 
-        [Option("civilShipNum", Required = false, HelpText = "The number of civil ship num, 1 by default")]
-        public ushort CivilShipCount { get; set; } = 1;
-
-        [Option("MaxCivilShipNum", Required = false, HelpText = "The number of max civil ship num, 2 by default")]
-        public ushort MaxCivilShipCount { get; set; } = 2;
-
-        [Option("MaxPlayerNumPerTeam", Required = false, HelpText = "The max player number of team, 6 by defualt")]
-        public ushort MaxPlayerNumPerTeam { get; set; } = 6;
-
-        [Option("warShipNum", Required = false, HelpText = "The number of war ship num, 0 by default")]
-        public ushort WarShipCount { get; set; } = 0;
-
-        [Option("MaxWarShipNum", Required = false, HelpText = "The number of war ship num, 2 by default")]
-        public ushort MaxWarShipCount { get; set; } = 2;
-
-        [Option("flagShipNum", Required = false, HelpText = "The number of flag ship num, 0 by default")]
-        public ushort FlagShipCount { get; set; } = 0;
-
-        [Option("MaxFlagShipNum", Required = false, HelpText = "The number of flag ship num, 1 by default")]
-        public ushort MaxFlagShipCount { get; set; } = 1;
-
-        [Option("MaxShipNum", Required = false, HelpText = "The max number of Ship, 5 by default")]
-        public ushort MaxShipCount { get; set; } = 5;
+        [Option("shipNum", Required = false, HelpText = "The max number of Ship, 4 by default")]
+        public ushort ShipCount { get; set; } = 4;
 
         [Option("homeNum", Required = false, HelpText = "The number of Home , 1 by default")]
         public ushort HomeCount { get; set; } = 1;
@@ -77,6 +56,5 @@ namespace Server
         public string StartLockFile { get; set; } = "114514";
         [Option("mode", Required = false, HelpText = "Whether to run final competition")]
         public int Mode { get; set; } = 0;
-        public ushort ShipCount => (ushort)(CivilShipCount + WarShipCount + FlagShipCount);
     }
 }

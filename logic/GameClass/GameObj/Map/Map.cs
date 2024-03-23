@@ -72,9 +72,9 @@ namespace GameClass.GameObj
         {
             return (Ship?)GameObjDict[GameObjType.Ship].Find(gameObj => (ID == ((Ship)gameObj).ID));
         }
-        public Ship? FindShipInShipID(long shipID)
+        public Ship? FindShipInPlayerID(long teamID, long playerID)
         {
-            return (Ship?)GameObjDict[GameObjType.Ship].Find(gameObj => (shipID == ((Ship)gameObj).ShipID));
+            return (Ship?)GameObjDict[GameObjType.Ship].Find(gameObj => (teamID == ((Ship)gameObj).TeamID) && playerID == ((Ship)gameObj).PlayerID);
         }
 
         public static bool WormholeInteract(Wormhole gameObj, XY Pos)
@@ -220,7 +220,7 @@ namespace GameClass.GameObj
                                 return false;
                             };
 
-                            if (GameObjDict[GameObjType.Wormhole].Cast<Wormhole>().Find(wormhole => HasWormhole(wormhole)) == null)
+                            if (GameObjDict[GameObjType.Wormhole].Cast<Wormhole>()?.Find(wormhole => HasWormhole(wormhole)) == null)
                             {
                                 List<XY> grids = [new XY(i, j)];
                                 Add(new Wormhole(GameData.GetCellCenterPos(i, j), grids));
@@ -233,7 +233,7 @@ namespace GameClass.GameObj
                     }
                 }
             }
-            Homes = GameObjDict[GameObjType.Home].Cast<Home>().ToNewList();
+            Homes = GameObjDict[GameObjType.Home].Cast<Home>()?.ToNewList()!;
         }
     }
 }

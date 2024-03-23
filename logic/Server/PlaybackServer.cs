@@ -9,7 +9,7 @@ namespace Server
     class PlaybackServer(ArgumentOptions options) : ServerBase
     {
         protected readonly ArgumentOptions options = options;
-        private int[] teamScore = [];
+        private long[] teamScore = [];
         private readonly ConcurrentDictionary<long, (SemaphoreSlim, SemaphoreSlim)> semaDict = new();
         // private object semaDictLock = new();
         private MessageToClient? currentGameInfo = new();
@@ -143,7 +143,7 @@ namespace Server
                     using (MessageReader mr = new(options.FileName))
                     {
                         Console.WriteLine("Parsing playback file...");
-                        teamScore = new int[mr.teamCount];
+                        teamScore = new long[mr.teamCount];
                         finalScore = new int[mr.teamCount];
                         int infoNo = 0;
                         object cursorLock = new();
@@ -210,7 +210,7 @@ namespace Server
                         timeInterval = (int)Math.Round(timeInterval / options.PlaybackSpeed);
                     }
                     using MessageReader mr = new(options.FileName);
-                    teamScore = new int[mr.teamCount];
+                    teamScore = new long[mr.teamCount];
                     finalScore = new int[mr.teamCount];
                     int infoNo = 0;
                     object cursorLock = new();
