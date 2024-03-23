@@ -3,6 +3,7 @@ using Gaming;
 using Grpc.Core;
 using Preparation.Utility;
 using Protobuf;
+using System.Runtime.CompilerServices;
 
 namespace Server
 {
@@ -63,7 +64,7 @@ namespace Server
                 // 观战模式
                 lock (spectatorJoinLock) // 具体原因见另一个上锁的地方
                 {
-                    if (semaDict.TryAdd(request.PlayerId, (new SemaphoreSlim(0, 1), new SemaphoreSlim(0, 1))))
+                    if (semaDict0.TryAdd(request.PlayerId, (new SemaphoreSlim(0, 1), new SemaphoreSlim(0, 1))))
                     {
                         Console.WriteLine("A new spectator comes to watch this game.");
                         IsSpectatorJoin = true;
@@ -76,7 +77,7 @@ namespace Server
                 }
                 do
                 {
-                    semaDict[request.PlayerId].Item1.Wait();
+                    semaDict0[request.PlayerId].Item1.Wait();
                     try
                     {
                         if (currentGameInfo != null)
@@ -87,7 +88,7 @@ namespace Server
                     }
                     catch (InvalidOperationException)
                     {
-                        if (semaDict.TryRemove(request.PlayerId, out var semas))
+                        if (semaDict0.TryRemove(request.PlayerId, out var semas))
                         {
                             try
                             {
@@ -107,7 +108,7 @@ namespace Server
                     {
                         try
                         {
-                            semaDict[request.PlayerId].Item2.Release();
+                            semaDict0[request.PlayerId].Item2.Release();
                         }
                         catch { }
                     }
@@ -148,11 +149,23 @@ namespace Server
                 Console.WriteLine($"Id: {request.PlayerId} joins.");
                 lock (spectatorJoinLock)  // 为了保证绝对安全，还是加上这个锁吧
                 {
-                    if (semaDict.TryAdd(request.PlayerId, temp))
+                    if (request.TeamId == 0)
                     {
-                        start = Interlocked.Increment(ref playerCountNow) == playerNum;
-                        Console.WriteLine($"PlayerCountNow: {playerCountNow}");
-                        Console.WriteLine($"PlayerNum: {playerNum}");
+                        if (semaDict0.TryAdd(request.PlayerId, temp))
+                        {
+                            start = Interlocked.Increment(ref playerCountNow) == (playerNum * 2);
+                            Console.WriteLine($"PlayerCountNow: {playerCountNow}");
+                            Console.WriteLine($"PlayerNum: {playerNum * 2}");
+                        }
+                    }
+                    else if (request.TeamId == 1)
+                    {
+                        if (semaDict1.TryAdd(request.PlayerId, temp))
+                        {
+                            start = Interlocked.Increment(ref playerCountNow) == (playerNum * 2);
+                            Console.WriteLine($"PlayerCountNow: {playerCountNow}");
+                            Console.WriteLine($"PlayerNum: {playerNum * 2}");
+                        }
                     }
                 }
                 if (start)
@@ -167,7 +180,10 @@ namespace Server
             bool exitFlag = false;
             do
             {
-                semaDict[request.PlayerId].Item1.Wait();
+                if (request.TeamId == 0)
+                    semaDict0[request.PlayerId].Item1.Wait();
+                else if (request.TeamId == 1)
+                    semaDict1[request.PlayerId].Item1.Wait();
                 try
                 {
                     if (currentGameInfo != null && !exitFlag)
@@ -186,7 +202,10 @@ namespace Server
                 }
                 finally
                 {
-                    semaDict[request.PlayerId].Item2.Release();
+                    if (request.TeamId == 0)
+                        semaDict0[request.PlayerId].Item2.Release();
+                    else if (request.TeamId == 1)
+                        semaDict1[request.PlayerId].Item2.Release();
                 }
             } while (game.GameMap.Timer.IsGaming);
 #if DEBUG
