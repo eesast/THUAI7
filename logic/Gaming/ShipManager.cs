@@ -20,6 +20,17 @@ namespace Gaming
             }
             public bool ActivateShip(Ship ship, XY pos)
             {
+                var activateCost = ship.ShipType switch
+                {
+                    ShipType.CivilShip => GameData.CivilShipCost,
+                    ShipType.WarShip => GameData.WarShipCost,
+                    ShipType.FlagShip => GameData.FlagShipCost,
+                    _ => int.MaxValue
+                };
+                if (activateCost > ship.MoneyPool.Money)
+                {
+                    return false;
+                }
                 if (ship.ShipState != ShipStateType.Deceased)
                 {
                     return false;
