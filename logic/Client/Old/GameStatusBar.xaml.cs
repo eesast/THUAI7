@@ -1,3 +1,4 @@
+using Client.Util;
 using Protobuf;
 
 namespace Client;

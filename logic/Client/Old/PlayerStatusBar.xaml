@@ -34,7 +34,7 @@
             <Label x:Name="MyMoney" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3" Text="  💰总经济：" Style="{StaticResource littleAttributes}" />
         </Grid>
 
-        <Grid x:Name="ShipStatusAttributesGrid" Grid.Row="1">
+        <Grid x:Name="SweeperStatusAttributesGrid" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
@@ -45,16 +45,16 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <Label x:Name="ShipItem" Grid.Row="1" Grid.Column="0" Text="单位👾" FontSize="Micro"/>
-            <Label x:Name="ShipMining" Grid.Row="1" Grid.Column="1" Text="采集模块" FontSize="Micro"/>
-            <Label x:Name="ShipBuild" Grid.Row="1" Grid.Column="2" Text="建造模块" FontSize="Micro"/>
-            <Label x:Name="ShipArmor" Grid.Row="1" Grid.Column="3" Text="装甲模块" FontSize="Micro"/>
-            <Label x:Name="ShipShield" Grid.Row="1" Grid.Column="4" Text="护盾模块" FontSize="Micro"/>
-            <Label x:Name="ShipAttack" Grid.Row="1" Grid.Column="5" Text="攻击模块" FontSize="Micro"/>
-            <Label x:Name="ShipState" Grid.Row="1" Grid.Column="6" Text="状态✨️" FontSize="Micro"/>
+            <Label x:Name="SweeperItem" Grid.Row="1" Grid.Column="0" Text="单位👾" FontSize="Micro"/>
+            <Label x:Name="SweeperMining" Grid.Row="1" Grid.Column="1" Text="采集模块" FontSize="Micro"/>
+            <Label x:Name="SweeperBuild" Grid.Row="1" Grid.Column="2" Text="建造模块" FontSize="Micro"/>
+            <Label x:Name="SweeperArmor" Grid.Row="1" Grid.Column="3" Text="装甲模块" FontSize="Micro"/>
+            <Label x:Name="SweeperShield" Grid.Row="1" Grid.Column="4" Text="护盾模块" FontSize="Micro"/>
+            <Label x:Name="SweeperAttack" Grid.Row="1" Grid.Column="5" Text="攻击模块" FontSize="Micro"/>
+            <Label x:Name="SweeperState" Grid.Row="1" Grid.Column="6" Text="状态✨️" FontSize="Micro"/>
         </Grid>
 
-        <Grid x:Name="ShipAllAttributesGrid" Grid.Row="2" >
+        <Grid x:Name="SweeperAllAttributesGrid" Grid.Row="2" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
