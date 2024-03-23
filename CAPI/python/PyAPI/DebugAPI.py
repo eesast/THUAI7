@@ -247,57 +247,167 @@ class SweeperDebugAPI(ISweeperAPI, IGameTimer):
             )
             self.__logger.info("************************\n")
 
-    def PrintTeam(self) -> None:
-        for team in self.__logic.Get
-
     def PrintSelfInfo(self) -> None:
-        pass
+        sweeper=self.__logic.GetSelfInfo()
+        self.__logger.info("******sweeper Info******")
+        self.__logger.info(
+            f"teamID={sweeper.teamID} playerID={sweeper.playerID}, GUID={sweeper.guid} sweeperType:{sweeper.sweeperType}"
+        )
+        self.__logger.info(
+            f"x={sweeper.x}, y={sweeper.y} hp={sweeper.hp} armor={sweeper.armor} shield={sweeper.shield} state:{sweeper.sweeperState}"
+        )
+        self.__logger.info(
+            f"speed={sweeper.speed}, view range={sweeper.viewRange}, facingDirection={sweeper.facingDirection}"
+        )
+        self.__logger.info(
+            f"producerType:{sweeper.producerType} constructorType:{sweeper.constructorType}"
+        )
+        self.__logger.info(
+            f"armorType:{sweeper.armorType} shieldType:{sweeper.shieldType} weaponType:{sweeper.weaponType}"
+        )
+        self.__logger.info("************************\n")
 
+    def __GetTime(self) -> float:
+        return (datetime.datetime.now() - self.__startPoint) / datetime.timedelta(
+            milliseconds=1
+        )
+    
     def StartTimer(self) -> None:
-        pass
+        self.__startPoint = datetime.datetime.now()
+        self.__logger.info("=== AI.play() ===")
+        self.__logger.info(f"StartTimer: {self.__startPoint.time()}")
 
     def EndTimer(self) -> None:
-        pass
+        self.__logger.info(f"Time elapsed: {self.__GetTime()}ms")
 
     def Play(self, ai: IAI) -> None:
         ai.SweeperPlay(self)
 
 
-class TeamAPI(ITeamAPI, IGameTimer):
-    def __init__(self, logic: ILogic) -> None:
-        self.__logic = logic
-        self.__pool = ThreadPoolExecutor(20)
+class TeamDebugAPI(ITeamAPI, IGameTimer):
+    def __init__(
+            self, logic: ILogic, file: bool, screen: bool, warnOnly: bool, playerID: int
+        ) -> None:
+            self.__logic = logic
+            self.__pool = ThreadPoolExecutor(20)
+            self.__startPoint = datetime.datetime.now()
+            self.__logger = logging.getLogger("api " + str(playerID))
+            self.__logger.setLevel(logging.DEBUG)
+            formatter = logging.Formatter(
+                "[%(name)s] [%(asctime)s.%(msecs)03d] [%(levelname)s] %(message)s",
+                "%H:%M:%S",
+            )
+            # 确保文件存在
+            if not os.path.exists(
+                os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/logs"
+            ):
+                os.makedirs(
+                    os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/logs"
+                )
 
-    def StartTimer(self) -> None:
-        pass
-
-    def EndTimer(self) -> None:
-        pass
-
-    def Play(self, ai: IAI) -> None:
-        ai.TeamPlay(self)
+            fileHandler = logging.FileHandler(
+                os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+                + "/logs/api-"
+                + str(playerID)
+                + "-log.txt",
+                mode="w+",
+                encoding="utf-8",
+            )
+            screenHandler = logging.StreamHandler()
+            if file:
+                fileHandler.setLevel(logging.DEBUG)
+                fileHandler.setFormatter(formatter)
+                self.__logger.addHandler(fileHandler)
+            if screen:
+                if warnOnly:
+                    screenHandler.setLevel(logging.WARNING)
+                else:
+                    screenHandler.setLevel(logging.INFO)
+                screenHandler.setFormatter(formatter)
+                self.__logger.addHandler(screenHandler)
 
     def SendMessage(self, toID: int, message: Union[str, bytes]) -> Future[bool]:
-        return self.__pool.submit(self.__logic.SendMessage, toID, message)
+        self.__logger.info(
+            f"SendMessage: toID = {toID}, message = {message}, called at {self.__GetTime()}ms"
+        )
+
+        def logSend() -> bool:
+            result = self.__logic.SendMessage(toID, message)
+            if not result:
+                self.__logger.warning(f"SendMessage: failed at {self.__GetTime()}ms")
+            return result
+
+        return self.__pool.submit(logSend)
 
     def HaveMessage(self) -> bool:
-        return self.__logic.HaveMessage()
+        self.__logger.info(f"HaveMessage: called at {self.__GetTime()}ms")
+        result = self.__logic.HaveMessage()
+        if not result:
+            self.__logger.warning(f"HaveMessage: failed at {self.__GetTime()}ms")
+        return result
 
     def GetMessage(self) -> Tuple[int, Union[str, bytes]]:
-        return self.__logic.GetMessage()
-
-    def GetFrameCount(self) -> int:
-        return self.__logic.GetFrameCount()
+        self.__logger.info(f"GetMessage: called at {self.__GetTime()}ms")
+        result = self.__logic.GetMessage()
+        if result[0] == -1:
+            self.__logger.warning(f"GetMessage: failed at {self.__GetTime()}ms")
+        return result
 
     def Wait(self) -> bool:
+        self.__logger.info(f"Wait: called at {self.__GetTime()}ms")
         if self.__logic.GetCounter() == -1:
             return False
         else:
             return self.__logic.WaitThread()
 
     def EndAllAction(self) -> Future[bool]:
-        return self.__pool.submit(self.__logic.EndAllAction)
+        self.__logger.info(f"EndAllAction: called at {self.__GetTime()}ms")
 
+        def logEnd() -> bool:
+            result = self.__logic.EndAllAction()
+            if not result:
+                self.__logger.warning(f"EndAllAction: failed at {self.__GetTime()}ms")
+            return result
+
+        return self.__pool.submit(logEnd)
+
+    def InstallModule(self, playerID: int, moduleType: THUAI7.ModuleType) -> Future[bool]:
+        self.__logger.info(f"InstallModule: playerID = {playerID}, type = {moduleType}, called at {self.__GetTime()}ms")
+
+        def logInstallModule() -> bool:
+            result = self.__logic.InstallModule(playerID, moduleType)
+            if not result:
+                self.__logger.warning(f"InstallModule: failed at {self.__GetTime()}ms")
+            return result
+
+        return self.__pool.submit(logInstallModule)
+
+    def Recycle(self, playerID: int) -> Future[bool]:
+        self.__logger.info(f"Recycle: ID = {playerID}, called at {self.__GetTime()}ms")
+
+        def logRecycle() -> bool:
+            result = self.__logic.Recycle(playerID)
+            if not result:
+                self.__logger.warning(f"Recycle: failed at {self.__GetTime()}ms")
+            return result
+
+        return self.__pool.submit(logRecycle)
+
+    def BuildSweeper(self, sweeperType: THUAI7.SweeperType) -> Future[bool]:
+        self.__logger.info(f"BuildSweeper: sweeperType = {sweeperType}, called at {self.__GetTime()}ms")
+
+        def logBuildSweeper() -> bool:
+            result = self.__logic.BuildSweeper(sweeperType)
+            if not result:
+                self.__logger.warning(f"BuildSweeper: failed at {self.__GetTime()}ms")
+            return result
+
+        return self.__pool.submit(logBuildSweeper)
+
+    
+    def GetFrameCount(self) -> int:
+        return self.__logic.GetFrameCount()
+    
     def GetBullets(self) -> List[THUAI7.Bullet]:
         return self.__logic.GetBullets()
 
@@ -340,15 +450,6 @@ class TeamAPI(ITeamAPI, IGameTimer):
     def GetMoney(self) -> int:
         return self.__logic.GetMoney()
 
-    def InstallModule(self, ID: int, type: THUAI7.ModuleType) -> Future[bool]:
-        return self.__pool.submit(self.__logic.InstallModule, ID, type)
-
-    def Recycle(self, ID: int) -> Future[bool]:
-        return self.__pool.submit(self.__logic.Recycle, ID)
-
-    def BuildSweeper(self, sweeperType: THUAI7.SweeperType) -> Future[bool]:
-        return self.__pool.submit(self.__logic.BuildSweeper, sweeperType)
-
     def Print(self, string: str) -> None:
         pass
 
@@ -357,3 +458,19 @@ class TeamAPI(ITeamAPI, IGameTimer):
 
     def PrintSelfInfo(self) -> None:
         pass
+
+    def __GetTime(self) -> float:
+        return (datetime.datetime.now() - self.__startPoint) / datetime.timedelta(
+            milliseconds=1
+        )
+    
+    def StartTimer(self) -> None:
+        self.__startPoint = datetime.datetime.now()
+        self.__logger.info("=== AI.play() ===")
+        self.__logger.info(f"StartTimer: {self.__startPoint.time()}")
+
+    def EndTimer(self) -> None:
+        self.__logger.info(f"Time elapsed: {self.__GetTime()}ms")
+
+    def Play(self, ai: IAI) -> None:
+        ai.SweeperPlay(self)
