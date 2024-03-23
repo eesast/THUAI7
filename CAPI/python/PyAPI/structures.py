@@ -39,11 +39,7 @@ class PlayerTeam(Enum):
     Blue = 2
 
 
-playerTeamDict = {
-    PlayerTeam.NullTeam: 0,
-    PlayerTeam.Red: 1,
-    PlayerTeam.Blue: 2
-}
+playerTeamDict = {PlayerTeam.NullTeam: 0, PlayerTeam.Red: 1, PlayerTeam.Blue: 2}
 
 
 class PlayerType(Enum):

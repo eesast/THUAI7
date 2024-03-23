@@ -2216,32 +2216,10 @@ namespace protobuf
 
         enum : int
         {
-            kXFieldNumber = 1,
-            kYFieldNumber = 2,
-            kTeamIdFieldNumber = 4,
-            kSweeperTypeFieldNumber = 3,
+            kTeamIdFieldNumber = 2,
+            kSweeperTypeFieldNumber = 1,
         };
-        // int32 x = 1;
-        void clear_x();
-        int32_t x() const;
-        void set_x(int32_t value);
-
-    private:
-        int32_t _internal_x() const;
-        void _internal_set_x(int32_t value);
-
-    public:
-        // int32 y = 2;
-        void clear_y();
-        int32_t y() const;
-        void set_y(int32_t value);
-
-    private:
-        int32_t _internal_y() const;
-        void _internal_set_y(int32_t value);
-
-    public:
-        // int64 team_id = 4;
+        // int64 team_id = 2;
         void clear_team_id();
         int64_t team_id() const;
         void set_team_id(int64_t value);
@@ -2251,7 +2229,7 @@ namespace protobuf
         void _internal_set_team_id(int64_t value);
 
     public:
-        // .protobuf.SweeperType sweeper_type = 3;
+        // .protobuf.SweeperType sweeper_type = 1;
         void clear_sweeper_type();
         ::protobuf::SweeperType sweeper_type() const;
         void set_sweeper_type(::protobuf::SweeperType value);
@@ -2272,8 +2250,6 @@ namespace protobuf
         typedef void DestructorSkippable_;
         struct Impl_
         {
-            int32_t x_;
-            int32_t y_;
             int64_t team_id_;
             int sweeper_type_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -3116,55 +3092,7 @@ namespace protobuf
 
     // BuildSweeperMsg
 
-    // int32 x = 1;
-    inline void BuildSweeperMsg::clear_x()
-    {
-        _impl_.x_ = 0;
-    }
-    inline int32_t BuildSweeperMsg::_internal_x() const
-    {
-        return _impl_.x_;
-    }
-    inline int32_t BuildSweeperMsg::x() const
-    {
-        // @@protoc_insertion_point(field_get:protobuf.BuildSweeperMsg.x)
-        return _internal_x();
-    }
-    inline void BuildSweeperMsg::_internal_set_x(int32_t value)
-    {
-        _impl_.x_ = value;
-    }
-    inline void BuildSweeperMsg::set_x(int32_t value)
-    {
-        _internal_set_x(value);
-        // @@protoc_insertion_point(field_set:protobuf.BuildSweeperMsg.x)
-    }
-
-    // int32 y = 2;
-    inline void BuildSweeperMsg::clear_y()
-    {
-        _impl_.y_ = 0;
-    }
-    inline int32_t BuildSweeperMsg::_internal_y() const
-    {
-        return _impl_.y_;
-    }
-    inline int32_t BuildSweeperMsg::y() const
-    {
-        // @@protoc_insertion_point(field_get:protobuf.BuildSweeperMsg.y)
-        return _internal_y();
-    }
-    inline void BuildSweeperMsg::_internal_set_y(int32_t value)
-    {
-        _impl_.y_ = value;
-    }
-    inline void BuildSweeperMsg::set_y(int32_t value)
-    {
-        _internal_set_y(value);
-        // @@protoc_insertion_point(field_set:protobuf.BuildSweeperMsg.y)
-    }
-
-    // .protobuf.SweeperType sweeper_type = 3;
+    // .protobuf.SweeperType sweeper_type = 1;
     inline void BuildSweeperMsg::clear_sweeper_type()
     {
         _impl_.sweeper_type_ = 0;
@@ -3188,7 +3116,7 @@ namespace protobuf
         // @@protoc_insertion_point(field_set:protobuf.BuildSweeperMsg.sweeper_type)
     }
 
-    // int64 team_id = 4;
+    // int64 team_id = 2;
     inline void BuildSweeperMsg::clear_team_id()
     {
         _impl_.team_id_ = int64_t{0};

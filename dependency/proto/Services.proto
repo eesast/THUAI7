@@ -12,7 +12,6 @@ service AvailableService
     rpc GetMap(NullRequest) returns (MessageOfMap);
     // 游戏过程中玩家执行操作的服务
     // 船
-    rpc Activate(ActivateMsg) returns (BoolRes);    // 激活
     rpc Move(MoveMsg) returns (MoveRes);            // 移动
     rpc Recover(RecoverMsg) returns (BoolRes);      // 回复
     rpc Produce(IDMsg) returns (BoolRes);           // 开采

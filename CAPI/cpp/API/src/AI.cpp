@@ -21,7 +21,8 @@ void AI::play(ISweeperAPI& api)
 {
     if (this->playerID == 1)
     {
-        // 玩家1执行操作
+        api.Move(10, 2.1);
+        api.PrintSelfInfo();
     }
     else if (this->playerID == 2)
     {
