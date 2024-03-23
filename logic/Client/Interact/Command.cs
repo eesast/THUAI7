@@ -207,7 +207,7 @@ namespace Client.Interact
                 Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 "THUAI7.json") : p;
             file = new ConfigDataFile();
-            
+
             ReadFile();
             if (autoSave)
                 OnMemoryChanged += (_, _) => SaveFile();

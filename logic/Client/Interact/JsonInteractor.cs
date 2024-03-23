@@ -29,7 +29,7 @@ namespace Client.Interact
                 string playerid = o["playerid"].ToString();
                 string sweepertype = o["sweepertype"].ToString();
                 string index = o["index"].ToString();
-              
+
                 reader.Close();
                 file.Close();
                 fs.Close();
@@ -38,7 +38,7 @@ namespace Client.Interact
                 cominfo[2] = teamid;
                 cominfo[3] = playerid;
                 cominfo[4] = sweepertype;
-                
+
                 //FileStream writetxt_fs = new FileStream(result1, FileMode.Create);
                 //StreamWriter wr = new StreamWriter(writetxt_fs, System.Text.Encoding.Default);
                 //wr.WriteLine(info);
@@ -47,7 +47,7 @@ namespace Client.Interact
             }
             return cominfo;
         }
-        
+
         public static string[] FileInteract()
         {
             string[] cominfo = new string[10];
@@ -62,7 +62,7 @@ namespace Client.Interact
 
                 d.Commands.Launched = true;
             }
-            
+
 
             return cominfo;
         }

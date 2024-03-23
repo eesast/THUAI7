@@ -585,7 +585,7 @@ namespace Client.ViewModel
             PureDrawMap(GameMap.GameMapArray);
             //ReactToCommandline();
 
-            
+
 
             ConnectToServer(new string[]{
                 "127.0.0.1",
