@@ -132,7 +132,6 @@ namespace installer.ViewModel
             }
         }
 
-        // private int cnt = 1;
         public void UpdateExceptions()
         {
             while (Downloader.Exceptions.Count > 0)
@@ -143,8 +142,6 @@ namespace installer.ViewModel
                     Exceptions.Add(exception);
                 }
             }
-            // Exceptions.Add(new Exception($"exp {cnt}"));
-            // cnt ++;
         }
 
         public ICommand BrowseBtnClickedCommand { get; }
