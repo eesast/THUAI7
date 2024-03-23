@@ -287,10 +287,10 @@ std::future<bool> SweeperAPI::Construct(THUAI7::ConstructionType constructionTyp
                       { return logic.Construct(constructionType); });
 }
 
-bool SweeperAPI::HaveView(int32_t gridX, int32_t gridY) const
+bool SweeperAPI::HaveView(int32_t targetX, int32_t targetY) const
 {
     auto selfInfo = GetSelfInfo();
-    return logic.HaveView(gridX, gridY, selfInfo->x, selfInfo->y, selfInfo->viewRange);
+    return logic.HaveView(targetX, targetY, selfInfo->x, selfInfo->y, selfInfo->viewRange);
 }
 
 // Team独有
@@ -306,10 +306,10 @@ std::future<bool> TeamAPI::Recycle(int64_t playerID)
                       { return logic.Recycle(playerID); });
 }
 
-std::future<bool> TeamAPI::BuildSweeper(THUAI7::SweeperType SweeperType, int32_t x, int32_t y)
+std::future<bool> TeamAPI::BuildSweeper(THUAI7::SweeperType SweeperType)
 {
     return std::async(std::launch::async, [=]()
-                      { return logic.BuildSweeper(SweeperType, x, y); });
+                      { return logic.BuildSweeper(SweeperType); });
 }
 
 void SweeperAPI::Play(IAI& ai)

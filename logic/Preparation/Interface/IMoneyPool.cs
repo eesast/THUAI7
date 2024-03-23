@@ -7,6 +7,6 @@ namespace Preparation.Interface
         public AtomicLongOnlyAddScore Money { get; }
         public AtomicLong Score { get; }
         public long AddMoney(long add);
-        public void SubMoney(long sub);
+        public long SubMoney(long sub);
     }
 }

@@ -152,26 +152,5 @@ namespace GameClass.GameObj
             }
             return -1;
         }
-        public void RemoveShip(Ship ship)
-        {
-            int i;
-            for (i = 0; i < shipList.Count; i++)
-            {
-                if (shipList[i] == ship)
-                    break;
-            }
-            if (i < shipList.Count)
-                shipList.RemoveAt(i);
-        }
-        public long[] GetShipIDs()
-        {
-            long[] shipIDs = new long[shipList.Count];
-            int i = 0;
-            foreach (Ship ship in shipList)
-            {
-                shipIDs[i++] = ship.PlayerID;
-            }
-            return shipIDs;
-        }
     }
 }

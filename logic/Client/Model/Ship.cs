@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Client.Util;
+using Protobuf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,84 +8,86 @@ using System.Threading.Tasks;
 
 namespace Client.Model
 {
-    public enum TeamEnum
+    //public enum TeamEnum
+    //{
+    //    Red,
+    //    Blue
+    //}
+
+    //public enum TypeEnum
+    //{
+    //    CivilSweeper,
+    //    WarSweeper,
+    //    FlagSweeper
+    //}
+
+    //public enum StateEnum
+    //{
+    //    Idle,
+    //    Producing,
+    //    Constructing,
+    //    Recovering,
+    //    Recycling,
+    //    Attacking,
+    //    Swinging,
+    //    Deceased
+    //}
+
+    //public enum ProducerModuleEnum
+    //{
+
+    //}
+
+    //public enum ConstuctorModuleEnum
+    //{
+
+    //}
+
+    //public enum ArmorModuleEnum
+    //{
+
+    //}
+
+    //public enum ShieldModuleEnum
+    //{
+
+    //}
+
+    //public enum AttackerModuleEnum
+    //{
+
+    //}
+
+    public class Sweeper : BindableObject
     {
-        Red,
-        Blue
-    }
-
-    public enum TypeEnum
-    {
-        CivilShip,
-        WarShip,
-        FlagShip
-    }
-
-    public enum StateEnum
-    {
-        Idle,
-        Producing,
-        Constructing,
-        Recovering,
-        Recycling,
-        Attacking,
-        Swinging,
-        Deceased
-    }
-
-    public enum ProducerModuleEnum
-    {
-
-    }
-
-    public enum ConstuctorModuleEnum
-    {
-
-    }
-
-    public enum ArmorModuleEnum
-    {
-
-    }
-
-    public enum ShieldModuleEnum
-    {
-
-    }
-
-    public enum AttackerModuleEnum
-    {
-
-    }
-
-    public class Ship : BindableObject
-    {
-        private TeamEnum team;
-        private TypeEnum type;
-        private StateEnum state;
+        private long teamID;
+        private SweeperType type;
+        private SweeperState state;
         private int Hp;
-        private ProducerModuleEnum producerModule;
-        private ConstuctorModuleEnum constuctorModule;
-        private ArmorModuleEnum armorModule;
-        private ShieldModuleEnum shieldModule;
-        private AttackerModuleEnum attackerModule;
+        private ProducerType producerModule;
+        private ConstructorType constuctorModule;
+        private ArmorType armorModule;
+        private ShieldType shieldModule;
+        private WeaponType weaponModule;
         private string type_s;
         private string state_s;
         private string producerModule_s;
         private string constuctorModule_s;
         private string armorModule_s;
         private string shieldModule_s;
-        private string attackerModule_s;
-        public TeamEnum Team
+        private string weaponModule_s;
+
+
+        public long TeamID
         {
-            get => team;
+            get => teamID;
             set
             {
-                team = value;
+                teamID = value;
                 OnPropertyChanged();
             }
         }
-        public TypeEnum Type
+        public SweeperType Type
         {
             get => type;
             set
@@ -92,7 +96,7 @@ namespace Client.Model
                 OnPropertyChanged();
             }
         }
-        public StateEnum State
+        public SweeperState State
         {
             get => state;
             set
@@ -110,7 +114,7 @@ namespace Client.Model
                 OnPropertyChanged();
             }
         }
-        public ProducerModuleEnum ProducerModule
+        public ProducerType ProducerModule
         {
             get => producerModule;
             set
@@ -119,7 +123,7 @@ namespace Client.Model
                 OnPropertyChanged();
             }
         }
-        public ConstuctorModuleEnum ConstuctorModule
+        public ConstructorType ConstuctorModule
         {
             get => constuctorModule;
             set
@@ -128,7 +132,7 @@ namespace Client.Model
                 OnPropertyChanged();
             }
         }
-        public ArmorModuleEnum ArmorModule
+        public ArmorType ArmorModule
         {
             get => armorModule;
             set
@@ -137,7 +141,7 @@ namespace Client.Model
                 OnPropertyChanged();
             }
         }
-        public ShieldModuleEnum ShieldModule
+        public ShieldType ShieldModule
         {
             get => shieldModule;
             set
@@ -146,18 +150,19 @@ namespace Client.Model
                 OnPropertyChanged();
             }
         }
-        public AttackerModuleEnum AttackerModule
+        public WeaponType WeaponModule
         {
-            get => attackerModule;
+            get => weaponModule;
             set
             {
-                attackerModule = value;
+                weaponModule = value;
                 OnPropertyChanged();
             }
         }
         public string Type_s
         {
-            get => type_s;
+            get => UtilInfo.SweeperTypeNameDict[Type];
+            //get => type_s;
             set
             {
                 type_s = value;
@@ -166,7 +171,8 @@ namespace Client.Model
         }
         public string State_s
         {
-            get => state_s;
+            get => UtilInfo.SweeperStateNameDict[State];
+            //get => state_s;
             set
             {
                 state_s = value;
@@ -175,7 +181,8 @@ namespace Client.Model
         }
         public string ProducerModule_s
         {
-            get => producerModule_s;
+            get => UtilInfo.SweeperProducerTypeNameDict[ProducerModule];
+            //get => producerModule_s;
             set
             {
                 producerModule_s = value;
@@ -184,7 +191,8 @@ namespace Client.Model
         }
         public string ConstuctorModule_s
         {
-            get => constuctorModule_s;
+            get => UtilInfo.SweeperConstructorNameDict[ConstuctorModule];
+            //get => constuctorModule_s;
             set
             {
                 constuctorModule_s = value;
@@ -193,7 +201,8 @@ namespace Client.Model
         }
         public string ArmorModule_s
         {
-            get => armorModule_s;
+            get => UtilInfo.SweeperArmorTypeNameDict[ArmorModule];
+            //get => armorModule_s;
             set
             {
                 armorModule_s = value;
@@ -202,19 +211,21 @@ namespace Client.Model
         }
         public string ShieldModule_s
         {
-            get => shieldModule_s;
+            get => UtilInfo.SweeperShieldTypeNameDict[ShieldModule];
+            //get => shieldModule_s;
             set
             {
                 shieldModule_s = value;
                 OnPropertyChanged();
             }
         }
-        public string AttackerModule_s
+        public string WeaponModule_s
         {
-            get => attackerModule_s;
+            get => UtilInfo.SweeperWeaponTypeNameDict[WeaponModule];
+            //get => weaponModule_s;
             set
             {
-                attackerModule_s = value;
+                weaponModule_s = value;
                 OnPropertyChanged();
             }
         }
