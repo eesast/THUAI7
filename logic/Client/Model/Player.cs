@@ -9,8 +9,8 @@ namespace Client.Model
 {
     public class Player : BindableObject
     {
-        private bool team;
-        public bool Team
+        private long team;
+        public long Team
         {
             get => team;
             set
@@ -39,12 +39,24 @@ namespace Client.Model
                 OnPropertyChanged();
             }
         }
-        private ObservableCollection<Ship> ships;
-        public ObservableCollection<Ship> Ships
+
+        private int score;
+        public int Score
+        {
+            get => score;
+            set
+            {
+                score = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ObservableCollection<Sweeper> ships;
+        public ObservableCollection<Sweeper> Sweepers
         {
             get
             {
-                return ships ?? (ships = new ObservableCollection<Ship>());
+                return ships ?? (ships = new ObservableCollection<Sweeper>());
             }
             set
             {
