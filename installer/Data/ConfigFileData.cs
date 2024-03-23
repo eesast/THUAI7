@@ -222,6 +222,8 @@ namespace installer.Data
                                  | NotifyFilters.LastWrite
                                  | NotifyFilters.Security
                                  | NotifyFilters.Size;
+            watcher.IncludeSubdirectories = false;
+            watcher.EnableRaisingEvents = true;
             watcher.Changed += (_, _) =>
             {
                 ReadFile();

@@ -58,7 +58,7 @@ namespace installer.Services
                 return sr.ReadToEnd();
             }
         }
-        
+
         public static string MergeUserCode(string strUserCode, string strOldTemplate, string strNewTemplate)
         {
             StringBuilder builder = new StringBuilder();
