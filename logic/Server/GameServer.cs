@@ -188,7 +188,7 @@ namespace Server
 
         private bool PlayerDeceased(int playerID)    //# 这里需要判断大本营deceased吗？
         {
-            return game.GameMap.GameObjDict[GameObjType.Ship].Cast<Ship>().Find(
+            return game.GameMap.GameObjDict[GameObjType.Ship].Cast<Ship>()?.Find(
                 ship => ship.PlayerID == playerID && ship.ShipState == ShipStateType.Deceased
                 ) != null;
         }
