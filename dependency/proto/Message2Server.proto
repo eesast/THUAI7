@@ -17,12 +17,6 @@ message PlayerMsg
     SweeperType sweeper_type = 3;
 }
 
-message ActivateMsg
-{
-    int64 player_id = 1;
-    int64 team_id = 2;
-    SweeperType sweeper_type = 3;
-}
 
 message MoveMsg
 {
@@ -74,8 +68,6 @@ message InstallMsg
 }
 message BuildSweeperMsg
 {
-    int32 x = 1;
-    int32 y = 2;
-    SweeperType sweeper_type = 3;
-    int64 team_id = 4;
+    SweeperType sweeper_type = 1;
+    int64 team_id = 2;
 }

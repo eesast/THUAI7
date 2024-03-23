@@ -222,7 +222,7 @@ namespace protobuf
         ::_pbi::ConstantInitialized
     ) :
         _impl_{
-            /*decltype(_impl_.x_)*/ 0, /*decltype(_impl_.y_)*/ 0, /*decltype(_impl_.team_id_)*/ int64_t{0}, /*decltype(_impl_.sweeper_type_)*/ 0, /*decltype(_impl_._cached_size_)*/ {}}
+            /*decltype(_impl_.team_id_)*/ int64_t{0}, /*decltype(_impl_.sweeper_type_)*/ 0, /*decltype(_impl_._cached_size_)*/ {}}
     {
     }
     struct BuildSweeperMsgDefaultTypeInternal
@@ -333,8 +333,6 @@ const uint32_t TableStruct_Message2Server_2eproto::offsets[] PROTOBUF_SECTION_VA
     ~0u,  // no _oneof_case_
     ~0u,  // no _weak_field_map_
     ~0u,  // no _inlined_string_donated_
-    PROTOBUF_FIELD_OFFSET(::protobuf::BuildSweeperMsg, _impl_.x_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::BuildSweeperMsg, _impl_.y_),
     PROTOBUF_FIELD_OFFSET(::protobuf::BuildSweeperMsg, _impl_.sweeper_type_),
     PROTOBUF_FIELD_OFFSET(::protobuf::BuildSweeperMsg, _impl_.team_id_),
 };
@@ -384,9 +382,9 @@ const char descriptor_table_protodef_Message2Server_2eproto[] PROTOBUF_SECTION_V
     "ver\030\002 \001(\003\022\017\n\007team_id\030\003 \001(\003\"[\n\nInstallMsg"
     "\022)\n\013module_type\030\001 \001(\0162\024.protobuf.ModuleT"
     "ype\022\021\n\tplayer_id\030\002 \001(\003\022\017\n\007team_id\030\003 \001(\003\""
-    "e\n\017BuildSweeperMsg\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005"
-    "\022+\n\014sweeper_type\030\003 \001(\0162\025.protobuf.Sweepe"
-    "rType\022\017\n\007team_id\030\004 \001(\003b\006proto3";
+    "O\n\017BuildSweeperMsg\022+\n\014sweeper_type\030\001 \001(\016"
+    "2\025.protobuf.SweeperType\022\017\n\007team_id\030\002 \001(\003"
+    "b\006proto3";
 static const ::_pbi::DescriptorTable* const descriptor_table_Message2Server_2eproto_deps[1] = {
     &::descriptor_table_MessageType_2eproto,
 };
@@ -394,7 +392,7 @@ static ::_pbi::once_flag descriptor_table_Message2Server_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Message2Server_2eproto = {
     false,
     false,
-    870,
+    848,
     descriptor_table_protodef_Message2Server_2eproto,
     "Message2Server.proto",
     &descriptor_table_Message2Server_2eproto_once,
@@ -2787,10 +2785,10 @@ namespace protobuf
         BuildSweeperMsg* const _this = this;
         (void)_this;
         new (&_impl_) Impl_{
-            decltype(_impl_.x_){}, decltype(_impl_.y_){}, decltype(_impl_.team_id_){}, decltype(_impl_.sweeper_type_){}, /*decltype(_impl_._cached_size_)*/ {}};
+            decltype(_impl_.team_id_){}, decltype(_impl_.sweeper_type_){}, /*decltype(_impl_._cached_size_)*/ {}};
 
         _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-        ::memcpy(&_impl_.x_, &from._impl_.x_, static_cast<size_t>(reinterpret_cast<char*>(&_impl_.sweeper_type_) - reinterpret_cast<char*>(&_impl_.x_)) + sizeof(_impl_.sweeper_type_));
+        ::memcpy(&_impl_.team_id_, &from._impl_.team_id_, static_cast<size_t>(reinterpret_cast<char*>(&_impl_.sweeper_type_) - reinterpret_cast<char*>(&_impl_.team_id_)) + sizeof(_impl_.sweeper_type_));
         // @@protoc_insertion_point(copy_constructor:protobuf.BuildSweeperMsg)
     }
 
@@ -2801,7 +2799,7 @@ namespace protobuf
         (void)arena;
         (void)is_message_owned;
         new (&_impl_) Impl_{
-            decltype(_impl_.x_){0}, decltype(_impl_.y_){0}, decltype(_impl_.team_id_){int64_t{0}}, decltype(_impl_.sweeper_type_){0}, /*decltype(_impl_._cached_size_)*/ {}};
+            decltype(_impl_.team_id_){int64_t{0}}, decltype(_impl_.sweeper_type_){0}, /*decltype(_impl_._cached_size_)*/ {}};
     }
 
     BuildSweeperMsg::~BuildSweeperMsg()
@@ -2832,7 +2830,7 @@ namespace protobuf
         // Prevent compiler warnings about cached_has_bits being unused
         (void)cached_has_bits;
 
-        ::memset(&_impl_.x_, 0, static_cast<size_t>(reinterpret_cast<char*>(&_impl_.sweeper_type_) - reinterpret_cast<char*>(&_impl_.x_)) + sizeof(_impl_.sweeper_type_));
+        ::memset(&_impl_.team_id_, 0, static_cast<size_t>(reinterpret_cast<char*>(&_impl_.sweeper_type_) - reinterpret_cast<char*>(&_impl_.team_id_)) + sizeof(_impl_.sweeper_type_));
         _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
     }
 
@@ -2847,29 +2845,9 @@ namespace protobuf
             ptr = ::_pbi::ReadTag(ptr, &tag);
             switch (tag >> 3)
             {
-                // int32 x = 1;
+                // .protobuf.SweeperType sweeper_type = 1;
                 case 1:
                     if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8))
-                    {
-                        _impl_.x_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-                        CHK_(ptr);
-                    }
-                    else
-                        goto handle_unusual;
-                    continue;
-                // int32 y = 2;
-                case 2:
-                    if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16))
-                    {
-                        _impl_.y_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-                        CHK_(ptr);
-                    }
-                    else
-                        goto handle_unusual;
-                    continue;
-                // .protobuf.SweeperType sweeper_type = 3;
-                case 3:
-                    if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24))
                     {
                         uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
                         CHK_(ptr);
@@ -2878,9 +2856,9 @@ namespace protobuf
                     else
                         goto handle_unusual;
                     continue;
-                // int64 team_id = 4;
-                case 4:
-                    if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32))
+                // int64 team_id = 2;
+                case 2:
+                    if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16))
                     {
                         _impl_.team_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
                         CHK_(ptr);
@@ -2922,34 +2900,20 @@ namespace protobuf
         uint32_t cached_has_bits = 0;
         (void)cached_has_bits;
 
-        // int32 x = 1;
-        if (this->_internal_x() != 0)
-        {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_x(), target);
-        }
-
-        // int32 y = 2;
-        if (this->_internal_y() != 0)
-        {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_y(), target);
-        }
-
-        // .protobuf.SweeperType sweeper_type = 3;
+        // .protobuf.SweeperType sweeper_type = 1;
         if (this->_internal_sweeper_type() != 0)
         {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteEnumToArray(
-                3, this->_internal_sweeper_type(), target
+                1, this->_internal_sweeper_type(), target
             );
         }
 
-        // int64 team_id = 4;
+        // int64 team_id = 2;
         if (this->_internal_team_id() != 0)
         {
             target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteInt64ToArray(4, this->_internal_team_id(), target);
+            target = ::_pbi::WireFormatLite::WriteInt64ToArray(2, this->_internal_team_id(), target);
         }
 
         if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields()))
@@ -2971,25 +2935,13 @@ namespace protobuf
         // Prevent compiler warnings about cached_has_bits being unused
         (void)cached_has_bits;
 
-        // int32 x = 1;
-        if (this->_internal_x() != 0)
-        {
-            total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_x());
-        }
-
-        // int32 y = 2;
-        if (this->_internal_y() != 0)
-        {
-            total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_y());
-        }
-
-        // int64 team_id = 4;
+        // int64 team_id = 2;
         if (this->_internal_team_id() != 0)
         {
             total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_team_id());
         }
 
-        // .protobuf.SweeperType sweeper_type = 3;
+        // .protobuf.SweeperType sweeper_type = 1;
         if (this->_internal_sweeper_type() != 0)
         {
             total_size += 1 +
@@ -3016,14 +2968,6 @@ namespace protobuf
         uint32_t cached_has_bits = 0;
         (void)cached_has_bits;
 
-        if (from._internal_x() != 0)
-        {
-            _this->_internal_set_x(from._internal_x());
-        }
-        if (from._internal_y() != 0)
-        {
-            _this->_internal_set_y(from._internal_y());
-        }
         if (from._internal_team_id() != 0)
         {
             _this->_internal_set_team_id(from._internal_team_id());
@@ -3054,9 +2998,9 @@ namespace protobuf
         using std::swap;
         _internal_metadata_.InternalSwap(&other->_internal_metadata_);
         ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-            PROTOBUF_FIELD_OFFSET(BuildSweeperMsg, _impl_.sweeper_type_) + sizeof(BuildSweeperMsg::_impl_.sweeper_type_) - PROTOBUF_FIELD_OFFSET(BuildSweeperMsg, _impl_.x_)>(
-            reinterpret_cast<char*>(&_impl_.x_),
-            reinterpret_cast<char*>(&other->_impl_.x_)
+            PROTOBUF_FIELD_OFFSET(BuildSweeperMsg, _impl_.sweeper_type_) + sizeof(BuildSweeperMsg::_impl_.sweeper_type_) - PROTOBUF_FIELD_OFFSET(BuildSweeperMsg, _impl_.team_id_)>(
+            reinterpret_cast<char*>(&_impl_.team_id_),
+            reinterpret_cast<char*>(&other->_impl_.team_id_)
         );
     }
 

@@ -25,15 +25,17 @@ public class UIControl : MonoBehaviour
     }
     public void BuildCivilship()
     {
-        Debug.Log("button pushed");
-        PlayerControl.GetInstance().selectedOption = InteractControl.InteractOption.BuildCivil;
+        if (PlayerControl.GetInstance().enabledInteract.Contains(InteractControl.InteractOption.BuildCivil))
+            PlayerControl.GetInstance().selectedOption = InteractControl.InteractOption.BuildCivil;
     }
     public void BuildMilitaryship()
     {
-        PlayerControl.GetInstance().selectedOption = InteractControl.InteractOption.BuildMilitary;
+        if (PlayerControl.GetInstance().enabledInteract.Contains(InteractControl.InteractOption.BuildMilitary))
+            PlayerControl.GetInstance().selectedOption = InteractControl.InteractOption.BuildMilitary;
     }
     public void BuildFlagship()
     {
-        PlayerControl.GetInstance().selectedOption = InteractControl.InteractOption.BuildFlag;
+        if (PlayerControl.GetInstance().enabledInteract.Contains(InteractControl.InteractOption.BuildFlag))
+            PlayerControl.GetInstance().selectedOption = InteractControl.InteractOption.BuildFlag;
     }
 }

@@ -3033,7 +3033,6 @@ namespace protobuf
             kPlayerIdFieldNumber = 2,
             kScoreFieldNumber = 3,
             kEnergyFieldNumber = 4,
-            kGuidFieldNumber = 5,
         };
         // int64 team_id = 1;
         void clear_team_id();
@@ -3055,34 +3054,24 @@ namespace protobuf
         void _internal_set_player_id(int64_t value);
 
     public:
-        // int32 score = 3;
+        // int64 score = 3;
         void clear_score();
-        int32_t score() const;
-        void set_score(int32_t value);
+        int64_t score() const;
+        void set_score(int64_t value);
 
     private:
-        int32_t _internal_score() const;
-        void _internal_set_score(int32_t value);
+        int64_t _internal_score() const;
+        void _internal_set_score(int64_t value);
 
     public:
-        // int32 energy = 4;
+        // int64 energy = 4;
         void clear_energy();
-        int32_t energy() const;
-        void set_energy(int32_t value);
+        int64_t energy() const;
+        void set_energy(int64_t value);
 
     private:
-        int32_t _internal_energy() const;
-        void _internal_set_energy(int32_t value);
-
-    public:
-        // int64 guid = 5;
-        void clear_guid();
-        int64_t guid() const;
-        void set_guid(int64_t value);
-
-    private:
-        int64_t _internal_guid() const;
-        void _internal_set_guid(int64_t value);
+        int64_t _internal_energy() const;
+        void _internal_set_energy(int64_t value);
 
     public:
         // @@protoc_insertion_point(class_scope:protobuf.MessageOfTeam)
@@ -3098,9 +3087,8 @@ namespace protobuf
         {
             int64_t team_id_;
             int64_t player_id_;
-            int32_t score_;
-            int32_t energy_;
-            int64_t guid_;
+            int64_t score_;
+            int64_t energy_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
         union
@@ -5005,7 +4993,7 @@ namespace protobuf
         enum NewsCase
         {
             kTextMessage = 1,
-            kBinaryMessage = 4,
+            kBinaryMessage = 2,
             NEWS_NOT_SET = 0,
         };
 
@@ -5108,12 +5096,13 @@ namespace protobuf
 
         enum : int
         {
-            kFromIdFieldNumber = 2,
-            kToIdFieldNumber = 3,
+            kFromIdFieldNumber = 3,
+            kToIdFieldNumber = 4,
+            kTeamIdFieldNumber = 5,
             kTextMessageFieldNumber = 1,
-            kBinaryMessageFieldNumber = 4,
+            kBinaryMessageFieldNumber = 2,
         };
-        // int64 from_id = 2;
+        // int64 from_id = 3;
         void clear_from_id();
         int64_t from_id() const;
         void set_from_id(int64_t value);
@@ -5123,7 +5112,7 @@ namespace protobuf
         void _internal_set_from_id(int64_t value);
 
     public:
-        // int64 to_id = 3;
+        // int64 to_id = 4;
         void clear_to_id();
         int64_t to_id() const;
         void set_to_id(int64_t value);
@@ -5131,6 +5120,16 @@ namespace protobuf
     private:
         int64_t _internal_to_id() const;
         void _internal_set_to_id(int64_t value);
+
+    public:
+        // int64 team_id = 5;
+        void clear_team_id();
+        int64_t team_id() const;
+        void set_team_id(int64_t value);
+
+    private:
+        int64_t _internal_team_id() const;
+        void _internal_set_team_id(int64_t value);
 
     public:
         // string text_message = 1;
@@ -5154,7 +5153,7 @@ namespace protobuf
         std::string* _internal_mutable_text_message();
 
     public:
-        // bytes binary_message = 4;
+        // bytes binary_message = 2;
         bool has_binary_message() const;
 
     private:
@@ -5195,6 +5194,7 @@ namespace protobuf
         {
             int64_t from_id_;
             int64_t to_id_;
+            int64_t team_id_;
             union NewsUnion
             {
                 constexpr NewsUnion() :
@@ -6788,76 +6788,52 @@ namespace protobuf
         // @@protoc_insertion_point(field_set:protobuf.MessageOfTeam.player_id)
     }
 
-    // int32 score = 3;
+    // int64 score = 3;
     inline void MessageOfTeam::clear_score()
     {
-        _impl_.score_ = 0;
+        _impl_.score_ = int64_t{0};
     }
-    inline int32_t MessageOfTeam::_internal_score() const
+    inline int64_t MessageOfTeam::_internal_score() const
     {
         return _impl_.score_;
     }
-    inline int32_t MessageOfTeam::score() const
+    inline int64_t MessageOfTeam::score() const
     {
         // @@protoc_insertion_point(field_get:protobuf.MessageOfTeam.score)
         return _internal_score();
     }
-    inline void MessageOfTeam::_internal_set_score(int32_t value)
+    inline void MessageOfTeam::_internal_set_score(int64_t value)
     {
         _impl_.score_ = value;
     }
-    inline void MessageOfTeam::set_score(int32_t value)
+    inline void MessageOfTeam::set_score(int64_t value)
     {
         _internal_set_score(value);
         // @@protoc_insertion_point(field_set:protobuf.MessageOfTeam.score)
     }
 
-    // int32 energy = 4;
+    // int64 energy = 4;
     inline void MessageOfTeam::clear_energy()
     {
-        _impl_.energy_ = 0;
+        _impl_.energy_ = int64_t{0};
     }
-    inline int32_t MessageOfTeam::_internal_energy() const
+    inline int64_t MessageOfTeam::_internal_energy() const
     {
         return _impl_.energy_;
     }
-    inline int32_t MessageOfTeam::energy() const
+    inline int64_t MessageOfTeam::energy() const
     {
         // @@protoc_insertion_point(field_get:protobuf.MessageOfTeam.energy)
         return _internal_energy();
     }
-    inline void MessageOfTeam::_internal_set_energy(int32_t value)
+    inline void MessageOfTeam::_internal_set_energy(int64_t value)
     {
         _impl_.energy_ = value;
     }
-    inline void MessageOfTeam::set_energy(int32_t value)
+    inline void MessageOfTeam::set_energy(int64_t value)
     {
         _internal_set_energy(value);
         // @@protoc_insertion_point(field_set:protobuf.MessageOfTeam.energy)
-    }
-
-    // int64 guid = 5;
-    inline void MessageOfTeam::clear_guid()
-    {
-        _impl_.guid_ = int64_t{0};
-    }
-    inline int64_t MessageOfTeam::_internal_guid() const
-    {
-        return _impl_.guid_;
-    }
-    inline int64_t MessageOfTeam::guid() const
-    {
-        // @@protoc_insertion_point(field_get:protobuf.MessageOfTeam.guid)
-        return _internal_guid();
-    }
-    inline void MessageOfTeam::_internal_set_guid(int64_t value)
-    {
-        _impl_.guid_ = value;
-    }
-    inline void MessageOfTeam::set_guid(int64_t value)
-    {
-        _internal_set_guid(value);
-        // @@protoc_insertion_point(field_set:protobuf.MessageOfTeam.guid)
     }
 
     // -------------------------------------------------------------------
@@ -8654,7 +8630,7 @@ namespace protobuf
         // @@protoc_insertion_point(field_set_allocated:protobuf.MessageOfNews.text_message)
     }
 
-    // bytes binary_message = 4;
+    // bytes binary_message = 2;
     inline bool MessageOfNews::_internal_has_binary_message() const
     {
         return news_case() == kBinaryMessage;
@@ -8753,7 +8729,7 @@ namespace protobuf
         // @@protoc_insertion_point(field_set_allocated:protobuf.MessageOfNews.binary_message)
     }
 
-    // int64 from_id = 2;
+    // int64 from_id = 3;
     inline void MessageOfNews::clear_from_id()
     {
         _impl_.from_id_ = int64_t{0};
@@ -8777,7 +8753,7 @@ namespace protobuf
         // @@protoc_insertion_point(field_set:protobuf.MessageOfNews.from_id)
     }
 
-    // int64 to_id = 3;
+    // int64 to_id = 4;
     inline void MessageOfNews::clear_to_id()
     {
         _impl_.to_id_ = int64_t{0};
@@ -8799,6 +8775,30 @@ namespace protobuf
     {
         _internal_set_to_id(value);
         // @@protoc_insertion_point(field_set:protobuf.MessageOfNews.to_id)
+    }
+
+    // int64 team_id = 5;
+    inline void MessageOfNews::clear_team_id()
+    {
+        _impl_.team_id_ = int64_t{0};
+    }
+    inline int64_t MessageOfNews::_internal_team_id() const
+    {
+        return _impl_.team_id_;
+    }
+    inline int64_t MessageOfNews::team_id() const
+    {
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfNews.team_id)
+        return _internal_team_id();
+    }
+    inline void MessageOfNews::_internal_set_team_id(int64_t value)
+    {
+        _impl_.team_id_ = value;
+    }
+    inline void MessageOfNews::set_team_id(int64_t value)
+    {
+        _internal_set_team_id(value);
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfNews.team_id)
     }
 
     inline bool MessageOfNews::has_news() const
