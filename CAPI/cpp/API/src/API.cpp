@@ -287,10 +287,10 @@ std::future<bool> SweeperAPI::Construct(THUAI7::ConstructionType constructionTyp
                       { return logic.Construct(constructionType); });
 }
 
-bool SweeperAPI::HaveView(int32_t gridX, int32_t gridY) const
+bool SweeperAPI::HaveView(int32_t targetX, int32_t targetY) const
 {
     auto selfInfo = GetSelfInfo();
-    return logic.HaveView(gridX, gridY, selfInfo->x, selfInfo->y, selfInfo->viewRange);
+    return logic.HaveView(targetX, targetY, selfInfo->x, selfInfo->y, selfInfo->viewRange);
 }
 
 // Team独有

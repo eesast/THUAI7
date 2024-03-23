@@ -444,7 +444,7 @@ namespace protobuf
         ::_pbi::ConstantInitialized
     ) :
         _impl_{
-            /*decltype(_impl_.from_id_)*/ int64_t{0}, /*decltype(_impl_.to_id_)*/ int64_t{0}, /*decltype(_impl_.news_)*/ {}, /*decltype(_impl_._cached_size_)*/ {}, /*decltype(_impl_._oneof_case_)*/ {}}
+            /*decltype(_impl_.from_id_)*/ int64_t{0}, /*decltype(_impl_.to_id_)*/ int64_t{0}, /*decltype(_impl_.team_id_)*/ int64_t{0}, /*decltype(_impl_.news_)*/ {}, /*decltype(_impl_._cached_size_)*/ {}, /*decltype(_impl_._oneof_case_)*/ {}}
     {
     }
     struct MessageOfNewsDefaultTypeInternal
@@ -684,6 +684,7 @@ const uint32_t TableStruct_Message2Clients_2eproto::offsets[] PROTOBUF_SECTION_V
     ::_pbi::kInvalidFieldOffsetTag,
     PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfNews, _impl_.from_id_),
     PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfNews, _impl_.to_id_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfNews, _impl_.team_id_),
     PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfNews, _impl_.news_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -802,9 +803,10 @@ const char descriptor_table_protodef_Message2Clients_2eproto[] PROTOBUF_SECTION_
     "\n\007BoolRes\022\023\n\013act_success\030\001 \001(\010\"B\n\016Sweepe"
     "rInfoRes\0220\n\014sweeper_info\030\001 \003(\0132\032.protobu"
     "f.MessageOfSweeper\"\031\n\006EcoRes\022\017\n\007economy\030"
-    "\001 \001(\003\"i\n\rMessageOfNews\022\026\n\014text_message\030\001"
-    " \001(\tH\000\022\030\n\016binary_message\030\004 \001(\014H\000\022\017\n\007from"
-    "_id\030\002 \001(\003\022\r\n\005to_id\030\003 \001(\003B\006\n\004newsb\006proto3";
+    "\001 \001(\003\"z\n\rMessageOfNews\022\026\n\014text_message\030\001"
+    " \001(\tH\000\022\030\n\016binary_message\030\002 \001(\014H\000\022\017\n\007from"
+    "_id\030\003 \001(\003\022\r\n\005to_id\030\004 \001(\003\022\017\n\007team_id\030\005 \001("
+    "\003B\006\n\004newsb\006proto3";
 static const ::_pbi::DescriptorTable* const descriptor_table_Message2Clients_2eproto_deps[1] = {
     &::descriptor_table_MessageType_2eproto,
 };
@@ -812,7 +814,7 @@ static ::_pbi::once_flag descriptor_table_Message2Clients_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Message2Clients_2eproto = {
     false,
     false,
-    2880,
+    2897,
     descriptor_table_protodef_Message2Clients_2eproto,
     "Message2Clients.proto",
     &descriptor_table_Message2Clients_2eproto_once,
@@ -7628,10 +7630,10 @@ namespace protobuf
         MessageOfNews* const _this = this;
         (void)_this;
         new (&_impl_) Impl_{
-            decltype(_impl_.from_id_){}, decltype(_impl_.to_id_){}, decltype(_impl_.news_){}, /*decltype(_impl_._cached_size_)*/ {}, /*decltype(_impl_._oneof_case_)*/ {}};
+            decltype(_impl_.from_id_){}, decltype(_impl_.to_id_){}, decltype(_impl_.team_id_){}, decltype(_impl_.news_){}, /*decltype(_impl_._cached_size_)*/ {}, /*decltype(_impl_._oneof_case_)*/ {}};
 
         _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-        ::memcpy(&_impl_.from_id_, &from._impl_.from_id_, static_cast<size_t>(reinterpret_cast<char*>(&_impl_.to_id_) - reinterpret_cast<char*>(&_impl_.from_id_)) + sizeof(_impl_.to_id_));
+        ::memcpy(&_impl_.from_id_, &from._impl_.from_id_, static_cast<size_t>(reinterpret_cast<char*>(&_impl_.team_id_) - reinterpret_cast<char*>(&_impl_.from_id_)) + sizeof(_impl_.team_id_));
         clear_has_news();
         switch (from.news_case())
         {
@@ -7660,7 +7662,7 @@ namespace protobuf
         (void)arena;
         (void)is_message_owned;
         new (&_impl_) Impl_{
-            decltype(_impl_.from_id_){int64_t{0}}, decltype(_impl_.to_id_){int64_t{0}}, decltype(_impl_.news_){}, /*decltype(_impl_._cached_size_)*/ {}, /*decltype(_impl_._oneof_case_)*/ {}};
+            decltype(_impl_.from_id_){int64_t{0}}, decltype(_impl_.to_id_){int64_t{0}}, decltype(_impl_.team_id_){int64_t{0}}, decltype(_impl_.news_){}, /*decltype(_impl_._cached_size_)*/ {}, /*decltype(_impl_._oneof_case_)*/ {}};
         clear_has_news();
     }
 
@@ -7719,7 +7721,7 @@ namespace protobuf
         // Prevent compiler warnings about cached_has_bits being unused
         (void)cached_has_bits;
 
-        ::memset(&_impl_.from_id_, 0, static_cast<size_t>(reinterpret_cast<char*>(&_impl_.to_id_) - reinterpret_cast<char*>(&_impl_.from_id_)) + sizeof(_impl_.to_id_));
+        ::memset(&_impl_.from_id_, 0, static_cast<size_t>(reinterpret_cast<char*>(&_impl_.team_id_) - reinterpret_cast<char*>(&_impl_.from_id_)) + sizeof(_impl_.team_id_));
         clear_news();
         _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
     }
@@ -7747,9 +7749,20 @@ namespace protobuf
                     else
                         goto handle_unusual;
                     continue;
-                // int64 from_id = 2;
+                // bytes binary_message = 2;
                 case 2:
-                    if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16))
+                    if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18))
+                    {
+                        auto str = _internal_mutable_binary_message();
+                        ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+                        CHK_(ptr);
+                    }
+                    else
+                        goto handle_unusual;
+                    continue;
+                // int64 from_id = 3;
+                case 3:
+                    if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24))
                     {
                         _impl_.from_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
                         CHK_(ptr);
@@ -7757,9 +7770,9 @@ namespace protobuf
                     else
                         goto handle_unusual;
                     continue;
-                // int64 to_id = 3;
-                case 3:
-                    if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24))
+                // int64 to_id = 4;
+                case 4:
+                    if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32))
                     {
                         _impl_.to_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
                         CHK_(ptr);
@@ -7767,12 +7780,11 @@ namespace protobuf
                     else
                         goto handle_unusual;
                     continue;
-                // bytes binary_message = 4;
-                case 4:
-                    if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34))
+                // int64 team_id = 5;
+                case 5:
+                    if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40))
                     {
-                        auto str = _internal_mutable_binary_message();
-                        ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+                        _impl_.team_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
                         CHK_(ptr);
                     }
                     else
@@ -7823,26 +7835,33 @@ namespace protobuf
             );
         }
 
-        // int64 from_id = 2;
-        if (this->_internal_from_id() != 0)
-        {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteInt64ToArray(2, this->_internal_from_id(), target);
-        }
-
-        // int64 to_id = 3;
-        if (this->_internal_to_id() != 0)
-        {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteInt64ToArray(3, this->_internal_to_id(), target);
-        }
-
-        // bytes binary_message = 4;
+        // bytes binary_message = 2;
         if (_internal_has_binary_message())
         {
             target = stream->WriteBytesMaybeAliased(
-                4, this->_internal_binary_message(), target
+                2, this->_internal_binary_message(), target
             );
+        }
+
+        // int64 from_id = 3;
+        if (this->_internal_from_id() != 0)
+        {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteInt64ToArray(3, this->_internal_from_id(), target);
+        }
+
+        // int64 to_id = 4;
+        if (this->_internal_to_id() != 0)
+        {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteInt64ToArray(4, this->_internal_to_id(), target);
+        }
+
+        // int64 team_id = 5;
+        if (this->_internal_team_id() != 0)
+        {
+            target = stream->EnsureSpace(target);
+            target = ::_pbi::WireFormatLite::WriteInt64ToArray(5, this->_internal_team_id(), target);
         }
 
         if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields()))
@@ -7864,16 +7883,22 @@ namespace protobuf
         // Prevent compiler warnings about cached_has_bits being unused
         (void)cached_has_bits;
 
-        // int64 from_id = 2;
+        // int64 from_id = 3;
         if (this->_internal_from_id() != 0)
         {
             total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_from_id());
         }
 
-        // int64 to_id = 3;
+        // int64 to_id = 4;
         if (this->_internal_to_id() != 0)
         {
             total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_to_id());
+        }
+
+        // int64 team_id = 5;
+        if (this->_internal_team_id() != 0)
+        {
+            total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_team_id());
         }
 
         switch (news_case())
@@ -7887,7 +7912,7 @@ namespace protobuf
                                   );
                     break;
                 }
-            // bytes binary_message = 4;
+            // bytes binary_message = 2;
             case kBinaryMessage:
                 {
                     total_size += 1 +
@@ -7929,6 +7954,10 @@ namespace protobuf
         {
             _this->_internal_set_to_id(from._internal_to_id());
         }
+        if (from._internal_team_id() != 0)
+        {
+            _this->_internal_set_team_id(from._internal_team_id());
+        }
         switch (from.news_case())
         {
             case kTextMessage:
@@ -7968,7 +7997,7 @@ namespace protobuf
         using std::swap;
         _internal_metadata_.InternalSwap(&other->_internal_metadata_);
         ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-            PROTOBUF_FIELD_OFFSET(MessageOfNews, _impl_.to_id_) + sizeof(MessageOfNews::_impl_.to_id_) - PROTOBUF_FIELD_OFFSET(MessageOfNews, _impl_.from_id_)>(
+            PROTOBUF_FIELD_OFFSET(MessageOfNews, _impl_.team_id_) + sizeof(MessageOfNews::_impl_.team_id_) - PROTOBUF_FIELD_OFFSET(MessageOfNews, _impl_.from_id_)>(
             reinterpret_cast<char*>(&_impl_.from_id_),
             reinterpret_cast<char*>(&other->_impl_.from_id_)
         );

@@ -4993,7 +4993,7 @@ namespace protobuf
         enum NewsCase
         {
             kTextMessage = 1,
-            kBinaryMessage = 4,
+            kBinaryMessage = 2,
             NEWS_NOT_SET = 0,
         };
 
@@ -5096,12 +5096,13 @@ namespace protobuf
 
         enum : int
         {
-            kFromIdFieldNumber = 2,
-            kToIdFieldNumber = 3,
+            kFromIdFieldNumber = 3,
+            kToIdFieldNumber = 4,
+            kTeamIdFieldNumber = 5,
             kTextMessageFieldNumber = 1,
-            kBinaryMessageFieldNumber = 4,
+            kBinaryMessageFieldNumber = 2,
         };
-        // int64 from_id = 2;
+        // int64 from_id = 3;
         void clear_from_id();
         int64_t from_id() const;
         void set_from_id(int64_t value);
@@ -5111,7 +5112,7 @@ namespace protobuf
         void _internal_set_from_id(int64_t value);
 
     public:
-        // int64 to_id = 3;
+        // int64 to_id = 4;
         void clear_to_id();
         int64_t to_id() const;
         void set_to_id(int64_t value);
@@ -5119,6 +5120,16 @@ namespace protobuf
     private:
         int64_t _internal_to_id() const;
         void _internal_set_to_id(int64_t value);
+
+    public:
+        // int64 team_id = 5;
+        void clear_team_id();
+        int64_t team_id() const;
+        void set_team_id(int64_t value);
+
+    private:
+        int64_t _internal_team_id() const;
+        void _internal_set_team_id(int64_t value);
 
     public:
         // string text_message = 1;
@@ -5142,7 +5153,7 @@ namespace protobuf
         std::string* _internal_mutable_text_message();
 
     public:
-        // bytes binary_message = 4;
+        // bytes binary_message = 2;
         bool has_binary_message() const;
 
     private:
@@ -5183,6 +5194,7 @@ namespace protobuf
         {
             int64_t from_id_;
             int64_t to_id_;
+            int64_t team_id_;
             union NewsUnion
             {
                 constexpr NewsUnion() :
@@ -8618,7 +8630,7 @@ namespace protobuf
         // @@protoc_insertion_point(field_set_allocated:protobuf.MessageOfNews.text_message)
     }
 
-    // bytes binary_message = 4;
+    // bytes binary_message = 2;
     inline bool MessageOfNews::_internal_has_binary_message() const
     {
         return news_case() == kBinaryMessage;
@@ -8717,7 +8729,7 @@ namespace protobuf
         // @@protoc_insertion_point(field_set_allocated:protobuf.MessageOfNews.binary_message)
     }
 
-    // int64 from_id = 2;
+    // int64 from_id = 3;
     inline void MessageOfNews::clear_from_id()
     {
         _impl_.from_id_ = int64_t{0};
@@ -8741,7 +8753,7 @@ namespace protobuf
         // @@protoc_insertion_point(field_set:protobuf.MessageOfNews.from_id)
     }
 
-    // int64 to_id = 3;
+    // int64 to_id = 4;
     inline void MessageOfNews::clear_to_id()
     {
         _impl_.to_id_ = int64_t{0};
@@ -8763,6 +8775,30 @@ namespace protobuf
     {
         _internal_set_to_id(value);
         // @@protoc_insertion_point(field_set:protobuf.MessageOfNews.to_id)
+    }
+
+    // int64 team_id = 5;
+    inline void MessageOfNews::clear_team_id()
+    {
+        _impl_.team_id_ = int64_t{0};
+    }
+    inline int64_t MessageOfNews::_internal_team_id() const
+    {
+        return _impl_.team_id_;
+    }
+    inline int64_t MessageOfNews::team_id() const
+    {
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfNews.team_id)
+        return _internal_team_id();
+    }
+    inline void MessageOfNews::_internal_set_team_id(int64_t value)
+    {
+        _impl_.team_id_ = value;
+    }
+    inline void MessageOfNews::set_team_id(int64_t value)
+    {
+        _internal_set_team_id(value);
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfNews.team_id)
     }
 
     inline bool MessageOfNews::has_news() const

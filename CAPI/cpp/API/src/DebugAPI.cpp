@@ -220,10 +220,10 @@ std::shared_ptr<const THUAI7::Sweeper> SweeperDebugAPI::GetSelfInfo() const
     return logic.SweeperGetSelfInfo();
 }
 
-bool SweeperDebugAPI::HaveView(int32_t gridX, int32_t gridY) const
+bool SweeperDebugAPI::HaveView(int32_t targetX, int32_t targetY) const
 {
     auto selfInfo = GetSelfInfo();
-    return logic.HaveView(gridX, gridY, selfInfo->x, selfInfo->y, selfInfo->viewRange);
+    return logic.HaveView(targetX, targetY, selfInfo->x, selfInfo->y, selfInfo->viewRange);
 }
 
 int32_t SweeperDebugAPI::GetEnergy() const
