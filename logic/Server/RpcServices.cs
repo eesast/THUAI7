@@ -502,6 +502,30 @@ namespace Server
             return Task.FromResult(boolRes);
         }
 
+        public override Task<BoolRes> BuildSweeper(BuildSweeperMsg request, ServerCallContext context)
+        {
+#if DEBUG
+            Console.WriteLine($"TRY BuildSweeper: SweeperType {request.SweeperType} from Team {request.TeamId}");
+#endif
+            BoolRes boolRes = new();
+
+            if (game.TeamList[(int)request.TeamId].GetShip(request.PlayerId) == null)
+            {
+                boolRes.ActSuccess = false;
+                return Task.FromResult(boolRes);
+            }
+            else if (game.TeamList[(int)request.TeamId].GetShip(request.PlayerId).IsRemoved == false)
+            {
+                boolRes.ActSuccess = false;
+                return Task.FromResult(boolRes);
+            }
+            boolRes.ActSuccess = game.ActivateShip(request.TeamId, request.PlayerId, Transformation.ShipTypeFromProto(request.SweeperType), request.BirthpointIndex);
+#if DEBUG
+            Console.WriteLine("END BuildSweeper");
+#endif
+            return Task.FromResult(boolRes);
+        }
+
         public override Task<BoolRes> EndAllAction(IDMsg request, ServerCallContext context)
         {
 #if DEBUG
