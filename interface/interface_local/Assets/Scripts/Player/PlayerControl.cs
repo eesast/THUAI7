@@ -20,11 +20,19 @@ public class PlayerControl : SingletonMono<PlayerControl>
     void Update()
     {
         testInput();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            foreach (InteractBase i in selectedInt)
+            {
+                i.selected = false;
+            }
+            selectedInt.Clear();
+        }
         CheckInteract();
         UpdateInteractList();
         Interact();
         ShipMpve();
-        ShipAttack();
+        // ShipAttack();
     }
     void testInput()
     {
@@ -44,11 +52,15 @@ public class PlayerControl : SingletonMono<PlayerControl>
                 }
                 if (Input.GetMouseButtonDown(0))
                 {
-                    foreach (InteractBase i in selectedInt)
+                    if (!Input.GetKey(KeyCode.LeftShift))
                     {
-                        i.selected = false;
+
+                        foreach (InteractBase i in selectedInt)
+                        {
+                            i.selected = false;
+                        }
+                        selectedInt.Clear();
                     }
-                    selectedInt.Clear();
                     raycaster.GetComponent<InteractBase>().tobeSelected = false;
                     tobeSelectedInt.Remove(raycaster.GetComponent<InteractBase>());
                     raycaster.GetComponent<InteractBase>().selected = true;
@@ -71,11 +83,12 @@ public class PlayerControl : SingletonMono<PlayerControl>
 
                 if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
                 {
-                    foreach (InteractBase i in selectedInt)
-                    {
-                        i.selected = false;
-                    }
-                    selectedInt.Clear();
+                    // foreach (InteractBase i in selectedInt)
+                    // {
+                    //     i.selected = false;
+                    // }
+                    // selectedInt.Clear();
+                    ShipAttack();
                 }
             }
         }
@@ -88,10 +101,10 @@ public class PlayerControl : SingletonMono<PlayerControl>
             // Debug.Log(InteractControl.GetInstance().interactOptions[InteractControl.InteractType.Base].Count);
             foreach (InteractBase interactBase in selectedInt)
             {
-                foreach (InteractControl.InteractOption interactOption in enabledInteract)
-                    if (!InteractControl.GetInstance().interactOptions[interactBase.interactType].Contains(interactOption))
+                for (int i = 0; i < enabledInteract.Count; i++)
+                    if (!InteractControl.GetInstance().interactOptions[interactBase.interactType].Contains(enabledInteract[i]))
                     {
-                        enabledInteract.Remove(interactOption);
+                        enabledInteract.Remove(enabledInteract[i]);
                     }
             }
 
@@ -122,12 +135,9 @@ public class PlayerControl : SingletonMono<PlayerControl>
     }
     void ShipAttack()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        foreach (InteractBase interactBase in selectedInt)
         {
-            foreach (InteractBase interactBase in selectedInt)
-            {
-                interactBase.attackOption = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            }
+            interactBase.attackOption = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
     }
 }

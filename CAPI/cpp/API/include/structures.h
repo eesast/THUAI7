@@ -259,7 +259,7 @@ namespace THUAI7
         std::map<std::pair<int32_t, int32_t>, std::pair<int64_t, int32_t>> recycleBankState;
         std::map<std::pair<int32_t, int32_t>, std::pair<int64_t, int32_t>> chargeStationState;
         std::map<std::pair<int32_t, int32_t>, std::pair<int64_t, int32_t>> signalTowerState;
-        std::map<std::pair<int32_t, int32_t>, std::pair<int64_t, int32_t>> HomeState;
+        std::map<std::pair<int32_t, int32_t>, std::pair<int64_t, int32_t>> homeState;
         std::map<std::pair<int32_t, int32_t>, int32_t> bridgeState;
         std::map<std::pair<int32_t, int32_t>, int32_t> garbageState;
     };

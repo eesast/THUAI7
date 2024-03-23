@@ -10,19 +10,16 @@ namespace GameClass.GameObj
     public abstract class ObjOfShip(XY initPos, int initRadius, GameObjType initType)
         : Movable(initPos, initRadius, initType), IObjOfShip
     {
-        public object ObjOfShipLock { get; } = new();
         private IShip? parent = null;
         public IShip? Parent
         {
             get
             {
-                lock (ObjOfShipLock)
-                    return parent;
+                return Interlocked.CompareExchange(ref parent, null, null);
             }
             set
             {
-                lock (ObjOfShipLock)
-                    parent = value;
+                Interlocked.Exchange(ref parent, value);
             }
         }
     }

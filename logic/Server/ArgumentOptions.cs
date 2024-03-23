@@ -12,7 +12,7 @@ namespace Server
     public class ArgumentOptions
     {
         [Option("ip", Required = false, HelpText = "Server listening ip")]
-        public string ServerIP { get; set; } = "0.0.0.0";
+        public string ServerIP { get; set; } = "172.28.192.1";
 
         [Option('p', "port", Required = true, HelpText = "Server listening port")]
         public ushort ServerPort { get; set; } = 8888;
@@ -20,8 +20,8 @@ namespace Server
         [Option("teamCount", Required = false, HelpText = "The number of teams, 2 by defualt")]
         public ushort TeamCount { get; set; } = 2;
 
-        [Option("shipNum", Required = false, HelpText = "The max number of Ship, 3 by default")]
-        public ushort ShipCount { get; set; } = 3;
+        [Option("shipNum", Required = false, HelpText = "The max number of Ship, 4 by default")]
+        public ushort ShipCount { get; set; } = 4;
 
         [Option("homeNum", Required = false, HelpText = "The number of Home , 1 by default")]
         public ushort HomeCount { get; set; } = 1;

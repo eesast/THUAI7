@@ -120,12 +120,12 @@ private:
     bool Rebuild(THUAI7::ConstructionType constructionType);
     bool Construct(THUAI7::ConstructionType constructionType);
     bool Attack(double angle);
-    [[nodiscard]] bool HaveView(int32_t gridX, int32_t gridY, int32_t selfX, int32_t selfY, int32_t viewRange) const;
+    [[nodiscard]] bool HaveView(int32_t selfX, int32_t selfY, int32_t targetX, int32_t targetY, int32_t viewRange) const;
 
     // ITeamAPI
     bool Recycle(int64_t playerID);
     bool InstallModule(int64_t playerID, THUAI7::ModuleType moduleType);
-    bool BuildSweeper(THUAI7::SweeperType SweeperType, int32_t cellX, int32_t cellY);
+    bool BuildSweeper(THUAI7::SweeperType SweeperType);
 
     bool TryConnection();
     void ProcessMessage();
