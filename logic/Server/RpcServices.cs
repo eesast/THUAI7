@@ -149,13 +149,13 @@ namespace Server
                 Console.WriteLine($"Id: {request.PlayerId} joins.");
                 lock (spectatorJoinLock)  // 为了保证绝对安全，还是加上这个锁吧
                 {
-                    if (request.TeamId == 0) 
+                    if (request.TeamId == 0)
                     {
                         if (semaDict0.TryAdd(request.PlayerId, temp))
                         {
                             start = Interlocked.Increment(ref playerCountNow) == (playerNum * 2);
                             Console.WriteLine($"PlayerCountNow: {playerCountNow}");
-                            Console.WriteLine($"PlayerNum: {playerNum*2}");
+                            Console.WriteLine($"PlayerNum: {playerNum * 2}");
                         }
                     }
                     else if (request.TeamId == 1)
@@ -164,7 +164,7 @@ namespace Server
                         {
                             start = Interlocked.Increment(ref playerCountNow) == (playerNum * 2);
                             Console.WriteLine($"PlayerCountNow: {playerCountNow}");
-                            Console.WriteLine($"PlayerNum: {playerNum*2}");
+                            Console.WriteLine($"PlayerNum: {playerNum * 2}");
                         }
                     }
                 }
@@ -202,7 +202,7 @@ namespace Server
                 }
                 finally
                 {
-                    if (request.TeamId == 0) 
+                    if (request.TeamId == 0)
                         semaDict0[request.PlayerId].Item2.Release();
                     else if (request.TeamId == 1)
                         semaDict1[request.PlayerId].Item2.Release();
