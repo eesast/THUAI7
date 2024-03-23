@@ -190,14 +190,14 @@ class Communication:
         else:
             return recycleResult.act_success
 
-    def BuildShip(self, cellX: int, cellY: int, shipType: THUAI7.SweeperType, teamID: int) -> bool:
+    def BuildShip(self,shipType: THUAI7.SweeperType, teamID: int) -> bool:
         try:
             with self.__mtxLimit:
                 if self.__counter >= self.__limit:
                     return False
                 self.__counter += 1
             buildResult: Message2Clients.BoolRes = self.__THUAI7Stub.BuildShip(
-                THUAI72Proto.THUAI72ProtobufBuildSweeperMsg(teamID, shipType, cellX, cellY)
+                THUAI72Proto.THUAI72ProtobufBuildSweeperMsg(teamID, shipType)
             )
         except grpc.RpcError:
             return False

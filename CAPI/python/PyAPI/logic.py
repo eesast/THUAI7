@@ -218,9 +218,9 @@ class Logic(ILogic):
         self.__logger.debug("Called Recycle")
         return self.__comm.Recycle(self.__playerID, self.__playerID, self.__teamID)
 
-    def BuildShip(self, shipType: THUAI7.SweeperType, cellX: int, cellY: int) -> bool:
+    def BuildShip(self, shipType: THUAI7.SweeperType) -> bool:
         self.__logger.debug("Called BuildShip")
-        return self.__comm.BuildShip(cellX, cellY, shipType, self.__teamID)
+        return self.__comm.BuildShip(shipType, self.__teamID)
 
     def __TryConnection(self) -> bool:
         self.__logger.info("Try to connect to the server.")

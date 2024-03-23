@@ -72,7 +72,7 @@ public:
     // Team使用的部分
     virtual bool Recycle(int64_t playerID) = 0;
     virtual bool InstallModule(int64_t playerID, THUAI7::ModuleType moduleType) = 0;
-    virtual bool BuildSweeper(THUAI7::SweeperType SweeperType, int32_t cellX, int32_t cellY) = 0;
+    virtual bool BuildSweeper(THUAI7::SweeperType SweeperType) = 0;
 };
 
 class IAPI
@@ -151,7 +151,7 @@ public:
     [[nodiscard]] virtual std::shared_ptr<const THUAI7::Team> GetSelfInfo() const = 0;
     virtual std::future<bool> InstallModule(int64_t playerID, THUAI7::ModuleType moduletype) = 0;
     virtual std::future<bool> Recycle(int64_t playerID) = 0;
-    virtual std::future<bool> BuildSweeper(THUAI7::SweeperType SweeperType, int32_t cellX, int32_t cellY) = 0;
+    virtual std::future<bool> BuildSweeper(THUAI7::SweeperType SweeperType) = 0;
 };
 
 class IGameTimer
@@ -271,7 +271,7 @@ public:
     [[nodiscard]] int32_t GetEnergy() const override;
     std::future<bool> InstallModule(int64_t playerID, THUAI7::ModuleType moduleType) override;
     std::future<bool> Recycle(int64_t playerID) override;
-    std::future<bool> BuildSweeper(THUAI7::SweeperType SweeperType, int32_t cellX, int32_t cellY) override;
+    std::future<bool> BuildSweeper(THUAI7::SweeperType SweeperType) override;
     void Print(std::string str) const
     {
     }
@@ -378,7 +378,7 @@ public:
     [[nodiscard]] int32_t GetEnergy() const override;
     std::future<bool> InstallModule(int64_t playerID, THUAI7::ModuleType moduleType) override;
     std::future<bool> Recycle(int64_t playerID) override;
-    std::future<bool> BuildSweeper(THUAI7::SweeperType SweeperType, int32_t cellX, int32_t cellY) override;
+    std::future<bool> BuildSweeper(THUAI7::SweeperType SweeperType) override;
     void Print(std::string str) const override;
     void PrintSelfInfo() const override;
     // TODO

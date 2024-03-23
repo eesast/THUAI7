@@ -481,12 +481,10 @@ class THUAI72Proto:
 
     @staticmethod
     def THUAI72ProtobufBuildSweeperMsg(
-        teamID: int, sweeperType: THUAI7.SweeperType, x: int, y: int
+        teamID: int, sweeperType: THUAI7.SweeperType
     ) -> Message2Server.BuildSweeperMsg:
         return Message2Server.BuildSweeperMsg(
             team_id=teamID,
-            x=x,
-            y=y,
             sweeper_type=THUAI72Proto.sweeperTypeDict[sweeperType]
         )
 

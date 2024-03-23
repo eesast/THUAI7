@@ -187,11 +187,11 @@ bool Communication::Attack(int64_t playerID, int64_t teamID, double angle)
         return false;
 }
 
-bool Communication::BuildSweeper(int64_t teamID, THUAI7::SweeperType SweeperType, int32_t x, int32_t y)
+bool Communication::BuildSweeper(int64_t teamID, THUAI7::SweeperType SweeperType)
 {
     protobuf::BoolRes reply;
     ClientContext context;
-    auto request = THUAI72Proto::THUAI72ProtobufBuildSweeperMsg(teamID, SweeperType, x, y);
+    auto request = THUAI72Proto::THUAI72ProtobufBuildSweeperMsg(teamID, SweeperType);
     auto status = THUAI7Stub->BuildSweeper(&context, request, &reply);
     if (status.ok())
         return true;

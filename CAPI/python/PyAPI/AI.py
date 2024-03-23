@@ -1,9 +1,9 @@
 import PyAPI.structures as THUAI7
 from PyAPI.Interface import IShipAPI, ITeamAPI, IAI
+from PyAPI.utils import AssistFunction
 from typing import Union, Final, cast, List
 from PyAPI.constants import Constants
 import queue
-
 import time
 
 
@@ -22,16 +22,6 @@ class Setting:
 
 
 numOfGridPerCell: Final[int] = 1000
-
-
-class AssistFunction:
-    @staticmethod
-    def CellToGrid(cell: int) -> int:
-        return cell * numOfGridPerCell + numOfGridPerCell // 2
-
-    @staticmethod
-    def GridToCell(grid: int) -> int:
-        return grid // numOfGridPerCell
 
 
 class AI(IAI):

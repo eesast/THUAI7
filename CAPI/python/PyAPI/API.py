@@ -213,8 +213,8 @@ class TeamAPI(ITeamAPI, IGameTimer):
     def Recycle(self, ID: int) -> Future[bool]:
         return self.__pool.submit(self.__logic.Recycle, ID)
 
-    def BuildShip(self, shipType: THUAI7.SweeperType, cellX: int, cellY: int) -> Future[bool]:
-        return self.__pool.submit(self.__logic.BuildShip, shipType, cellX, cellY)
+    def BuildShip(self, shipType: THUAI7.SweeperType) -> Future[bool]:
+        return self.__pool.submit(self.__logic.BuildShip, shipType)
 
     def Print(self, string: str) -> None:
         pass

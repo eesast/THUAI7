@@ -127,7 +127,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def BuildShip(self, shipType: THUAI7.SweeperType, cellX: int, cellY: int) -> bool:
+    def BuildShip(self, shipType: THUAI7.SweeperType) -> bool:
         pass
 
 
@@ -308,7 +308,7 @@ class ITeamAPI(IAPI, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def BuildShip(self, shipType: THUAI7.SweeperType, cellX: int, cellY: int) -> Future[bool]:
+    def BuildShip(self, shipType: THUAI7.SweeperType) -> Future[bool]:
         pass
 
 
