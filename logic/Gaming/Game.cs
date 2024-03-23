@@ -46,10 +46,12 @@ namespace Gaming
                 return playerInitInfo.playerID;
             }
         }
-        public bool ActivateShip(long teamID, ShipType shipType, int birthPointIndex = 0)
+        public bool ActivateShip(long teamID, long playerID, ShipType shipType, int birthPointIndex = 0)
         {
-            Ship? ship = teamList[(int)teamID].GetNewShip(shipType);
+            Ship? ship = teamList[(int)teamID].GetShip(playerID);
             if (ship == null)
+                return false;
+            else if (ship.IsRemoved == false)
                 return false;
             if (birthPointIndex < 0)
                 birthPointIndex = 0;
@@ -109,7 +111,14 @@ namespace Gaming
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
             if (ship != null)
-                return actionManager.Construct(ship, constructionType);
+            {
+                var flag = actionManager.Construct(ship, constructionType);
+                if (constructionType == ConstructionType.Community && flag)
+                {
+                    UpdateBirthPoint();
+                }
+                return flag;
+            }
             return false;
         }
         public bool InstallModule(long teamID, long shipID, ModuleType moduleType)

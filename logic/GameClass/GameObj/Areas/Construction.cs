@@ -54,7 +54,12 @@ public class Construction(XY initPos)
                 return false;
             }
         }
-        return HP.AddV(constructSpeed) > 0;
+        var addHP = HP.GetMaxV() - HP > constructSpeed ? constructSpeed : HP.GetMaxV() - HP;
+        if (ship.MoneyPool.Money < addHP / 10)
+        {
+            return false;
+        }
+        return ship.MoneyPool.SubMoney(HP.AddV(addHP) / 10) > 0;
     }
     public void BeAttacked(Bullet bullet)
     {
@@ -62,6 +67,10 @@ public class Construction(XY initPos)
         {
             long subHP = bullet.AP;
             HP.SubPositiveV(subHP);
+        }
+        if (HP == 0)
+        {
+            constructionType = ConstructionType.Null;
         }
     }
     public void AddConstructNum(int add = 1)

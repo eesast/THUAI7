@@ -70,4 +70,6 @@ message BuildSweeperMsg
 {
     SweeperType sweeper_type = 1;
     int64 team_id = 2;
+    int64 player_id = 3;
+    int32 birthpoint_index = 4;
 }
