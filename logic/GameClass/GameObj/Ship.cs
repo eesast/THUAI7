@@ -266,6 +266,30 @@ public class Ship : Movable, IShip
     {
         MoneyPool.Money.Sub(sub);
     }
+    public long GetCost()
+    {
+        var cost = 0;
+        switch (ShipType)
+        {
+            case ShipType.CivilShip:
+                cost += GameData.CivilShipCost;
+                break;
+            case ShipType.WarShip:
+                cost += GameData.WarShipCost;
+                break;
+            case ShipType.FlagShip:
+                cost += GameData.FlagShipCost;
+                break;
+            default:
+                return 0;
+        }
+        cost += producer.Cost;
+        cost += constructor.Cost;
+        cost += armor.Cost;
+        cost += shield.Cost;
+        cost += weapon.Cost;
+        return cost;
+    }
     private long ChangeShipState(RunningStateType running, ShipStateType value = ShipStateType.Null, GameObj? gameObj = null)
     {
         //只能被SetShipState引用

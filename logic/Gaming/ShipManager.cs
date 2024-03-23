@@ -51,6 +51,8 @@ namespace Gaming
                 }
                 if (ship.HP == 0)
                 {
+                    var money = ship.GetCost();
+                    bullet.Parent.AddMoney(money);
                     Remove(ship);
                 }
             }

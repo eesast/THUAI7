@@ -10,6 +10,7 @@ namespace Preparation.Interface
         public ShipType ShipType { get; }
         public ShipStateType ShipState { get; }
         public IntNumUpdateEachCD BulletNum { get; }
+        public void AddMoney(long add);
         public long SetShipState(RunningStateType running, ShipStateType value = ShipStateType.Null, IGameObj? obj = null);
         public bool ResetShipState(long state, RunningStateType running = RunningStateType.Null, ShipStateType value = ShipStateType.Null, IGameObj? obj = null);
     }

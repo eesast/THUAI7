@@ -111,7 +111,14 @@ namespace Gaming
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
             if (ship != null)
-                return actionManager.Construct(ship, constructionType);
+            {
+                var flag = actionManager.Construct(ship, constructionType);
+                if (constructionType == ConstructionType.Community && flag)
+                {
+                    UpdateBirthPoint();
+                }
+                return flag;
+            }
             return false;
         }
         public bool InstallModule(long teamID, long shipID, ModuleType moduleType)
