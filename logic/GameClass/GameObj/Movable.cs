@@ -14,7 +14,7 @@ namespace GameClass.GameObj
         public object ActionLock => actionLock;
         private readonly ReaderWriterLockSlim moveReaderWriterLock = new();
         /// <summary>
-        /// 规定MoveReaderWriterLock < ActionLock
+        /// 规定ActionLock > MoveReaderWriterLock  
         /// </summary>
         public ReaderWriterLockSlim MoveReaderWriterLock => moveReaderWriterLock;
         public Semaphore ThreadNum { get; } = new(1, 1);

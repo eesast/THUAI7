@@ -8,6 +8,20 @@ namespace Preparation.Utility
     {
     }
 
+
+    public class AtomicT<T>(T? x) : Atomic where T : class?
+    {
+        protected T? v = x;
+
+        public override string ToString() => Interlocked.CompareExchange(ref v, null, null)?.ToString() ?? "NULL";
+        public T? Get() => Interlocked.CompareExchange(ref v, null, null);
+        public static implicit operator T?(AtomicT<T> aint) => Interlocked.CompareExchange(ref aint.v, null, null);
+        /// <returns>返回操作前的值</returns>
+        public virtual T? SetReturnOri(T? value) => Interlocked.Exchange(ref v, value);
+        /// <returns>返回操作前的值</returns>
+        public virtual T? CompareExReturnOri(T? newV, T? compareTo) => Interlocked.CompareExchange(ref v, newV, compareTo);
+    }
+
     public class AtomicInt(int x) : Atomic
     {
         protected int v = x;

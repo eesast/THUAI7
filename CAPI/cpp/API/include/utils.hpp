@@ -520,12 +520,10 @@ namespace THUAI72Proto
         return installMsg;
     }
 
-    inline protobuf::BuildSweeperMsg THUAI72ProtobufBuildSweeperMsg(int64_t teamID, THUAI7::SweeperType SweeperType, int32_t x, int32_t y)
+    inline protobuf::BuildSweeperMsg THUAI72ProtobufBuildSweeperMsg(int64_t teamID, THUAI7::SweeperType SweeperType)
     {
         protobuf::BuildSweeperMsg buildSweeperMsg;
         buildSweeperMsg.set_team_id(teamID);
-        buildSweeperMsg.set_x(x);
-        buildSweeperMsg.set_y(y);
         buildSweeperMsg.set_sweeper_type(THUAI72Proto::sweeperTypeDict[SweeperType]);
         return buildSweeperMsg;
     }

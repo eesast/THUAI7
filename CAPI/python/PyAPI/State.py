@@ -6,9 +6,8 @@ class State:
     def __init__(self) -> None:
         self.teamScore = 0
         self.self = THUAI7.Sweeper()
-        self.ships = []
+        self.sweepers = []
         self.enemySweepers = []
-        self.teams = []
         self.gameMap = []
         self.bullets = []
         self.bombedBullets = []
@@ -19,15 +18,13 @@ class State:
     teamScore: int
     self: Union[THUAI7.Sweeper, THUAI7.Team]
 
-    ships: List[THUAI7.Sweeper]
+    sweepers: List[THUAI7.Sweeper]
     enemySweepers: List[THUAI7.Sweeper]
-
-    teams: List[THUAI7.Team]
 
     gameMap: List[List[THUAI7.PlaceType]]
 
     bullets: List[THUAI7.Bullet]
-    #bombedBullets: List[THUAI7.BombedBullet]
+    # bombedBullets: List[THUAI7.BombedBullet]
 
     mapInfo: THUAI7.GameMap
 

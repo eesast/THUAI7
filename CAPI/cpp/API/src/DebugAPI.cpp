@@ -220,10 +220,10 @@ std::shared_ptr<const THUAI7::Sweeper> SweeperDebugAPI::GetSelfInfo() const
     return logic.SweeperGetSelfInfo();
 }
 
-bool SweeperDebugAPI::HaveView(int32_t gridX, int32_t gridY) const
+bool SweeperDebugAPI::HaveView(int32_t targetX, int32_t targetY) const
 {
     auto selfInfo = GetSelfInfo();
-    return logic.HaveView(gridX, gridY, selfInfo->x, selfInfo->y, selfInfo->viewRange);
+    return logic.HaveView(targetX, targetY, selfInfo->x, selfInfo->y, selfInfo->viewRange);
 }
 
 int32_t SweeperDebugAPI::GetEnergy() const
@@ -436,10 +436,10 @@ std::future<bool> TeamDebugAPI::Recycle(int64_t playerID)
                       { return logic.Recycle(playerID); });
 }
 
-std::future<bool> TeamDebugAPI::BuildSweeper(THUAI7::SweeperType SweeperType, int32_t x, int32_t y)
+std::future<bool> TeamDebugAPI::BuildSweeper(THUAI7::SweeperType SweeperType)
 {
     return std::async(std::launch::async, [=]()
-                      { return logic.BuildSweeper(SweeperType, x, y); });
+                      { return logic.BuildSweeper(SweeperType); });
 }
 
 void TeamDebugAPI::PrintSelfInfo() const
