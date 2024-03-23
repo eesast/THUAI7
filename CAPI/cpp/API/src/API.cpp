@@ -306,10 +306,10 @@ std::future<bool> TeamAPI::Recycle(int64_t playerID)
                       { return logic.Recycle(playerID); });
 }
 
-std::future<bool> TeamAPI::BuildSweeper(THUAI7::SweeperType SweeperType, int32_t x, int32_t y)
+std::future<bool> TeamAPI::BuildSweeper(THUAI7::SweeperType SweeperType)
 {
     return std::async(std::launch::async, [=]()
-                      { return logic.BuildSweeper(SweeperType, x, y); });
+                      { return logic.BuildSweeper(SweeperType); });
 }
 
 void SweeperAPI::Play(IAI& ai)

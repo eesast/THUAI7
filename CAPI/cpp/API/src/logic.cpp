@@ -242,10 +242,10 @@ bool Logic::Construct(THUAI7::ConstructionType constructiontype)
     return pComm->Construct(playerID, teamID, constructiontype);
 }
 
-bool Logic::BuildSweeper(THUAI7::SweeperType Sweepertype, int32_t x, int32_t y)
+bool Logic::BuildSweeper(THUAI7::SweeperType Sweepertype)
 {
     logger->debug("Called BuildSweeper");
-    return pComm->BuildSweeper(teamID, Sweepertype, x, y);
+    return pComm->BuildSweeper(teamID, Sweepertype);
 }
 
 // 等待完成
