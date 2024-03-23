@@ -8,7 +8,6 @@ class State:
         self.self = THUAI7.Sweeper()
         self.sweepers = []
         self.enemySweepers = []
-        self.teams = []
         self.gameMap = []
         self.bullets = []
         self.bombedBullets = []
@@ -22,12 +21,10 @@ class State:
     sweepers: List[THUAI7.Sweeper]
     enemySweepers: List[THUAI7.Sweeper]
 
-    teams: List[THUAI7.Team]
-
     gameMap: List[List[THUAI7.PlaceType]]
 
     bullets: List[THUAI7.Bullet]
-    #bombedBullets: List[THUAI7.BombedBullet]
+    # bombedBullets: List[THUAI7.BombedBullet]
 
     mapInfo: THUAI7.GameMap
 

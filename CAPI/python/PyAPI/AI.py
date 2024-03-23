@@ -12,13 +12,15 @@ class Setting:
     @staticmethod
     def Asynchronous() -> bool:
         return False
-    
+
     @staticmethod
-    def SweeperTypes()->List[THUAI7.SweeperType]:
-        return [THUAI7.SweeperType.CivilianSweeper,
-                THUAI7.SweeperType.MilitarySweeper,
-                THUAI7.SweeperType.MilitarySweeper,
-                THUAI7.SweeperType.FlagSweeper]
+    def SweeperTypes() -> List[THUAI7.SweeperType]:
+        return [
+            THUAI7.SweeperType.CivilianSweeper,
+            THUAI7.SweeperType.MilitarySweeper,
+            THUAI7.SweeperType.MilitarySweeper,
+            THUAI7.SweeperType.FlagSweeper,
+        ]
 
 
 numOfGridPerCell: Final[int] = 1000

@@ -79,11 +79,11 @@ class SweeperAPI(ISweeperAPI, IGameTimer):
     def GetConstructionHp(self, cellX: int, cellY: int) -> int:
         return self.__logic.GetConstructionHp(cellX, cellY)
 
-    def GetWormHp(self, cellX: int, cellY: int) -> int:
-        return self.__logic.GetWormHp(cellX, cellY)
+    def GetBridgeHp(self, cellX: int, cellY: int) -> int:
+        return self.__logic.GetBridgeHp(cellX, cellY)
 
-    def GetResourceState(self, cellX: int, cellY: int) -> int:
-        return self.__logic.GetResourceState(cellX, cellY)
+    def GetGarbageState(self, cellX: int, cellY: int) -> int:
+        return self.__logic.GetGarbageState(cellX, cellY)
 
     def GetHomeHp(self) -> int:
         return self.__logic.GetHomeHp()
@@ -104,9 +104,13 @@ class SweeperAPI(ISweeperAPI, IGameTimer):
         return self.__logic.GetScore()
 
     def HaveView(self, gridX: int, gridY: int) -> bool:
-        return self.__logic.HaveView(gridX, gridY,
-                                     self.GetSelfInfo().x, self.GetSelfInfo().y,
-                                     self.GetSelfInfo().viewRange)
+        return self.__logic.HaveView(
+            gridX,
+            gridY,
+            self.GetSelfInfo().x,
+            self.GetSelfInfo().y,
+            self.GetSelfInfo().viewRange,
+        )
 
     def Print(self, cont: str) -> None:
         pass
@@ -183,8 +187,8 @@ class TeamAPI(ITeamAPI, IGameTimer):
     def GetConstructionHp(self, cellX: int, cellY: int) -> int:
         return self.__logic.GetConstructionHp(cellX, cellY)
 
-    def GetWormHp(self, cellX: int, cellY: int) -> int:
-        return self.__logic.GetWormHp(cellX, cellY)
+    def GetBridgeHp(self, cellX: int, cellY: int) -> int:
+        return self.__logic.GetBridgeHp(cellX, cellY)
 
     def GetResouceState(self, cellX: int, cellY: int) -> int:
         return self.__logic.GetResouceState(cellX, cellY)
