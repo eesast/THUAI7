@@ -40,12 +40,16 @@ class AssistFunction:
             dy = deltaY / divide
             selfX = float(x)
             selfY = float(y)
-            if (newPlace == THUAI7.PlaceType.Grass and myPlace == THUAI7.PlaceType.Grass):
+            if newPlace == THUAI7.PlaceType.Grass and myPlace == THUAI7.PlaceType.Grass:
                 for _ in range(divide):
                     selfX += dx
                     selfY += dy
-                    if (map[AssistFunction.GridToCell(int(selfX))][AssistFunction.GridToCell(int(selfY))]
-                            != THUAI7.PlaceType.Grass):
+                    if (
+                        map[AssistFunction.GridToCell(int(selfX))][
+                            AssistFunction.GridToCell(int(selfY))
+                        ]
+                        != THUAI7.PlaceType.Grass
+                    ):
                         return False
                 else:
                     return True
@@ -53,8 +57,12 @@ class AssistFunction:
                 for _ in range(divide):
                     selfX += dx
                     selfY += dy
-                    if (map[AssistFunction.GridToCell(int(selfX))][AssistFunction.GridToCell(int(selfY))]
-                            == THUAI7.PlaceType.Wall):
+                    if (
+                        map[AssistFunction.GridToCell(int(selfX))][
+                            AssistFunction.GridToCell(int(selfY))
+                        ]
+                        == THUAI7.PlaceType.Wall
+                    ):
                         return False
                 else:
                     return True
@@ -201,7 +209,9 @@ class Proto2THUAI7:
     }
 
     @staticmethod
-    def Protobuf2THUAI7Sweeper(sweeperMsg: Message2Clients.MessageOfSweeper) -> THUAI7.Sweeper:
+    def Protobuf2THUAI7Sweeper(
+        sweeperMsg: Message2Clients.MessageOfSweeper,
+    ) -> THUAI7.Sweeper:
         sweeper = THUAI7.Sweeper()
         sweeper.x = sweeperMsg.x
         sweeper.y = sweeperMsg.y
@@ -407,18 +417,12 @@ class THUAI72Proto:
         playerID: int, teamID: int, time: int, angle: float
     ) -> Message2Server.MoveMsg:
         return Message2Server.MoveMsg(
-            player_id=playerID,
-            team_id=teamID,
-            time_in_milliseconds=time,
-            angle=angle
+            player_id=playerID, team_id=teamID, time_in_milliseconds=time, angle=angle
         )
 
     @staticmethod
     def THUAI72ProtobufIDMsg(playerID: int, teamID: int) -> Message2Server.IDMsg:
-        return Message2Server.IDMsg(
-            player_id=playerID,
-            team_id=teamID
-        )
+        return Message2Server.IDMsg(player_id=playerID, team_id=teamID)
 
     @staticmethod
     def THUAI72ProtobufConstructMsg(
@@ -427,27 +431,21 @@ class THUAI72Proto:
         return Message2Server.ConstructMsg(
             player_id=playerID,
             team_id=teamID,
-            construction_type=THUAI72Proto.constructionTypeDict[constructionType]
+            construction_type=THUAI72Proto.constructionTypeDict[constructionType],
         )
 
     @staticmethod
     def THUAI72ProtobufAttackMsg(
         playerID: int, teamID: int, angle: float
     ) -> Message2Server.AttackMsg:
-        return Message2Server.AttackMsg(
-            player_id=playerID,
-            team_id=teamID,
-            angle=angle
-        )
+        return Message2Server.AttackMsg(player_id=playerID, team_id=teamID, angle=angle)
 
     @staticmethod
     def THUAI72ProtobufRecoverMsg(
         playerID: int, teamID: int, recover: int
     ) -> Message2Server.RecoverMsg:
         return Message2Server.RecoverMsg(
-            player_id=playerID,
-            team_id=teamID,
-            recover=recover
+            player_id=playerID, team_id=teamID, recover=recover
         )
 
     @staticmethod
@@ -459,14 +457,14 @@ class THUAI72Proto:
                 player_id=playerID,
                 team_id=teamID,
                 binary_message=msg,
-                to_player_id=toPlayerID
+                to_player_id=toPlayerID,
             )
         else:
             return Message2Server.SendMsg(
                 player_id=playerID,
                 team_id=teamID,
                 text_message=msg,
-                to_player_id=toPlayerID
+                to_player_id=toPlayerID,
             )
 
     @staticmethod
@@ -476,32 +474,31 @@ class THUAI72Proto:
         return Message2Server.InstallMsg(
             module_type=THUAI72Proto.moduleTypeDict[moduleType],
             player_id=playerID,
-            team_id=teamID
+            team_id=teamID,
         )
 
     @staticmethod
     def THUAI72ProtobufBuildSweeperMsg(
-        teamID: int, sweeperType: THUAI7.SweeperType, x: int, y: int
+        teamID: int, sweeperType: THUAI7.SweeperType
     ) -> Message2Server.BuildSweeperMsg:
         return Message2Server.BuildSweeperMsg(
-            team_id=teamID,
-            x=x,
-            y=y,
-            sweeper_type=THUAI72Proto.sweeperTypeDict[sweeperType]
+            team_id=teamID, sweeper_type=THUAI72Proto.sweeperTypeDict[sweeperType]
         )
 
     @staticmethod
     def THUAI72ProtobufPlayerMsg(
-        playerID: int, teamID: int, shipType: THUAI7.SweeperType
+        playerID: int, teamID: int, sweeperType: THUAI7.SweeperType
     ) -> Message2Server.PlayerMsg:
         return Message2Server.PlayerMsg(
             player_id=playerID,
             team_id=teamID,
-            sweeper_type=THUAI72Proto.sweeperTypeDict[shipType]
+            sweeper_type=THUAI72Proto.sweeperTypeDict[sweeperType],
         )
 
     @staticmethod
     def THUAI72ProtobufRecoverMsg(
         playerID: int, recover: int, teamID: int
     ) -> Message2Server.RecoverMsg:
-        return Message2Server.RecoverMsg(player_id=playerID, team_id=teamID, recover=recover)
+        return Message2Server.RecoverMsg(
+            player_id=playerID, team_id=teamID, recover=recover
+        )

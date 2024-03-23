@@ -99,7 +99,8 @@ namespace Gaming
                     {
                         if (bullet.CanBeBombed(kvp.Key))
                         {
-                            beAttackedList.AddRange(gameMap.GameObjDict[kvp.Key].FindAll(gameObj => bullet.CanAttack((GameObj)gameObj)));
+                            var thisList = gameMap.GameObjDict[kvp.Key].FindAll(gameObj => bullet.CanAttack((GameObj)gameObj));
+                            if (thisList != null) beAttackedList.AddRange(thisList);
                         }
                     }
                     foreach (GameObj beAttackedObj in beAttackedList.Cast<GameObj>())

@@ -20,6 +20,17 @@ namespace Gaming
             }
             public bool ActivateShip(Ship ship, XY pos)
             {
+                var activateCost = ship.ShipType switch
+                {
+                    ShipType.CivilShip => GameData.CivilShipCost,
+                    ShipType.WarShip => GameData.WarShipCost,
+                    ShipType.FlagShip => GameData.FlagShipCost,
+                    _ => int.MaxValue
+                };
+                if (activateCost > ship.MoneyPool.Money)
+                {
+                    return false;
+                }
                 if (ship.ShipState != ShipStateType.Deceased)
                 {
                     return false;
@@ -51,6 +62,8 @@ namespace Gaming
                 }
                 if (ship.HP == 0)
                 {
+                    var money = ship.GetCost();
+                    bullet.Parent.AddMoney(money);
                     Remove(ship);
                 }
             }

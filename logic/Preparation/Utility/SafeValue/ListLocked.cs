@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace Preparation.Utility
 {
-    public class LockedClassList<T> where T : class
+    public class LockedClassList<T> where T : class?
     {
         private readonly ReaderWriterLockSlim listLock = new();
         private List<T> list;
@@ -104,7 +104,7 @@ namespace Preparation.Utility
         #endregion
 
         #region 读取与对类操作
-        public TResult ReadLock<TResult>(Func<TResult> func)
+        public TResult? ReadLock<TResult>(Func<TResult?> func)
         {
             listLock.EnterReadLock();
             try
@@ -130,7 +130,7 @@ namespace Preparation.Utility
 
         }
 
-        public T this[int index]
+        public T? this[int index]
         {
             get
             {
@@ -158,7 +158,7 @@ namespace Preparation.Utility
             return ReadLock(() => { return list.Find(match); });
         }
 
-        public List<T> FindAll(Predicate<T> match)
+        public List<T>? FindAll(Predicate<T> match)
         {
             return ReadLock(() => { return list.FindAll(match); });
         }
@@ -167,17 +167,17 @@ namespace Preparation.Utility
 
         public void ForEach(Action<T> action) => ReadLock(() => { list.ForEach(action); });
 
-        public Array ToArray()
+        public Array? ToArray()
         {
             return ReadLock(() => { return list.ToArray(); });
         }
-        public List<T> ToNewList()
+        public List<T>? ToNewList()
         {
             List<T> lt = new();
             return ReadLock(() => { lt.AddRange(list); return lt; });
         }
 
-        public LockedClassList<TResult> Cast<TResult>() where TResult : class
+        public LockedClassList<TResult>? Cast<TResult>() where TResult : class?
         {
             LockedClassList<TResult> lt = new();
             return ReadLock(() => { lt.AddRange(list.Cast<TResult>()); return lt; });

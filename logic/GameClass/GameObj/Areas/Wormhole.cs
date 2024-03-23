@@ -16,7 +16,12 @@ public class Wormhole(XY initPos, List<XY> grids)
     public AtomicInt RepairNum { get; } = new AtomicInt(0);
     public bool Repair(int constructSpeed, Ship ship)
     {
-        return HP.AddV(constructSpeed) > 0;
+        var addHP = HP.GetMaxV() - HP > constructSpeed ? constructSpeed : HP.GetMaxV() - HP;
+        if (ship.MoneyPool.Money < addHP / 10)
+        {
+            return false;
+        }
+        return ship.MoneyPool.SubMoney(HP.AddV(addHP) / 10) > 0;
     }
     public void BeAttacked(Bullet bullet)
     {
