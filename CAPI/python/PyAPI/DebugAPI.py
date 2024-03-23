@@ -7,6 +7,7 @@ import logging
 import os
 import datetime
 
+
 class SweeperDebugAPI(ISweeperAPI, IGameTimer):
     def __init__(
         self, logic: ILogic, file: bool, screen: bool, warnOnly: bool, playerID: int
@@ -49,7 +50,6 @@ class SweeperDebugAPI(ISweeperAPI, IGameTimer):
             screenHandler.setFormatter(formatter)
             self.__logger.addHandler(screenHandler)
 
-
     def Move(self, timeInMilliseconds: int, angle: float) -> Future[bool]:
         self.__logger.info(
             f"Move: timeInMilliseconds = {timeInMilliseconds}, angle = {angle}, called at {self.__GetTime()}ms"
@@ -88,45 +88,54 @@ class SweeperDebugAPI(ISweeperAPI, IGameTimer):
 
     def Recover(self) -> Future[bool]:
         self.__logger.info(f"Recover: called at {self.__GetTime()}ms")
-        def logRecover()->bool:
-            result=self.__logic.Recover()
+
+        def logRecover() -> bool:
+            result = self.__logic.Recover()
             if not result:
                 self.__logger.warning(f"Recover failed at {self.__GetTime()}ms")
             return result
+
         return self.__pool.submit(logRecover)
 
     def Produce(self) -> Future[bool]:
         self.__logger.info(f"Produce: called at {self.__GetTime()}ms")
-        
+
         def logProduce() -> bool:
             result = self.__logic.Produce()
             if not result:
                 self.__logger.warning(f"Produce failed at {self.__GetTime()}ms")
             return result
-        
+
         return self.__pool.submit(logProduce)
 
-
     def Rebuild(self, constructionType: THUAI7.ConstructionType) -> Future[bool]:
-        self.__logger.info(f"Rebuild: called at {self.__GetTime()}ms construction type {constructionType}")
-        
+        self.__logger.info(
+            f"Rebuild: called at {self.__GetTime()}ms construction type {constructionType}"
+        )
+
         def logRebuild() -> bool:
             result = self.__logic.Rebuild(constructionType)
             if not result:
-                self.__logger.warning(f"Rebuild failed at {self.__GetTime()}ms with construction type {constructionType}")
+                self.__logger.warning(
+                    f"Rebuild failed at {self.__GetTime()}ms with construction type {constructionType}"
+                )
             return result
-        
+
         return self.__pool.submit(logRebuild)
 
     def Construct(self, constructionType: THUAI7.ConstructionType) -> Future[bool]:
-        self.__logger.info(f"Construct: called at {self.__GetTime()}ms with construction type {constructionType}")
-        
+        self.__logger.info(
+            f"Construct: called at {self.__GetTime()}ms with construction type {constructionType}"
+        )
+
         def logConstruct() -> bool:
             result = self.__logic.Construct(constructionType)
             if not result:
-                self.__logger.warning(f"Construct failed at {self.__GetTime()}ms with construction type {constructionType}")
+                self.__logger.warning(
+                    f"Construct failed at {self.__GetTime()}ms with construction type {constructionType}"
+                )
             return result
-        
+
         return self.__pool.submit(logConstruct)
 
     def Wait(self) -> bool:
@@ -146,7 +155,7 @@ class SweeperDebugAPI(ISweeperAPI, IGameTimer):
             return result
 
         return self.__pool.submit(logEnd)
-    
+
     def SendMessage(self, toID: int, message: Union[str, bytes]) -> Future[bool]:
         self.__logger.info(
             f"SendMessage: toID = {toID}, message = {message}, called at {self.__GetTime()}ms"
@@ -176,7 +185,7 @@ class SweeperDebugAPI(ISweeperAPI, IGameTimer):
 
     def GetFrameCount(self) -> int:
         return self.__logic.GetFrameCount()
-    
+
     def GetSweepers(self) -> List[THUAI7.Sweeper]:
         return self.__logic.GetSweepers()
 
@@ -195,11 +204,11 @@ class SweeperDebugAPI(ISweeperAPI, IGameTimer):
     def GetConstructionHp(self, cellX: int, cellY: int) -> int:
         return self.__logic.GetConstructionHp(cellX, cellY)
 
-    def GetWormHp(self, cellX: int, cellY: int) -> int:
-        return self.__logic.GetWormHp(cellX, cellY)
+    def GetBridgeHp(self, cellX: int, cellY: int) -> int:
+        return self.__logic.GetBridgeHp(cellX, cellY)
 
-    def GetResourceState(self, cellX: int, cellY: int) -> int:
-        return self.__logic.GetResourceState(cellX, cellY)
+    def GetGarbageState(self, cellX: int, cellY: int) -> int:
+        return self.__logic.GetGarbageState(cellX, cellY)
 
     def GetHomeHp(self) -> int:
         return self.__logic.GetHomeHp()
@@ -220,9 +229,13 @@ class SweeperDebugAPI(ISweeperAPI, IGameTimer):
         return self.__logic.GetScore()
 
     def HaveView(self, gridX: int, gridY: int) -> bool:
-        return self.__logic.HaveView(gridX, gridY,
-                                     self.GetSelfInfo().x, self.GetSelfInfo().y,
-                                     self.GetSelfInfo().viewRange)
+        return self.__logic.HaveView(
+            gridX,
+            gridY,
+            self.GetSelfInfo().x,
+            self.GetSelfInfo().y,
+            self.GetSelfInfo().viewRange,
+        )
 
     def Print(self, cont: str) -> None:
         self.__logger.info(cont)
@@ -248,7 +261,7 @@ class SweeperDebugAPI(ISweeperAPI, IGameTimer):
             self.__logger.info("************************\n")
 
     def PrintSelfInfo(self) -> None:
-        sweeper=self.__logic.GetSelfInfo()
+        sweeper = self.__logic.GetSelfInfo()
         self.__logger.info("******sweeper Info******")
         self.__logger.info(
             f"teamID={sweeper.teamID} playerID={sweeper.playerID}, GUID={sweeper.guid} sweeperType:{sweeper.sweeperType}"
@@ -271,7 +284,7 @@ class SweeperDebugAPI(ISweeperAPI, IGameTimer):
         return (datetime.datetime.now() - self.__startPoint) / datetime.timedelta(
             milliseconds=1
         )
-    
+
     def StartTimer(self) -> None:
         self.__startPoint = datetime.datetime.now()
         self.__logger.info("=== AI.play() ===")
@@ -286,45 +299,45 @@ class SweeperDebugAPI(ISweeperAPI, IGameTimer):
 
 class TeamDebugAPI(ITeamAPI, IGameTimer):
     def __init__(
-            self, logic: ILogic, file: bool, screen: bool, warnOnly: bool, playerID: int
-        ) -> None:
-            self.__logic = logic
-            self.__pool = ThreadPoolExecutor(20)
-            self.__startPoint = datetime.datetime.now()
-            self.__logger = logging.getLogger("api " + str(playerID))
-            self.__logger.setLevel(logging.DEBUG)
-            formatter = logging.Formatter(
-                "[%(name)s] [%(asctime)s.%(msecs)03d] [%(levelname)s] %(message)s",
-                "%H:%M:%S",
-            )
-            # 确保文件存在
-            if not os.path.exists(
+        self, logic: ILogic, file: bool, screen: bool, warnOnly: bool, playerID: int
+    ) -> None:
+        self.__logic = logic
+        self.__pool = ThreadPoolExecutor(20)
+        self.__startPoint = datetime.datetime.now()
+        self.__logger = logging.getLogger("api " + str(playerID))
+        self.__logger.setLevel(logging.DEBUG)
+        formatter = logging.Formatter(
+            "[%(name)s] [%(asctime)s.%(msecs)03d] [%(levelname)s] %(message)s",
+            "%H:%M:%S",
+        )
+        # 确保文件存在
+        if not os.path.exists(
+            os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/logs"
+        ):
+            os.makedirs(
                 os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/logs"
-            ):
-                os.makedirs(
-                    os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/logs"
-                )
-
-            fileHandler = logging.FileHandler(
-                os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-                + "/logs/api-"
-                + str(playerID)
-                + "-log.txt",
-                mode="w+",
-                encoding="utf-8",
             )
-            screenHandler = logging.StreamHandler()
-            if file:
-                fileHandler.setLevel(logging.DEBUG)
-                fileHandler.setFormatter(formatter)
-                self.__logger.addHandler(fileHandler)
-            if screen:
-                if warnOnly:
-                    screenHandler.setLevel(logging.WARNING)
-                else:
-                    screenHandler.setLevel(logging.INFO)
-                screenHandler.setFormatter(formatter)
-                self.__logger.addHandler(screenHandler)
+
+        fileHandler = logging.FileHandler(
+            os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+            + "/logs/api-"
+            + str(playerID)
+            + "-log.txt",
+            mode="w+",
+            encoding="utf-8",
+        )
+        screenHandler = logging.StreamHandler()
+        if file:
+            fileHandler.setLevel(logging.DEBUG)
+            fileHandler.setFormatter(formatter)
+            self.__logger.addHandler(fileHandler)
+        if screen:
+            if warnOnly:
+                screenHandler.setLevel(logging.WARNING)
+            else:
+                screenHandler.setLevel(logging.INFO)
+            screenHandler.setFormatter(formatter)
+            self.__logger.addHandler(screenHandler)
 
     def SendMessage(self, toID: int, message: Union[str, bytes]) -> Future[bool]:
         self.__logger.info(
@@ -371,8 +384,12 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
 
         return self.__pool.submit(logEnd)
 
-    def InstallModule(self, playerID: int, moduleType: THUAI7.ModuleType) -> Future[bool]:
-        self.__logger.info(f"InstallModule: playerID = {playerID}, type = {moduleType}, called at {self.__GetTime()}ms")
+    def InstallModule(
+        self, playerID: int, moduleType: THUAI7.ModuleType
+    ) -> Future[bool]:
+        self.__logger.info(
+            f"InstallModule: playerID = {playerID}, type = {moduleType}, called at {self.__GetTime()}ms"
+        )
 
         def logInstallModule() -> bool:
             result = self.__logic.InstallModule(playerID, moduleType)
@@ -394,7 +411,9 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
         return self.__pool.submit(logRecycle)
 
     def BuildSweeper(self, sweeperType: THUAI7.SweeperType) -> Future[bool]:
-        self.__logger.info(f"BuildSweeper: sweeperType = {sweeperType}, called at {self.__GetTime()}ms")
+        self.__logger.info(
+            f"BuildSweeper: sweeperType = {sweeperType}, called at {self.__GetTime()}ms"
+        )
 
         def logBuildSweeper() -> bool:
             result = self.__logic.BuildSweeper(sweeperType)
@@ -404,10 +423,9 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
 
         return self.__pool.submit(logBuildSweeper)
 
-    
     def GetFrameCount(self) -> int:
         return self.__logic.GetFrameCount()
-    
+
     def GetBullets(self) -> List[THUAI7.Bullet]:
         return self.__logic.GetBullets()
 
@@ -426,8 +444,8 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
     def GetConstructionHp(self, cellX: int, cellY: int) -> int:
         return self.__logic.GetConstructionHp(cellX, cellY)
 
-    def GetWormHp(self, cellX: int, cellY: int) -> int:
-        return self.__logic.GetWormHp(cellX, cellY)
+    def GetBridgeHp(self, cellX: int, cellY: int) -> int:
+        return self.__logic.GetBridgeHp(cellX, cellY)
 
     def GetResouceState(self, cellX: int, cellY: int) -> int:
         return self.__logic.GetResouceState(cellX, cellY)
@@ -463,7 +481,7 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
         return (datetime.datetime.now() - self.__startPoint) / datetime.timedelta(
             milliseconds=1
         )
-    
+
     def StartTimer(self) -> None:
         self.__startPoint = datetime.datetime.now()
         self.__logger.info("=== AI.play() ===")
