@@ -383,7 +383,7 @@ void Logic::LoadBufferSelf(const protobuf::MessageToClient& message)
                 {
                     bufferState->sweeperSelf = Proto2THUAI7::Protobuf2THUAI7Sweeper(item.sweeper_message());
                     bufferState->sweepers.push_back(bufferState->sweeperSelf);
-                    logger->debug("Add Self Sweeper!");
+                    logger->debug("Load Self Sweeper!");
                 }
             }
         }
@@ -395,13 +395,13 @@ void Logic::LoadBufferSelf(const protobuf::MessageToClient& message)
             if (Proto2THUAI7::messageOfObjDict[item.message_of_obj_case()] == THUAI7::MessageOfObj::TeamMessage && item.team_message().team_id() == teamID)
             {
                 bufferState->teamSelf = Proto2THUAI7::Protobuf2THUAI7Team(item.team_message());
-                logger->debug("Add Self Team!");
+                logger->debug("Load Self Team!");
             }
             else if (Proto2THUAI7::messageOfObjDict[item.message_of_obj_case()] == THUAI7::MessageOfObj::SweeperMessage && item.team_message().team_id() == teamID)
             {
                 std::shared_ptr<THUAI7::Sweeper> Sweeper = Proto2THUAI7::Protobuf2THUAI7Sweeper(item.sweeper_message());
                 bufferState->sweepers.push_back(Sweeper);
-                logger->debug("Add Sweeper!");
+                logger->debug("Load Sweeper!");
             }
         }
     }
@@ -422,21 +422,51 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     {
                         std::shared_ptr<THUAI7::Sweeper> Sweeper = Proto2THUAI7::Protobuf2THUAI7Sweeper(item.sweeper_message());
                         bufferState->enemySweepers.push_back(Sweeper);
-                        logger->debug("Add EnemySweeper!");
+                        logger->debug("Load EnemySweeper!");
                     }
                 }
                 else if (teamID == item.sweeper_message().team_id() && playerID != item.sweeper_message().player_id())
                 {
                     std::shared_ptr<THUAI7::Sweeper> Sweeper = Proto2THUAI7::Protobuf2THUAI7Sweeper(item.sweeper_message());
                     bufferState->sweepers.push_back(Sweeper);
-                    logger->debug("Add Sweeper!");
+                    logger->debug("Load Sweeper!");
                 }
                 break;
             case THUAI7::MessageOfObj::BulletMessage:
-                if (AssistFunction::HaveView(x, y, item.bullet_message().x(), item.bullet_message().y(), viewRange, bufferState->gameMap))
+                if (item.bullet_message().team_id() != teamID && AssistFunction::HaveView(x, y, item.bullet_message().x(), item.bullet_message().y(), viewRange, bufferState->gameMap))
                 {
                     bufferState->bullets.push_back(Proto2THUAI7::Protobuf2THUAI7Bullet(item.bullet_message()));
-                    logger->debug("Add Bullet!");
+                    logger->debug("Load Bullet!");
+                }
+                break;
+            case THUAI7::MessageOfObj::HomeMessage:
+                if (item.home_message().team_id() == teamID)
+                {
+                    auto pos = std::make_pair(AssistFunction::GridToCell(item.home_message().x()), AssistFunction::GridToCell(item.home_message().y()));
+                    if (bufferState->mapInfo->homeState.count(pos) == 0)
+                    {
+                        bufferState->mapInfo->homeState.emplace(pos, std::make_pair(item.home_message().team_id(), item.home_message().hp()));
+                        logger->debug("Load Home!");
+                    }
+                    else
+                    {
+                        bufferState->mapInfo->homeState[pos].second = item.home_message().hp();
+                        logger->debug("Update Home!");
+                    }
+                }
+                else if (AssistFunction::HaveView(x, y, item.home_message().x(), item.home_message().y(), viewRange, bufferState->gameMap))
+                {
+                    auto pos = std::make_pair(AssistFunction::GridToCell(item.home_message().x()), AssistFunction::GridToCell(item.home_message().y()));
+                    if (bufferState->mapInfo->homeState.count(pos) == 0)
+                    {
+                        bufferState->mapInfo->homeState.emplace(pos, std::make_pair(item.home_message().team_id(), item.home_message().hp()));
+                        logger->debug("Load Home!");
+                    }
+                    else
+                    {
+                        bufferState->mapInfo->homeState[pos].second = item.home_message().hp();
+                        logger->debug("Update Home!");
+                    }
                 }
                 break;
             case THUAI7::MessageOfObj::RecycleBankMessage:
@@ -446,7 +476,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     if (bufferState->mapInfo->recycleBankState.count(pos) == 0)
                     {
                         bufferState->mapInfo->recycleBankState.emplace(pos, std::make_pair(item.recyclebank_message().team_id(), item.recyclebank_message().hp()));
-                        logger->debug("Add RecycleBank!");
+                        logger->debug("Load RecycleBank!");
                     }
                     else
                     {
@@ -460,7 +490,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     if (bufferState->mapInfo->recycleBankState.count(pos) == 0)
                     {
                         bufferState->mapInfo->recycleBankState.emplace(pos, std::make_pair(item.recyclebank_message().team_id(), item.recyclebank_message().hp()));
-                        logger->debug("Add RecycleBank!");
+                        logger->debug("Load RecycleBank!");
                     }
                     else
                     {
@@ -476,7 +506,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     if (bufferState->mapInfo->chargeStationState.count(pos) == 0)
                     {
                         bufferState->mapInfo->chargeStationState.emplace(pos, std::make_pair(item.chargestation_message().team_id(), item.chargestation_message().hp()));
-                        logger->debug("Add ChargeStation!");
+                        logger->debug("Load ChargeStation!");
                     }
                     else
                     {
@@ -490,7 +520,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     if (bufferState->mapInfo->chargeStationState.count(pos) == 0)
                     {
                         bufferState->mapInfo->chargeStationState.emplace(pos, std::make_pair(item.chargestation_message().team_id(), item.chargestation_message().hp()));
-                        logger->debug("Add ChargeStation!");
+                        logger->debug("Load ChargeStation!");
                     }
                     else
                     {
@@ -506,7 +536,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     if (bufferState->mapInfo->signalTowerState.count(pos) == 0)
                     {
                         bufferState->mapInfo->signalTowerState.emplace(pos, std::make_pair(item.signaltower_message().team_id(), item.signaltower_message().hp()));
-                        logger->debug("Add SignalTower!");
+                        logger->debug("Load SignalTower!");
                     }
                     else
                     {
@@ -520,7 +550,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     if (bufferState->mapInfo->signalTowerState.count(pos) == 0)
                     {
                         bufferState->mapInfo->signalTowerState.emplace(pos, std::make_pair(item.signaltower_message().team_id(), item.signaltower_message().hp()));
-                        logger->debug("Add SignalTower!");
+                        logger->debug("Load SignalTower!");
                     }
                     else
                     {
@@ -536,7 +566,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     if (bufferState->mapInfo->bridgeState.count(pos) == 0)
                     {
                         bufferState->mapInfo->bridgeState.emplace(pos, item.bridge_message().hp());
-                        logger->debug("Add Bridge!");
+                        logger->debug("Load Bridge!");
                     }
                     else
                     {
@@ -552,7 +582,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     if (bufferState->mapInfo->garbageState.count(pos) == 0)
                     {
                         bufferState->mapInfo->garbageState.emplace(pos, item.garbage_message().progress());
-                        logger->debug("Add Garbage!");
+                        logger->debug("Load Garbage!");
                     }
                     else
                     {
@@ -569,12 +599,12 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                         if (Proto2THUAI7::newsTypeDict[news.news_case()] == THUAI7::NewsType::TextMessage)
                         {
                             messageQueue.emplace(std::make_pair(news.from_id(), news.text_message()));
-                            logger->debug("Add Text News!");
+                            logger->debug("Load Text News!");
                         }
                         else if (Proto2THUAI7::newsTypeDict[news.news_case()] == THUAI7::NewsType::BinaryMessage)
                         {
                             messageQueue.emplace(std::make_pair(news.from_id(), news.binary_message()));
-                            logger->debug("Add Binary News!");
+                            logger->debug("Load Binary News!");
                         }
                         else
                             logger->error("Unknown NewsType!");
@@ -604,7 +634,37 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                 {
                     std::shared_ptr<THUAI7::Sweeper> Sweeper = Proto2THUAI7::Protobuf2THUAI7Sweeper(item.sweeper_message());
                     bufferState->enemySweepers.push_back(Sweeper);
-                    logger->debug("Add Enemy Sweeper!");
+                    logger->debug("Load Enemy Sweeper!");
+                }
+                break;
+            case THUAI7::MessageOfObj::HomeMessage:
+                if (item.home_message().team_id() == teamID)
+                {
+                    auto pos = std::make_pair(AssistFunction::GridToCell(item.home_message().x()), AssistFunction::GridToCell(item.home_message().y()));
+                    if (bufferState->mapInfo->homeState.count(pos) == 0)
+                    {
+                        bufferState->mapInfo->homeState.emplace(pos, std::make_pair(item.home_message().team_id(), item.home_message().hp()));
+                        logger->debug("Load Home!");
+                    }
+                    else
+                    {
+                        bufferState->mapInfo->homeState[pos].second = item.home_message().hp();
+                        logger->debug("Update Home!");
+                    }
+                }
+                else if (AssistFunction::HaveView(x, y, item.home_message().x(), item.home_message().y(), viewRange, bufferState->gameMap))
+                {
+                    auto pos = std::make_pair(AssistFunction::GridToCell(item.home_message().x()), AssistFunction::GridToCell(item.home_message().y()));
+                    if (bufferState->mapInfo->homeState.count(pos) == 0)
+                    {
+                        bufferState->mapInfo->homeState.emplace(pos, std::make_pair(item.home_message().team_id(), item.home_message().hp()));
+                        logger->debug("Load Home!");
+                    }
+                    else
+                    {
+                        bufferState->mapInfo->homeState[pos].second = item.home_message().hp();
+                        logger->debug("Update Home!");
+                    }
                 }
                 break;
             case THUAI7::MessageOfObj::RecycleBankMessage:
@@ -614,7 +674,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     if (bufferState->mapInfo->recycleBankState.count(pos) == 0)
                     {
                         bufferState->mapInfo->recycleBankState.emplace(pos, std::make_pair(item.recyclebank_message().team_id(), item.recyclebank_message().hp()));
-                        logger->debug("Add RecycleBank!");
+                        logger->debug("Load RecycleBank!");
                     }
                     else
                     {
@@ -628,7 +688,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     if (bufferState->mapInfo->recycleBankState.count(pos) == 0)
                     {
                         bufferState->mapInfo->recycleBankState.emplace(pos, std::make_pair(item.recyclebank_message().team_id(), item.recyclebank_message().hp()));
-                        logger->debug("Add RecycleBank!");
+                        logger->debug("Load RecycleBank!");
                     }
                     else
                     {
@@ -644,7 +704,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     if (bufferState->mapInfo->chargeStationState.count(pos) == 0)
                     {
                         bufferState->mapInfo->chargeStationState.emplace(pos, std::make_pair(item.chargestation_message().team_id(), item.chargestation_message().hp()));
-                        logger->debug("Add ChargeStation!");
+                        logger->debug("Load ChargeStation!");
                     }
                     else
                     {
@@ -658,7 +718,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     if (bufferState->mapInfo->chargeStationState.count(pos) == 0)
                     {
                         bufferState->mapInfo->chargeStationState.emplace(pos, std::make_pair(item.chargestation_message().team_id(), item.chargestation_message().hp()));
-                        logger->debug("Add ChargeStation!");
+                        logger->debug("Load ChargeStation!");
                     }
                     else
                     {
@@ -674,7 +734,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     if (bufferState->mapInfo->signalTowerState.count(pos) == 0)
                     {
                         bufferState->mapInfo->signalTowerState.emplace(pos, std::make_pair(item.signaltower_message().team_id(), item.signaltower_message().hp()));
-                        logger->debug("Add SignalTower!");
+                        logger->debug("Load SignalTower!");
                     }
                     else
                     {
@@ -688,7 +748,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     if (bufferState->mapInfo->signalTowerState.count(pos) == 0)
                     {
                         bufferState->mapInfo->signalTowerState.emplace(pos, std::make_pair(item.signaltower_message().team_id(), item.signaltower_message().hp()));
-                        logger->debug("Add SignalTower!");
+                        logger->debug("Load SignalTower!");
                     }
                     else
                     {
@@ -704,7 +764,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     if (bufferState->mapInfo->bridgeState.count(pos) == 0)
                     {
                         bufferState->mapInfo->bridgeState.emplace(pos, item.bridge_message().hp());
-                        logger->debug("Add Bridge!");
+                        logger->debug("Load Bridge!");
                     }
                     else
                     {
@@ -720,7 +780,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     if (bufferState->mapInfo->garbageState.count(pos) == 0)
                     {
                         bufferState->mapInfo->garbageState.emplace(pos, item.garbage_message().progress());
-                        logger->debug("Add Garbage!");
+                        logger->debug("Load Garbage!");
                     }
                     else
                     {
@@ -736,12 +796,12 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     if (Proto2THUAI7::newsTypeDict[news.news_case()] == THUAI7::NewsType::TextMessage)
                     {
                         messageQueue.emplace(std::make_pair(news.from_id(), news.text_message()));
-                        logger->debug("Add Text News!");
+                        logger->debug("Load Text News!");
                     }
                     else if (Proto2THUAI7::newsTypeDict[news.news_case()] == THUAI7::NewsType::BinaryMessage)
                     {
                         messageQueue.emplace(std::make_pair(news.from_id(), news.binary_message()));
-                        logger->debug("Add Binary News!");
+                        logger->debug("Load Binary News!");
                     }
                     else
                         logger->error("Unknown NewsType!");
