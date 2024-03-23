@@ -213,14 +213,15 @@ namespace Gaming
             {
                 if (GameData.NeedCopy(keyValuePair.Key))
                 {
-                    gameObjList.AddRange(gameMap.GameObjDict[keyValuePair.Key].ToNewList());
+                    var thisList = gameMap.GameObjDict[keyValuePair.Key].ToNewList();
+                    if (thisList != null) gameObjList.AddRange(thisList);
                 }
             }
             return gameObjList;
         }
         public void UpdateBirthPoint()
         {
-            gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>().ForEach(
+            gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>()?.ForEach(
                 delegate (Construction construction)
                 {
                     if (construction.ConstructionType == ConstructionType.Community)
@@ -245,7 +246,7 @@ namespace Gaming
             {
                 foreach (XY birthPoint in team.BirthPointList)
                 {
-                    gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>().ForEach(
+                    gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>()?.ForEach(
                         delegate (Construction construction)
                     {
                         if (construction.Position == birthPoint)
@@ -268,7 +269,7 @@ namespace Gaming
             actionManager = new(gameMap, shipManager);
             attackManager = new(gameMap, shipManager);
             teamList = [];
-            gameMap.GameObjDict[GameObjType.Home].Cast<GameObj>().ForEach(
+            gameMap.GameObjDict[GameObjType.Home].Cast<GameObj>()?.ForEach(
                 delegate (GameObj gameObj)
                 {
                     if (gameObj.Type == GameObjType.Home)
