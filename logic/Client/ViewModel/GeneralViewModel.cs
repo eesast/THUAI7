@@ -8,7 +8,7 @@ using Client.Model;
 using Protobuf;
 using Grpc.Core;
 using System.Diagnostics.Metrics;
-using CommunityToolkit.Mvvm.ComponentModel;
+using Client.Util;
 
 namespace Client.ViewModel
 {
@@ -60,12 +60,12 @@ namespace Client.ViewModel
         }
 
         private long playerID;
-        private SweeperType shipType;
+        private SweeperType SweeperType;
         private long teamID;
         AvailableService.AvailableServiceClient? client;
         AsyncServerStreamingCall<MessageToClient>? responseStream;
         bool isSpectatorMode = false;
-        // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID 3-teamID 4-shipType
+        // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID 3-teamID 4-SweeperType
         public void ConnectToServer(string[] comInfo)
         {
             if (!isSpectatorMode && comInfo.Length != 5 || isSpectatorMode && comInfo.Length != 4)
@@ -86,7 +86,7 @@ namespace Client.ViewModel
             //playerMsg.Y = 0;
             if (!isSpectatorMode)
             {
-                shipType = Convert.ToInt64(comInfo[4]) switch
+                SweeperType = Convert.ToInt64(comInfo[4]) switch
                 {
                     0 => SweeperType.NullSweeperType,
                     1 => SweeperType.CivilianSweeper,
@@ -94,19 +94,340 @@ namespace Client.ViewModel
                     3 => SweeperType.FlagSweeper,
                     _ => SweeperType.NullSweeperType
                 };
-                playerMsg.SweeperType = shipType;
+                playerMsg.SweeperType = SweeperType;
             }
             responseStream = client.AddPlayer(playerMsg);
             isClientStocked = false;
         }
 
         int testcounter = 0;
+
+        private async void OnReceive()
+        {
+            try
+            {
+                while (responseStream != null && await responseStream.ResponseStream.MoveNext())
+                {
+                    lock (drawPicLock)
+                    {
+                        ballX += 20;
+                        ballY += 20;
+
+                        listOfAll.Clear();
+                        listOfSweeper.Clear();
+                        listOfBullet.Clear();
+                        listOfBombedBullet.Clear();
+                        listOfRecycleBank.Clear();
+                        listOfChargeStation.Clear();
+                        listOfSignalTower.Clear();
+                        listOfGarbage.Clear();
+                        listOfHome.Clear();
+                        listOfBridge.Clear();
+                        MessageToClient content = responseStream.ResponseStream.Current;
+                        MessageOfMap mapMassage = new();
+                        bool mapMessageExist = false;
+                        switch (content.GameState)
+                        {
+                            case GameState.GameStart:
+                                foreach (var obj in content.ObjMessage)
+                                {
+                                    switch (obj.MessageOfObjCase)
+                                    {
+                                        case MessageOfObj.MessageOfObjOneofCase.SweeperMessage:
+                                            listOfSweeper.Add(obj.SweeperMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
+                                            listOfBullet.Add(obj.BulletMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.BombedBulletMessage:
+                                            listOfBombedBullet.Add(obj.BombedBulletMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
+                                            listOfRecycleBank.Add(obj.RecyclebankMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
+                                            listOfChargeStation.Add(obj.ChargestationMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
+                                            listOfSignalTower.Add(obj.SignaltowerMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
+                                            listOfGarbage.Add(obj.GarbageMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
+                                            listOfHome.Add(obj.HomeMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.MapMessage:
+                                            mapMassage = obj.MapMessage;
+                                            break;
+                                    }
+                                }
+                                listOfAll.Add(content.AllMessage);
+                                countMap.Clear();
+                                countMap.Add((int)MapPatchType.Garbage, listOfGarbage.Count);
+                                countMap.Add((int)MapPatchType.RecycleBank, listOfRecycleBank.Count);
+                                countMap.Add((int)MapPatchType.ChargeStation, listOfChargeStation.Count);
+                                countMap.Add((int)MapPatchType.SignalTower, listOfSignalTower.Count);
+                                GetMap(mapMassage);
+                                break;
+                            case GameState.GameRunning:
+                                foreach (var obj in content.ObjMessage)
+                                {
+                                    switch (obj.MessageOfObjCase)
+                                    {
+                                        case MessageOfObj.MessageOfObjOneofCase.SweeperMessage:
+                                            listOfSweeper.Add(obj.SweeperMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
+                                            listOfRecycleBank.Add(obj.RecyclebankMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
+                                            listOfChargeStation.Add(obj.ChargestationMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
+                                            listOfSignalTower.Add(obj.SignaltowerMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
+                                            listOfBullet.Add(obj.BulletMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.BombedBulletMessage:
+                                            listOfBombedBullet.Add(obj.BombedBulletMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
+                                            listOfGarbage.Add(obj.GarbageMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
+                                            listOfHome.Add(obj.HomeMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.MapMessage:
+                                            mapMassage = obj.MapMessage;
+                                            mapMessageExist = true;
+                                            break;
+                                    }
+                                }
+                                listOfAll.Add(content.AllMessage);
+                                if (mapMessageExist)
+                                {
+                                    countMap.Clear();
+                                    countMap.Add((int)MapPatchType.Garbage, listOfGarbage.Count);
+                                    countMap.Add((int)MapPatchType.RecycleBank, listOfRecycleBank.Count);
+                                    countMap.Add((int)MapPatchType.ChargeStation, listOfChargeStation.Count);
+                                    countMap.Add((int)MapPatchType.SignalTower, listOfSignalTower.Count);
+                                    GetMap(mapMassage);
+                                    mapMessageExist = false;
+                                }
+                                break;
+
+                            case GameState.GameEnd:
+                                //DisplayAlert("Info", "Game End", "OK");
+                                foreach (var obj in content.ObjMessage)
+                                {
+                                    switch (obj.MessageOfObjCase)
+                                    {
+                                        case MessageOfObj.MessageOfObjOneofCase.SweeperMessage:
+                                            listOfSweeper.Add(obj.SweeperMessage);
+                                            break;
+
+                                        //case MessageOfObj.MessageOfObjOneofCase.BuildingMessage:
+                                        //    listOfBuilding.Add(obj.BuildingMessage);
+                                        //    break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
+                                            listOfRecycleBank.Add(obj.RecyclebankMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
+                                            listOfChargeStation.Add(obj.ChargestationMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
+                                            listOfSignalTower.Add(obj.SignaltowerMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
+                                            listOfBullet.Add(obj.BulletMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.BombedBulletMessage:
+                                            listOfBombedBullet.Add(obj.BombedBulletMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
+                                            listOfGarbage.Add(obj.GarbageMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
+                                            listOfHome.Add(obj.HomeMessage);
+                                            break;
+
+                                        case MessageOfObj.MessageOfObjOneofCase.MapMessage:
+                                            mapMassage = obj.MapMessage;
+                                            break;
+                                    }
+                                }
+                                listOfAll.Add(content.AllMessage);
+                                break;
+                        }
+                    }
+                    if (responseStream == null)
+                    {
+                        throw new Exception("Unconnected");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                /* 
+                    #TODO
+                    Show the error message
+                */
+            }
+        }
+
+        private void Refresh(object sender, EventArgs e)
+        {
+            try
+            {
+                lock (drawPicLock)
+                {
+                    //if (UIinitiated)
+                    //{
+                    //    redPlayer.SlideLengthSet();
+                    //    bluePlayer.SlideLengthSet();
+                    //    gameStatusBar.SlideLengthSet();
+                    //}
+                    if (!isClientStocked)
+                    {
+                        if (!hasDrawn && getMapFlag)
+                        {
+                            //PureDrawMap(defaultMap);
+                            hasDrawn = true;
+                        }
+
+                        foreach (var data in listOfAll)
+                        {
+                            RedPlayer.Money = data.RedTeamEnergy;
+                            RedPlayer.Hp = data.RedHomeHp;
+                            RedPlayer.Score = data.RedTeamScore;
+                            BluePlayer.Money = data.BlueTeamEnergy;
+                            BluePlayer.Hp = data.BlueHomeHp;
+                            BluePlayer.Score = data.BlueTeamScore;
+                        }
+
+                        foreach (var data in listOfHome)
+                        {
+                            DrawHome(data);
+                            if (data.TeamId == (long)PlayerTeam.Red)
+                            {
+                                RedPlayer.Team = data.TeamId;
+                            }
+                            else if (data.TeamId == (long)PlayerTeam.Blue)
+                            {
+                                BluePlayer.Team = data.TeamId;
+                            }
+                        }
+
+                        foreach (var data in listOfSweeper)
+                        {
+                            if (data.TeamId == (long)PlayerTeam.Red)
+                            {
+                                Sweeper ship = new Sweeper
+                                {
+                                    Type = data.SweeperType,
+                                    State = data.SweeperState,
+                                    ArmorModule = data.ArmorType,
+                                    ShieldModule = data.ShieldType,
+                                    WeaponModule = data.WeaponType,
+                                    ProducerModule = data.ProducerType,
+                                    ConstuctorModule = data.ConstructorType,
+                                    Type_s = UtilInfo.SweeperTypeNameDict[data.SweeperType],
+                                    State_s = UtilInfo.SweeperStateNameDict[data.SweeperState],
+                                    ArmorModule_s = UtilInfo.SweeperArmorTypeNameDict[data.ArmorType],
+                                    ShieldModule_s = UtilInfo.SweeperShieldTypeNameDict[data.ShieldType],
+                                    WeaponModule_s = UtilInfo.SweeperWeaponTypeNameDict[data.WeaponType],
+                                    ConstuctorModule_s = UtilInfo.SweeperConstructorNameDict[data.ConstructorType],
+                                    ProducerModule_s = UtilInfo.SweeperProducerTypeNameDict[data.ProducerType]
+                                };
+                                RedPlayer.Sweepers.Add(ship);
+                            }
+                            else if (data.TeamId == (long)PlayerTeam.Blue)
+                            {
+                                Sweeper ship = new Sweeper
+                                {
+                                    Type = data.SweeperType,
+                                    State = data.SweeperState,
+                                    ArmorModule = data.ArmorType,
+                                    ShieldModule = data.ShieldType,
+                                    WeaponModule = data.WeaponType,
+                                    ProducerModule = data.ProducerType,
+                                    ConstuctorModule = data.ConstructorType,
+                                    Type_s = UtilInfo.SweeperTypeNameDict[data.SweeperType],
+                                    State_s = UtilInfo.SweeperStateNameDict[data.SweeperState],
+                                    ArmorModule_s = UtilInfo.SweeperArmorTypeNameDict[data.ArmorType],
+                                    ShieldModule_s = UtilInfo.SweeperShieldTypeNameDict[data.ShieldType],
+                                    WeaponModule_s = UtilInfo.SweeperWeaponTypeNameDict[data.WeaponType],
+                                    ConstuctorModule_s = UtilInfo.SweeperConstructorNameDict[data.ConstructorType],
+                                    ProducerModule_s = UtilInfo.SweeperProducerTypeNameDict[data.ProducerType]
+                                };
+                                BluePlayer.Sweepers.Add(ship);
+                            }
+                        }
+
+                        foreach (var data in listOfChargeStation)
+                        {
+                            DrawChargeStation(data);
+                        }
+
+                        foreach (var data in listOfRecycleBank)
+                        {
+                            DrawRecycleBank(data);
+                        }
+
+                        foreach (var data in listOfBridge)
+                        {
+                            DrawWormHole(data);
+                        }
+
+                        foreach (var data in listOfSignalTower)
+                        {
+                            DrawSignalTower(data);
+                        }
+
+                        foreach (var data in listOfGarbage)
+                        {
+                            DrawResource(data);
+                        }
+                    }
+                }
+            }
+            finally
+            {
+
+            }
+            //counter++;
+        }
         private void UpdateTest(object sender, EventArgs e)
         {
             counterViewModelTest++;
-            if (!hasDrawn)
+            if (!hasDrawn && getMapFlag)
             {
-                PureDrawMap(GameMap.GameMapArray);
+                PureDrawMap(defaultMap);
                 hasDrawn = true;
             }
             if (testcounter < 30)
@@ -114,14 +435,14 @@ namespace Client.ViewModel
                 testcounter++;
                 if (testcounter % 3 == 0)
                 {
-                    Ship ship = new Ship
+                    Sweeper ship = new Sweeper
                     {
-                        Type_s = "CivilShip",
+                        Type_s = "CivilSweeper",
                         State_s = "Idle",
                         ArmorModule_s = "LightArmor"
                     };
-                    RedPlayer.Ships.Add(ship);
-                    BluePlayer.Ships.Add(ship);
+                    RedPlayer.Sweepers.Add(ship);
+                    BluePlayer.Sweepers.Add(ship);
                 }
             }
             DrawHome(new MessageOfHome
@@ -132,7 +453,7 @@ namespace Client.ViewModel
                 TeamId = 1
             });
 
-            //DrawFactory(new MessageOfRecycleBank
+            //DrawRecycleBank(new MessageOfRecycleBank
             //{
             //    X = 11,
             //    Y = 11,
@@ -147,12 +468,13 @@ namespace Client.ViewModel
                 Hp = 100
             });
 
-            ballX += 1;
-            ballY += 1;
+            //ballX += 1;
+            //ballY += 1;
         }
 
         public GeneralViewModel()
         {
+            InitiateObjects();
             Title = "THUAI7";
             Links = [
                 new Link { Name = "天梯信息", Url = "" },
@@ -163,13 +485,13 @@ namespace Client.ViewModel
             RedPlayer.Hp = 100;
             RedPlayer.Money = 1000;
 
-            Ship ship = new Ship
+            Sweeper ship = new Sweeper
             {
-                Type_s = "CivilShip",
+                Type_s = "CivilSweeper",
                 State_s = "Idle",
                 ArmorModule_s = "LightArmor"
             };
-            RedPlayer.Ships.Add(ship);
+            RedPlayer.Sweepers.Add(ship);
 
             WormHole1HP = 100;
             WormHole2HP = 100;
@@ -185,13 +507,22 @@ namespace Client.ViewModel
                     });
                 }
             }
+            PureDrawMap(GameMap.GameMapArray);
 
-
+            ConnectToServer(new string[]{
+                "127.0.0.1",
+                "8888",
+                "1",
+                "1",
+                "1"
+            });
 
             timerViewModel = Dispatcher.CreateTimer();
             timerViewModel.Interval = TimeSpan.FromMilliseconds(5);
             timerViewModel.Tick += new EventHandler(UpdateTest);
             timerViewModel.Start();
+
+            OnReceive();
         }
     }
 }
