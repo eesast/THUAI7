@@ -25,6 +25,7 @@ namespace Client.Util
             { SweeperState.Recycling, "Recycling" },
             { SweeperState.Attacking, "Attacking" },
             { SweeperState.Swinging, "Swinging" },
+            { SweeperState.Stunned, "Stunned" },
             { SweeperState.Moving, "Moving" }
         };
 
