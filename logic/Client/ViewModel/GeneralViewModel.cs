@@ -8,7 +8,6 @@ using Client.Model;
 using Protobuf;
 using Grpc.Core;
 using System.Diagnostics.Metrics;
-using CommunityToolkit.Mvvm.ComponentModel;
 using Client.Util;
 
 namespace Client.ViewModel
@@ -61,12 +60,12 @@ namespace Client.ViewModel
         }
 
         private long playerID;
-        private SweeperType shipType;
+        private SweeperType SweeperType;
         private long teamID;
         AvailableService.AvailableServiceClient? client;
         AsyncServerStreamingCall<MessageToClient>? responseStream;
         bool isSpectatorMode = false;
-        // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID 3-teamID 4-shipType
+        // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID 3-teamID 4-SweeperType
         public void ConnectToServer(string[] comInfo)
         {
             if (!isSpectatorMode && comInfo.Length != 5 || isSpectatorMode && comInfo.Length != 4)
@@ -87,7 +86,7 @@ namespace Client.ViewModel
             //playerMsg.Y = 0;
             if (!isSpectatorMode)
             {
-                shipType = Convert.ToInt64(comInfo[4]) switch
+                SweeperType = Convert.ToInt64(comInfo[4]) switch
                 {
                     0 => SweeperType.NullSweeperType,
                     1 => SweeperType.CivilianSweeper,
@@ -95,7 +94,7 @@ namespace Client.ViewModel
                     3 => SweeperType.FlagSweeper,
                     _ => SweeperType.NullSweeperType
                 };
-                playerMsg.SweeperType = shipType;
+                playerMsg.SweeperType = SweeperType;
             }
             responseStream = client.AddPlayer(playerMsg);
             isClientStocked = false;
@@ -115,15 +114,15 @@ namespace Client.ViewModel
                         ballY += 20;
 
                         listOfAll.Clear();
-                        listOfShip.Clear();
+                        listOfSweeper.Clear();
                         listOfBullet.Clear();
                         listOfBombedBullet.Clear();
-                        listOfFactory.Clear();
-                        listOfCommunity.Clear();
-                        listOfFort.Clear();
-                        listOfResource.Clear();
+                        listOfRecycleBank.Clear();
+                        listOfChargeStation.Clear();
+                        listOfSignalTower.Clear();
+                        listOfGarbage.Clear();
                         listOfHome.Clear();
-                        listOfWormhole.Clear();
+                        listOfBridge.Clear();
                         MessageToClient content = responseStream.ResponseStream.Current;
                         MessageOfMap mapMassage = new();
                         bool mapMessageExist = false;
@@ -134,8 +133,8 @@ namespace Client.ViewModel
                                 {
                                     switch (obj.MessageOfObjCase)
                                     {
-                                        case MessageOfObj.MessageOfObjOneofCase.ShipMessage:
-                                            listOfShip.Add(obj.ShipMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.SweeperMessage:
+                                            listOfSweeper.Add(obj.SweeperMessage);
                                             break;
 
                                         case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
@@ -146,20 +145,20 @@ namespace Client.ViewModel
                                             listOfBombedBullet.Add(obj.BombedBulletMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
-                                            listOfFactory.Add(obj.FactoryMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
+                                            listOfRecycleBank.Add(obj.RecyclebankMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
-                                            listOfCommunity.Add(obj.CommunityMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
+                                            listOfChargeStation.Add(obj.ChargestationMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.FortMessage:
-                                            listOfFort.Add(obj.FortMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
+                                            listOfSignalTower.Add(obj.SignaltowerMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
-                                            listOfResource.Add(obj.ResourceMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
+                                            listOfGarbage.Add(obj.GarbageMessage);
                                             break;
 
                                         case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
@@ -173,10 +172,10 @@ namespace Client.ViewModel
                                 }
                                 listOfAll.Add(content.AllMessage);
                                 countMap.Clear();
-                                countMap.Add((int)MapPatchType.Resource, listOfResource.Count);
-                                countMap.Add((int)MapPatchType.Factory, listOfFactory.Count);
-                                countMap.Add((int)MapPatchType.Community, listOfCommunity.Count);
-                                countMap.Add((int)MapPatchType.Fort, listOfFort.Count);
+                                countMap.Add((int)MapPatchType.Garbage, listOfGarbage.Count);
+                                countMap.Add((int)MapPatchType.RecycleBank, listOfRecycleBank.Count);
+                                countMap.Add((int)MapPatchType.ChargeStation, listOfChargeStation.Count);
+                                countMap.Add((int)MapPatchType.SignalTower, listOfSignalTower.Count);
                                 GetMap(mapMassage);
                                 break;
                             case GameState.GameRunning:
@@ -184,20 +183,20 @@ namespace Client.ViewModel
                                 {
                                     switch (obj.MessageOfObjCase)
                                     {
-                                        case MessageOfObj.MessageOfObjOneofCase.ShipMessage:
-                                            listOfShip.Add(obj.ShipMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.SweeperMessage:
+                                            listOfSweeper.Add(obj.SweeperMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
-                                            listOfFactory.Add(obj.FactoryMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
+                                            listOfRecycleBank.Add(obj.RecyclebankMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
-                                            listOfCommunity.Add(obj.CommunityMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
+                                            listOfChargeStation.Add(obj.ChargestationMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.FortMessage:
-                                            listOfFort.Add(obj.FortMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
+                                            listOfSignalTower.Add(obj.SignaltowerMessage);
                                             break;
 
                                         case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
@@ -208,8 +207,8 @@ namespace Client.ViewModel
                                             listOfBombedBullet.Add(obj.BombedBulletMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
-                                            listOfResource.Add(obj.ResourceMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
+                                            listOfGarbage.Add(obj.GarbageMessage);
                                             break;
 
                                         case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
@@ -226,10 +225,10 @@ namespace Client.ViewModel
                                 if (mapMessageExist)
                                 {
                                     countMap.Clear();
-                                    countMap.Add((int)MapPatchType.Resource, listOfResource.Count);
-                                    countMap.Add((int)MapPatchType.Factory, listOfFactory.Count);
-                                    countMap.Add((int)MapPatchType.Community, listOfCommunity.Count);
-                                    countMap.Add((int)MapPatchType.Fort, listOfFort.Count);
+                                    countMap.Add((int)MapPatchType.Garbage, listOfGarbage.Count);
+                                    countMap.Add((int)MapPatchType.RecycleBank, listOfRecycleBank.Count);
+                                    countMap.Add((int)MapPatchType.ChargeStation, listOfChargeStation.Count);
+                                    countMap.Add((int)MapPatchType.SignalTower, listOfSignalTower.Count);
                                     GetMap(mapMassage);
                                     mapMessageExist = false;
                                 }
@@ -241,24 +240,24 @@ namespace Client.ViewModel
                                 {
                                     switch (obj.MessageOfObjCase)
                                     {
-                                        case MessageOfObj.MessageOfObjOneofCase.ShipMessage:
-                                            listOfShip.Add(obj.ShipMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.SweeperMessage:
+                                            listOfSweeper.Add(obj.SweeperMessage);
                                             break;
 
                                         //case MessageOfObj.MessageOfObjOneofCase.BuildingMessage:
                                         //    listOfBuilding.Add(obj.BuildingMessage);
                                         //    break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
-                                            listOfFactory.Add(obj.FactoryMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
+                                            listOfRecycleBank.Add(obj.RecyclebankMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
-                                            listOfCommunity.Add(obj.CommunityMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
+                                            listOfChargeStation.Add(obj.ChargestationMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.FortMessage:
-                                            listOfFort.Add(obj.FortMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
+                                            listOfSignalTower.Add(obj.SignaltowerMessage);
                                             break;
 
                                         case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
@@ -269,8 +268,8 @@ namespace Client.ViewModel
                                             listOfBombedBullet.Add(obj.BombedBulletMessage);
                                             break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
-                                            listOfResource.Add(obj.ResourceMessage);
+                                        case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
+                                            listOfGarbage.Add(obj.GarbageMessage);
                                             break;
 
                                         case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
@@ -323,10 +322,10 @@ namespace Client.ViewModel
 
                         foreach (var data in listOfAll)
                         {
-                            RedPlayer.Money = data.RedTeamMoney;
+                            RedPlayer.Money = data.RedTeamEnergy;
                             RedPlayer.Hp = data.RedHomeHp;
                             RedPlayer.Score = data.RedTeamScore;
-                            BluePlayer.Money = data.BlueTeamMoney;
+                            BluePlayer.Money = data.BlueTeamEnergy;
                             BluePlayer.Hp = data.BlueHomeHp;
                             BluePlayer.Score = data.BlueTeamScore;
                         }
@@ -344,73 +343,73 @@ namespace Client.ViewModel
                             }
                         }
 
-                        foreach (var data in listOfShip)
+                        foreach (var data in listOfSweeper)
                         {
                             if (data.TeamId == (long)PlayerTeam.Red)
                             {
-                                Ship ship = new Ship
+                                Sweeper ship = new Sweeper
                                 {
-                                    Type = data.ShipType,
-                                    State = data.ShipState,
+                                    Type = data.SweeperType,
+                                    State = data.SweeperState,
                                     ArmorModule = data.ArmorType,
                                     ShieldModule = data.ShieldType,
                                     WeaponModule = data.WeaponType,
                                     ProducerModule = data.ProducerType,
                                     ConstuctorModule = data.ConstructorType,
-                                    Type_s = UtilInfo.ShipTypeNameDict[data.ShipType],
-                                    State_s = UtilInfo.ShipStateNameDict[data.ShipState],
-                                    ArmorModule_s = UtilInfo.ShipArmorTypeNameDict[data.ArmorType],
-                                    ShieldModule_s = UtilInfo.ShipShieldTypeNameDict[data.ShieldType],
-                                    WeaponModule_s = UtilInfo.ShipWeaponTypeNameDict[data.WeaponType],
-                                    ConstuctorModule_s = UtilInfo.ShipConstructorNameDict[data.ConstructorType],
-                                    ProducerModule_s = UtilInfo.ShipProducerTypeNameDict[data.ProducerType]
+                                    Type_s = UtilInfo.SweeperTypeNameDict[data.SweeperType],
+                                    State_s = UtilInfo.SweeperStateNameDict[data.SweeperState],
+                                    ArmorModule_s = UtilInfo.SweeperArmorTypeNameDict[data.ArmorType],
+                                    ShieldModule_s = UtilInfo.SweeperShieldTypeNameDict[data.ShieldType],
+                                    WeaponModule_s = UtilInfo.SweeperWeaponTypeNameDict[data.WeaponType],
+                                    ConstuctorModule_s = UtilInfo.SweeperConstructorNameDict[data.ConstructorType],
+                                    ProducerModule_s = UtilInfo.SweeperProducerTypeNameDict[data.ProducerType]
                                 };
-                                RedPlayer.Ships.Add(ship);
+                                RedPlayer.Sweepers.Add(ship);
                             }
                             else if (data.TeamId == (long)PlayerTeam.Blue)
                             {
-                                Ship ship = new Ship
+                                Sweeper ship = new Sweeper
                                 {
-                                    Type = data.ShipType,
-                                    State = data.ShipState,
+                                    Type = data.SweeperType,
+                                    State = data.SweeperState,
                                     ArmorModule = data.ArmorType,
                                     ShieldModule = data.ShieldType,
                                     WeaponModule = data.WeaponType,
                                     ProducerModule = data.ProducerType,
                                     ConstuctorModule = data.ConstructorType,
-                                    Type_s = UtilInfo.ShipTypeNameDict[data.ShipType],
-                                    State_s = UtilInfo.ShipStateNameDict[data.ShipState],
-                                    ArmorModule_s = UtilInfo.ShipArmorTypeNameDict[data.ArmorType],
-                                    ShieldModule_s = UtilInfo.ShipShieldTypeNameDict[data.ShieldType],
-                                    WeaponModule_s = UtilInfo.ShipWeaponTypeNameDict[data.WeaponType],
-                                    ConstuctorModule_s = UtilInfo.ShipConstructorNameDict[data.ConstructorType],
-                                    ProducerModule_s = UtilInfo.ShipProducerTypeNameDict[data.ProducerType]
+                                    Type_s = UtilInfo.SweeperTypeNameDict[data.SweeperType],
+                                    State_s = UtilInfo.SweeperStateNameDict[data.SweeperState],
+                                    ArmorModule_s = UtilInfo.SweeperArmorTypeNameDict[data.ArmorType],
+                                    ShieldModule_s = UtilInfo.SweeperShieldTypeNameDict[data.ShieldType],
+                                    WeaponModule_s = UtilInfo.SweeperWeaponTypeNameDict[data.WeaponType],
+                                    ConstuctorModule_s = UtilInfo.SweeperConstructorNameDict[data.ConstructorType],
+                                    ProducerModule_s = UtilInfo.SweeperProducerTypeNameDict[data.ProducerType]
                                 };
-                                BluePlayer.Ships.Add(ship);
+                                BluePlayer.Sweepers.Add(ship);
                             }
                         }
 
-                        foreach (var data in listOfCommunity)
+                        foreach (var data in listOfChargeStation)
                         {
-                            DrawCommunity(data);
+                            DrawChargeStation(data);
                         }
 
-                        foreach (var data in listOfFactory)
+                        foreach (var data in listOfRecycleBank)
                         {
-                            DrawFactory(data);
+                            DrawRecycleBank(data);
                         }
 
-                        foreach (var data in listOfWormhole)
+                        foreach (var data in listOfBridge)
                         {
                             DrawWormHole(data);
                         }
 
-                        foreach (var data in listOfFort)
+                        foreach (var data in listOfSignalTower)
                         {
-                            DrawFort(data);
+                            DrawSignalTower(data);
                         }
 
-                        foreach (var data in listOfResource)
+                        foreach (var data in listOfGarbage)
                         {
                             DrawResource(data);
                         }
@@ -436,14 +435,14 @@ namespace Client.ViewModel
                 testcounter++;
                 if (testcounter % 3 == 0)
                 {
-                    Ship ship = new Ship
+                    Sweeper ship = new Sweeper
                     {
-                        Type_s = "CivilShip",
+                        Type_s = "CivilSweeper",
                         State_s = "Idle",
                         ArmorModule_s = "LightArmor"
                     };
-                    RedPlayer.Ships.Add(ship);
-                    BluePlayer.Ships.Add(ship);
+                    RedPlayer.Sweepers.Add(ship);
+                    BluePlayer.Sweepers.Add(ship);
                 }
             }
             DrawHome(new MessageOfHome
@@ -454,7 +453,7 @@ namespace Client.ViewModel
                 TeamId = 1
             });
 
-            //DrawFactory(new MessageOfRecycleBank
+            //DrawRecycleBank(new MessageOfRecycleBank
             //{
             //    X = 11,
             //    Y = 11,
@@ -486,13 +485,13 @@ namespace Client.ViewModel
             RedPlayer.Hp = 100;
             RedPlayer.Money = 1000;
 
-            Ship ship = new Ship
+            Sweeper ship = new Sweeper
             {
-                Type_s = "CivilShip",
+                Type_s = "CivilSweeper",
                 State_s = "Idle",
                 ArmorModule_s = "LightArmor"
             };
-            RedPlayer.Ships.Add(ship);
+            RedPlayer.Sweepers.Add(ship);
 
             WormHole1HP = 100;
             WormHole2HP = 100;

@@ -1,4 +1,4 @@
-using Client.Model;
+﻿using Client.Model;
 using Protobuf;
 using System;
 using System.Collections.Generic;
@@ -29,35 +29,35 @@ namespace Client.ViewModel
     {
 
         private List<MessageOfAll> listOfAll;
-        private List<MessageOfShip> listOfShip;
+        private List<MessageOfSweeper> listOfSweeper;
         private List<MessageOfBullet> listOfBullet;
         private List<MessageOfBombedBullet> listOfBombedBullet;
-        private List<MessageOfFactory> listOfFactory;
-        private List<MessageOfCommunity> listOfCommunity;
-        private List<MessageOfFort> listOfFort;
-        private List<MessageOfWormhole> listOfWormhole;
-        private List<MessageOfResource> listOfResource;
+        private List<MessageOfRecycleBank> listOfRecycleBank;
+        private List<MessageOfSignalTower> listOfSignalTower;
+        private List<MessageOfChargeStation> listOfChargeStation;
+        private List<MessageOfBridge> listOfBridge;
+        private List<MessageOfGarbage> listOfGarbage;
         private List<MessageOfHome> listOfHome;
 
         /* initiate the Lists of Objects and CountList */
         private void InitiateObjects()
         {
             listOfAll = new List<MessageOfAll>();
-            listOfShip = new List<MessageOfShip>(); ;
+            listOfSweeper = new List<MessageOfSweeper>(); ;
             listOfBullet = new List<MessageOfBullet>();
             listOfBombedBullet = new List<MessageOfBombedBullet>();
-            listOfFactory = new List<MessageOfFactory>();
-            listOfCommunity = new List<MessageOfCommunity>();
-            listOfFort = new List<MessageOfFort>();
-            listOfResource = new List<MessageOfResource>();
+            listOfRecycleBank = new List<MessageOfRecycleBank>();
+            listOfChargeStation = new List<MessageOfChargeStation>();
+            listOfSignalTower = new List<MessageOfSignalTower>();
+            listOfGarbage = new List<MessageOfGarbage>();
             listOfHome = new List<MessageOfHome>();
-            listOfWormhole = new List<MessageOfWormhole>();
+            listOfBridge = new List<MessageOfBridge>();
             countMap = new Dictionary<int, int>();
         }
         private (int x, int y)[] resourcePositionIndex;
-        private (int x, int y)[] factoryPositionIndex;
-        private (int x, int y)[] communityPositionIndex;
-        private (int x, int y)[] fortPositionIndex;
+        private (int x, int y)[] RecycleBankPositionIndex;
+        private (int x, int y)[] ChargeStationPositionIndex;
+        private (int x, int y)[] SignalTowerPositionIndex;
         private (int x, int y)[] wormHolePositionIndex;
         private Dictionary<int, int> countMap;
 
@@ -104,7 +104,7 @@ namespace Client.ViewModel
                 BombRange = 5
             }, canvas);
 
-            DrawShip(new MessageOfShip
+            DrawSweeper(new MessageOfSweeper
             {
                 X = 10,
                 Y = 11,
@@ -120,7 +120,7 @@ namespace Client.ViewModel
                 BombRange = 5
             }, canvas);
 
-            DrawShip(new MessageOfShip
+            DrawSweeper(new MessageOfSweeper
             {
                 X = 10,
                 Y = 12,
@@ -136,7 +136,7 @@ namespace Client.ViewModel
                 BombRange = 5
             });
 
-            listOfShip.Add(new MessageOfShip
+            listOfSweeper.Add(new MessageOfSweeper
             {
                 X = 10,
                 Y = 12,
@@ -154,9 +154,9 @@ namespace Client.ViewModel
 
             if (listOfBullet.Count > 0)
             {
-                foreach (var data in listOfShip)
+                foreach (var data in listOfSweeper)
                 {
-                    DrawShip(data, canvas);
+                    DrawSweeper(data, canvas);
                 }
             }
         }
@@ -166,12 +166,12 @@ namespace Client.ViewModel
             {MapPatchType.RedHome, Colors.Red},
             {MapPatchType.BlueHome, Colors.Blue},
             {MapPatchType.Ruin, Colors.Black},
-            {MapPatchType.Shadow, Colors.Gray},
-            {MapPatchType.Asteroid, Colors.Brown},
-            {MapPatchType.Resource, Colors.Yellow},
-            {MapPatchType.Factory, Colors.Orange},
-            {MapPatchType.Community, Colors.Chocolate},
-            {MapPatchType.Fort, Colors.Azure},
+            {MapPatchType.Grass, Colors.Gray},
+            {MapPatchType.River, Colors.Brown},
+            {MapPatchType.Garbage, Colors.Yellow},
+            {MapPatchType.RecycleBank, Colors.Orange},
+            {MapPatchType.ChargeStation, Colors.Chocolate},
+            {MapPatchType.SignalTower, Colors.Azure},
             {MapPatchType.WormHole, Colors.Purple},
             {MapPatchType.Null, Colors.White}
         };
@@ -190,18 +190,18 @@ namespace Client.ViewModel
                             MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Blue; break; //Blue Home
                         case MapPatchType.Ruin:
                             MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Black; break; // Ruin
-                        case MapPatchType.Shadow:
-                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Gray; break; // Shadow
-                        case MapPatchType.Asteroid:
-                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Brown; break; // Asteroid
-                        case MapPatchType.Resource:
+                        case MapPatchType.Grass:
+                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Gray; break; // Grass
+                        case MapPatchType.River:
+                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Brown; break; // River
+                        case MapPatchType.Garbage:
                             MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Yellow; break; //Resource
-                        case MapPatchType.Factory:
-                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Orange; break; //Factory
-                        case MapPatchType.Community:
-                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Chocolate; break; //Community
-                        case MapPatchType.Fort:
-                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Azure; break; //Fort
+                        case MapPatchType.RecycleBank:
+                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Orange; break; //RecycleBank
+                        case MapPatchType.ChargeStation:
+                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Chocolate; break; //ChargeStation
+                        case MapPatchType.SignalTower:
+                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Azure; break; //SignalTower
                         default:
                             break;
                     }
@@ -213,18 +213,18 @@ namespace Client.ViewModel
         //{
         //    //resourceArray = new Label[countMap[(int)MapPatchType.Resource]];
         //    resourcePositionIndex = new (int x, int y)[countMap[(int)MapPatchType.Resource]];
-        //    //factoryArray = new Label[countMap[(int)MapPatchType.Factory]];
-        //    factoryPositionIndex = new (int x, int y)[countMap[(int)MapPatchType.Factory]];
-        //    //communityArray = new Label[countMap[(int)MapPatchType.Community]];
-        //    communityPositionIndex = new (int x, int y)[countMap[(int)MapPatchType.Community]];
-        //    //fortArray = new Label[countMap[(int)MapPatchType.Fort]];
-        //    fortPositionIndex = new (int x, int y)[countMap[(int)MapPatchType.Fort]];
+        //    //RecycleBankArray = new Label[countMap[(int)MapPatchType.RecycleBank]];
+        //    RecycleBankPositionIndex = new (int x, int y)[countMap[(int)MapPatchType.RecycleBank]];
+        //    //ChargeStationArray = new Label[countMap[(int)MapPatchType.ChargeStation]];
+        //    ChargeStationPositionIndex = new (int x, int y)[countMap[(int)MapPatchType.ChargeStation]];
+        //    //SignalTowerArray = new Label[countMap[(int)MapPatchType.SignalTower]];
+        //    SignalTowerPositionIndex = new (int x, int y)[countMap[(int)MapPatchType.SignalTower]];
 
 
         //    int counterOfResource = 0;
-        //    int counterOfFactory = 0;
-        //    int counterOfCommunity = 0;
-        //    int counterOfFort = 0;
+        //    int counterOfRecycleBank = 0;
+        //    int counterOfChargeStation = 0;
+        //    int counterOfSignalTower = 0;
 
 
         //    int[,] todrawMap;
@@ -242,10 +242,10 @@ namespace Client.ViewModel
         //                    mapPatches[i, j].PatchColor = Colors.Blue; break; //Blue Home
         //                case MapPatchType.Ruin:
         //                    mapPatches[i, j].PatchColor = Colors.Black; break; // Ruin
-        //                case MapPatchType.Shadow:
-        //                    mapPatches[i, j].PatchColor = Colors.Gray; break; // Shadow
-        //                case MapPatchType.Asteroid:
-        //                    mapPatches[i, j].PatchColor = Colors.Brown; break; // Asteroid
+        //                case MapPatchType.Grass:
+        //                    mapPatches[i, j].PatchColor = Colors.Gray; break; // Grass
+        //                case MapPatchType.River:
+        //                    mapPatches[i, j].PatchColor = Colors.Brown; break; // River
         //                case MapPatchType.Resource:
         //                    mapPatches[i, j].PatchColor = Colors.Yellow; //Resource
         //                    resourcePositionIndex[counterOfResource] = (i, j);
@@ -265,11 +265,11 @@ namespace Client.ViewModel
         //                    counterOfResource++;
         //                    break;
 
-        //                case MapPatchType.Factory:
-        //                    mapPatches[i, j].PatchColor = Colors.Orange; //Factory
-        //                    factoryPositionIndex[counterOfFactory] = (i, j);
+        //                case MapPatchType.RecycleBank:
+        //                    mapPatches[i, j].PatchColor = Colors.Orange; //RecycleBank
+        //                    RecycleBankPositionIndex[counterOfRecycleBank] = (i, j);
         //                    mapPatches[i, j].Text = "F";
-        //                    //factoryArray[counterOfFactory] = new Label()
+        //                    //RecycleBankArray[counterOfRecycleBank] = new Label()
         //                    //{
         //                    //    FontSize = unitFontSize,
         //                    //    WidthRequest = unitWidth,
@@ -281,14 +281,14 @@ namespace Client.ViewModel
         //                    //    VerticalTextAlignment = TextAlignment.Center,
         //                    //    BackgroundColor = Colors.Transparent
         //                    //};
-        //                    counterOfFactory++;
+        //                    counterOfRecycleBank++;
         //                    break;
 
-        //                case MapPatchType.Community:
-        //                    mapPatches[i, j].PatchColor = Colors.Chocolate; //Community
-        //                    communityPositionIndex[counterOfCommunity] = (i, j);
+        //                case MapPatchType.ChargeStation:
+        //                    mapPatches[i, j].PatchColor = Colors.Chocolate; //ChargeStation
+        //                    ChargeStationPositionIndex[counterOfChargeStation] = (i, j);
         //                    mapPatches[i, j].Text = "C";
-        //                    //factoryArray[counterOfCommunity] = new Label()
+        //                    //RecycleBankArray[counterOfChargeStation] = new Label()
         //                    //{
         //                    //    FontSize = unitFontSize,
         //                    //    WidthRequest = unitWidth,
@@ -300,14 +300,14 @@ namespace Client.ViewModel
         //                    //    VerticalTextAlignment = TextAlignment.Center,
         //                    //    BackgroundColor = Colors.Transparent
         //                    //};
-        //                    counterOfCommunity++;
+        //                    counterOfChargeStation++;
         //                    break;
 
-        //                case MapPatchType.Fort:
-        //                    mapPatches[i, j].PatchColor = Colors.Azure; //Fort
-        //                    fortPositionIndex[counterOfFort] = (i, j);
+        //                case MapPatchType.SignalTower:
+        //                    mapPatches[i, j].PatchColor = Colors.Azure; //SignalTower
+        //                    SignalTowerPositionIndex[counterOfSignalTower] = (i, j);
         //                    mapPatches[i, j].Text = "Fo";
-        //                    //fortArray[counterOfFort] = new Label()
+        //                    //SignalTowerArray[counterOfSignalTower] = new Label()
         //                    //{
         //                    //    FontSize = unitFontSize,
         //                    //    WidthRequest = unitWidth,
@@ -319,7 +319,7 @@ namespace Client.ViewModel
         //                    //    VerticalTextAlignment = TextAlignment.Center,
         //                    //    BackgroundColor = Colors.Transparent
         //                    //};
-        //                    counterOfFort++;
+        //                    counterOfSignalTower++;
         //                    break;
 
         //                default:
@@ -344,11 +344,11 @@ namespace Client.ViewModel
         //    return -1;
         //}
 
-        //private int FindIndexOfFactory(MessageOfFactory obj)
+        //private int FindIndexOfRecycleBank(MessageOfRecycleBank obj)
         //{
-        //    for (int i = 0; i < listOfFactory.Count; i++)
+        //    for (int i = 0; i < listOfRecycleBank.Count; i++)
         //    {
-        //        if (factoryPositionIndex[i].x == obj.X && factoryPositionIndex[i].y == obj.Y)
+        //        if (RecycleBankPositionIndex[i].x == obj.X && RecycleBankPositionIndex[i].y == obj.Y)
         //        {
         //            return i;
         //        }
@@ -356,11 +356,11 @@ namespace Client.ViewModel
         //    return -1;
         //}
 
-        //private int FindIndexOfCommunity(MessageOfCommunity obj)
+        //private int FindIndexOfChargeStation(MessageOfChargeStation obj)
         //{
-        //    for (int i = 0; i < listOfCommunity.Count; i++)
+        //    for (int i = 0; i < listOfChargeStation.Count; i++)
         //    {
-        //        if (communityPositionIndex[i].x == obj.X && communityPositionIndex[i].y == obj.Y)
+        //        if (ChargeStationPositionIndex[i].x == obj.X && ChargeStationPositionIndex[i].y == obj.Y)
         //        {
         //            return i;
         //        }
@@ -368,11 +368,11 @@ namespace Client.ViewModel
         //    return -1;
         //}
 
-        //private int FindIndexOfFort(MessageOfFort obj)
+        //private int FindIndexOfSignalTower(MessgaeOfSignalTower obj)
         //{
-        //    for (int i = 0; i < listOfFort.Count; i++)
+        //    for (int i = 0; i < listOfSignalTower.Count; i++)
         //    {
-        //        if (fortPositionIndex[i].x == obj.X && fortPositionIndex[i].y == obj.Y)
+        //        if (SignalTowerPositionIndex[i].x == obj.X && SignalTowerPositionIndex[i].y == obj.Y)
         //        {
         //            return i;
         //        }
@@ -409,7 +409,7 @@ namespace Client.ViewModel
             }
         }
 
-        private void DrawFactory(MessageOfFactory data)
+        private void DrawRecycleBank(MessageOfRecycleBank data)
         {
             int x = data.X;
             int y = data.Y;
@@ -420,12 +420,12 @@ namespace Client.ViewModel
             switch (team_id)
             {
                 case (long)PlayerTeam.Red:
-                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Factory];
+                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.RecycleBank];
                     MapPatchesList[index].TextColor = Colors.Red;
                     break;
 
                 case (long)PlayerTeam.Blue:
-                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Factory];
+                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.RecycleBank];
                     MapPatchesList[index].TextColor = Colors.Blue;
                     break;
 
@@ -436,7 +436,7 @@ namespace Client.ViewModel
             }
         }
 
-        private void DrawCommunity(MessageOfCommunity data)
+        private void DrawChargeStation(MessageOfChargeStation data)
         {
             int x = data.X;
             int y = data.Y;
@@ -447,12 +447,12 @@ namespace Client.ViewModel
             switch (team_id)
             {
                 case (long)PlayerTeam.Red:
-                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Community];
+                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.ChargeStation];
                     MapPatchesList[index].TextColor = Colors.Red;
                     break;
 
                 case (long)PlayerTeam.Blue:
-                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Community];
+                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.ChargeStation];
                     MapPatchesList[index].TextColor = Colors.Blue;
                     break;
 
@@ -463,7 +463,7 @@ namespace Client.ViewModel
             }
         }
 
-        private void DrawFort(MessageOfFort data)
+        private void DrawSignalTower(MessageOfSignalTower data)
         {
             int x = data.X;
             int y = data.Y;
@@ -474,12 +474,12 @@ namespace Client.ViewModel
             switch (team_id)
             {
                 case (long)PlayerTeam.Red:
-                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Fort];
+                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.SignalTower];
                     MapPatchesList[index].TextColor = Colors.Red;
                     break;
 
                 case (long)PlayerTeam.Blue:
-                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Fort];
+                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.SignalTower];
                     MapPatchesList[index].TextColor = Colors.Blue;
                     break;
 
@@ -490,7 +490,7 @@ namespace Client.ViewModel
             }
         }
 
-        private void DrawWormHole(MessageOfWormhole data)
+        private void DrawWormHole(MessageOfBridge data)
         {
             int x = data.X;
             int y = data.Y;
@@ -501,14 +501,14 @@ namespace Client.ViewModel
             MapPatchesList[index].TextColor = Colors.White;
         }
 
-        private void DrawResource(MessageOfResource data)
+        private void DrawResource(MessageOfGarbage data)
         {
             int x = data.X;
             int y = data.Y;
             int hp = data.Progress;
             int index = UtilFunctions.getIndex(x, y);
             MapPatchesList[index].Text = Convert.ToString(hp);
-            MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Resource];
+            MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Garbage];
             MapPatchesList[index].TextColor = Colors.White;
         }
 
@@ -541,7 +541,7 @@ namespace Client.ViewModel
             canvas.FillCircle(x, y, 2);
         }
 
-        private void DrawShip(MessageOfShip data, ICanvas canvas)
+        private void DrawSweeper(MessageOfSweeper data, ICanvas canvas)
         {
             PointF point = UtilFunctions.getMapCenter(data.X, data.Y);
             float x = point.X;

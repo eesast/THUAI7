@@ -82,7 +82,7 @@
                         <Label x:Name="RedMoney" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3" Text="{Binding RedPlayer.Money, StringFormat='💰总经济： {0}'}" Style="{StaticResource littleAttributes}" />
                     </Grid>
 
-                    <Grid x:Name="RedShipStatusAttributesGrid" Grid.Row="1">
+                    <Grid x:Name="RedSweeperStatusAttributesGrid" Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
@@ -93,19 +93,19 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
-                        <Label x:Name="RedShipItem" Grid.Row="1" Grid.Column="0" Text="单位👾" FontSize="Micro"/>
-                        <Label x:Name="RedShipMining" Grid.Row="1" Grid.Column="1" Text="采集模块" FontSize="Micro"/>
-                        <Label x:Name="RedShipBuild" Grid.Row="1" Grid.Column="2" Text="建造模块" FontSize="Micro"/>
-                        <Label x:Name="RedShipArmor" Grid.Row="1" Grid.Column="3" Text="装甲模块" FontSize="Micro"/>
-                        <Label x:Name="RedShipShield" Grid.Row="1" Grid.Column="4" Text="护盾模块" FontSize="Micro"/>
-                        <Label x:Name="RedShipAttack" Grid.Row="1" Grid.Column="5" Text="攻击模块" FontSize="Micro"/>
-                        <Label x:Name="RedShipState" Grid.Row="1" Grid.Column="6" Text="状态✨️" FontSize="Micro"/>
+                        <Label x:Name="RedSweeperItem" Grid.Row="1" Grid.Column="0" Text="单位👾" FontSize="Micro"/>
+                        <Label x:Name="RedSweeperMining" Grid.Row="1" Grid.Column="1" Text="采集模块" FontSize="Micro"/>
+                        <Label x:Name="RedSweeperBuild" Grid.Row="1" Grid.Column="2" Text="建造模块" FontSize="Micro"/>
+                        <Label x:Name="RedSweeperArmor" Grid.Row="1" Grid.Column="3" Text="装甲模块" FontSize="Micro"/>
+                        <Label x:Name="RedSweeperShield" Grid.Row="1" Grid.Column="4" Text="护盾模块" FontSize="Micro"/>
+                        <Label x:Name="RedSweeperAttack" Grid.Row="1" Grid.Column="5" Text="攻击模块" FontSize="Micro"/>
+                        <Label x:Name="RedSweeperState" Grid.Row="1" Grid.Column="6" Text="状态✨️" FontSize="Micro"/>
                     </Grid>
 
 
-                    <CollectionView ItemsSource="{Binding RedPlayer.Ships}" Grid.Row="2">
+                    <CollectionView ItemsSource="{Binding RedPlayer.Sweepers}" Grid.Row="2">
                         <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="model:Ship">
+                            <DataTemplate x:DataType="model:Sweeper">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
@@ -162,7 +162,7 @@
                         <Label x:Name="BlueMoney" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3" Text="{Binding BluePlayer.Money, StringFormat='💰总经济： {0}'}" Style="{StaticResource littleAttributes}" />
                     </Grid>
 
-                    <Grid x:Name="BlueShipStatusAttributesGrid" Grid.Row="1">
+                    <Grid x:Name="BlueSweeperStatusAttributesGrid" Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
@@ -173,18 +173,18 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
-                        <Label x:Name="BlueShipItem" Grid.Row="1" Grid.Column="0" Text="单位👾" FontSize="Micro"/>
-                        <Label x:Name="BlueShipMining" Grid.Row="1" Grid.Column="1" Text="采集模块" FontSize="Micro"/>
-                        <Label x:Name="BlueShipBuild" Grid.Row="1" Grid.Column="2" Text="建造模块" FontSize="Micro"/>
-                        <Label x:Name="BlueShipArmor" Grid.Row="1" Grid.Column="3" Text="装甲模块" FontSize="Micro"/>
-                        <Label x:Name="BlueShipShield" Grid.Row="1" Grid.Column="4" Text="护盾模块" FontSize="Micro"/>
-                        <Label x:Name="BlueShipAttack" Grid.Row="1" Grid.Column="5" Text="攻击模块" FontSize="Micro"/>
-                        <Label x:Name="BlueShipState" Grid.Row="1" Grid.Column="6" Text="状态✨️" FontSize="Micro"/>
+                        <Label x:Name="BlueSweeperItem" Grid.Row="1" Grid.Column="0" Text="单位👾" FontSize="Micro"/>
+                        <Label x:Name="BlueSweeperMining" Grid.Row="1" Grid.Column="1" Text="采集模块" FontSize="Micro"/>
+                        <Label x:Name="BlueSweeperBuild" Grid.Row="1" Grid.Column="2" Text="建造模块" FontSize="Micro"/>
+                        <Label x:Name="BlueSweeperArmor" Grid.Row="1" Grid.Column="3" Text="装甲模块" FontSize="Micro"/>
+                        <Label x:Name="BlueSweeperShield" Grid.Row="1" Grid.Column="4" Text="护盾模块" FontSize="Micro"/>
+                        <Label x:Name="BlueSweeperAttack" Grid.Row="1" Grid.Column="5" Text="攻击模块" FontSize="Micro"/>
+                        <Label x:Name="BlueSweeperState" Grid.Row="1" Grid.Column="6" Text="状态✨️" FontSize="Micro"/>
                     </Grid>
 
-                    <CollectionView ItemsSource="{Binding BluePlayer.Ships}" Grid.Row="2">
+                    <CollectionView ItemsSource="{Binding BluePlayer.Sweepers}" Grid.Row="2">
                         <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="model:Ship">
+                            <DataTemplate x:DataType="model:Sweeper">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />

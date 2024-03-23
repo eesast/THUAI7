@@ -51,12 +51,12 @@ namespace Client.Model
             }
         }
 
-        private ObservableCollection<Ship> ships;
-        public ObservableCollection<Ship> Ships
+        private ObservableCollection<Sweeper> ships;
+        public ObservableCollection<Sweeper> Sweepers
         {
             get
             {
-                return ships ?? (ships = new ObservableCollection<Ship>());
+                return ships ?? (ships = new ObservableCollection<Sweeper>());
             }
             set
             {

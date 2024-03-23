@@ -14,7 +14,7 @@ namespace Client
         };
         PlayerRole myRole;
         private double lengthOfHpSlide = 240;
-        List<ShipLabel> shipLabels = new List<ShipLabel>();
+        List<SweeperLabel> shipLabels = new List<SweeperLabel>();
         public PlayerStatusBar(Grid parent, int Row, int Column, int role)
         {
             InitializeComponent();
@@ -30,11 +30,11 @@ namespace Client
             parent.Children.Add(this);
             parent.SetColumn(this, Column);
             parent.SetRow(this, Row);
-            shipLabels.Add(new ShipLabel());
-            shipLabels.Add(new ShipLabel());
-            shipLabels.Add(new ShipLabel());
+            shipLabels.Add(new SweeperLabel());
+            shipLabels.Add(new SweeperLabel());
+            shipLabels.Add(new SweeperLabel());
             DrawSelfInfo();
-            DrawShipTable();
+            DrawSweeperTable();
         }
 
         private void DrawSelfInfo()
@@ -54,7 +54,7 @@ namespace Client
             }
         }
 
-        private void DrawShipTable()
+        private void DrawSweeperTable()
         {
             for (int shipCounter = 0; shipCounter < shipLabels.Count; shipCounter++)
             {
@@ -73,32 +73,32 @@ namespace Client
                 shipLabels[shipCounter].shipStatusGrid.SetRow(shipLabels[shipCounter].status, 0);
                 shipLabels[shipCounter].shipStatusGrid.SetRow(shipLabels[shipCounter].hpSlide, 1);
 
-                ShipAllAttributesGrid.Children.Add(shipLabels[shipCounter].name);
-                ShipAllAttributesGrid.Children.Add(shipLabels[shipCounter].producer);
-                ShipAllAttributesGrid.Children.Add(shipLabels[shipCounter].constructor);
-                ShipAllAttributesGrid.Children.Add(shipLabels[shipCounter].armor);
-                ShipAllAttributesGrid.Children.Add(shipLabels[shipCounter].shield);
-                ShipAllAttributesGrid.Children.Add(shipLabels[shipCounter].weapon);
-                ShipAllAttributesGrid.Children.Add(shipLabels[shipCounter].shipStatusGrid);
-                //ShipAllAttributesGrid.Children.Add(shipLabels[shipCounter].status);
+                SweeperAllAttributesGrid.Children.Add(shipLabels[shipCounter].name);
+                SweeperAllAttributesGrid.Children.Add(shipLabels[shipCounter].producer);
+                SweeperAllAttributesGrid.Children.Add(shipLabels[shipCounter].constructor);
+                SweeperAllAttributesGrid.Children.Add(shipLabels[shipCounter].armor);
+                SweeperAllAttributesGrid.Children.Add(shipLabels[shipCounter].shield);
+                SweeperAllAttributesGrid.Children.Add(shipLabels[shipCounter].weapon);
+                SweeperAllAttributesGrid.Children.Add(shipLabels[shipCounter].shipStatusGrid);
+                //SweeperAllAttributesGrid.Children.Add(shipLabels[shipCounter].status);
 
-                ShipAllAttributesGrid.SetRow(shipLabels[shipCounter].name, shipCounter);
-                ShipAllAttributesGrid.SetRow(shipLabels[shipCounter].producer, shipCounter);
-                ShipAllAttributesGrid.SetRow(shipLabels[shipCounter].constructor, shipCounter);
-                ShipAllAttributesGrid.SetRow(shipLabels[shipCounter].armor, shipCounter);
-                ShipAllAttributesGrid.SetRow(shipLabels[shipCounter].shield, shipCounter);
-                ShipAllAttributesGrid.SetRow(shipLabels[shipCounter].weapon, shipCounter);
-                ShipAllAttributesGrid.SetRow(shipLabels[shipCounter].shipStatusGrid, shipCounter);
-                //ShipAllAttributesGrid.SetRow(shipLabels[shipCounter].status, shipCounter);
+                SweeperAllAttributesGrid.SetRow(shipLabels[shipCounter].name, shipCounter);
+                SweeperAllAttributesGrid.SetRow(shipLabels[shipCounter].producer, shipCounter);
+                SweeperAllAttributesGrid.SetRow(shipLabels[shipCounter].constructor, shipCounter);
+                SweeperAllAttributesGrid.SetRow(shipLabels[shipCounter].armor, shipCounter);
+                SweeperAllAttributesGrid.SetRow(shipLabels[shipCounter].shield, shipCounter);
+                SweeperAllAttributesGrid.SetRow(shipLabels[shipCounter].weapon, shipCounter);
+                SweeperAllAttributesGrid.SetRow(shipLabels[shipCounter].shipStatusGrid, shipCounter);
+                //SweeperAllAttributesGrid.SetRow(shipLabels[shipCounter].status, shipCounter);
 
-                ShipAllAttributesGrid.SetColumn(shipLabels[shipCounter].name, 0);
-                ShipAllAttributesGrid.SetColumn(shipLabels[shipCounter].producer, 1);
-                ShipAllAttributesGrid.SetColumn(shipLabels[shipCounter].constructor, 2);
-                ShipAllAttributesGrid.SetColumn(shipLabels[shipCounter].armor, 3);
-                ShipAllAttributesGrid.SetColumn(shipLabels[shipCounter].shield, 4);
-                ShipAllAttributesGrid.SetColumn(shipLabels[shipCounter].weapon, 5);
-                ShipAllAttributesGrid.SetColumn(shipLabels[shipCounter].shipStatusGrid, 6);
-                //ShipAllAttributesGrid.SetColumn(shipLabels[shipCounter].status, 6);
+                SweeperAllAttributesGrid.SetColumn(shipLabels[shipCounter].name, 0);
+                SweeperAllAttributesGrid.SetColumn(shipLabels[shipCounter].producer, 1);
+                SweeperAllAttributesGrid.SetColumn(shipLabels[shipCounter].constructor, 2);
+                SweeperAllAttributesGrid.SetColumn(shipLabels[shipCounter].armor, 3);
+                SweeperAllAttributesGrid.SetColumn(shipLabels[shipCounter].shield, 4);
+                SweeperAllAttributesGrid.SetColumn(shipLabels[shipCounter].weapon, 5);
+                SweeperAllAttributesGrid.SetColumn(shipLabels[shipCounter].shipStatusGrid, 6);
+                //SweeperAllAttributesGrid.SetColumn(shipLabels[shipCounter].status, 6);
             }
         }
 
@@ -112,11 +112,11 @@ namespace Client
             }
         }
 
-        public void SetShipValue(MessageOfSweeper ship)
+        public void SetSweeperValue(MessageOfSweeper ship)
         {
             if (ship.TeamId == (long)PlayerTeam.Red && myRole == PlayerRole.Red || ship.TeamId == (long)PlayerTeam.Blue && myRole == PlayerRole.Blue)
             {
-                ShipLabel shipLabel = new ShipLabel();
+                SweeperLabel shipLabel = new SweeperLabel();
                 shipLabel.name.Text = ship.SweeperType.ToString() + ship.PlayerId.ToString();
                 shipLabel.producer.Text = ship.ProducerType.ToString();
                 shipLabel.armor.Text = ship.ArmorType.ToString();
@@ -131,14 +131,14 @@ namespace Client
         public void SlideLengthSet()
         {
             UtilFunctions.SlideLengthSet(MyHpSlide, ref haveSetSlideLength, ref lengthOfHpSlide, PlayerRoleInfoGrid.Width);
-            foreach (ShipLabel shiplabel in shipLabels)
+            foreach (SweeperLabel shiplabel in shipLabels)
             {
-                UtilFunctions.SlideLengthSet(shiplabel.hpSlide, ref haveSetSlideLength, ref shiplabel.lengthOfShipHpSlide, shiplabel.shipStatusGrid.Width);
+                UtilFunctions.SlideLengthSet(shiplabel.hpSlide, ref haveSetSlideLength, ref shiplabel.lengthOfSweeperHpSlide, shiplabel.shipStatusGrid.Width);
             }
             haveSetSlideLength = true;
         }
     }
-    public class ShipLabel
+    public class SweeperLabel
     {
         public Label name = new Label() { Text = "name" };
         public Label producer = new Label() { Text = "producer" };
@@ -147,7 +147,7 @@ namespace Client
         public Label shield = new Label() { Text = "shield" };
         public Label weapon = new Label() { Text = "weapon" };
         public Label status = new Label() { Text = "IDLE" };
-        public double lengthOfShipHpSlide = 80;
+        public double lengthOfSweeperHpSlide = 80;
         public BoxView hpSlide = new BoxView() { Color = Colors.Red, WidthRequest = 80, HeightRequest = 3, HorizontalOptions = LayoutOptions.Start, VerticalOptions = LayoutOptions.End };
         public Grid shipStatusGrid = new Grid();
     };
