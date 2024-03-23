@@ -7,7 +7,23 @@ using ITimer = Preparation.Interface.ITimer;
 
 namespace GameEngine
 {
-    public class MoveEngine
+    /// <summary>
+    /// Constrctor
+    /// </summary>
+    /// <param name="gameMap">游戏地图</param>
+    /// <param name="OnCollision">
+    /// <para>发生碰撞时要做的事情</para>
+    /// <para>- 第一个参数为移动的物体</para>
+    /// <para>- 第二个参数为撞到的物体</para>
+    /// <para>- 第三个参数为移动的位移向量</para>
+    /// <para>返回值见AfterCollision的定义</para>
+    /// </param>
+    /// <param name="EndMove">结束碰撞时要做的事情</param>
+    public class MoveEngine(
+        IMap gameMap,
+        Func<IMovable, IGameObj, XY, MoveEngine.AfterCollision> OnCollision,
+        Action<IMovable> EndMove
+        )
     {
         /// <summary>
         /// 碰撞结束后要做的事情
@@ -19,33 +35,16 @@ namespace GameEngine
             Destroyed = 2       // 物体已经毁坏
         }
 
-        private readonly ITimer gameTimer;
-        private readonly Action<IMovable> EndMove;
+        private readonly ITimer gameTimer = gameMap.Timer;
+        private readonly Action<IMovable> EndMove = EndMove;
 
         public IGameObj? CheckCollision(IMovable obj, XY Pos)
         {
             return collisionChecker.CheckCollision(obj, Pos);
         }
 
-        private readonly CollisionChecker collisionChecker;
-        private readonly Func<IMovable, IGameObj, XY, AfterCollision> OnCollision;
-        /// <summary>
-        /// Constrctor
-        /// </summary>
-        /// <param name="gameMap">游戏地图</param>
-        /// <param name="OnCollision">发生碰撞时要做的事情，第一个参数为移动的物体，第二个参数为撞到的物体，第三个参数为移动的位移向量，返回值见AfterCollision的定义</param>
-        /// <param name="EndMove">结束碰撞时要做的事情</param>
-        public MoveEngine(
-            IMap gameMap,
-            Func<IMovable, IGameObj, XY, AfterCollision> OnCollision,
-            Action<IMovable> EndMove
-        )
-        {
-            this.gameTimer = gameMap.Timer;
-            this.EndMove = EndMove;
-            this.OnCollision = OnCollision;
-            this.collisionChecker = new CollisionChecker(gameMap);
-        }
+        private readonly CollisionChecker collisionChecker = new(gameMap);
+        private readonly Func<IMovable, IGameObj, XY, AfterCollision> OnCollision = OnCollision;
 
         /// <summary>
         /// 在无碰撞的前提下行走最远的距离
@@ -62,7 +61,7 @@ namespace GameEngine
                 // 尝试滑动
                 IGameObj? collisionObj = collisionChecker.CheckCollisionWhenMoving(obj, moveVec);
                 XY slideVec = new(0, 0);
-                switch (collisionObj.Shape)
+                switch (collisionObj?.Shape)
                 {
                     case ShapeType.Circle:
                         XY connectVec = collisionObj.Position - obj.Position;
@@ -80,6 +79,8 @@ namespace GameEngine
                         {
                             slideVec = new XY(moveVec.x * Math.Sign(collisionObj.Position.x - obj.Position.x), 0);
                         }
+                        break;
+                    default:
                         break;
                 }
                 double slideLen = collisionChecker.FindMax(obj, slideVec);
@@ -110,7 +111,7 @@ namespace GameEngine
                         flag = true;
                         break;
                     case AfterCollision.Destroyed:
-                        Debugger.Output(obj, " collide with " + collisionObj.ToString() + " and has been removed from the game.");
+                        Debugger.Output(obj, $"collide with {collisionObj} and has been removed from the game.");
                         return false;
                     case AfterCollision.MoveMax:
                         if (!MoveMax(obj, res, stateNum)) return false;
@@ -141,7 +142,7 @@ namespace GameEngine
                 {
                     double moveVecLength = 0.0;
                     XY res = new(direction, moveVecLength);
-                    double deltaLen = (double)0.0;  // 转向，并用deltaLen存储行走的误差
+                    double deltaLen = 0.0;  // 转向，并用deltaLen存储行走的误差
                     IGameObj? collisionObj = null;
                     bool isEnded = false;
 
@@ -159,7 +160,7 @@ namespace GameEngine
                                 flag = true;
                                 break;
                             case AfterCollision.Destroyed:
-                                Debugger.Output(obj, " collide with " + collisionObj.ToString() + " and has been removed from the game.");
+                                Debugger.Output(obj, $"collide with {collisionObj} and has been removed from the game.");
                                 isEnded = true;
                                 break;
                             case AfterCollision.MoveMax:
@@ -200,7 +201,6 @@ namespace GameEngine
                                 {
                                     if (b)
                                         Console.WriteLine("Fatal Error: The computer runs so slow that the object cannot finish moving during this time!!!!!!");
-
 #if DEBUG
                                     else
                                     {
@@ -242,7 +242,7 @@ namespace GameEngine
                                             flag = true;
                                             break;
                                         case AfterCollision.Destroyed:
-                                            Debugger.Output(obj, " collide with " + collisionObj.ToString() + " and has been removed from the game.");
+                                            Debugger.Output(obj, $"collide with {collisionObj} and has been removed from the game.");
                                             isEnded = true;
                                             break;
                                         case AfterCollision.MoveMax:

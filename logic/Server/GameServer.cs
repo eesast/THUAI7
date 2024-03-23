@@ -13,16 +13,16 @@ namespace Server
 {
     partial class GameServer : ServerBase
     {
-        private ConcurrentDictionary<long, (SemaphoreSlim, SemaphoreSlim)> semaDict = new();
+        private readonly ConcurrentDictionary<long, (SemaphoreSlim, SemaphoreSlim)> semaDict = new();
         // private object semaDictLock = new();
         protected readonly ArgumentOptions options;
-        private HttpSender? httpSender;
+        private readonly HttpSender? httpSender;
         private readonly object gameLock = new();
         private MessageToClient currentGameInfo = new();
-        private MessageOfObj currentMapMsg = new();
+        private readonly MessageOfObj currentMapMsg = new();
         private readonly object newsLock = new();
-        private List<MessageOfNews> currentNews = [];
-        private SemaphoreSlim endGameSem = new(0);
+        private readonly List<MessageOfNews> currentNews = [];
+        private readonly SemaphoreSlim endGameSem = new(0);
         protected readonly Game game;
         private readonly uint spectatorMinPlayerID = 2023;
         public int playerNum;
@@ -30,7 +30,7 @@ namespace Server
         protected long[][] communicationToGameID; // 通信用的ID映射到游戏内的ID，0指向队伍1，1指向队伍2，通信中0为大本营，1-5为船
         private readonly object messageToAllClientsLock = new();
         public static readonly long SendMessageToClientIntervalInMilliseconds = 50;
-        private MessageWriter? mwr = null;
+        private readonly MessageWriter? mwr = null;
         private readonly object spectatorJoinLock = new();
 
         public void StartGame()
@@ -96,13 +96,9 @@ namespace Server
             result.Add("RedTeam", score[0]);
             result.Add("BlueTeam", score[1]);
             JsonSerializer serializer = new();
-            using (StreamWriter sw = new(path))
-            {
-                using (JsonWriter writer = new JsonTextWriter(sw))
-                {
-                    serializer.Serialize(writer, result);
-                }
-            }
+            using StreamWriter sw = new(path);
+            using JsonTextWriter writer = new(sw);
+            serializer.Serialize(writer, result);
         }
 
         protected void SendGameResult(int[] scores, int mode)		// 天梯的 Server 给网站发消息记录比赛结果
@@ -115,7 +111,9 @@ namespace Server
             game.ClearAllLists();
             mwr?.Flush();
             if (options.ResultFileName != DefaultArgumentOptions.FileName)
-                SaveGameResult(options.ResultFileName.EndsWith(".json") ? options.ResultFileName : options.ResultFileName + ".json");
+                SaveGameResult(options.ResultFileName.EndsWith(".json")
+                             ? options.ResultFileName
+                             : options.ResultFileName + ".json");
             int[] scores = GetScore();
             SendGameResult(scores, options.Mode);
             endGameSem.Release();
@@ -140,6 +138,11 @@ namespace Server
                         foreach (GameObj gameObj in gameObjList.Cast<GameObj>())
                         {
                             MessageOfObj? msg = CopyInfo.Auto(gameObj, time);
+                            if (msg != null) currentGameInfo.ObjMessage.Add(msg);
+                        }
+                        foreach (Team team in game.TeamList)
+                        {
+                            MessageOfObj? msg = CopyInfo.Auto(team, time);
                             if (msg != null) currentGameInfo.ObjMessage.Add(msg);
                         }
                         lock (newsLock)
@@ -178,7 +181,7 @@ namespace Server
         private bool PlayerDeceased(int playerID)    //# 这里需要判断大本营deceased吗？
         {
             return game.GameMap.GameObjDict[GameObjType.Ship].Cast<Ship>().Find(
-                ship => ship.ShipID == playerID && ship.ShipState == ShipStateType.Deceased
+                ship => ship.PlayerID == playerID && ship.ShipState == ShipStateType.Deceased
                 ) != null;
         }
 
@@ -210,16 +213,9 @@ namespace Server
 
         private bool ValidPlayerID(long playerID)
         {
-            if ((0 <= playerID && playerID < options.ShipCount) || (options.MaxShipCount <= playerID && playerID < options.MaxShipCount + options.HomeCount))
+            if (playerID == 0 || (1 <= playerID && playerID <= options.ShipCount))
                 return true;
             return false;
-        }
-
-        private int PlayerIDToTeamID(long playerID)
-        {
-            if (0 <= playerID && playerID < options.MaxPlayerNumPerTeam) return 0;
-            if (options.MaxPlayerNumPerTeam <= playerID && playerID < options.MaxPlayerNumPerTeam * 2) return 1;
-            return -1;
         }
 
         private MessageOfAll GetMessageOfAll(int time)
@@ -255,7 +251,7 @@ namespace Server
         public GameServer(ArgumentOptions options)
         {
             this.options = options;
-            if (options.mapResource == DefaultArgumentOptions.MapResource)
+            if (options.MapResource == DefaultArgumentOptions.MapResource)
                 game = new(MapInfo.defaultMapStruct, options.TeamCount);
             else
             {
@@ -264,33 +260,31 @@ namespace Server
                 {
                     string? line;
                     int i = 0, j = 0;
-                    using (StreamReader sr = new(options.mapResource))
+                    using StreamReader sr = new(options.MapResource);
+                    while (!sr.EndOfStream && i < GameData.MapRows)
                     {
-                        while (!sr.EndOfStream && i < GameData.MapRows)
+                        if ((line = sr.ReadLine()) != null)
                         {
-                            if ((line = sr.ReadLine()) != null)
+                            string[] nums = line.Split(' ');
+                            foreach (string item in nums)
                             {
-                                string[] nums = line.Split(' ');
-                                foreach (string item in nums)
+                                if (item.Length > 1)//以兼容原方案
                                 {
-                                    if (item.Length > 1)//以兼容原方案
-                                    {
-                                        map[i, j] = (uint)int.Parse(item);
-                                    }
-                                    else
-                                    {
-                                        //2022-04-22 by LHR 十六进制编码地图方案（防止地图编辑员瞎眼x
-                                        map[i, j] = (uint)MapEncoder.Hex2Dec(char.Parse(item));
-                                    }
-                                    j++;
-                                    if (j >= GameData.MapCols)
-                                    {
-                                        j = 0;
-                                        break;
-                                    }
+                                    map[i, j] = (uint)int.Parse(item);
                                 }
-                                i++;
+                                else
+                                {
+                                    //2022-04-22 by LHR 十六进制编码地图方案（防止地图编辑员瞎眼x
+                                    map[i, j] = (uint)MapEncoder.Hex2Dec(char.Parse(item));
+                                }
+                                j++;
+                                if (j >= GameData.MapCols)
+                                {
+                                    j = 0;
+                                    break;
+                                }
                             }
+                            i++;
                         }
                     }
                 }
@@ -309,18 +303,15 @@ namespace Server
             communicationToGameID = new long[TeamCount][];
             for (int i = 0; i < TeamCount; i++)
             {
-                communicationToGameID[i] = new long[options.MaxShipCount + options.HomeCount];
+                communicationToGameID[i] = new long[options.ShipCount + options.HomeCount];
             }
             //创建server时先设定待加入对象都是invalid
             for (int team = 0; team < TeamCount; team++)
             {
-                for (int i = 0; i < options.MaxShipCount; i++)
+                communicationToGameID[team][0] = GameObj.invalidID; // team
+                for (int i = 1; i <= options.ShipCount; i++)
                 {
-                    communicationToGameID[team][i] = GameObj.invalidID;
-                }
-                for (int i = options.MaxShipCount; i < options.MaxShipCount + options.HomeCount; i++)
-                {
-                    communicationToGameID[team][i] = GameObj.invalidID;
+                    communicationToGameID[team][i] = GameObj.invalidID; //sweeper
                 }
             }
 
@@ -328,7 +319,7 @@ namespace Server
             {
                 try
                 {
-                    mwr = new MessageWriter(options.FileName, options.TeamCount, options.ShipCount);
+                    mwr = new(options.FileName, options.TeamCount, options.ShipCount);
                 }
                 catch
                 {
@@ -338,7 +329,7 @@ namespace Server
 
             if (options.Url != DefaultArgumentOptions.Url && options.Token != DefaultArgumentOptions.Token)
             {
-                this.httpSender = new HttpSender(options.Url, options.Token);
+                httpSender = new(options.Url, options.Token);
             }
         }
     }

@@ -2,11 +2,8 @@
 
 namespace GameClass.GameObj;
 
-public abstract class Immovable : GameObj
+public abstract class Immovable(XY initPos, int initRadius, GameObjType initType)
+    : GameObj(initPos, initRadius, initType)
 {
     public override XY Position => position;
-    public Immovable(XY initPos, int initRadius, GameObjType initType)
-        : base(initPos, initRadius, initType)
-    {
-    }
 }

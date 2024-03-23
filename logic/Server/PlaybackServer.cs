@@ -9,15 +9,15 @@ namespace Server
     class PlaybackServer(ArgumentOptions options) : ServerBase
     {
         protected readonly ArgumentOptions options = options;
-        private int[] teamScore = new int[0];
-        private ConcurrentDictionary<long, (SemaphoreSlim, SemaphoreSlim)> semaDict = new();
+        private long[] teamScore = [];
+        private readonly ConcurrentDictionary<long, (SemaphoreSlim, SemaphoreSlim)> semaDict = new();
         // private object semaDictLock = new();
         private MessageToClient? currentGameInfo = new();
         private MessageOfObj currentMapMsg = new();
-        private uint spectatorMinPlayerID = 2023;
+        private const uint spectatorMinPlayerID = 2023;
         // private List<uint> spectatorList = new List<uint>();
         public int TeamCount => options.TeamCount;
-        private object spectatorJoinLock = new();
+        private readonly object spectatorJoinLock = new();
         protected object spectatorLock = new();
         protected bool isSpectatorJoin = false;
         protected bool IsSpectatorJoin
@@ -35,7 +35,7 @@ namespace Server
             }
         }
         private bool IsGaming { get; set; } = true;
-        private int[] finalScore = new int[0];
+        private int[] finalScore = [];
         public int[] FinalScore
         {
             get
@@ -43,10 +43,12 @@ namespace Server
                 return finalScore;
             }
         }
-        public override int[] GetMoney() => new int[0];
+        public override int[] GetMoney() => [];
         public override int[] GetScore() => FinalScore;
 
-        public override async Task AddPlayer(PlayerMsg request, IServerStreamWriter<MessageToClient> responseStream, ServerCallContext context)
+        public override async Task AddPlayer(PlayerMsg request,
+                                             IServerStreamWriter<MessageToClient> responseStream,
+                                             ServerCallContext context)
         {
             Console.WriteLine($"AddPlayer: {request.PlayerId}");
             if (request.PlayerId >= spectatorMinPlayerID && options.NotAllowSpectator == false)
@@ -141,7 +143,7 @@ namespace Server
                     using (MessageReader mr = new(options.FileName))
                     {
                         Console.WriteLine("Parsing playback file...");
-                        teamScore = new int[mr.teamCount];
+                        teamScore = new long[mr.teamCount];
                         finalScore = new int[mr.teamCount];
                         int infoNo = 0;
                         object cursorLock = new();
@@ -207,117 +209,115 @@ namespace Server
                         options.PlaybackSpeed = Math.Max(0.25, Math.Min(4.0, options.PlaybackSpeed));
                         timeInterval = (int)Math.Round(timeInterval / options.PlaybackSpeed);
                     }
-                    using (MessageReader mr = new(options.FileName))
-                    {
-                        teamScore = new int[mr.teamCount];
-                        finalScore = new int[mr.teamCount];
-                        int infoNo = 0;
-                        object cursorLock = new();
-                        var msgCurTop = Console.CursorTop;
-                        var msgCurLeft = Console.CursorLeft;
-                        var frt = new FrameRateTaskExecutor<int>
-                        (
-                            loopCondition: () => true,
-                            loopToDo: () =>
-                            {
-                                MessageToClient? msg = null;
+                    using MessageReader mr = new(options.FileName);
+                    teamScore = new long[mr.teamCount];
+                    finalScore = new int[mr.teamCount];
+                    int infoNo = 0;
+                    object cursorLock = new();
+                    var msgCurTop = Console.CursorTop;
+                    var msgCurLeft = Console.CursorLeft;
+                    var frt = new FrameRateTaskExecutor<int>
+                    (
+                        loopCondition: () => true,
+                        loopToDo: () =>
+                        {
+                            MessageToClient? msg = null;
 
-                                msg = mr.ReadOne();
-                                if (msg == null)
-                                {
-                                    Console.WriteLine("The game doesn't come to an end because of timing up!");
-                                    IsGaming = false;
-                                    ReportGame(msg);
-                                    return false;
-                                }
+                            msg = mr.ReadOne();
+                            if (msg == null)
+                            {
+                                Console.WriteLine("The game doesn't come to an end because of timing up!");
+                                IsGaming = false;
                                 ReportGame(msg);
+                                return false;
+                            }
+                            ReportGame(msg);
+                            lock (cursorLock)
+                            {
+                                var curTop = Console.CursorTop;
+                                var curLeft = Console.CursorLeft;
+                                Console.SetCursorPosition(msgCurLeft, msgCurTop);
+                                Console.WriteLine($"Sending messages... Current message number: {infoNo}.");
+                                Console.SetCursorPosition(curLeft, curTop);
+                            }
+                            if (msg != null)
+                            {
+                                foreach (var item in msg.ObjMessage)
+                                {
+                                    if (item.TeamMessage != null)
+                                        teamScore[item.TeamMessage.TeamId] = item.TeamMessage.Score;
+
+                                }
+                            }
+
+                            ++infoNo;
+                            if (msg == null)
+                            {
+                                Console.WriteLine("No game information in this file!");
+                                IsGaming = false;
+                                ReportGame(msg);
+                                return false;
+                            }
+                            if (msg.GameState == GameState.GameEnd)
+                            {
+                                Console.WriteLine("Game over normally!");
+                                IsGaming = false;
+                                finalScore[0] = msg.AllMessage.BlueTeamScore;
+                                finalScore[1] = msg.AllMessage.RedTeamScore;
+                                ReportGame(msg);
+                                return false;
+                            }
+                            return true;
+                        },
+                        timeInterval: timeInterval,
+                        finallyReturn: () => 0
+                    )
+                    { AllowTimeExceed = true, MaxTolerantTimeExceedCount = 5 };
+
+                    Console.WriteLine("The server is well prepared! Please MAKE SURE that you have opened all the clients to watch the game!");
+                    Console.WriteLine("If ALL clients have opened, press any key to start.");
+                    Console.ReadKey();
+
+                    new Thread
+                        (
+                            () =>
+                            {
+                                var rateCurTop = Console.CursorTop;
+                                var rateCurLeft = Console.CursorLeft;
                                 lock (cursorLock)
                                 {
-                                    var curTop = Console.CursorTop;
-                                    var curLeft = Console.CursorLeft;
-                                    Console.SetCursorPosition(msgCurLeft, msgCurTop);
-                                    Console.WriteLine($"Sending messages... Current message number: {infoNo}.");
-                                    Console.SetCursorPosition(curLeft, curTop);
+                                    rateCurTop = Console.CursorTop;
+                                    rateCurLeft = Console.CursorLeft;
+                                    Console.WriteLine($"Send message to clients frame rate: {frt.FrameRate}");
                                 }
-                                if (msg != null)
+                                while (!frt.Finished)
                                 {
-                                    foreach (var item in msg.ObjMessage)
-                                    {
-                                        if (item.TeamMessage != null)
-                                            teamScore[item.TeamMessage.TeamId] = item.TeamMessage.Score;
-
-                                    }
-                                }
-
-                                ++infoNo;
-                                if (msg == null)
-                                {
-                                    Console.WriteLine("No game information in this file!");
-                                    IsGaming = false;
-                                    ReportGame(msg);
-                                    return false;
-                                }
-                                if (msg.GameState == GameState.GameEnd)
-                                {
-                                    Console.WriteLine("Game over normally!");
-                                    IsGaming = false;
-                                    finalScore[0] = msg.AllMessage.BlueTeamScore;
-                                    finalScore[1] = msg.AllMessage.RedTeamScore;
-                                    ReportGame(msg);
-                                    return false;
-                                }
-                                return true;
-                            },
-                            timeInterval: timeInterval,
-                            finallyReturn: () => 0
-                        )
-                        { AllowTimeExceed = true, MaxTolerantTimeExceedCount = 5 };
-
-                        Console.WriteLine("The server is well prepared! Please MAKE SURE that you have opened all the clients to watch the game!");
-                        Console.WriteLine("If ALL clients have opened, press any key to start.");
-                        Console.ReadKey();
-
-                        new Thread
-                            (
-                                () =>
-                                {
-                                    var rateCurTop = Console.CursorTop;
-                                    var rateCurLeft = Console.CursorLeft;
                                     lock (cursorLock)
                                     {
-                                        rateCurTop = Console.CursorTop;
-                                        rateCurLeft = Console.CursorLeft;
+                                        var curTop = Console.CursorTop;
+                                        var curLeft = Console.CursorLeft;
+                                        Console.SetCursorPosition(rateCurLeft, rateCurTop);
                                         Console.WriteLine($"Send message to clients frame rate: {frt.FrameRate}");
+                                        Console.SetCursorPosition(curLeft, curTop);
                                     }
-                                    while (!frt.Finished)
-                                    {
-                                        lock (cursorLock)
-                                        {
-                                            var curTop = Console.CursorTop;
-                                            var curLeft = Console.CursorLeft;
-                                            Console.SetCursorPosition(rateCurLeft, rateCurTop);
-                                            Console.WriteLine($"Send message to clients frame rate: {frt.FrameRate}");
-                                            Console.SetCursorPosition(curLeft, curTop);
-                                        }
-                                        Thread.Sleep(1000);
-                                    }
+                                    Thread.Sleep(1000);
                                 }
-                            )
-                        { IsBackground = true }.Start();
+                            }
+                        )
+                    { IsBackground = true }.Start();
 
-                        lock (cursorLock)
-                        {
-                            msgCurLeft = Console.CursorLeft;
-                            msgCurTop = Console.CursorTop;
-                            Console.WriteLine("Sending messages...");
-                        }
-                        frt.Start();
+                    lock (cursorLock)
+                    {
+                        msgCurLeft = Console.CursorLeft;
+                        msgCurTop = Console.CursorTop;
+                        Console.WriteLine("Sending messages...");
                     }
+                    frt.Start();
                 }
             }
             finally
             {
-                teamScore ??= new int[0];
+                teamScore ??= [];
             }
         }
     }
