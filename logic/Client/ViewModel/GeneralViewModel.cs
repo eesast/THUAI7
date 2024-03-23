@@ -9,6 +9,10 @@ using Protobuf;
 using Grpc.Core;
 using System.Diagnostics.Metrics;
 using Client.Util;
+using Client.Interact;
+using CommandLine;
+using Newtonsoft;
+using System.Globalization;
 
 namespace Client.ViewModel
 {
@@ -70,7 +74,7 @@ namespace Client.ViewModel
         {
             if (!isSpectatorMode && comInfo.Length != 5 || isSpectatorMode && comInfo.Length != 4)
             {
-                throw new Exception("注册信息有误！");
+                throw new Exception("Error Registration Information！");
             }
             playerID = Convert.ToInt64(comInfo[2]);
             teamID = Convert.ToInt64(comInfo[3]);
@@ -100,15 +104,83 @@ namespace Client.ViewModel
             isClientStocked = false;
         }
 
+        private void Playback(string fileName, double pbSpeed = 2.0)
+        {
+        }
+
+        string[] comInfo = new string[10];
+
+        //CommandLineArgs.ArgumentOptions? options = null;
+        //private void ReactToCommandline()
+        //{
+        //    string[] args = Environment.GetCommandLineArgs();
+        //    if (args.Length == 2)
+        //    {
+        //        Playback(args[1]);
+        //        return;
+        //    }
+        //    _ = Parser.Default.ParseArguments<CommandLineArgs.ArgumentOptions>(args).WithParsed(o =>
+        //    { options = o; });
+        //    if (options != null && Convert.ToInt64(options.PlayerID) > 2023)
+        //    {
+        //        isSpectatorMode = true;
+        //        string[] comInfo = new string[3];
+        //        comInfo[0] = options.Ip;
+        //        comInfo[1] = options.Port;
+        //        comInfo[2] = options.PlayerID;
+        //        ConnectToServer(comInfo);
+        //        OnReceive();
+        //        return;
+        //    }
+        //    if (options == null || options.cl == false)
+        //    {
+        //        OnReceive();
+        //    }
+        //    else
+        //    {
+        //        if (options.PlaybackFile == DefaultArgumentOptions.FileName)
+        //        {
+        //            try
+        //            {
+        //                string[] comInfo = new string[5];
+        //                comInfo[0] = options.Ip;
+        //                comInfo[1] = options.Port;
+        //                comInfo[2] = options.PlayerID;
+        //                comInfo[3] = options.PlayerType;
+        //                comInfo[4] = options.Occupation;
+        //                ConnectToServer(comInfo);
+        //                OnReceive();
+        //            }
+        //            catch
+        //            {
+        //                OnReceive();
+        //            }
+        //        }
+        //        else
+        //        {
+        //            Playback(options.PlaybackFile, options.PlaybackSpeed);
+        //        }
+        //    }
+        //}
         int testcounter = 0;
+
+
 
         private async void OnReceive()
         {
             try
             {
+                System.Diagnostics.Debug.WriteLine("============= OnReceiving Server Stream ================");
+                if (responseStream != null)
+                    System.Diagnostics.Debug.WriteLine("============= responseStream != null ================");
+
+                if (await responseStream.ResponseStream.MoveNext())
+                    System.Diagnostics.Debug.WriteLine("============= responseStream.ResponseStream.MoveNext() ================");
+
                 while (responseStream != null && await responseStream.ResponseStream.MoveNext())
                 {
-                    lock (drawPicLock)
+                    System.Diagnostics.Debug.WriteLine("============= Receiving Server Stream ================");
+                    //lock (drawPicLock)
                     {
                         ballX += 20;
                         ballY += 20;
@@ -293,6 +365,8 @@ namespace Client.ViewModel
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("-----------------------------");
+                System.Diagnostics.Debug.WriteLine(ex.Message);
                 /* 
                     #TODO
                     Show the error message
@@ -437,9 +511,10 @@ namespace Client.ViewModel
                 {
                     Sweeper ship = new Sweeper
                     {
-                        Type_s = "CivilSweeper",
-                        State_s = "Idle",
-                        ArmorModule_s = "LightArmor"
+                        Type = SweeperType.MilitarySweeper,
+                        State = SweeperState.Stunned,
+                        //Type_s = UtilInfo.SweeperTypeNameDict[SweeperType.MilitarySweeper],
+                        //State_s = UtilInfo.SweeperStateNameDict[SweeperState.Stunned]
                     };
                     RedPlayer.Sweepers.Add(ship);
                     BluePlayer.Sweepers.Add(ship);
@@ -476,12 +551,12 @@ namespace Client.ViewModel
         {
             InitiateObjects();
             Title = "THUAI7";
-            Links = [
-                new Link { Name = "天梯信息", Url = "" },
-                new Link { Name = "获取更新", Url = "" },
-                new Link { Name = "我的AI", Url = "" },
-                new Link { Name = "配置链接", Url = "" }
-            ];
+            //Links = [
+            //    new Link { Name = "天梯信息", Url = "" },
+            //    new Link { Name = "获取更新", Url = "" },
+            //    new Link { Name = "我的AI", Url = "" },
+            //    new Link { Name = "配置链接", Url = "" }
+            //];
             RedPlayer.Hp = 100;
             RedPlayer.Money = 1000;
 
@@ -508,11 +583,14 @@ namespace Client.ViewModel
                 }
             }
             PureDrawMap(GameMap.GameMapArray);
+            //ReactToCommandline();
+
+            
 
             ConnectToServer(new string[]{
                 "127.0.0.1",
                 "8888",
-                "1",
+                "0",
                 "1",
                 "1"
             });
