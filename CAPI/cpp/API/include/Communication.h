@@ -41,7 +41,7 @@ public:
     bool Send(int64_t playerID, int64_t toPlayerID, int64_t teamID, std::string message, bool binary);
     // Team
     bool InstallModule(int64_t playerID, int64_t teamID, THUAI7::ModuleType moduleType);
-    bool BuildSweeper(int64_t teamID, THUAI7::SweeperType SweeperType, int32_t x, int32_t y);
+    bool BuildSweeper(int64_t teamID, THUAI7::SweeperType SweeperType);
     bool Recycle(int64_t playerID, int64_t teamID);
 
 private:

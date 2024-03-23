@@ -35,7 +35,11 @@ public class InteractControl : Singleton<InteractControl>
         InstallModuleShellGun,
         InstallModuleMissileGun,
         InstallModuleArcGun,
-
+        Produce,
+        ConstructFactory,
+        ConstructCommunity,
+        ConstructFort,
+        RepairWormhole,
     }
     public readonly Dictionary<InteractType, List<InteractOption>> interactOptions = new Dictionary<InteractType, List<InteractOption>>(){
         {InteractType.Base,
@@ -65,6 +69,11 @@ public class InteractControl : Singleton<InteractControl>
                 InteractOption.InstallModuleShellGun,
                 InteractOption.InstallModuleMissileGun,
                 InteractOption.InstallModuleArcGun,
+                InteractOption.Produce,
+                InteractOption.ConstructFactory,
+                InteractOption.ConstructCommunity,
+                InteractOption.ConstructFort,
+                InteractOption.RepairWormhole,
                 }},
     };
 }
