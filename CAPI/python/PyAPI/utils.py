@@ -490,12 +490,12 @@ class THUAI72Proto:
 
     @staticmethod
     def THUAI72ProtobufPlayerMsg(
-        playerID: int, teamID: int, shipType: THUAI7.SweeperType
+        playerID: int, teamID: int, sweeperType: THUAI7.SweeperType
     ) -> Message2Server.PlayerMsg:
         return Message2Server.PlayerMsg(
             player_id=playerID,
             team_id=teamID,
-            sweeper_type=THUAI72Proto.sweeperTypeDict[shipType]
+            sweeper_type=THUAI72Proto.sweeperTypeDict[sweeperType]
         )
 
     @staticmethod

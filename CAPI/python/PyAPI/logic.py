@@ -10,7 +10,7 @@ import proto.Message2Clients_pb2 as Message2Clients
 from queue import Queue
 import PyAPI.structures as THUAI7
 from PyAPI.utils import Proto2THUAI7, AssistFunction
-from PyAPI.API import ShipAPI, TeamAPI
+from PyAPI.API import SweeperAPI, TeamAPI
 from PyAPI.AI import Setting
 from PyAPI.Communication import Communication
 from PyAPI.State import State
@@ -18,11 +18,11 @@ from PyAPI.Interface import ILogic, IGameTimer
 
 
 class Logic(ILogic):
-    def __init__(self, playerID: int, teamID: int, playerType: THUAI7.PlayerType, shipType: THUAI7.SweeperType) -> None:
+    def __init__(self, playerID: int, teamID: int, playerType: THUAI7.PlayerType, sweeperType: THUAI7.SweeperType) -> None:
         self.__playerID: int = playerID
         self.__teamID: int = teamID
         self.__playerType: THUAI7.PlayerType = playerType
-        self.__shipType: THUAI7.SweeperType = shipType
+        self.__sweeperType: THUAI7.SweeperType = sweeperType
 
         self.__comm: Communication
 
@@ -55,14 +55,14 @@ class Logic(ILogic):
 
         self.__messageQueue: Queue = Queue()
 
-    def GetShips(self) -> List[THUAI7.Sweeper]:
+    def GetSweepers(self) -> List[THUAI7.Sweeper]:
         with self.__mtxState:
-            self.__logger.debug("Called GetShips")
-            return copy.deepcopy(self.__currentState.ships)
+            self.__logger.debug("Called GetSweepers")
+            return copy.deepcopy(self.__currentState.sweepers)
 
-    def GetEnemyShips(self) -> List[THUAI7.Sweeper]:
+    def GetEnemySweepers(self) -> List[THUAI7.Sweeper]:
         with self.__mtxState:
-            self.__logger.debug("Called GetEnemyShips")
+            self.__logger.debug("Called GetEnemySweepers")
             return copy.deepcopy(self.__currentState.enemySweepers)
 
     def GetBullets(self) -> List[THUAI7.Bullet]:
@@ -218,9 +218,9 @@ class Logic(ILogic):
         self.__logger.debug("Called Recycle")
         return self.__comm.Recycle(self.__playerID, self.__playerID, self.__teamID)
 
-    def BuildShip(self, shipType: THUAI7.SweeperType) -> bool:
-        self.__logger.debug("Called BuildShip")
-        return self.__comm.BuildShip(shipType, self.__teamID)
+    def BuildSweeper(self, sweeperType: THUAI7.SweeperType) -> bool:
+        self.__logger.debug("Called BuildSweeper")
+        return self.__comm.BuildSweeper(sweeperType, self.__teamID)
 
     def __TryConnection(self) -> bool:
         self.__logger.info("Try to connect to the server.")
@@ -229,7 +229,7 @@ class Logic(ILogic):
     def __ProcessMessage(self) -> None:
         def messageThread():
             self.__logger.info("Message thread started")
-            self.__comm.AddPlayer(self.__playerID, self.__teamID, self.__shipType)
+            self.__comm.AddPlayer(self.__playerID, self.__teamID, self.__sweeperType)
             self.__logger.info("Player added")
 
             while self.__gameState != THUAI7.GameState.GameEnd:
@@ -277,7 +277,7 @@ class Logic(ILogic):
 
     def LoadBuffer(self, message: Message2Clients.MessageToClient) -> None:
         with self.__cvBuffer:
-            self.__bufferState.ships.clear()
+            self.__bufferState.sweepers.clear()
             self.__bufferState.enemySweepers.clear()
             self.__bufferState.teams.clear()
             self.__bufferState.bullets.clear()
@@ -287,8 +287,8 @@ class Logic(ILogic):
 
             if self.__playerID != 0:
                 for obj in message.obj_message:
-                    if obj.WhichOneof("message_of_obj") == "ship_message":
-                        self.__bufferState.guids.append(obj.ship_message.guid)
+                    if obj.WhichOneof("message_of_obj") == "sweeper_message":
+                        self.__bufferState.guids.append(obj.sweeper_message.guid)
             else:
                 for obj in message.obj_message:
                     if obj.WhichOneof("message_of_obj") == "team_message":
@@ -313,13 +313,13 @@ class Logic(ILogic):
     def __LoadBufferSelf(self, message: Message2Clients.MessageToClient) -> None:
         if self.__playerID != 0:
             for item in message.obj_message:
-                if item.WhichOneof("message_of_obj") == "ship_message":
-                    if item.ship_message.player_id == self.__playerID:
-                        self.__bufferState.self = Proto2THUAI7.Protobuf2THUAI7Sweeper(item.ship_message)
-                        self.__bufferState.ships.append(self.__bufferState.self)
+                if item.WhichOneof("message_of_obj") == "sweeper_message":
+                    if item.sweeper_message.player_id == self.__playerID:
+                        self.__bufferState.self = Proto2THUAI7.Protobuf2THUAI7Sweeper(item.sweeper_message)
+                        self.__bufferState.sweepers.append(self.__bufferState.self)
                     else:
-                        self.__bufferState.ships.append(Proto2THUAI7.Protobuf2THUAI7Sweeper(item.ship_message))
-                    self.__logger.debug("Load ship")
+                        self.__bufferState.sweepers.append(Proto2THUAI7.Protobuf2THUAI7Sweeper(item.sweeper_message))
+                    self.__logger.debug("Load sweeper")
         else:
             for item in message.obj_message:
                 if item.WhichOneof("message_of_obj") == "team_message":
@@ -328,14 +328,14 @@ class Logic(ILogic):
                     self.__logger.debug("Load team")
 
     def __LoadBufferCase(self, item: Message2Clients.MessageOfObj) -> None:
-        if item.WhichOneof("message_of_obj") == "ship_message":
-            if item.ship_message.team_id != self.__teamID:
+        if item.WhichOneof("message_of_obj") == "sweeper_message":
+            if item.sweeper_message.team_id != self.__teamID:
                 if AssistFunction.HaveView(self.__bufferState.self.viewRange,
                                            self.__bufferState.self.x, self.__bufferState.self.y,
-                                           item.ship_message.x, item.ship_message.y,
+                                           item.sweeper_message.x, item.sweeper_message.y,
                                            self.__bufferState.gameMap):
-                    self.__bufferState.enemySweepers.append(Proto2THUAI7.Protobuf2THUAI7Sweeper(item.ship_message))
-                    self.__logger.debug("Load enemy ship")
+                    self.__bufferState.enemySweepers.append(Proto2THUAI7.Protobuf2THUAI7Sweeper(item.sweeper_message))
+                    self.__logger.debug("Load enemy sweeper")
 
         elif item.WhichOneof("message_of_obj") == "bullet_message":
             if AssistFunction.HaveView(self.__bufferState.self.viewRange,
@@ -521,11 +521,11 @@ class Logic(ILogic):
 
         # 构造timer
         if not file and not screen:
-            self.__timer = ShipAPI(self)
-        # else:
-        #     self.__timer = ShipDebugAPI(
-        #         self, file, screen, warnOnly, self.__playerID
-        #     )
+            self.__timer = SweeperAPI(self)
+        else:
+            self.__timer = SweeperDebugAPI(
+                self, file, screen, warnOnly, self.__playerID
+            )
 
         # 构建AI线程
         def AIThread():
@@ -549,6 +549,7 @@ class Logic(ILogic):
             self.__logger.info("Connect to the server successfully, AI thread will be started.")
             self.__threadAI = threading.Thread(target=AIThread)
             self.__threadAI.start()
+            self.__logger.info("Start to Process Message")
             self.__ProcessMessage()
             self.__logger.info("Join the AI thread.")
             self.__threadAI.join()

@@ -11,11 +11,11 @@ class ILogic(metaclass=ABCMeta):
     '''`IAPI` 统一可用的接口'''
 
     @abstractmethod
-    def GetShips(self) -> List[THUAI7.Sweeper]:
+    def GetSweepers(self) -> List[THUAI7.Sweeper]:
         pass
 
     @abstractmethod
-    def GetEnemyShips(self) -> List[THUAI7.Sweeper]:
+    def GetEnemySweepers(self) -> List[THUAI7.Sweeper]:
         pass
 
     @abstractmethod
@@ -59,7 +59,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetMoney(self) -> int:
+    def GetEnergy(self) -> int:
         pass
 
     @abstractmethod
@@ -127,7 +127,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def BuildShip(self, shipType: THUAI7.SweeperType) -> bool:
+    def BuildSweeper(self, sweeperType: THUAI7.SweeperType) -> bool:
         pass
 
 
@@ -172,11 +172,11 @@ class IAPI(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetShips(self) -> List[THUAI7.Sweeper]:
+    def GetSweepers(self) -> List[THUAI7.Sweeper]:
         pass
 
     @abstractmethod
-    def GetEnemyShips(self) -> List[THUAI7.Sweeper]:
+    def GetEnemySweepers(self) -> List[THUAI7.Sweeper]:
         pass
 
     @abstractmethod
@@ -212,7 +212,7 @@ class IAPI(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetMoney(self) -> int:
+    def GetEnergy(self) -> int:
         pass
 
     @abstractmethod
@@ -228,7 +228,7 @@ class IAPI(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def PrintShip(self) -> None:
+    def PrintSweeper(self) -> None:
         pass
 
     @abstractmethod
@@ -244,7 +244,7 @@ class IAPI(metaclass=ABCMeta):
         pass
 
 
-class IShipAPI(IAPI, metaclass=ABCMeta):
+class ISweeperAPI(IAPI, metaclass=ABCMeta):
     @abstractmethod
     def Move(self, timeInMilliseconds: int, angleInRadian: float) -> Future[bool]:
         pass
@@ -308,13 +308,13 @@ class ITeamAPI(IAPI, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def BuildShip(self, shipType: THUAI7.SweeperType) -> Future[bool]:
+    def BuildSweeper(self, sweeperType: THUAI7.SweeperType) -> Future[bool]:
         pass
 
 
 class IAI(metaclass=ABCMeta):
     @abstractmethod
-    def ShipPlay(self, api: IShipAPI) -> None:
+    def SweeperPlay(self, api: ISweeperAPI) -> None:
         pass
 
     @abstractmethod

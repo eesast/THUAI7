@@ -101,17 +101,17 @@ def THUAI7Main(argv: List[str], AIBuilder: Callable) -> None:
     screen = args.screen
     warnOnly = args.warnOnly
     playerType = THUAI7.PlayerType.NullPlayerType
-    shipType = THUAI7.SweeperType.NullSweeperType
+    sweeperType = THUAI7.SweeperType.NullSweeperType
     if pID == 0:
         playerType = THUAI7.PlayerType.Team
     else:
         playerType = THUAI7.PlayerType.Sweeper
-        shipType = Setting.SweeperTypes()[pID]
+        sweeperType = Setting.SweeperTypes()[pID]
 
     if platform.system().lower() == "windows":
         PrintWelcomeString()
 
-    logic = Logic(pID, tID, playerType, shipType)
+    logic = Logic(pID, tID, playerType, sweeperType)
     logic.Main(AIBuilder, sIP, sPort, file, screen, warnOnly)
 
 
