@@ -14,8 +14,8 @@ namespace Gaming
             {
                 Ship newShip = new(GameData.ShipRadius, shipType, moneyPool);
                 gameMap.Add(newShip);
-                newShip.TeamID.SetReturnOri(teamID);
-                newShip.PlayerID.SetReturnOri(playerID);
+                newShip.TeamID.SetROri(teamID);
+                newShip.PlayerID.SetROri(playerID);
                 return newShip;
             }
             public bool ActivateShip(Ship ship, XY pos)

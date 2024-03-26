@@ -6,7 +6,7 @@ namespace Preparation.Utility
     //其对应属性不应当有set访问器，避免不安全的=赋值
     public abstract class Atomic
     {
-    }    
+    }
 
     public class AtomicT<T>(T? x) : Atomic where T : class?
     {
@@ -34,7 +34,7 @@ namespace Preparation.Utility
         public double CompareExROri(double newV, double compareTo) => Interlocked.CompareExchange(ref v, newV, compareTo);
     }
 
-    public class AtomicBool(bool x) : Atomic , ISafeConvertible<bool>
+    public class AtomicBool(bool x) : Atomic, ISafeAddable<bool>
     {
         private int v = x ? 1 : 0;//v&1==0为false,v&1==1为true
 
@@ -44,7 +44,7 @@ namespace Preparation.Utility
 
         /// <returns>返回操作前的值</returns>
         public bool SetROri(bool value) => ((Interlocked.Exchange(ref v, value ? 1 : 0) & 1) == 1);
-        public void Set(bool value) =>Interlocked.Exchange(ref v, value ? 1 : 0);
+        public void Set(bool value) => Interlocked.Exchange(ref v, value ? 1 : 0);
 
         /// <returns>赋值前的值是否与将赋予的值不相同</returns>
         public bool TrySet(bool value)
