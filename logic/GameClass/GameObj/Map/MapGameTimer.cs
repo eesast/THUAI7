@@ -25,7 +25,7 @@ namespace GameClass.GameObj
                     return false;
                 startTime = Environment.TickCount64;
                 Thread.Sleep(timeInMilliseconds);
-                IsGaming.SetReturnOri(false);
+                IsGaming.SetROri(false);
                 return true;
             }
         }

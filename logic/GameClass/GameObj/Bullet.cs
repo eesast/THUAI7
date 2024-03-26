@@ -35,8 +35,8 @@ public abstract class Bullet : ObjOfShip
     public Bullet(Ship ship, int radius, XY Position) :
         base(Position, radius, GameObjType.Bullet)
     {
-        CanMove.SetReturnOri(true);
-        MoveSpeed.SetReturnOri(Speed);
+        CanMove.SetROri(true);
+        MoveSpeed.SetROri(Speed);
         Parent = ship;
     }
 }

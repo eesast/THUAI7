@@ -38,7 +38,7 @@ namespace Gaming
                 ship.ReSetPos(pos);
                 long stateNum = ship.SetShipState(RunningStateType.RunningActively, ShipStateType.Null);
                 ship.ResetShipState(stateNum);
-                ship.CanMove.SetReturnOri(true);
+                ship.CanMove.SetROri(true);
                 return true;
             }
             public void BeAttacked(Ship ship, Bullet bullet)
