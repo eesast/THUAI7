@@ -109,9 +109,9 @@ namespace installer.ViewModel
     /// <summary>
     /// Password 附加属性，来自https://blog.csdn.net/qq_43562262/article/details/121786337
     /// </summary>
-    public class PasswordHelper
+    public class PasswordFileService
     {
-        public static readonly DependencyProperty PasswordProperty = DependencyProperty.RegisterAttached("Password", typeof(string), typeof(PasswordHelper),
+        public static readonly DependencyProperty PasswordProperty = DependencyProperty.RegisterAttached("Password", typeof(string), typeof(PasswordFileService),
             new PropertyMetadata(new PropertyChangedCallback(OnPropertyChanged)));
 
         public static string GetPassword(DependencyObject d)
@@ -123,7 +123,7 @@ namespace installer.ViewModel
             d.SetValue(PasswordProperty, value);
         }
 
-        public static readonly DependencyProperty AttachProperty = DependencyProperty.RegisterAttached("Attach", typeof(string), typeof(PasswordHelper),
+        public static readonly DependencyProperty AttachProperty = DependencyProperty.RegisterAttached("Attach", typeof(string), typeof(PasswordFileService),
             new PropertyMetadata(new PropertyChangedCallback(OnAttachChanged)));
 
         public static string GetAttach(DependencyObject d)

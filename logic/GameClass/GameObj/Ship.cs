@@ -259,14 +259,37 @@ public class Ship : Movable, IShip
             }
         }
     }
-    public void AddMoney(long add)
+    public long AddMoney(long add)
     {
-        MoneyPool.Money.Add(add);
-        MoneyPool.Score.Add(add);
+        return MoneyPool.AddMoney(add);
     }
-    public void SubMoney(long sub)
+    public long SubMoney(long sub)
     {
-        MoneyPool.Money.Sub(sub);
+        return MoneyPool.SubMoney(sub);
+    }
+    public long GetCost()
+    {
+        var cost = 0;
+        switch (ShipType)
+        {
+            case ShipType.CivilShip:
+                cost += GameData.CivilShipCost;
+                break;
+            case ShipType.WarShip:
+                cost += GameData.WarShipCost;
+                break;
+            case ShipType.FlagShip:
+                cost += GameData.FlagShipCost;
+                break;
+            default:
+                return 0;
+        }
+        cost += producer.Cost;
+        cost += constructor.Cost;
+        cost += armor.Cost;
+        cost += shield.Cost;
+        cost += weapon.Cost;
+        return cost;
     }
     private long ChangeShipState(RunningStateType running, ShipStateType value = ShipStateType.Null, GameObj? gameObj = null)
     {
