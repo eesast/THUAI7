@@ -4,15 +4,24 @@ using System.Collections.Generic;
 
 namespace Preparation.Utility;
 
-public class ObjPool<T>(Func<T, bool> funcCheckIdle, Action<T> funcSwitchIdle) : IObjPool<T>
+public class ObjPool<T, TType>(Func<T, TType> classfier,
+                               Func<T, bool> idleChecker,
+                               Action<T> activator,
+                               Action<T> inactivator)
+    : IObjPool<T, TType>
     where T : class
+    where TType : notnull
 {
     private readonly object dictLock = new();
-    private readonly Dictionary<Type, LockedClassList<T>> objs = [];
-    private readonly Func<T, bool> checkIdle = funcCheckIdle;
-    private readonly Action<T> switchIdle = funcSwitchIdle;
+    private readonly Dictionary<TType, LockedClassList<T>> objs = [];
+    private readonly Func<T, TType> classfier = classfier;
+    private readonly Func<T, bool> idleChecker = idleChecker;
+    private readonly Action<T> activator = activator;
+    private readonly Action<T> inactivator = inactivator;
 
-    public int Count
+    #region 属性
+
+    public int Size
     {
         get
         {
@@ -41,44 +50,57 @@ public class ObjPool<T>(Func<T, bool> funcCheckIdle, Action<T> funcSwitchIdle) :
             }
         }
     }
-    public int CountIdle => Travel(checkIdle, true).Count;
-
-    #region Initiate
-    public void Initiate<TDerive>(int num)
-        where TDerive : class, T, new()
-        => Initiate(num, () => new TDerive());
-    public void Initiate<TDerive>(int num, Func<TDerive> func)
-        where TDerive : class, T
+    public int IdleNum
     {
-        Type tp = typeof(TDerive);
-        if (objs.ContainsKey(tp)) Clear<TDerive>();
+        get
+        {
+            int sum = 0;
+            Travel((o) => { if (idleChecker(o)) sum++; });
+            return sum;
+        }
+    }
+
+    #endregion
+
+    #region 主功能
+
+    public void Initiate(TType tp, int num, Func<T> func)
+    {
+        if (objs.ContainsKey(tp)) Clear(tp);
         lock (dictLock)
         {
             objs[tp] = new(num);
             for (int i = 0; i < num; i++)
             {
-                objs[tp].Add(func());
+                var obj = func();
+                inactivator(obj);
+                objs[tp].Add(obj);
             }
         }
     }
+    public T? GetObj(TType tp)
+    {
+        lock (dictLock)
+        {
+            if (CheckEmpty(tp) || GetIdleNum(tp) == 0) return null;
+            var ret = Find(idleChecker);
+            if (ret is null) return null;
+            activator(ret);
+            return ret;
+        }
+    }
+    public void ReturnObj(T obj)
+    {
+        lock (dictLock) inactivator(obj);
+    }
+
     #endregion
 
-    public T? GetObj<TDerive>()
-        where TDerive : class, T
-    {
-        if (CheckEmpty<TDerive>() || GetIdleNum<TDerive>() == 0) return null;
-        var ret = Find((TDerive o) => checkIdle(o));
-        if (ret == null) return null;
-        switchIdle(ret);
-        return ret;
-    }
-    public void ReturnObj(T obj) => switchIdle(obj);
-
     #region Append
-    public void Append<TDerive>(TDerive obj)
-        where TDerive : class, T
+
+    public void Append(T obj)
     {
-        Type tp = typeof(TDerive);
+        TType tp = classfier(obj);
         if (!objs.TryGetValue(tp, out var ls))
         {
             LockedClassList<T> temp = new();
@@ -90,10 +112,15 @@ public class ObjPool<T>(Func<T, bool> funcCheckIdle, Action<T> funcSwitchIdle) :
             lock (dictLock) ls.Add(obj);
         }
     }
-    public void Append<TDerive>(IEnumerable<TDerive> objs)
-        where TDerive : class, T
+    public void Append(IEnumerable<T> objs)
     {
-        Type tp = typeof(TDerive);
+        foreach (var obj in objs)
+        {
+            Append(obj);
+        }
+    }
+    public void AppendNoCheck(TType tp, IEnumerable<T> objs)
+    {
         if (!this.objs.TryGetValue(tp, out var ls))
         {
             LockedClassList<T> temp = new();
@@ -105,23 +132,29 @@ public class ObjPool<T>(Func<T, bool> funcCheckIdle, Action<T> funcSwitchIdle) :
             lock (dictLock) ls.AddRange(objs);
         }
     }
+
     #endregion
 
-    public int GetNum<TDerive>()
-        where TDerive : class, T
-        => objs[typeof(TDerive)].Count;
-    public bool CheckEmpty<TDerive>()
-        where TDerive : class, T
-        => GetNum<TDerive>() == 0;
-    public int GetIdleNum<TDerive>()
-        where TDerive : class, T
+    #region 子属性
+
+    public int GetNum(TType tp)
+        => objs[tp].Count;
+    public bool CheckEmpty(TType tp)
+        => GetNum(tp) == 0;
+    public int GetIdleNum(TType tp)
     {
-        var ret = Travel((TDerive o) => checkIdle(o));
-        return ret is not null ? ret.Count : 0;
+        int sum = 0;
+        Travel(tp, (o) => { if (idleChecker(o)) sum++; });
+        return sum;
     }
 
+    #endregion
+
+    #region 遍历
+
     #region Travel
-    public List<TResult> Travel<TResult>(Func<T, TResult> func, bool _)
+
+    public List<TResult> Travel<TResult>(Func<T, TResult> func)
     {
         List<TResult> ret = [];
         lock (dictLock)
@@ -137,10 +170,22 @@ public class ObjPool<T>(Func<T, bool> funcCheckIdle, Action<T> funcSwitchIdle) :
         }
         return ret;
     }
-    public List<TResult>? Travel<TDerive, TResult>(Func<TDerive, TResult> func)
-        where TDerive : class, T
+    public void Travel(Action<T> func)
     {
-        Type tp = typeof(TDerive);
+        lock (dictLock)
+        {
+            foreach (var ls in objs.Values)
+            {
+                var len = ls.Count;
+                for (int i = 0; i < len; i++)
+                {
+                    func(ls[i]);
+                }
+            }
+        }
+    }
+    public List<TResult>? Travel<TResult>(TType tp, Func<T, TResult> func)
+    {
         if (!objs.TryGetValue(tp, out var ls)) return null;
         var len = ls.Count;
         List<TResult> ret = new(len);
@@ -148,15 +193,29 @@ public class ObjPool<T>(Func<T, bool> funcCheckIdle, Action<T> funcSwitchIdle) :
         {
             for (int i = 0; i < len; i++)
             {
-                ret.Add(func((TDerive)ls[i]));
+                ret.Add(func(ls[i]));
             }
         }
         return ret;
     }
+    public void Travel(TType tp, Action<T> func)
+    {
+        if (!objs.TryGetValue(tp, out var ls)) return;
+        var len = ls.Count;
+        lock (dictLock)
+        {
+            for (int i = 0; i < len; i++)
+            {
+                func(ls[i]);
+            }
+        }
+    }
+
     #endregion
 
     #region Find
-    public T? Find(Func<T, bool> cond, bool _)
+
+    public T? Find(Func<T, bool> cond)
     {
         lock (dictLock)
         {
@@ -168,28 +227,28 @@ public class ObjPool<T>(Func<T, bool> funcCheckIdle, Action<T> funcSwitchIdle) :
                     if (cond(ls[i])) return ls[i];
                 }
             }
-            return null;
         }
+        return null;
     }
-    public TDerive? Find<TDerive>(Func<TDerive, bool> cond)
-        where TDerive : class, T
+    public T? Find(TType tp, Func<T, bool> cond)
     {
-        Type tp = typeof(TDerive);
         if (!objs.TryGetValue(tp, out var ls)) return null;
         var len = ls.Count;
         lock (dictLock)
         {
             for (int i = 0; i < len; i++)
             {
-                if (cond((TDerive)ls[i])) return (TDerive)ls[i];
+                if (cond(ls[i])) return ls[i];
             }
         }
         return null;
     }
+
     #endregion
 
     #region Until
-    public (List<TResult> results, T? target) Until<TResult>(Func<T, TResult> func, Func<T, bool> cond, bool _)
+
+    public (List<TResult> results, T? target) Until<TResult>(Func<T, TResult> func, Func<T, bool> cond)
     {
         List<TResult> ret = [];
         T? retObj = null;
@@ -214,32 +273,63 @@ public class ObjPool<T>(Func<T, bool> funcCheckIdle, Action<T> funcSwitchIdle) :
         }
         return (ret, retObj);
     }
-    public (List<TResult>? results, TDerive? target) Until<TDerive, TResult>(Func<TDerive, TResult> func, Func<TDerive, bool> cond)
-        where TDerive : class, T
+    public T? Until(Action<T> func, Func<T, bool> cond)
     {
-        Type tp = typeof(TDerive);
+        lock (dictLock)
+        {
+            foreach (var ls in objs.Values)
+            {
+                var len = ls.Count;
+                for (int i = 0; i < len; i++)
+                {
+                    func(ls[i]);
+                    if (cond(ls[i])) return ls[i];
+                }
+            }
+        }
+        return null;
+    }
+    public (List<TResult>? results, T? target) Until<TResult>(TType tp, Func<T, TResult> func, Func<T, bool> cond)
+    {
         if (!objs.TryGetValue(tp, out var ls)) return (null, null);
         var len = ls.Count;
         List<TResult> ret = new(len);
-        TDerive? retObj = null;
+        T? retObj = null;
         lock (dictLock)
         {
             for (int i = 0; i < len; i++)
             {
-                ret.Add(func((TDerive)ls[i]));
-                if (cond((TDerive)ls[i]))
+                ret.Add(func(ls[i]));
+                if (cond(ls[i]))
                 {
-                    retObj = (TDerive)ls[i];
+                    retObj = ls[i];
                     break;
                 }
             }
         }
         return (ret, retObj);
     }
+    public T? Until(TType tp, Action<T> func, Func<T, bool> cond)
+    {
+        if (!objs.TryGetValue(tp, out var ls)) return null;
+        var len = ls.Count;
+        lock (dictLock)
+        {
+            for (int i = 0; i < len; i++)
+            {
+                func(ls[i]);
+                if (cond(ls[i])) return ls[i];
+            }
+        }
+        return null;
+    }
+
     #endregion
 
+    #endregion
 
     #region Clear
+
     public void Clear()
     {
         lock (dictLock)
@@ -251,10 +341,8 @@ public class ObjPool<T>(Func<T, bool> funcCheckIdle, Action<T> funcSwitchIdle) :
             }
         }
     }
-    public void Clear<TDerive>()
-        where TDerive : class, T
+    public void Clear(TType tp)
     {
-        Type tp = typeof(TDerive);
         if (!objs.TryGetValue(tp, out var ls)) return;
         lock (dictLock)
         {
@@ -262,6 +350,7 @@ public class ObjPool<T>(Func<T, bool> funcCheckIdle, Action<T> funcSwitchIdle) :
             objs.Remove(tp);
         }
     }
+
     #endregion
 }
 

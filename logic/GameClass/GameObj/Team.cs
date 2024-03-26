@@ -150,16 +150,5 @@ namespace GameClass.GameObj
             }
             return -1;
         }
-
-        public long[] GetShipIDs()
-        {
-            long[] shipIDs = new long[shipList.Count];
-            int i = 0;
-            foreach (Ship ship in shipList)
-            {
-                shipIDs[i++] = ship.PlayerID;
-            }
-            return shipIDs;
-        }
     }
 }
