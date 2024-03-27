@@ -23,7 +23,7 @@
                 <Image Source="eesast_software_trans_enlarged_256x256.png" VerticalOptions="FillAndExpand"  HorizontalOptions="Start" WidthRequest="80"/>
                 <Label x:Name="GameLabel" Text="THUAI7 Client for players" FontSize="Micro" VerticalOptions="Center" WidthRequest="200"/>
 
-                <CollectionView ItemsSource="{Binding Links}" ItemsLayout="HorizontalList">
+                <!--<CollectionView ItemsSource="{Binding Links}" ItemsLayout="HorizontalList">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="model:Link">
                             <Grid>
@@ -31,7 +31,7 @@
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
-                </CollectionView>
+                </CollectionView>-->
             </HorizontalStackLayout>
 
             <Grid x:Name="MainGrid" HeightRequest="{Binding Source={x:Reference verticalStackLayout}, Path=Height}">

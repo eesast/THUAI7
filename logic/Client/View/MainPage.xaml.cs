@@ -11,6 +11,7 @@ using Protobuf;
 using Microsoft.Maui.Controls.Shapes;
 using System.Linq.Expressions;
 using Client.ViewModel;
+using Client.Interact;
 using Client.Model;
 using System.Reflection;
 
@@ -55,6 +56,13 @@ namespace Client
                     MapGrid.SetRow(mapPatches_[i, j], j);
                 }
             }
+
+            //CommandLineProcess.StartProcess();
+            //string[] args = Environment.GetCommandLineArgs();
+            //foreach(string arg in args)
+            //{
+            //    System.Diagnostics.Debug.WriteLine(arg);
+            //}
             //PureDrawMap(viewModel);
             //InitiateObjects();
             UIinitiated = true;

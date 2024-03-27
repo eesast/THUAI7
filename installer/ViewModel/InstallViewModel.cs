@@ -25,7 +25,7 @@ namespace installer.ViewModel
             FolderPicker = folderPicker;
             Exceptions = new ObservableCollection<Exception>();
 
-            downloadPath = Downloader.Data.InstallPath;
+            downloadPath = Downloader.Data.Config.InstallPath;
 
             BrowseBtnClickedCommand = new AsyncRelayCommand(BrowseBtnClicked);
             CheckUpdBtnClickedCommand = new RelayCommand(CheckUpdBtnClicked);

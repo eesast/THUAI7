@@ -162,6 +162,7 @@ namespace Client.Model
         public string Type_s
         {
             get => UtilInfo.SweeperTypeNameDict[Type];
+            //get => type_s;
             set
             {
                 type_s = value;
@@ -171,6 +172,7 @@ namespace Client.Model
         public string State_s
         {
             get => UtilInfo.SweeperStateNameDict[State];
+            //get => state_s;
             set
             {
                 state_s = value;
@@ -179,7 +181,8 @@ namespace Client.Model
         }
         public string ProducerModule_s
         {
-            get => producerModule_s;
+            get => UtilInfo.SweeperProducerTypeNameDict[ProducerModule];
+            //get => producerModule_s;
             set
             {
                 producerModule_s = value;
@@ -188,7 +191,8 @@ namespace Client.Model
         }
         public string ConstuctorModule_s
         {
-            get => constuctorModule_s;
+            get => UtilInfo.SweeperConstructorNameDict[ConstuctorModule];
+            //get => constuctorModule_s;
             set
             {
                 constuctorModule_s = value;
@@ -197,7 +201,8 @@ namespace Client.Model
         }
         public string ArmorModule_s
         {
-            get => armorModule_s;
+            get => UtilInfo.SweeperArmorTypeNameDict[ArmorModule];
+            //get => armorModule_s;
             set
             {
                 armorModule_s = value;
@@ -206,7 +211,8 @@ namespace Client.Model
         }
         public string ShieldModule_s
         {
-            get => shieldModule_s;
+            get => UtilInfo.SweeperShieldTypeNameDict[ShieldModule];
+            //get => shieldModule_s;
             set
             {
                 shieldModule_s = value;
@@ -215,7 +221,8 @@ namespace Client.Model
         }
         public string WeaponModule_s
         {
-            get => weaponModule_s;
+            get => UtilInfo.SweeperWeaponTypeNameDict[WeaponModule];
+            //get => weaponModule_s;
             set
             {
                 weaponModule_s = value;
