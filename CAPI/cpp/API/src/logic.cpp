@@ -652,7 +652,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                         logger->debug("Update Home!");
                     }
                 }
-                else if (AssistFunction::HaveView(x, y, item.home_message().x(), item.home_message().y(), viewRange, bufferState->gameMap))
+                else if (HaveOverView(item.home_message().x(), item.home_message().y()))
                 {
                     auto pos = std::make_pair(AssistFunction::GridToCell(item.home_message().x()), AssistFunction::GridToCell(item.home_message().y()));
                     if (bufferState->mapInfo->homeState.count(pos) == 0)

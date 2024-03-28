@@ -223,7 +223,7 @@ class GameMap:
         self.recycleBankState: Dict[Tuple[int, int], Tuple[int, int]] = {}
         self.chargeStationState: Dict[Tuple[int, int], Tuple[int, int]] = {}
         self.signalTowerState: Dict[Tuple[int, int], Tuple[int, int]] = {}
-        self.HomeState: Dict[Tuple[int, int], Tuple[int, int]] = {}
+        self.homeState: Dict[Tuple[int, int], Tuple[int, int]] = {}
         self.bridgeState: Dict[Tuple[int, int], int] = {}
         self.garbageState: Dict[Tuple[int, int], int] = {}
 

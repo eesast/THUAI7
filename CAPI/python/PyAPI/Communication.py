@@ -18,7 +18,7 @@ class BoolErrorHandler(IErrorHandler):
 
 class Communication:
     def __init__(self, sIP: str, sPort: str):
-        aim = sIP + ':' + sPort
+        aim = sIP + ":" + sPort
         channel = grpc.insecure_channel(aim)
         self.__THUAI7Stub = Services.AvailableServiceStub(channel)
         self.__haveNewMessage = False
