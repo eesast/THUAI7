@@ -9,20 +9,20 @@ namespace Preparation.Utility
     public class LockedClassList<T> where T : class?
     {
         private readonly ReaderWriterLockSlim listLock = new();
-        private List<T> list;
+        private readonly List<T> list;
 
         #region 构造
         public LockedClassList()
         {
-            list = new List<T>();
+            list = [];
         }
         public LockedClassList(int capacity)
         {
-            list = new List<T>(capacity);
+            list = new(capacity);
         }
         public LockedClassList(IEnumerable<T> collection)
         {
-            list = new List<T>(collection);
+            list = new(collection);
         }
         #endregion
 
@@ -70,15 +70,16 @@ namespace Preparation.Utility
 
         public void Clear()
         {
-            WriteLock(() => { list.Clear(); });
+            WriteLock(list.Clear);
         }
 
         public bool Remove(T item)
         {
-            return WriteLock<bool>(() => { return list.Remove(item); });
+            return WriteLock(() => list.Remove(item));
         }
 
-        public int RemoveAll(T item) => WriteLock(() => { return list.RemoveAll((t) => { return t == item; }); });
+        public int RemoveAll(T item)
+            => WriteLock(() => list.RemoveAll((t) => t == item));
 
         public T? RemoveOne(Predicate<T> match) =>
             WriteLock(() =>
@@ -90,7 +91,8 @@ namespace Preparation.Utility
                 return ans;
             });
 
-        public int RemoveAll(Predicate<T> match) => WriteLock(() => { return list.RemoveAll(match); });
+        public int RemoveAll(Predicate<T> match)
+            => WriteLock(() => list.RemoveAll(match));
 
         public bool RemoveAt(int index)
         {
@@ -134,46 +136,48 @@ namespace Preparation.Utility
         {
             get
             {
-                return ReadLock<T>(() => { return list[index]; });
+                return ReadLock(() => { return list[index]; });
             }
             set
             {
                 ReadLock(() => { list[index] = value!; });
             }
         }
-        public int Count => ReadLock(() => { return list.Count; });
+        public int Count => ReadLock(() => list.Count);
 
         public int IndexOf(T item)
         {
-            return ReadLock(() => { return list.IndexOf(item); });
+            return ReadLock(() => list.IndexOf(item));
         }
 
         public bool Contains(T item)
         {
-            return ReadLock(() => { return list.Contains(item); });
+            return ReadLock(() => list.Contains(item));
         }
 
         public T? Find(Predicate<T> match)
         {
-            return ReadLock(() => { return list.Find(match); });
+            return ReadLock(() => list.Find(match));
         }
 
         public List<T>? FindAll(Predicate<T> match)
         {
-            return ReadLock(() => { return list.FindAll(match); });
+            return ReadLock(() => list.FindAll(match));
         }
 
-        public int FindIndex(Predicate<T> match) => ReadLock(() => { return list.FindIndex(match); });
+        public int FindIndex(Predicate<T> match)
+            => ReadLock(() => list.FindIndex(match));
 
-        public void ForEach(Action<T> action) => ReadLock(() => { list.ForEach(action); });
+        public void ForEach(Action<T> action)
+            => ReadLock(() => { list.ForEach(action); });
 
         public Array? ToArray()
         {
-            return ReadLock(() => { return list.ToArray(); });
+            return ReadLock(list.ToArray);
         }
         public List<T>? ToNewList()
         {
-            List<T> lt = new();
+            List<T> lt = [];
             return ReadLock(() => { lt.AddRange(list); return lt; });
         }
 
