@@ -3,7 +3,6 @@ using Gaming;
 using Grpc.Core;
 using Preparation.Utility;
 using Protobuf;
-using System.Runtime.CompilerServices;
 
 namespace Server
 {
