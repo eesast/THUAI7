@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
+using UnityEditor.iOS;
 using UnityEngine;
 
 public class ShipControl : MonoBehaviour
@@ -37,19 +39,36 @@ public class ShipControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        switch (interactBase.interactOption)
+        {
+            case InteractControl.InteractOption.Produce:
+                foreach (Vector2 resourcePos in PlaceManager.GetInstance().resource)
+                {
+                    if (Tool.GetInstance().CheckBeside(transform.position, resourcePos))
+                    {
+
+                    }
+                }
+                break;
+            default: break;
+        }
         MoveTowards(interactBase.moveOption);
         AttackTowards(interactBase.attackOption);
         interactBase.attackOption = Vector2.zero;
     }
     void MoveTowards(Vector2 pos)
     {
-        if ((pos - (Vector2)transform.position).magnitude > 0.1f)
-        {
-            targetQ = DealQ(Mathf.Atan2(pos.y - transform.position.y, pos.x - transform.position.x) * Mathf.Rad2Deg - 90);
-            SetVQTo((pos - (Vector2)transform.position).normalized * speed);
-        }
-        else
-            SetVQTo(Vector2.zero);
+        if (interactBase.enableMove)
+            if ((pos - (Vector2)transform.position).magnitude > 0.1f)
+            {
+                targetQ = DealQ(Mathf.Atan2(pos.y - transform.position.y, pos.x - transform.position.x) * Mathf.Rad2Deg - 90);
+                SetVQTo((pos - (Vector2)transform.position).normalized * speed);
+            }
+            else
+            {
+                SetVQTo(Vector2.zero);
+                interactBase.enableMove = false;
+            }
     }
     void AttackTowards(Vector2 pos)
     {

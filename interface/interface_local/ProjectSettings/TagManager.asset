@@ -13,7 +13,7 @@ TagManager:
   - Water
   - UI
   - Interactable
-  - 
+  - Passable
   - 
   - 
   - 
@@ -44,4 +44,7 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 4228088997
     locked: 0
