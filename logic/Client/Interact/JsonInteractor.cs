@@ -19,9 +19,9 @@ namespace Client.Interact
 
             if (File.Exists(filepath))
             {
-                FileStream fs = new FileStream(filepath, FileMode.Open, FileAccess.ReadWrite);
-                StreamReader file = new StreamReader(fs, System.Text.Encoding.Default);
-                JsonTextReader reader = new JsonTextReader(file);//解析json模块
+                FileStream fs = new(filepath, FileMode.Open, FileAccess.ReadWrite);
+                StreamReader file = new(fs, System.Text.Encoding.Default);
+                JsonTextReader reader = new(file);//解析json模块
                 JObject o = (JObject)JToken.ReadFrom(reader);
                 string ip = o["ip"].ToString();
                 string port = o["port"].ToString();
@@ -51,7 +51,7 @@ namespace Client.Interact
         public static string[] FileInteract()
         {
             string[] cominfo = new string[10];
-            ConfigData d = new ConfigData();
+            ConfigData d = new();
             if (d.Commands.Launched == false)
             {
                 cominfo[0] = d.Commands.IP;

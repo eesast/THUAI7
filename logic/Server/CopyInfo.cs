@@ -1,8 +1,8 @@
 using GameClass.GameObj;
 using GameClass.GameObj.Areas;
 using Preparation.Utility;
-using Utility = Preparation.Utility;
 using Protobuf;
+using Utility = Preparation.Utility;
 
 namespace Server
 {

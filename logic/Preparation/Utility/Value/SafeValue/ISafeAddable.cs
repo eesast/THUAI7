@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-
-namespace Preparation.Utility
+﻿namespace Preparation.Utility
 {
     public interface ISafeAddable<T>
     {

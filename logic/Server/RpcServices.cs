@@ -3,7 +3,6 @@ using Gaming;
 using Grpc.Core;
 using Preparation.Utility;
 using Protobuf;
-using System.Runtime.CompilerServices;
 
 namespace Server
 {
@@ -508,13 +507,14 @@ namespace Server
             Console.WriteLine($"TRY BuildSweeper: SweeperType {request.SweeperType} from Team {request.TeamId}");
 #endif
             BoolRes boolRes = new();
-
-            if (game.TeamList[(int)request.TeamId].GetShip(request.PlayerId) == null)
+            var ship = game.TeamList[(int)request.TeamId].ShipPool.Find(
+                (ship) => ship.PlayerID == request.PlayerId);
+            if (ship == null)
             {
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
             }
-            else if (game.TeamList[(int)request.TeamId].GetShip(request.PlayerId).IsRemoved == false)
+            else if (ship.IsRemoved == false)
             {
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);

@@ -1,5 +1,5 @@
-﻿using System;
-using Preparation.Utility;
+﻿using Preparation.Utility;
+using System;
 
 namespace GameClass.GameObj.Bullets;
 

@@ -134,7 +134,7 @@ namespace Preparation.Utility
 
     public class TimeBasedProgressAtVariableSpeed
     {
-        private LongInTheVariableRangeWithStartTime progress;
+        private readonly LongInTheVariableRangeWithStartTime progress;
         public AtomicDouble speed;
 
         #region 构造 

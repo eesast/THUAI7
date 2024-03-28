@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Preparation.Utility;
+using System;
 using System.Threading;
-using Preparation.Utility;
 using ITimer = Preparation.Interface.ITimer;
 
 namespace GameClass.GameObj

@@ -1,5 +1,4 @@
 ﻿using Preparation.Utility;
-using System;
 
 namespace GameClass.GameObj.Areas;
 
