@@ -26,13 +26,13 @@ namespace GameClass.GameObj
                 idleChecker: (ship) => ship.IsRemoved,
                 activator: (ship) =>
                 {
-                    ship.CanMove.SetReturnOri(true);
-                    ship.IsRemoved.SetReturnOri(false);
+                    ship.CanMove.SetROri(true);
+                    ship.IsRemoved.SetROri(false);
                 },
                 inactivator: (ship) =>
                 {
-                    ship.CanMove.SetReturnOri(false);
-                    ship.IsRemoved.SetReturnOri(true);
+                    ship.CanMove.SetROri(false);
+                    ship.IsRemoved.SetROri(true);
                 });
             ShipPool.Initiate(ShipType.CivilShip, GameData.MaxCivilShipNum,
                               () => new(GameData.ShipRadius, ShipType.CivilShip, MoneyPool));

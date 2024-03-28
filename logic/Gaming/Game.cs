@@ -197,7 +197,7 @@ namespace Gaming
                 {
                     gameMap.GameObjDict[GameObjType.Ship].ForEach(delegate (IGameObj ship)
                     {
-                        ((Ship)ship).CanMove.SetReturnOri(false);
+                        ((Ship)ship).CanMove.SetROri(false);
                     });
                     gameMap.GameObjDict[keyValuePair.Key].Clear();
                 }
