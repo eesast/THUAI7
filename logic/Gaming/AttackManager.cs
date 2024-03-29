@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using GameClass.GameObj;
+﻿using GameClass.GameObj;
 using GameClass.GameObj.Areas;
 using GameClass.GameObj.Bullets;
 using GameEngine;
-using Preparation.Utility;
 using Preparation.Interface;
-using Timothy.FrameRateTask;
+using Preparation.Utility;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using Timothy.FrameRateTask;
 
 namespace Gaming
 {
@@ -21,7 +21,7 @@ namespace Gaming
             public readonly MoveEngine moveEngine = new(
                     gameMap: gameMap,
                     OnCollision: (obj, collisionObj, moveVec) => MoveEngine.AfterCollision.Destroyed,
-                    EndMove: obj => obj.CanMove.SetReturnOri(false)
+                    EndMove: obj => obj.CanMove.SetROri(false)
                 );
 
             public void ProduceBulletNaturally(BulletType bulletType, Ship ship, double angle, XY pos)
@@ -57,7 +57,7 @@ namespace Gaming
             {
                 if (gameMap.Remove(bullet))
                 {
-                    bullet.CanMove.SetReturnOri(false);
+                    bullet.CanMove.SetROri(false);
                     if (bullet.BulletBombRange > 0)
                     {
                         BombedBullet bombedBullet = new(bullet);
