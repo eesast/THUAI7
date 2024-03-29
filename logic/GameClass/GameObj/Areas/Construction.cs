@@ -31,7 +31,7 @@ public class Construction(XY initPos)
         {
             if (this.constructionType == ConstructionType.Null || HP == 0)
             {
-                TeamID.SetReturnOri(ship.TeamID);
+                TeamID.SetROri(ship.TeamID);
                 this.constructionType = constructionType;
                 switch (constructionType)
                 {

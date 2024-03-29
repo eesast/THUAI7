@@ -14,8 +14,8 @@ namespace Gaming
             {
                 Ship newShip = new(GameData.ShipRadius, shipType, moneyPool);
                 gameMap.Add(newShip);
-                newShip.TeamID.SetReturnOri(teamID);
-                newShip.PlayerID.SetReturnOri(playerID);
+                newShip.TeamID.SetROri(teamID);
+                newShip.PlayerID.SetROri(playerID);
                 return newShip;
             }
             public bool ActivateShip(Ship ship, XY pos)
@@ -38,7 +38,7 @@ namespace Gaming
                 ship.ReSetPos(pos);
                 long stateNum = ship.SetShipState(RunningStateType.RunningActively, ShipStateType.Null);
                 ship.ResetShipState(stateNum);
-                ship.CanMove.SetReturnOri(true);
+                ship.CanMove.SetROri(true);
                 return true;
             }
             public void BeAttacked(Ship ship, Bullet bullet)
