@@ -8,6 +8,7 @@ public class BaseControl : MonoBehaviour
     public Vector2[] generatePos = new Vector2[2];
     [SerializeField]
     public MessageOfBase messageOfBase;
+    public GameObject obj;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,16 +24,16 @@ public class BaseControl : MonoBehaviour
         switch (interactBase.interactOption)
         {
             case InteractControl.InteractOption.BuildCivil:
-                ObjCreater.GetInstance().CreateObj(ShipType.CIVILIAN_SHIP, generatePos[Tool.GetInstance().GetRandom(0, 2)]).GetComponent<ShipControl>()
-                    .messageOfShip.playerTeam = messageOfBase.playerTeam;
+                obj = ObjCreater.GetInstance().CreateObj(ShipType.CIVILIAN_SHIP, generatePos[Tool.GetInstance().GetRandom(0, 2)]);
+                obj.GetComponent<ShipControl>().messageOfShip.playerTeam = messageOfBase.playerTeam;
                 break;
             case InteractControl.InteractOption.BuildMilitary:
-                ObjCreater.GetInstance().CreateObj(ShipType.MILITARY_SHIP, generatePos[Tool.GetInstance().GetRandom(0, 2)]).GetComponent<ShipControl>()
-                    .messageOfShip.playerTeam = messageOfBase.playerTeam;
+                obj = ObjCreater.GetInstance().CreateObj(ShipType.MILITARY_SHIP, generatePos[Tool.GetInstance().GetRandom(0, 2)]);
+                obj.GetComponent<ShipControl>().messageOfShip.playerTeam = messageOfBase.playerTeam;
                 break;
             case InteractControl.InteractOption.BuildFlag:
-                ObjCreater.GetInstance().CreateObj(ShipType.FLAG_SHIP, generatePos[Tool.GetInstance().GetRandom(0, 2)]).GetComponent<ShipControl>()
-                    .messageOfShip.playerTeam = messageOfBase.playerTeam;
+                obj = ObjCreater.GetInstance().CreateObj(ShipType.FLAG_SHIP, generatePos[Tool.GetInstance().GetRandom(0, 2)]);
+                obj.GetComponent<ShipControl>().messageOfShip.playerTeam = messageOfBase.playerTeam;
                 break;
             default: break;
         }
