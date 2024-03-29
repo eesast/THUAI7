@@ -263,9 +263,6 @@ class SweeperDebugAPI(ISweeperAPI, IGameTimer):
     def PrintTeam(self) -> None:
         pass
 
-    def PrintTeam(self) -> None:
-        pass
-
     def PrintSelfInfo(self) -> None:
         sweeper = self.__logic.GetSelfInfo()
         self.__logger.info("******sweeper Info******")

@@ -59,7 +59,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetMoney(self) -> int:
+    def GetEnergy(self) -> int:
         pass
 
     @abstractmethod
@@ -214,7 +214,7 @@ class IAPI(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetMoney(self) -> int:
+    def GetEnergy(self) -> int:
         pass
 
     @abstractmethod
