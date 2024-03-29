@@ -391,7 +391,7 @@ public class Ship : Movable, IShip
         {
             if (SetShipState(RunningStateType.RunningForcibly, shipStateType) == -1) return false;
             TryToRemove();
-            CanMove.SetReturnOri(false);
+            CanMove.SetROri(false);
             position = GameData.PosNotInGame;
         }
         return true;
@@ -408,14 +408,14 @@ public class Ship : Movable, IShip
     public Ship(int initRadius, ShipType shipType, MoneyPool moneyPool) :
         base(GameData.PosNotInGame, initRadius, GameObjType.Ship)
     {
-        this.CanMove.SetReturnOri(false);
-        this.IsRemoved.SetReturnOri(true);
+        this.CanMove.SetROri(false);
+        this.IsRemoved.SetROri(true);
         this.Occupation = OccupationFactory.FindIOccupation(this.ShipType = shipType);
         this.ViewRange = this.Occupation.ViewRange;
         this.HP = new(this.Occupation.MaxHp);
         this.Armor = new(this.Occupation.BaseArmor);
         this.Shield = new(this.Occupation.BaseShield);
-        this.MoveSpeed.SetReturnOri(this.orgMoveSpeed = Occupation.MoveSpeed);
+        this.MoveSpeed.SetROri(this.orgMoveSpeed = Occupation.MoveSpeed);
         this.MoneyPool = moneyPool;
         (this.producerType, this.constructorType, this.armorType, this.shieldType, this.weaponType) = this.ShipType switch
         {
