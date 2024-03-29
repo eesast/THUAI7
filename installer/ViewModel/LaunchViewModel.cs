@@ -7,20 +7,19 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using installer.Model;
 
 namespace installer.ViewModel
 {
     public class LaunchViewModel : BaseViewModel
     {
-        public LaunchViewModel()
+        private readonly Downloader Downloader;
+        public LaunchViewModel(Downloader downloader)
         {
-            ip = "127.0.0.1";
-            port = "8888";
-            teamID = "0";
-            playerID = "0";
-            sweeperType = "0";
-            playbackFile = "D:\\Playback";
-            playbackSpeed = "2.0";
+            Downloader = downloader;
+
+            PlaybackSpeed = Downloader.Data.Config.Commands.PlaybackSpeed.ToString();
+            StartEnabled = true;
 
             StartBtnClickedCommand = new AsyncRelayCommand(StartBtnClicked);
         }
@@ -36,73 +35,85 @@ namespace installer.ViewModel
             }
         }
 
-        private string ip;
+
         public string IP
         {
-            get => ip;
+            get => Downloader.Data.Config.Commands.IP;
             set
             {
-                ip = value;
+                Downloader.Data.Config.Commands.IP = value;
                 OnPropertyChanged();
             }
         }
-        private string port;
+
         public string Port
         {
-            get => port;
+            get => Downloader.Data.Config.Commands.Port;
             set
             {
-                port = value;
+                Downloader.Data.Config.Commands.Port = value;
                 OnPropertyChanged();
             }
         }
-        private string teamID;
+
         public string TeamID
         {
-            get => teamID;
+            get => Downloader.Data.Config.Commands.TeamID;
             set
             {
-                teamID = value;
+                Downloader.Data.Config.Commands.TeamID = value;
                 OnPropertyChanged();
             }
         }
-        private string playerID;
+
         public string PlayerID
         {
-            get => playerID;
+            get => Downloader.Data.Config.Commands.PlayerID;
             set
             {
-                playerID = value;
+                Downloader.Data.Config.Commands.PlayerID = value;
                 OnPropertyChanged();
             }
         }
-        private string sweeperType;
+
         public string SweeperType
         {
-            get => sweeperType;
+            get => Downloader.Data.Config.Commands.SweeperType;
             set
             {
-                sweeperType = value;
+                Downloader.Data.Config.Commands.SweeperType = value;
                 OnPropertyChanged();
             }
         }
-        private string playbackFile;
+
         public string PlaybackFile
         {
-            get => playbackFile;
+            get => Downloader.Data.Config.Commands.PlaybackFile;
             set
             {
-                playbackFile = value;
+                Downloader.Data.Config.Commands.PlaybackFile = value;
                 OnPropertyChanged();
             }
         }
-        private string playbackSpeed;
-        public string PlaybackSpeed
+
+        public string? playbackSpeed;
+        public string? PlaybackSpeed
         {
             get => playbackSpeed;
             set
             {
                 playbackSpeed = value;
+                try
+                {
+                    Downloader.Data.Config.Commands.PlaybackSpeed = Convert.ToDouble(value);
+                    DebugAlert = null;
+                    StartEnabled = true;
+                }
+                catch (Exception e)
+                {
+                    DebugAlert = e.ToString();
+                    StartEnabled = false;
+                }
                 OnPropertyChanged();
             }
         }
@@ -113,10 +124,11 @@ namespace installer.ViewModel
             get => startEnabled;
             set
             {
-                startEnabled = true;
+                startEnabled = value;
                 OnPropertyChanged();
             }
         }
+
 
         public ICommand StartBtnClickedCommand { get; }
         private async Task StartBtnClicked()
@@ -126,13 +138,13 @@ namespace installer.ViewModel
 
         private void Start()
         {
-            DebugAlert = IP.ToString() + " "
-                       + Port.ToString() + " "
-                       + TeamID.ToString() + " "
-                       + PlayerID.ToString() + " "
-                       + SweeperType.ToString() + " "
-                       + PlaybackFile.ToString() + " "
-                       + PlaybackSpeed.ToString();
+            DebugAlert = IP + " "
+                       + Port + " "
+                       + TeamID + " "
+                       + PlayerID + " "
+                       + SweeperType + " "
+                       + PlaybackFile + " "
+                       + PlaybackSpeed;
         }
     }
 }

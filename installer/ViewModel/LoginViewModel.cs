@@ -5,16 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using installer.Model;
 
 namespace installer.ViewModel
 {
     public class LoginViewModel : BaseViewModel
     {
-        private readonly Model.Downloader Downloader;
+        private readonly Downloader Downloader;
 
-        public LoginViewModel(Model.Downloader downloader)
+        public LoginViewModel(Downloader downloader)
         {
             Downloader = downloader;
+
             LoginBtnClickedCommand = new RelayCommand(LoginBtnClicked);
         }
 
