@@ -129,6 +129,7 @@ public class PlayerControl : SingletonMono<PlayerControl>
         {
             foreach (InteractBase interactBase in selectedInt)
             {
+                interactBase.enableMove = true;
                 interactBase.moveOption = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             }
         }
