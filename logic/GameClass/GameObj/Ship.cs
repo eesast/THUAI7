@@ -450,5 +450,6 @@ public class Ship : Movable, IShip
             ModuleFactory.FindIShield(ShipType, shieldType),
             ModuleFactory.FindIWeapon(ShipType, weaponType)
         );
+        Debugger.Output(this, "Ship created");
     }
 }
