@@ -188,12 +188,12 @@ namespace Gaming
                 }
                 if (bullet != null)
                 {
-                    Debugger.Output($"playerID:{ship.ID} successfully attacked!");
+                    Debugger.Output($"Player {ship.PlayerID} from Team {ship.TeamID} successfully attacked!");
                     return true;
                 }
                 else
                 {
-                    Debugger.Output($"playerID:{ship.ID} failed to attack!");
+                    Debugger.Output($"Player {ship.PlayerID} from Team {ship.TeamID} failed to attack!");
                     return false;
                 }
             }
