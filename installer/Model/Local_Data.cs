@@ -14,53 +14,14 @@ using Command = installer.Data.Command;
 
 namespace installer.Model
 {
-    public record VersionID
-    {
-        public VersionID(int major, int minor, int build, int revision)
-        {
-            (Major, Minor, Build, Revision) = (major, minor, build, revision);
-        }
-        public int Major, Minor, Build, Revision;
-        public static bool operator >(VersionID left, VersionID right)
-        {
-            return (left.Major > right.Major) |
-                (left.Major == right.Major && left.Minor > right.Minor) |
-                (left.Major == right.Major && left.Minor == right.Minor && left.Build > right.Build) |
-                (left.Major == right.Major && left.Minor == right.Minor && left.Build == right.Build && left.Revision > right.Revision);
-        }
-        public static bool operator <(VersionID left, VersionID right)
-        {
-            return (left.Major < right.Major) |
-                (left.Major == right.Major && left.Minor < right.Minor) |
-                (left.Major == right.Major && left.Minor == right.Minor && left.Build < right.Build) |
-                (left.Major == right.Major && left.Minor == right.Minor && left.Build == right.Build && left.Revision < right.Revision);
-        }
-    }
-    public class MD5DataFile
-    {
-        public Dictionary<string, string> Data { get; set; } = new Dictionary<string, string>();
-        public Command Command { get; set; } = new Command();
-        public VersionID Version = new VersionID(1, 0, 0, 0);
-        public string Description { get; set; }
-            = "The Description of the current version.";
-        public string BugFixed { get; set; }
-            = "Bugs had been fixed.";
-        public string BugGenerated { get; set; }
-            = "New bugs found in the new version.";
-    }
-
     public class Local_Data
     {
         public string ConfigPath;       // 标记路径记录文件THUAI7.json的路径
         public string MD5DataPath;      // 标记MD5本地缓存文件的路径
-        public string UserCodePostfix = "cpp";  // 用户文件后缀(.cpp/.py)
         public MD5DataFile FileHashData = new MD5DataFile();
         public ConfigData Config;
-        public string UserCodePath
-        {
-            get => Path.Combine(Config.InstallPath,
-            $"???{Path.DirectorySeparatorChar}AI{UserCodePostfix}");
-        }
+        public Version CurrentVersion;
+        public Dictionary<LanguageOption, (bool, string)> LangEnabled;
         public string LogPath { get => Path.Combine(Config.InstallPath, "Logs"); }
         public ConcurrentDictionary<string, string> MD5Data
         {
@@ -96,12 +57,14 @@ namespace installer.Model
                         if (!File.Exists(MD5DataPath))
                             SaveMD5Data();
                         ReadMD5Data();
+                        CurrentVersion = FileHashData.Version;
                         MD5Update.Clear();
                     }
                     else
                     {
                         MD5DataPath = Path.Combine(Config.InstallPath, $".{Path.DirectorySeparatorChar}hash.json");
                         Config.MD5DataPath = $".{Path.DirectorySeparatorChar}hash.json";
+                        CurrentVersion = FileHashData.Version;
                         SaveMD5Data();
                     }
                     RememberMe = (Config.Remembered && Convert.ToBoolean(Config.Remembered));
@@ -114,6 +77,7 @@ namespace installer.Model
                     Config.MD5DataPath = Config.InstallPath;
                     MD5DataPath = Path.Combine(Config.InstallPath, $".{Path.DirectorySeparatorChar}hash.json");
                     Config.MD5DataPath = $".{Path.DirectorySeparatorChar}hash.json";
+                    CurrentVersion = FileHashData.Version;
                     SaveMD5Data();
                 }
             }
@@ -123,6 +87,7 @@ namespace installer.Model
                 var dir = Directory.CreateDirectory(Path.Combine(AppContext.BaseDirectory, "THUAI7"));
                 Config.InstallPath = dir.FullName;
                 MD5DataPath = Path.Combine(Config.InstallPath, $".{Path.DirectorySeparatorChar}hash.json");
+                CurrentVersion = FileHashData.Version;
                 Config.MD5DataPath = $".{Path.DirectorySeparatorChar}hash.json";
                 SaveMD5Data();
             }
@@ -139,6 +104,11 @@ namespace installer.Model
             Log = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.log"));
             LogError = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.error.log"));
             Exceptions = new ExceptionStack(LogError, this);
+            LangEnabled = new Dictionary<LanguageOption, (bool, string)>();
+            foreach (var a in typeof(LanguageOption).GetEnumValues())
+            {
+                LangEnabled.Add((LanguageOption)a, (false, string.Empty));
+            }
         }
 
         ~Local_Data()
@@ -219,7 +189,7 @@ namespace installer.Model
                 }
                 r.Close(); r.Dispose();
             }
-            catch (JsonException e)
+            catch (JsonException)
             {
                 // Json反序列化失败，考虑重新创建MD5数据库
                 r.Close(); r.Dispose();
@@ -251,6 +221,7 @@ namespace installer.Model
         {
             try
             {
+                FileHashData.Version = CurrentVersion;
                 using (FileStream fs = new FileStream(MD5DataPath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 using (StreamWriter sw = new StreamWriter(fs))
                 {
@@ -289,7 +260,7 @@ namespace installer.Model
             {
                 string cur = stack.Pop();
                 files.AddRange(from f in Directory.GetFiles(cur)
-                               where !IsUserFile(f)
+                               where !IsUserFile(f, LangEnabled)
                                select f);
                 foreach (var d in Directory.GetDirectories(cur))
                     stack.Push(d);
@@ -326,7 +297,6 @@ namespace installer.Model
             SaveMD5Data();
         }
 
-
         public static bool IsUserFile(string filename)
         {
             if (filename.Contains("git") || filename.Contains("bin") || filename.Contains("obj"))
@@ -344,6 +314,14 @@ namespace installer.Model
             return false;
         }
 
+        public static bool IsUserFile(string filename, Dictionary<LanguageOption, (bool, string)> dict)
+        {
+            if (filename.Contains("AI.cpp"))
+                dict[LanguageOption.cpp] = (true, filename);
+            if (filename.Contains("AI.py"))
+                dict[LanguageOption.python] = (true, filename);
+            return IsUserFile(filename);
+        }
         public static int CountFile(string folder, string? root = null)
         {
             int result = (from f in Directory.EnumerateFiles(folder)

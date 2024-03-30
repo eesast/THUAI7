@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.IO.Compression;
 using System.Formats.Tar;
 using installer.Data;
+using installer.Services;
 
 namespace installer.Model
 {
@@ -31,6 +32,7 @@ namespace installer.Model
         public string StartName = "maintest.exe";           // 启动的程序名
         public Local_Data Data;                             // 本地文件管理器
         public Tencent_Cos Cloud;                           // THUAI7 Cos桶
+        public Version CurrentVersion { get => Data.CurrentVersion; set => Data.CurrentVersion = value; }
 
         public HttpClient Client = new HttpClient();
         public EEsast Web;                                  // EEsast服务器
@@ -50,10 +52,10 @@ namespace installer.Model
         public string UserEmail { get => Web.Email; }
         public Data.Command Commands
         {
-            get => Data.FileHashData.Command;
+            get => Data.Config.Commands;
             set
             {
-                Data.FileHashData.Command = value;
+                Data.Config.Commands = value;
             }
         }
         public enum UsingOS { Win, Linux, OSX };
@@ -122,7 +124,6 @@ namespace installer.Model
             Web.Token_Changed += SaveToken;
             LoggerBinding();
 
-            string? temp;
             if (Data.Config.Remembered)
             {
                 Username = Data.Config.UserName;
@@ -291,16 +292,67 @@ namespace installer.Model
             Status = UpdateStatus.hash_computing;
             Data.ScanDir();
             Status = UpdateStatus.success;
-            return Data.MD5Update.Count != 0;
+            return Data.MD5Update.Count != 0 || CurrentVersion < Data.FileHashData.Version;
         }
 
         /// <summary>
         /// 更新文件
         /// </summary>
-        public void Update()
+        public int Update()
         {
+            int result = 0;
             if (CheckUpdate())
             {
+                // 处理AI.cpp/AI.py合并问题
+                if (CurrentVersion < Data.FileHashData.Version)
+                {
+                    var c = CurrentVersion;
+                    var v = Data.FileHashData.Version;
+                    Status = UpdateStatus.downloading;
+                    var p = Path.Combine(Data.Config.InstallPath, "Templates");
+                    var tocpp = Cloud.DownloadFileAsync(Path.Combine(p, $"v{c}.cpp.t"),
+                        $"./Template/v{c}.cpp.t");
+                    var topy = Cloud.DownloadFileAsync(Path.Combine(p, $"v{c}.py.t"),
+                        $"./Template/v{c}.py.t");
+                    var tncpp = Cloud.DownloadFileAsync(Path.Combine(p, $"v{v}.cpp.t"),
+                        $"./Template/v{v}.cpp.t");
+                    var tnpy = Cloud.DownloadFileAsync(Path.Combine(p, $"v{v}.py.t"),
+                        $"./Template/v{v}.py.t");
+                    Task.WaitAll(tocpp, topy, tncpp, tnpy);
+                    if (Directory.GetFiles(p).Count() == 4)
+                    {
+                        if (Data.LangEnabled[LanguageOption.cpp].Item1)
+                        {
+                            var so = FileService.ReadToEnd(Path.Combine(p, $"v{c}.cpp.t"));
+                            var sn = FileService.ReadToEnd(Path.Combine(p, $"v{v}.cpp.t"));
+                            var sa = FileService.ReadToEnd(Data.LangEnabled[LanguageOption.cpp].Item2);
+                            var s = FileService.MergeUserCode(sa, so, sn);
+                            using (var f = new FileStream(Data.LangEnabled[LanguageOption.cpp].Item2 + ".temp", FileMode.Create))
+                            using (var w = new StreamWriter(f))
+                            {
+                                w.Write(s);
+                                w.Flush();
+                            }
+                            result |= 1;
+                        }
+                        if (Data.LangEnabled[LanguageOption.python].Item1)
+                        {
+                            var so = FileService.ReadToEnd(Path.Combine(p, $"v{c}.py.t"));
+                            var sn = FileService.ReadToEnd(Path.Combine(p, $"v{v}.py.t"));
+                            var sa = FileService.ReadToEnd(Data.LangEnabled[LanguageOption.python].Item2);
+                            var s = FileService.MergeUserCode(sa, so, sn);
+                            using (var f = new FileStream(Data.LangEnabled[LanguageOption.python].Item2 + ".temp", FileMode.Create))
+                            using (var w = new StreamWriter(f))
+                            {
+                                w.Write(s);
+                                w.Flush();
+                            }
+                            result |= 2;
+                        }
+                    }
+                }
+                downloadFailed.Clear();
+
                 Status = UpdateStatus.downloading;
                 Cloud.DownloadQueueAsync(Data.Config.InstallPath,
                     from item in Data.MD5Update where item.state != System.Data.DataRowState.Added select item.name,
@@ -320,16 +372,17 @@ namespace installer.Model
                     if (Data.MD5Update.Count == 0)
                     {
                         Status = UpdateStatus.success;
-                        return;
+                        return result;
                     }
                 }
             }
             else
             {
                 Status = UpdateStatus.success;
-                return;
+                return result;
             }
             Status = UpdateStatus.error;
+            return result;
         }
 
         /// <summary>
@@ -388,7 +441,7 @@ namespace installer.Model
                     lang = "unknown";
                     break;
             }
-            Web.UploadFiles(Client, Path.Combine(Data.Config.InstallPath, Data.UserCodePath), lang, $"player_{player_id}").Wait();
+            Web.UploadFiles(Client, Data.LangEnabled[Commands.Language].Item2, lang, $"player_{player_id}").Wait();
         }
         #endregion
     }
