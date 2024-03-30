@@ -1,6 +1,6 @@
 ﻿namespace Preparation.Utility
 {
-    public interface ISafeAddable<T>
+    public interface IAddable<T>
     {
         public void Add(T value);
     }

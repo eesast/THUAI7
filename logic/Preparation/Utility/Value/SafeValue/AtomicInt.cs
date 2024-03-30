@@ -5,7 +5,7 @@ namespace Preparation.Utility
 {
     //其对应属性不应当有set访问器，避免不安全的=赋值
 
-    public class AtomicInt(int x) : Atomic, ISafeAddable<int>
+    public class AtomicInt(int x) : Atomic, IAddable<int>
     {
         protected int v = x;
 
@@ -49,8 +49,8 @@ namespace Preparation.Utility
     /// </summary>
     public class AtomicIntOnlyAddScore(int x, double speed = 1.0) : AtomicInt(x)
     {
-        public ISafeAddable<int> score = new AtomicInt(0);
-        public ISafeAddable<int> Score
+        public IAddable<int> score = new AtomicInt(0);
+        public IAddable<int> Score
         {
             get
             {
@@ -154,7 +154,18 @@ namespace Preparation.Utility
     /// </summary>
     public class AtomicIntChangeAffectScore(int x, double speed = 1.0) : AtomicInt(x)
     {
-        public ISafeAddable<int> Score { get; set; } = new AtomicInt(0);
+        public IAddable<int> score = new AtomicInt(0);
+        public IAddable<int> Score
+        {
+            get
+            {
+                return Interlocked.CompareExchange(ref score, null, null);
+            }
+            set
+            {
+                Interlocked.Exchange(ref score, value);
+            }
+        }
         public AtomicDouble speed = new(speed);
 
         /// <returns>返回操作前的值</returns>
@@ -249,7 +260,7 @@ namespace Preparation.Utility
         }
     }
 
-    public class AtomicLong(long x) : Atomic, ISafeAddable<int>, ISafeAddable<long>
+    public class AtomicLong(long x) : Atomic, IAddable<int>, IAddable<long>
     {
         protected long v = x;
 
@@ -280,7 +291,18 @@ namespace Preparation.Utility
     /// </summary>
     public class AtomicLongOnlyAddScore(long x, double speed = 1.0) : AtomicLong(x)
     {
-        public ISafeAddable<long> Score { get; set; } = new AtomicLong(0);
+        public IAddable<long> score = new AtomicLong(0);
+        public IAddable<long> Score
+        {
+            get
+            {
+                return Interlocked.CompareExchange(ref score, null, null);
+            }
+            set
+            {
+                Interlocked.Exchange(ref score, value);
+            }
+        }
         public AtomicDouble speed = new(speed);
 
         /// <returns>返回操作前的值</returns>

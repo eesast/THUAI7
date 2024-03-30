@@ -374,8 +374,8 @@ namespace Preparation.Utility
             {
                 int previousV = v;
                 int addV = (int)((Environment.TickCount64 - startTime.Stop()) * speed);
-                if (addV < 0) v += addV;
-                else return 0;
+                if (addV <= 0) return 0;
+                else v += addV;
                 if (v > maxV) v = maxV;
                 return v - previousV;
             }
