@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Preparation.Utility;
+using System;
 using System.Threading;
-using Preparation.Utility;
 using ITimer = Preparation.Interface.ITimer;
 
 namespace GameClass.GameObj
@@ -25,7 +25,7 @@ namespace GameClass.GameObj
                     return false;
                 startTime = Environment.TickCount64;
                 Thread.Sleep(timeInMilliseconds);
-                IsGaming.SetReturnOri(false);
+                IsGaming.SetROri(false);
                 return true;
             }
         }
