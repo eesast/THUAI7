@@ -182,27 +182,26 @@ class Logic(ILogic):
         with self.__mtxState:
             self.__logger.debug("Called GetHomeHp")
             return copy.deepcopy(
-                self.__currentState.gameInfo.blueHomeHp
+                self.__currentState.gameInfo.redHomeHp
                 if self.__teamID == 1
-                else self.__currentState.gameInfo.redHomeHp
+                else self.__currentState.gameInfo.blueHomeHp
             )
 
     def GetEnergy(self) -> int:
         with self.__mtxState:
             self.__logger.debug("Called GetEnergy")
             return copy.deepcopy(
-                self.__currentState.gameInfo.blueMoney
+                self.__currentState.gameInfo.redEnergy
                 if self.__teamID == 1
-                else self.__currentState.gameInfo.redMoney
+                else self.__currentState.gameInfo.blueEnergy
             )
-
     def GetScore(self) -> int:
         with self.__mtxState:
             self.__logger.debug("Called GetScore")
             return copy.deepcopy(
-                self.__currentState.gameInfo.blueScore
+                self.__currentState.gameInfo.redScore
                 if self.__teamID == 1
-                else self.__currentState.gameInfo.redScore
+                else self.__currentState.gameInfo.blueScore
             )
 
     def Attack(self, angle: float) -> int:
