@@ -4,6 +4,7 @@ using GameClass.GameObj.Bullets;
 using GameEngine;
 using Preparation.Interface;
 using Preparation.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -14,27 +15,46 @@ namespace Gaming
     public partial class Game
     {
         private readonly AttackManager attackManager;
-        private class AttackManager(Map gameMap, ShipManager shipManager)
+        private class AttackManager
         {
-            private readonly Map gameMap = gameMap;
-            private readonly ShipManager shipManager = shipManager;
-            public readonly MoveEngine moveEngine = new(
+            private readonly Map gameMap;
+            private readonly ShipManager shipManager;
+            private readonly MoveEngine moveEngine;
+            public AttackManager(Map gameMap, ShipManager shipManager)
+            {
+                this.gameMap = gameMap;
+                this.shipManager = shipManager;
+                moveEngine = new(
                     gameMap: gameMap,
-                    OnCollision: (obj, collisionObj, moveVec) => MoveEngine.AfterCollision.Destroyed,
-                    EndMove: obj => obj.CanMove.SetROri(false)
+                    OnCollision: (obj, collisionObj, moveVec) =>
+                    {
+                        BulletBomb((Bullet)obj, (GameObj)collisionObj);
+                        return MoveEngine.AfterCollision.Destroyed;
+                    },
+                    EndMove: obj =>
+                    {
+                        Debugger.Output(obj, " end move at " + obj.Position.ToString() + " At time: " + Environment.TickCount64);
+                        if (obj.CanMove)
+                        {
+                            BulletBomb((Bullet)obj, null);
+                        }
+                        obj.CanMove.SetROri(false);
+                    }
                 );
-
+            }
             public void ProduceBulletNaturally(BulletType bulletType, Ship ship, double angle, XY pos)
             {
                 // 子弹如果没有和其他物体碰撞，将会一直向前直到超出人物的attackRange
                 if (bulletType == BulletType.Null) return;
                 Bullet? bullet = BulletFactory.GetBullet(ship, pos, bulletType);
                 if (bullet == null) return;
+                Debugger.Output(bullet, "Attack in " + pos.ToString());
                 gameMap.Add(bullet);
                 moveEngine.MoveObj(bullet, (int)(bullet.AttackDistance * 1000 / bullet.MoveSpeed), angle, ++bullet.StateNum);  // 这里时间参数除出来的单位要是ms
             }
             private void BombObj(Bullet bullet, GameObj objBeingShot)
             {
+                Debugger.Output(bullet, "bombed " + objBeingShot.ToString());
                 switch (objBeingShot.Type)
                 {
                     case GameObjType.Ship:
@@ -77,6 +97,11 @@ namespace Gaming
             }
             private void BulletBomb(Bullet bullet, GameObj? objBeingShot)
             {
+                if (objBeingShot != null)
+                    Debugger.Output(bullet, "bombed with" + objBeingShot.ToString());
+                else
+                    Debugger.Output(bullet, "bombed without objBeingShot");
+
                 if (!TryRemoveBullet(bullet))
                 {
                     return;
@@ -120,6 +145,7 @@ namespace Gaming
                 Bullet? bullet = ship.Attack(angle);
                 if (bullet != null)
                 {
+                    Debugger.Output(bullet, "Attack in " + bullet.Position.ToString());
                     gameMap.Add(bullet);
                     moveEngine.MoveObj(bullet, (int)(bullet.AttackDistance * 1000 / bullet.MoveSpeed), angle, ++bullet.StateNum);  // 这里时间参数除出来的单位要是ms
                     if (bullet.CastTime > 0)
@@ -161,9 +187,15 @@ namespace Gaming
                     }
                 }
                 if (bullet != null)
+                {
+                    Debugger.Output($"Player {ship.PlayerID} from Team {ship.TeamID} successfully attacked!");
                     return true;
+                }
                 else
+                {
+                    Debugger.Output($"Player {ship.PlayerID} from Team {ship.TeamID} failed to attack!");
                     return false;
+                }
             }
         }
     }
