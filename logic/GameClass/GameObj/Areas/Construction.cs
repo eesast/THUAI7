@@ -1,5 +1,4 @@
 ﻿using Preparation.Utility;
-using System;
 
 namespace GameClass.GameObj.Areas;
 
@@ -31,7 +30,7 @@ public class Construction(XY initPos)
         {
             if (this.constructionType == ConstructionType.Null || HP == 0)
             {
-                TeamID.SetReturnOri(ship.TeamID);
+                TeamID.SetROri(ship.TeamID);
                 this.constructionType = constructionType;
                 switch (constructionType)
                 {
@@ -54,7 +53,12 @@ public class Construction(XY initPos)
                 return false;
             }
         }
-        return HP.AddV(constructSpeed) > 0;
+        var addHP = HP.GetMaxV() - HP > constructSpeed ? constructSpeed : HP.GetMaxV() - HP;
+        if (ship.MoneyPool.Money < addHP / 10)
+        {
+            return false;
+        }
+        return ship.MoneyPool.SubMoney(HP.AddV(addHP) / 10) > 0;
     }
     public void BeAttacked(Bullet bullet)
     {
@@ -62,6 +66,10 @@ public class Construction(XY initPos)
         {
             long subHP = bullet.AP;
             HP.SubPositiveV(subHP);
+        }
+        if (HP == 0)
+        {
+            constructionType = ConstructionType.Null;
         }
     }
     public void AddConstructNum(int add = 1)

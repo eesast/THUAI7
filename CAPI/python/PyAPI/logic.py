@@ -10,19 +10,27 @@ import proto.Message2Clients_pb2 as Message2Clients
 from queue import Queue
 import PyAPI.structures as THUAI7
 from PyAPI.utils import Proto2THUAI7, AssistFunction
-from PyAPI.API import ShipAPI, TeamAPI
+from PyAPI.API import SweeperAPI, TeamAPI
+from PyAPI.DebugAPI import SweeperDebugAPI, TeamDebugAPI
 from PyAPI.AI import Setting
 from PyAPI.Communication import Communication
 from PyAPI.State import State
 from PyAPI.Interface import ILogic, IGameTimer
+from PyAPI.DebugAPI import SweeperDebugAPI, TeamDebugAPI
 
 
 class Logic(ILogic):
-    def __init__(self, playerID: int, teamID: int, playerType: THUAI7.PlayerType, shipType: THUAI7.SweeperType) -> None:
+    def __init__(
+        self,
+        playerID: int,
+        teamID: int,
+        playerType: THUAI7.PlayerType,
+        sweeperType: THUAI7.SweeperType,
+    ) -> None:
         self.__playerID: int = playerID
         self.__teamID: int = teamID
         self.__playerType: THUAI7.PlayerType = playerType
-        self.__shipType: THUAI7.SweeperType = shipType
+        self.__sweeperType: THUAI7.SweeperType = sweeperType
 
         self.__comm: Communication
 
@@ -55,14 +63,14 @@ class Logic(ILogic):
 
         self.__messageQueue: Queue = Queue()
 
-    def GetShips(self) -> List[THUAI7.Sweeper]:
+    def GetSweepers(self) -> List[THUAI7.Sweeper]:
         with self.__mtxState:
-            self.__logger.debug("Called GetShips")
-            return copy.deepcopy(self.__currentState.ships)
+            self.__logger.debug("Called GetSweepers")
+            return copy.deepcopy(self.__currentState.sweepers)
 
-    def GetEnemyShips(self) -> List[THUAI7.Sweeper]:
+    def GetEnemySweepers(self) -> List[THUAI7.Sweeper]:
         with self.__mtxState:
-            self.__logger.debug("Called GetEnemyShips")
+            self.__logger.debug("Called GetEnemySweepers")
             return copy.deepcopy(self.__currentState.enemySweepers)
 
     def GetBullets(self) -> List[THUAI7.Bullet]:
@@ -82,7 +90,12 @@ class Logic(ILogic):
 
     def GetPlaceType(self, x: int, y: int) -> THUAI7.PlaceType:
         with self.__mtxState:
-            if x < 0 or x >= len(self.__currentState.gameMap) or y < 0 or y >= len(self.__currentState.gameMap[0]):
+            if (
+                x < 0
+                or x >= len(self.__currentState.gameMap)
+                or y < 0
+                or y >= len(self.__currentState.gameMap[0])
+            ):
                 self.__logger.warning("GetPlaceType: Out of range")
                 return THUAI7.PlaceType(0)
             self.__logger.debug("Called GetPlaceType")
@@ -128,54 +141,70 @@ class Logic(ILogic):
     def GetConstructionHp(self, cellX: int, cellY: int) -> int:
         with self.__mtxState:
             self.__logger.debug("Called GetConstructionHp")
-            if (cellX, cellY) in self.__currentState.mapInfo.factoryState:
-                return copy.deepcopy(self.__currentState.mapInfo.factoryState[(cellX, cellY)])
-            elif (cellX, cellY) in self.__currentState.mapInfo.communityState:
-                return copy.deepcopy(self.__currentState.mapInfo.communityState[(cellX, cellY)])
-            elif (cellX, cellY) in self.__currentState.mapInfo.fortState:
-                return copy.deepcopy(self.__currentState.mapInfo.fortState[(cellX, cellY)])
+            if (cellX, cellY) in self.__currentState.mapInfo.recycleBankState:
+                return copy.deepcopy(
+                    self.__currentState.mapInfo.recycleBankState[(cellX, cellY)]
+                )
+            elif (cellX, cellY) in self.__currentState.mapInfo.chargeStationState:
+                return copy.deepcopy(
+                    self.__currentState.mapInfo.chargeStationState[(cellX, cellY)]
+                )
+            elif (cellX, cellY) in self.__currentState.mapInfo.signalTowerState:
+                return copy.deepcopy(
+                    self.__currentState.mapInfo.signalTowerState[(cellX, cellY)]
+                )
             else:
                 self.__logger.warning("GetConstructionHp: Out of range")
                 return -1
 
-    def GetWormHp(self, cellX: int, cellY: int) -> int:
+    def GetBridgeHp(self, cellX: int, cellY: int) -> int:
         with self.__mtxState:
-            self.__logger.debug("Called GetWormHp")
-            if (cellX, cellY) not in self.__currentState.mapInfo.wormholeState:
-                self.__logger.warning("GetWormHp: Out of range")
+            self.__logger.debug("Called GetBridgeHp")
+            if (cellX, cellY) not in self.__currentState.mapInfo.bridgeState:
+                self.__logger.warning("GetBridgeHp: Out of range")
                 return -1
             else:
-                return copy.deepcopy(self.__currentState.mapInfo.wormholeState[(cellX, cellY)])
+                return copy.deepcopy(
+                    self.__currentState.mapInfo.bridgeState[(cellX, cellY)]
+                )
 
-    def GetResourceState(self, cellX: int, cellY: int) -> int:
+    def GetGarbageState(self, cellX: int, cellY: int) -> int:
         with self.__mtxState:
-            self.__logger.debug("Called GetResourceState")
-            if (cellX, cellY) not in self.__currentState.mapInfo.resourceState:
-                self.__logger.warning("GetResourceState: Out of range")
+            self.__logger.debug("Called GetGarbageState")
+            if (cellX, cellY) not in self.__currentState.mapInfo.garbageState:
+                self.__logger.warning("GetGarbageState: Out of range")
                 return -1
             else:
-                return copy.deepcopy(self.__currentState.mapInfo.resourceState[(cellX, cellY)])
+                return copy.deepcopy(
+                    self.__currentState.mapInfo.garbageState[(cellX, cellY)]
+                )
 
     def GetHomeHp(self) -> int:
         with self.__mtxState:
             self.__logger.debug("Called GetHomeHp")
-            return copy.deepcopy(self.__currentState.gameInfo.blueHomeHp
-                                 if self.__teamID == 1
-                                 else self.__currentState.gameInfo.redHomeHp)
+            return copy.deepcopy(
+                self.__currentState.gameInfo.blueHomeHp
+                if self.__teamID == 1
+                else self.__currentState.gameInfo.redHomeHp
+            )
 
-    def GetMoney(self) -> int:
+    def GetEnergy(self) -> int:
         with self.__mtxState:
-            self.__logger.debug("Called GetMoney")
-            return copy.deepcopy(self.__currentState.gameInfo.blueMoney
-                                 if self.__teamID == 1
-                                 else self.__currentState.gameInfo.redMoney)
+            self.__logger.debug("Called GetEnergy")
+            return copy.deepcopy(
+                self.__currentState.gameInfo.blueMoney
+                if self.__teamID == 1
+                else self.__currentState.gameInfo.redMoney
+            )
 
     def GetScore(self) -> int:
         with self.__mtxState:
             self.__logger.debug("Called GetScore")
-            return copy.deepcopy(self.__currentState.gameInfo.blueScore
-                                 if self.__teamID == 1
-                                 else self.__currentState.gameInfo.redScore)
+            return copy.deepcopy(
+                self.__currentState.gameInfo.blueScore
+                if self.__teamID == 1
+                else self.__currentState.gameInfo.redScore
+            )
 
     def Attack(self, angle: float) -> int:
         self.__logger.debug("Called Attack")
@@ -185,10 +214,14 @@ class Logic(ILogic):
         self.__logger.debug("Called EndAllAction")
         return self.__comm.EndAllAction(self.__playerID, self.__teamID)
 
-    def HaveView(self, gridX: int, gridY: int, selfX: int, selfY: int, viewRange: int) -> bool:
+    def HaveView(
+        self, gridX: int, gridY: int, selfX: int, selfY: int, viewRange: int
+    ) -> bool:
         with self.__mtxState:
             self.__logger.debug("Called HaveView")
-            return AssistFunction.HaveView(viewRange, selfX, selfY, gridX, gridY, self.__currentState.gameMap)
+            return AssistFunction.HaveView(
+                viewRange, selfX, selfY, gridX, gridY, self.__currentState.gameMap
+            )
 
     def TryConnection(self) -> bool:
         self.__logger.info("Called TryConnection")
@@ -218,9 +251,9 @@ class Logic(ILogic):
         self.__logger.debug("Called Recycle")
         return self.__comm.Recycle(self.__playerID, self.__playerID, self.__teamID)
 
-    def BuildShip(self, shipType: THUAI7.SweeperType, cellX: int, cellY: int) -> bool:
-        self.__logger.debug("Called BuildShip")
-        return self.__comm.BuildShip(cellX, cellY, shipType, self.__teamID)
+    def BuildSweeper(self, sweeperType: THUAI7.SweeperType) -> bool:
+        self.__logger.debug("Called BuildSweeper")
+        return self.__comm.BuildSweeper(sweeperType, self.__teamID)
 
     def __TryConnection(self) -> bool:
         self.__logger.info("Try to connect to the server.")
@@ -229,7 +262,7 @@ class Logic(ILogic):
     def __ProcessMessage(self) -> None:
         def messageThread():
             self.__logger.info("Message thread started")
-            self.__comm.AddPlayer(self.__playerID, self.__teamID, self.__shipType)
+            self.__comm.AddPlayer(self.__playerID, self.__teamID, self.__sweeperType)
             self.__logger.info("Player added")
 
             while self.__gameState != THUAI7.GameState.GameEnd:
@@ -275,11 +308,10 @@ class Logic(ILogic):
 
         threading.Thread(target=messageThread).start()
 
-    def LoadBuffer(self, message: Message2Clients.MessageToClient) -> None:
+    def __LoadBuffer(self, message: Message2Clients.MessageToClient) -> None:
         with self.__cvBuffer:
-            self.__bufferState.ships.clear()
+            self.__bufferState.sweepers.clear()
             self.__bufferState.enemySweepers.clear()
-            self.__bufferState.teams.clear()
             self.__bufferState.bullets.clear()
             self.__bufferState.bombedBullets.clear()
             self.__bufferState.guids.clear()
@@ -287,21 +319,26 @@ class Logic(ILogic):
 
             if self.__playerID != 0:
                 for obj in message.obj_message:
-                    if obj.WhichOneof("message_of_obj") == "ship_message":
-                        self.__bufferState.guids.append(obj.ship_message.guid)
+                    if obj.WhichOneof("message_of_obj") == "sweeper_message":
+                        self.__bufferState.guids.append(obj.sweeper_message.guid)
             else:
                 for obj in message.obj_message:
                     if obj.WhichOneof("message_of_obj") == "team_message":
                         self.__bufferState.guids.append(obj.team_message.guid)
 
-            self.__bufferState.gameInfo = Proto2THUAI7.Protobuf2THUAI7GameInfo(message.all_message)
+            self.__bufferState.gameInfo = Proto2THUAI7.Protobuf2THUAI7GameInfo(
+                message.all_message
+            )
 
             self.__LoadBufferSelf(message)
             for item in message.obj_message:
                 self.__LoadBufferCase(item)
             if Setting.Asynchronous():
                 with self.__mtxState:
-                    self.__currentState, self.__bufferState = self.__bufferState, self.__currentState
+                    self.__currentState, self.__bufferState = (
+                        self.__bufferState,
+                        self.__currentState,
+                    )
                     self.__counterState = self.__counterBuffer
                     self.__logger.info("Update state!")
                 self.__freshed = True
@@ -313,135 +350,463 @@ class Logic(ILogic):
     def __LoadBufferSelf(self, message: Message2Clients.MessageToClient) -> None:
         if self.__playerID != 0:
             for item in message.obj_message:
-                if item.WhichOneof("message_of_obj") == "ship_message":
-                    if item.ship_message.player_id == self.__playerID:
-                        self.__bufferState.self = Proto2THUAI7.Protobuf2THUAI7Sweeper(item.ship_message)
-                        self.__bufferState.ships.append(self.__bufferState.self)
-                    else:
-                        self.__bufferState.ships.append(Proto2THUAI7.Protobuf2THUAI7Sweeper(item.ship_message))
-                    self.__logger.debug("Load ship")
+                if item.WhichOneof("message_of_obj") == "sweeper_message":
+                    if item.sweeper_message.player_id == self.__playerID:
+                        self.__bufferState.self = Proto2THUAI7.Protobuf2THUAI7Sweeper(
+                            item.sweeper_message
+                        )
+                        self.__bufferState.sweepers.append(self.__bufferState.self)
+                        self.__logger.debug("Load self sweeper")
         else:
             for item in message.obj_message:
                 if item.WhichOneof("message_of_obj") == "team_message":
-                    self.__bufferState.self = Proto2THUAI7.Protobuf2THUAI7Team(item.team_message)
-                    self.__bufferState.teams.append(self.__bufferState.self)
-                    self.__logger.debug("Load team")
+                    self.__bufferState.self = Proto2THUAI7.Protobuf2THUAI7Team(
+                        item.team_message
+                    )
+                    self.__logger.debug("Load self team")
+                if item.WhichOneof("message_of_obj") == "sweeper_message":
+                    if item.sweeper_message.team_id == self.__teamID:
+                        self.__bufferState.sweepers.append(
+                            Proto2THUAI7.Protobuf2THUAI7Sweeper(item.sweeper_message)
+                        )
+                        self.__logger.debug("Load sweeper")
 
     def __LoadBufferCase(self, item: Message2Clients.MessageOfObj) -> None:
-        if item.WhichOneof("message_of_obj") == "ship_message":
-            if item.ship_message.team_id != self.__teamID:
-                if AssistFunction.HaveView(self.__bufferState.self.viewRange,
-                                           self.__bufferState.self.x, self.__bufferState.self.y,
-                                           item.ship_message.x, item.ship_message.y,
-                                           self.__bufferState.gameMap):
-                    self.__bufferState.enemySweepers.append(Proto2THUAI7.Protobuf2THUAI7Sweeper(item.ship_message))
-                    self.__logger.debug("Load enemy ship")
-
-        elif item.WhichOneof("message_of_obj") == "bullet_message":
-            if AssistFunction.HaveView(self.__bufferState.self.viewRange,
-                                       self.__bufferState.self.x, self.__bufferState.self.y,
-                                       item.bullet_message.x, item.bullet_message.y,
-                                       self.__bufferState.gameMap):
-                self.__bufferState.bullets.append(Proto2THUAI7.Protobuf2THUAI7Bullet(item.bullet_message))
-                self.__logger.debug("Add Bullet!")
-
-        elif item.WhichOneof("message_of_obj") == "factory_message":
-            if AssistFunction.HaveView(self.__bufferState.self.viewRange, self.__bufferState.self.x,
-                                       self.__bufferState.self.y, item.factory_message.x, item.factory_message.y,
-                                       self.__bufferState.gameMap):
-                pos = (AssistFunction.GridToCell(item.factory_message.x),
-                       AssistFunction.GridToCell(item.factory_message.y))
-                if pos not in self.__bufferState.mapInfo.factoryState:
-                    self.__bufferState.mapInfo.factoryState[pos] = item.factory_message.hp
-                    self.__logger.debug("New Factory")
+        if self.__playerType == THUAI7.PlayerType.Sweeper:
+            if item.WhichOneof("message_of_obj") == "sweeper_message":
+                if item.sweeper_message.team_id != self.__teamID:
+                    if AssistFunction.HaveView(
+                        self.__bufferState.self.viewRange,
+                        self.__bufferState.self.x,
+                        self.__bufferState.self.y,
+                        item.sweeper_message.x,
+                        item.sweeper_message.y,
+                        self.__bufferState.gameMap,
+                    ):
+                        self.__bufferState.enemySweepers.append(
+                            Proto2THUAI7.Protobuf2THUAI7Sweeper(item.sweeper_message)
+                        )
+                        self.__logger.debug("Load enemy sweeper")
                 else:
-                    self.__bufferState.mapInfo.factoryState[pos] = item.factory_message.hp
-                    self.__logger.debug("Update Factory")
+                    self.__bufferState.sweepers.append(
+                        Proto2THUAI7.Protobuf2THUAI7Sweeper(item.sweeper_message)
+                    )
+                    self.__logger.debug("Load sweeper")
 
-        elif item.WhichOneof("message_of_obj") == "community_message":
-            if AssistFunction.HaveView(self.__bufferState.self.viewRange,
-                                       self.__bufferState.self.x, self.__bufferState.self.y,
-                                       item.community_message.x, item.community_message.y,
-                                       self.__bufferState.gameMap):
-                pos = (AssistFunction.GridToCell(item.community_message.x),
-                       AssistFunction.GridToCell(item.community_message.y))
-                if pos not in self.__bufferState.mapInfo.communityState:
-                    self.__bufferState.mapInfo.communityState[pos] = item.community_message.hp
-                    self.__logger.debug("New Community")
-                else:
-                    self.__bufferState.mapInfo.communityState[pos] = item.community_message.hp
-                    self.__logger.debug("Update Community")
+            elif item.WhichOneof("message_of_obj") == "bullet_message":
+                if AssistFunction.HaveView(
+                    self.__bufferState.self.viewRange,
+                    self.__bufferState.self.x,
+                    self.__bufferState.self.y,
+                    item.bullet_message.x,
+                    item.bullet_message.y,
+                    self.__bufferState.gameMap,
+                ):
+                    self.__bufferState.bullets.append(
+                        Proto2THUAI7.Protobuf2THUAI7Bullet(item.bullet_message)
+                    )
+                    self.__logger.debug("Load Bullet!")
 
-        elif item.WhichOneof("message_of_obj") == "fort_message":
-            if AssistFunction.HaveView(self.__bufferState.self.viewRange,
-                                       self.__bufferState.self.x, self.__bufferState.self.y,
-                                       item.fort_message.x, item.fort_message.y,
-                                       self.__bufferState.gameMap):
-                pos = (AssistFunction.GridToCell(item.fort_message.x),
-                       AssistFunction.GridToCell(item.fort_message.y))
-                if pos not in self.__bufferState.mapInfo.fortState:
-                    self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
-                    self.__logger.debug("New Fort")
-                else:
-                    self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
-                    self.__logger.debug("Update Fort")
+            elif item.WhichOneof("message_of_obj") == "recyclebank_message":
+                if item.recyclebank_message.team_id == self.__teamID:
+                    pos = (
+                        AssistFunction.GridToCell(item.recyclebank_message.x),
+                        AssistFunction.GridToCell(item.recyclebank_message.y),
+                    )
+                    if pos not in self.__bufferState.mapInfo.recycleBankState:
+                        self.__bufferState.mapInfo.recycleBankState[pos] = (
+                            item.recyclebank_message.hp
+                        )
+                        self.__logger.debug("New RecycleBank")
+                    else:
+                        self.__bufferState.mapInfo.recycleBankState[pos] = (
+                            item.recyclebank_message.hp
+                        )
+                        self.__logger.debug("Update RecycleBank")
+                elif AssistFunction.HaveView(
+                    self.__bufferState.self.viewRange,
+                    self.__bufferState.self.x,
+                    self.__bufferState.self.y,
+                    item.recyclebank_message.x,
+                    item.recyclebank_message.y,
+                    self.__bufferState.gameMap,
+                ):
+                    pos = (
+                        AssistFunction.GridToCell(item.recyclebank_message.x),
+                        AssistFunction.GridToCell(item.recyclebank_message.y),
+                    )
+                    if pos not in self.__bufferState.mapInfo.recycleBankState:
+                        self.__bufferState.mapInfo.recycleBankState[pos] = (
+                            item.recyclebank_message.hp
+                        )
+                        self.__logger.debug("New RecycleBank")
+                    else:
+                        self.__bufferState.mapInfo.recycleBankState[pos] = (
+                            item.recyclebank_message.hp
+                        )
+                        self.__logger.debug("Update RecycleBank")
 
-        elif item.WhichOneof("message_of_obj") == "wormhole_message":
-            pos = (AssistFunction.GridToCell(item.wormhole_message.x),
-                   AssistFunction.GridToCell(item.wormhole_message.y))
-            self.__bufferState.mapInfo.wormholeState[pos] = item.wormhole_message.hp
-            self.__logger.debug("Update Wormhole")
+            elif item.WhichOneof("message_of_obj") == "chargestation_message":
+                if item.chargestation_message.team_id == self.__teamID:
+                    pos = (
+                        AssistFunction.GridToCell(item.chargestation_message.x),
+                        AssistFunction.GridToCell(item.chargestation_message.y),
+                    )
+                    if pos not in self.__bufferState.mapInfo.chargeStationState:
+                        self.__bufferState.mapInfo.chargeStationState[pos] = (
+                            item.chargestation_message.hp
+                        )
+                        self.__logger.debug("New ChargeStation")
+                    else:
+                        self.__bufferState.mapInfo.chargeStationState[pos] = (
+                            item.chargestation_message.hp
+                        )
+                        self.__logger.debug("Update ChargeStation")
+                elif AssistFunction.HaveView(
+                    self.__bufferState.self.viewRange,
+                    self.__bufferState.self.x,
+                    self.__bufferState.self.y,
+                    item.chargestation_message.x,
+                    item.chargestation_message.y,
+                    self.__bufferState.gameMap,
+                ):
+                    pos = (
+                        AssistFunction.GridToCell(item.chargestation_message.x),
+                        AssistFunction.GridToCell(item.chargestation_message.y),
+                    )
+                    if pos not in self.__bufferState.mapInfo.chargeStationState:
+                        self.__bufferState.mapInfo.chargeStationState[pos] = (
+                            item.chargestation_message.hp
+                        )
+                        self.__logger.debug("New ChargeStation")
+                    else:
+                        self.__bufferState.mapInfo.chargeStationState[pos] = (
+                            item.chargestation_message.hp
+                        )
+                        self.__logger.debug("Update ChargeStation")
 
-        elif item.WhichOneof("message_of_obj") == "home_message":
-            if AssistFunction.HaveView(self.__bufferState.self.viewRange,
-                                       self.__bufferState.self.x, self.__bufferState.self.y,
-                                       item.home_message.x, item.home_message.y,
-                                       self.__bufferState.gameMap):
-                pos = (AssistFunction.GridToCell(item.home_message.x),
-                       AssistFunction.GridToCell(item.home_message.y))
-                self.__bufferState.mapInfo.homeState[pos] = item.home_message.hp
-                self.__logger.debug("Update Home")
+            elif item.WhichOneof("message_of_obj") == "signaltower_message":
+                if item.signaltower_message.team_id == self.__teamID:
+                    pos = (
+                        AssistFunction.GridToCell(item.signaltower_message.x),
+                        AssistFunction.GridToCell(item.signaltower_message.y),
+                    )
+                    if pos not in self.__bufferState.mapInfo.signalTowerState:
+                        self.__bufferState.mapInfo.signalTowerState[pos] = (
+                            item.signaltower_message.hp
+                        )
+                        self.__logger.debug("New SignalTower")
+                    else:
+                        self.__bufferState.mapInfo.signalTowerState[pos] = (
+                            item.signaltower_message.hp
+                        )
+                        self.__logger.debug("Update SignalTower")
+                elif AssistFunction.HaveView(
+                    self.__bufferState.self.viewRange,
+                    self.__bufferState.self.x,
+                    self.__bufferState.self.y,
+                    item.signaltower_message.x,
+                    item.signaltower_message.y,
+                    self.__bufferState.gameMap,
+                ):
+                    pos = (
+                        AssistFunction.GridToCell(item.signaltower_message.x),
+                        AssistFunction.GridToCell(item.signaltower_message.y),
+                    )
+                    if pos not in self.__bufferState.mapInfo.signalTowerState:
+                        self.__bufferState.mapInfo.signalTowerState[pos] = (
+                            item.signaltower_message.hp
+                        )
+                        self.__logger.debug("New SignalTower")
+                    else:
+                        self.__bufferState.mapInfo.signalTowerState[pos] = (
+                            item.signaltower_message.hp
+                        )
+                        self.__logger.debug("Update SignalTower")
 
-        elif item.WhichOneof("message_of_obj") == "resource_message":
-            if AssistFunction.HaveView(self.__bufferState.self.viewRange,
-                                       self.__bufferState.self.x, self.__bufferState.self.y,
-                                       item.resource_message.x, item.resource_message.y,
-                                       self.__bufferState.gameMap):
-                pos = (AssistFunction.GridToCell(item.resource_message.x),
-                       AssistFunction.GridToCell(item.resource_message.y))
-                self.__bufferState.mapInfo.resourceState[pos] = item.resource_message.progress
-                self.__logger.debug("Update Resource")
+            elif item.WhichOneof("message_of_obj") == "bridge_message":
+                if AssistFunction.HaveView(
+                    self.__bufferState.self.viewRange,
+                    self.__bufferState.self.x,
+                    self.__bufferState.self.y,
+                    item.bridge_message.x,
+                    item.bridge_message.y,
+                    self.__bufferState.gameMap,
+                ):
+                    pos = (
+                        AssistFunction.GridToCell(item.bridge_message.x),
+                        AssistFunction.GridToCell(item.bridge_message.y),
+                    )
+                    self.__bufferState.mapInfo.bridgeState[pos] = item.bridge_message.hp
+                    self.__logger.debug("Update Bridge")
 
-        elif item.WhichOneof("message_of_obj") == "news_message":
-            if item.news_message.to_id == self.__playerID:
-                if item.news_message.WhichOneof("news") == "text_message":
-                    self.__messageQueue.put((item.news_message.from_id, item.news_message.text_message))
-                    self.__logger.debug("Add News!")
-                elif item.news_message.WhichOneof("news") == "binary_message":
-                    self.__messageQueue.put((item.news_message.from_id, item.news_message.binary_message))
-                    self.__logger.debug("Add News!")
-                else:
-                    self.__logger.error("Unknown News!")
+            elif item.WhichOneof("message_of_obj") == "home_message":
+                if item.home_message.team_id == self.__teamID:
+                    pos = (
+                        AssistFunction.GridToCell(item.home_message.x),
+                        AssistFunction.GridToCell(item.home_message.y),
+                    )
+                    self.__bufferState.mapInfo.homeState[pos] = item.home_message.hp
+                    self.__logger.debug("Update Home")
+                elif AssistFunction.HaveView(
+                    self.__bufferState.self.viewRange,
+                    self.__bufferState.self.x,
+                    self.__bufferState.self.y,
+                    item.home_message.x,
+                    item.home_message.y,
+                    self.__bufferState.gameMap,
+                ):
+                    pos = (
+                        AssistFunction.GridToCell(item.home_message.x),
+                        AssistFunction.GridToCell(item.home_message.y),
+                    )
+                    self.__bufferState.mapInfo.homeState[pos] = item.home_message.hp
+                    self.__logger.debug("Update Home")
 
-        # elif item.WhichOneof("message_of_obj")=="bombed_bullet_message":
-        #     if AssistFunction.HaveView(
-        #         self.__bufferState.self.viewRange,
-        #         self.__bufferState.self.x,
-        #         self.__bufferState.self.y,
-        #         item.bombed_bullet_message.x,
-        #         item.bombed_bullet_message.y,
-        #         self.__bufferState.gameMap,
-        #     ):
-        #         self.__bufferState.bombedBullets.append(Proto2THUAI7.Protobuf2THUAI7BombedBullet(item.bombed_bullet_message))
-        #         self.__logger.debug("Add Bombed Bullet!")
+            elif item.WhichOneof("message_of_obj") == "garbage_message":
+                if AssistFunction.HaveView(
+                    self.__bufferState.self.viewRange,
+                    self.__bufferState.self.x,
+                    self.__bufferState.self.y,
+                    item.garbage_message.x,
+                    item.garbage_message.y,
+                    self.__bufferState.gameMap,
+                ):
+                    pos = (
+                        AssistFunction.GridToCell(item.garbage_message.x),
+                        AssistFunction.GridToCell(item.garbage_message.y),
+                    )
+                    self.__bufferState.mapInfo.garbageState[pos] = (
+                        item.garbage_message.progress
+                    )
+                    self.__logger.debug("Update Garbage")
 
-        elif item.WhichOneof("message_of_obj") == "team_message":
-            if item.team_message.team_id != self.__teamID:
-                self.__bufferState.teams.append(Proto2THUAI7.Protobuf2THUAI7Team(item.team_message))
-                self.__logger.debug("Add Team!")
+            elif item.WhichOneof("message_of_obj") == "news_message":
+                if (
+                    item.news_message.team_id == self.__teamID
+                    and item.news_message.to_id == self.__playerID
+                ):
+                    if item.news_message.WhichOneof("news") == "text_message":
+                        self.__messageQueue.put(
+                            (item.news_message.from_id, item.news_message.text_message)
+                        )
+                        self.__logger.debug("Add News!")
+                    elif item.news_message.WhichOneof("news") == "binary_message":
+                        self.__messageQueue.put(
+                            (
+                                item.news_message.from_id,
+                                item.news_message.binary_message,
+                            )
+                        )
+                        self.__logger.debug("Add News!")
+                    else:
+                        self.__logger.error("Unknown News!")
 
-        else:
-            self.__logger.error("Unknown message!")
+            # elif item.WhichOneof('message_of_obj')=='bombed_bullet_message':
+            #     if AssistFunction.HaveView(
+            #         self.__bufferState.self.viewRange,
+            #         self.__bufferState.self.x,
+            #         self.__bufferState.self.y,
+            #         item.bombed_bullet_message.x,
+            #         item.bombed_bullet_message.y,
+            #         self.__bufferState.gameMap,
+            #     ):
+            #         self.__bufferState.bombedBullets.append(Proto2THUAI7.Protobuf2THUAI7BombedBullet(item.bombed_bullet_message))
+            #         self.__logger.debug('Add Bombed Bullet!')
+
+            else:
+                self.__logger.error("Unknown message!")
+        elif self.__playerType == THUAI7.PlayerType.Team:
+
+            def HaveOverView(targetX: int, targetY: int):
+                for sweeper in self.__bufferState.sweepers:
+                    if AssistFunction.HaveView(
+                        sweeper.viewRange, sweeper.x, sweeper.y, targetX, targetY
+                    ):
+                        return True
+                return False
+
+            if item.WhichOneof("message_of_obj") == "sweeper_message":
+                if item.sweeper_message.team_id != self.__teamID:
+                    if HaveOverView(item.sweeper_message.x, item.sweeper_message.y):
+                        self.__bufferState.enemySweepers.append(
+                            Proto2THUAI7.Protobuf2THUAI7Sweeper(item.sweeper_message)
+                        )
+                        self.__logger.debug("Load enemy sweeper")
+
+            elif item.WhichOneof("message_of_obj") == "recyclebank_message":
+                if item.recyclebank_message.team_id == self.__teamID:
+                    pos = (
+                        AssistFunction.GridToCell(item.recyclebank_message.x),
+                        AssistFunction.GridToCell(item.recyclebank_message.y),
+                    )
+                    if pos not in self.__bufferState.mapInfo.recycleBankState:
+                        self.__bufferState.mapInfo.recycleBankState[pos] = (
+                            item.recyclebank_message.hp
+                        )
+                        self.__logger.debug("New RecycleBank")
+                    else:
+                        self.__bufferState.mapInfo.recycleBankState[pos] = (
+                            item.recyclebank_message.hp
+                        )
+                        self.__logger.debug("Update RecycleBank")
+                elif HaveOverView(
+                    item.recyclebank_message.x, item.recyclebank_message.y
+                ):
+                    pos = (
+                        AssistFunction.GridToCell(item.recyclebank_message.x),
+                        AssistFunction.GridToCell(item.recyclebank_message.y),
+                    )
+                    if pos not in self.__bufferState.mapInfo.recycleBankState:
+                        self.__bufferState.mapInfo.recycleBankState[pos] = (
+                            item.recyclebank_message.hp
+                        )
+                        self.__logger.debug("New RecycleBank")
+                    else:
+                        self.__bufferState.mapInfo.recycleBankState[pos] = (
+                            item.recyclebank_message.hp
+                        )
+                        self.__logger.debug("Update RecycleBank")
+
+            elif item.WhichOneof("message_of_obj") == "chargestation_message":
+                if item.chargestation_message.team_id == self.__teamID:
+                    pos = (
+                        AssistFunction.GridToCell(item.chargestation_message.x),
+                        AssistFunction.GridToCell(item.chargestation_message.y),
+                    )
+                    if pos not in self.__bufferState.mapInfo.chargeStationState:
+                        self.__bufferState.mapInfo.chargeStationState[pos] = (
+                            item.chargestation_message.hp
+                        )
+                        self.__logger.debug("New ChargeStation")
+                    else:
+                        self.__bufferState.mapInfo.chargeStationState[pos] = (
+                            item.chargestation_message.hp
+                        )
+                        self.__logger.debug("Update ChargeStation")
+                elif HaveOverView(
+                    item.chargestation_message.x, item.chargestation_message.y
+                ):
+                    pos = (
+                        AssistFunction.GridToCell(item.chargestation_message.x),
+                        AssistFunction.GridToCell(item.chargestation_message.y),
+                    )
+                    if pos not in self.__bufferState.mapInfo.chargeStationState:
+                        self.__bufferState.mapInfo.chargeStationState[pos] = (
+                            item.chargestation_message.hp
+                        )
+                        self.__logger.debug("New ChargeStation")
+                    else:
+                        self.__bufferState.mapInfo.chargeStationState[pos] = (
+                            item.chargestation_message.hp
+                        )
+                        self.__logger.debug("Update ChargeStation")
+
+            elif item.WhichOneof("message_of_obj") == "signaltower_message":
+                if item.signaltower_message.team_id == self.__teamID:
+                    pos = (
+                        AssistFunction.GridToCell(item.signaltower_message.x),
+                        AssistFunction.GridToCell(item.signaltower_message.y),
+                    )
+                    if pos not in self.__bufferState.mapInfo.signalTowerState:
+                        self.__bufferState.mapInfo.signalTowerState[pos] = (
+                            item.signaltower_message.hp
+                        )
+                        self.__logger.debug("New SignalTower")
+                    else:
+                        self.__bufferState.mapInfo.signalTowerState[pos] = (
+                            item.signaltower_message.hp
+                        )
+                        self.__logger.debug("Update SignalTower")
+                elif HaveOverView(
+                    item.signaltower_message.x, item.signaltower_message.y
+                ):
+                    pos = (
+                        AssistFunction.GridToCell(item.signaltower_message.x),
+                        AssistFunction.GridToCell(item.signaltower_message.y),
+                    )
+                    if pos not in self.__bufferState.mapInfo.signalTowerState:
+                        self.__bufferState.mapInfo.signalTowerState[pos] = (
+                            item.signaltower_message.hp
+                        )
+                        self.__logger.debug("New SignalTower")
+                    else:
+                        self.__bufferState.mapInfo.signalTowerState[pos] = (
+                            item.signaltower_message.hp
+                        )
+                        self.__logger.debug("Update SignalTower")
+
+            elif item.WhichOneof("message_of_obj") == "bridge_message":
+                if HaveOverView(item.bridge_message.x, item.bridge_message.y):
+                    pos = (
+                        AssistFunction.GridToCell(item.bridge_message.x),
+                        AssistFunction.GridToCell(item.bridge_message.y),
+                    )
+                    self.__bufferState.mapInfo.bridgeState[pos] = item.bridge_message.hp
+                    self.__logger.debug("Update Bridge")
+
+            elif item.WhichOneof("message_of_obj") == "home_message":
+                if item.home_message.team_id == self.__teamID:
+                    pos = (
+                        AssistFunction.GridToCell(item.home_message.x),
+                        AssistFunction.GridToCell(item.home_message.y),
+                    )
+                    self.__bufferState.mapInfo.homeState[pos] = item.home_message.hp
+                    self.__logger.debug("Update Home")
+                elif HaveOverView(item.home_message.x, item.home_message.y):
+                    pos = (
+                        AssistFunction.GridToCell(item.home_message.x),
+                        AssistFunction.GridToCell(item.home_message.y),
+                    )
+                    self.__bufferState.mapInfo.homeState[pos] = item.home_message.hp
+                    self.__logger.debug("Update Home")
+
+            elif item.WhichOneof("message_of_obj") == "garbage_message":
+                if HaveOverView(item.garbage_message.x, item.garbage_message.y):
+                    pos = (
+                        AssistFunction.GridToCell(item.garbage_message.x),
+                        AssistFunction.GridToCell(item.garbage_message.y),
+                    )
+                    self.__bufferState.mapInfo.garbageState[pos] = (
+                        item.garbage_message.progress
+                    )
+                    self.__logger.debug("Update Garbage")
+
+            elif item.WhichOneof("message_of_obj") == "news_message":
+                if (
+                    item.news_message.team_id == self.__teamID
+                    and item.news_message.to_id == self.__playerID
+                ):
+                    if item.news_message.WhichOneof("news") == "text_message":
+                        self.__messageQueue.put(
+                            (item.news_message.from_id, item.news_message.text_message)
+                        )
+                        self.__logger.debug("Add News!")
+                    elif item.news_message.WhichOneof("news") == "binary_message":
+                        self.__messageQueue.put(
+                            (
+                                item.news_message.from_id,
+                                item.news_message.binary_message,
+                            )
+                        )
+                        self.__logger.debug("Add News!")
+                    else:
+                        self.__logger.error("Unknown News!")
+
+            # elif item.WhichOneof('message_of_obj')=='bombed_bullet_message':
+            #     if AssistFunction.HaveView(
+            #         self.__bufferState.self.viewRange,
+            #         self.__bufferState.self.x,
+            #         self.__bufferState.self.y,
+            #         item.bombed_bullet_message.x,
+            #         item.bombed_bullet_message.y,
+            #         self.__bufferState.gameMap,
+            #     ):
+            #         self.__bufferState.bombedBullets.append(Proto2THUAI7.Protobuf2THUAI7BombedBullet(item.bombed_bullet_message))
+            #         self.__logger.debug('Add Bombed Bullet!')
+
+            else:
+                self.__logger.error("Unknown message!")
 
     def __UnBlockAI(self) -> None:
         with self.__cvAI:
@@ -453,7 +818,10 @@ class Logic(ILogic):
             with self.__cvBuffer:
                 self.__cvBuffer.wait_for(lambda: self.__bufferUpdated)
                 with self.__mtxState:
-                    self.__bufferState, self.__currentState = self.__currentState, self.__bufferState
+                    self.__bufferState, self.__currentState = (
+                        self.__currentState,
+                        self.__bufferState,
+                    )
                     self.__counterState = self.__counterBuffer
                 self.__bufferUpdated = False
                 self.__logger.info("Update state!")
@@ -479,14 +847,18 @@ class Logic(ILogic):
             "%H:%M:%S",
         )
         # 确保文件存在
-        # if not os.path.exists(os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/logs"):
+        # if not os.path.exists(os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/logs'):
         #     os.makedirs(os.path.dirname(os.path.dirname(
-        #         os.path.realpath(__file__))) + "/logs")
+        #         os.path.realpath(__file__))) + '/logs')
 
         if platform.system().lower() == "windows":
-            os.system(f'mkdir "{os.path.dirname(os.path.dirname(os.path.realpath(__file__)))}\\logs"')
+            os.system(
+                f'mkdir "{os.path.dirname(os.path.dirname(os.path.realpath(__file__)))}\\logs"'
+            )
         else:
-            os.system(f'mkdir -p "{os.path.dirname(os.path.dirname(os.path.realpath(__file__)))}/logs"')
+            os.system(
+                f'mkdir -p "{os.path.dirname(os.path.dirname(os.path.realpath(__file__)))}/logs"'
+            )
 
         fileHandler = logging.FileHandler(
             os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -521,11 +893,11 @@ class Logic(ILogic):
 
         # 构造timer
         if not file and not screen:
-            self.__timer = ShipAPI(self)
-        # else:
-        #     self.__timer = ShipDebugAPI(
-        #         self, file, screen, warnOnly, self.__playerID
-        #     )
+            self.__timer = SweeperAPI(self)
+        else:
+            self.__timer = SweeperDebugAPI(
+                self, file, screen, warnOnly, self.__playerID
+            )
 
         # 构建AI线程
         def AIThread():
@@ -546,9 +918,12 @@ class Logic(ILogic):
                     self.__timer.EndTimer()
 
         if self.__TryConnection():
-            self.__logger.info("Connect to the server successfully, AI thread will be started.")
+            self.__logger.info(
+                "Connect to the server successfully, AI thread will be started."
+            )
             self.__threadAI = threading.Thread(target=AIThread)
             self.__threadAI.start()
+            self.__logger.info("Start to Process Message")
             self.__ProcessMessage()
             self.__logger.info("Join the AI thread.")
             self.__threadAI.join()

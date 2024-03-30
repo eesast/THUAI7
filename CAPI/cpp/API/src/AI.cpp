@@ -1,6 +1,7 @@
 #include <vector>
 #include <thread>
 #include <array>
+#include <map>
 #include "AI.h"
 #include "constants.h"
 // 注意不要使用conio.h，Windows.h等非标准库
@@ -21,25 +22,29 @@ void AI::play(ISweeperAPI& api)
 {
     if (this->playerID == 1)
     {
-        // 玩家1执行操作
+        api.Move(10, 2.1);
+        api.PrintSelfInfo();
+        api.Attack(1.1);
     }
     else if (this->playerID == 2)
     {
-        // 玩家2执行操作
+        api.Move(10, 2.1);
+        api.PrintSelfInfo();
     }
 
     else if (this->playerID == 3)
     {
-        // 玩家3执行操作
+        api.Move(10, 2.1);
+        api.PrintSelfInfo();
     }
     else if (this->playerID == 4)
     {
-        // 玩家4执行操作
+        api.Move(10, 2.1);
+        api.PrintSelfInfo();
     }
 }
 
 void AI::play(ITeamAPI& api)  // 默认team playerID 为0
 {
-    auto self = api.GetSelfInfo();
     api.PrintSelfInfo();
 }

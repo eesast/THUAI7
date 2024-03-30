@@ -37,7 +37,7 @@ namespace Gaming
                 {
                     return GameObj.invalidID;
                 }
-                teamList[(int)playerInitInfo.teamID].AddShip(newShip);
+                //teamList[(int)playerInitInfo.teamID].AddShip(newShip);
                 return newShip.PlayerID;
             }
             else
@@ -46,10 +46,12 @@ namespace Gaming
                 return playerInitInfo.playerID;
             }
         }
-        public bool ActivateShip(long teamID, ShipType shipType, int birthPointIndex = 0)
+        public bool ActivateShip(long teamID, long playerID, ShipType shipType, int birthPointIndex = 0)
         {
-            Ship? ship = teamList[(int)teamID].GetNewShip(shipType);
+            Ship? ship = teamList[(int)teamID].ShipPool.GetObj(shipType);
             if (ship == null)
+                return false;
+            else if (ship.IsRemoved == false)
                 return false;
             if (birthPointIndex < 0)
                 birthPointIndex = 0;
@@ -109,7 +111,14 @@ namespace Gaming
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
             if (ship != null)
-                return actionManager.Construct(ship, constructionType);
+            {
+                var flag = actionManager.Construct(ship, constructionType);
+                if (constructionType == ConstructionType.Community && flag)
+                {
+                    UpdateBirthPoint();
+                }
+                return flag;
+            }
             return false;
         }
         public bool InstallModule(long teamID, long shipID, ModuleType moduleType)
@@ -188,7 +197,7 @@ namespace Gaming
                 {
                     gameMap.GameObjDict[GameObjType.Ship].ForEach(delegate (IGameObj ship)
                     {
-                        ((Ship)ship).CanMove.SetReturnOri(false);
+                        ((Ship)ship).CanMove.SetROri(false);
                     });
                     gameMap.GameObjDict[keyValuePair.Key].Clear();
                 }
@@ -213,14 +222,15 @@ namespace Gaming
             {
                 if (GameData.NeedCopy(keyValuePair.Key))
                 {
-                    gameObjList.AddRange(gameMap.GameObjDict[keyValuePair.Key].ToNewList());
+                    var thisList = gameMap.GameObjDict[keyValuePair.Key].ToNewList();
+                    if (thisList != null) gameObjList.AddRange(thisList);
                 }
             }
             return gameObjList;
         }
         public void UpdateBirthPoint()
         {
-            gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>().ForEach(
+            gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>()?.ForEach(
                 delegate (Construction construction)
                 {
                     if (construction.ConstructionType == ConstructionType.Community)
@@ -245,7 +255,7 @@ namespace Gaming
             {
                 foreach (XY birthPoint in team.BirthPointList)
                 {
-                    gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>().ForEach(
+                    gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>()?.ForEach(
                         delegate (Construction construction)
                     {
                         if (construction.Position == birthPoint)
@@ -268,7 +278,7 @@ namespace Gaming
             actionManager = new(gameMap, shipManager);
             attackManager = new(gameMap, shipManager);
             teamList = [];
-            gameMap.GameObjDict[GameObjType.Home].Cast<GameObj>().ForEach(
+            gameMap.GameObjDict[GameObjType.Home].Cast<GameObj>()?.ForEach(
                 delegate (GameObj gameObj)
                 {
                     if (gameObj.Type == GameObjType.Home)

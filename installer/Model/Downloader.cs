@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO.Compression;
 using System.Formats.Tar;
+using installer.Data;
+using installer.Services;
 
 namespace installer.Model
 {
@@ -30,10 +32,11 @@ namespace installer.Model
         public string StartName = "maintest.exe";           // 启动的程序名
         public Local_Data Data;                             // 本地文件管理器
         public Tencent_Cos Cloud;                           // THUAI7 Cos桶
+        public Version CurrentVersion { get => Data.CurrentVersion; set => Data.CurrentVersion = value; }
 
         public HttpClient Client = new HttpClient();
         public EEsast Web;                                  // EEsast服务器
-        public Logger Log;                               // 日志管理器
+        public Logger Log;                                  // 日志管理器
         public Logger LogError;
         public enum UpdateStatus
         {
@@ -47,10 +50,14 @@ namespace installer.Model
         public string Password { get => Web.Password; set { Web.Password = value; } }
         public string UserId { get => Web.ID; }
         public string UserEmail { get => Web.Email; }
-        public string CodeRoute { get; set; } = string.Empty;
-        public string PlayerNum { get; set; } = "nSelect";
-        public enum LaunchLanguage { cpp, python };
-        public LaunchLanguage Language { get; set; } = LaunchLanguage.cpp;
+        public Data.Command Commands
+        {
+            get => Data.Config.Commands;
+            set
+            {
+                Data.Config.Commands = value;
+            }
+        }
         public enum UsingOS { Win, Linux, OSX };
         public UsingOS usingOS { get; set; }
         public ExceptionStack Exceptions;
@@ -76,7 +83,7 @@ namespace installer.Model
             if ((Log.LastRecordTime != DateTime.MinValue && DateTime.Now.Month != Log.LastRecordTime.Month)
                 || (LogError.LastRecordTime != DateTime.MinValue && DateTime.Now.Month != LogError.LastRecordTime.Month))
             {
-                string tardir = Path.Combine(Data.InstallPath, "LogArchieved");
+                string tardir = Path.Combine(Data.Config.InstallPath, "LogArchieved");
                 if (!Directory.Exists(tardir))
                     Directory.CreateDirectory(tardir);
                 string tarPath = Path.Combine(tardir, $"Backup-{Log.LastRecordTime.Year}-{Log.LastRecordTime.Month}.tar");
@@ -108,7 +115,7 @@ namespace installer.Model
                 LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.error.log"));
             }
             Exceptions = new ExceptionStack(LogError, this);
-            Route = Data.InstallPath;
+            Route = Data.Config.InstallPath;
             Cloud = new Tencent_Cos("1319625962", "ap-beijing", "bucket1",
                 LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.log")),
                 LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.error.log")));
@@ -117,16 +124,10 @@ namespace installer.Model
             Web.Token_Changed += SaveToken;
             LoggerBinding();
 
-            string? temp;
-            if (Data.Config.TryGetValue("Remembered", out temp))
+            if (Data.Config.Remembered)
             {
-                if (Convert.ToBoolean(temp))
-                {
-                    if (Data.Config.TryGetValue("Username", out temp))
-                        Username = temp;
-                    if (Data.Config.TryGetValue("Password", out temp))
-                        Password = temp;
-                }
+                Username = Data.Config.UserName;
+                Password = Data.Config.Password;
             }
             Cloud.UpdateSecret(MauiProgram.SecretID, MauiProgram.SecretKey);
         }
@@ -197,7 +198,7 @@ namespace installer.Model
         public void Install(string? path = null)
         {
             Data.Installed = false;
-            Data.InstallPath = path ?? Data.InstallPath;
+            Data.Config.InstallPath = path ?? Data.Config.InstallPath;
             UpdateMD5();
             if (Status == UpdateStatus.error) return;
 
@@ -215,9 +216,9 @@ namespace installer.Model
                 }
             };
             action = deleteTask;
-            deleteTask(new DirectoryInfo(Data.InstallPath));
+            deleteTask(new DirectoryInfo(Data.Config.InstallPath));
 
-            Data.ResetInstallPath(Data.InstallPath);
+            Data.ResetInstallPath(Data.Config.InstallPath);
             Cloud.Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.log"));
             Cloud.LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.error.log"));
             Cloud.Exceptions = new ExceptionStack(Cloud.LogError, Cloud);
@@ -229,11 +230,11 @@ namespace installer.Model
             Exceptions = new ExceptionStack(LogError, this);
             LoggerBinding();
 
-            string zp = Path.Combine(Data.InstallPath, "THUAI7.tar.gz");
+            string zp = Path.Combine(Data.Config.InstallPath, "THUAI7.tar.gz");
             Status = UpdateStatus.downloading;
             Cloud.DownloadFileAsync(zp, "THUAI7.tar.gz").Wait();
             Status = UpdateStatus.unarchieving;
-            Cloud.ArchieveUnzip(zp, Data.InstallPath);
+            Cloud.ArchieveUnzip(zp, Data.Config.InstallPath);
             File.Delete(zp);
 
             Status = UpdateStatus.hash_computing;
@@ -257,7 +258,7 @@ namespace installer.Model
         public void ResetInstallPath(string newPath)
         {
             newPath = newPath.EndsWith(Path.DirectorySeparatorChar) ? newPath[0..-1] : newPath;
-            var installPath = Data.InstallPath.EndsWith(Path.DirectorySeparatorChar) ? Data.InstallPath[0..-1] : Data.InstallPath;
+            var installPath = Data.Config.InstallPath.EndsWith(Path.DirectorySeparatorChar) ? Data.Config.InstallPath[0..-1] : Data.Config.InstallPath;
             if (newPath != installPath)
             {
                 Log.Dispose(); LogError.Dispose(); Exceptions.logger.Dispose();
@@ -291,25 +292,76 @@ namespace installer.Model
             Status = UpdateStatus.hash_computing;
             Data.ScanDir();
             Status = UpdateStatus.success;
-            return Data.MD5Update.Count != 0;
+            return Data.MD5Update.Count != 0 || CurrentVersion < Data.FileHashData.Version;
         }
 
         /// <summary>
         /// 更新文件
         /// </summary>
-        public void Update()
+        public int Update()
         {
+            int result = 0;
             if (CheckUpdate())
             {
+                // 处理AI.cpp/AI.py合并问题
+                if (CurrentVersion < Data.FileHashData.Version)
+                {
+                    var c = CurrentVersion;
+                    var v = Data.FileHashData.Version;
+                    Status = UpdateStatus.downloading;
+                    var p = Path.Combine(Data.Config.InstallPath, "Templates");
+                    var tocpp = Cloud.DownloadFileAsync(Path.Combine(p, $"v{c}.cpp.t"),
+                        $"./Template/v{c}.cpp.t");
+                    var topy = Cloud.DownloadFileAsync(Path.Combine(p, $"v{c}.py.t"),
+                        $"./Template/v{c}.py.t");
+                    var tncpp = Cloud.DownloadFileAsync(Path.Combine(p, $"v{v}.cpp.t"),
+                        $"./Template/v{v}.cpp.t");
+                    var tnpy = Cloud.DownloadFileAsync(Path.Combine(p, $"v{v}.py.t"),
+                        $"./Template/v{v}.py.t");
+                    Task.WaitAll(tocpp, topy, tncpp, tnpy);
+                    if (Directory.GetFiles(p).Count() == 4)
+                    {
+                        if (Data.LangEnabled[LanguageOption.cpp].Item1)
+                        {
+                            var so = FileService.ReadToEnd(Path.Combine(p, $"v{c}.cpp.t"));
+                            var sn = FileService.ReadToEnd(Path.Combine(p, $"v{v}.cpp.t"));
+                            var sa = FileService.ReadToEnd(Data.LangEnabled[LanguageOption.cpp].Item2);
+                            var s = FileService.MergeUserCode(sa, so, sn);
+                            using (var f = new FileStream(Data.LangEnabled[LanguageOption.cpp].Item2 + ".temp", FileMode.Create))
+                            using (var w = new StreamWriter(f))
+                            {
+                                w.Write(s);
+                                w.Flush();
+                            }
+                            result |= 1;
+                        }
+                        if (Data.LangEnabled[LanguageOption.python].Item1)
+                        {
+                            var so = FileService.ReadToEnd(Path.Combine(p, $"v{c}.py.t"));
+                            var sn = FileService.ReadToEnd(Path.Combine(p, $"v{v}.py.t"));
+                            var sa = FileService.ReadToEnd(Data.LangEnabled[LanguageOption.python].Item2);
+                            var s = FileService.MergeUserCode(sa, so, sn);
+                            using (var f = new FileStream(Data.LangEnabled[LanguageOption.python].Item2 + ".temp", FileMode.Create))
+                            using (var w = new StreamWriter(f))
+                            {
+                                w.Write(s);
+                                w.Flush();
+                            }
+                            result |= 2;
+                        }
+                    }
+                }
+                downloadFailed.Clear();
+
                 Status = UpdateStatus.downloading;
-                Cloud.DownloadQueueAsync(Data.InstallPath,
+                Cloud.DownloadQueueAsync(Data.Config.InstallPath,
                     from item in Data.MD5Update where item.state != System.Data.DataRowState.Added select item.name,
                     downloadFailed).Wait();
                 foreach (var item in Data.MD5Update.Where((s) => s.state == System.Data.DataRowState.Added))
                 {
                     var _file = item.name;
                     var file = _file.StartsWith('.') ?
-                        Path.Combine(Data.InstallPath, _file) : _file;
+                        Path.Combine(Data.Config.InstallPath, _file) : _file;
                     File.Delete(file);
                 }
                 if (downloadFailed.Count == 0)
@@ -320,16 +372,17 @@ namespace installer.Model
                     if (Data.MD5Update.Count == 0)
                     {
                         Status = UpdateStatus.success;
-                        return;
+                        return result;
                     }
                 }
             }
             else
             {
                 Status = UpdateStatus.success;
-                return;
+                return result;
             }
             Status = UpdateStatus.error;
+            return result;
         }
 
         /// <summary>
@@ -352,45 +405,21 @@ namespace installer.Model
         /// <param name="args"></param>
         public void SaveToken(object? sender, EventArgs args)
         {
-            if (Data.Config.ContainsKey("Token"))
-                Data.Config["Token"] = Web.Token;
-            else
-                Data.Config.Add("Token", Web.Token);
-            Data.SaveConfig();
+            Data.Config.Token = Web.Token;
         }
 
         public void RememberUser()
         {
-            if (Data.Config.ContainsKey("Username"))
-                Data.Config["Username"] = Username;
-            else
-                Data.Config.Add("Username", Username);
-
-            if (Data.Config.ContainsKey("Password"))
-                Data.Config["Password"] = Password;
-            else
-                Data.Config.Add("Password", Password);
-
-            if (Data.Config.ContainsKey("Remembered"))
-                Data.Config["Remembered"] = "true";
-            else
-                Data.Config.Add("Remembered", "true");
-
-            Data.SaveConfig();
+            Data.Config.UserName = Username;
+            Data.Config.Password = Password;
+            Data.Config.Remembered = true;
         }
 
         public void ForgetUser()
         {
-            if (Data.Config.ContainsKey("Remembered"))
-                Data.Config["Remembered"] = "false";
-
-            if (Data.Config.ContainsKey("Username"))
-                Data.Config["Username"] = string.Empty;
-
-            if (Data.Config.ContainsKey("Password"))
-                Data.Config["Password"] = string.Empty;
-
-            Data.SaveConfig();
+            Data.Config.UserName = string.Empty;
+            Data.Config.Password = string.Empty;
+            Data.Config.Remembered = false;
         }
 
         /// <summary>
@@ -399,9 +428,20 @@ namespace installer.Model
         /// <param name="player_id">对应玩家id</param>
         public void UploadFiles(int player_id)
         {
-            Web.UploadFiles(Client, Path.Combine(Data.InstallPath, Data.UserCodePath),
-                Language == LaunchLanguage.cpp ? "cpp" : "python",
-                $"player_{player_id}").Wait();
+            string lang;
+            switch (Commands.Language)
+            {
+                case LanguageOption.cpp:
+                    lang = "cpp";
+                    break;
+                case LanguageOption.python:
+                    lang = "python";
+                    break;
+                default:
+                    lang = "unknown";
+                    break;
+            }
+            Web.UploadFiles(Client, Data.LangEnabled[Commands.Language].Item2, lang, $"player_{player_id}").Wait();
         }
         #endregion
     }

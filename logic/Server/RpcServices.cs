@@ -63,7 +63,7 @@ namespace Server
                 // 观战模式
                 lock (spectatorJoinLock) // 具体原因见另一个上锁的地方
                 {
-                    if (semaDict.TryAdd(request.PlayerId, (new SemaphoreSlim(0, 1), new SemaphoreSlim(0, 1))))
+                    if (semaDict0.TryAdd(request.PlayerId, (new SemaphoreSlim(0, 1), new SemaphoreSlim(0, 1))))
                     {
                         Console.WriteLine("A new spectator comes to watch this game.");
                         IsSpectatorJoin = true;
@@ -76,7 +76,7 @@ namespace Server
                 }
                 do
                 {
-                    semaDict[request.PlayerId].Item1.Wait();
+                    semaDict0[request.PlayerId].Item1.Wait();
                     try
                     {
                         if (currentGameInfo != null)
@@ -87,7 +87,7 @@ namespace Server
                     }
                     catch (InvalidOperationException)
                     {
-                        if (semaDict.TryRemove(request.PlayerId, out var semas))
+                        if (semaDict0.TryRemove(request.PlayerId, out var semas))
                         {
                             try
                             {
@@ -107,7 +107,7 @@ namespace Server
                     {
                         try
                         {
-                            semaDict[request.PlayerId].Item2.Release();
+                            semaDict0[request.PlayerId].Item2.Release();
                         }
                         catch { }
                     }
@@ -148,11 +148,23 @@ namespace Server
                 Console.WriteLine($"Id: {request.PlayerId} joins.");
                 lock (spectatorJoinLock)  // 为了保证绝对安全，还是加上这个锁吧
                 {
-                    if (semaDict.TryAdd(request.PlayerId, temp))
+                    if (request.TeamId == 0)
                     {
-                        start = Interlocked.Increment(ref playerCountNow) == playerNum;
-                        Console.WriteLine($"PlayerCountNow: {playerCountNow}");
-                        Console.WriteLine($"PlayerNum: {playerNum}");
+                        if (semaDict0.TryAdd(request.PlayerId, temp))
+                        {
+                            start = Interlocked.Increment(ref playerCountNow) == (playerNum * TeamCount);
+                            Console.WriteLine($"PlayerCountNow: {playerCountNow}");
+                            Console.WriteLine($"PlayerNum: {playerNum * TeamCount}");
+                        }
+                    }
+                    else if (request.TeamId == 1)
+                    {
+                        if (semaDict1.TryAdd(request.PlayerId, temp))
+                        {
+                            start = Interlocked.Increment(ref playerCountNow) == (playerNum * TeamCount);
+                            Console.WriteLine($"PlayerCountNow: {playerCountNow}");
+                            Console.WriteLine($"PlayerNum: {playerNum * TeamCount}");
+                        }
                     }
                 }
                 if (start)
@@ -167,7 +179,10 @@ namespace Server
             bool exitFlag = false;
             do
             {
-                semaDict[request.PlayerId].Item1.Wait();
+                if (request.TeamId == 0)
+                    semaDict0[request.PlayerId].Item1.Wait();
+                else if (request.TeamId == 1)
+                    semaDict1[request.PlayerId].Item1.Wait();
                 try
                 {
                     if (currentGameInfo != null && !exitFlag)
@@ -186,7 +201,10 @@ namespace Server
                 }
                 finally
                 {
-                    semaDict[request.PlayerId].Item2.Release();
+                    if (request.TeamId == 0)
+                        semaDict0[request.PlayerId].Item2.Release();
+                    else if (request.TeamId == 1)
+                        semaDict1[request.PlayerId].Item2.Release();
                 }
             } while (game.GameMap.Timer.IsGaming);
 #if DEBUG
@@ -208,7 +226,7 @@ namespace Server
 
         #region 船
 
-        public override Task<BoolRes> Activate(ActivateMsg request, ServerCallContext context)
+        /*public override Task<BoolRes> Activate(ActivateMsg request, ServerCallContext context)
         {
 #if DEBUG
             Console.WriteLine($"TRY Activate: Player {request.PlayerId} from Team {request.TeamId}");
@@ -226,7 +244,7 @@ namespace Server
             Console.WriteLine($"END Activate: {boolRes.ActSuccess}");
 #endif
             return Task.FromResult(boolRes);
-        }
+        }*/
 
         public override Task<MoveRes> Move(MoveMsg request, ServerCallContext context)
         {
@@ -479,6 +497,31 @@ namespace Server
             boolRes.ActSuccess = game.Recycle(request.TeamId, request.PlayerId);
 #if DEBUG
             Console.WriteLine("END Recycle");
+#endif
+            return Task.FromResult(boolRes);
+        }
+
+        public override Task<BoolRes> BuildSweeper(BuildSweeperMsg request, ServerCallContext context)
+        {
+#if DEBUG
+            Console.WriteLine($"TRY BuildSweeper: SweeperType {request.SweeperType} from Team {request.TeamId}");
+#endif
+            BoolRes boolRes = new();
+            var ship = game.TeamList[(int)request.TeamId].ShipPool.Find(
+                (ship) => ship.PlayerID == request.PlayerId);
+            if (ship == null)
+            {
+                boolRes.ActSuccess = false;
+                return Task.FromResult(boolRes);
+            }
+            else if (ship.IsRemoved == false)
+            {
+                boolRes.ActSuccess = false;
+                return Task.FromResult(boolRes);
+            }
+            boolRes.ActSuccess = game.ActivateShip(request.TeamId, request.PlayerId, Transformation.ShipTypeFromProto(request.SweeperType), request.BirthpointIndex);
+#if DEBUG
+            Console.WriteLine("END BuildSweeper");
 #endif
             return Task.FromResult(boolRes);
         }

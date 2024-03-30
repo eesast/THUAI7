@@ -1,19 +1,19 @@
 ﻿using GameClass.GameObj;
-using Gaming;
 using GameClass.MapGenerator;
+using Gaming;
 using Newtonsoft.Json;
 using Playback;
 using Preparation.Utility;
 using Protobuf;
 using System.Collections.Concurrent;
 using Timothy.FrameRateTask;
-using Utility = Preparation.Utility;
 
 namespace Server
 {
     partial class GameServer : ServerBase
     {
-        private readonly ConcurrentDictionary<long, (SemaphoreSlim, SemaphoreSlim)> semaDict = new();
+        private readonly ConcurrentDictionary<long, (SemaphoreSlim, SemaphoreSlim)> semaDict0 = new(); //for spectator and team0 player
+        private readonly ConcurrentDictionary<long, (SemaphoreSlim, SemaphoreSlim)> semaDict1 = new();
         // private object semaDictLock = new();
         protected readonly ArgumentOptions options;
         private readonly HttpSender? httpSender;
@@ -164,14 +164,21 @@ namespace Server
             }
             lock (spectatorJoinLock)
             {
-                foreach (var kvp in semaDict)
+                foreach (var kvp in semaDict0)
                 {
                     kvp.Value.Item1.Release();
                 }
-
+                foreach (var kvp in semaDict1)
+                {
+                    kvp.Value.Item1.Release();
+                }
                 // 若此时观战者加入，则死锁，所以需要 spectatorJoinLock
 
-                foreach (var kvp in semaDict)
+                foreach (var kvp in semaDict0)
+                {
+                    kvp.Value.Item2.Wait();
+                }
+                foreach (var kvp in semaDict1)
                 {
                     kvp.Value.Item2.Wait();
                 }
@@ -180,7 +187,7 @@ namespace Server
 
         private bool PlayerDeceased(int playerID)    //# 这里需要判断大本营deceased吗？
         {
-            return game.GameMap.GameObjDict[GameObjType.Ship].Cast<Ship>().Find(
+            return game.GameMap.GameObjDict[GameObjType.Ship].Cast<Ship>()?.Find(
                 ship => ship.PlayerID == playerID && ship.ShipState == ShipStateType.Deceased
                 ) != null;
         }

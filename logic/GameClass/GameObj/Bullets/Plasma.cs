@@ -7,7 +7,7 @@ internal sealed class Plasma : Bullet
     public Plasma(Ship ship, XY pos, int radius = GameData.BulletRadius) :
         base(ship, radius, pos)
     {
-        AP.SetReturnOri(GameData.PlasmaDamage);
+        AP.SetROri(GameData.PlasmaDamage);
     }
     public override double BulletBombRange => 0;
     public override double AttackDistance => GameData.PlasmaRange;

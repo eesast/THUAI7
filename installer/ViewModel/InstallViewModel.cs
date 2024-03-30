@@ -15,17 +15,17 @@ namespace installer.ViewModel
 {
     public class InstallViewModel : BaseViewModel
     {
-        private readonly Model.Downloader Downloader;
+        private readonly Downloader Downloader;
         private readonly IFolderPicker FolderPicker;
         public ObservableCollection<Exception> Exceptions { get; private set; }
 
-        public InstallViewModel(IFolderPicker folderPicker, Model.Downloader downloader)
+        public InstallViewModel(IFolderPicker folderPicker, Downloader downloader)
         {
             Downloader = downloader;
             FolderPicker = folderPicker;
             Exceptions = new ObservableCollection<Exception>();
 
-            downloadPath = Downloader.Data.InstallPath;
+            downloadPath = Downloader.Data.Config.InstallPath;
 
             BrowseBtnClickedCommand = new AsyncRelayCommand(BrowseBtnClicked);
             CheckUpdBtnClickedCommand = new RelayCommand(CheckUpdBtnClicked);
@@ -132,7 +132,6 @@ namespace installer.ViewModel
             }
         }
 
-        // private int cnt = 1;
         public void UpdateExceptions()
         {
             while (Downloader.Exceptions.Count > 0)
@@ -143,8 +142,6 @@ namespace installer.ViewModel
                     Exceptions.Add(exception);
                 }
             }
-            // Exceptions.Add(new Exception($"exp {cnt}"));
-            // cnt ++;
         }
 
         public ICommand BrowseBtnClickedCommand { get; }

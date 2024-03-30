@@ -1,7 +1,4 @@
-using Preparation.Interface;
 using Preparation.Utility;
-using System;
-using System.Threading;
 
 namespace GameClass.GameObj.Bullets;
 
@@ -10,7 +7,7 @@ internal sealed class Laser : Bullet
     public Laser(Ship ship, XY pos, int radius = GameData.BulletRadius) :
         base(ship, radius, pos)
     {
-        AP.SetReturnOri(GameData.LaserDamage);
+        AP.SetROri(GameData.LaserDamage);
     }
     public override double BulletBombRange => 0;
     public override double AttackDistance => GameData.LaserRange;

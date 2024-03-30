@@ -9,15 +9,14 @@ public class MoneyPool : IMoneyPool
     public AtomicLong Score { get; } = new AtomicLong(0);
     public MoneyPool()
     {
-        Money.SetScore(Score);
+        Money.Score = Score;
     }
     public long AddMoney(long add)
     {
-        Money.Add(add);
-        return add;
+        return Money.AddRNow(add);
     }
-    public void SubMoney(long sub)
+    public long SubMoney(long sub)
     {
-        Money.Sub(sub);
+        return Money.SubRNow(sub);
     }
 }
