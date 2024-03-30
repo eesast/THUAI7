@@ -101,12 +101,6 @@ namespace Gaming
                     () =>
                     {
                         ship.ThreadNum.WaitOne();
-                        if (!resource.Produce(ship.ProduceSpeed, ship))
-                        {
-                            ship.ThreadNum.Release();
-                            ship.ResetShipState(stateNum);
-                            return;
-                        }
                         if (!ship.StartThread(stateNum, RunningStateType.RunningActively))
                         {
                             ship.ThreadNum.Release();
@@ -119,6 +113,12 @@ namespace Gaming
                             loopCondition: () => stateNum == ship.StateNum && gameMap.Timer.IsGaming,
                             loopToDo: () =>
                             {
+                                if (!resource.Produce(ship.ProduceSpeed * GameData.CheckInterval, ship))
+                                {
+                                    ship.ThreadNum.Release();
+                                    ship.ResetShipState(stateNum);
+                                    return false;
+                                }
                                 if (resource.HP == 0)
                                 {
                                     ship.ResetShipState(stateNum);
@@ -157,12 +157,6 @@ namespace Gaming
                     () =>
                     {
                         ship.ThreadNum.WaitOne();
-                        if (!construction.Construct(ship.ConstructSpeed, constructionType, ship))
-                        {
-                            ship.ThreadNum.Release();
-                            ship.ResetShipState(stateNum);
-                            return;
-                        }
                         if (!ship.StartThread(stateNum, RunningStateType.RunningActively))
                         {
                             ship.ThreadNum.Release();
@@ -175,6 +169,12 @@ namespace Gaming
                             loopCondition: () => stateNum == ship.StateNum && gameMap.Timer.IsGaming,
                             loopToDo: () =>
                             {
+                                if (!construction.Construct(ship.ConstructSpeed * GameData.CheckInterval, constructionType, ship))
+                                {
+                                    ship.ThreadNum.Release();
+                                    ship.ResetShipState(stateNum);
+                                    return false;
+                                }
                                 if (construction.HP == construction.HP.GetMaxV())
                                 {
                                     ship.ResetShipState(stateNum);
@@ -213,12 +213,6 @@ namespace Gaming
                     () =>
                     {
                         ship.ThreadNum.WaitOne();
-                        if (!wormhole.Repair(ship.ConstructSpeed, ship))
-                        {
-                            ship.ThreadNum.Release();
-                            ship.ResetShipState(stateNum);
-                            return;
-                        }
                         if (!ship.StartThread(stateNum, RunningStateType.RunningActively))
                         {
                             ship.ThreadNum.Release();
@@ -231,6 +225,12 @@ namespace Gaming
                             loopCondition: () => stateNum == ship.StateNum && gameMap.Timer.IsGaming,
                             loopToDo: () =>
                             {
+                                if (!wormhole.Repair(ship.ConstructSpeed * GameData.CheckInterval, ship))
+                                {
+                                    ship.ThreadNum.Release();
+                                    ship.ResetShipState(stateNum);
+                                    return false;
+                                }
                                 if (wormhole.HP == wormhole.HP.GetMaxV())
                                 {
                                     ship.ResetShipState(stateNum);
