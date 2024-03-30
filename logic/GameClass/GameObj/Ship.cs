@@ -1,9 +1,8 @@
-﻿using System;
-using GameClass.GameObj.Bullets;
-using Preparation.Interface;
-using Preparation.Utility;
+﻿using GameClass.GameObj.Bullets;
 using GameClass.GameObj.Modules;
 using GameClass.GameObj.Occupations;
+using Preparation.Interface;
+using Preparation.Utility;
 
 namespace GameClass.GameObj;
 
@@ -18,7 +17,9 @@ public class Ship : Movable, IShip
     {
         if (IsRemoved)
             return true;
-        if (targetObj.Type == GameObjType.Ship && XY.DistanceCeil3(targetObj.Position, this.Position) < this.Radius + targetObj.Radius - GameData.AdjustLength)
+        if (targetObj.Type == GameObjType.Ship
+         && XY.DistanceCeil3(targetObj.Position, Position)
+            < Radius + targetObj.Radius - GameData.AdjustLength)
             return true;
         return false;
     }
@@ -355,7 +356,7 @@ public class Ship : Movable, IShip
         lock (actionLock)
         {
             if (state != stateNum) return false;
-            this.runningState = running;
+            runningState = running;
             whatInteractingWith = (GameObj?)obj;
             shipState = value;
             ++stateNum;
@@ -367,7 +368,7 @@ public class Ship : Movable, IShip
         lock (actionLock)
         {
             if (state != stateNum) return false;
-            this.runningState = running;
+            runningState = running;
             whatInteractingWith = (GameObj?)obj;
             shipState = value;
             return true;
@@ -377,7 +378,7 @@ public class Ship : Movable, IShip
     {
         lock (actionLock)
         {
-            if (this.StateNum == stateNum)
+            if (StateNum == stateNum)
             {
                 this.runningState = runningState;
                 return true;
@@ -391,7 +392,7 @@ public class Ship : Movable, IShip
         {
             if (SetShipState(RunningStateType.RunningForcibly, shipStateType) == -1) return false;
             TryToRemove();
-            CanMove.SetReturnOri(false);
+            CanMove.SetROri(false);
             position = GameData.PosNotInGame;
         }
         return true;
@@ -408,16 +409,16 @@ public class Ship : Movable, IShip
     public Ship(int initRadius, ShipType shipType, MoneyPool moneyPool) :
         base(GameData.PosNotInGame, initRadius, GameObjType.Ship)
     {
-        this.CanMove.SetReturnOri(false);
-        this.IsRemoved.SetReturnOri(true);
-        this.Occupation = OccupationFactory.FindIOccupation(this.ShipType = shipType);
-        this.ViewRange = this.Occupation.ViewRange;
-        this.HP = new(this.Occupation.MaxHp);
-        this.Armor = new(this.Occupation.BaseArmor);
-        this.Shield = new(this.Occupation.BaseShield);
-        this.MoveSpeed.SetReturnOri(this.orgMoveSpeed = Occupation.MoveSpeed);
-        this.MoneyPool = moneyPool;
-        (this.producerType, this.constructorType, this.armorType, this.shieldType, this.weaponType) = this.ShipType switch
+        CanMove.SetROri(false);
+        IsRemoved.SetROri(true);
+        Occupation = OccupationFactory.FindIOccupation(ShipType = shipType);
+        ViewRange = Occupation.ViewRange;
+        HP = new(Occupation.MaxHp);
+        Armor = new(Occupation.BaseArmor);
+        Shield = new(Occupation.BaseShield);
+        MoveSpeed.SetROri(orgMoveSpeed = Occupation.MoveSpeed);
+        MoneyPool = moneyPool;
+        (producerType, constructorType, armorType, shieldType, weaponType) = ShipType switch
         {
             ShipType.CivilShip => (
                 ProducerType.Producer1,
@@ -442,12 +443,12 @@ public class Ship : Movable, IShip
             ),
             _ => (ProducerType.Null, ConstructorType.Null, ArmorType.Null, ShieldType.Null, WeaponType.Null)
         };
-        (this.producer, this.constructor, this.armor, this.shield, this.weapon) = (
-            ModuleFactory.FindIProducer(this.ShipType, this.producerType),
-            ModuleFactory.FindIConstructor(this.ShipType, this.constructorType),
-            ModuleFactory.FindIArmor(this.ShipType, this.armorType),
-            ModuleFactory.FindIShield(this.ShipType, this.shieldType),
-            ModuleFactory.FindIWeapon(this.ShipType, this.weaponType)
+        (producer, constructor, armor, shield, weapon) = (
+            ModuleFactory.FindIProducer(ShipType, producerType),
+            ModuleFactory.FindIConstructor(ShipType, constructorType),
+            ModuleFactory.FindIArmor(ShipType, armorType),
+            ModuleFactory.FindIShield(ShipType, shieldType),
+            ModuleFactory.FindIWeapon(ShipType, weaponType)
         );
     }
 }

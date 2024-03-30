@@ -11,6 +11,7 @@ from queue import Queue
 import PyAPI.structures as THUAI7
 from PyAPI.utils import Proto2THUAI7, AssistFunction
 from PyAPI.API import SweeperAPI, TeamAPI
+from PyAPI.DebugAPI import SweeperDebugAPI, TeamDebugAPI
 from PyAPI.AI import Setting
 from PyAPI.Communication import Communication
 from PyAPI.State import State
@@ -855,7 +856,7 @@ class Logic(ILogic):
             )
         else:
             os.system(
-                f'mkdir -p "{os.path.dirname(os.path.dirname(os.path.realpath(__file__)))} / logs"'
+                f'mkdir -p "{os.path.dirname(os.path.dirname(os.path.realpath(__file__)))}/logs"'
             )
 
         fileHandler = logging.FileHandler(
