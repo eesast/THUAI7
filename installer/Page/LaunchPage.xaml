@@ -98,6 +98,14 @@
 
         <Button
             WidthRequest="400"
+            Text="保存"
+            Command="{Binding SaveBtnClickedCommand}"
+            IsEnabled="{Binding SaveEnabled}"
+            BackgroundColor="{Binding ConstBackgroundColor}"
+            FontSize="{Binding ConstFontSize}"
+            TextColor="{Binding ConstTextColor}"/>
+        <Button
+            WidthRequest="400"
             Text="启动"
             Command="{Binding StartBtnClickedCommand}"
             IsEnabled="{Binding StartEnabled}"
