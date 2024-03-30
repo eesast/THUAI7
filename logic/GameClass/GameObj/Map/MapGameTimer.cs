@@ -14,7 +14,7 @@ namespace GameClass.GameObj
         public class GameTimer : ITimer
         {
             private long startTime;
-            public int nowTime() => (int)(Environment.TickCount64 - startTime);
+            public int NowTime() => (int)(Environment.TickCount64 - startTime);
 
             private readonly AtomicBool isGaming = new(false);
             public AtomicBool IsGaming => isGaming;

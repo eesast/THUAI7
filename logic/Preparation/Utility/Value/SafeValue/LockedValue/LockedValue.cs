@@ -19,12 +19,12 @@ namespace Preparation.Utility
 
         public TResult? EnterOtherLock<TResult>(LockedValue a, Func<TResult?> func)
         {
-            if (this.idInClass == a.idInClass) return default(TResult?);
+            if (idInClass == a.idInClass) return default;
             bool thisLock = false;
             bool thatLock = false;
             try
             {
-                if (this.idInClass < a.idInClass)
+                if (idInClass < a.idInClass)
                 {
                     Monitor.Enter(vLock, ref thisLock);
                     Monitor.Enter(a.VLock, ref thatLock);
@@ -44,12 +44,12 @@ namespace Preparation.Utility
         }
         public void EnterOtherLock<TResult>(LockedValue a, Action func)
         {
-            if (this.idInClass == a.idInClass) return;
+            if (idInClass == a.idInClass) return;
             bool thisLock = false;
             bool thatLock = false;
             try
             {
-                if (this.idInClass < a.idInClass)
+                if (idInClass < a.idInClass)
                 {
                     Monitor.Enter(vLock, ref thisLock);
                     Monitor.Enter(a.VLock, ref thatLock);

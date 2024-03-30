@@ -103,7 +103,7 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
         TType tp = classfier(obj);
         if (!objs.TryGetValue(tp, out var ls))
         {
-            LockedClassList<T> temp = new();
+            LockedClassList<T> temp = [];
             temp.Add(obj);
             lock (dictLock) objs[tp] = temp;
         }
@@ -123,7 +123,7 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
     {
         if (!this.objs.TryGetValue(tp, out var ls))
         {
-            LockedClassList<T> temp = new();
+            LockedClassList<T> temp = [];
             temp.AddRange(objs);
             lock (dictLock) this.objs[tp] = temp;
         }
@@ -176,10 +176,9 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
         {
             foreach (var ls in objs.Values)
             {
-                var len = ls.Count;
-                for (int i = 0; i < len; i++)
+                foreach (var obj in ls)
                 {
-                    func(ls[i]);
+                    func(obj);
                 }
             }
         }
@@ -201,12 +200,11 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
     public void Travel(TType tp, Action<T> func)
     {
         if (!objs.TryGetValue(tp, out var ls)) return;
-        var len = ls.Count;
         lock (dictLock)
         {
-            for (int i = 0; i < len; i++)
+            foreach (var obj in ls)
             {
-                func(ls[i]);
+                func(obj);
             }
         }
     }
@@ -221,10 +219,9 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
         {
             foreach (var ls in objs.Values)
             {
-                var len = ls.Count;
-                for (int i = 0; i < len; i++)
+                foreach (var obj in ls)
                 {
-                    if (cond(ls[i])) return ls[i];
+                    if (cond(obj)) return obj;
                 }
             }
         }
@@ -233,12 +230,11 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
     public T? Find(TType tp, Func<T, bool> cond)
     {
         if (!objs.TryGetValue(tp, out var ls)) return null;
-        var len = ls.Count;
         lock (dictLock)
         {
-            for (int i = 0; i < len; i++)
+            foreach (var obj in ls)
             {
-                if (cond(ls[i])) return ls[i];
+                if (cond(obj)) return obj;
             }
         }
         return null;
@@ -257,13 +253,12 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
             bool flag = false;
             foreach (var ls in objs.Values)
             {
-                var len = ls.Count;
-                for (int i = 0; i < len; i++)
+                foreach (var obj in ls)
                 {
-                    ret.Add(func(ls[i]));
-                    if (cond(ls[i]))
+                    ret.Add(func(obj));
+                    if (cond(obj))
                     {
-                        retObj = ls[i];
+                        retObj = obj;
                         flag = true;
                         break;
                     }
@@ -279,11 +274,10 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
         {
             foreach (var ls in objs.Values)
             {
-                var len = ls.Count;
-                for (int i = 0; i < len; i++)
+                foreach (var obj in ls)
                 {
-                    func(ls[i]);
-                    if (cond(ls[i])) return ls[i];
+                    func(obj);
+                    if (cond(obj)) return obj;
                 }
             }
         }
@@ -297,12 +291,12 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
         T? retObj = null;
         lock (dictLock)
         {
-            for (int i = 0; i < len; i++)
+            foreach (var obj in ls)
             {
-                ret.Add(func(ls[i]));
-                if (cond(ls[i]))
+                ret.Add(func(obj));
+                if (cond(obj))
                 {
-                    retObj = ls[i];
+                    retObj = obj;
                     break;
                 }
             }
@@ -312,13 +306,12 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
     public T? Until(TType tp, Action<T> func, Func<T, bool> cond)
     {
         if (!objs.TryGetValue(tp, out var ls)) return null;
-        var len = ls.Count;
         lock (dictLock)
         {
-            for (int i = 0; i < len; i++)
+            foreach (var obj in ls)
             {
-                func(ls[i]);
-                if (cond(ls[i])) return ls[i];
+                func(obj);
+                if (cond(obj)) return obj;
             }
         }
         return null;
