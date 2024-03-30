@@ -14,16 +14,32 @@ namespace Gaming
     public partial class Game
     {
         private readonly AttackManager attackManager;
-        private class AttackManager(Map gameMap, ShipManager shipManager)
+        private class AttackManager
         {
-            private readonly Map gameMap = gameMap;
-            private readonly ShipManager shipManager = shipManager;
-            public readonly MoveEngine moveEngine = new(
+            private readonly Map gameMap;
+            private readonly ShipManager shipManager;
+            private readonly MoveEngine moveEngine;
+            public AttackManager(Map gameMap, ShipManager shipManager)
+            {
+                this.gameMap = gameMap;
+                this.shipManager = shipManager;
+                moveEngine = new(
                     gameMap: gameMap,
-                    OnCollision: (obj, collisionObj, moveVec) => MoveEngine.AfterCollision.Destroyed,
-                    EndMove: obj => obj.CanMove.SetROri(false)
+                    OnCollision: (obj, collisionObj, moveVec) =>
+                    {
+                        BulletBomb((Bullet)obj, (GameObj)collisionObj);
+                        return MoveEngine.AfterCollision.Destroyed;
+                    },
+                    EndMove: obj =>
+                    {
+                        if (obj.CanMove)
+                        {
+                            BulletBomb((Bullet)obj, null);
+                        }
+                        obj.CanMove.SetROri(false);
+                    }
                 );
-
+            }
             public void ProduceBulletNaturally(BulletType bulletType, Ship ship, double angle, XY pos)
             {
                 // 子弹如果没有和其他物体碰撞，将会一直向前直到超出人物的attackRange
