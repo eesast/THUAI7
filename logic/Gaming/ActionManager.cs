@@ -248,6 +248,29 @@ namespace Gaming
                 { IsBackground = true }.Start();
                 return false;
             }
+            public bool AddMoneyNaturally(Team team)
+            {
+                new Thread
+                (
+                    () =>
+                    {
+                        Thread.Sleep(GameData.CheckInterval);
+                        new FrameRateTaskExecutor<int>
+                        (
+                            loopCondition: () => gameMap.Timer.IsGaming,
+                            loopToDo: () =>
+                            {
+                                team.AddMoney(team.MoneyAddPerSecond);
+                                return true;
+                            },
+                            timeInterval: GameData.CheckInterval,
+                            finallyReturn: () => 0
+                        ).Start();
+                    }
+                )
+                { IsBackground = true }.Start();
+                return false;
+            }
         }
     }
 }

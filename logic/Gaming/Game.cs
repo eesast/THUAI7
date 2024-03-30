@@ -67,6 +67,10 @@ namespace Gaming
             if (gameMap.Timer.IsGaming)
                 return false;
             // 开始游戏
+            foreach (var team in TeamList)
+            {
+                actionManager.AddMoneyNaturally(team);
+            }
             new Thread
             (
                 () =>
@@ -116,6 +120,10 @@ namespace Gaming
                 if (constructionType == ConstructionType.Community && flag)
                 {
                     UpdateBirthPoint();
+                }
+                if (constructionType == ConstructionType.Factory && flag)
+                {
+                    UpdateMoneyPerSecond();
                 }
                 return flag;
             }
@@ -270,13 +278,29 @@ namespace Gaming
                 }
             }
         }
+        public void UpdateMoneyPerSecond()
+        {
+            foreach (var team in TeamList)
+            {
+                team.MoneyAddPerSecond = GameData.ScoreHomePerSecond;
+            }
+            gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>()?.ForEach(
+                delegate (Construction construction)
+                {
+                    if (construction.ConstructionType == ConstructionType.Factory)
+                    {
+                        TeamList[(int)construction.TeamID].MoneyAddPerSecond += GameData.ScoreFactoryPerSecond;
+                    }
+                }
+            );
+        }
         public Game(MapStruct mapResource, int numOfTeam)
         {
             gameMap = new(mapResource);
             shipManager = new(gameMap);
             moduleManager = new();
             actionManager = new(gameMap, shipManager);
-            attackManager = new(gameMap, shipManager);
+            attackManager = new(gameMap, shipManager, game: this);
             teamList = [];
             gameMap.GameObjDict[GameObjType.Home].Cast<GameObj>()?.ForEach(
                 delegate (GameObj gameObj)
@@ -287,13 +311,8 @@ namespace Gaming
                         teamList.Last().BirthPointList.Add(gameObj.Position);
                         teamList.Last().AddMoney(GameData.InitialMoney);
                     }
-                    /*         if (teamList.Count == numOfTeam)
-                             {
-                                 break;
-                             }*/
                 }
-                );
-
+            );
         }
     }
 }

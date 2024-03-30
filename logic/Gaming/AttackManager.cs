@@ -20,10 +20,12 @@ namespace Gaming
             private readonly Map gameMap;
             private readonly ShipManager shipManager;
             private readonly MoveEngine moveEngine;
-            public AttackManager(Map gameMap, ShipManager shipManager)
+            private readonly Game game;
+            public AttackManager(Map gameMap, ShipManager shipManager, Game game)
             {
                 this.gameMap = gameMap;
                 this.shipManager = shipManager;
+                this.game = game;
                 moveEngine = new(
                     gameMap: gameMap,
                     OnCollision: (obj, collisionObj, moveVec) =>
@@ -41,6 +43,7 @@ namespace Gaming
                         obj.CanMove.SetROri(false);
                     }
                 );
+                this.game = game;
             }
             public void ProduceBulletNaturally(BulletType bulletType, Ship ship, double angle, XY pos)
             {
@@ -61,7 +64,10 @@ namespace Gaming
                         shipManager.BeAttacked((Ship)objBeingShot, bullet);
                         break;
                     case GameObjType.Construction:
+                        var constructionType = ((Construction)objBeingShot).ConstructionType;
                         ((Construction)objBeingShot).BeAttacked(bullet);
+                        if (constructionType == ConstructionType.Community) game.UpdateBirthPoint();
+                        else if (constructionType == ConstructionType.Factory) game.UpdateMoneyPerSecond();
                         break;
                     case GameObjType.Wormhole:
                         ((Wormhole)objBeingShot).BeAttacked(bullet);
