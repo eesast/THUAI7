@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5170778442484362911}
   m_Layer: 6
   m_Name: disperse_militaryship3
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109,7 +109,8 @@ MonoBehaviour:
     armor: 400
     shield: 400
     playerTeam: 0
-    shipType: 2
+    shipState: 0
+    shipType: 0
     viewRange: 0
     producerType: 0
     constructorType: 0
@@ -138,6 +139,7 @@ MonoBehaviour:
   seObj: {fileID: 0}
   moveOption: {x: 0, y: 0}
   attackOption: {x: 0, y: 0}
+  enableMove: 0
 --- !u!50 &1666208417870257314
 Rigidbody2D:
   serializedVersion: 4

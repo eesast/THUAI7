@@ -150,7 +150,7 @@ public enum NewsType
 
 public enum PlayerTeam
 {
-    NULL_TEAM,
     RED,
     BLUE,
+    NULL_TEAM,
 }
