@@ -115,7 +115,7 @@ namespace Gaming
                 {
                     return false;
                 }
-                long actualRecover = ship.HP.AddPositiveV(recover);
+                long actualRecover = ship.HP.AddPositiveVRChange(recover);
                 ship.SubMoney((long)(actualRecover * 1.2));
                 return true;
             }

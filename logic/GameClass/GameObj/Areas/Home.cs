@@ -7,7 +7,7 @@ public class Home(XY initPos, long id)
     : Immovable(initPos, GameData.NumOfPosGridPerCell / 2, GameObjType.Home), IHome
 {
     public long TeamID { get; } = id;
-    public LongInTheVariableRange HP => new(GameData.HomeHP);
+    public InVariableRange<long> HP => new(GameData.HomeHP);
     public override bool IsRigid => false;
     public override ShapeType Shape => ShapeType.Square;
 
