@@ -11,7 +11,7 @@ class SweeperAPI(ISweeperAPI, IGameTimer):
         self.__pool = ThreadPoolExecutor(20)
 
     def Move(self, timeInMilliseconds: int, angle: float) -> Future[bool]:
-        return self.__pool.submit(self.__logic.move, timeInMilliseconds, angle)
+        return self.__pool.submit(self.__logic.Move, timeInMilliseconds, angle)
 
     def MoveRight(self, timeInMilliseconds: int) -> Future[bool]:
         return self.Move(timeInMilliseconds, pi * 0.5)
