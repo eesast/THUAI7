@@ -171,7 +171,6 @@ namespace installer.Data
             }
         }
 
-
         public int LaunchID
         {
             get => file.LaunchID;
@@ -363,6 +362,7 @@ namespace installer.Data
                 com = value;
                 if (temp != value)
                     OnMemoryChanged?.Invoke(this, new EventArgs());
+                com.OnMemoryChanged += (_, _) => OnMemoryChanged?.Invoke(this, new EventArgs());
             }
         }
     }
