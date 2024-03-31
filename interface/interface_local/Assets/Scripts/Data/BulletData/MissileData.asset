@@ -10,13 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f5a82f5376adfa14893e400fba4af4f5, type: 3}
-  m_Name: ArcData
+  m_Name: MissileData
   m_EditorClassIdentifier: 
+  cost: 1800
   attackDistance: 8
-  explosionRange: 0
-  attackDamage:
-  - 100
-  - 3200
-  armorDamageMultiplier: 2
-  shieldDamageMultiplier: 2
-  speed: 8
+  explosionRange: 1.6
+  attackDamage: 40060000
+  armorDamageMultiplier: 1
+  shieldDamageMultiplier: -1
+  speed: 6

@@ -16,7 +16,6 @@ from PyAPI.AI import Setting
 from PyAPI.Communication import Communication
 from PyAPI.State import State
 from PyAPI.Interface import ILogic, IGameTimer
-from PyAPI.DebugAPI import SweeperDebugAPI, TeamDebugAPI
 
 
 class Logic(ILogic):
@@ -183,27 +182,27 @@ class Logic(ILogic):
         with self.__mtxState:
             self.__logger.debug("Called GetHomeHp")
             return copy.deepcopy(
-                self.__currentState.gameInfo.blueHomeHp
+                self.__currentState.gameInfo.redHomeHp
                 if self.__teamID == 1
-                else self.__currentState.gameInfo.redHomeHp
+                else self.__currentState.gameInfo.blueHomeHp
             )
 
     def GetEnergy(self) -> int:
         with self.__mtxState:
             self.__logger.debug("Called GetEnergy")
             return copy.deepcopy(
-                self.__currentState.gameInfo.blueMoney
+                self.__currentState.gameInfo.redEnergy
                 if self.__teamID == 1
-                else self.__currentState.gameInfo.redMoney
+                else self.__currentState.gameInfo.blueEnergy
             )
 
     def GetScore(self) -> int:
         with self.__mtxState:
             self.__logger.debug("Called GetScore")
             return copy.deepcopy(
-                self.__currentState.gameInfo.blueScore
+                self.__currentState.gameInfo.redScore
                 if self.__teamID == 1
-                else self.__currentState.gameInfo.redScore
+                else self.__currentState.gameInfo.blueScore
             )
 
     def Attack(self, angle: float) -> int:
@@ -893,11 +892,19 @@ class Logic(ILogic):
 
         # 构造timer
         if not file and not screen:
-            self.__timer = SweeperAPI(self)
+            if self.__playerID == 0:
+                self.__timer = TeamAPI(self)
+            else:
+                self.__timer = SweeperAPI(self)
         else:
-            self.__timer = SweeperDebugAPI(
-                self, file, screen, warnOnly, self.__playerID
-            )
+            if self.__playerID == 0:
+                self.__timer = TeamDebugAPI(
+                    self, file, screen, warnOnly, self.__playerID
+                )
+            else:
+                self.__timer = SweeperDebugAPI(
+                    self, file, screen, warnOnly, self.__playerID
+                )
 
         # 构建AI线程
         def AIThread():
@@ -923,7 +930,6 @@ class Logic(ILogic):
             )
             self.__threadAI = threading.Thread(target=AIThread)
             self.__threadAI.start()
-            self.__logger.info("Start to Process Message")
             self.__ProcessMessage()
             self.__logger.info("Join the AI thread.")
             self.__threadAI.join()

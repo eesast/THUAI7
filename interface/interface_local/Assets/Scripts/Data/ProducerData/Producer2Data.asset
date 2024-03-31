@@ -9,13 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5a82f5376adfa14893e400fba4af4f5, type: 3}
-  m_Name: ShellData
+  m_Script: {fileID: 11500000, guid: 54e831eeb4931d14da985b488040e198, type: 3}
+  m_Name: Producer2Data
   m_EditorClassIdentifier: 
-  attackDistance: 4
-  explosionRange: 0
-  attackDamage:
-  - 1800
-  armorDamageMultiplier: 0.4
-  shieldDamageMultiplier: 1.5
-  speed: 8
+  cost: 400
+  miningSpeed: 30

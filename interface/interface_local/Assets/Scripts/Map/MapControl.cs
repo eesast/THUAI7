@@ -24,12 +24,19 @@ public class MapControl : SingletonMono<MapControl>
                 {
                     case PlaceType.HOME:
                         if (!bases[0])
+                        {
                             bases[0] = ObjCreater.GetInstance().CreateObj(PlaceType.HOME, new Vector2(j, 50 - i)).GetComponent<BaseControl>();
+                            bases[0].name = "Base1";
+                        }
                         else
+                        {
                             bases[1] = ObjCreater.GetInstance().CreateObj(PlaceType.HOME, new Vector2(j, 50 - i)).GetComponent<BaseControl>();
+                            bases[1].name = "Base2";
+                        }
                         break;
                     case PlaceType.RESOURCE:
-                        ObjCreater.GetInstance().CreateObj(PlaceType.HOME, new Vector2(j, 50 - i));
+                        ObjCreater.GetInstance().CreateObj(PlaceType.RESOURCE, new Vector2(j, 50 - i));
+                        // Debug.Log(PlaceManager.GetInstance().resource);
                         PlaceManager.GetInstance().resource.Add(new Vector2(j, 50 - i));
                         break;
                     default:
@@ -37,13 +44,13 @@ public class MapControl : SingletonMono<MapControl>
                         break;
                 }
             }
-            bases[0].messageOfBase.playerTeam = PlayerTeam.BLUE;
-            bases[1].messageOfBase.playerTeam = PlayerTeam.RED;
         }
-        // Update is called once per frame
-        void Update()
-        {
+        bases[0].messageOfBase.playerTeam = PlayerTeam.BLUE;
+        bases[1].messageOfBase.playerTeam = PlayerTeam.RED;
+    }
+    // Update is called once per frame
+    void Update()
+    {
 
-        }
     }
 }

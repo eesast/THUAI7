@@ -450,8 +450,8 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
     def GetBridgeHp(self, cellX: int, cellY: int) -> int:
         return self.__logic.GetBridgeHp(cellX, cellY)
 
-    def GetResouceState(self, cellX: int, cellY: int) -> int:
-        return self.__logic.GetResouceState(cellX, cellY)
+    def GetGarbageState(self, cellX: int, cellY: int) -> int:
+        return self.__logic.GetGarbageState(cellX, cellY)
 
     def GetHomeHp(self) -> int:
         return self.__logic.GetHomeHp()
@@ -472,13 +472,37 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
         return self.__logic.GetEnergy()
 
     def Print(self, string: str) -> None:
-        pass
+        self.__logger.info(string)
+
+    def PrintSweeper(self) -> None:
+        for sweeper in self.__logic.GetSweepers():
+            self.__logger.info("******sweeper Info******")
+            self.__logger.info(
+                f"teamID={sweeper.teamID} playerID={sweeper.playerID}, GUID={sweeper.guid} sweeperType:{sweeper.sweeperType}"
+            )
+            self.__logger.info(
+                f"x={sweeper.x}, y={sweeper.y} hp={sweeper.hp} armor={sweeper.armor} shield={sweeper.shield} state:{sweeper.sweeperState}"
+            )
+            self.__logger.info(
+                f"speed={sweeper.speed}, view range={sweeper.viewRange}, facingDirection={sweeper.facingDirection}"
+            )
+            self.__logger.info(
+                f"producerType:{sweeper.producerType} constructorType:{sweeper.constructorType}"
+            )
+            self.__logger.info(
+                f"armorType:{sweeper.armorType} shieldType:{sweeper.shieldType} weaponType:{sweeper.weaponType}"
+            )
+            self.__logger.info("************************\n")
 
     def PrintTeam(self) -> None:
-        pass
+        self.PrintSelfInfo()
 
     def PrintSelfInfo(self) -> None:
-        pass
+        selfInfo = self.__logic.GetSelfInfo()
+        self.__logger.info("******self team info******")
+        self.__logger.info(f"teamID:{selfInfo.teamID} playerID:{selfInfo.playerID}")
+        self.__logger.info(f"score:{selfInfo.score} energy:{selfInfo.energy}")
+        self.__logger.info("************************\n")
 
     def __GetTime(self) -> float:
         return (datetime.datetime.now() - self.__startPoint) / datetime.timedelta(

@@ -12,7 +12,7 @@ public struct MessageOfShip
     public int shield;
     public PlayerTeam playerTeam;
     // public int playerId;
-    // public ShipState shipState;
+    public ShipState shipState;
     public ShipType shipType;
     public int viewRange;
     public ProducerType producerType;

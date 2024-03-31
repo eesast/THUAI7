@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Base
+  - Ship
+  - Bullet
   layers:
   - Default
   - TransparentFX
