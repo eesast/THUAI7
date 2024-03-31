@@ -92,7 +92,7 @@ namespace installer.ViewModel
                     ipChanged = false;
                 else
                     ipChanged = true;
-                startEnabled = !ipChanged
+                StartEnabled = !ipChanged
                             && !portChanged
                             && !teamIDChanged
                             && !playerIDChanged
@@ -134,7 +134,7 @@ namespace installer.ViewModel
                     teamIDChanged = false;
                 else
                     teamIDChanged = true;
-                startEnabled = !ipChanged
+                StartEnabled = !ipChanged
                             && !portChanged
                             && !teamIDChanged
                             && !playerIDChanged
@@ -155,7 +155,7 @@ namespace installer.ViewModel
                     playerIDChanged = false;
                 else
                     playerIDChanged = true;
-                startEnabled = !ipChanged
+                StartEnabled = !ipChanged
                             && !portChanged
                             && !teamIDChanged
                             && !playerIDChanged
@@ -176,7 +176,7 @@ namespace installer.ViewModel
                     sweeperTypeChanged = false;
                 else
                     sweeperTypeChanged = true;
-                startEnabled = !ipChanged
+                StartEnabled = !ipChanged
                             && !portChanged
                             && !teamIDChanged
                             && !playerIDChanged
@@ -197,7 +197,7 @@ namespace installer.ViewModel
                     playbackFileChanged = false;
                 else
                     playbackFileChanged = true;
-                startEnabled = !ipChanged
+                StartEnabled = !ipChanged
                             && !portChanged
                             && !teamIDChanged
                             && !playerIDChanged
@@ -218,7 +218,7 @@ namespace installer.ViewModel
                     playbackSpeedChanged = false;
                 else
                     playbackSpeedChanged = true;
-                startEnabled = !ipChanged
+                StartEnabled = !ipChanged
                             && !portChanged
                             && !teamIDChanged
                             && !playerIDChanged
@@ -243,6 +243,16 @@ namespace installer.ViewModel
                     else
                         languageChanged = false;
                 }
+                if (!cppSelect && !PySelect)
+                    languageChanged = true;
+                StartEnabled = !ipChanged
+                            && !portChanged
+                            && !teamIDChanged
+                            && !playerIDChanged
+                            && !sweeperTypeChanged
+                            && !playbackFileChanged
+                            && !playbackSpeedChanged
+                            && !languageChanged;
                 OnPropertyChanged();
             }
         }
@@ -260,6 +270,16 @@ namespace installer.ViewModel
                     else
                         languageChanged = false;
                 }
+                if (!cppSelect && !PySelect)
+                    languageChanged = true;
+                StartEnabled = !ipChanged
+                            && !portChanged
+                            && !teamIDChanged
+                            && !playerIDChanged
+                            && !sweeperTypeChanged
+                            && !playbackFileChanged
+                            && !playbackSpeedChanged
+                            && !languageChanged;
                 OnPropertyChanged();
             }
         }
