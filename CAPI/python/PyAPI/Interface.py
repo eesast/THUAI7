@@ -154,10 +154,6 @@ class IAPI(metaclass=ABCMeta):
     def GetMessage(self) -> Tuple[int, str]:
         pass
 
-    @abstractmethod
-    def Move(self, timeInMilliseconds: int, angle: float) -> Future[bool]:
-        pass
-
     # 获取游戏目前所进行的帧数
     @abstractmethod
     def GetFrameCount(self) -> int:

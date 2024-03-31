@@ -107,7 +107,7 @@ int THUAI7Main(int argc, char** argv, CreateAIFunc AIBuilder)
         else
         {
             playerType = THUAI7::PlayerType::Sweeper;
-            SweeperType = SweeperTypeDict[pID];
+            SweeperType = SweeperTypeDict[pID - 1];
         }
 #ifdef _MSC_VER
         std::cout
