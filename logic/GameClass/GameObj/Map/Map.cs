@@ -178,6 +178,7 @@ namespace GameClass.GameObj
         public void Add(IGameObj gameObj)
         {
             GameObjDict[gameObj.Type].Add(gameObj);
+            Debugger.Output("Found a " + gameObj.Type.ToString() + " at " + gameObj.Position.ToString());
         }
         public Map(MapStruct mapResource)
         {
