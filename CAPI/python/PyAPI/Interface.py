@@ -8,7 +8,7 @@ from typing import List, Tuple, Union
 
 
 class ILogic(metaclass=ABCMeta):
-    '''`IAPI` 统一可用的接口'''
+    """`IAPI` 统一可用的接口"""
 
     @abstractmethod
     def GetSweepers(self) -> List[THUAI7.Sweeper]:
@@ -59,7 +59,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetMoney(self) -> int:
+    def GetEnergy(self) -> int:
         pass
 
     @abstractmethod
@@ -134,13 +134,13 @@ class ILogic(metaclass=ABCMeta):
 
 
 class IAPI(metaclass=ABCMeta):
-    '''
+    """
     选手可执行的操作，应当保证所有函数的返回值都应当为 `asyncio.Future`，例如下面的移动函数：\n
     指挥本角色进行移动：
     - `timeInMilliseconds` 为移动时间，单位为毫秒
     - `angleInRadian` 表示移动的方向，单位是弧度，使用极坐标——竖直向下方向为 x 轴，水平向右方向为 y 轴\n
     发送信息、接受信息，注意收消息时无消息则返回 `nullopt`
-    '''
+    """
 
     @abstractmethod
     def SendMessage(self, toPlayerID: int, message: Union[str, bytes]) -> Future[bool]:
@@ -161,12 +161,12 @@ class IAPI(metaclass=ABCMeta):
     # 获取游戏目前所进行的帧数
     @abstractmethod
     def GetFrameCount(self) -> int:
-        '获取游戏目前所进行的帧数'
+        "获取游戏目前所进行的帧数"
         pass
 
     @abstractmethod
     def Wait(self) -> Future[bool]:
-        '等待下一帧'
+        "等待下一帧"
         pass
 
     @abstractmethod
@@ -214,7 +214,7 @@ class IAPI(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetMoney(self) -> int:
+    def GetEnergy(self) -> int:
         pass
 
     @abstractmethod

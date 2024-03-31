@@ -152,18 +152,18 @@ namespace Server
                     {
                         if (semaDict0.TryAdd(request.PlayerId, temp))
                         {
-                            start = Interlocked.Increment(ref playerCountNow) == (playerNum * 2);
+                            start = Interlocked.Increment(ref playerCountNow) == (playerNum * TeamCount);
                             Console.WriteLine($"PlayerCountNow: {playerCountNow}");
-                            Console.WriteLine($"PlayerNum: {playerNum * 2}");
+                            Console.WriteLine($"PlayerNum: {playerNum * TeamCount}");
                         }
                     }
                     else if (request.TeamId == 1)
                     {
                         if (semaDict1.TryAdd(request.PlayerId, temp))
                         {
-                            start = Interlocked.Increment(ref playerCountNow) == (playerNum * 2);
+                            start = Interlocked.Increment(ref playerCountNow) == (playerNum * TeamCount);
                             Console.WriteLine($"PlayerCountNow: {playerCountNow}");
-                            Console.WriteLine($"PlayerNum: {playerNum * 2}");
+                            Console.WriteLine($"PlayerNum: {playerNum * TeamCount}");
                         }
                     }
                 }

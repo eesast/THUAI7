@@ -11,7 +11,7 @@ class SweeperAPI(ISweeperAPI, IGameTimer):
         self.__pool = ThreadPoolExecutor(20)
 
     def Move(self, timeInMilliseconds: int, angle: float) -> Future[bool]:
-        return self.__pool.submit(self.__logic.move, timeInMilliseconds, angle)
+        return self.__pool.submit(self.__logic.Move, timeInMilliseconds, angle)
 
     def MoveRight(self, timeInMilliseconds: int) -> Future[bool]:
         return self.Move(timeInMilliseconds, pi * 0.5)
@@ -97,8 +97,8 @@ class SweeperAPI(ISweeperAPI, IGameTimer):
     def GetSelfInfo(self) -> THUAI7.Sweeper:
         return cast(THUAI7.Sweepers, self.__logic.GetSelfInfo())
 
-    def GetMoney(self) -> int:
-        return self.__logic.GetMoney()
+    def GetEnergy(self) -> int:
+        return self.__logic.GetEnergy()
 
     def GetScore(self) -> int:
         return self.__logic.GetScore()
@@ -208,8 +208,8 @@ class TeamAPI(ITeamAPI, IGameTimer):
     def GetScore(self) -> int:
         return self.__logic.GetScore()
 
-    def GetMoney(self) -> int:
-        return self.__logic.GetMoney()
+    def GetEnergy(self) -> int:
+        return self.__logic.GetEnergy()
 
     def InstallModule(self, ID: int, type: THUAI7.ModuleType) -> Future[bool]:
         return self.__pool.submit(self.__logic.InstallModule, ID, type)

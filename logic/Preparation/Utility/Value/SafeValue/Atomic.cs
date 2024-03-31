@@ -33,7 +33,8 @@ namespace Preparation.Utility
         public double CompareExROri(double newV, double compareTo) => Interlocked.CompareExchange(ref v, newV, compareTo);
     }
 
-    public class AtomicBool(bool x) : Atomic, ISafeAddable<bool>
+    //许多情况下，volatile即可
+    public class AtomicBool(bool x) : Atomic, IAddable<bool>
     {
         private int v = x ? 1 : 0;//v&1==0为false,v&1==1为true
 
