@@ -30,6 +30,8 @@ Logic::Logic(int64_t pID, int64_t tID, THUAI7::PlayerType pType, THUAI7::Sweeper
         playerTeam = THUAI7::PlayerTeam::Red;
     if (teamID == 1)
         playerTeam = THUAI7::PlayerTeam::Blue;
+    else
+        playerTeam = THUAI7::PlayerTeam::NullTeam;
 }
 
 std::vector<std::shared_ptr<const THUAI7::Sweeper>> Logic::GetSweepers() const

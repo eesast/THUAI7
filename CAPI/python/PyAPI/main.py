@@ -106,7 +106,9 @@ def THUAI7Main(argv: List[str], AIBuilder: Callable) -> None:
         playerType = THUAI7.PlayerType.Team
     else:
         playerType = THUAI7.PlayerType.Sweeper
-        sweeperType = Setting.SweeperTypes()[pID]
+        sweeperType = Setting.SweeperTypes()[
+            pID - 1
+        ]  # 减去1 是因为字典从0计数，而我们的船是从1计数
 
     if platform.system().lower() == "windows":
         PrintWelcomeString()

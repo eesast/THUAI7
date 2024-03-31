@@ -32,18 +32,23 @@ class AI(IAI):
 
     def SweeperPlay(self, api: ISweeperAPI) -> None:
         # 公共操作
-
-        if self.__playerID == 0:
-            # player0的操作
-            return
-        elif self.__playerID == 1:
+        if self.__playerID == 1:
+            api.PrintSelfInfo()
+            time.sleep(1)
             # player1的操作
             return
         elif self.__playerID == 2:
             # player2的操作
             return
-        return
+        elif self.__playerID == 3:
+            # player3的操作
+            return
+        elif self.__playerID == 4:
+            # player4的操作
+            return
+        returnF
 
     def TeamPlay(self, api: ITeamAPI) -> None:
+        assert self.__playerID == 0, "Team's playerID must be 0"
         # 操作
         return
