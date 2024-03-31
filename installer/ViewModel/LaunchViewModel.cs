@@ -54,7 +54,7 @@ namespace installer.ViewModel
                     break;
             }
 
-            
+
             SaveEnabled = true;
             StartEnabled = true;
 
@@ -331,7 +331,8 @@ namespace installer.ViewModel
 
         private void Save()
         {
-            Task.Run(() => {
+            Task.Run(() =>
+            {
                 try
                 {
                     if (IP == null)
@@ -344,7 +345,8 @@ namespace installer.ViewModel
                     DebugAlert = "IP: " + e.Message;
                 }
             });
-            Task.Run(() => {
+            Task.Run(() =>
+            {
                 try
                 {
                     if (Port == null)
@@ -357,7 +359,8 @@ namespace installer.ViewModel
                     DebugAlert = "Port: " + e.Message;
                 }
             });
-            Task.Run(() => {
+            Task.Run(() =>
+            {
                 try
                 {
                     if (TeamID == null)
@@ -370,7 +373,8 @@ namespace installer.ViewModel
                     DebugAlert = "Team ID: " + e.Message;
                 }
             });
-            Task.Run(() => {
+            Task.Run(() =>
+            {
                 try
                 {
                     if (PlayerID == null)
@@ -383,7 +387,8 @@ namespace installer.ViewModel
                     DebugAlert = "Player ID: " + e.Message;
                 }
             });
-            Task.Run(() => {
+            Task.Run(() =>
+            {
                 try
                 {
                     if (SweeperType == null)
@@ -396,7 +401,8 @@ namespace installer.ViewModel
                     DebugAlert = "Sweeper Type: " + e.Message;
                 }
             });
-            Task.Run(() => {
+            Task.Run(() =>
+            {
                 try
                 {
                     if (PlaybackFile == null)
@@ -409,7 +415,8 @@ namespace installer.ViewModel
                     DebugAlert = "Playback File: " + e.Message;
                 }
             });
-            Task.Run(() => {
+            Task.Run(() =>
+            {
                 try
                 {
                     Downloader.Data.Config.Commands.PlaybackSpeed = Convert.ToDouble(PlaybackSpeed);
@@ -420,7 +427,8 @@ namespace installer.ViewModel
                     DebugAlert = "Playback Speed: " + e.Message;
                 }
             });
-            Task.Run(() => {
+            Task.Run(() =>
+            {
                 try
                 {
                     if (CppSelect)
@@ -454,7 +462,7 @@ namespace installer.ViewModel
                        + PlaybackSpeed;
         }
 
-        
+
         private string? debugAlert;
         public string? DebugAlert
         {
