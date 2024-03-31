@@ -93,9 +93,9 @@ public class ObjCreater : SingletonMono<ObjCreater>
             }
             return null;
         }
-        void Start()
-        {
-            mapfa = GameObject.Find("Map").transform;
-        }
+    }
+    void Start()
+    {
+        mapfa = GameObject.Find("Map").transform;
     }
 }

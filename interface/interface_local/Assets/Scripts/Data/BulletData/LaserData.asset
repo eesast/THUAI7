@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f5a82f5376adfa14893e400fba4af4f5, type: 3}
-  m_Name: PlasmaData
+  m_Name: LaserData
   m_EditorClassIdentifier: 
+  cost: 1000
   attackDistance: 4
   explosionRange: 0
-  attackDamage:
-  - 1300
-  armorDamageMultiplier: 2
-  shieldDamageMultiplier: 0.4
-  speed: 10
+  attackDamage: b0040000
+  armorDamageMultiplier: 1.5
+  shieldDamageMultiplier: 0.6
+  speed: 20
