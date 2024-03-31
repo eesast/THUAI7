@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using installer.Model;
+using installer.Data;
 
 namespace installer.ViewModel
 {
@@ -26,6 +27,34 @@ namespace installer.ViewModel
             PlaybackFile = Downloader.Data.Config.Commands.PlaybackFile;
             PlaybackSpeed = Downloader.Data.Config.Commands.PlaybackSpeed.ToString();
 
+            ipChanged = false;
+            portChanged = false;
+            teamIDChanged = false;
+            playerIDChanged = false;
+            sweeperTypeChanged = false;
+            playbackFileChanged = false;
+            playbackSpeedChanged = false;
+
+            switch (Downloader.Data.Config.Commands.Language)
+            {
+                case LanguageOption.cpp:
+                    CppSelect = true;
+                    PySelect = false;
+                    languageChanged = false;
+                    break;
+                case LanguageOption.python:
+                    CppSelect = false;
+                    PySelect = true;
+                    languageChanged = false;
+                    break;
+                default:
+                    CppSelect = false;
+                    PySelect = false;
+                    languageChanged = true;
+                    break;
+            }
+
+            
             SaveEnabled = true;
             StartEnabled = true;
 
@@ -33,19 +62,26 @@ namespace installer.ViewModel
             StartBtnClickedCommand = new AsyncRelayCommand(StartBtnClicked);
         }
 
-        private string? debugAlert;
-        public string? DebugAlert
-        {
-            get => debugAlert;
-            set
-            {
-                debugAlert = value;
-                OnPropertyChanged();
-            }
-        }
-
 
         private string? ip;
+        private string? port;
+        private string? teamID;
+        private string? playerID;
+        private string? sweeperType;
+        private string? playbackFile;
+        private string? playbackSpeed;
+        private bool cppSelect;
+        private bool pySelect;
+
+        private bool ipChanged;
+        private bool portChanged;
+        private bool teamIDChanged;
+        private bool playerIDChanged;
+        private bool sweeperTypeChanged;
+        private bool playbackFileChanged;
+        private bool playbackSpeedChanged;
+        private bool languageChanged;
+
         public string? IP
         {
             get => ip;
@@ -53,18 +89,20 @@ namespace installer.ViewModel
             {
                 ip = value;
                 if (ip == Downloader.Data.Config.Commands.IP)
-                {
-                    StartEnabled = true;
-                }
+                    ipChanged = false;
                 else
-                {
-                    StartEnabled = false;
-                }
+                    ipChanged = true;
+                startEnabled = !ipChanged
+                            && !portChanged
+                            && !teamIDChanged
+                            && !playerIDChanged
+                            && !sweeperTypeChanged
+                            && !playbackFileChanged
+                            && !playbackSpeedChanged
+                            && !languageChanged;
                 OnPropertyChanged();
             }
         }
-
-        private string? port;
         public string? Port
         {
             get => port;
@@ -72,18 +110,20 @@ namespace installer.ViewModel
             {
                 port = value;
                 if (port == Downloader.Data.Config.Commands.Port)
-                {
-                    StartEnabled = true;
-                }
+                    portChanged = false;
                 else
-                {
-                    StartEnabled = false;
-                }
+                    portChanged = true;
+                startEnabled = !ipChanged
+                            && !portChanged
+                            && !teamIDChanged
+                            && !playerIDChanged
+                            && !sweeperTypeChanged
+                            && !playbackFileChanged
+                            && !playbackSpeedChanged
+                            && !languageChanged;
                 OnPropertyChanged();
             }
         }
-
-        private string? teamID;
         public string? TeamID
         {
             get => teamID;
@@ -91,18 +131,20 @@ namespace installer.ViewModel
             {
                 teamID = value;
                 if (teamID == Downloader.Data.Config.Commands.TeamID)
-                {
-                    StartEnabled = true;
-                }
+                    teamIDChanged = false;
                 else
-                {
-                    StartEnabled = false;
-                }
+                    teamIDChanged = true;
+                startEnabled = !ipChanged
+                            && !portChanged
+                            && !teamIDChanged
+                            && !playerIDChanged
+                            && !sweeperTypeChanged
+                            && !playbackFileChanged
+                            && !playbackSpeedChanged
+                            && !languageChanged;
                 OnPropertyChanged();
             }
         }
-
-        private string? playerID;
         public string? PlayerID
         {
             get => playerID;
@@ -110,18 +152,20 @@ namespace installer.ViewModel
             {
                 playerID = value;
                 if (playerID == Downloader.Data.Config.Commands.PlayerID)
-                {
-                    StartEnabled = true;
-                }
+                    playerIDChanged = false;
                 else
-                {
-                    StartEnabled = false;
-                }
+                    playerIDChanged = true;
+                startEnabled = !ipChanged
+                            && !portChanged
+                            && !teamIDChanged
+                            && !playerIDChanged
+                            && !sweeperTypeChanged
+                            && !playbackFileChanged
+                            && !playbackSpeedChanged
+                            && !languageChanged;
                 OnPropertyChanged();
             }
         }
-
-        private string? sweeperType;
         public string? SweeperType
         {
             get => sweeperType;
@@ -129,18 +173,20 @@ namespace installer.ViewModel
             {
                 sweeperType = value;
                 if (sweeperType == Downloader.Data.Config.Commands.SweeperType)
-                {
-                    StartEnabled = true;
-                }
+                    sweeperTypeChanged = false;
                 else
-                {
-                    StartEnabled = false;
-                }
+                    sweeperTypeChanged = true;
+                startEnabled = !ipChanged
+                            && !portChanged
+                            && !teamIDChanged
+                            && !playerIDChanged
+                            && !sweeperTypeChanged
+                            && !playbackFileChanged
+                            && !playbackSpeedChanged
+                            && !languageChanged;
                 OnPropertyChanged();
             }
         }
-
-        private string? playbackFile;
         public string? PlaybackFile
         {
             get => playbackFile;
@@ -148,18 +194,20 @@ namespace installer.ViewModel
             {
                 playbackFile = value;
                 if (playbackFile == Downloader.Data.Config.Commands.PlaybackFile)
-                {
-                    StartEnabled = true;
-                }
+                    playbackFileChanged = false;
                 else
-                {
-                    StartEnabled = false;
-                }
+                    playbackFileChanged = true;
+                startEnabled = !ipChanged
+                            && !portChanged
+                            && !teamIDChanged
+                            && !playerIDChanged
+                            && !sweeperTypeChanged
+                            && !playbackFileChanged
+                            && !playbackSpeedChanged
+                            && !languageChanged;
                 OnPropertyChanged();
             }
         }
-
-        public string? playbackSpeed;
         public string? PlaybackSpeed
         {
             get => playbackSpeed;
@@ -167,12 +215,50 @@ namespace installer.ViewModel
             {
                 playbackSpeed = value;
                 if (playbackSpeed == Downloader.Data.Config.Commands.PlaybackSpeed.ToString())
-                {
-                    StartEnabled = true;
-                }
+                    playbackSpeedChanged = false;
                 else
+                    playbackSpeedChanged = true;
+                startEnabled = !ipChanged
+                            && !portChanged
+                            && !teamIDChanged
+                            && !playerIDChanged
+                            && !sweeperTypeChanged
+                            && !playbackFileChanged
+                            && !playbackSpeedChanged
+                            && !languageChanged;
+                OnPropertyChanged();
+            }
+        }
+        public bool CppSelect
+        {
+            get => cppSelect;
+            set
+            {
+                cppSelect = value;
+                if (cppSelect)
                 {
-                    StartEnabled = false;
+                    PySelect = false;
+                    if (Downloader.Data.Config.Commands.Language != LanguageOption.cpp)
+                        languageChanged = true;
+                    else
+                        languageChanged = false;
+                }
+                OnPropertyChanged();
+            }
+        }
+        public bool PySelect
+        {
+            get => pySelect;
+            set
+            {
+                pySelect = value;
+                if (pySelect)
+                {
+                    CppSelect = false;
+                    if (Downloader.Data.Config.Commands.Language != LanguageOption.python)
+                        languageChanged = true;
+                    else
+                        languageChanged = false;
                 }
                 OnPropertyChanged();
             }
@@ -180,6 +266,7 @@ namespace installer.ViewModel
 
 
         private bool saveEnabled;
+        private bool startEnabled;
         public bool SaveEnabled
         {
             get => saveEnabled;
@@ -189,8 +276,6 @@ namespace installer.ViewModel
                 OnPropertyChanged();
             }
         }
-
-        private bool startEnabled;
         public bool StartEnabled
         {
 
@@ -202,135 +287,140 @@ namespace installer.ViewModel
             }
         }
 
+
         public ICommand SaveBtnClickedCommand { get; }
+        public ICommand StartBtnClickedCommand { get; }
+
         private async Task SaveBtnClicked()
         {
             DebugAlert = "Save";
-            var cntExp = await Task.Run(() => Save());
-            if (cntExp == 0)
-            {
-                StartEnabled = true;
-            }
+            await Task.Run(() => Save());
+            StartEnabled = !ipChanged
+                        && !portChanged
+                        && !teamIDChanged
+                        && !playerIDChanged
+                        && !sweeperTypeChanged
+                        && !playbackFileChanged
+                        && !playbackSpeedChanged
+                        && !languageChanged;
         }
-
-        public ICommand StartBtnClickedCommand { get; }
         private async Task StartBtnClicked()
         {
             await Task.Run(() => Start());
         }
 
-        private int Save()
+        private void Save()
         {
-            int cntExp = 0;
             Task.Run(() => {
                 try
                 {
                     if (IP == null)
-                    {
                         throw new Exception("empty");
-                    }
                     Downloader.Data.Config.Commands.IP = IP;
+                    ipChanged = false;
                 }
                 catch (Exception e)
                 {
                     DebugAlert = "IP: " + e.Message;
-                    StartEnabled = false;
-                    cntExp++;
                 }
             });
             Task.Run(() => {
                 try
                 {
                     if (Port == null)
-                    {
                         throw new Exception("empty");
-                    }
                     Downloader.Data.Config.Commands.Port = Port;
+                    portChanged = false;
                 }
                 catch (Exception e)
                 {
-                    if (Port == null)
-                    {
-                        throw new Exception("empty");
-                    }
                     DebugAlert = "Port: " + e.Message;
-                    StartEnabled = false;
-                    cntExp++;
                 }
             });
             Task.Run(() => {
                 try
                 {
                     if (TeamID == null)
-                    {
                         throw new Exception("empty");
-                    }
                     Downloader.Data.Config.Commands.TeamID = TeamID;
+                    teamIDChanged = false;
                 }
                 catch (Exception e)
                 {
                     DebugAlert = "Team ID: " + e.Message;
-                    StartEnabled = false;
-                    cntExp++;
                 }
             });
             Task.Run(() => {
                 try
                 {
                     if (PlayerID == null)
-                    {
                         throw new Exception("empty");
-                    }
                     Downloader.Data.Config.Commands.PlayerID = PlayerID;
+                    playerIDChanged = false;
                 }
                 catch (Exception e)
                 {
                     DebugAlert = "Player ID: " + e.Message;
-                    StartEnabled = false;
-                    cntExp++;
                 }
             });
             Task.Run(() => {
                 try
                 {
                     if (SweeperType == null)
-                    {
                         throw new Exception("empty");
-                    }
                     Downloader.Data.Config.Commands.SweeperType = SweeperType;
+                    sweeperTypeChanged = false;
                 }
                 catch (Exception e)
                 {
                     DebugAlert = "Sweeper Type: " + e.Message;
-                    StartEnabled = false;
-                    cntExp++;
                 }
             });
             Task.Run(() => {
                 try
                 {
+                    if (PlaybackFile == null)
+                        throw new Exception("empty");
                     Downloader.Data.Config.Commands.PlaybackFile = PlaybackFile;
+                    playbackFileChanged = false;
                 }
                 catch (Exception e)
                 {
                     DebugAlert = "Playback File: " + e.Message;
-                    StartEnabled = false;
-                    cntExp++;
                 }
             });
             Task.Run(() => {
                 try
                 {
                     Downloader.Data.Config.Commands.PlaybackSpeed = Convert.ToDouble(PlaybackSpeed);
+                    playbackSpeedChanged = false;
                 }
                 catch (Exception e)
                 {
                     DebugAlert = "Playback Speed: " + e.Message;
-                    StartEnabled = false;
-                    cntExp++;
                 }
             });
-            return cntExp;
+            Task.Run(() => {
+                try
+                {
+                    if (CppSelect)
+                    {
+                        Downloader.Data.Config.Commands.Language = LanguageOption.cpp;
+                        languageChanged = false;
+                    }
+                    else if (PySelect)
+                    {
+                        Downloader.Data.Config.Commands.Language = LanguageOption.python;
+                        languageChanged = false;
+                    }
+                    else
+                        throw new Exception("empty");
+                }
+                catch (Exception e)
+                {
+                    DebugAlert = "Language: " + e.Message;
+                }
+            });
         }
 
         private void Start()
@@ -342,6 +432,18 @@ namespace installer.ViewModel
                        + SweeperType + " "
                        + PlaybackFile + " "
                        + PlaybackSpeed;
+        }
+
+        
+        private string? debugAlert;
+        public string? DebugAlert
+        {
+            get => debugAlert;
+            set
+            {
+                debugAlert = value;
+                OnPropertyChanged();
+            }
         }
     }
 }
