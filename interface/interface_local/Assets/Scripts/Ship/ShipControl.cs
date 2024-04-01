@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
-using UnityEditor.iOS;
 using UnityEngine;
 
 public class ShipControl : MonoBehaviour
