@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 7800904211505029374}
   m_Layer: 6
   m_Name: foreshadow_flagship3
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -277,9 +277,10 @@ MonoBehaviour:
     armor: 800
     shield: 800
     playerTeam: 0
+    shipState: 0
     shipType: 3
     viewRange: 0
-    producerType: 0
+    producerType: 1
     constructorType: 0
     armorType: 0
     shieldType: 0
@@ -306,6 +307,7 @@ MonoBehaviour:
   seObj: {fileID: 0}
   moveOption: {x: 0, y: 0}
   attackOption: {x: 0, y: 0}
+  enableMove: 0
 --- !u!50 &3397589707071195213
 Rigidbody2D:
   serializedVersion: 4

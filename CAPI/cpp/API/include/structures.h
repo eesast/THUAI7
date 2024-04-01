@@ -49,9 +49,9 @@ namespace THUAI7
 
     enum class PlayerTeam : unsigned char
     {
-        NullTeam = 0,
-        Red = 1,
-        Blue = 2,
+        Red = 0,
+        Blue = 1,
+        NullTeam = 2,
     };
 
     enum class PlayerType : unsigned char

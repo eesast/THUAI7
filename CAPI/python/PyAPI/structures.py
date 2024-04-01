@@ -34,12 +34,9 @@ class ShapeType(Enum):
 
 
 class PlayerTeam(Enum):
-    NullTeam = 0
-    Red = 1
-    Blue = 2
-
-
-playerTeamDict = {PlayerTeam.NullTeam: 0, PlayerTeam.Red: 1, PlayerTeam.Blue: 2}
+    Red = 0
+    Blue = 1
+    NullTeam =2
 
 
 class PlayerType(Enum):
