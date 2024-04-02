@@ -133,7 +133,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletData: {fileID: 11400000, guid: 23ccf6674696d814d953e27d4af902d0, type: 2}
   messageOfBullet:
-    type: 0
+    type: 3
     playerTeam: 0
 --- !u!50 &330809320193030683
 Rigidbody2D:

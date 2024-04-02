@@ -85,6 +85,7 @@ public class PlayerControl : SingletonMono<PlayerControl>
                     i.tobeSelected = false;
                 }
                 tobeSelectedInt.Clear();
+                // Debug.Log("clear");
 
                 if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
                 {

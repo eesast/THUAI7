@@ -1113,8 +1113,8 @@ MonoBehaviour:
   - {fileID: 6520599987196359259, guid: acca4bed1be3e314191cd041b6718c5a, type: 3}
   - {fileID: 73901610976941151, guid: c7b49a90d8bef8d46a4bce231bbd4bbc, type: 3}
   - {fileID: 2817536373982564735, guid: d43c88f52cfe70248899ea9ef8cfe8a2, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 4461932328840788347, guid: df385eaebb177c244a8f6aa2fc2d05f2, type: 3}
+  - {fileID: 3284573290373744302, guid: 690965b65f8667d4299c13f7cb4dc444, type: 3}
   - {fileID: 2487624789702488523, guid: 9ba3f57fff0f3f240aad67b489d717f2, type: 3}
   shiplist:
   - {fileID: 7171601645716739352, guid: 689388b1ed32205428711466f3794748, type: 3}

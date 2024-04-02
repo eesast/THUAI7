@@ -39,6 +39,7 @@ public class ShipControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        RendererControl.GetInstance().SetColToChild(messageOfShip.playerTeam, gameObject.transform);
         switch (interactBase.interactOption)
         {
             case InteractControl.InteractOption.Produce:
