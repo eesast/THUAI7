@@ -1185,6 +1185,27 @@ MonoBehaviour:
   civilShipData: {fileID: 11400000, guid: 9fe1f9c27065b8f469ce5ee64ae7ef2c, type: 2}
   militaryShipData: {fileID: 11400000, guid: eff4f0dc7669fd1469463e3bff5104a8, type: 2}
   flagShipData: {fileID: 11400000, guid: 9a89d808d3c0a8a489972c9bc6edb515, type: 2}
+  Team0Color:
+  - color: {r: 1, g: 0.027672624, b: 0, a: 0}
+    idensity: 1.94
+  - color: {r: 1, g: 0.41553456, b: 0, a: 0}
+    idensity: 1.93
+  Team1Color:
+  - color: {r: 0, g: 0.12, b: 0.75, a: 0}
+    idensity: 2.62
+  - color: {r: 0, g: 0.75, b: 0.585, a: 0}
+    idensity: 2.22
+  ResourceColor:
+  - color: {r: 3.9533496, g: 1.4225332, b: 0, a: 0}
+    idensity: 2.4
+  - color: {r: 3.9533496, g: 1.4225332, b: 0, a: 0}
+    idensity: 2.4
+  LaserColor:
+  - color: {r: 1, g: 0.40633562, b: 0, a: 0}
+    idensity: 1.47
+  PlasmaColor:
+  - color: {r: 0, g: 0.7693863, b: 1, a: 0}
+    idensity: 1.28
 --- !u!1 &1084531560
 GameObject:
   m_ObjectHideFlags: 0
@@ -1828,6 +1849,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapFa: {fileID: 0}
+  obj: {fileID: 0}
   bases:
   - {fileID: 0}
   - {fileID: 0}

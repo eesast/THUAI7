@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LaserData
   m_EditorClassIdentifier: 
   cost: 1000
-  attackDistance: 4
+  attackDistance: 8
   explosionRange: 0
   attackDamage: b0040000
   armorDamageMultiplier: 1.5
