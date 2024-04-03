@@ -85,19 +85,19 @@ namespace protobuf
     {
         NULL_PLACE_TYPE = 0,
         HOME = 1,
-        GROUND = 2,
-        WALL = 3,
-        GRASS = 4,
-        RIVER = 5,
-        GARBAGE = 6,
+        SPACE = 2,
+        RUIN = 3,
+        SHADOW = 4,
+        ASTEROID = 5,
+        RESOURCE = 6,
         CONSTRUCTION = 7,
-        BRIDGE = 8,
+        WORMHOLE = 8,
         PlaceType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
         PlaceType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
     };
     bool PlaceType_IsValid(int value);
     constexpr PlaceType PlaceType_MIN = NULL_PLACE_TYPE;
-    constexpr PlaceType PlaceType_MAX = BRIDGE;
+    constexpr PlaceType PlaceType_MAX = WORMHOLE;
     constexpr int PlaceType_ARRAYSIZE = PlaceType_MAX + 1;
 
     const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* PlaceType_descriptor();
@@ -150,7 +150,7 @@ namespace protobuf
     enum PlayerType : int
     {
         NULL_PLAYER_TYPE = 0,
-        SWEEPER = 1,
+        SHIP = 1,
         TEAM = 2,
         PlayerType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
         PlayerType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
@@ -177,38 +177,38 @@ namespace protobuf
             PlayerType_descriptor(), name, value
         );
     }
-    enum SweeperType : int
+    enum ShipType : int
     {
-        NULL_SWEEPER_TYPE = 0,
-        CIVILIAN_SWEEPER = 1,
-        MILITARY_SWEEPER = 2,
-        FLAG_SWEEPER = 3,
-        SweeperType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
-        SweeperType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+        NULL_SHIP_TYPE = 0,
+        CIVILIAN_SHIP = 1,
+        MILITARY_SHIP = 2,
+        FLAG_SHIP = 3,
+        ShipType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+        ShipType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
     };
-    bool SweeperType_IsValid(int value);
-    constexpr SweeperType SweeperType_MIN = NULL_SWEEPER_TYPE;
-    constexpr SweeperType SweeperType_MAX = FLAG_SWEEPER;
-    constexpr int SweeperType_ARRAYSIZE = SweeperType_MAX + 1;
+    bool ShipType_IsValid(int value);
+    constexpr ShipType ShipType_MIN = NULL_SHIP_TYPE;
+    constexpr ShipType ShipType_MAX = FLAG_SHIP;
+    constexpr int ShipType_ARRAYSIZE = ShipType_MAX + 1;
 
-    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SweeperType_descriptor();
+    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ShipType_descriptor();
     template<typename T>
-    inline const std::string& SweeperType_Name(T enum_t_value)
+    inline const std::string& ShipType_Name(T enum_t_value)
     {
-        static_assert(::std::is_same<T, SweeperType>::value || ::std::is_integral<T>::value, "Incorrect type passed to function SweeperType_Name.");
+        static_assert(::std::is_same<T, ShipType>::value || ::std::is_integral<T>::value, "Incorrect type passed to function ShipType_Name.");
         return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-            SweeperType_descriptor(), enum_t_value
+            ShipType_descriptor(), enum_t_value
         );
     }
-    inline bool SweeperType_Parse(
-        ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, SweeperType* value
+    inline bool ShipType_Parse(
+        ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, ShipType* value
     )
     {
-        return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<SweeperType>(
-            SweeperType_descriptor(), name, value
+        return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ShipType>(
+            ShipType_descriptor(), name, value
         );
     }
-    enum SweeperState : int
+    enum ShipState : int
     {
         NULL_STATUS = 0,
         IDLE = 1,
@@ -220,29 +220,29 @@ namespace protobuf
         SWINGING = 7,
         STUNNED = 8,
         MOVING = 9,
-        SweeperState_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
-        SweeperState_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+        ShipState_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+        ShipState_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
     };
-    bool SweeperState_IsValid(int value);
-    constexpr SweeperState SweeperState_MIN = NULL_STATUS;
-    constexpr SweeperState SweeperState_MAX = MOVING;
-    constexpr int SweeperState_ARRAYSIZE = SweeperState_MAX + 1;
+    bool ShipState_IsValid(int value);
+    constexpr ShipState ShipState_MIN = NULL_STATUS;
+    constexpr ShipState ShipState_MAX = MOVING;
+    constexpr int ShipState_ARRAYSIZE = ShipState_MAX + 1;
 
-    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SweeperState_descriptor();
+    const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ShipState_descriptor();
     template<typename T>
-    inline const std::string& SweeperState_Name(T enum_t_value)
+    inline const std::string& ShipState_Name(T enum_t_value)
     {
-        static_assert(::std::is_same<T, SweeperState>::value || ::std::is_integral<T>::value, "Incorrect type passed to function SweeperState_Name.");
+        static_assert(::std::is_same<T, ShipState>::value || ::std::is_integral<T>::value, "Incorrect type passed to function ShipState_Name.");
         return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-            SweeperState_descriptor(), enum_t_value
+            ShipState_descriptor(), enum_t_value
         );
     }
-    inline bool SweeperState_Parse(
-        ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, SweeperState* value
+    inline bool ShipState_Parse(
+        ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, ShipState* value
     )
     {
-        return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<SweeperState>(
-            SweeperState_descriptor(), name, value
+        return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ShipState>(
+            ShipState_descriptor(), name, value
         );
     }
     enum WeaponType : int
@@ -483,15 +483,15 @@ namespace protobuf
     enum ConstructionType : int
     {
         NULL_CONSTRUCTION_TYPE = 0,
-        RECYCLEBANK = 1,
-        CHARGESTATION = 2,
-        SIGNALTOWER = 3,
+        FACTORY = 1,
+        COMMUNITY = 2,
+        FORT = 3,
         ConstructionType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
         ConstructionType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
     };
     bool ConstructionType_IsValid(int value);
     constexpr ConstructionType ConstructionType_MIN = NULL_CONSTRUCTION_TYPE;
-    constexpr ConstructionType ConstructionType_MAX = SIGNALTOWER;
+    constexpr ConstructionType ConstructionType_MAX = FORT;
     constexpr int ConstructionType_ARRAYSIZE = ConstructionType_MAX + 1;
 
     const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ConstructionType_descriptor();
@@ -628,22 +628,22 @@ inline const EnumDescriptor* GetEnumDescriptor<::protobuf::PlayerType>()
     return ::protobuf::PlayerType_descriptor();
 }
 template<>
-struct is_proto_enum<::protobuf::SweeperType> : ::std::true_type
+struct is_proto_enum<::protobuf::ShipType> : ::std::true_type
 {
 };
 template<>
-inline const EnumDescriptor* GetEnumDescriptor<::protobuf::SweeperType>()
+inline const EnumDescriptor* GetEnumDescriptor<::protobuf::ShipType>()
 {
-    return ::protobuf::SweeperType_descriptor();
+    return ::protobuf::ShipType_descriptor();
 }
 template<>
-struct is_proto_enum<::protobuf::SweeperState> : ::std::true_type
+struct is_proto_enum<::protobuf::ShipState> : ::std::true_type
 {
 };
 template<>
-inline const EnumDescriptor* GetEnumDescriptor<::protobuf::SweeperState>()
+inline const EnumDescriptor* GetEnumDescriptor<::protobuf::ShipState>()
 {
-    return ::protobuf::SweeperState_descriptor();
+    return ::protobuf::ShipState_descriptor();
 }
 template<>
 struct is_proto_enum<::protobuf::WeaponType> : ::std::true_type
