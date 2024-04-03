@@ -159,23 +159,23 @@ class Logic(ILogic):
     def GetWormholeHp(self, cellX: int, cellY: int) -> int:
         with self.__mtxState:
             self.__logger.debug("Called GetWormholeHp")
-            if (cellX, cellY) not in self.__currentState.mapInfo.bridgeState:
+            if (cellX, cellY) not in self.__currentState.mapInfo.wormholeState:
                 self.__logger.warning("GetWormholeHp: Out of range")
                 return -1
             else:
                 return copy.deepcopy(
-                    self.__currentState.mapInfo.bridgeState[(cellX, cellY)]
+                    self.__currentState.mapInfo.wormholeState[(cellX, cellY)]
                 )
 
     def GetResourceState(self, cellX: int, cellY: int) -> int:
         with self.__mtxState:
             self.__logger.debug("Called GetResourceState")
-            if (cellX, cellY) not in self.__currentState.mapInfo.garbageState:
+            if (cellX, cellY) not in self.__currentState.mapInfo.resourceState:
                 self.__logger.warning("GetResourceState: Out of range")
                 return -1
             else:
                 return copy.deepcopy(
-                    self.__currentState.mapInfo.garbageState[(cellX, cellY)]
+                    self.__currentState.mapInfo.resourceState[(cellX, cellY)]
                 )
 
     def GetHomeHp(self) -> int:
@@ -523,20 +523,20 @@ class Logic(ILogic):
                         )
                         self.__logger.debug("Update Fort")
 
-            elif item.WhichOneof("message_of_obj") == "bridge_message":
+            elif item.WhichOneof("message_of_obj") == "wormhole_message":
                 if AssistFunction.HaveView(
                     self.__bufferState.self.viewRange,
                     self.__bufferState.self.x,
                     self.__bufferState.self.y,
-                    item.bridge_message.x,
-                    item.bridge_message.y,
+                    item.wormhole_message.x,
+                    item.wormhole_message.y,
                     self.__bufferState.gameMap,
                 ):
                     pos = (
-                        AssistFunction.GridToCell(item.bridge_message.x),
-                        AssistFunction.GridToCell(item.bridge_message.y),
+                        AssistFunction.GridToCell(item.wormhole_message.x),
+                        AssistFunction.GridToCell(item.wormhole_message.y),
                     )
-                    self.__bufferState.mapInfo.bridgeState[pos] = item.bridge_message.hp
+                    self.__bufferState.mapInfo.wormholeState[pos] = item.wormhole_message.hp
                     self.__logger.debug("Update Wormhole")
 
             elif item.WhichOneof("message_of_obj") == "home_message":
@@ -562,21 +562,21 @@ class Logic(ILogic):
                     self.__bufferState.mapInfo.homeState[pos] = item.home_message.hp
                     self.__logger.debug("Update Home")
 
-            elif item.WhichOneof("message_of_obj") == "garbage_message":
+            elif item.WhichOneof("message_of_obj") == "resource_message":
                 if AssistFunction.HaveView(
                     self.__bufferState.self.viewRange,
                     self.__bufferState.self.x,
                     self.__bufferState.self.y,
-                    item.garbage_message.x,
-                    item.garbage_message.y,
+                    item.resource_message.x,
+                    item.resource_message.y,
                     self.__bufferState.gameMap,
                 ):
                     pos = (
-                        AssistFunction.GridToCell(item.garbage_message.x),
-                        AssistFunction.GridToCell(item.garbage_message.y),
+                        AssistFunction.GridToCell(item.resource_message.x),
+                        AssistFunction.GridToCell(item.resource_message.y),
                     )
-                    self.__bufferState.mapInfo.garbageState[pos] = (
-                        item.garbage_message.progress
+                    self.__bufferState.mapInfo.resourceState[pos] = (
+                        item.resource_message.progress
                     )
                     self.__logger.debug("Update Resource")
 
@@ -735,13 +735,13 @@ class Logic(ILogic):
                         )
                         self.__logger.debug("Update Fort")
 
-            elif item.WhichOneof("message_of_obj") == "bridge_message":
-                if HaveOverView(item.bridge_message.x, item.bridge_message.y):
+            elif item.WhichOneof("message_of_obj") == "wormhole_message":
+                if HaveOverView(item.wormhole_message.x, item.wormhole_message.y):
                     pos = (
-                        AssistFunction.GridToCell(item.bridge_message.x),
-                        AssistFunction.GridToCell(item.bridge_message.y),
+                        AssistFunction.GridToCell(item.wormhole_message.x),
+                        AssistFunction.GridToCell(item.wormhole_message.y),
                     )
-                    self.__bufferState.mapInfo.bridgeState[pos] = item.bridge_message.hp
+                    self.__bufferState.mapInfo.wormholeState[pos] = item.wormhole_message.hp
                     self.__logger.debug("Update Wormhole")
 
             elif item.WhichOneof("message_of_obj") == "home_message":
@@ -760,14 +760,14 @@ class Logic(ILogic):
                     self.__bufferState.mapInfo.homeState[pos] = item.home_message.hp
                     self.__logger.debug("Update Home")
 
-            elif item.WhichOneof("message_of_obj") == "garbage_message":
-                if HaveOverView(item.garbage_message.x, item.garbage_message.y):
+            elif item.WhichOneof("message_of_obj") == "resource_message":
+                if HaveOverView(item.resource_message.x, item.resource_message.y):
                     pos = (
-                        AssistFunction.GridToCell(item.garbage_message.x),
-                        AssistFunction.GridToCell(item.garbage_message.y),
+                        AssistFunction.GridToCell(item.resource_message.x),
+                        AssistFunction.GridToCell(item.resource_message.y),
                     )
-                    self.__bufferState.mapInfo.garbageState[pos] = (
-                        item.garbage_message.progress
+                    self.__bufferState.mapInfo.resourceState[pos] = (
+                        item.resource_message.progress
                     )
                     self.__logger.debug("Update Resource")
 
