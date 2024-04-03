@@ -30,7 +30,7 @@ class AssistFunction:
         distance = deltaX**2 + deltaY**2
         myPlace = map[AssistFunction.GridToCell(x)][AssistFunction.GridToCell(y)]
         newPlace = map[AssistFunction.GridToCell(newX)][AssistFunction.GridToCell(newY)]
-        if myPlace != THUAI7.PlaceType.Grass and newPlace == THUAI7.PlaceType.Grass:
+        if myPlace != THUAI7.PlaceType.Shadow and newPlace == THUAI7.PlaceType.Shadow:
             return False
         if distance <= viewRange * viewRange:
             divide = max(abs(deltaX), abs(deltaY)) // 100
@@ -40,7 +40,10 @@ class AssistFunction:
             dy = deltaY / divide
             selfX = float(x)
             selfY = float(y)
-            if newPlace == THUAI7.PlaceType.Grass and myPlace == THUAI7.PlaceType.Grass:
+            if (
+                newPlace == THUAI7.PlaceType.Shadow
+                and myPlace == THUAI7.PlaceType.Shadow
+            ):
                 for _ in range(divide):
                     selfX += dx
                     selfY += dy
@@ -48,7 +51,7 @@ class AssistFunction:
                         map[AssistFunction.GridToCell(int(selfX))][
                             AssistFunction.GridToCell(int(selfY))
                         ]
-                        != THUAI7.PlaceType.Grass
+                        != THUAI7.PlaceType.Shadow
                     ):
                         return False
                 else:
@@ -61,7 +64,7 @@ class AssistFunction:
                         map[AssistFunction.GridToCell(int(selfX))][
                             AssistFunction.GridToCell(int(selfY))
                         ]
-                        == THUAI7.PlaceType.Wall
+                        == THUAI7.PlaceType.Ruin
                     ):
                         return False
                 else:
@@ -81,13 +84,13 @@ class Proto2THUAI7:
     placeTypeDict: Final[dict] = {
         MessageType.NULL_PLACE_TYPE: THUAI7.PlaceType.NullPlaceType,
         MessageType.HOME: THUAI7.PlaceType.Home,
-        MessageType.GROUND: THUAI7.PlaceType.Ground,
-        MessageType.WALL: THUAI7.PlaceType.Wall,
-        MessageType.GRASS: THUAI7.PlaceType.Grass,
-        MessageType.RIVER: THUAI7.PlaceType.River,
-        MessageType.GARBAGE: THUAI7.PlaceType.Garbage,
+        MessageType.SPACE: THUAI7.PlaceType.Space,
+        MessageType.RUIN: THUAI7.PlaceType.Ruin,
+        MessageType.SHADOW: THUAI7.PlaceType.Shadow,
+        MessageType.ASTEROID: THUAI7.PlaceType.Asteroid,
+        MessageType.RESOURCE: THUAI7.PlaceType.Resource,
         MessageType.CONSTRUCTION: THUAI7.PlaceType.Construction,
-        MessageType.BRIDGE: THUAI7.PlaceType.Bridge,
+        MessageType.WORMHOLE: THUAI7.PlaceType.Wormhole,
     }
 
     shapeTypeDict: Final[dict] = {
@@ -98,28 +101,28 @@ class Proto2THUAI7:
 
     playerTypeDict: Final[dict] = {
         MessageType.NULL_PLAYER_TYPE: THUAI7.PlayerType.NullPlayerType,
-        MessageType.SWEEPER: THUAI7.PlayerType.Sweeper,
+        MessageType.SHIP: THUAI7.PlayerType.Ship,
         MessageType.TEAM: THUAI7.PlayerType.Team,
     }
 
-    sweeperTypeDict: Final[dict] = {
-        MessageType.NULL_SWEEPER_TYPE: THUAI7.SweeperType.NullSweeperType,
-        MessageType.CIVILIAN_SWEEPER: THUAI7.SweeperType.CivilianSweeper,
-        MessageType.MILITARY_SWEEPER: THUAI7.SweeperType.MilitarySweeper,
-        MessageType.FLAG_SWEEPER: THUAI7.SweeperType.FlagSweeper,
+    shipTypeDict: Final[dict] = {
+        MessageType.NULL_SHIP_TYPE: THUAI7.ShipType.NullShipType,
+        MessageType.CIVILIAN_SHIP: THUAI7.ShipType.CivilianShip,
+        MessageType.MILITARY_SHIP: THUAI7.ShipType.MilitaryShip,
+        MessageType.FLAG_SHIP: THUAI7.ShipType.FlagShip,
     }
 
-    sweeperStateDict: Final[dict] = {
-        MessageType.NULL_STATUS: THUAI7.SweeperState.NullStatus,
-        MessageType.IDLE: THUAI7.SweeperState.Idle,
-        MessageType.PRODUCING: THUAI7.SweeperState.Producing,
-        MessageType.CONSTRUCTING: THUAI7.SweeperState.Constructing,
-        MessageType.RECOVERING: THUAI7.SweeperState.Recovering,
-        MessageType.RECYCLING: THUAI7.SweeperState.Recycling,
-        MessageType.ATTACKING: THUAI7.SweeperState.Attacking,
-        MessageType.SWINGING: THUAI7.SweeperState.Swinging,
-        MessageType.STUNNED: THUAI7.SweeperState.Stunned,
-        MessageType.MOVING: THUAI7.SweeperState.Moving,
+    shipStateDict: Final[dict] = {
+        MessageType.NULL_STATUS: THUAI7.ShipState.NullStatus,
+        MessageType.IDLE: THUAI7.ShipState.Idle,
+        MessageType.PRODUCING: THUAI7.ShipState.Producing,
+        MessageType.CONSTRUCTING: THUAI7.ShipState.Constructing,
+        MessageType.RECOVERING: THUAI7.ShipState.Recovering,
+        MessageType.RECYCLING: THUAI7.ShipState.Recycling,
+        MessageType.ATTACKING: THUAI7.ShipState.Attacking,
+        MessageType.SWINGING: THUAI7.ShipState.Swinging,
+        MessageType.STUNNED: THUAI7.ShipState.Stunned,
+        MessageType.MOVING: THUAI7.ShipState.Moving,
     }
 
     weaponTypeDict: Final[dict] = {
@@ -191,9 +194,9 @@ class Proto2THUAI7:
 
     constructionTypeDict: Final[dict] = {
         MessageType.NULL_CONSTRUCTION_TYPE: THUAI7.ConstructionType.NullConstructionType,
-        MessageType.RECYCLEBANK: THUAI7.ConstructionType.RecycleBank,
-        MessageType.CHARGESTATION: THUAI7.ConstructionType.ChargeStation,
-        MessageType.SIGNALTOWER: THUAI7.ConstructionType.SignalTower,
+        MessageType.FACTORY: THUAI7.ConstructionType.Factory,
+        MessageType.COMMUNITY: THUAI7.ConstructionType.Community,
+        MessageType.FORT: THUAI7.ConstructionType.Fort,
     }
 
     playerTeamDict: Final[dict] = {
@@ -209,31 +212,31 @@ class Proto2THUAI7:
     }
 
     @staticmethod
-    def Protobuf2THUAI7Sweeper(
-        sweeperMsg: Message2Clients.MessageOfSweeper,
-    ) -> THUAI7.Sweeper:
-        sweeper = THUAI7.Sweeper()
-        sweeper.x = sweeperMsg.x
-        sweeper.y = sweeperMsg.y
-        sweeper.speed = sweeperMsg.speed
-        sweeper.hp = sweeperMsg.hp
-        sweeper.armor = sweeperMsg.armor
-        sweeper.shield = sweeperMsg.shield
-        sweeper.teamID = sweeperMsg.team_id
-        sweeper.playerID = sweeperMsg.player_id
-        sweeper.guid = sweeperMsg.guid
-        sweeper.sweeperState = Proto2THUAI7.sweeperStateDict[sweeperMsg.sweeper_state]
-        sweeper.sweeperType = Proto2THUAI7.sweeperTypeDict[sweeperMsg.sweeper_type]
-        sweeper.viewRange = sweeperMsg.view_range
-        sweeper.producerType = Proto2THUAI7.producerTypeDict[sweeperMsg.producer_type]
-        sweeper.constructorType = Proto2THUAI7.constructorTypeDict[
-            sweeperMsg.constructor_type
+    def Protobuf2THUAI7Ship(
+        shipMsg: Message2Clients.MessageOfShip,
+    ) -> THUAI7.Ship:
+        ship = THUAI7.Ship()
+        ship.x = shipMsg.x
+        ship.y = shipMsg.y
+        ship.speed = shipMsg.speed
+        ship.hp = shipMsg.hp
+        ship.armor = shipMsg.armor
+        ship.shield = shipMsg.shield
+        ship.teamID = shipMsg.team_id
+        ship.playerID = shipMsg.player_id
+        ship.guid = shipMsg.guid
+        ship.shipState = Proto2THUAI7.shipStateDict[shipMsg.ship_state]
+        ship.shipType = Proto2THUAI7.shipTypeDict[shipMsg.ship_type]
+        ship.viewRange = shipMsg.view_range
+        ship.producerType = Proto2THUAI7.producerTypeDict[shipMsg.producer_type]
+        ship.constructorType = Proto2THUAI7.constructorTypeDict[
+            shipMsg.constructor_type
         ]
-        sweeper.armorType = Proto2THUAI7.armorTypeDict[sweeperMsg.armor_type]
-        sweeper.shieldType = Proto2THUAI7.shieldTypeDict[sweeperMsg.shield_type]
-        sweeper.weaponType = Proto2THUAI7.weaponTypeDict[sweeperMsg.weapon_type]
-        sweeper.facingDirection = sweeperMsg.facing_direction
-        return sweeper
+        ship.armorType = Proto2THUAI7.armorTypeDict[shipMsg.armor_type]
+        ship.shieldType = Proto2THUAI7.shieldTypeDict[shipMsg.shield_type]
+        ship.weaponType = Proto2THUAI7.weaponTypeDict[shipMsg.weapon_type]
+        ship.facingDirection = shipMsg.facing_direction
+        return ship
 
     @staticmethod
     def Protobuf2THUAI7Bullet(
@@ -291,13 +294,13 @@ class THUAI72Proto:
     placeTypeDict: Final[dict] = {
         THUAI7.PlaceType.NullPlaceType: MessageType.NULL_PLACE_TYPE,
         THUAI7.PlaceType.Home: MessageType.HOME,
-        THUAI7.PlaceType.Ground: MessageType.GROUND,
-        THUAI7.PlaceType.Wall: MessageType.WALL,
-        THUAI7.PlaceType.Grass: MessageType.GRASS,
-        THUAI7.PlaceType.River: MessageType.RIVER,
-        THUAI7.PlaceType.Garbage: MessageType.GARBAGE,
+        THUAI7.PlaceType.Space: MessageType.SPACE,
+        THUAI7.PlaceType.Ruin: MessageType.RUIN,
+        THUAI7.PlaceType.Shadow: MessageType.SHADOW,
+        THUAI7.PlaceType.Asteroid: MessageType.ASTEROID,
+        THUAI7.PlaceType.Resource: MessageType.RESOURCE,
         THUAI7.PlaceType.Construction: MessageType.CONSTRUCTION,
-        THUAI7.PlaceType.Bridge: MessageType.BRIDGE,
+        THUAI7.PlaceType.Wormhole: MessageType.WORMHOLE,
     }
 
     shapeTypeDict: Final[dict] = {
@@ -308,28 +311,28 @@ class THUAI72Proto:
 
     playerTypeDict: Final[dict] = {
         THUAI7.PlayerType.NullPlayerType: MessageType.NULL_PLAYER_TYPE,
-        THUAI7.PlayerType.Sweeper: MessageType.SWEEPER,
+        THUAI7.PlayerType.Ship: MessageType.SHIP,
         THUAI7.PlayerType.Team: MessageType.TEAM,
     }
 
-    sweeperTypeDict: Final[dict] = {
-        THUAI7.SweeperType.NullSweeperType: MessageType.NULL_SWEEPER_TYPE,
-        THUAI7.SweeperType.CivilianSweeper: MessageType.CIVILIAN_SWEEPER,
-        THUAI7.SweeperType.MilitarySweeper: MessageType.MILITARY_SWEEPER,
-        THUAI7.SweeperType.FlagSweeper: MessageType.FLAG_SWEEPER,
+    shipTypeDict: Final[dict] = {
+        THUAI7.ShipType.NullShipType: MessageType.NULL_SHIP_TYPE,
+        THUAI7.ShipType.CivilianShip: MessageType.CIVILIAN_SHIP,
+        THUAI7.ShipType.MilitaryShip: MessageType.MILITARY_SHIP,
+        THUAI7.ShipType.FlagShip: MessageType.FLAG_SHIP,
     }
 
-    sweeperStateDict: Final[dict] = {
-        THUAI7.SweeperState.NullStatus: MessageType.NULL_STATUS,
-        THUAI7.SweeperState.Idle: MessageType.IDLE,
-        THUAI7.SweeperState.Producing: MessageType.PRODUCING,
-        THUAI7.SweeperState.Constructing: MessageType.CONSTRUCTING,
-        THUAI7.SweeperState.Recovering: MessageType.RECOVERING,
-        THUAI7.SweeperState.Recycling: MessageType.RECYCLING,
-        THUAI7.SweeperState.Attacking: MessageType.ATTACKING,
-        THUAI7.SweeperState.Swinging: MessageType.SWINGING,
-        THUAI7.SweeperState.Stunned: MessageType.STUNNED,
-        THUAI7.SweeperState.Moving: MessageType.MOVING,
+    shipStateDict: Final[dict] = {
+        THUAI7.ShipState.NullStatus: MessageType.NULL_STATUS,
+        THUAI7.ShipState.Idle: MessageType.IDLE,
+        THUAI7.ShipState.Producing: MessageType.PRODUCING,
+        THUAI7.ShipState.Constructing: MessageType.CONSTRUCTING,
+        THUAI7.ShipState.Recovering: MessageType.RECOVERING,
+        THUAI7.ShipState.Recycling: MessageType.RECYCLING,
+        THUAI7.ShipState.Attacking: MessageType.ATTACKING,
+        THUAI7.ShipState.Swinging: MessageType.SWINGING,
+        THUAI7.ShipState.Stunned: MessageType.STUNNED,
+        THUAI7.ShipState.Moving: MessageType.MOVING,
     }
 
     weaponTypeDict: Final[dict] = {
@@ -401,9 +404,9 @@ class THUAI72Proto:
 
     constructionTypeDict: Final[dict] = {
         THUAI7.ConstructionType.NullConstructionType: MessageType.NULL_CONSTRUCTION_TYPE,
-        THUAI7.ConstructionType.RecycleBank: MessageType.RECYCLEBANK,
-        THUAI7.ConstructionType.ChargeStation: MessageType.CHARGESTATION,
-        THUAI7.ConstructionType.SignalTower: MessageType.SIGNALTOWER,
+        THUAI7.ConstructionType.Factory: MessageType.FACTORY,
+        THUAI7.ConstructionType.Community: MessageType.COMMUNITY,
+        THUAI7.ConstructionType.Fort: MessageType.FORT,
     }
 
     playerTeamDict: Final[dict] = {
@@ -478,21 +481,21 @@ class THUAI72Proto:
         )
 
     @staticmethod
-    def THUAI72ProtobufBuildSweeperMsg(
-        teamID: int, sweeperType: THUAI7.SweeperType
-    ) -> Message2Server.BuildSweeperMsg:
-        return Message2Server.BuildSweeperMsg(
-            team_id=teamID, sweeper_type=THUAI72Proto.sweeperTypeDict[sweeperType]
+    def THUAI72ProtobufBuildShipMsg(
+        teamID: int, shipType: THUAI7.ShipType
+    ) -> Message2Server.BuildShipMsg:
+        return Message2Server.BuildShipMsg(
+            team_id=teamID, ship_type=THUAI72Proto.shipTypeDict[shipType]
         )
 
     @staticmethod
     def THUAI72ProtobufPlayerMsg(
-        playerID: int, teamID: int, sweeperType: THUAI7.SweeperType
+        playerID: int, teamID: int, shipType: THUAI7.ShipType
     ) -> Message2Server.PlayerMsg:
         return Message2Server.PlayerMsg(
             player_id=playerID,
             team_id=teamID,
-            sweeper_type=THUAI72Proto.sweeperTypeDict[sweeperType],
+            ship_type=THUAI72Proto.shipTypeDict[shipType],
         )
 
     @staticmethod
