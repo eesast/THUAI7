@@ -199,7 +199,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.55, y: 0.55, z: 0.55}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8795451193146998850}
@@ -278,7 +278,7 @@ MonoBehaviour:
     shield: 800
     playerTeam: 0
     shipState: 0
-    shipType: 3
+    shipType: 0
     viewRange: 0
     producerType: 1
     constructorType: 0
