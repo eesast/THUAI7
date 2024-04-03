@@ -23,7 +23,7 @@ namespace Client.Interact
 
         public string PlayerID { get; set; } = "0";
 
-        public string SweeperType { get; set; } = "0";
+        public string ShipType { get; set; } = "0";
 
         public string PlaybackFile { get; set; } = "CLGG!@#$%^&*()_+";
 
@@ -120,13 +120,13 @@ namespace Client.Interact
         }
 
 
-        public string SweeperType
+        public string ShipType
         {
-            get => file.SweeperType;
+            get => file.ShipType;
             set
             {
-                var temp = file.SweeperType;
-                file.SweeperType = value;
+                var temp = file.ShipType;
+                file.ShipType = value;
                 if (temp != value)
                     OnMemoryChanged?.Invoke(this, new EventArgs());
             }

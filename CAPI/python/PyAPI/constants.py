@@ -3,14 +3,13 @@ class Constants:
     numofGridPerCell = 1000
     rows = 50
     cols = 50
-    maxGarbageProgress = 200
-    maxBridgeHp = 18000
+    maxResourceProgress = 200
+    maxWormholeHp = 18000
     robPercent = 0.2
     destroyBuildingBonus = 200
     recoverMultiplier = 1.2
     recycleMultiplier = 0.5
-
-    sizeOfSweeper = 800
+    sizeOfShip = 800
 
 
 class Home:
@@ -18,22 +17,22 @@ class Home:
     energySpeed = 1
 
 
-class RecycleBank:
+class Factory:
     maxHp = 8000
     energySpeed = 3
 
 
-class ChargeStation:
+class Community:
     maxHp = 6000
 
 
-class SignalTower:
+class Fort:
     maxHp = 12000
     attackRange = 8000
     damage = 1200
 
 
-class CivilianSweeper:
+class CivilianShip:
     Speed = 3000
     basicArmor = 0
     basicShield = 0
@@ -41,7 +40,7 @@ class CivilianSweeper:
     Cost = 40
 
 
-class MilitarySweeper:
+class MilitaryShip:
     Speed = 2800
     basicArmor = 400
     basicShield = 400
@@ -49,7 +48,7 @@ class MilitarySweeper:
     Cost = 120
 
 
-class FlagSweeper:
+class FlagShip:
     Speed = 2700
     basicArmor = 800
     basicShield = 800

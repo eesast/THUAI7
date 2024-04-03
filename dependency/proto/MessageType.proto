@@ -15,13 +15,13 @@ enum PlaceType // 地图中的所有建筑/地点类型
 {
     NULL_PLACE_TYPE = 0;
     HOME = 1;
-    GROUND = 2;
-    WALL = 3;
-    GRASS = 4;
-    RIVER = 5;
-    GARBAGE = 6;
+    SPACE = 2;
+    RUIN = 3;
+    SHADOW = 4;
+    ASTEROID = 5;
+    RESOURCE = 6;
     CONSTRUCTION = 7; 
-    BRIDGE = 8;
+    WORMHOLE = 8;
 }
 
 enum ShapeType
@@ -35,19 +35,19 @@ enum ShapeType
 enum PlayerType
 {
     NULL_PLAYER_TYPE = 0;
-    SWEEPER = 1;
+    SHIP = 1;
     TEAM = 2;
 }
 
-enum SweeperType
+enum ShipType
 {
-    NULL_SWEEPER_TYPE = 0;
-    CIVILIAN_SWEEPER = 1;
-    MILITARY_SWEEPER = 2;
-    FLAG_SWEEPER = 3;
+    NULL_SHIP_TYPE = 0;
+    CIVILIAN_SHIP = 1;
+    MILITARY_SHIP = 2;
+    FLAG_SHIP = 3;
 }
 
-enum SweeperState
+enum ShipState
 {
     NULL_STATUS = 0;
     IDLE = 1;
@@ -138,9 +138,9 @@ enum BulletType
 enum ConstructionType
 {
     NULL_CONSTRUCTION_TYPE = 0;
-    RECYCLEBANK = 1;
-    CHARGESTATION = 2;
-    SIGNALTOWER = 3;
+    FACTORY = 1;
+    COMMUNITY = 2;
+    FORT = 3;
 }
 
 enum NewsType

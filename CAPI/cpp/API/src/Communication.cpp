@@ -187,12 +187,12 @@ bool Communication::Attack(int64_t playerID, int64_t teamID, double angle)
         return false;
 }
 
-bool Communication::BuildSweeper(int64_t teamID, THUAI7::SweeperType SweeperType)
+bool Communication::BuildShip(int64_t teamID, THUAI7::ShipType ShipType)
 {
     protobuf::BoolRes reply;
     ClientContext context;
-    auto request = THUAI72Proto::THUAI72ProtobufBuildSweeperMsg(teamID, SweeperType);
-    auto status = THUAI7Stub->BuildSweeper(&context, request, &reply);
+    auto request = THUAI72Proto::THUAI72ProtobufBuildShipMsg(teamID, ShipType);
+    auto status = THUAI7Stub->BuildShip(&context, request, &reply);
     if (status.ok())
         return true;
     else
@@ -223,11 +223,11 @@ bool Communication::TryConnection(int64_t playerID, int64_t teamID)
         return false;
 }
 
-void Communication::AddPlayer(int64_t playerID, int64_t teamID, THUAI7::SweeperType SweeperType)
+void Communication::AddPlayer(int64_t playerID, int64_t teamID, THUAI7::ShipType ShipType)
 {
     auto tMessage = [=]()
     {
-        protobuf::PlayerMsg playerMsg = THUAI72Proto::THUAI72ProtobufPlayerMsg(playerID, teamID, SweeperType);
+        protobuf::PlayerMsg playerMsg = THUAI72Proto::THUAI72ProtobufPlayerMsg(playerID, teamID, ShipType);
         grpc::ClientContext context;
         auto MessageReader = THUAI7Stub->AddPlayer(&context, playerMsg);
 

@@ -318,7 +318,7 @@ namespace Server
                 communicationToGameID[team][0] = GameObj.invalidID; // team
                 for (int i = 1; i <= options.ShipCount; i++)
                 {
-                    communicationToGameID[team][i] = GameObj.invalidID; //sweeper
+                    communicationToGameID[team][i] = GameObj.invalidID; //ship
                 }
             }
 
