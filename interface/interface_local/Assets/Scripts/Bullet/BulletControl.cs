@@ -14,6 +14,7 @@ public class BulletControl : MonoBehaviour
     }
     void Update()
     {
+        RendererControl.GetInstance().SetColToChild(messageOfBullet.type, messageOfBullet.playerTeam, transform);
         lifeTime += Time.deltaTime;
         // Debug.Log(rb.velocity);
         if (lifeTime > bulletData.attackDistance / bulletData.speed)
