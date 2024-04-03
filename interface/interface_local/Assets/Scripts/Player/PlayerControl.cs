@@ -31,11 +31,12 @@ public class PlayerControl : SingletonMono<PlayerControl>
         CheckInteract();
         UpdateInteractList();
         Interact();
-        ShipMpve();
         // ShipAttack();
     }
     void testInput()
     {
+        if (Input.GetKeyDown(KeyCode.P))
+            selectedOption = InteractControl.InteractOption.Produce;
     }
     void CheckInteract()
     {
@@ -69,6 +70,10 @@ public class PlayerControl : SingletonMono<PlayerControl>
                         selectedInt.Add(raycaster.GetComponent<InteractBase>());
                     }
                 }
+                if (Input.GetMouseButtonDown(1))
+                {
+                    ShipMove(raycaster.transform.position);
+                }
             }
         }
         else
@@ -90,6 +95,10 @@ public class PlayerControl : SingletonMono<PlayerControl>
                     // selectedInt.Clear();
                     ShipAttack();
                 }
+                if (Input.GetMouseButtonDown(1))
+                {
+                    ShipMove(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                }
             }
         }
     }
@@ -107,7 +116,6 @@ public class PlayerControl : SingletonMono<PlayerControl>
                         enabledInteract.Remove(enabledInteract[i]);
                     }
             }
-
         }
         else
         {
@@ -123,15 +131,12 @@ public class PlayerControl : SingletonMono<PlayerControl>
         }
         selectedOption = InteractControl.InteractOption.None;
     }
-    void ShipMpve()
+    void ShipMove(Vector2 movePos)
     {
-        if (Input.GetMouseButtonDown(1))
+        foreach (InteractBase interactBase in selectedInt)
         {
-            foreach (InteractBase interactBase in selectedInt)
-            {
-                interactBase.enableMove = true;
-                interactBase.moveOption = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            }
+            interactBase.enableMove = true;
+            interactBase.moveOption = movePos;
         }
     }
     void ShipAttack()

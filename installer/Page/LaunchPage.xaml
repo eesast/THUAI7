@@ -92,10 +92,39 @@
                 Text="{Binding PlaybackSpeed}"
                 FontSize="16"/>
         </HorizontalStackLayout>
+        <HorizontalStackLayout>
+            <Label
+                WidthRequest="170"
+                Text="Language"
+                VerticalOptions="Center"
+                FontSize="{Binding ConstFontSize}"/>
+            <CheckBox
+                IsChecked="{Binding CppSelect}"/>
+            <Label
+                WidthRequest="100"
+                Text="C++"
+                VerticalOptions="Center"
+                FontSize="{Binding ConstFontSize}"/>
+            <CheckBox
+                IsChecked="{Binding PySelect}"/>
+            <Label
+                WidthRequest="100"
+                Text="Python"
+                VerticalOptions="Center"
+                FontSize="{Binding ConstFontSize}"/>
+        </HorizontalStackLayout>
 
         <Label
             Text="{Binding DebugAlert}"/>
 
+        <Button
+            WidthRequest="400"
+            Text="保存"
+            Command="{Binding SaveBtnClickedCommand}"
+            IsEnabled="{Binding SaveEnabled}"
+            BackgroundColor="{Binding ConstBackgroundColor}"
+            FontSize="{Binding ConstFontSize}"
+            TextColor="{Binding ConstTextColor}"/>
         <Button
             WidthRequest="400"
             Text="启动"

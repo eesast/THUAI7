@@ -11,7 +11,7 @@ class SweeperAPI(ISweeperAPI, IGameTimer):
         self.__pool = ThreadPoolExecutor(20)
 
     def Move(self, timeInMilliseconds: int, angle: float) -> Future[bool]:
-        return self.__pool.submit(self.__logic.move, timeInMilliseconds, angle)
+        return self.__pool.submit(self.__logic.Move, timeInMilliseconds, angle)
 
     def MoveRight(self, timeInMilliseconds: int) -> Future[bool]:
         return self.Move(timeInMilliseconds, pi * 0.5)
@@ -190,8 +190,8 @@ class TeamAPI(ITeamAPI, IGameTimer):
     def GetBridgeHp(self, cellX: int, cellY: int) -> int:
         return self.__logic.GetBridgeHp(cellX, cellY)
 
-    def GetResouceState(self, cellX: int, cellY: int) -> int:
-        return self.__logic.GetResouceState(cellX, cellY)
+    def GetGarbageState(self, cellX: int, cellY: int) -> int:
+        return self.__logic.GetGarbageState(cellX, cellY)
 
     def GetHomeHp(self) -> int:
         return self.__logic.GetHomeHp()
@@ -224,6 +224,9 @@ class TeamAPI(ITeamAPI, IGameTimer):
         pass
 
     def PrintTeam(self) -> None:
+        pass
+
+    def PrintSweeper(self) -> None:
         pass
 
     def PrintSelfInfo(self) -> None:
