@@ -1,5 +1,5 @@
 import PyAPI.structures as THUAI7
-from PyAPI.Interface import ISweeperAPI, ITeamAPI, IAI
+from PyAPI.Interface import IShipAPI, ITeamAPI, IAI
 from PyAPI.utils import AssistFunction
 from typing import Union, Final, cast, List
 from PyAPI.constants import Constants
@@ -14,12 +14,12 @@ class Setting:
         return False
 
     @staticmethod
-    def SweeperTypes() -> List[THUAI7.SweeperType]:
+    def ShipTypes() -> List[THUAI7.ShipType]:
         return [
-            THUAI7.SweeperType.CivilianSweeper,
-            THUAI7.SweeperType.MilitarySweeper,
-            THUAI7.SweeperType.MilitarySweeper,
-            THUAI7.SweeperType.FlagSweeper,
+            THUAI7.ShipType.CivilianShip,
+            THUAI7.ShipType.MilitaryShip,
+            THUAI7.ShipType.MilitaryShip,
+            THUAI7.ShipType.FlagShip,
         ]
 
 
@@ -30,7 +30,7 @@ class AI(IAI):
     def __init__(self, pID: int):
         self.__playerID = pID
 
-    def SweeperPlay(self, api: ISweeperAPI) -> None:
+    def ShipPlay(self, api: IShipAPI) -> None:
         # 公共操作
         if self.__playerID == 1:
             api.PrintSelfInfo()

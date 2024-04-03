@@ -10,8 +10,8 @@ import proto.Message2Clients_pb2 as Message2Clients
 from queue import Queue
 import PyAPI.structures as THUAI7
 from PyAPI.utils import Proto2THUAI7, AssistFunction
-from PyAPI.API import SweeperAPI, TeamAPI
-from PyAPI.DebugAPI import SweeperDebugAPI, TeamDebugAPI
+from PyAPI.API import ShipAPI, TeamAPI
+from PyAPI.DebugAPI import ShipDebugAPI, TeamDebugAPI
 from PyAPI.AI import Setting
 from PyAPI.Communication import Communication
 from PyAPI.State import State
@@ -24,12 +24,12 @@ class Logic(ILogic):
         playerID: int,
         teamID: int,
         playerType: THUAI7.PlayerType,
-        sweeperType: THUAI7.SweeperType,
+        shipType: THUAI7.ShipType,
     ) -> None:
         self.__playerID: int = playerID
         self.__teamID: int = teamID
         self.__playerType: THUAI7.PlayerType = playerType
-        self.__sweeperType: THUAI7.SweeperType = sweeperType
+        self.__shipType: THUAI7.ShipType = shipType
 
         self.__comm: Communication
 
@@ -62,22 +62,22 @@ class Logic(ILogic):
 
         self.__messageQueue: Queue = Queue()
 
-    def GetSweepers(self) -> List[THUAI7.Sweeper]:
+    def GetShips(self) -> List[THUAI7.Ship]:
         with self.__mtxState:
-            self.__logger.debug("Called GetSweepers")
-            return copy.deepcopy(self.__currentState.sweepers)
+            self.__logger.debug("Called GetShips")
+            return copy.deepcopy(self.__currentState.ships)
 
-    def GetEnemySweepers(self) -> List[THUAI7.Sweeper]:
+    def GetEnemyShips(self) -> List[THUAI7.Ship]:
         with self.__mtxState:
-            self.__logger.debug("Called GetEnemySweepers")
-            return copy.deepcopy(self.__currentState.enemySweepers)
+            self.__logger.debug("Called GetEnemyShips")
+            return copy.deepcopy(self.__currentState.enemyShips)
 
     def GetBullets(self) -> List[THUAI7.Bullet]:
         with self.__mtxState:
             self.__logger.debug("Called GetBullets")
             return copy.deepcopy(self.__currentState.bullets)
 
-    def GetSelfInfo(self) -> Union[THUAI7.Sweeper, THUAI7.Team]:
+    def GetSelfInfo(self) -> Union[THUAI7.Ship, THUAI7.Team]:
         with self.__mtxState:
             self.__logger.debug("Called GetSelfInfo")
             return copy.deepcopy(self.__currentState.self)
@@ -156,22 +156,22 @@ class Logic(ILogic):
                 self.__logger.warning("GetConstructionHp: Out of range")
                 return -1
 
-    def GetBridgeHp(self, cellX: int, cellY: int) -> int:
+    def GetWormholeHp(self, cellX: int, cellY: int) -> int:
         with self.__mtxState:
-            self.__logger.debug("Called GetBridgeHp")
+            self.__logger.debug("Called GetWormholeHp")
             if (cellX, cellY) not in self.__currentState.mapInfo.bridgeState:
-                self.__logger.warning("GetBridgeHp: Out of range")
+                self.__logger.warning("GetWormholeHp: Out of range")
                 return -1
             else:
                 return copy.deepcopy(
                     self.__currentState.mapInfo.bridgeState[(cellX, cellY)]
                 )
 
-    def GetGarbageState(self, cellX: int, cellY: int) -> int:
+    def GetResourceState(self, cellX: int, cellY: int) -> int:
         with self.__mtxState:
-            self.__logger.debug("Called GetGarbageState")
+            self.__logger.debug("Called GetResourceState")
             if (cellX, cellY) not in self.__currentState.mapInfo.garbageState:
-                self.__logger.warning("GetGarbageState: Out of range")
+                self.__logger.warning("GetResourceState: Out of range")
                 return -1
             else:
                 return copy.deepcopy(
@@ -250,9 +250,9 @@ class Logic(ILogic):
         self.__logger.debug("Called Recycle")
         return self.__comm.Recycle(self.__playerID, self.__playerID, self.__teamID)
 
-    def BuildSweeper(self, sweeperType: THUAI7.SweeperType) -> bool:
-        self.__logger.debug("Called BuildSweeper")
-        return self.__comm.BuildSweeper(sweeperType, self.__teamID)
+    def BuildShip(self, shipType: THUAI7.ShipType) -> bool:
+        self.__logger.debug("Called BuildShip")
+        return self.__comm.BuildShip(shipType, self.__teamID)
 
     def __TryConnection(self) -> bool:
         self.__logger.info("Try to connect to the server.")
@@ -261,7 +261,7 @@ class Logic(ILogic):
     def __ProcessMessage(self) -> None:
         def messageThread():
             self.__logger.info("Message thread started")
-            self.__comm.AddPlayer(self.__playerID, self.__teamID, self.__sweeperType)
+            self.__comm.AddPlayer(self.__playerID, self.__teamID, self.__shipType)
             self.__logger.info("Player added")
 
             while self.__gameState != THUAI7.GameState.GameEnd:
@@ -309,8 +309,8 @@ class Logic(ILogic):
 
     def __LoadBuffer(self, message: Message2Clients.MessageToClient) -> None:
         with self.__cvBuffer:
-            self.__bufferState.sweepers.clear()
-            self.__bufferState.enemySweepers.clear()
+            self.__bufferState.ships.clear()
+            self.__bufferState.enemyShips.clear()
             self.__bufferState.bullets.clear()
             self.__bufferState.bombedBullets.clear()
             self.__bufferState.guids.clear()
@@ -318,8 +318,8 @@ class Logic(ILogic):
 
             if self.__playerID != 0:
                 for obj in message.obj_message:
-                    if obj.WhichOneof("message_of_obj") == "sweeper_message":
-                        self.__bufferState.guids.append(obj.sweeper_message.guid)
+                    if obj.WhichOneof("message_of_obj") == "ship_message":
+                        self.__bufferState.guids.append(obj.ship_message.guid)
             else:
                 for obj in message.obj_message:
                     if obj.WhichOneof("message_of_obj") == "team_message":
@@ -349,13 +349,13 @@ class Logic(ILogic):
     def __LoadBufferSelf(self, message: Message2Clients.MessageToClient) -> None:
         if self.__playerID != 0:
             for item in message.obj_message:
-                if item.WhichOneof("message_of_obj") == "sweeper_message":
-                    if item.sweeper_message.player_id == self.__playerID:
-                        self.__bufferState.self = Proto2THUAI7.Protobuf2THUAI7Sweeper(
-                            item.sweeper_message
+                if item.WhichOneof("message_of_obj") == "ship_message":
+                    if item.ship_message.player_id == self.__playerID:
+                        self.__bufferState.self = Proto2THUAI7.Protobuf2THUAI7Ship(
+                            item.ship_message
                         )
-                        self.__bufferState.sweepers.append(self.__bufferState.self)
-                        self.__logger.debug("Load self sweeper")
+                        self.__bufferState.ships.append(self.__bufferState.self)
+                        self.__logger.debug("Load self ship")
         else:
             for item in message.obj_message:
                 if item.WhichOneof("message_of_obj") == "team_message":
@@ -363,34 +363,34 @@ class Logic(ILogic):
                         item.team_message
                     )
                     self.__logger.debug("Load self team")
-                if item.WhichOneof("message_of_obj") == "sweeper_message":
-                    if item.sweeper_message.team_id == self.__teamID:
-                        self.__bufferState.sweepers.append(
-                            Proto2THUAI7.Protobuf2THUAI7Sweeper(item.sweeper_message)
+                if item.WhichOneof("message_of_obj") == "ship_message":
+                    if item.ship_message.team_id == self.__teamID:
+                        self.__bufferState.ships.append(
+                            Proto2THUAI7.Protobuf2THUAI7Ship(item.ship_message)
                         )
-                        self.__logger.debug("Load sweeper")
+                        self.__logger.debug("Load ship")
 
     def __LoadBufferCase(self, item: Message2Clients.MessageOfObj) -> None:
-        if self.__playerType == THUAI7.PlayerType.Sweeper:
-            if item.WhichOneof("message_of_obj") == "sweeper_message":
-                if item.sweeper_message.team_id != self.__teamID:
+        if self.__playerType == THUAI7.PlayerType.Ship:
+            if item.WhichOneof("message_of_obj") == "ship_message":
+                if item.ship_message.team_id != self.__teamID:
                     if AssistFunction.HaveView(
                         self.__bufferState.self.viewRange,
                         self.__bufferState.self.x,
                         self.__bufferState.self.y,
-                        item.sweeper_message.x,
-                        item.sweeper_message.y,
+                        item.ship_message.x,
+                        item.ship_message.y,
                         self.__bufferState.gameMap,
                     ):
-                        self.__bufferState.enemySweepers.append(
-                            Proto2THUAI7.Protobuf2THUAI7Sweeper(item.sweeper_message)
+                        self.__bufferState.enemyShips.append(
+                            Proto2THUAI7.Protobuf2THUAI7Ship(item.ship_message)
                         )
-                        self.__logger.debug("Load enemy sweeper")
+                        self.__logger.debug("Load enemy ship")
                 else:
-                    self.__bufferState.sweepers.append(
-                        Proto2THUAI7.Protobuf2THUAI7Sweeper(item.sweeper_message)
+                    self.__bufferState.ships.append(
+                        Proto2THUAI7.Protobuf2THUAI7Ship(item.ship_message)
                     )
-                    self.__logger.debug("Load sweeper")
+                    self.__logger.debug("Load ship")
 
             elif item.WhichOneof("message_of_obj") == "bullet_message":
                 if AssistFunction.HaveView(
@@ -416,12 +416,12 @@ class Logic(ILogic):
                         self.__bufferState.mapInfo.recycleBankState[pos] = (
                             item.recyclebank_message.hp
                         )
-                        self.__logger.debug("New RecycleBank")
+                        self.__logger.debug("New Factory")
                     else:
                         self.__bufferState.mapInfo.recycleBankState[pos] = (
                             item.recyclebank_message.hp
                         )
-                        self.__logger.debug("Update RecycleBank")
+                        self.__logger.debug("Update Factory")
                 elif AssistFunction.HaveView(
                     self.__bufferState.self.viewRange,
                     self.__bufferState.self.x,
@@ -438,12 +438,12 @@ class Logic(ILogic):
                         self.__bufferState.mapInfo.recycleBankState[pos] = (
                             item.recyclebank_message.hp
                         )
-                        self.__logger.debug("New RecycleBank")
+                        self.__logger.debug("New Factory")
                     else:
                         self.__bufferState.mapInfo.recycleBankState[pos] = (
                             item.recyclebank_message.hp
                         )
-                        self.__logger.debug("Update RecycleBank")
+                        self.__logger.debug("Update Factory")
 
             elif item.WhichOneof("message_of_obj") == "chargestation_message":
                 if item.chargestation_message.team_id == self.__teamID:
@@ -455,12 +455,12 @@ class Logic(ILogic):
                         self.__bufferState.mapInfo.chargeStationState[pos] = (
                             item.chargestation_message.hp
                         )
-                        self.__logger.debug("New ChargeStation")
+                        self.__logger.debug("New Community")
                     else:
                         self.__bufferState.mapInfo.chargeStationState[pos] = (
                             item.chargestation_message.hp
                         )
-                        self.__logger.debug("Update ChargeStation")
+                        self.__logger.debug("Update Community")
                 elif AssistFunction.HaveView(
                     self.__bufferState.self.viewRange,
                     self.__bufferState.self.x,
@@ -477,12 +477,12 @@ class Logic(ILogic):
                         self.__bufferState.mapInfo.chargeStationState[pos] = (
                             item.chargestation_message.hp
                         )
-                        self.__logger.debug("New ChargeStation")
+                        self.__logger.debug("New Community")
                     else:
                         self.__bufferState.mapInfo.chargeStationState[pos] = (
                             item.chargestation_message.hp
                         )
-                        self.__logger.debug("Update ChargeStation")
+                        self.__logger.debug("Update Community")
 
             elif item.WhichOneof("message_of_obj") == "signaltower_message":
                 if item.signaltower_message.team_id == self.__teamID:
@@ -494,12 +494,12 @@ class Logic(ILogic):
                         self.__bufferState.mapInfo.signalTowerState[pos] = (
                             item.signaltower_message.hp
                         )
-                        self.__logger.debug("New SignalTower")
+                        self.__logger.debug("New Fort")
                     else:
                         self.__bufferState.mapInfo.signalTowerState[pos] = (
                             item.signaltower_message.hp
                         )
-                        self.__logger.debug("Update SignalTower")
+                        self.__logger.debug("Update Fort")
                 elif AssistFunction.HaveView(
                     self.__bufferState.self.viewRange,
                     self.__bufferState.self.x,
@@ -516,12 +516,12 @@ class Logic(ILogic):
                         self.__bufferState.mapInfo.signalTowerState[pos] = (
                             item.signaltower_message.hp
                         )
-                        self.__logger.debug("New SignalTower")
+                        self.__logger.debug("New Fort")
                     else:
                         self.__bufferState.mapInfo.signalTowerState[pos] = (
                             item.signaltower_message.hp
                         )
-                        self.__logger.debug("Update SignalTower")
+                        self.__logger.debug("Update Fort")
 
             elif item.WhichOneof("message_of_obj") == "bridge_message":
                 if AssistFunction.HaveView(
@@ -537,7 +537,7 @@ class Logic(ILogic):
                         AssistFunction.GridToCell(item.bridge_message.y),
                     )
                     self.__bufferState.mapInfo.bridgeState[pos] = item.bridge_message.hp
-                    self.__logger.debug("Update Bridge")
+                    self.__logger.debug("Update Wormhole")
 
             elif item.WhichOneof("message_of_obj") == "home_message":
                 if item.home_message.team_id == self.__teamID:
@@ -578,7 +578,7 @@ class Logic(ILogic):
                     self.__bufferState.mapInfo.garbageState[pos] = (
                         item.garbage_message.progress
                     )
-                    self.__logger.debug("Update Garbage")
+                    self.__logger.debug("Update Resource")
 
             elif item.WhichOneof("message_of_obj") == "news_message":
                 if (
@@ -618,20 +618,20 @@ class Logic(ILogic):
         elif self.__playerType == THUAI7.PlayerType.Team:
 
             def HaveOverView(targetX: int, targetY: int):
-                for sweeper in self.__bufferState.sweepers:
+                for ship in self.__bufferState.ships:
                     if AssistFunction.HaveView(
-                        sweeper.viewRange, sweeper.x, sweeper.y, targetX, targetY
+                        ship.viewRange, ship.x, ship.y, targetX, targetY
                     ):
                         return True
                 return False
 
-            if item.WhichOneof("message_of_obj") == "sweeper_message":
-                if item.sweeper_message.team_id != self.__teamID:
-                    if HaveOverView(item.sweeper_message.x, item.sweeper_message.y):
-                        self.__bufferState.enemySweepers.append(
-                            Proto2THUAI7.Protobuf2THUAI7Sweeper(item.sweeper_message)
+            if item.WhichOneof("message_of_obj") == "ship_message":
+                if item.ship_message.team_id != self.__teamID:
+                    if HaveOverView(item.ship_message.x, item.ship_message.y):
+                        self.__bufferState.enemyShips.append(
+                            Proto2THUAI7.Protobuf2THUAI7Ship(item.ship_message)
                         )
-                        self.__logger.debug("Load enemy sweeper")
+                        self.__logger.debug("Load enemy ship")
 
             elif item.WhichOneof("message_of_obj") == "recyclebank_message":
                 if item.recyclebank_message.team_id == self.__teamID:
@@ -643,12 +643,12 @@ class Logic(ILogic):
                         self.__bufferState.mapInfo.recycleBankState[pos] = (
                             item.recyclebank_message.hp
                         )
-                        self.__logger.debug("New RecycleBank")
+                        self.__logger.debug("New Factory")
                     else:
                         self.__bufferState.mapInfo.recycleBankState[pos] = (
                             item.recyclebank_message.hp
                         )
-                        self.__logger.debug("Update RecycleBank")
+                        self.__logger.debug("Update Factory")
                 elif HaveOverView(
                     item.recyclebank_message.x, item.recyclebank_message.y
                 ):
@@ -660,12 +660,12 @@ class Logic(ILogic):
                         self.__bufferState.mapInfo.recycleBankState[pos] = (
                             item.recyclebank_message.hp
                         )
-                        self.__logger.debug("New RecycleBank")
+                        self.__logger.debug("New Factory")
                     else:
                         self.__bufferState.mapInfo.recycleBankState[pos] = (
                             item.recyclebank_message.hp
                         )
-                        self.__logger.debug("Update RecycleBank")
+                        self.__logger.debug("Update Factory")
 
             elif item.WhichOneof("message_of_obj") == "chargestation_message":
                 if item.chargestation_message.team_id == self.__teamID:
@@ -677,12 +677,12 @@ class Logic(ILogic):
                         self.__bufferState.mapInfo.chargeStationState[pos] = (
                             item.chargestation_message.hp
                         )
-                        self.__logger.debug("New ChargeStation")
+                        self.__logger.debug("New Community")
                     else:
                         self.__bufferState.mapInfo.chargeStationState[pos] = (
                             item.chargestation_message.hp
                         )
-                        self.__logger.debug("Update ChargeStation")
+                        self.__logger.debug("Update Community")
                 elif HaveOverView(
                     item.chargestation_message.x, item.chargestation_message.y
                 ):
@@ -694,12 +694,12 @@ class Logic(ILogic):
                         self.__bufferState.mapInfo.chargeStationState[pos] = (
                             item.chargestation_message.hp
                         )
-                        self.__logger.debug("New ChargeStation")
+                        self.__logger.debug("New Community")
                     else:
                         self.__bufferState.mapInfo.chargeStationState[pos] = (
                             item.chargestation_message.hp
                         )
-                        self.__logger.debug("Update ChargeStation")
+                        self.__logger.debug("Update Community")
 
             elif item.WhichOneof("message_of_obj") == "signaltower_message":
                 if item.signaltower_message.team_id == self.__teamID:
@@ -711,12 +711,12 @@ class Logic(ILogic):
                         self.__bufferState.mapInfo.signalTowerState[pos] = (
                             item.signaltower_message.hp
                         )
-                        self.__logger.debug("New SignalTower")
+                        self.__logger.debug("New Fort")
                     else:
                         self.__bufferState.mapInfo.signalTowerState[pos] = (
                             item.signaltower_message.hp
                         )
-                        self.__logger.debug("Update SignalTower")
+                        self.__logger.debug("Update Fort")
                 elif HaveOverView(
                     item.signaltower_message.x, item.signaltower_message.y
                 ):
@@ -728,12 +728,12 @@ class Logic(ILogic):
                         self.__bufferState.mapInfo.signalTowerState[pos] = (
                             item.signaltower_message.hp
                         )
-                        self.__logger.debug("New SignalTower")
+                        self.__logger.debug("New Fort")
                     else:
                         self.__bufferState.mapInfo.signalTowerState[pos] = (
                             item.signaltower_message.hp
                         )
-                        self.__logger.debug("Update SignalTower")
+                        self.__logger.debug("Update Fort")
 
             elif item.WhichOneof("message_of_obj") == "bridge_message":
                 if HaveOverView(item.bridge_message.x, item.bridge_message.y):
@@ -742,7 +742,7 @@ class Logic(ILogic):
                         AssistFunction.GridToCell(item.bridge_message.y),
                     )
                     self.__bufferState.mapInfo.bridgeState[pos] = item.bridge_message.hp
-                    self.__logger.debug("Update Bridge")
+                    self.__logger.debug("Update Wormhole")
 
             elif item.WhichOneof("message_of_obj") == "home_message":
                 if item.home_message.team_id == self.__teamID:
@@ -769,7 +769,7 @@ class Logic(ILogic):
                     self.__bufferState.mapInfo.garbageState[pos] = (
                         item.garbage_message.progress
                     )
-                    self.__logger.debug("Update Garbage")
+                    self.__logger.debug("Update Resource")
 
             elif item.WhichOneof("message_of_obj") == "news_message":
                 if (
@@ -895,14 +895,14 @@ class Logic(ILogic):
             if self.__playerID == 0:
                 self.__timer = TeamAPI(self)
             else:
-                self.__timer = SweeperAPI(self)
+                self.__timer = ShipAPI(self)
         else:
             if self.__playerID == 0:
                 self.__timer = TeamDebugAPI(
                     self, file, screen, warnOnly, self.__playerID
                 )
             else:
-                self.__timer = SweeperDebugAPI(
+                self.__timer = ShipDebugAPI(
                     self, file, screen, warnOnly, self.__playerID
                 )
 
