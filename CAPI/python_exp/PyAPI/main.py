@@ -85,7 +85,7 @@ screen: bool = True
 warnOnly: bool = False
 
 
-def StartLogic(pID: int, playerType: THUAI7.PlayerType, sweeperType: THUAI7.SweeperType) -> None:
+def StartLogic(pID: int, playerType: THUAI7.PlayerType, sweeperType: THUAI7.ShipType) -> None:
     logic = Logic(pID, tID, playerType, sweeperType)
     logic.Main(lambda pID: AI(pID), sIP, sPort, file, screen, warnOnly)
 
@@ -107,7 +107,7 @@ if __name__ == "__main__":
 
     AIs = mp.Pool(processes=5)
     initArgs = [
-        (0, THUAI7.PlayerType.Team, THUAI7.SweeperType.NullSweeperType),
-        (1, THUAI7.PlayerType.Sweeper, THUAI7.SweeperType.CivilianSweeper)
+        (0, THUAI7.PlayerType.Team, THUAI7.ShipType.NullShipType),
+        (1, THUAI7.PlayerType.Ship, THUAI7.ShipType.CivilianShip)
     ]
     AIs.map(StartLogicMap, initArgs)
