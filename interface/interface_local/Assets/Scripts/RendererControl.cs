@@ -106,7 +106,7 @@ public class RendererControl : Singleton<RendererControl>
         {
             case BulletType.LASER:
                 CurrentRenderer = targetTransform.Find("mask1").GetComponent<Renderer>();
-                Debug.Log("render bullet");
+                // Debug.Log("render bullet");
                 if (CurrentRenderer)
                 {
                     CurrentRenderer.GetPropertyBlock(CurrentPropertyBlock);

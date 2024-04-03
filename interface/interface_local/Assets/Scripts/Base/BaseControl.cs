@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Build.Content;
 using UnityEngine;
 
 public class BaseControl : MonoBehaviour
@@ -15,8 +16,39 @@ public class BaseControl : MonoBehaviour
         interactBase = GetComponent<InteractBase>();
         generatePos[0] = transform.Find("GeneratePosition1").position;
         generatePos[1] = transform.Find("GeneratePosition2").position;
-        messageOfBase.economy = 400;
+        messageOfBase.economy = ParaDefine.GetInstance().baseData.initialEco;
+        messageOfBase.shipNum.civilShipNum = ParaDefine.GetInstance().baseData.initialShipNum.civilShipNum;
+        messageOfBase.shipNum.militaryShipNum = ParaDefine.GetInstance().baseData.initialShipNum.militaryShipNum;
+        messageOfBase.shipNum.flagShipNum = ParaDefine.GetInstance().baseData.initialShipNum.flagShipNum;
+        messageOfBase.shipTotalNum = messageOfBase.shipNum.civilShipNum + messageOfBase.shipNum.militaryShipNum + messageOfBase.shipNum.flagShipNum;
+        for (int i = 1; i <= messageOfBase.shipNum.civilShipNum; i++)
+            BuildCivil();
+        for (int i = 1; i <= messageOfBase.shipNum.militaryShipNum; i++)
+            BuildMilitary();
+        for (int i = 1; i <= messageOfBase.shipNum.flagShipNum; i++)
+            BuildFlag();
         StartCoroutine(economyUpdate());
+    }
+    void BuildCivil()
+    {
+        obj = ObjCreater.GetInstance().CreateObj(ShipType.CIVILIAN_SHIP, generatePos[Tool.GetInstance().GetRandom(0, 2)]);
+        obj.GetComponent<ShipControl>().messageOfShip.playerTeam = messageOfBase.playerTeam;
+        messageOfBase.shipNum.civilShipNum++;
+        messageOfBase.shipTotalNum++;
+    }
+    void BuildMilitary()
+    {
+        obj = ObjCreater.GetInstance().CreateObj(ShipType.MILITARY_SHIP, generatePos[Tool.GetInstance().GetRandom(0, 2)]);
+        obj.GetComponent<ShipControl>().messageOfShip.playerTeam = messageOfBase.playerTeam;
+        messageOfBase.shipNum.militaryShipNum++;
+        messageOfBase.shipTotalNum++;
+    }
+    void BuildFlag()
+    {
+        obj = ObjCreater.GetInstance().CreateObj(ShipType.FLAG_SHIP, generatePos[Tool.GetInstance().GetRandom(0, 2)]);
+        obj.GetComponent<ShipControl>().messageOfShip.playerTeam = messageOfBase.playerTeam;
+        messageOfBase.shipNum.flagShipNum++;
+        messageOfBase.shipTotalNum++;
     }
 
     // Update is called once per frame
@@ -25,24 +57,27 @@ public class BaseControl : MonoBehaviour
         switch (interactBase.interactOption)
         {
             case InteractControl.InteractOption.BuildCivil:
-                if (CostEconomy(ParaDefine.GetInstance().civilShipData.cost))
+                if (messageOfBase.shipNum.civilShipNum < ParaDefine.GetInstance().baseData.maxShipNum.civilShipNum &&
+                messageOfBase.shipTotalNum < ParaDefine.GetInstance().baseData.maxTotalShipNum &&
+                CostEconomy(ParaDefine.GetInstance().civilShipData.cost))
                 {
-                    obj = ObjCreater.GetInstance().CreateObj(ShipType.CIVILIAN_SHIP, generatePos[Tool.GetInstance().GetRandom(0, 2)]);
-                    obj.GetComponent<ShipControl>().messageOfShip.playerTeam = messageOfBase.playerTeam;
+                    BuildCivil();
                 }
                 break;
             case InteractControl.InteractOption.BuildMilitary:
-                if (CostEconomy(ParaDefine.GetInstance().militaryShipData.cost))
+                if (messageOfBase.shipNum.militaryShipNum < ParaDefine.GetInstance().baseData.maxShipNum.militaryShipNum &&
+                messageOfBase.shipTotalNum < ParaDefine.GetInstance().baseData.maxTotalShipNum &&
+                CostEconomy(ParaDefine.GetInstance().militaryShipData.cost))
                 {
-                    obj = ObjCreater.GetInstance().CreateObj(ShipType.MILITARY_SHIP, generatePos[Tool.GetInstance().GetRandom(0, 2)]);
-                    obj.GetComponent<ShipControl>().messageOfShip.playerTeam = messageOfBase.playerTeam;
+                    BuildMilitary();
                 }
                 break;
             case InteractControl.InteractOption.BuildFlag:
-                if (CostEconomy(ParaDefine.GetInstance().flagShipData.cost))
+                if (messageOfBase.shipNum.flagShipNum < ParaDefine.GetInstance().baseData.maxShipNum.flagShipNum &&
+                messageOfBase.shipTotalNum < ParaDefine.GetInstance().baseData.maxTotalShipNum &&
+                CostEconomy(ParaDefine.GetInstance().flagShipData.cost))
                 {
-                    obj = ObjCreater.GetInstance().CreateObj(ShipType.FLAG_SHIP, generatePos[Tool.GetInstance().GetRandom(0, 2)]);
-                    obj.GetComponent<ShipControl>().messageOfShip.playerTeam = messageOfBase.playerTeam;
+                    BuildFlag();
                 }
                 break;
             default: break;

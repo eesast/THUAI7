@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ObjCreater : SingletonMono<ObjCreater>
 {
-    public GameObject[] placeList, shiplist, bulletList;
+    public GameObject[] placeList, shiplist, bulletList, constructionList;
     public Transform mapfa;
     public GameObject CreateObj(PlaceType placeType, Vector2 Pos, Quaternion? quaternion = null)
     {
@@ -90,6 +90,29 @@ public class ObjCreater : SingletonMono<ObjCreater>
                 case BulletType.ARC:
                     if (bulletList[4])
                         return Instantiate(bulletList[4], Pos, quaternion);
+                    break;
+            }
+            return null;
+        }
+    }
+    public GameObject CreateObj(ConstructionType constructionType, Vector2 Pos)
+    {
+        {
+            switch (constructionType)
+            {
+                case ConstructionType.FACTORY:
+                    if (bulletList[0])
+                        return Instantiate(constructionList[0], Pos, Quaternion.identity);
+                    break;
+                case ConstructionType.COMMUNITY:
+                    if (bulletList[1])
+                        return Instantiate(constructionList[1], Pos, Quaternion.identity);
+                    break;
+                case ConstructionType.FORT:
+                    if (bulletList[2])
+                        return Instantiate(constructionList[2], Pos, Quaternion.identity);
+                    break;
+                default:
                     break;
             }
             return null;

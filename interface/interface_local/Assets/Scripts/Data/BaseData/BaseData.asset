@@ -9,13 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5a82f5376adfa14893e400fba4af4f5, type: 3}
-  m_Name: LaserData
+  m_Script: {fileID: 11500000, guid: c3fccf85858e7d04cb05b8405220282d, type: 3}
+  m_Name: BaseData
   m_EditorClassIdentifier: 
-  cost: 1000
-  attackDistance: 4
-  explosionRange: 0
-  attackDamage: b0040000
-  armorDamageMultiplier: 1.5
-  shieldDamageMultiplier: 0.6
-  speed: 20
+  maxShipNum:
+    civilShipNum: 2
+    militaryShipNum: 2
+    flagShipNum: 1
+  initialShipNum:
+    civilShipNum: 0
+    militaryShipNum: 0
+    flagShipNum: 0
+  maxTotalShipNum: 4
+  initialEco: 400

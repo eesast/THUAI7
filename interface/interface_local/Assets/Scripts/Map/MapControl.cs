@@ -24,15 +24,17 @@ public class MapControl : SingletonMono<MapControl>
                 switch ((PlaceType)map[i, j])
                 {
                     case PlaceType.HOME:
-                        if (!bases[0])
-                        {
-                            bases[0] = ObjCreater.GetInstance().CreateObj(PlaceType.HOME, new Vector2(j, 50 - i)).GetComponent<BaseControl>();
-                            bases[0].name = "Base1";
-                        }
-                        else
+                        if (!bases[1])
                         {
                             bases[1] = ObjCreater.GetInstance().CreateObj(PlaceType.HOME, new Vector2(j, 50 - i)).GetComponent<BaseControl>();
                             bases[1].name = "Base2";
+                            bases[1].transform.SetParent(null);
+                        }
+                        else
+                        {
+                            bases[0] = ObjCreater.GetInstance().CreateObj(PlaceType.HOME, new Vector2(j, 50 - i)).GetComponent<BaseControl>();
+                            bases[0].name = "Base1";
+                            bases[0].transform.SetParent(null);
                         }
                         break;
                     case PlaceType.RESOURCE:
@@ -44,14 +46,18 @@ public class MapControl : SingletonMono<MapControl>
                             wormholeFlip ? Quaternion.Euler(0, 0, 180) : Quaternion.identity);
                         wormholeFlip = !wormholeFlip;
                         break;
+                    case PlaceType.CONSTRUCTION:
+                        obj = ObjCreater.GetInstance().CreateObj(PlaceType.CONSTRUCTION, new Vector2(j, 50 - i));
+                        PlaceManager.GetInstance().emptyConstruction.Add(new Vector2(j, 50 - i));
+                        break;
                     default:
                         ObjCreater.GetInstance().CreateObj((PlaceType)map[i, j], new Vector2(j, 50 - i));
                         break;
                 }
             }
         }
-        bases[0].messageOfBase.playerTeam = PlayerTeam.BLUE;
-        bases[1].messageOfBase.playerTeam = PlayerTeam.RED;
+        bases[0].messageOfBase.playerTeam = PlayerTeam.RED;
+        bases[1].messageOfBase.playerTeam = PlayerTeam.BLUE;
     }
     // Update is called once per frame
     void Update()

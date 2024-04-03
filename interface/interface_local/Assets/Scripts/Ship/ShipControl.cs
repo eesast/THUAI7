@@ -13,6 +13,7 @@ public class ShipControl : MonoBehaviour
     float speed;
     private float targetQ;
     public MessageOfShip messageOfShip;
+    GameObject obj;
     void SetVQTo(Vector2 targetV)
     {
         if ((rb.velocity.normalized - targetV.normalized).magnitude < 1.5f || rb.velocity.magnitude < 0.1f)
@@ -72,6 +73,32 @@ public class ShipControl : MonoBehaviour
                 if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().arcData.cost))
                     messageOfShip.weaponType = WeaponType.ARCGUN;
                 break;
+            case InteractControl.InteractOption.ConstructFactory:
+                Debug.Log("choose to construct factory");
+                for (int i = 0; i < PlaceManager.GetInstance().emptyConstruction.Count; i++)
+                {
+                    if (Tool.GetInstance().CheckBeside(transform.position, PlaceManager.GetInstance().emptyConstruction[i]))
+                    {
+                        obj = ObjCreater.GetInstance().CreateObj(ConstructionType.FACTORY,
+                            PlaceManager.GetInstance().emptyConstruction[i]);
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.playerTeam = messageOfShip.playerTeam;
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.x = (int)PlaceManager.GetInstance().emptyConstruction[i].x;
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.y = (int)PlaceManager.GetInstance().emptyConstruction[i].y;
+                        PlaceManager.GetInstance().emptyConstruction.Remove(PlaceManager.GetInstance().emptyConstruction[i]);
+                        PlaceManager.GetInstance().factory.Add(obj.GetComponent<ConstructionControl>());
+                    }
+                }
+                foreach (ConstructionControl factory in PlaceManager.GetInstance().factory)
+                {
+                    if (factory.messageOfConstruction.playerTeam == messageOfShip.playerTeam &&
+                    factory.messageOfConstruction.hp < ParaDefine.GetInstance().factoryData.hpMax &&
+                    Tool.GetInstance().CheckBeside(transform.position, new Vector2(factory.messageOfConstruction.x, factory.messageOfConstruction.y)))
+                    {
+                        if (messageOfShip.shipState != ShipState.CONSTRUCTING)
+                            Construct(factory);
+                    }
+                }
+                break;
             default:
                 break;
         }
@@ -96,13 +123,42 @@ public class ShipControl : MonoBehaviour
                 break;
         }
     }
+    void Construct(ConstructionControl construction)
+    {
+        {
+            switch (messageOfShip.constructorType)
+            {
+                case ConstructorType.CONSTRUCTOR1:
+                    StartCoroutine(ConstructIE(construction, ParaDefine.GetInstance().constructor1Data.constructSpeed));
+                    break;
+                case ConstructorType.CONSTRUCTOR2:
+                    StartCoroutine(ConstructIE(construction, ParaDefine.GetInstance().constructor2Data.constructSpeed));
+                    break;
+                case ConstructorType.CONSTRUCTOR3:
+                    StartCoroutine(ConstructIE(construction, ParaDefine.GetInstance().constructor3Data.constructSpeed));
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
     IEnumerator ProduceIE(int economy)
     {
-        Debug.Log("try produce");
+        // Debug.Log("try produce");
         messageOfShip.shipState = ShipState.PRODUCING;
         while (messageOfShip.shipState == ShipState.PRODUCING)
         {
             MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].AddEconomy(economy);
+            yield return new WaitForSeconds(1);
+        }
+
+    }
+    IEnumerator ConstructIE(ConstructionControl construction, int constructSpeed)
+    {
+        messageOfShip.shipState = ShipState.CONSTRUCTING;
+        while (messageOfShip.shipState == ShipState.CONSTRUCTING)
+        {
+            construction.Construct(constructSpeed);
             yield return new WaitForSeconds(1);
         }
 
@@ -133,7 +189,6 @@ public class ShipControl : MonoBehaviour
         {
 
             messageOfShip.shipState = ShipState.ATTACKING;
-            GameObject obj;
             switch (messageOfShip.weaponType)
             {
                 case WeaponType.LASERGUN:

@@ -37,6 +37,8 @@ public class PlayerControl : SingletonMono<PlayerControl>
     {
         if (Input.GetKeyDown(KeyCode.P))
             selectedOption = InteractControl.InteractOption.Produce;
+        if (Input.GetKeyDown(KeyCode.C))
+            selectedOption = InteractControl.InteractOption.ConstructFactory;
     }
     void CheckInteract()
     {
@@ -85,7 +87,7 @@ public class PlayerControl : SingletonMono<PlayerControl>
                     i.tobeSelected = false;
                 }
                 tobeSelectedInt.Clear();
-                // Debug.Log("clear");
+                // Debug.Log("clear" + tobeSelectedInt.Count);
 
                 if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
                 {
