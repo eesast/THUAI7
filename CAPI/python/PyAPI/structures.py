@@ -217,9 +217,9 @@ class Bullet:
 
 class GameMap:
     def __init__(self):
-        self.recycleBankState: Dict[Tuple[int, int], Tuple[int, int]] = {}
-        self.chargeStationState: Dict[Tuple[int, int], Tuple[int, int]] = {}
-        self.signalTowerState: Dict[Tuple[int, int], Tuple[int, int]] = {}
+        self.factoryState: Dict[Tuple[int, int], Tuple[int, int]] = {}
+        self.communityState: Dict[Tuple[int, int], Tuple[int, int]] = {}
+        self.fortState: Dict[Tuple[int, int], Tuple[int, int]] = {}
         self.homeState: Dict[Tuple[int, int], Tuple[int, int]] = {}
         self.bridgeState: Dict[Tuple[int, int], int] = {}
         self.garbageState: Dict[Tuple[int, int], int] = {}

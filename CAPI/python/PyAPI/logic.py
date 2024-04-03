@@ -140,17 +140,17 @@ class Logic(ILogic):
     def GetConstructionHp(self, cellX: int, cellY: int) -> int:
         with self.__mtxState:
             self.__logger.debug("Called GetConstructionHp")
-            if (cellX, cellY) in self.__currentState.mapInfo.recycleBankState:
+            if (cellX, cellY) in self.__currentState.mapInfo.factoryState:
                 return copy.deepcopy(
-                    self.__currentState.mapInfo.recycleBankState[(cellX, cellY)]
+                    self.__currentState.mapInfo.factoryState[(cellX, cellY)]
                 )
-            elif (cellX, cellY) in self.__currentState.mapInfo.chargeStationState:
+            elif (cellX, cellY) in self.__currentState.mapInfo.communityState:
                 return copy.deepcopy(
-                    self.__currentState.mapInfo.chargeStationState[(cellX, cellY)]
+                    self.__currentState.mapInfo.communityState[(cellX, cellY)]
                 )
-            elif (cellX, cellY) in self.__currentState.mapInfo.signalTowerState:
+            elif (cellX, cellY) in self.__currentState.mapInfo.fortState:
                 return copy.deepcopy(
-                    self.__currentState.mapInfo.signalTowerState[(cellX, cellY)]
+                    self.__currentState.mapInfo.fortState[(cellX, cellY)]
                 )
             else:
                 self.__logger.warning("GetConstructionHp: Out of range")
@@ -406,120 +406,120 @@ class Logic(ILogic):
                     )
                     self.__logger.debug("Load Bullet!")
 
-            elif item.WhichOneof("message_of_obj") == "recyclebank_message":
-                if item.recyclebank_message.team_id == self.__teamID:
+            elif item.WhichOneof("message_of_obj") == "factory_message":
+                if item.factory_message.team_id == self.__teamID:
                     pos = (
-                        AssistFunction.GridToCell(item.recyclebank_message.x),
-                        AssistFunction.GridToCell(item.recyclebank_message.y),
+                        AssistFunction.GridToCell(item.factory_message.x),
+                        AssistFunction.GridToCell(item.factory_message.y),
                     )
-                    if pos not in self.__bufferState.mapInfo.recycleBankState:
-                        self.__bufferState.mapInfo.recycleBankState[pos] = (
-                            item.recyclebank_message.hp
+                    if pos not in self.__bufferState.mapInfo.factoryState:
+                        self.__bufferState.mapInfo.factoryState[pos] = (
+                            item.factory_message.hp
                         )
                         self.__logger.debug("New Factory")
                     else:
-                        self.__bufferState.mapInfo.recycleBankState[pos] = (
-                            item.recyclebank_message.hp
+                        self.__bufferState.mapInfo.factoryState[pos] = (
+                            item.factory_message.hp
                         )
                         self.__logger.debug("Update Factory")
                 elif AssistFunction.HaveView(
                     self.__bufferState.self.viewRange,
                     self.__bufferState.self.x,
                     self.__bufferState.self.y,
-                    item.recyclebank_message.x,
-                    item.recyclebank_message.y,
+                    item.factory_message.x,
+                    item.factory_message.y,
                     self.__bufferState.gameMap,
                 ):
                     pos = (
-                        AssistFunction.GridToCell(item.recyclebank_message.x),
-                        AssistFunction.GridToCell(item.recyclebank_message.y),
+                        AssistFunction.GridToCell(item.factory_message.x),
+                        AssistFunction.GridToCell(item.factory_message.y),
                     )
-                    if pos not in self.__bufferState.mapInfo.recycleBankState:
-                        self.__bufferState.mapInfo.recycleBankState[pos] = (
-                            item.recyclebank_message.hp
+                    if pos not in self.__bufferState.mapInfo.factoryState:
+                        self.__bufferState.mapInfo.factoryState[pos] = (
+                            item.factory_message.hp
                         )
                         self.__logger.debug("New Factory")
                     else:
-                        self.__bufferState.mapInfo.recycleBankState[pos] = (
-                            item.recyclebank_message.hp
+                        self.__bufferState.mapInfo.factoryState[pos] = (
+                            item.factory_message.hp
                         )
                         self.__logger.debug("Update Factory")
 
-            elif item.WhichOneof("message_of_obj") == "chargestation_message":
-                if item.chargestation_message.team_id == self.__teamID:
+            elif item.WhichOneof("message_of_obj") == "community_message":
+                if item.community_message.team_id == self.__teamID:
                     pos = (
-                        AssistFunction.GridToCell(item.chargestation_message.x),
-                        AssistFunction.GridToCell(item.chargestation_message.y),
+                        AssistFunction.GridToCell(item.community_message.x),
+                        AssistFunction.GridToCell(item.community_message.y),
                     )
-                    if pos not in self.__bufferState.mapInfo.chargeStationState:
-                        self.__bufferState.mapInfo.chargeStationState[pos] = (
-                            item.chargestation_message.hp
+                    if pos not in self.__bufferState.mapInfo.communityState:
+                        self.__bufferState.mapInfo.communityState[pos] = (
+                            item.community_message.hp
                         )
                         self.__logger.debug("New Community")
                     else:
-                        self.__bufferState.mapInfo.chargeStationState[pos] = (
-                            item.chargestation_message.hp
+                        self.__bufferState.mapInfo.communityState[pos] = (
+                            item.community_message.hp
                         )
                         self.__logger.debug("Update Community")
                 elif AssistFunction.HaveView(
                     self.__bufferState.self.viewRange,
                     self.__bufferState.self.x,
                     self.__bufferState.self.y,
-                    item.chargestation_message.x,
-                    item.chargestation_message.y,
+                    item.community_message.x,
+                    item.community_message.y,
                     self.__bufferState.gameMap,
                 ):
                     pos = (
-                        AssistFunction.GridToCell(item.chargestation_message.x),
-                        AssistFunction.GridToCell(item.chargestation_message.y),
+                        AssistFunction.GridToCell(item.community_message.x),
+                        AssistFunction.GridToCell(item.community_message.y),
                     )
-                    if pos not in self.__bufferState.mapInfo.chargeStationState:
-                        self.__bufferState.mapInfo.chargeStationState[pos] = (
-                            item.chargestation_message.hp
+                    if pos not in self.__bufferState.mapInfo.communityState:
+                        self.__bufferState.mapInfo.communityState[pos] = (
+                            item.community_message.hp
                         )
                         self.__logger.debug("New Community")
                     else:
-                        self.__bufferState.mapInfo.chargeStationState[pos] = (
-                            item.chargestation_message.hp
+                        self.__bufferState.mapInfo.communityState[pos] = (
+                            item.community_message.hp
                         )
                         self.__logger.debug("Update Community")
 
-            elif item.WhichOneof("message_of_obj") == "signaltower_message":
-                if item.signaltower_message.team_id == self.__teamID:
+            elif item.WhichOneof("message_of_obj") == "fort_message":
+                if item.fort_message.team_id == self.__teamID:
                     pos = (
-                        AssistFunction.GridToCell(item.signaltower_message.x),
-                        AssistFunction.GridToCell(item.signaltower_message.y),
+                        AssistFunction.GridToCell(item.fort_message.x),
+                        AssistFunction.GridToCell(item.fort_message.y),
                     )
-                    if pos not in self.__bufferState.mapInfo.signalTowerState:
-                        self.__bufferState.mapInfo.signalTowerState[pos] = (
-                            item.signaltower_message.hp
+                    if pos not in self.__bufferState.mapInfo.fortState:
+                        self.__bufferState.mapInfo.fortState[pos] = (
+                            item.fort_message.hp
                         )
                         self.__logger.debug("New Fort")
                     else:
-                        self.__bufferState.mapInfo.signalTowerState[pos] = (
-                            item.signaltower_message.hp
+                        self.__bufferState.mapInfo.fortState[pos] = (
+                            item.fort_message.hp
                         )
                         self.__logger.debug("Update Fort")
                 elif AssistFunction.HaveView(
                     self.__bufferState.self.viewRange,
                     self.__bufferState.self.x,
                     self.__bufferState.self.y,
-                    item.signaltower_message.x,
-                    item.signaltower_message.y,
+                    item.fort_message.x,
+                    item.fort_message.y,
                     self.__bufferState.gameMap,
                 ):
                     pos = (
-                        AssistFunction.GridToCell(item.signaltower_message.x),
-                        AssistFunction.GridToCell(item.signaltower_message.y),
+                        AssistFunction.GridToCell(item.fort_message.x),
+                        AssistFunction.GridToCell(item.fort_message.y),
                     )
-                    if pos not in self.__bufferState.mapInfo.signalTowerState:
-                        self.__bufferState.mapInfo.signalTowerState[pos] = (
-                            item.signaltower_message.hp
+                    if pos not in self.__bufferState.mapInfo.fortState:
+                        self.__bufferState.mapInfo.fortState[pos] = (
+                            item.fort_message.hp
                         )
                         self.__logger.debug("New Fort")
                     else:
-                        self.__bufferState.mapInfo.signalTowerState[pos] = (
-                            item.signaltower_message.hp
+                        self.__bufferState.mapInfo.fortState[pos] = (
+                            item.fort_message.hp
                         )
                         self.__logger.debug("Update Fort")
 
@@ -633,105 +633,105 @@ class Logic(ILogic):
                         )
                         self.__logger.debug("Load enemy ship")
 
-            elif item.WhichOneof("message_of_obj") == "recyclebank_message":
-                if item.recyclebank_message.team_id == self.__teamID:
+            elif item.WhichOneof("message_of_obj") == "factory_message":
+                if item.factory_message.team_id == self.__teamID:
                     pos = (
-                        AssistFunction.GridToCell(item.recyclebank_message.x),
-                        AssistFunction.GridToCell(item.recyclebank_message.y),
+                        AssistFunction.GridToCell(item.factory_message.x),
+                        AssistFunction.GridToCell(item.factory_message.y),
                     )
-                    if pos not in self.__bufferState.mapInfo.recycleBankState:
-                        self.__bufferState.mapInfo.recycleBankState[pos] = (
-                            item.recyclebank_message.hp
+                    if pos not in self.__bufferState.mapInfo.factoryState:
+                        self.__bufferState.mapInfo.factoryState[pos] = (
+                            item.factory_message.hp
                         )
                         self.__logger.debug("New Factory")
                     else:
-                        self.__bufferState.mapInfo.recycleBankState[pos] = (
-                            item.recyclebank_message.hp
+                        self.__bufferState.mapInfo.factoryState[pos] = (
+                            item.factory_message.hp
                         )
                         self.__logger.debug("Update Factory")
                 elif HaveOverView(
-                    item.recyclebank_message.x, item.recyclebank_message.y
+                    item.factory_message.x, item.factory_message.y
                 ):
                     pos = (
-                        AssistFunction.GridToCell(item.recyclebank_message.x),
-                        AssistFunction.GridToCell(item.recyclebank_message.y),
+                        AssistFunction.GridToCell(item.factory_message.x),
+                        AssistFunction.GridToCell(item.factory_message.y),
                     )
-                    if pos not in self.__bufferState.mapInfo.recycleBankState:
-                        self.__bufferState.mapInfo.recycleBankState[pos] = (
-                            item.recyclebank_message.hp
+                    if pos not in self.__bufferState.mapInfo.factoryState:
+                        self.__bufferState.mapInfo.factoryState[pos] = (
+                            item.factory_message.hp
                         )
                         self.__logger.debug("New Factory")
                     else:
-                        self.__bufferState.mapInfo.recycleBankState[pos] = (
-                            item.recyclebank_message.hp
+                        self.__bufferState.mapInfo.factoryState[pos] = (
+                            item.factory_message.hp
                         )
                         self.__logger.debug("Update Factory")
 
-            elif item.WhichOneof("message_of_obj") == "chargestation_message":
-                if item.chargestation_message.team_id == self.__teamID:
+            elif item.WhichOneof("message_of_obj") == "community_message":
+                if item.community_message.team_id == self.__teamID:
                     pos = (
-                        AssistFunction.GridToCell(item.chargestation_message.x),
-                        AssistFunction.GridToCell(item.chargestation_message.y),
+                        AssistFunction.GridToCell(item.community_message.x),
+                        AssistFunction.GridToCell(item.community_message.y),
                     )
-                    if pos not in self.__bufferState.mapInfo.chargeStationState:
-                        self.__bufferState.mapInfo.chargeStationState[pos] = (
-                            item.chargestation_message.hp
+                    if pos not in self.__bufferState.mapInfo.communityState:
+                        self.__bufferState.mapInfo.communityState[pos] = (
+                            item.community_message.hp
                         )
                         self.__logger.debug("New Community")
                     else:
-                        self.__bufferState.mapInfo.chargeStationState[pos] = (
-                            item.chargestation_message.hp
+                        self.__bufferState.mapInfo.communityState[pos] = (
+                            item.community_message.hp
                         )
                         self.__logger.debug("Update Community")
                 elif HaveOverView(
-                    item.chargestation_message.x, item.chargestation_message.y
+                    item.community_message.x, item.community_message.y
                 ):
                     pos = (
-                        AssistFunction.GridToCell(item.chargestation_message.x),
-                        AssistFunction.GridToCell(item.chargestation_message.y),
+                        AssistFunction.GridToCell(item.community_message.x),
+                        AssistFunction.GridToCell(item.community_message.y),
                     )
-                    if pos not in self.__bufferState.mapInfo.chargeStationState:
-                        self.__bufferState.mapInfo.chargeStationState[pos] = (
-                            item.chargestation_message.hp
+                    if pos not in self.__bufferState.mapInfo.communityState:
+                        self.__bufferState.mapInfo.communityState[pos] = (
+                            item.community_message.hp
                         )
                         self.__logger.debug("New Community")
                     else:
-                        self.__bufferState.mapInfo.chargeStationState[pos] = (
-                            item.chargestation_message.hp
+                        self.__bufferState.mapInfo.communityState[pos] = (
+                            item.community_message.hp
                         )
                         self.__logger.debug("Update Community")
 
-            elif item.WhichOneof("message_of_obj") == "signaltower_message":
-                if item.signaltower_message.team_id == self.__teamID:
+            elif item.WhichOneof("message_of_obj") == "fort_message":
+                if item.fort_message.team_id == self.__teamID:
                     pos = (
-                        AssistFunction.GridToCell(item.signaltower_message.x),
-                        AssistFunction.GridToCell(item.signaltower_message.y),
+                        AssistFunction.GridToCell(item.fort_message.x),
+                        AssistFunction.GridToCell(item.fort_message.y),
                     )
-                    if pos not in self.__bufferState.mapInfo.signalTowerState:
-                        self.__bufferState.mapInfo.signalTowerState[pos] = (
-                            item.signaltower_message.hp
+                    if pos not in self.__bufferState.mapInfo.fortState:
+                        self.__bufferState.mapInfo.fortState[pos] = (
+                            item.fort_message.hp
                         )
                         self.__logger.debug("New Fort")
                     else:
-                        self.__bufferState.mapInfo.signalTowerState[pos] = (
-                            item.signaltower_message.hp
+                        self.__bufferState.mapInfo.fortState[pos] = (
+                            item.fort_message.hp
                         )
                         self.__logger.debug("Update Fort")
                 elif HaveOverView(
-                    item.signaltower_message.x, item.signaltower_message.y
+                    item.fort_message.x, item.fort_message.y
                 ):
                     pos = (
-                        AssistFunction.GridToCell(item.signaltower_message.x),
-                        AssistFunction.GridToCell(item.signaltower_message.y),
+                        AssistFunction.GridToCell(item.fort_message.x),
+                        AssistFunction.GridToCell(item.fort_message.y),
                     )
-                    if pos not in self.__bufferState.mapInfo.signalTowerState:
-                        self.__bufferState.mapInfo.signalTowerState[pos] = (
-                            item.signaltower_message.hp
+                    if pos not in self.__bufferState.mapInfo.fortState:
+                        self.__bufferState.mapInfo.fortState[pos] = (
+                            item.fort_message.hp
                         )
                         self.__logger.debug("New Fort")
                     else:
-                        self.__bufferState.mapInfo.signalTowerState[pos] = (
-                            item.signaltower_message.hp
+                        self.__bufferState.mapInfo.fortState[pos] = (
+                            item.fort_message.hp
                         )
                         self.__logger.debug("Update Fort")
 
