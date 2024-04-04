@@ -94,18 +94,18 @@ namespace Client
         //                    mapPatches_[i, j].BackgroundColor = Colors.Blue; break; //Blue Home
         //                case MapPatchType.Ruin:
         //                    mapPatches_[i, j].BackgroundColor = Colors.Black; break; // Ruin
-        //                case MapPatchType.Grass:
-        //                    mapPatches_[i, j].BackgroundColor = Colors.Gray; break; // Grass
-        //                case MapPatchType.River:
-        //                    mapPatches_[i, j].BackgroundColor = Colors.Brown; break; // River
+        //                case MapPatchType.Shadow:
+        //                    mapPatches_[i, j].BackgroundColor = Colors.Gray; break; // Shadow
+        //                case MapPatchType.Asteroid:
+        //                    mapPatches_[i, j].BackgroundColor = Colors.Brown; break; // Asteroid
         //                case MapPatchType.Resource:
         //                    mapPatches_[i, j].BackgroundColor = Colors.Yellow; break; //Resource
-        //                case MapPatchType.RecycleBank:
+        //                case MapPatchType.Factory:
         //                    mapPatches_[i, j].BackgroundColor = Colors.Orange; break; //Factiry
-        //                case MapPatchType.ChargeStation:
-        //                    mapPatches_[i, j].BackgroundColor = Colors.Chocolate; break; //ChargeStation
-        //                case MapPatchType.SignalTower:
-        //                    mapPatches_[i, j].BackgroundColor = Colors.Azure; break; //SignalTower
+        //                case MapPatchType.Community:
+        //                    mapPatches_[i, j].BackgroundColor = Colors.Chocolate; break; //Community
+        //                case MapPatchType.Fort:
+        //                    mapPatches_[i, j].BackgroundColor = Colors.Azure; break; //Fort
         //                default:
         //                    break;
         //            }
@@ -118,18 +118,18 @@ namespace Client
         //{
         //    resourceArray = new Label[countMap[(int)MapPatchType.Resource]];
         //    resourcePositionIndex = new (int x, int y)[countMap[(int)MapPatchType.Resource]];
-        //    RecycleBankArray = new Label[countMap[(int)MapPatchType.RecycleBank]];
-        //    RecycleBankPositionIndex = new (int x, int y)[countMap[(int)MapPatchType.RecycleBank]];
-        //    ChargeStationArray = new Label[countMap[(int)MapPatchType.ChargeStation]];
-        //    ChargeStationPositionIndex = new (int x, int y)[countMap[(int)MapPatchType.ChargeStation]];
-        //    signaltowerArray = new Label[countMap[(int)MapPatchType.SignalTower]];
-        //    signaltowerPositionIndex = new (int x, int y)[countMap[(int)MapPatchType.SignalTower]];
+        //    FactoryArray = new Label[countMap[(int)MapPatchType.Factory]];
+        //    FactoryPositionIndex = new (int x, int y)[countMap[(int)MapPatchType.Factory]];
+        //    CommunityArray = new Label[countMap[(int)MapPatchType.Community]];
+        //    CommunityPositionIndex = new (int x, int y)[countMap[(int)MapPatchType.Community]];
+        //    FortArray = new Label[countMap[(int)MapPatchType.Fort]];
+        //    FortPositionIndex = new (int x, int y)[countMap[(int)MapPatchType.Fort]];
 
 
         //    int counterOfResource = 0;
-        //    int counterOfRecycleBank = 0;
-        //    int counterOfChargeStation = 0;
-        //    int counterOfSignalTower = 0;
+        //    int counterOfFactory = 0;
+        //    int counterOfCommunity = 0;
+        //    int counterOfFort = 0;
 
 
         //    int[,] todrawMap;
@@ -155,10 +155,10 @@ namespace Client
         //                    mapPatches[i, j].Color = Colors.Blue; break; //Blue Home
         //                case MapPatchType.Ruin:
         //                    mapPatches[i, j].Color = Colors.Black; break; // Ruin
-        //                case MapPatchType.Grass:
-        //                    mapPatches[i, j].Color = Colors.Gray; break; // Grass
-        //                case MapPatchType.River:
-        //                    mapPatches[i, j].Color = Colors.Brown; break; // River
+        //                case MapPatchType.Shadow:
+        //                    mapPatches[i, j].Color = Colors.Gray; break; // Shadow
+        //                case MapPatchType.Asteroid:
+        //                    mapPatches[i, j].Color = Colors.Brown; break; // Asteroid
         //                case MapPatchType.Resource:
         //                    mapPatches[i, j].Color = Colors.Yellow; //Resource
         //                    resourcePositionIndex[counterOfResource] = (i, j);
@@ -177,10 +177,10 @@ namespace Client
         //                    counterOfResource++;
         //                    break;
 
-        //                case MapPatchType.RecycleBank:
-        //                    mapPatches[i, j].Color = Colors.Orange; //RecycleBank
-        //                    RecycleBankPositionIndex[counterOfRecycleBank] = (i, j);
-        //                    RecycleBankArray[counterOfRecycleBank] = new Label()
+        //                case MapPatchType.Factory:
+        //                    mapPatches[i, j].Color = Colors.Orange; //Factory
+        //                    FactoryPositionIndex[counterOfFactory] = (i, j);
+        //                    FactoryArray[counterOfFactory] = new Label()
         //                    {
         //                        FontSize = unitFontSize,
         //                        WidthRequest = unitWidth,
@@ -192,13 +192,13 @@ namespace Client
         //                        VerticalTextAlignment = TextAlignment.Center,
         //                        BackgroundColor = Colors.Transparent
         //                    };
-        //                    counterOfRecycleBank++;
+        //                    counterOfFactory++;
         //                    break;
 
-        //                case MapPatchType.ChargeStation:
-        //                    mapPatches[i, j].Color = Colors.Chocolate; //ChargeStation
-        //                    RecycleBankPositionIndex[counterOfChargeStation] = (i, j);
-        //                    RecycleBankArray[counterOfChargeStation] = new Label()
+        //                case MapPatchType.Community:
+        //                    mapPatches[i, j].Color = Colors.Chocolate; //Community
+        //                    FactoryPositionIndex[counterOfCommunity] = (i, j);
+        //                    FactoryArray[counterOfCommunity] = new Label()
         //                    {
         //                        FontSize = unitFontSize,
         //                        WidthRequest = unitWidth,
@@ -210,13 +210,13 @@ namespace Client
         //                        VerticalTextAlignment = TextAlignment.Center,
         //                        BackgroundColor = Colors.Transparent
         //                    };
-        //                    counterOfChargeStation++;
+        //                    counterOfCommunity++;
         //                    break;
 
-        //                case MapPatchType.SignalTower:
-        //                    mapPatches[i, j].Color = Colors.Azure; //SignalTower
-        //                    RecycleBankPositionIndex[counterOfSignalTower] = (i, j);
-        //                    RecycleBankArray[counterOfSignalTower] = new Label()
+        //                case MapPatchType.Fort:
+        //                    mapPatches[i, j].Color = Colors.Azure; //Fort
+        //                    FactoryPositionIndex[counterOfFort] = (i, j);
+        //                    FactoryArray[counterOfFort] = new Label()
         //                    {
         //                        FontSize = unitFontSize,
         //                        WidthRequest = unitWidth,
@@ -228,7 +228,7 @@ namespace Client
         //                        VerticalTextAlignment = TextAlignment.Center,
         //                        BackgroundColor = Colors.Transparent
         //                    };
-        //                    counterOfSignalTower++;
+        //                    counterOfFort++;
         //                    break;
 
         //                default:
@@ -248,7 +248,7 @@ namespace Client
         //        {
         //            lock (drawPicLock)
         //            {
-        //                listOfSweeper.Clear();
+        //                listOfShip.Clear();
         //                //listOfBuilding.Clear();
         //                listOfBullet.Clear();
         //                listOfResource.Clear();
@@ -264,8 +264,8 @@ namespace Client
         //                        {
         //                            switch (obj.MessageOfObjCase)
         //                            {
-        //                                case MessageOfObj.MessageOfObjOneofCase.SweeperMessage:
-        //                                    listOfSweeper.Add(obj.SweeperMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.ShipMessage:
+        //                                    listOfShip.Add(obj.ShipMessage);
         //                                    break;
 
         //                                //case MessageOfObj.MessageOfObjOneofCase.BuildingMessage:
@@ -280,20 +280,20 @@ namespace Client
         //                                    listOfBombedBullet.Add(obj.BombedBulletMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
-        //                                    listOfRecycleBank.Add(obj.RecyclebankMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
+        //                                    listOfFactory.Add(obj.FactoryMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
-        //                                    listOfChargeStation.Add(obj.ChargestationMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
+        //                                    listOfCommunity.Add(obj.CommunityMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
-        //                                    listOfSignalTower.Add(obj.SignaltowerMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.FortMessage:
+        //                                    listOfFort.Add(obj.FortMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
-        //                                    listOfResource.Add(obj.GarbageMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
+        //                                    listOfResource.Add(obj.ResourceMessage);
         //                                    break;
 
         //                                case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
@@ -308,9 +308,9 @@ namespace Client
         //                        listOfAll.Add(content.AllMessage);
         //                        countMap.Clear();
         //                        countMap.Add((int)MapPatchType.Resource, listOfResource.Count);
-        //                        countMap.Add((int)MapPatchType.RecycleBank, listOfRecycleBank.Count);
-        //                        countMap.Add((int)MapPatchType.ChargeStation, listOfChargeStation.Count);
-        //                        countMap.Add((int)MapPatchType.SignalTower, listOfSignalTower.Count);
+        //                        countMap.Add((int)MapPatchType.Factory, listOfFactory.Count);
+        //                        countMap.Add((int)MapPatchType.Community, listOfCommunity.Count);
+        //                        countMap.Add((int)MapPatchType.Fort, listOfFort.Count);
         //                        //countMap.Add((int)MapPatchType.Building, listOfBuilding.Count);
         //                        GetMap(mapMassage);
         //                        break;
@@ -319,20 +319,20 @@ namespace Client
         //                        {
         //                            switch (obj.MessageOfObjCase)
         //                            {
-        //                                case MessageOfObj.MessageOfObjOneofCase.SweeperMessage:
-        //                                    listOfSweeper.Add(obj.SweeperMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.ShipMessage:
+        //                                    listOfShip.Add(obj.ShipMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
-        //                                    listOfRecycleBank.Add(obj.RecyclebankMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
+        //                                    listOfFactory.Add(obj.FactoryMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
-        //                                    listOfChargeStation.Add(obj.ChargestationMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
+        //                                    listOfCommunity.Add(obj.CommunityMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
-        //                                    listOfSignalTower.Add(obj.SignaltowerMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.FortMessage:
+        //                                    listOfFort.Add(obj.FortMessage);
         //                                    break;
 
         //                                //case MessageOfObj.MessageOfObjOneofCase.BuildingMessage:
@@ -347,8 +347,8 @@ namespace Client
         //                                    listOfBombedBullet.Add(obj.BombedBulletMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
-        //                                    listOfResource.Add(obj.GarbageMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
+        //                                    listOfResource.Add(obj.ResourceMessage);
         //                                    break;
 
         //                                case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
@@ -366,9 +366,9 @@ namespace Client
         //                        {
         //                            countMap.Clear();
         //                            countMap.Add((int)MapPatchType.Resource, listOfResource.Count);
-        //                            countMap.Add((int)MapPatchType.RecycleBank, listOfRecycleBank.Count);
-        //                            countMap.Add((int)MapPatchType.ChargeStation, listOfChargeStation.Count);
-        //                            countMap.Add((int)MapPatchType.SignalTower, listOfSignalTower.Count);
+        //                            countMap.Add((int)MapPatchType.Factory, listOfFactory.Count);
+        //                            countMap.Add((int)MapPatchType.Community, listOfCommunity.Count);
+        //                            countMap.Add((int)MapPatchType.Fort, listOfFort.Count);
         //                            GetMap(mapMassage);
         //                            mapMessageExist = false;
         //                        }
@@ -380,24 +380,24 @@ namespace Client
         //                        {
         //                            switch (obj.MessageOfObjCase)
         //                            {
-        //                                case MessageOfObj.MessageOfObjOneofCase.SweeperMessage:
-        //                                    listOfSweeper.Add(obj.SweeperMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.ShipMessage:
+        //                                    listOfShip.Add(obj.ShipMessage);
         //                                    break;
 
         //                                //case MessageOfObj.MessageOfObjOneofCase.BuildingMessage:
         //                                //    listOfBuilding.Add(obj.BuildingMessage);
         //                                //    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
-        //                                    listOfRecycleBank.Add(obj.RecyclebankMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
+        //                                    listOfFactory.Add(obj.FactoryMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
-        //                                    listOfChargeStation.Add(obj.ChargestationMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
+        //                                    listOfCommunity.Add(obj.CommunityMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
-        //                                    listOfSignalTower.Add(obj.SignaltowerMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.FortMessage:
+        //                                    listOfFort.Add(obj.FortMessage);
         //                                    break;
 
         //                                case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
@@ -408,8 +408,8 @@ namespace Client
         //                                    listOfBombedBullet.Add(obj.BombedBulletMessage);
         //                                    break;
 
-        //                                case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
-        //                                    listOfResource.Add(obj.GarbageMessage);
+        //                                case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
+        //                                    listOfResource.Add(obj.ResourceMessage);
         //                                    break;
 
         //                                case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
@@ -440,7 +440,7 @@ namespace Client
         //    }
         //}
 
-        //private int FindIndexOfResource(MessageOfGarbage obj)
+        //private int FindIndexOfResource(MessageOfResource obj)
         //{
         //    for (int i = 0; i < listOfResource.Count; i++)
         //    {
@@ -452,11 +452,11 @@ namespace Client
         //    return -1;
         //}
 
-        //private int FindIndexOfRecycleBank(MessageOfRecycleBank obj)
+        //private int FindIndexOfFactory(MessageOfFactory obj)
         //{
-        //    for (int i = 0; i < listOfRecycleBank.Count; i++)
+        //    for (int i = 0; i < listOfFactory.Count; i++)
         //    {
-        //        if (RecycleBankPositionIndex[i].x == obj.X && RecycleBankPositionIndex[i].y == obj.Y)
+        //        if (FactoryPositionIndex[i].x == obj.X && FactoryPositionIndex[i].y == obj.Y)
         //        {
         //            return i;
         //        }
@@ -464,11 +464,11 @@ namespace Client
         //    return -1;
         //}
 
-        //private int FindIndexOfChargeStation(MessageOfChargeStation obj)
+        //private int FindIndexOfCommunity(MessageOfCommunity obj)
         //{
-        //    for (int i = 0; i < listOfChargeStation.Count; i++)
+        //    for (int i = 0; i < listOfCommunity.Count; i++)
         //    {
-        //        if (ChargeStationPositionIndex[i].x == obj.X && ChargeStationPositionIndex[i].y == obj.Y)
+        //        if (CommunityPositionIndex[i].x == obj.X && CommunityPositionIndex[i].y == obj.Y)
         //        {
         //            return i;
         //        }
@@ -476,11 +476,11 @@ namespace Client
         //    return -1;
         //}
 
-        //private int FindIndexOfSignalTower(MessageOfSignalTower obj)
+        //private int FindIndexOfFort(MessageOfFort obj)
         //{
-        //    for (int i = 0; i < listOfSignalTower.Count; i++)
+        //    for (int i = 0; i < listOfFort.Count; i++)
         //    {
-        //        if (signaltowerPositionIndex[i].x == obj.X && signaltowerPositionIndex[i].y == obj.Y)
+        //        if (FortPositionIndex[i].x == obj.X && FortPositionIndex[i].y == obj.Y)
         //        {
         //            return i;
         //        }
@@ -544,18 +544,18 @@ namespace Client
                         //{
                         //    DrawResource(data);
                         //}
-                        ////foreach (var data in listOfSweeper)
+                        ////foreach (var data in listOfShip)
                         //{
                         //    if (data.TeamId == (long)PlayerTeam.Red)
                         //    {
-                        //        redPlayer.SetSweeperValue(data);
+                        //        redPlayer.SetShipValue(data);
                         //    }
                         //    else
                         //    {
-                        //        bluePlayer.SetSweeperValue(data);
+                        //        bluePlayer.SetShipValue(data);
                         //    }
                         //    // TODO: Dynamic change the ships' label
-                        //    DrawSweeper(data);
+                        //    DrawShip(data);
                         //}
                     }
                 }
@@ -587,46 +587,46 @@ namespace Client
         //    //MapGrid.Children.Add(iconOfHome);
         //}
 
-        //private void DrawRecycleBank(MessageOfRecycleBank data)
+        //private void DrawFactory(MessageOfFactory data)
         //{
         //    int hp = data.Hp;
         //    //TODO: calculate the percentage of Hp
-        //    int idx = FindIndexOfRecycleBank(data);
-        //    RecycleBankArray[idx].FontSize = unitFontSize;
-        //    RecycleBankArray[idx].WidthRequest = unitWidth;
-        //    RecycleBankArray[idx].HeightRequest = unitHeight;
-        //    RecycleBankArray[idx].Text = Convert.ToString(hp);
-        //    RecycleBankArray[idx].Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0);
-        //    RecycleBankArray[idx].BackgroundColor = Colors.Chocolate;
-        //    //MapGrid.Children.Add(RecycleBankArray[idx]);
+        //    int idx = FindIndexOfFactory(data);
+        //    FactoryArray[idx].FontSize = unitFontSize;
+        //    FactoryArray[idx].WidthRequest = unitWidth;
+        //    FactoryArray[idx].HeightRequest = unitHeight;
+        //    FactoryArray[idx].Text = Convert.ToString(hp);
+        //    FactoryArray[idx].Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0);
+        //    FactoryArray[idx].BackgroundColor = Colors.Chocolate;
+        //    //MapGrid.Children.Add(FactoryArray[idx]);
         //}
 
-        //private void DrawChargeStation(MessageOfChargeStation data)
+        //private void DrawCommunity(MessageOfCommunity data)
         //{
         //    int hp = data.Hp;
         //    //TODO: calculate the percentage of Hp
-        //    int idx = FindIndexOfChargeStation(data);
-        //    ChargeStationArray[idx].FontSize = unitFontSize;
-        //    ChargeStationArray[idx].WidthRequest = unitWidth;
-        //    ChargeStationArray[idx].HeightRequest = unitHeight;
-        //    ChargeStationArray[idx].Text = Convert.ToString(hp);
-        //    ChargeStationArray[idx].Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0);
-        //    ChargeStationArray[idx].BackgroundColor = Colors.Green;
-        //    //MapGrid.Children.Add(ChargeStationArray[idx]);
+        //    int idx = FindIndexOfCommunity(data);
+        //    CommunityArray[idx].FontSize = unitFontSize;
+        //    CommunityArray[idx].WidthRequest = unitWidth;
+        //    CommunityArray[idx].HeightRequest = unitHeight;
+        //    CommunityArray[idx].Text = Convert.ToString(hp);
+        //    CommunityArray[idx].Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0);
+        //    CommunityArray[idx].BackgroundColor = Colors.Green;
+        //    //MapGrid.Children.Add(CommunityArray[idx]);
         //}
 
-        //private void DrawSignalTower(MessageOfSignalTower data)
+        //private void DrawFort(MessageOfFort data)
         //{
         //    int hp = data.Hp;
         //    //TODO: calculate the percentage of Hp
-        //    int idx = FindIndexOfSignalTower(data);
-        //    signaltowerArray[idx].FontSize = unitFontSize;
-        //    signaltowerArray[idx].WidthRequest = unitWidth;
-        //    signaltowerArray[idx].HeightRequest = unitHeight;
-        //    signaltowerArray[idx].Text = Convert.ToString(hp);
-        //    signaltowerArray[idx].Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0);
-        //    signaltowerArray[idx].BackgroundColor = Colors.Azure;
-        //    //MapGrid.Children.Add(signaltowerArray[idx]);
+        //    int idx = FindIndexOfFort(data);
+        //    FortArray[idx].FontSize = unitFontSize;
+        //    FortArray[idx].WidthRequest = unitWidth;
+        //    FortArray[idx].HeightRequest = unitHeight;
+        //    FortArray[idx].Text = Convert.ToString(hp);
+        //    FortArray[idx].Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0);
+        //    FortArray[idx].BackgroundColor = Colors.Azure;
+        //    //MapGrid.Children.Add(FortArray[idx]);
         //}
         //private void DrawBullet(MessageOfBullet data)
         //{
@@ -686,7 +686,7 @@ namespace Client
         //    //MapGrid.Children.Add(iconOfBombedBullet);
         //}
 
-        //private void DrawResource(MessageOfGarbage data)
+        //private void DrawResource(MessageOfResource data)
         //{
         //    int idx = FindIndexOfResource(data);
         //    resourceArray[idx].FontSize = unitFontSize;
@@ -697,9 +697,9 @@ namespace Client
         //    //MapGrid.Children.Add(resourceArray[idx]);
         //}
 
-        //private void DrawSweeper(MessgaeOfSweeper data)
+        //private void DrawShip(MessgaeOfShip data)
         //{
-        //    //Ellipse iconOfSweeper = new()
+        //    //Ellipse iconOfShip = new()
         //    //{
         //    //    WidthRequest = 2 * characterRadiusTimes * unitWidth,
         //    //    HeightRequest = 2 * characterRadiusTimes * unitHeight,
@@ -708,12 +708,12 @@ namespace Client
         //    //    Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0),
         //    //    Fill = (data.TeamId == (long)PlayerTeam.Red) ? Colors.Red : Colors.Blue
         //    //};
-        //    Label nameOfSweeper = new()
+        //    Label nameOfShip = new()
         //    {
         //        FontSize = unitFontSize,
         //        WidthRequest = unitWidth,
         //        HeightRequest = unitHeight,
-        //        Text = data.SweeperType.ToString()[0] + data.PlayerId.ToString(),
+        //        Text = data.ShipType.ToString()[0] + data.PlayerId.ToString(),
         //        HorizontalOptions = LayoutOptions.Start,
         //        VerticalOptions = LayoutOptions.Start,
         //        HorizontalTextAlignment = TextAlignment.Center,
@@ -721,8 +721,8 @@ namespace Client
         //        BackgroundColor = Colors.Transparent,
         //        Margin = new Thickness(unitHeight * data.Y / 1000.0 - unitWidth * characterRadiusTimes, unitWidth * data.X / 1000.0 - unitWidth * characterRadiusTimes, 0, 0)
         //    };
-        //    //MapGrid.Children.Add(iconOfSweeper);
-        //    //MapGrid.Children.Add(nameOfSweeper);
+        //    //MapGrid.Children.Add(iconOfShip);
+        //    //MapGrid.Children.Add(nameOfShip);
         //}
 
 

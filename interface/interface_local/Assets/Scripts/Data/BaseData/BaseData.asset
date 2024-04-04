@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3fccf85858e7d04cb05b8405220282d, type: 3}
+  m_Name: BaseData
+  m_EditorClassIdentifier: 
+  maxShipNum:
+    civilShipNum: 2
+    militaryShipNum: 2
+    flagShipNum: 1
+  initialShipNum:
+    civilShipNum: 0
+    militaryShipNum: 0
+    flagShipNum: 0
+  maxTotalShipNum: 4
+  initialEco: 400
