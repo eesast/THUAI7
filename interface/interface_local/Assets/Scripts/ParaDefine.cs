@@ -9,7 +9,7 @@ public class ParaDefine : SingletonMono<ParaDefine>
     public ProducerData producer1Data, producer2Data, producer3Data;
     public ConstructorData constructor1Data, constructor2Data, constructor3Data;
     public ShipData civilShipData, militaryShipData, flagShipData;
-    public ConstructionData factoryData, communitytData, fortData;
+    public ConstructionData factoryData, communityData, fortData;
     public BaseData baseData;
     [Serializable]
     public class litColorSetting

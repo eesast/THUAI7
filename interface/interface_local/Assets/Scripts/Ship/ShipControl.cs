@@ -100,6 +100,56 @@ public class ShipControl : MonoBehaviour
                     }
                 }
                 break;
+            case InteractControl.InteractOption.ConstructCommunity:
+                for (int i = 0; i < PlaceManager.GetInstance().emptyConstruction.Count; i++)
+                {
+                    if (Tool.GetInstance().CheckBeside(transform.position, PlaceManager.GetInstance().emptyConstruction[i]))
+                    {
+                        obj = ObjCreater.GetInstance().CreateObj(ConstructionType.COMMUNITY,
+                            PlaceManager.GetInstance().emptyConstruction[i]);
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.playerTeam = messageOfShip.playerTeam;
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.x = (int)PlaceManager.GetInstance().emptyConstruction[i].x;
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.y = (int)PlaceManager.GetInstance().emptyConstruction[i].y;
+                        PlaceManager.GetInstance().emptyConstruction.Remove(PlaceManager.GetInstance().emptyConstruction[i]);
+                        PlaceManager.GetInstance().community.Add(obj.GetComponent<ConstructionControl>());
+                    }
+                }
+                foreach (ConstructionControl community in PlaceManager.GetInstance().community)
+                {
+                    if (community.messageOfConstruction.playerTeam == messageOfShip.playerTeam &&
+                    community.messageOfConstruction.hp < ParaDefine.GetInstance().communityData.hpMax &&
+                    Tool.GetInstance().CheckBeside(transform.position, new Vector2(community.messageOfConstruction.x, community.messageOfConstruction.y)))
+                    {
+                        if (messageOfShip.shipState != ShipState.CONSTRUCTING)
+                            Construct(community);
+                    }
+                }
+                break;
+            case InteractControl.InteractOption.ConstructFort:
+                for (int i = 0; i < PlaceManager.GetInstance().emptyConstruction.Count; i++)
+                {
+                    if (Tool.GetInstance().CheckBeside(transform.position, PlaceManager.GetInstance().emptyConstruction[i]))
+                    {
+                        obj = ObjCreater.GetInstance().CreateObj(ConstructionType.FORT,
+                            PlaceManager.GetInstance().emptyConstruction[i]);
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.playerTeam = messageOfShip.playerTeam;
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.x = (int)PlaceManager.GetInstance().emptyConstruction[i].x;
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.y = (int)PlaceManager.GetInstance().emptyConstruction[i].y;
+                        PlaceManager.GetInstance().emptyConstruction.Remove(PlaceManager.GetInstance().emptyConstruction[i]);
+                        PlaceManager.GetInstance().fort.Add(obj.GetComponent<ConstructionControl>());
+                    }
+                }
+                foreach (ConstructionControl fort in PlaceManager.GetInstance().fort)
+                {
+                    if (fort.messageOfConstruction.playerTeam == messageOfShip.playerTeam &&
+                    fort.messageOfConstruction.hp < ParaDefine.GetInstance().fortData.hpMax &&
+                    Tool.GetInstance().CheckBeside(transform.position, new Vector2(fort.messageOfConstruction.x, fort.messageOfConstruction.y)))
+                    {
+                        if (messageOfShip.shipState != ShipState.CONSTRUCTING)
+                            Construct(fort);
+                    }
+                }
+                break;
             default:
                 break;
         }
