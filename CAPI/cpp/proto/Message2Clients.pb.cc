@@ -22,28 +22,28 @@ namespace _pbi = _pb::internal;
 
 namespace protobuf
 {
-    PROTOBUF_CONSTEXPR MessageOfSweeper::MessageOfSweeper(
+    PROTOBUF_CONSTEXPR MessageOfShip::MessageOfShip(
         ::_pbi::ConstantInitialized
     ) :
         _impl_{
-            /*decltype(_impl_.x_)*/ 0, /*decltype(_impl_.y_)*/ 0, /*decltype(_impl_.speed_)*/ 0, /*decltype(_impl_.hp_)*/ 0, /*decltype(_impl_.armor_)*/ 0, /*decltype(_impl_.shield_)*/ 0, /*decltype(_impl_.team_id_)*/ int64_t{0}, /*decltype(_impl_.player_id_)*/ int64_t{0}, /*decltype(_impl_.guid_)*/ int64_t{0}, /*decltype(_impl_.sweeper_state_)*/ 0, /*decltype(_impl_.sweeper_type_)*/ 0, /*decltype(_impl_.view_range_)*/ 0, /*decltype(_impl_.producer_type_)*/ 0, /*decltype(_impl_.constructor_type_)*/ 0, /*decltype(_impl_.armor_type_)*/ 0, /*decltype(_impl_.shield_type_)*/ 0, /*decltype(_impl_.weapon_type_)*/ 0, /*decltype(_impl_.facing_direction_)*/ 0, /*decltype(_impl_._cached_size_)*/ {}}
+            /*decltype(_impl_.x_)*/ 0, /*decltype(_impl_.y_)*/ 0, /*decltype(_impl_.speed_)*/ 0, /*decltype(_impl_.hp_)*/ 0, /*decltype(_impl_.armor_)*/ 0, /*decltype(_impl_.shield_)*/ 0, /*decltype(_impl_.team_id_)*/ int64_t{0}, /*decltype(_impl_.player_id_)*/ int64_t{0}, /*decltype(_impl_.guid_)*/ int64_t{0}, /*decltype(_impl_.ship_state_)*/ 0, /*decltype(_impl_.ship_type_)*/ 0, /*decltype(_impl_.view_range_)*/ 0, /*decltype(_impl_.producer_type_)*/ 0, /*decltype(_impl_.constructor_type_)*/ 0, /*decltype(_impl_.armor_type_)*/ 0, /*decltype(_impl_.shield_type_)*/ 0, /*decltype(_impl_.weapon_type_)*/ 0, /*decltype(_impl_.facing_direction_)*/ 0, /*decltype(_impl_._cached_size_)*/ {}}
     {
     }
-    struct MessageOfSweeperDefaultTypeInternal
+    struct MessageOfShipDefaultTypeInternal
     {
-        PROTOBUF_CONSTEXPR MessageOfSweeperDefaultTypeInternal() :
+        PROTOBUF_CONSTEXPR MessageOfShipDefaultTypeInternal() :
             _instance(::_pbi::ConstantInitialized{})
         {
         }
-        ~MessageOfSweeperDefaultTypeInternal()
+        ~MessageOfShipDefaultTypeInternal()
         {
         }
         union
         {
-            MessageOfSweeper _instance;
+            MessageOfShip _instance;
         };
     };
-    PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MessageOfSweeperDefaultTypeInternal _MessageOfSweeper_default_instance_;
+    PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MessageOfShipDefaultTypeInternal _MessageOfShip_default_instance_;
     PROTOBUF_CONSTEXPR MessageOfBullet::MessageOfBullet(
         ::_pbi::ConstantInitialized
     ) :
@@ -88,116 +88,116 @@ namespace protobuf
         };
     };
     PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MessageOfBombedBulletDefaultTypeInternal _MessageOfBombedBullet_default_instance_;
-    PROTOBUF_CONSTEXPR MessageOfRecycleBank::MessageOfRecycleBank(
+    PROTOBUF_CONSTEXPR MessageOfFactory::MessageOfFactory(
         ::_pbi::ConstantInitialized
     ) :
         _impl_{
             /*decltype(_impl_.x_)*/ 0, /*decltype(_impl_.y_)*/ 0, /*decltype(_impl_.team_id_)*/ int64_t{0}, /*decltype(_impl_.hp_)*/ 0, /*decltype(_impl_._cached_size_)*/ {}}
     {
     }
-    struct MessageOfRecycleBankDefaultTypeInternal
+    struct MessageOfFactoryDefaultTypeInternal
     {
-        PROTOBUF_CONSTEXPR MessageOfRecycleBankDefaultTypeInternal() :
+        PROTOBUF_CONSTEXPR MessageOfFactoryDefaultTypeInternal() :
             _instance(::_pbi::ConstantInitialized{})
         {
         }
-        ~MessageOfRecycleBankDefaultTypeInternal()
+        ~MessageOfFactoryDefaultTypeInternal()
         {
         }
         union
         {
-            MessageOfRecycleBank _instance;
+            MessageOfFactory _instance;
         };
     };
-    PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MessageOfRecycleBankDefaultTypeInternal _MessageOfRecycleBank_default_instance_;
-    PROTOBUF_CONSTEXPR MessageOfChargeStation::MessageOfChargeStation(
+    PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MessageOfFactoryDefaultTypeInternal _MessageOfFactory_default_instance_;
+    PROTOBUF_CONSTEXPR MessageOfCommunity::MessageOfCommunity(
         ::_pbi::ConstantInitialized
     ) :
         _impl_{
             /*decltype(_impl_.x_)*/ 0, /*decltype(_impl_.y_)*/ 0, /*decltype(_impl_.team_id_)*/ int64_t{0}, /*decltype(_impl_.hp_)*/ 0, /*decltype(_impl_._cached_size_)*/ {}}
     {
     }
-    struct MessageOfChargeStationDefaultTypeInternal
+    struct MessageOfCommunityDefaultTypeInternal
     {
-        PROTOBUF_CONSTEXPR MessageOfChargeStationDefaultTypeInternal() :
+        PROTOBUF_CONSTEXPR MessageOfCommunityDefaultTypeInternal() :
             _instance(::_pbi::ConstantInitialized{})
         {
         }
-        ~MessageOfChargeStationDefaultTypeInternal()
+        ~MessageOfCommunityDefaultTypeInternal()
         {
         }
         union
         {
-            MessageOfChargeStation _instance;
+            MessageOfCommunity _instance;
         };
     };
-    PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MessageOfChargeStationDefaultTypeInternal _MessageOfChargeStation_default_instance_;
-    PROTOBUF_CONSTEXPR MessageOfSignalTower::MessageOfSignalTower(
+    PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MessageOfCommunityDefaultTypeInternal _MessageOfCommunity_default_instance_;
+    PROTOBUF_CONSTEXPR MessageOfFort::MessageOfFort(
         ::_pbi::ConstantInitialized
     ) :
         _impl_{
             /*decltype(_impl_.x_)*/ 0, /*decltype(_impl_.y_)*/ 0, /*decltype(_impl_.team_id_)*/ int64_t{0}, /*decltype(_impl_.hp_)*/ 0, /*decltype(_impl_._cached_size_)*/ {}}
     {
     }
-    struct MessageOfSignalTowerDefaultTypeInternal
+    struct MessageOfFortDefaultTypeInternal
     {
-        PROTOBUF_CONSTEXPR MessageOfSignalTowerDefaultTypeInternal() :
+        PROTOBUF_CONSTEXPR MessageOfFortDefaultTypeInternal() :
             _instance(::_pbi::ConstantInitialized{})
         {
         }
-        ~MessageOfSignalTowerDefaultTypeInternal()
+        ~MessageOfFortDefaultTypeInternal()
         {
         }
         union
         {
-            MessageOfSignalTower _instance;
+            MessageOfFort _instance;
         };
     };
-    PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MessageOfSignalTowerDefaultTypeInternal _MessageOfSignalTower_default_instance_;
-    PROTOBUF_CONSTEXPR MessageOfBridge::MessageOfBridge(
+    PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MessageOfFortDefaultTypeInternal _MessageOfFort_default_instance_;
+    PROTOBUF_CONSTEXPR MessageOfWormhole::MessageOfWormhole(
         ::_pbi::ConstantInitialized
     ) :
         _impl_{
             /*decltype(_impl_.x_)*/ 0, /*decltype(_impl_.y_)*/ 0, /*decltype(_impl_.hp_)*/ 0, /*decltype(_impl_._cached_size_)*/ {}}
     {
     }
-    struct MessageOfBridgeDefaultTypeInternal
+    struct MessageOfWormholeDefaultTypeInternal
     {
-        PROTOBUF_CONSTEXPR MessageOfBridgeDefaultTypeInternal() :
+        PROTOBUF_CONSTEXPR MessageOfWormholeDefaultTypeInternal() :
             _instance(::_pbi::ConstantInitialized{})
         {
         }
-        ~MessageOfBridgeDefaultTypeInternal()
+        ~MessageOfWormholeDefaultTypeInternal()
         {
         }
         union
         {
-            MessageOfBridge _instance;
+            MessageOfWormhole _instance;
         };
     };
-    PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MessageOfBridgeDefaultTypeInternal _MessageOfBridge_default_instance_;
-    PROTOBUF_CONSTEXPR MessageOfGarbage::MessageOfGarbage(
+    PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MessageOfWormholeDefaultTypeInternal _MessageOfWormhole_default_instance_;
+    PROTOBUF_CONSTEXPR MessageOfResource::MessageOfResource(
         ::_pbi::ConstantInitialized
     ) :
         _impl_{
             /*decltype(_impl_.x_)*/ 0, /*decltype(_impl_.y_)*/ 0, /*decltype(_impl_.progress_)*/ 0, /*decltype(_impl_._cached_size_)*/ {}}
     {
     }
-    struct MessageOfGarbageDefaultTypeInternal
+    struct MessageOfResourceDefaultTypeInternal
     {
-        PROTOBUF_CONSTEXPR MessageOfGarbageDefaultTypeInternal() :
+        PROTOBUF_CONSTEXPR MessageOfResourceDefaultTypeInternal() :
             _instance(::_pbi::ConstantInitialized{})
         {
         }
-        ~MessageOfGarbageDefaultTypeInternal()
+        ~MessageOfResourceDefaultTypeInternal()
         {
         }
         union
         {
-            MessageOfGarbage _instance;
+            MessageOfResource _instance;
         };
     };
-    PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MessageOfGarbageDefaultTypeInternal _MessageOfGarbage_default_instance_;
+    PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 MessageOfResourceDefaultTypeInternal _MessageOfResource_default_instance_;
     PROTOBUF_CONSTEXPR MessageOfHome::MessageOfHome(
         ::_pbi::ConstantInitialized
     ) :
@@ -396,28 +396,28 @@ namespace protobuf
         };
     };
     PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 BoolResDefaultTypeInternal _BoolRes_default_instance_;
-    PROTOBUF_CONSTEXPR SweeperInfoRes::SweeperInfoRes(
+    PROTOBUF_CONSTEXPR ShipInfoRes::ShipInfoRes(
         ::_pbi::ConstantInitialized
     ) :
         _impl_{
-            /*decltype(_impl_.sweeper_info_)*/ {}, /*decltype(_impl_._cached_size_)*/ {}}
+            /*decltype(_impl_.ship_info_)*/ {}, /*decltype(_impl_._cached_size_)*/ {}}
     {
     }
-    struct SweeperInfoResDefaultTypeInternal
+    struct ShipInfoResDefaultTypeInternal
     {
-        PROTOBUF_CONSTEXPR SweeperInfoResDefaultTypeInternal() :
+        PROTOBUF_CONSTEXPR ShipInfoResDefaultTypeInternal() :
             _instance(::_pbi::ConstantInitialized{})
         {
         }
-        ~SweeperInfoResDefaultTypeInternal()
+        ~ShipInfoResDefaultTypeInternal()
         {
         }
         union
         {
-            SweeperInfoRes _instance;
+            ShipInfoRes _instance;
         };
     };
-    PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SweeperInfoResDefaultTypeInternal _SweeperInfoRes_default_instance_;
+    PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ShipInfoResDefaultTypeInternal _ShipInfoRes_default_instance_;
     PROTOBUF_CONSTEXPR EcoRes::EcoRes(
         ::_pbi::ConstantInitialized
     ) :
@@ -469,29 +469,29 @@ static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors
 
 const uint32_t TableStruct_Message2Clients_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
     ~0u,  // no _has_bits_
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSweeper, _internal_metadata_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfShip, _internal_metadata_),
     ~0u,  // no _extensions_
     ~0u,  // no _oneof_case_
     ~0u,  // no _weak_field_map_
     ~0u,  // no _inlined_string_donated_
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSweeper, _impl_.x_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSweeper, _impl_.y_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSweeper, _impl_.speed_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSweeper, _impl_.hp_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSweeper, _impl_.armor_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSweeper, _impl_.shield_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSweeper, _impl_.team_id_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSweeper, _impl_.player_id_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSweeper, _impl_.guid_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSweeper, _impl_.sweeper_state_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSweeper, _impl_.sweeper_type_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSweeper, _impl_.view_range_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSweeper, _impl_.producer_type_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSweeper, _impl_.constructor_type_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSweeper, _impl_.armor_type_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSweeper, _impl_.shield_type_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSweeper, _impl_.weapon_type_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSweeper, _impl_.facing_direction_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfShip, _impl_.x_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfShip, _impl_.y_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfShip, _impl_.speed_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfShip, _impl_.hp_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfShip, _impl_.armor_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfShip, _impl_.shield_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfShip, _impl_.team_id_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfShip, _impl_.player_id_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfShip, _impl_.guid_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfShip, _impl_.ship_state_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfShip, _impl_.ship_type_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfShip, _impl_.view_range_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfShip, _impl_.producer_type_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfShip, _impl_.constructor_type_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfShip, _impl_.armor_type_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfShip, _impl_.shield_type_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfShip, _impl_.weapon_type_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfShip, _impl_.facing_direction_),
     ~0u,  // no _has_bits_
     PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfBullet, _internal_metadata_),
     ~0u,  // no _extensions_
@@ -520,53 +520,53 @@ const uint32_t TableStruct_Message2Clients_2eproto::offsets[] PROTOBUF_SECTION_V
     PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfBombedBullet, _impl_.mapping_id_),
     PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfBombedBullet, _impl_.bomb_range_),
     ~0u,  // no _has_bits_
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfRecycleBank, _internal_metadata_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfFactory, _internal_metadata_),
     ~0u,  // no _extensions_
     ~0u,  // no _oneof_case_
     ~0u,  // no _weak_field_map_
     ~0u,  // no _inlined_string_donated_
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfRecycleBank, _impl_.x_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfRecycleBank, _impl_.y_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfRecycleBank, _impl_.hp_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfRecycleBank, _impl_.team_id_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfFactory, _impl_.x_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfFactory, _impl_.y_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfFactory, _impl_.hp_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfFactory, _impl_.team_id_),
     ~0u,  // no _has_bits_
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfChargeStation, _internal_metadata_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfCommunity, _internal_metadata_),
     ~0u,  // no _extensions_
     ~0u,  // no _oneof_case_
     ~0u,  // no _weak_field_map_
     ~0u,  // no _inlined_string_donated_
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfChargeStation, _impl_.x_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfChargeStation, _impl_.y_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfChargeStation, _impl_.hp_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfChargeStation, _impl_.team_id_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfCommunity, _impl_.x_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfCommunity, _impl_.y_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfCommunity, _impl_.hp_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfCommunity, _impl_.team_id_),
     ~0u,  // no _has_bits_
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSignalTower, _internal_metadata_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfFort, _internal_metadata_),
     ~0u,  // no _extensions_
     ~0u,  // no _oneof_case_
     ~0u,  // no _weak_field_map_
     ~0u,  // no _inlined_string_donated_
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSignalTower, _impl_.x_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSignalTower, _impl_.y_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSignalTower, _impl_.hp_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfSignalTower, _impl_.team_id_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfFort, _impl_.x_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfFort, _impl_.y_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfFort, _impl_.hp_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfFort, _impl_.team_id_),
     ~0u,  // no _has_bits_
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfBridge, _internal_metadata_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfWormhole, _internal_metadata_),
     ~0u,  // no _extensions_
     ~0u,  // no _oneof_case_
     ~0u,  // no _weak_field_map_
     ~0u,  // no _inlined_string_donated_
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfBridge, _impl_.x_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfBridge, _impl_.y_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfBridge, _impl_.hp_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfWormhole, _impl_.x_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfWormhole, _impl_.y_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfWormhole, _impl_.hp_),
     ~0u,  // no _has_bits_
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfGarbage, _internal_metadata_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfResource, _internal_metadata_),
     ~0u,  // no _extensions_
     ~0u,  // no _oneof_case_
     ~0u,  // no _weak_field_map_
     ~0u,  // no _inlined_string_donated_
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfGarbage, _impl_.x_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfGarbage, _impl_.y_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfGarbage, _impl_.progress_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfResource, _impl_.x_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfResource, _impl_.y_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfResource, _impl_.progress_),
     ~0u,  // no _has_bits_
     PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfHome, _internal_metadata_),
     ~0u,  // no _extensions_
@@ -661,12 +661,12 @@ const uint32_t TableStruct_Message2Clients_2eproto::offsets[] PROTOBUF_SECTION_V
     ~0u,  // no _inlined_string_donated_
     PROTOBUF_FIELD_OFFSET(::protobuf::BoolRes, _impl_.act_success_),
     ~0u,  // no _has_bits_
-    PROTOBUF_FIELD_OFFSET(::protobuf::SweeperInfoRes, _internal_metadata_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::ShipInfoRes, _internal_metadata_),
     ~0u,  // no _extensions_
     ~0u,  // no _oneof_case_
     ~0u,  // no _weak_field_map_
     ~0u,  // no _inlined_string_donated_
-    PROTOBUF_FIELD_OFFSET(::protobuf::SweeperInfoRes, _impl_.sweeper_info_),
+    PROTOBUF_FIELD_OFFSET(::protobuf::ShipInfoRes, _impl_.ship_info_),
     ~0u,  // no _has_bits_
     PROTOBUF_FIELD_OFFSET(::protobuf::EcoRes, _internal_metadata_),
     ~0u,  // no _extensions_
@@ -688,14 +688,14 @@ const uint32_t TableStruct_Message2Clients_2eproto::offsets[] PROTOBUF_SECTION_V
     PROTOBUF_FIELD_OFFSET(::protobuf::MessageOfNews, _impl_.news_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-    {0, -1, -1, sizeof(::protobuf::MessageOfSweeper)},
+    {0, -1, -1, sizeof(::protobuf::MessageOfShip)},
     {24, -1, -1, sizeof(::protobuf::MessageOfBullet)},
     {39, -1, -1, sizeof(::protobuf::MessageOfBombedBullet)},
-    {51, -1, -1, sizeof(::protobuf::MessageOfRecycleBank)},
-    {61, -1, -1, sizeof(::protobuf::MessageOfChargeStation)},
-    {71, -1, -1, sizeof(::protobuf::MessageOfSignalTower)},
-    {81, -1, -1, sizeof(::protobuf::MessageOfBridge)},
-    {90, -1, -1, sizeof(::protobuf::MessageOfGarbage)},
+    {51, -1, -1, sizeof(::protobuf::MessageOfFactory)},
+    {61, -1, -1, sizeof(::protobuf::MessageOfCommunity)},
+    {71, -1, -1, sizeof(::protobuf::MessageOfFort)},
+    {81, -1, -1, sizeof(::protobuf::MessageOfWormhole)},
+    {90, -1, -1, sizeof(::protobuf::MessageOfResource)},
     {99, -1, -1, sizeof(::protobuf::MessageOfHome)},
     {109, -1, -1, sizeof(::protobuf::MessageOfMap_Row)},
     {116, -1, -1, sizeof(::protobuf::MessageOfMap)},
@@ -705,20 +705,20 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
     {167, -1, -1, sizeof(::protobuf::MessageToClient)},
     {176, -1, -1, sizeof(::protobuf::MoveRes)},
     {185, -1, -1, sizeof(::protobuf::BoolRes)},
-    {192, -1, -1, sizeof(::protobuf::SweeperInfoRes)},
+    {192, -1, -1, sizeof(::protobuf::ShipInfoRes)},
     {199, -1, -1, sizeof(::protobuf::EcoRes)},
     {206, -1, -1, sizeof(::protobuf::MessageOfNews)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
-    &::protobuf::_MessageOfSweeper_default_instance_._instance,
+    &::protobuf::_MessageOfShip_default_instance_._instance,
     &::protobuf::_MessageOfBullet_default_instance_._instance,
     &::protobuf::_MessageOfBombedBullet_default_instance_._instance,
-    &::protobuf::_MessageOfRecycleBank_default_instance_._instance,
-    &::protobuf::_MessageOfChargeStation_default_instance_._instance,
-    &::protobuf::_MessageOfSignalTower_default_instance_._instance,
-    &::protobuf::_MessageOfBridge_default_instance_._instance,
-    &::protobuf::_MessageOfGarbage_default_instance_._instance,
+    &::protobuf::_MessageOfFactory_default_instance_._instance,
+    &::protobuf::_MessageOfCommunity_default_instance_._instance,
+    &::protobuf::_MessageOfFort_default_instance_._instance,
+    &::protobuf::_MessageOfWormhole_default_instance_._instance,
+    &::protobuf::_MessageOfResource_default_instance_._instance,
     &::protobuf::_MessageOfHome_default_instance_._instance,
     &::protobuf::_MessageOfMap_Row_default_instance_._instance,
     &::protobuf::_MessageOfMap_default_instance_._instance,
@@ -728,85 +728,83 @@ static const ::_pb::Message* const file_default_instances[] = {
     &::protobuf::_MessageToClient_default_instance_._instance,
     &::protobuf::_MoveRes_default_instance_._instance,
     &::protobuf::_BoolRes_default_instance_._instance,
-    &::protobuf::_SweeperInfoRes_default_instance_._instance,
+    &::protobuf::_ShipInfoRes_default_instance_._instance,
     &::protobuf::_EcoRes_default_instance_._instance,
     &::protobuf::_MessageOfNews_default_instance_._instance,
 };
 
 const char descriptor_table_protodef_Message2Clients_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
     "\n\025Message2Clients.proto\022\010protobuf\032\021Messa"
-    "geType.proto\"\201\004\n\020MessageOfSweeper\022\t\n\001x\030\001"
-    " \001(\005\022\t\n\001y\030\002 \001(\005\022\r\n\005speed\030\003 \001(\005\022\n\n\002hp\030\004 \001"
-    "(\005\022\r\n\005armor\030\005 \001(\005\022\016\n\006shield\030\006 \001(\005\022\017\n\007tea"
-    "m_id\030\007 \001(\003\022\021\n\tplayer_id\030\010 \001(\003\022\014\n\004guid\030\t "
-    "\001(\003\022-\n\rsweeper_state\030\n \001(\0162\026.protobuf.Sw"
-    "eeperState\022+\n\014sweeper_type\030\013 \001(\0162\025.proto"
-    "buf.SweeperType\022\022\n\nview_range\030\014 \001(\005\022-\n\rp"
-    "roducer_type\030\r \001(\0162\026.protobuf.ProducerTy"
-    "pe\0223\n\020constructor_type\030\016 \001(\0162\031.protobuf."
-    "ConstructorType\022\'\n\narmor_type\030\017 \001(\0162\023.pr"
-    "otobuf.ArmorType\022)\n\013shield_type\030\020 \001(\0162\024."
-    "protobuf.ShieldType\022)\n\013weapon_type\030\021 \001(\016"
-    "2\024.protobuf.WeaponType\022\030\n\020facing_directi"
-    "on\030\022 \001(\001\"\267\001\n\017MessageOfBullet\022\"\n\004type\030\001 \001"
-    "(\0162\024.protobuf.BulletType\022\t\n\001x\030\002 \001(\005\022\t\n\001y"
-    "\030\003 \001(\005\022\030\n\020facing_direction\030\004 \001(\001\022\016\n\006dama"
-    "ge\030\005 \001(\005\022\017\n\007team_id\030\006 \001(\003\022\014\n\004guid\030\007 \001(\003\022"
-    "\022\n\nbomb_range\030\010 \001(\001\022\r\n\005speed\030\t \001(\005\"\223\001\n\025M"
-    "essageOfBombedBullet\022\"\n\004type\030\001 \001(\0162\024.pro"
-    "tobuf.BulletType\022\t\n\001x\030\002 \001(\005\022\t\n\001y\030\003 \001(\005\022\030"
-    "\n\020facing_direction\030\004 \001(\001\022\022\n\nmapping_id\030\005"
-    " \001(\003\022\022\n\nbomb_range\030\006 \001(\001\"I\n\024MessageOfRec"
-    "ycleBank\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\n\n\002hp\030\003 \001"
-    "(\005\022\017\n\007team_id\030\004 \001(\003\"K\n\026MessageOfChargeSt"
-    "ation\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\n\n\002hp\030\003 \001(\005\022"
-    "\017\n\007team_id\030\004 \001(\003\"I\n\024MessageOfSignalTower"
-    "\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\n\n\002hp\030\003 \001(\005\022\017\n\007te"
-    "am_id\030\004 \001(\003\"3\n\017MessageOfBridge\022\t\n\001x\030\001 \001("
-    "\005\022\t\n\001y\030\002 \001(\005\022\n\n\002hp\030\003 \001(\005\":\n\020MessageOfGar"
-    "bage\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\020\n\010progress\030\003"
-    " \001(\005\"B\n\rMessageOfHome\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 "
-    "\001(\005\022\n\n\002hp\030\003 \001(\005\022\017\n\007team_id\030\004 \001(\003\"\201\001\n\014Mes"
-    "sageOfMap\022\016\n\006height\030\001 \001(\r\022\r\n\005width\030\002 \001(\r"
-    "\022(\n\004rows\030\003 \003(\0132\032.protobuf.MessageOfMap.R"
-    "ow\032(\n\003Row\022!\n\004cols\030\001 \003(\0162\023.protobuf.Place"
-    "Type\"R\n\rMessageOfTeam\022\017\n\007team_id\030\001 \001(\003\022\021"
-    "\n\tplayer_id\030\002 \001(\003\022\r\n\005score\030\003 \001(\003\022\016\n\006ener"
-    "gy\030\004 \001(\003\"\275\005\n\014MessageOfObj\0225\n\017sweeper_mes"
-    "sage\030\001 \001(\0132\032.protobuf.MessageOfSweeperH\000"
-    "\0223\n\016bullet_message\030\002 \001(\0132\031.protobuf.Mess"
-    "ageOfBulletH\000\022=\n\023recyclebank_message\030\003 \001"
-    "(\0132\036.protobuf.MessageOfRecycleBankH\000\022A\n\025"
-    "chargestation_message\030\004 \001(\0132 .protobuf.M"
-    "essageOfChargeStationH\000\022=\n\023signaltower_m"
-    "essage\030\005 \001(\0132\036.protobuf.MessageOfSignalT"
-    "owerH\000\0223\n\016bridge_message\030\006 \001(\0132\031.protobu"
-    "f.MessageOfBridgeH\000\022/\n\014home_message\030\007 \001("
-    "\0132\027.protobuf.MessageOfHomeH\000\0225\n\017garbage_"
-    "message\030\010 \001(\0132\032.protobuf.MessageOfGarbag"
-    "eH\000\022-\n\013map_message\030\t \001(\0132\026.protobuf.Mess"
-    "ageOfMapH\000\022/\n\014news_message\030\n \001(\0132\027.proto"
-    "buf.MessageOfNewsH\000\022@\n\025bombed_bullet_mes"
-    "sage\030\013 \001(\0132\037.protobuf.MessageOfBombedBul"
-    "letH\000\022/\n\014team_message\030\014 \001(\0132\027.protobuf.M"
-    "essageOfTeamH\000B\020\n\016message_of_obj\"\260\001\n\014Mes"
-    "sageOfAll\022\021\n\tgame_time\030\001 \001(\005\022\026\n\016red_team"
-    "_score\030\002 \001(\005\022\027\n\017blue_team_score\030\003 \001(\005\022\027\n"
-    "\017red_team_energy\030\004 \001(\005\022\030\n\020blue_team_ener"
-    "gy\030\005 \001(\005\022\023\n\013red_home_hp\030\006 \001(\005\022\024\n\014blue_ho"
-    "me_hp\030\007 \001(\005\"\224\001\n\017MessageToClient\022+\n\013obj_m"
-    "essage\030\001 \003(\0132\026.protobuf.MessageOfObj\022\'\n\n"
-    "game_state\030\002 \001(\0162\023.protobuf.GameState\022+\n"
-    "\013all_message\030\003 \001(\0132\026.protobuf.MessageOfA"
-    "ll\"J\n\007MoveRes\022\024\n\014actual_speed\030\001 \001(\003\022\024\n\014a"
-    "ctual_angle\030\002 \001(\001\022\023\n\013act_success\030\003 \001(\010\"\036"
-    "\n\007BoolRes\022\023\n\013act_success\030\001 \001(\010\"B\n\016Sweepe"
-    "rInfoRes\0220\n\014sweeper_info\030\001 \003(\0132\032.protobu"
-    "f.MessageOfSweeper\"\031\n\006EcoRes\022\017\n\007economy\030"
-    "\001 \001(\003\"z\n\rMessageOfNews\022\026\n\014text_message\030\001"
-    " \001(\tH\000\022\030\n\016binary_message\030\002 \001(\014H\000\022\017\n\007from"
-    "_id\030\003 \001(\003\022\r\n\005to_id\030\004 \001(\003\022\017\n\007team_id\030\005 \001("
-    "\003B\006\n\004newsb\006proto3";
+    "geType.proto\"\362\003\n\rMessageOfShip\022\t\n\001x\030\001 \001("
+    "\005\022\t\n\001y\030\002 \001(\005\022\r\n\005speed\030\003 \001(\005\022\n\n\002hp\030\004 \001(\005\022"
+    "\r\n\005armor\030\005 \001(\005\022\016\n\006shield\030\006 \001(\005\022\017\n\007team_i"
+    "d\030\007 \001(\003\022\021\n\tplayer_id\030\010 \001(\003\022\014\n\004guid\030\t \001(\003"
+    "\022\'\n\nship_state\030\n \001(\0162\023.protobuf.ShipStat"
+    "e\022%\n\tship_type\030\013 \001(\0162\022.protobuf.ShipType"
+    "\022\022\n\nview_range\030\014 \001(\005\022-\n\rproducer_type\030\r "
+    "\001(\0162\026.protobuf.ProducerType\0223\n\020construct"
+    "or_type\030\016 \001(\0162\031.protobuf.ConstructorType"
+    "\022\'\n\narmor_type\030\017 \001(\0162\023.protobuf.ArmorTyp"
+    "e\022)\n\013shield_type\030\020 \001(\0162\024.protobuf.Shield"
+    "Type\022)\n\013weapon_type\030\021 \001(\0162\024.protobuf.Wea"
+    "ponType\022\030\n\020facing_direction\030\022 \001(\001\"\267\001\n\017Me"
+    "ssageOfBullet\022\"\n\004type\030\001 \001(\0162\024.protobuf.B"
+    "ulletType\022\t\n\001x\030\002 \001(\005\022\t\n\001y\030\003 \001(\005\022\030\n\020facin"
+    "g_direction\030\004 \001(\001\022\016\n\006damage\030\005 \001(\005\022\017\n\007tea"
+    "m_id\030\006 \001(\003\022\014\n\004guid\030\007 \001(\003\022\022\n\nbomb_range\030\010"
+    " \001(\001\022\r\n\005speed\030\t \001(\005\"\223\001\n\025MessageOfBombedB"
+    "ullet\022\"\n\004type\030\001 \001(\0162\024.protobuf.BulletTyp"
+    "e\022\t\n\001x\030\002 \001(\005\022\t\n\001y\030\003 \001(\005\022\030\n\020facing_direct"
+    "ion\030\004 \001(\001\022\022\n\nmapping_id\030\005 \001(\003\022\022\n\nbomb_ra"
+    "nge\030\006 \001(\001\"E\n\020MessageOfFactory\022\t\n\001x\030\001 \001(\005"
+    "\022\t\n\001y\030\002 \001(\005\022\n\n\002hp\030\003 \001(\005\022\017\n\007team_id\030\004 \001(\003"
+    "\"G\n\022MessageOfCommunity\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002"
+    " \001(\005\022\n\n\002hp\030\003 \001(\005\022\017\n\007team_id\030\004 \001(\003\"B\n\rMes"
+    "sageOfFort\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\n\n\002hp\030\003"
+    " \001(\005\022\017\n\007team_id\030\004 \001(\003\"5\n\021MessageOfWormho"
+    "le\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\n\n\002hp\030\003 \001(\005\";\n\021"
+    "MessageOfResource\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\022"
+    "\020\n\010progress\030\003 \001(\005\"B\n\rMessageOfHome\022\t\n\001x\030"
+    "\001 \001(\005\022\t\n\001y\030\002 \001(\005\022\n\n\002hp\030\003 \001(\005\022\017\n\007team_id\030"
+    "\004 \001(\003\"\201\001\n\014MessageOfMap\022\016\n\006height\030\001 \001(\r\022\r"
+    "\n\005width\030\002 \001(\r\022(\n\004rows\030\003 \003(\0132\032.protobuf.M"
+    "essageOfMap.Row\032(\n\003Row\022!\n\004cols\030\001 \003(\0162\023.p"
+    "rotobuf.PlaceType\"R\n\rMessageOfTeam\022\017\n\007te"
+    "am_id\030\001 \001(\003\022\021\n\tplayer_id\030\002 \001(\003\022\r\n\005score\030"
+    "\003 \001(\003\022\016\n\006energy\030\004 \001(\003\"\237\005\n\014MessageOfObj\022/"
+    "\n\014ship_message\030\001 \001(\0132\027.protobuf.MessageO"
+    "fShipH\000\0223\n\016bullet_message\030\002 \001(\0132\031.protob"
+    "uf.MessageOfBulletH\000\0225\n\017factory_message\030"
+    "\003 \001(\0132\032.protobuf.MessageOfFactoryH\000\0229\n\021c"
+    "ommunity_message\030\004 \001(\0132\034.protobuf.Messag"
+    "eOfCommunityH\000\022/\n\014fort_message\030\005 \001(\0132\027.p"
+    "rotobuf.MessageOfFortH\000\0227\n\020wormhole_mess"
+    "age\030\006 \001(\0132\033.protobuf.MessageOfWormholeH\000"
+    "\022/\n\014home_message\030\007 \001(\0132\027.protobuf.Messag"
+    "eOfHomeH\000\0227\n\020resource_message\030\010 \001(\0132\033.pr"
+    "otobuf.MessageOfResourceH\000\022-\n\013map_messag"
+    "e\030\t \001(\0132\026.protobuf.MessageOfMapH\000\022/\n\014new"
+    "s_message\030\n \001(\0132\027.protobuf.MessageOfNews"
+    "H\000\022@\n\025bombed_bullet_message\030\013 \001(\0132\037.prot"
+    "obuf.MessageOfBombedBulletH\000\022/\n\014team_mes"
+    "sage\030\014 \001(\0132\027.protobuf.MessageOfTeamH\000B\020\n"
+    "\016message_of_obj\"\260\001\n\014MessageOfAll\022\021\n\tgame"
+    "_time\030\001 \001(\005\022\026\n\016red_team_score\030\002 \001(\005\022\027\n\017b"
+    "lue_team_score\030\003 \001(\005\022\027\n\017red_team_energy\030"
+    "\004 \001(\005\022\030\n\020blue_team_energy\030\005 \001(\005\022\023\n\013red_h"
+    "ome_hp\030\006 \001(\005\022\024\n\014blue_home_hp\030\007 \001(\005\"\224\001\n\017M"
+    "essageToClient\022+\n\013obj_message\030\001 \003(\0132\026.pr"
+    "otobuf.MessageOfObj\022\'\n\ngame_state\030\002 \001(\0162"
+    "\023.protobuf.GameState\022+\n\013all_message\030\003 \001("
+    "\0132\026.protobuf.MessageOfAll\"J\n\007MoveRes\022\024\n\014"
+    "actual_speed\030\001 \001(\003\022\024\n\014actual_angle\030\002 \001(\001"
+    "\022\023\n\013act_success\030\003 \001(\010\"\036\n\007BoolRes\022\023\n\013act_"
+    "success\030\001 \001(\010\"9\n\013ShipInfoRes\022*\n\tship_inf"
+    "o\030\001 \003(\0132\027.protobuf.MessageOfShip\"\031\n\006EcoR"
+    "es\022\017\n\007economy\030\001 \001(\003\"z\n\rMessageOfNews\022\026\n\014"
+    "text_message\030\001 \001(\tH\000\022\030\n\016binary_message\030\002"
+    " \001(\014H\000\022\017\n\007from_id\030\003 \001(\003\022\r\n\005to_id\030\004 \001(\003\022\017"
+    "\n\007team_id\030\005 \001(\003B\006\n\004newsb\006proto3";
 static const ::_pbi::DescriptorTable* const descriptor_table_Message2Clients_2eproto_deps[1] = {
     &::descriptor_table_MessageType_2eproto,
 };
@@ -814,7 +812,7 @@ static ::_pbi::once_flag descriptor_table_Message2Clients_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Message2Clients_2eproto = {
     false,
     false,
-    2897,
+    2831,
     descriptor_table_protodef_Message2Clients_2eproto,
     "Message2Clients.proto",
     &descriptor_table_Message2Clients_2eproto_once,
@@ -840,43 +838,43 @@ namespace protobuf
 
     // ===================================================================
 
-    class MessageOfSweeper::_Internal
+    class MessageOfShip::_Internal
     {
     public:
     };
 
-    MessageOfSweeper::MessageOfSweeper(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned) :
+    MessageOfShip::MessageOfShip(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned) :
         ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned)
     {
         SharedCtor(arena, is_message_owned);
-        // @@protoc_insertion_point(arena_constructor:protobuf.MessageOfSweeper)
+        // @@protoc_insertion_point(arena_constructor:protobuf.MessageOfShip)
     }
-    MessageOfSweeper::MessageOfSweeper(const MessageOfSweeper& from) :
+    MessageOfShip::MessageOfShip(const MessageOfShip& from) :
         ::PROTOBUF_NAMESPACE_ID::Message()
     {
-        MessageOfSweeper* const _this = this;
+        MessageOfShip* const _this = this;
         (void)_this;
         new (&_impl_) Impl_{
-            decltype(_impl_.x_){}, decltype(_impl_.y_){}, decltype(_impl_.speed_){}, decltype(_impl_.hp_){}, decltype(_impl_.armor_){}, decltype(_impl_.shield_){}, decltype(_impl_.team_id_){}, decltype(_impl_.player_id_){}, decltype(_impl_.guid_){}, decltype(_impl_.sweeper_state_){}, decltype(_impl_.sweeper_type_){}, decltype(_impl_.view_range_){}, decltype(_impl_.producer_type_){}, decltype(_impl_.constructor_type_){}, decltype(_impl_.armor_type_){}, decltype(_impl_.shield_type_){}, decltype(_impl_.weapon_type_){}, decltype(_impl_.facing_direction_){}, /*decltype(_impl_._cached_size_)*/ {}};
+            decltype(_impl_.x_){}, decltype(_impl_.y_){}, decltype(_impl_.speed_){}, decltype(_impl_.hp_){}, decltype(_impl_.armor_){}, decltype(_impl_.shield_){}, decltype(_impl_.team_id_){}, decltype(_impl_.player_id_){}, decltype(_impl_.guid_){}, decltype(_impl_.ship_state_){}, decltype(_impl_.ship_type_){}, decltype(_impl_.view_range_){}, decltype(_impl_.producer_type_){}, decltype(_impl_.constructor_type_){}, decltype(_impl_.armor_type_){}, decltype(_impl_.shield_type_){}, decltype(_impl_.weapon_type_){}, decltype(_impl_.facing_direction_){}, /*decltype(_impl_._cached_size_)*/ {}};
 
         _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
         ::memcpy(&_impl_.x_, &from._impl_.x_, static_cast<size_t>(reinterpret_cast<char*>(&_impl_.facing_direction_) - reinterpret_cast<char*>(&_impl_.x_)) + sizeof(_impl_.facing_direction_));
-        // @@protoc_insertion_point(copy_constructor:protobuf.MessageOfSweeper)
+        // @@protoc_insertion_point(copy_constructor:protobuf.MessageOfShip)
     }
 
-    inline void MessageOfSweeper::SharedCtor(
+    inline void MessageOfShip::SharedCtor(
         ::_pb::Arena* arena, bool is_message_owned
     )
     {
         (void)arena;
         (void)is_message_owned;
         new (&_impl_) Impl_{
-            decltype(_impl_.x_){0}, decltype(_impl_.y_){0}, decltype(_impl_.speed_){0}, decltype(_impl_.hp_){0}, decltype(_impl_.armor_){0}, decltype(_impl_.shield_){0}, decltype(_impl_.team_id_){int64_t{0}}, decltype(_impl_.player_id_){int64_t{0}}, decltype(_impl_.guid_){int64_t{0}}, decltype(_impl_.sweeper_state_){0}, decltype(_impl_.sweeper_type_){0}, decltype(_impl_.view_range_){0}, decltype(_impl_.producer_type_){0}, decltype(_impl_.constructor_type_){0}, decltype(_impl_.armor_type_){0}, decltype(_impl_.shield_type_){0}, decltype(_impl_.weapon_type_){0}, decltype(_impl_.facing_direction_){0}, /*decltype(_impl_._cached_size_)*/ {}};
+            decltype(_impl_.x_){0}, decltype(_impl_.y_){0}, decltype(_impl_.speed_){0}, decltype(_impl_.hp_){0}, decltype(_impl_.armor_){0}, decltype(_impl_.shield_){0}, decltype(_impl_.team_id_){int64_t{0}}, decltype(_impl_.player_id_){int64_t{0}}, decltype(_impl_.guid_){int64_t{0}}, decltype(_impl_.ship_state_){0}, decltype(_impl_.ship_type_){0}, decltype(_impl_.view_range_){0}, decltype(_impl_.producer_type_){0}, decltype(_impl_.constructor_type_){0}, decltype(_impl_.armor_type_){0}, decltype(_impl_.shield_type_){0}, decltype(_impl_.weapon_type_){0}, decltype(_impl_.facing_direction_){0}, /*decltype(_impl_._cached_size_)*/ {}};
     }
 
-    MessageOfSweeper::~MessageOfSweeper()
+    MessageOfShip::~MessageOfShip()
     {
-        // @@protoc_insertion_point(destructor:protobuf.MessageOfSweeper)
+        // @@protoc_insertion_point(destructor:protobuf.MessageOfShip)
         if (auto* arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>())
         {
             (void)arena;
@@ -885,19 +883,19 @@ namespace protobuf
         SharedDtor();
     }
 
-    inline void MessageOfSweeper::SharedDtor()
+    inline void MessageOfShip::SharedDtor()
     {
         GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
     }
 
-    void MessageOfSweeper::SetCachedSize(int size) const
+    void MessageOfShip::SetCachedSize(int size) const
     {
         _impl_._cached_size_.Set(size);
     }
 
-    void MessageOfSweeper::Clear()
+    void MessageOfShip::Clear()
     {
-        // @@protoc_insertion_point(message_clear_start:protobuf.MessageOfSweeper)
+        // @@protoc_insertion_point(message_clear_start:protobuf.MessageOfShip)
         uint32_t cached_has_bits = 0;
         // Prevent compiler warnings about cached_has_bits being unused
         (void)cached_has_bits;
@@ -906,7 +904,7 @@ namespace protobuf
         _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
     }
 
-    const char* MessageOfSweeper::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx)
+    const char* MessageOfShip::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx)
     {
 #define CHK_(x)                       \
     if (PROTOBUF_PREDICT_FALSE(!(x))) \
@@ -1007,24 +1005,24 @@ namespace protobuf
                     else
                         goto handle_unusual;
                     continue;
-                // .protobuf.SweeperState sweeper_state = 10;
+                // .protobuf.ShipState ship_state = 10;
                 case 10:
                     if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 80))
                     {
                         uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
                         CHK_(ptr);
-                        _internal_set_sweeper_state(static_cast<::protobuf::SweeperState>(val));
+                        _internal_set_ship_state(static_cast<::protobuf::ShipState>(val));
                     }
                     else
                         goto handle_unusual;
                     continue;
-                // .protobuf.SweeperType sweeper_type = 11;
+                // .protobuf.ShipType ship_type = 11;
                 case 11:
                     if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 88))
                     {
                         uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
                         CHK_(ptr);
-                        _internal_set_sweeper_type(static_cast<::protobuf::SweeperType>(val));
+                        _internal_set_ship_type(static_cast<::protobuf::ShipType>(val));
                     }
                     else
                         goto handle_unusual;
@@ -1130,11 +1128,11 @@ namespace protobuf
 #undef CHK_
     }
 
-    uint8_t* MessageOfSweeper::_InternalSerialize(
+    uint8_t* MessageOfShip::_InternalSerialize(
         uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream
     ) const
     {
-        // @@protoc_insertion_point(serialize_to_array_start:protobuf.MessageOfSweeper)
+        // @@protoc_insertion_point(serialize_to_array_start:protobuf.MessageOfShip)
         uint32_t cached_has_bits = 0;
         (void)cached_has_bits;
 
@@ -1201,21 +1199,21 @@ namespace protobuf
             target = ::_pbi::WireFormatLite::WriteInt64ToArray(9, this->_internal_guid(), target);
         }
 
-        // .protobuf.SweeperState sweeper_state = 10;
-        if (this->_internal_sweeper_state() != 0)
+        // .protobuf.ShipState ship_state = 10;
+        if (this->_internal_ship_state() != 0)
         {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteEnumToArray(
-                10, this->_internal_sweeper_state(), target
+                10, this->_internal_ship_state(), target
             );
         }
 
-        // .protobuf.SweeperType sweeper_type = 11;
-        if (this->_internal_sweeper_type() != 0)
+        // .protobuf.ShipType ship_type = 11;
+        if (this->_internal_ship_type() != 0)
         {
             target = stream->EnsureSpace(target);
             target = ::_pbi::WireFormatLite::WriteEnumToArray(
-                11, this->_internal_sweeper_type(), target
+                11, this->_internal_ship_type(), target
             );
         }
 
@@ -1288,13 +1286,13 @@ namespace protobuf
                 _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream
             );
         }
-        // @@protoc_insertion_point(serialize_to_array_end:protobuf.MessageOfSweeper)
+        // @@protoc_insertion_point(serialize_to_array_end:protobuf.MessageOfShip)
         return target;
     }
 
-    size_t MessageOfSweeper::ByteSizeLong() const
+    size_t MessageOfShip::ByteSizeLong() const
     {
-        // @@protoc_insertion_point(message_byte_size_start:protobuf.MessageOfSweeper)
+        // @@protoc_insertion_point(message_byte_size_start:protobuf.MessageOfShip)
         size_t total_size = 0;
 
         uint32_t cached_has_bits = 0;
@@ -1355,18 +1353,18 @@ namespace protobuf
             total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_guid());
         }
 
-        // .protobuf.SweeperState sweeper_state = 10;
-        if (this->_internal_sweeper_state() != 0)
+        // .protobuf.ShipState ship_state = 10;
+        if (this->_internal_ship_state() != 0)
         {
             total_size += 1 +
-                          ::_pbi::WireFormatLite::EnumSize(this->_internal_sweeper_state());
+                          ::_pbi::WireFormatLite::EnumSize(this->_internal_ship_state());
         }
 
-        // .protobuf.SweeperType sweeper_type = 11;
-        if (this->_internal_sweeper_type() != 0)
+        // .protobuf.ShipType ship_type = 11;
+        if (this->_internal_ship_type() != 0)
         {
             total_size += 1 +
-                          ::_pbi::WireFormatLite::EnumSize(this->_internal_sweeper_type());
+                          ::_pbi::WireFormatLite::EnumSize(this->_internal_ship_type());
         }
 
         // int32 view_range = 12;
@@ -1423,19 +1421,19 @@ namespace protobuf
         return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
     }
 
-    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MessageOfSweeper::_class_data_ = {
+    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MessageOfShip::_class_data_ = {
         ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-        MessageOfSweeper::MergeImpl};
-    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData* MessageOfSweeper::GetClassData() const
+        MessageOfShip::MergeImpl};
+    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData* MessageOfShip::GetClassData() const
     {
         return &_class_data_;
     }
 
-    void MessageOfSweeper::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg)
+    void MessageOfShip::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg)
     {
-        auto* const _this = static_cast<MessageOfSweeper*>(&to_msg);
-        auto& from = static_cast<const MessageOfSweeper&>(from_msg);
-        // @@protoc_insertion_point(class_specific_merge_from_start:protobuf.MessageOfSweeper)
+        auto* const _this = static_cast<MessageOfShip*>(&to_msg);
+        auto& from = static_cast<const MessageOfShip&>(from_msg);
+        // @@protoc_insertion_point(class_specific_merge_from_start:protobuf.MessageOfShip)
         GOOGLE_DCHECK_NE(&from, _this);
         uint32_t cached_has_bits = 0;
         (void)cached_has_bits;
@@ -1476,13 +1474,13 @@ namespace protobuf
         {
             _this->_internal_set_guid(from._internal_guid());
         }
-        if (from._internal_sweeper_state() != 0)
+        if (from._internal_ship_state() != 0)
         {
-            _this->_internal_set_sweeper_state(from._internal_sweeper_state());
+            _this->_internal_set_ship_state(from._internal_ship_state());
         }
-        if (from._internal_sweeper_type() != 0)
+        if (from._internal_ship_type() != 0)
         {
-            _this->_internal_set_sweeper_type(from._internal_sweeper_type());
+            _this->_internal_set_ship_type(from._internal_ship_type());
         }
         if (from._internal_view_range() != 0)
         {
@@ -1519,32 +1517,32 @@ namespace protobuf
         _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
     }
 
-    void MessageOfSweeper::CopyFrom(const MessageOfSweeper& from)
+    void MessageOfShip::CopyFrom(const MessageOfShip& from)
     {
-        // @@protoc_insertion_point(class_specific_copy_from_start:protobuf.MessageOfSweeper)
+        // @@protoc_insertion_point(class_specific_copy_from_start:protobuf.MessageOfShip)
         if (&from == this)
             return;
         Clear();
         MergeFrom(from);
     }
 
-    bool MessageOfSweeper::IsInitialized() const
+    bool MessageOfShip::IsInitialized() const
     {
         return true;
     }
 
-    void MessageOfSweeper::InternalSwap(MessageOfSweeper* other)
+    void MessageOfShip::InternalSwap(MessageOfShip* other)
     {
         using std::swap;
         _internal_metadata_.InternalSwap(&other->_internal_metadata_);
         ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-            PROTOBUF_FIELD_OFFSET(MessageOfSweeper, _impl_.facing_direction_) + sizeof(MessageOfSweeper::_impl_.facing_direction_) - PROTOBUF_FIELD_OFFSET(MessageOfSweeper, _impl_.x_)>(
+            PROTOBUF_FIELD_OFFSET(MessageOfShip, _impl_.facing_direction_) + sizeof(MessageOfShip::_impl_.facing_direction_) - PROTOBUF_FIELD_OFFSET(MessageOfShip, _impl_.x_)>(
             reinterpret_cast<char*>(&_impl_.x_),
             reinterpret_cast<char*>(&other->_impl_.x_)
         );
     }
 
-    ::PROTOBUF_NAMESPACE_ID::Metadata MessageOfSweeper::GetMetadata() const
+    ::PROTOBUF_NAMESPACE_ID::Metadata MessageOfShip::GetMetadata() const
     {
         return ::_pbi::AssignDescriptors(
             &descriptor_table_Message2Clients_2eproto_getter, &descriptor_table_Message2Clients_2eproto_once, file_level_metadata_Message2Clients_2eproto[0]
@@ -2388,31 +2386,31 @@ namespace protobuf
 
     // ===================================================================
 
-    class MessageOfRecycleBank::_Internal
+    class MessageOfFactory::_Internal
     {
     public:
     };
 
-    MessageOfRecycleBank::MessageOfRecycleBank(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned) :
+    MessageOfFactory::MessageOfFactory(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned) :
         ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned)
     {
         SharedCtor(arena, is_message_owned);
-        // @@protoc_insertion_point(arena_constructor:protobuf.MessageOfRecycleBank)
+        // @@protoc_insertion_point(arena_constructor:protobuf.MessageOfFactory)
     }
-    MessageOfRecycleBank::MessageOfRecycleBank(const MessageOfRecycleBank& from) :
+    MessageOfFactory::MessageOfFactory(const MessageOfFactory& from) :
         ::PROTOBUF_NAMESPACE_ID::Message()
     {
-        MessageOfRecycleBank* const _this = this;
+        MessageOfFactory* const _this = this;
         (void)_this;
         new (&_impl_) Impl_{
             decltype(_impl_.x_){}, decltype(_impl_.y_){}, decltype(_impl_.team_id_){}, decltype(_impl_.hp_){}, /*decltype(_impl_._cached_size_)*/ {}};
 
         _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
         ::memcpy(&_impl_.x_, &from._impl_.x_, static_cast<size_t>(reinterpret_cast<char*>(&_impl_.hp_) - reinterpret_cast<char*>(&_impl_.x_)) + sizeof(_impl_.hp_));
-        // @@protoc_insertion_point(copy_constructor:protobuf.MessageOfRecycleBank)
+        // @@protoc_insertion_point(copy_constructor:protobuf.MessageOfFactory)
     }
 
-    inline void MessageOfRecycleBank::SharedCtor(
+    inline void MessageOfFactory::SharedCtor(
         ::_pb::Arena* arena, bool is_message_owned
     )
     {
@@ -2422,9 +2420,9 @@ namespace protobuf
             decltype(_impl_.x_){0}, decltype(_impl_.y_){0}, decltype(_impl_.team_id_){int64_t{0}}, decltype(_impl_.hp_){0}, /*decltype(_impl_._cached_size_)*/ {}};
     }
 
-    MessageOfRecycleBank::~MessageOfRecycleBank()
+    MessageOfFactory::~MessageOfFactory()
     {
-        // @@protoc_insertion_point(destructor:protobuf.MessageOfRecycleBank)
+        // @@protoc_insertion_point(destructor:protobuf.MessageOfFactory)
         if (auto* arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>())
         {
             (void)arena;
@@ -2433,19 +2431,19 @@ namespace protobuf
         SharedDtor();
     }
 
-    inline void MessageOfRecycleBank::SharedDtor()
+    inline void MessageOfFactory::SharedDtor()
     {
         GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
     }
 
-    void MessageOfRecycleBank::SetCachedSize(int size) const
+    void MessageOfFactory::SetCachedSize(int size) const
     {
         _impl_._cached_size_.Set(size);
     }
 
-    void MessageOfRecycleBank::Clear()
+    void MessageOfFactory::Clear()
     {
-        // @@protoc_insertion_point(message_clear_start:protobuf.MessageOfRecycleBank)
+        // @@protoc_insertion_point(message_clear_start:protobuf.MessageOfFactory)
         uint32_t cached_has_bits = 0;
         // Prevent compiler warnings about cached_has_bits being unused
         (void)cached_has_bits;
@@ -2454,7 +2452,7 @@ namespace protobuf
         _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
     }
 
-    const char* MessageOfRecycleBank::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx)
+    const char* MessageOfFactory::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx)
     {
 #define CHK_(x)                       \
     if (PROTOBUF_PREDICT_FALSE(!(x))) \
@@ -2531,11 +2529,11 @@ namespace protobuf
 #undef CHK_
     }
 
-    uint8_t* MessageOfRecycleBank::_InternalSerialize(
+    uint8_t* MessageOfFactory::_InternalSerialize(
         uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream
     ) const
     {
-        // @@protoc_insertion_point(serialize_to_array_start:protobuf.MessageOfRecycleBank)
+        // @@protoc_insertion_point(serialize_to_array_start:protobuf.MessageOfFactory)
         uint32_t cached_has_bits = 0;
         (void)cached_has_bits;
 
@@ -2573,13 +2571,13 @@ namespace protobuf
                 _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream
             );
         }
-        // @@protoc_insertion_point(serialize_to_array_end:protobuf.MessageOfRecycleBank)
+        // @@protoc_insertion_point(serialize_to_array_end:protobuf.MessageOfFactory)
         return target;
     }
 
-    size_t MessageOfRecycleBank::ByteSizeLong() const
+    size_t MessageOfFactory::ByteSizeLong() const
     {
-        // @@protoc_insertion_point(message_byte_size_start:protobuf.MessageOfRecycleBank)
+        // @@protoc_insertion_point(message_byte_size_start:protobuf.MessageOfFactory)
         size_t total_size = 0;
 
         uint32_t cached_has_bits = 0;
@@ -2613,19 +2611,19 @@ namespace protobuf
         return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
     }
 
-    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MessageOfRecycleBank::_class_data_ = {
+    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MessageOfFactory::_class_data_ = {
         ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-        MessageOfRecycleBank::MergeImpl};
-    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData* MessageOfRecycleBank::GetClassData() const
+        MessageOfFactory::MergeImpl};
+    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData* MessageOfFactory::GetClassData() const
     {
         return &_class_data_;
     }
 
-    void MessageOfRecycleBank::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg)
+    void MessageOfFactory::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg)
     {
-        auto* const _this = static_cast<MessageOfRecycleBank*>(&to_msg);
-        auto& from = static_cast<const MessageOfRecycleBank&>(from_msg);
-        // @@protoc_insertion_point(class_specific_merge_from_start:protobuf.MessageOfRecycleBank)
+        auto* const _this = static_cast<MessageOfFactory*>(&to_msg);
+        auto& from = static_cast<const MessageOfFactory&>(from_msg);
+        // @@protoc_insertion_point(class_specific_merge_from_start:protobuf.MessageOfFactory)
         GOOGLE_DCHECK_NE(&from, _this);
         uint32_t cached_has_bits = 0;
         (void)cached_has_bits;
@@ -2649,32 +2647,32 @@ namespace protobuf
         _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
     }
 
-    void MessageOfRecycleBank::CopyFrom(const MessageOfRecycleBank& from)
+    void MessageOfFactory::CopyFrom(const MessageOfFactory& from)
     {
-        // @@protoc_insertion_point(class_specific_copy_from_start:protobuf.MessageOfRecycleBank)
+        // @@protoc_insertion_point(class_specific_copy_from_start:protobuf.MessageOfFactory)
         if (&from == this)
             return;
         Clear();
         MergeFrom(from);
     }
 
-    bool MessageOfRecycleBank::IsInitialized() const
+    bool MessageOfFactory::IsInitialized() const
     {
         return true;
     }
 
-    void MessageOfRecycleBank::InternalSwap(MessageOfRecycleBank* other)
+    void MessageOfFactory::InternalSwap(MessageOfFactory* other)
     {
         using std::swap;
         _internal_metadata_.InternalSwap(&other->_internal_metadata_);
         ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-            PROTOBUF_FIELD_OFFSET(MessageOfRecycleBank, _impl_.hp_) + sizeof(MessageOfRecycleBank::_impl_.hp_) - PROTOBUF_FIELD_OFFSET(MessageOfRecycleBank, _impl_.x_)>(
+            PROTOBUF_FIELD_OFFSET(MessageOfFactory, _impl_.hp_) + sizeof(MessageOfFactory::_impl_.hp_) - PROTOBUF_FIELD_OFFSET(MessageOfFactory, _impl_.x_)>(
             reinterpret_cast<char*>(&_impl_.x_),
             reinterpret_cast<char*>(&other->_impl_.x_)
         );
     }
 
-    ::PROTOBUF_NAMESPACE_ID::Metadata MessageOfRecycleBank::GetMetadata() const
+    ::PROTOBUF_NAMESPACE_ID::Metadata MessageOfFactory::GetMetadata() const
     {
         return ::_pbi::AssignDescriptors(
             &descriptor_table_Message2Clients_2eproto_getter, &descriptor_table_Message2Clients_2eproto_once, file_level_metadata_Message2Clients_2eproto[3]
@@ -2683,31 +2681,31 @@ namespace protobuf
 
     // ===================================================================
 
-    class MessageOfChargeStation::_Internal
+    class MessageOfCommunity::_Internal
     {
     public:
     };
 
-    MessageOfChargeStation::MessageOfChargeStation(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned) :
+    MessageOfCommunity::MessageOfCommunity(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned) :
         ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned)
     {
         SharedCtor(arena, is_message_owned);
-        // @@protoc_insertion_point(arena_constructor:protobuf.MessageOfChargeStation)
+        // @@protoc_insertion_point(arena_constructor:protobuf.MessageOfCommunity)
     }
-    MessageOfChargeStation::MessageOfChargeStation(const MessageOfChargeStation& from) :
+    MessageOfCommunity::MessageOfCommunity(const MessageOfCommunity& from) :
         ::PROTOBUF_NAMESPACE_ID::Message()
     {
-        MessageOfChargeStation* const _this = this;
+        MessageOfCommunity* const _this = this;
         (void)_this;
         new (&_impl_) Impl_{
             decltype(_impl_.x_){}, decltype(_impl_.y_){}, decltype(_impl_.team_id_){}, decltype(_impl_.hp_){}, /*decltype(_impl_._cached_size_)*/ {}};
 
         _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
         ::memcpy(&_impl_.x_, &from._impl_.x_, static_cast<size_t>(reinterpret_cast<char*>(&_impl_.hp_) - reinterpret_cast<char*>(&_impl_.x_)) + sizeof(_impl_.hp_));
-        // @@protoc_insertion_point(copy_constructor:protobuf.MessageOfChargeStation)
+        // @@protoc_insertion_point(copy_constructor:protobuf.MessageOfCommunity)
     }
 
-    inline void MessageOfChargeStation::SharedCtor(
+    inline void MessageOfCommunity::SharedCtor(
         ::_pb::Arena* arena, bool is_message_owned
     )
     {
@@ -2717,9 +2715,9 @@ namespace protobuf
             decltype(_impl_.x_){0}, decltype(_impl_.y_){0}, decltype(_impl_.team_id_){int64_t{0}}, decltype(_impl_.hp_){0}, /*decltype(_impl_._cached_size_)*/ {}};
     }
 
-    MessageOfChargeStation::~MessageOfChargeStation()
+    MessageOfCommunity::~MessageOfCommunity()
     {
-        // @@protoc_insertion_point(destructor:protobuf.MessageOfChargeStation)
+        // @@protoc_insertion_point(destructor:protobuf.MessageOfCommunity)
         if (auto* arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>())
         {
             (void)arena;
@@ -2728,19 +2726,19 @@ namespace protobuf
         SharedDtor();
     }
 
-    inline void MessageOfChargeStation::SharedDtor()
+    inline void MessageOfCommunity::SharedDtor()
     {
         GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
     }
 
-    void MessageOfChargeStation::SetCachedSize(int size) const
+    void MessageOfCommunity::SetCachedSize(int size) const
     {
         _impl_._cached_size_.Set(size);
     }
 
-    void MessageOfChargeStation::Clear()
+    void MessageOfCommunity::Clear()
     {
-        // @@protoc_insertion_point(message_clear_start:protobuf.MessageOfChargeStation)
+        // @@protoc_insertion_point(message_clear_start:protobuf.MessageOfCommunity)
         uint32_t cached_has_bits = 0;
         // Prevent compiler warnings about cached_has_bits being unused
         (void)cached_has_bits;
@@ -2749,7 +2747,7 @@ namespace protobuf
         _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
     }
 
-    const char* MessageOfChargeStation::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx)
+    const char* MessageOfCommunity::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx)
     {
 #define CHK_(x)                       \
     if (PROTOBUF_PREDICT_FALSE(!(x))) \
@@ -2826,11 +2824,11 @@ namespace protobuf
 #undef CHK_
     }
 
-    uint8_t* MessageOfChargeStation::_InternalSerialize(
+    uint8_t* MessageOfCommunity::_InternalSerialize(
         uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream
     ) const
     {
-        // @@protoc_insertion_point(serialize_to_array_start:protobuf.MessageOfChargeStation)
+        // @@protoc_insertion_point(serialize_to_array_start:protobuf.MessageOfCommunity)
         uint32_t cached_has_bits = 0;
         (void)cached_has_bits;
 
@@ -2868,13 +2866,13 @@ namespace protobuf
                 _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream
             );
         }
-        // @@protoc_insertion_point(serialize_to_array_end:protobuf.MessageOfChargeStation)
+        // @@protoc_insertion_point(serialize_to_array_end:protobuf.MessageOfCommunity)
         return target;
     }
 
-    size_t MessageOfChargeStation::ByteSizeLong() const
+    size_t MessageOfCommunity::ByteSizeLong() const
     {
-        // @@protoc_insertion_point(message_byte_size_start:protobuf.MessageOfChargeStation)
+        // @@protoc_insertion_point(message_byte_size_start:protobuf.MessageOfCommunity)
         size_t total_size = 0;
 
         uint32_t cached_has_bits = 0;
@@ -2908,19 +2906,19 @@ namespace protobuf
         return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
     }
 
-    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MessageOfChargeStation::_class_data_ = {
+    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MessageOfCommunity::_class_data_ = {
         ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-        MessageOfChargeStation::MergeImpl};
-    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData* MessageOfChargeStation::GetClassData() const
+        MessageOfCommunity::MergeImpl};
+    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData* MessageOfCommunity::GetClassData() const
     {
         return &_class_data_;
     }
 
-    void MessageOfChargeStation::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg)
+    void MessageOfCommunity::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg)
     {
-        auto* const _this = static_cast<MessageOfChargeStation*>(&to_msg);
-        auto& from = static_cast<const MessageOfChargeStation&>(from_msg);
-        // @@protoc_insertion_point(class_specific_merge_from_start:protobuf.MessageOfChargeStation)
+        auto* const _this = static_cast<MessageOfCommunity*>(&to_msg);
+        auto& from = static_cast<const MessageOfCommunity&>(from_msg);
+        // @@protoc_insertion_point(class_specific_merge_from_start:protobuf.MessageOfCommunity)
         GOOGLE_DCHECK_NE(&from, _this);
         uint32_t cached_has_bits = 0;
         (void)cached_has_bits;
@@ -2944,32 +2942,32 @@ namespace protobuf
         _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
     }
 
-    void MessageOfChargeStation::CopyFrom(const MessageOfChargeStation& from)
+    void MessageOfCommunity::CopyFrom(const MessageOfCommunity& from)
     {
-        // @@protoc_insertion_point(class_specific_copy_from_start:protobuf.MessageOfChargeStation)
+        // @@protoc_insertion_point(class_specific_copy_from_start:protobuf.MessageOfCommunity)
         if (&from == this)
             return;
         Clear();
         MergeFrom(from);
     }
 
-    bool MessageOfChargeStation::IsInitialized() const
+    bool MessageOfCommunity::IsInitialized() const
     {
         return true;
     }
 
-    void MessageOfChargeStation::InternalSwap(MessageOfChargeStation* other)
+    void MessageOfCommunity::InternalSwap(MessageOfCommunity* other)
     {
         using std::swap;
         _internal_metadata_.InternalSwap(&other->_internal_metadata_);
         ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-            PROTOBUF_FIELD_OFFSET(MessageOfChargeStation, _impl_.hp_) + sizeof(MessageOfChargeStation::_impl_.hp_) - PROTOBUF_FIELD_OFFSET(MessageOfChargeStation, _impl_.x_)>(
+            PROTOBUF_FIELD_OFFSET(MessageOfCommunity, _impl_.hp_) + sizeof(MessageOfCommunity::_impl_.hp_) - PROTOBUF_FIELD_OFFSET(MessageOfCommunity, _impl_.x_)>(
             reinterpret_cast<char*>(&_impl_.x_),
             reinterpret_cast<char*>(&other->_impl_.x_)
         );
     }
 
-    ::PROTOBUF_NAMESPACE_ID::Metadata MessageOfChargeStation::GetMetadata() const
+    ::PROTOBUF_NAMESPACE_ID::Metadata MessageOfCommunity::GetMetadata() const
     {
         return ::_pbi::AssignDescriptors(
             &descriptor_table_Message2Clients_2eproto_getter, &descriptor_table_Message2Clients_2eproto_once, file_level_metadata_Message2Clients_2eproto[4]
@@ -2978,31 +2976,31 @@ namespace protobuf
 
     // ===================================================================
 
-    class MessageOfSignalTower::_Internal
+    class MessageOfFort::_Internal
     {
     public:
     };
 
-    MessageOfSignalTower::MessageOfSignalTower(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned) :
+    MessageOfFort::MessageOfFort(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned) :
         ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned)
     {
         SharedCtor(arena, is_message_owned);
-        // @@protoc_insertion_point(arena_constructor:protobuf.MessageOfSignalTower)
+        // @@protoc_insertion_point(arena_constructor:protobuf.MessageOfFort)
     }
-    MessageOfSignalTower::MessageOfSignalTower(const MessageOfSignalTower& from) :
+    MessageOfFort::MessageOfFort(const MessageOfFort& from) :
         ::PROTOBUF_NAMESPACE_ID::Message()
     {
-        MessageOfSignalTower* const _this = this;
+        MessageOfFort* const _this = this;
         (void)_this;
         new (&_impl_) Impl_{
             decltype(_impl_.x_){}, decltype(_impl_.y_){}, decltype(_impl_.team_id_){}, decltype(_impl_.hp_){}, /*decltype(_impl_._cached_size_)*/ {}};
 
         _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
         ::memcpy(&_impl_.x_, &from._impl_.x_, static_cast<size_t>(reinterpret_cast<char*>(&_impl_.hp_) - reinterpret_cast<char*>(&_impl_.x_)) + sizeof(_impl_.hp_));
-        // @@protoc_insertion_point(copy_constructor:protobuf.MessageOfSignalTower)
+        // @@protoc_insertion_point(copy_constructor:protobuf.MessageOfFort)
     }
 
-    inline void MessageOfSignalTower::SharedCtor(
+    inline void MessageOfFort::SharedCtor(
         ::_pb::Arena* arena, bool is_message_owned
     )
     {
@@ -3012,9 +3010,9 @@ namespace protobuf
             decltype(_impl_.x_){0}, decltype(_impl_.y_){0}, decltype(_impl_.team_id_){int64_t{0}}, decltype(_impl_.hp_){0}, /*decltype(_impl_._cached_size_)*/ {}};
     }
 
-    MessageOfSignalTower::~MessageOfSignalTower()
+    MessageOfFort::~MessageOfFort()
     {
-        // @@protoc_insertion_point(destructor:protobuf.MessageOfSignalTower)
+        // @@protoc_insertion_point(destructor:protobuf.MessageOfFort)
         if (auto* arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>())
         {
             (void)arena;
@@ -3023,19 +3021,19 @@ namespace protobuf
         SharedDtor();
     }
 
-    inline void MessageOfSignalTower::SharedDtor()
+    inline void MessageOfFort::SharedDtor()
     {
         GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
     }
 
-    void MessageOfSignalTower::SetCachedSize(int size) const
+    void MessageOfFort::SetCachedSize(int size) const
     {
         _impl_._cached_size_.Set(size);
     }
 
-    void MessageOfSignalTower::Clear()
+    void MessageOfFort::Clear()
     {
-        // @@protoc_insertion_point(message_clear_start:protobuf.MessageOfSignalTower)
+        // @@protoc_insertion_point(message_clear_start:protobuf.MessageOfFort)
         uint32_t cached_has_bits = 0;
         // Prevent compiler warnings about cached_has_bits being unused
         (void)cached_has_bits;
@@ -3044,7 +3042,7 @@ namespace protobuf
         _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
     }
 
-    const char* MessageOfSignalTower::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx)
+    const char* MessageOfFort::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx)
     {
 #define CHK_(x)                       \
     if (PROTOBUF_PREDICT_FALSE(!(x))) \
@@ -3121,11 +3119,11 @@ namespace protobuf
 #undef CHK_
     }
 
-    uint8_t* MessageOfSignalTower::_InternalSerialize(
+    uint8_t* MessageOfFort::_InternalSerialize(
         uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream
     ) const
     {
-        // @@protoc_insertion_point(serialize_to_array_start:protobuf.MessageOfSignalTower)
+        // @@protoc_insertion_point(serialize_to_array_start:protobuf.MessageOfFort)
         uint32_t cached_has_bits = 0;
         (void)cached_has_bits;
 
@@ -3163,13 +3161,13 @@ namespace protobuf
                 _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream
             );
         }
-        // @@protoc_insertion_point(serialize_to_array_end:protobuf.MessageOfSignalTower)
+        // @@protoc_insertion_point(serialize_to_array_end:protobuf.MessageOfFort)
         return target;
     }
 
-    size_t MessageOfSignalTower::ByteSizeLong() const
+    size_t MessageOfFort::ByteSizeLong() const
     {
-        // @@protoc_insertion_point(message_byte_size_start:protobuf.MessageOfSignalTower)
+        // @@protoc_insertion_point(message_byte_size_start:protobuf.MessageOfFort)
         size_t total_size = 0;
 
         uint32_t cached_has_bits = 0;
@@ -3203,19 +3201,19 @@ namespace protobuf
         return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
     }
 
-    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MessageOfSignalTower::_class_data_ = {
+    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MessageOfFort::_class_data_ = {
         ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-        MessageOfSignalTower::MergeImpl};
-    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData* MessageOfSignalTower::GetClassData() const
+        MessageOfFort::MergeImpl};
+    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData* MessageOfFort::GetClassData() const
     {
         return &_class_data_;
     }
 
-    void MessageOfSignalTower::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg)
+    void MessageOfFort::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg)
     {
-        auto* const _this = static_cast<MessageOfSignalTower*>(&to_msg);
-        auto& from = static_cast<const MessageOfSignalTower&>(from_msg);
-        // @@protoc_insertion_point(class_specific_merge_from_start:protobuf.MessageOfSignalTower)
+        auto* const _this = static_cast<MessageOfFort*>(&to_msg);
+        auto& from = static_cast<const MessageOfFort&>(from_msg);
+        // @@protoc_insertion_point(class_specific_merge_from_start:protobuf.MessageOfFort)
         GOOGLE_DCHECK_NE(&from, _this);
         uint32_t cached_has_bits = 0;
         (void)cached_has_bits;
@@ -3239,32 +3237,32 @@ namespace protobuf
         _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
     }
 
-    void MessageOfSignalTower::CopyFrom(const MessageOfSignalTower& from)
+    void MessageOfFort::CopyFrom(const MessageOfFort& from)
     {
-        // @@protoc_insertion_point(class_specific_copy_from_start:protobuf.MessageOfSignalTower)
+        // @@protoc_insertion_point(class_specific_copy_from_start:protobuf.MessageOfFort)
         if (&from == this)
             return;
         Clear();
         MergeFrom(from);
     }
 
-    bool MessageOfSignalTower::IsInitialized() const
+    bool MessageOfFort::IsInitialized() const
     {
         return true;
     }
 
-    void MessageOfSignalTower::InternalSwap(MessageOfSignalTower* other)
+    void MessageOfFort::InternalSwap(MessageOfFort* other)
     {
         using std::swap;
         _internal_metadata_.InternalSwap(&other->_internal_metadata_);
         ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-            PROTOBUF_FIELD_OFFSET(MessageOfSignalTower, _impl_.hp_) + sizeof(MessageOfSignalTower::_impl_.hp_) - PROTOBUF_FIELD_OFFSET(MessageOfSignalTower, _impl_.x_)>(
+            PROTOBUF_FIELD_OFFSET(MessageOfFort, _impl_.hp_) + sizeof(MessageOfFort::_impl_.hp_) - PROTOBUF_FIELD_OFFSET(MessageOfFort, _impl_.x_)>(
             reinterpret_cast<char*>(&_impl_.x_),
             reinterpret_cast<char*>(&other->_impl_.x_)
         );
     }
 
-    ::PROTOBUF_NAMESPACE_ID::Metadata MessageOfSignalTower::GetMetadata() const
+    ::PROTOBUF_NAMESPACE_ID::Metadata MessageOfFort::GetMetadata() const
     {
         return ::_pbi::AssignDescriptors(
             &descriptor_table_Message2Clients_2eproto_getter, &descriptor_table_Message2Clients_2eproto_once, file_level_metadata_Message2Clients_2eproto[5]
@@ -3273,31 +3271,31 @@ namespace protobuf
 
     // ===================================================================
 
-    class MessageOfBridge::_Internal
+    class MessageOfWormhole::_Internal
     {
     public:
     };
 
-    MessageOfBridge::MessageOfBridge(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned) :
+    MessageOfWormhole::MessageOfWormhole(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned) :
         ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned)
     {
         SharedCtor(arena, is_message_owned);
-        // @@protoc_insertion_point(arena_constructor:protobuf.MessageOfBridge)
+        // @@protoc_insertion_point(arena_constructor:protobuf.MessageOfWormhole)
     }
-    MessageOfBridge::MessageOfBridge(const MessageOfBridge& from) :
+    MessageOfWormhole::MessageOfWormhole(const MessageOfWormhole& from) :
         ::PROTOBUF_NAMESPACE_ID::Message()
     {
-        MessageOfBridge* const _this = this;
+        MessageOfWormhole* const _this = this;
         (void)_this;
         new (&_impl_) Impl_{
             decltype(_impl_.x_){}, decltype(_impl_.y_){}, decltype(_impl_.hp_){}, /*decltype(_impl_._cached_size_)*/ {}};
 
         _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
         ::memcpy(&_impl_.x_, &from._impl_.x_, static_cast<size_t>(reinterpret_cast<char*>(&_impl_.hp_) - reinterpret_cast<char*>(&_impl_.x_)) + sizeof(_impl_.hp_));
-        // @@protoc_insertion_point(copy_constructor:protobuf.MessageOfBridge)
+        // @@protoc_insertion_point(copy_constructor:protobuf.MessageOfWormhole)
     }
 
-    inline void MessageOfBridge::SharedCtor(
+    inline void MessageOfWormhole::SharedCtor(
         ::_pb::Arena* arena, bool is_message_owned
     )
     {
@@ -3307,9 +3305,9 @@ namespace protobuf
             decltype(_impl_.x_){0}, decltype(_impl_.y_){0}, decltype(_impl_.hp_){0}, /*decltype(_impl_._cached_size_)*/ {}};
     }
 
-    MessageOfBridge::~MessageOfBridge()
+    MessageOfWormhole::~MessageOfWormhole()
     {
-        // @@protoc_insertion_point(destructor:protobuf.MessageOfBridge)
+        // @@protoc_insertion_point(destructor:protobuf.MessageOfWormhole)
         if (auto* arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>())
         {
             (void)arena;
@@ -3318,19 +3316,19 @@ namespace protobuf
         SharedDtor();
     }
 
-    inline void MessageOfBridge::SharedDtor()
+    inline void MessageOfWormhole::SharedDtor()
     {
         GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
     }
 
-    void MessageOfBridge::SetCachedSize(int size) const
+    void MessageOfWormhole::SetCachedSize(int size) const
     {
         _impl_._cached_size_.Set(size);
     }
 
-    void MessageOfBridge::Clear()
+    void MessageOfWormhole::Clear()
     {
-        // @@protoc_insertion_point(message_clear_start:protobuf.MessageOfBridge)
+        // @@protoc_insertion_point(message_clear_start:protobuf.MessageOfWormhole)
         uint32_t cached_has_bits = 0;
         // Prevent compiler warnings about cached_has_bits being unused
         (void)cached_has_bits;
@@ -3339,7 +3337,7 @@ namespace protobuf
         _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
     }
 
-    const char* MessageOfBridge::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx)
+    const char* MessageOfWormhole::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx)
     {
 #define CHK_(x)                       \
     if (PROTOBUF_PREDICT_FALSE(!(x))) \
@@ -3406,11 +3404,11 @@ namespace protobuf
 #undef CHK_
     }
 
-    uint8_t* MessageOfBridge::_InternalSerialize(
+    uint8_t* MessageOfWormhole::_InternalSerialize(
         uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream
     ) const
     {
-        // @@protoc_insertion_point(serialize_to_array_start:protobuf.MessageOfBridge)
+        // @@protoc_insertion_point(serialize_to_array_start:protobuf.MessageOfWormhole)
         uint32_t cached_has_bits = 0;
         (void)cached_has_bits;
 
@@ -3441,13 +3439,13 @@ namespace protobuf
                 _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream
             );
         }
-        // @@protoc_insertion_point(serialize_to_array_end:protobuf.MessageOfBridge)
+        // @@protoc_insertion_point(serialize_to_array_end:protobuf.MessageOfWormhole)
         return target;
     }
 
-    size_t MessageOfBridge::ByteSizeLong() const
+    size_t MessageOfWormhole::ByteSizeLong() const
     {
-        // @@protoc_insertion_point(message_byte_size_start:protobuf.MessageOfBridge)
+        // @@protoc_insertion_point(message_byte_size_start:protobuf.MessageOfWormhole)
         size_t total_size = 0;
 
         uint32_t cached_has_bits = 0;
@@ -3475,19 +3473,19 @@ namespace protobuf
         return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
     }
 
-    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MessageOfBridge::_class_data_ = {
+    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MessageOfWormhole::_class_data_ = {
         ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-        MessageOfBridge::MergeImpl};
-    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData* MessageOfBridge::GetClassData() const
+        MessageOfWormhole::MergeImpl};
+    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData* MessageOfWormhole::GetClassData() const
     {
         return &_class_data_;
     }
 
-    void MessageOfBridge::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg)
+    void MessageOfWormhole::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg)
     {
-        auto* const _this = static_cast<MessageOfBridge*>(&to_msg);
-        auto& from = static_cast<const MessageOfBridge&>(from_msg);
-        // @@protoc_insertion_point(class_specific_merge_from_start:protobuf.MessageOfBridge)
+        auto* const _this = static_cast<MessageOfWormhole*>(&to_msg);
+        auto& from = static_cast<const MessageOfWormhole&>(from_msg);
+        // @@protoc_insertion_point(class_specific_merge_from_start:protobuf.MessageOfWormhole)
         GOOGLE_DCHECK_NE(&from, _this);
         uint32_t cached_has_bits = 0;
         (void)cached_has_bits;
@@ -3507,32 +3505,32 @@ namespace protobuf
         _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
     }
 
-    void MessageOfBridge::CopyFrom(const MessageOfBridge& from)
+    void MessageOfWormhole::CopyFrom(const MessageOfWormhole& from)
     {
-        // @@protoc_insertion_point(class_specific_copy_from_start:protobuf.MessageOfBridge)
+        // @@protoc_insertion_point(class_specific_copy_from_start:protobuf.MessageOfWormhole)
         if (&from == this)
             return;
         Clear();
         MergeFrom(from);
     }
 
-    bool MessageOfBridge::IsInitialized() const
+    bool MessageOfWormhole::IsInitialized() const
     {
         return true;
     }
 
-    void MessageOfBridge::InternalSwap(MessageOfBridge* other)
+    void MessageOfWormhole::InternalSwap(MessageOfWormhole* other)
     {
         using std::swap;
         _internal_metadata_.InternalSwap(&other->_internal_metadata_);
         ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-            PROTOBUF_FIELD_OFFSET(MessageOfBridge, _impl_.hp_) + sizeof(MessageOfBridge::_impl_.hp_) - PROTOBUF_FIELD_OFFSET(MessageOfBridge, _impl_.x_)>(
+            PROTOBUF_FIELD_OFFSET(MessageOfWormhole, _impl_.hp_) + sizeof(MessageOfWormhole::_impl_.hp_) - PROTOBUF_FIELD_OFFSET(MessageOfWormhole, _impl_.x_)>(
             reinterpret_cast<char*>(&_impl_.x_),
             reinterpret_cast<char*>(&other->_impl_.x_)
         );
     }
 
-    ::PROTOBUF_NAMESPACE_ID::Metadata MessageOfBridge::GetMetadata() const
+    ::PROTOBUF_NAMESPACE_ID::Metadata MessageOfWormhole::GetMetadata() const
     {
         return ::_pbi::AssignDescriptors(
             &descriptor_table_Message2Clients_2eproto_getter, &descriptor_table_Message2Clients_2eproto_once, file_level_metadata_Message2Clients_2eproto[6]
@@ -3541,31 +3539,31 @@ namespace protobuf
 
     // ===================================================================
 
-    class MessageOfGarbage::_Internal
+    class MessageOfResource::_Internal
     {
     public:
     };
 
-    MessageOfGarbage::MessageOfGarbage(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned) :
+    MessageOfResource::MessageOfResource(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned) :
         ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned)
     {
         SharedCtor(arena, is_message_owned);
-        // @@protoc_insertion_point(arena_constructor:protobuf.MessageOfGarbage)
+        // @@protoc_insertion_point(arena_constructor:protobuf.MessageOfResource)
     }
-    MessageOfGarbage::MessageOfGarbage(const MessageOfGarbage& from) :
+    MessageOfResource::MessageOfResource(const MessageOfResource& from) :
         ::PROTOBUF_NAMESPACE_ID::Message()
     {
-        MessageOfGarbage* const _this = this;
+        MessageOfResource* const _this = this;
         (void)_this;
         new (&_impl_) Impl_{
             decltype(_impl_.x_){}, decltype(_impl_.y_){}, decltype(_impl_.progress_){}, /*decltype(_impl_._cached_size_)*/ {}};
 
         _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
         ::memcpy(&_impl_.x_, &from._impl_.x_, static_cast<size_t>(reinterpret_cast<char*>(&_impl_.progress_) - reinterpret_cast<char*>(&_impl_.x_)) + sizeof(_impl_.progress_));
-        // @@protoc_insertion_point(copy_constructor:protobuf.MessageOfGarbage)
+        // @@protoc_insertion_point(copy_constructor:protobuf.MessageOfResource)
     }
 
-    inline void MessageOfGarbage::SharedCtor(
+    inline void MessageOfResource::SharedCtor(
         ::_pb::Arena* arena, bool is_message_owned
     )
     {
@@ -3575,9 +3573,9 @@ namespace protobuf
             decltype(_impl_.x_){0}, decltype(_impl_.y_){0}, decltype(_impl_.progress_){0}, /*decltype(_impl_._cached_size_)*/ {}};
     }
 
-    MessageOfGarbage::~MessageOfGarbage()
+    MessageOfResource::~MessageOfResource()
     {
-        // @@protoc_insertion_point(destructor:protobuf.MessageOfGarbage)
+        // @@protoc_insertion_point(destructor:protobuf.MessageOfResource)
         if (auto* arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>())
         {
             (void)arena;
@@ -3586,19 +3584,19 @@ namespace protobuf
         SharedDtor();
     }
 
-    inline void MessageOfGarbage::SharedDtor()
+    inline void MessageOfResource::SharedDtor()
     {
         GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
     }
 
-    void MessageOfGarbage::SetCachedSize(int size) const
+    void MessageOfResource::SetCachedSize(int size) const
     {
         _impl_._cached_size_.Set(size);
     }
 
-    void MessageOfGarbage::Clear()
+    void MessageOfResource::Clear()
     {
-        // @@protoc_insertion_point(message_clear_start:protobuf.MessageOfGarbage)
+        // @@protoc_insertion_point(message_clear_start:protobuf.MessageOfResource)
         uint32_t cached_has_bits = 0;
         // Prevent compiler warnings about cached_has_bits being unused
         (void)cached_has_bits;
@@ -3607,7 +3605,7 @@ namespace protobuf
         _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
     }
 
-    const char* MessageOfGarbage::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx)
+    const char* MessageOfResource::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx)
     {
 #define CHK_(x)                       \
     if (PROTOBUF_PREDICT_FALSE(!(x))) \
@@ -3674,11 +3672,11 @@ namespace protobuf
 #undef CHK_
     }
 
-    uint8_t* MessageOfGarbage::_InternalSerialize(
+    uint8_t* MessageOfResource::_InternalSerialize(
         uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream
     ) const
     {
-        // @@protoc_insertion_point(serialize_to_array_start:protobuf.MessageOfGarbage)
+        // @@protoc_insertion_point(serialize_to_array_start:protobuf.MessageOfResource)
         uint32_t cached_has_bits = 0;
         (void)cached_has_bits;
 
@@ -3709,13 +3707,13 @@ namespace protobuf
                 _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream
             );
         }
-        // @@protoc_insertion_point(serialize_to_array_end:protobuf.MessageOfGarbage)
+        // @@protoc_insertion_point(serialize_to_array_end:protobuf.MessageOfResource)
         return target;
     }
 
-    size_t MessageOfGarbage::ByteSizeLong() const
+    size_t MessageOfResource::ByteSizeLong() const
     {
-        // @@protoc_insertion_point(message_byte_size_start:protobuf.MessageOfGarbage)
+        // @@protoc_insertion_point(message_byte_size_start:protobuf.MessageOfResource)
         size_t total_size = 0;
 
         uint32_t cached_has_bits = 0;
@@ -3743,19 +3741,19 @@ namespace protobuf
         return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
     }
 
-    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MessageOfGarbage::_class_data_ = {
+    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData MessageOfResource::_class_data_ = {
         ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-        MessageOfGarbage::MergeImpl};
-    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData* MessageOfGarbage::GetClassData() const
+        MessageOfResource::MergeImpl};
+    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData* MessageOfResource::GetClassData() const
     {
         return &_class_data_;
     }
 
-    void MessageOfGarbage::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg)
+    void MessageOfResource::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg)
     {
-        auto* const _this = static_cast<MessageOfGarbage*>(&to_msg);
-        auto& from = static_cast<const MessageOfGarbage&>(from_msg);
-        // @@protoc_insertion_point(class_specific_merge_from_start:protobuf.MessageOfGarbage)
+        auto* const _this = static_cast<MessageOfResource*>(&to_msg);
+        auto& from = static_cast<const MessageOfResource&>(from_msg);
+        // @@protoc_insertion_point(class_specific_merge_from_start:protobuf.MessageOfResource)
         GOOGLE_DCHECK_NE(&from, _this);
         uint32_t cached_has_bits = 0;
         (void)cached_has_bits;
@@ -3775,32 +3773,32 @@ namespace protobuf
         _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
     }
 
-    void MessageOfGarbage::CopyFrom(const MessageOfGarbage& from)
+    void MessageOfResource::CopyFrom(const MessageOfResource& from)
     {
-        // @@protoc_insertion_point(class_specific_copy_from_start:protobuf.MessageOfGarbage)
+        // @@protoc_insertion_point(class_specific_copy_from_start:protobuf.MessageOfResource)
         if (&from == this)
             return;
         Clear();
         MergeFrom(from);
     }
 
-    bool MessageOfGarbage::IsInitialized() const
+    bool MessageOfResource::IsInitialized() const
     {
         return true;
     }
 
-    void MessageOfGarbage::InternalSwap(MessageOfGarbage* other)
+    void MessageOfResource::InternalSwap(MessageOfResource* other)
     {
         using std::swap;
         _internal_metadata_.InternalSwap(&other->_internal_metadata_);
         ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-            PROTOBUF_FIELD_OFFSET(MessageOfGarbage, _impl_.progress_) + sizeof(MessageOfGarbage::_impl_.progress_) - PROTOBUF_FIELD_OFFSET(MessageOfGarbage, _impl_.x_)>(
+            PROTOBUF_FIELD_OFFSET(MessageOfResource, _impl_.progress_) + sizeof(MessageOfResource::_impl_.progress_) - PROTOBUF_FIELD_OFFSET(MessageOfResource, _impl_.x_)>(
             reinterpret_cast<char*>(&_impl_.x_),
             reinterpret_cast<char*>(&other->_impl_.x_)
         );
     }
 
-    ::PROTOBUF_NAMESPACE_ID::Metadata MessageOfGarbage::GetMetadata() const
+    ::PROTOBUF_NAMESPACE_ID::Metadata MessageOfResource::GetMetadata() const
     {
         return ::_pbi::AssignDescriptors(
             &descriptor_table_Message2Clients_2eproto_getter, &descriptor_table_Message2Clients_2eproto_once, file_level_metadata_Message2Clients_2eproto[7]
@@ -4914,59 +4912,59 @@ namespace protobuf
     class MessageOfObj::_Internal
     {
     public:
-        static const ::protobuf::MessageOfSweeper& sweeper_message(const MessageOfObj* msg);
+        static const ::protobuf::MessageOfShip& ship_message(const MessageOfObj* msg);
         static const ::protobuf::MessageOfBullet& bullet_message(const MessageOfObj* msg);
-        static const ::protobuf::MessageOfRecycleBank& recyclebank_message(const MessageOfObj* msg);
-        static const ::protobuf::MessageOfChargeStation& chargestation_message(const MessageOfObj* msg);
-        static const ::protobuf::MessageOfSignalTower& signaltower_message(const MessageOfObj* msg);
-        static const ::protobuf::MessageOfBridge& bridge_message(const MessageOfObj* msg);
+        static const ::protobuf::MessageOfFactory& factory_message(const MessageOfObj* msg);
+        static const ::protobuf::MessageOfCommunity& community_message(const MessageOfObj* msg);
+        static const ::protobuf::MessageOfFort& fort_message(const MessageOfObj* msg);
+        static const ::protobuf::MessageOfWormhole& wormhole_message(const MessageOfObj* msg);
         static const ::protobuf::MessageOfHome& home_message(const MessageOfObj* msg);
-        static const ::protobuf::MessageOfGarbage& garbage_message(const MessageOfObj* msg);
+        static const ::protobuf::MessageOfResource& resource_message(const MessageOfObj* msg);
         static const ::protobuf::MessageOfMap& map_message(const MessageOfObj* msg);
         static const ::protobuf::MessageOfNews& news_message(const MessageOfObj* msg);
         static const ::protobuf::MessageOfBombedBullet& bombed_bullet_message(const MessageOfObj* msg);
         static const ::protobuf::MessageOfTeam& team_message(const MessageOfObj* msg);
     };
 
-    const ::protobuf::MessageOfSweeper&
-        MessageOfObj::_Internal::sweeper_message(const MessageOfObj* msg)
+    const ::protobuf::MessageOfShip&
+        MessageOfObj::_Internal::ship_message(const MessageOfObj* msg)
     {
-        return *msg->_impl_.message_of_obj_.sweeper_message_;
+        return *msg->_impl_.message_of_obj_.ship_message_;
     }
     const ::protobuf::MessageOfBullet&
         MessageOfObj::_Internal::bullet_message(const MessageOfObj* msg)
     {
         return *msg->_impl_.message_of_obj_.bullet_message_;
     }
-    const ::protobuf::MessageOfRecycleBank&
-        MessageOfObj::_Internal::recyclebank_message(const MessageOfObj* msg)
+    const ::protobuf::MessageOfFactory&
+        MessageOfObj::_Internal::factory_message(const MessageOfObj* msg)
     {
-        return *msg->_impl_.message_of_obj_.recyclebank_message_;
+        return *msg->_impl_.message_of_obj_.factory_message_;
     }
-    const ::protobuf::MessageOfChargeStation&
-        MessageOfObj::_Internal::chargestation_message(const MessageOfObj* msg)
+    const ::protobuf::MessageOfCommunity&
+        MessageOfObj::_Internal::community_message(const MessageOfObj* msg)
     {
-        return *msg->_impl_.message_of_obj_.chargestation_message_;
+        return *msg->_impl_.message_of_obj_.community_message_;
     }
-    const ::protobuf::MessageOfSignalTower&
-        MessageOfObj::_Internal::signaltower_message(const MessageOfObj* msg)
+    const ::protobuf::MessageOfFort&
+        MessageOfObj::_Internal::fort_message(const MessageOfObj* msg)
     {
-        return *msg->_impl_.message_of_obj_.signaltower_message_;
+        return *msg->_impl_.message_of_obj_.fort_message_;
     }
-    const ::protobuf::MessageOfBridge&
-        MessageOfObj::_Internal::bridge_message(const MessageOfObj* msg)
+    const ::protobuf::MessageOfWormhole&
+        MessageOfObj::_Internal::wormhole_message(const MessageOfObj* msg)
     {
-        return *msg->_impl_.message_of_obj_.bridge_message_;
+        return *msg->_impl_.message_of_obj_.wormhole_message_;
     }
     const ::protobuf::MessageOfHome&
         MessageOfObj::_Internal::home_message(const MessageOfObj* msg)
     {
         return *msg->_impl_.message_of_obj_.home_message_;
     }
-    const ::protobuf::MessageOfGarbage&
-        MessageOfObj::_Internal::garbage_message(const MessageOfObj* msg)
+    const ::protobuf::MessageOfResource&
+        MessageOfObj::_Internal::resource_message(const MessageOfObj* msg)
     {
-        return *msg->_impl_.message_of_obj_.garbage_message_;
+        return *msg->_impl_.message_of_obj_.resource_message_;
     }
     const ::protobuf::MessageOfMap&
         MessageOfObj::_Internal::map_message(const MessageOfObj* msg)
@@ -4988,24 +4986,24 @@ namespace protobuf
     {
         return *msg->_impl_.message_of_obj_.team_message_;
     }
-    void MessageOfObj::set_allocated_sweeper_message(::protobuf::MessageOfSweeper* sweeper_message)
+    void MessageOfObj::set_allocated_ship_message(::protobuf::MessageOfShip* ship_message)
     {
         ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
         clear_message_of_obj();
-        if (sweeper_message)
+        if (ship_message)
         {
             ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-                ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(sweeper_message);
+                ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(ship_message);
             if (message_arena != submessage_arena)
             {
-                sweeper_message = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-                    message_arena, sweeper_message, submessage_arena
+                ship_message = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+                    message_arena, ship_message, submessage_arena
                 );
             }
-            set_has_sweeper_message();
-            _impl_.message_of_obj_.sweeper_message_ = sweeper_message;
+            set_has_ship_message();
+            _impl_.message_of_obj_.ship_message_ = ship_message;
         }
-        // @@protoc_insertion_point(field_set_allocated:protobuf.MessageOfObj.sweeper_message)
+        // @@protoc_insertion_point(field_set_allocated:protobuf.MessageOfObj.ship_message)
     }
     void MessageOfObj::set_allocated_bullet_message(::protobuf::MessageOfBullet* bullet_message)
     {
@@ -5026,81 +5024,81 @@ namespace protobuf
         }
         // @@protoc_insertion_point(field_set_allocated:protobuf.MessageOfObj.bullet_message)
     }
-    void MessageOfObj::set_allocated_recyclebank_message(::protobuf::MessageOfRecycleBank* recyclebank_message)
+    void MessageOfObj::set_allocated_factory_message(::protobuf::MessageOfFactory* factory_message)
     {
         ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
         clear_message_of_obj();
-        if (recyclebank_message)
+        if (factory_message)
         {
             ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-                ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(recyclebank_message);
+                ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(factory_message);
             if (message_arena != submessage_arena)
             {
-                recyclebank_message = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-                    message_arena, recyclebank_message, submessage_arena
+                factory_message = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+                    message_arena, factory_message, submessage_arena
                 );
             }
-            set_has_recyclebank_message();
-            _impl_.message_of_obj_.recyclebank_message_ = recyclebank_message;
+            set_has_factory_message();
+            _impl_.message_of_obj_.factory_message_ = factory_message;
         }
-        // @@protoc_insertion_point(field_set_allocated:protobuf.MessageOfObj.recyclebank_message)
+        // @@protoc_insertion_point(field_set_allocated:protobuf.MessageOfObj.factory_message)
     }
-    void MessageOfObj::set_allocated_chargestation_message(::protobuf::MessageOfChargeStation* chargestation_message)
+    void MessageOfObj::set_allocated_community_message(::protobuf::MessageOfCommunity* community_message)
     {
         ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
         clear_message_of_obj();
-        if (chargestation_message)
+        if (community_message)
         {
             ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-                ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(chargestation_message);
+                ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(community_message);
             if (message_arena != submessage_arena)
             {
-                chargestation_message = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-                    message_arena, chargestation_message, submessage_arena
+                community_message = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+                    message_arena, community_message, submessage_arena
                 );
             }
-            set_has_chargestation_message();
-            _impl_.message_of_obj_.chargestation_message_ = chargestation_message;
+            set_has_community_message();
+            _impl_.message_of_obj_.community_message_ = community_message;
         }
-        // @@protoc_insertion_point(field_set_allocated:protobuf.MessageOfObj.chargestation_message)
+        // @@protoc_insertion_point(field_set_allocated:protobuf.MessageOfObj.community_message)
     }
-    void MessageOfObj::set_allocated_signaltower_message(::protobuf::MessageOfSignalTower* signaltower_message)
+    void MessageOfObj::set_allocated_fort_message(::protobuf::MessageOfFort* fort_message)
     {
         ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
         clear_message_of_obj();
-        if (signaltower_message)
+        if (fort_message)
         {
             ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-                ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(signaltower_message);
+                ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(fort_message);
             if (message_arena != submessage_arena)
             {
-                signaltower_message = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-                    message_arena, signaltower_message, submessage_arena
+                fort_message = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+                    message_arena, fort_message, submessage_arena
                 );
             }
-            set_has_signaltower_message();
-            _impl_.message_of_obj_.signaltower_message_ = signaltower_message;
+            set_has_fort_message();
+            _impl_.message_of_obj_.fort_message_ = fort_message;
         }
-        // @@protoc_insertion_point(field_set_allocated:protobuf.MessageOfObj.signaltower_message)
+        // @@protoc_insertion_point(field_set_allocated:protobuf.MessageOfObj.fort_message)
     }
-    void MessageOfObj::set_allocated_bridge_message(::protobuf::MessageOfBridge* bridge_message)
+    void MessageOfObj::set_allocated_wormhole_message(::protobuf::MessageOfWormhole* wormhole_message)
     {
         ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
         clear_message_of_obj();
-        if (bridge_message)
+        if (wormhole_message)
         {
             ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-                ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(bridge_message);
+                ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(wormhole_message);
             if (message_arena != submessage_arena)
             {
-                bridge_message = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-                    message_arena, bridge_message, submessage_arena
+                wormhole_message = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+                    message_arena, wormhole_message, submessage_arena
                 );
             }
-            set_has_bridge_message();
-            _impl_.message_of_obj_.bridge_message_ = bridge_message;
+            set_has_wormhole_message();
+            _impl_.message_of_obj_.wormhole_message_ = wormhole_message;
         }
-        // @@protoc_insertion_point(field_set_allocated:protobuf.MessageOfObj.bridge_message)
+        // @@protoc_insertion_point(field_set_allocated:protobuf.MessageOfObj.wormhole_message)
     }
     void MessageOfObj::set_allocated_home_message(::protobuf::MessageOfHome* home_message)
     {
@@ -5121,24 +5119,24 @@ namespace protobuf
         }
         // @@protoc_insertion_point(field_set_allocated:protobuf.MessageOfObj.home_message)
     }
-    void MessageOfObj::set_allocated_garbage_message(::protobuf::MessageOfGarbage* garbage_message)
+    void MessageOfObj::set_allocated_resource_message(::protobuf::MessageOfResource* resource_message)
     {
         ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
         clear_message_of_obj();
-        if (garbage_message)
+        if (resource_message)
         {
             ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-                ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(garbage_message);
+                ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(resource_message);
             if (message_arena != submessage_arena)
             {
-                garbage_message = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-                    message_arena, garbage_message, submessage_arena
+                resource_message = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+                    message_arena, resource_message, submessage_arena
                 );
             }
-            set_has_garbage_message();
-            _impl_.message_of_obj_.garbage_message_ = garbage_message;
+            set_has_resource_message();
+            _impl_.message_of_obj_.resource_message_ = resource_message;
         }
-        // @@protoc_insertion_point(field_set_allocated:protobuf.MessageOfObj.garbage_message)
+        // @@protoc_insertion_point(field_set_allocated:protobuf.MessageOfObj.resource_message)
     }
     void MessageOfObj::set_allocated_map_message(::protobuf::MessageOfMap* map_message)
     {
@@ -5234,10 +5232,10 @@ namespace protobuf
         clear_has_message_of_obj();
         switch (from.message_of_obj_case())
         {
-            case kSweeperMessage:
+            case kShipMessage:
                 {
-                    _this->_internal_mutable_sweeper_message()->::protobuf::MessageOfSweeper::MergeFrom(
-                        from._internal_sweeper_message()
+                    _this->_internal_mutable_ship_message()->::protobuf::MessageOfShip::MergeFrom(
+                        from._internal_ship_message()
                     );
                     break;
                 }
@@ -5248,31 +5246,31 @@ namespace protobuf
                     );
                     break;
                 }
-            case kRecyclebankMessage:
+            case kFactoryMessage:
                 {
-                    _this->_internal_mutable_recyclebank_message()->::protobuf::MessageOfRecycleBank::MergeFrom(
-                        from._internal_recyclebank_message()
+                    _this->_internal_mutable_factory_message()->::protobuf::MessageOfFactory::MergeFrom(
+                        from._internal_factory_message()
                     );
                     break;
                 }
-            case kChargestationMessage:
+            case kCommunityMessage:
                 {
-                    _this->_internal_mutable_chargestation_message()->::protobuf::MessageOfChargeStation::MergeFrom(
-                        from._internal_chargestation_message()
+                    _this->_internal_mutable_community_message()->::protobuf::MessageOfCommunity::MergeFrom(
+                        from._internal_community_message()
                     );
                     break;
                 }
-            case kSignaltowerMessage:
+            case kFortMessage:
                 {
-                    _this->_internal_mutable_signaltower_message()->::protobuf::MessageOfSignalTower::MergeFrom(
-                        from._internal_signaltower_message()
+                    _this->_internal_mutable_fort_message()->::protobuf::MessageOfFort::MergeFrom(
+                        from._internal_fort_message()
                     );
                     break;
                 }
-            case kBridgeMessage:
+            case kWormholeMessage:
                 {
-                    _this->_internal_mutable_bridge_message()->::protobuf::MessageOfBridge::MergeFrom(
-                        from._internal_bridge_message()
+                    _this->_internal_mutable_wormhole_message()->::protobuf::MessageOfWormhole::MergeFrom(
+                        from._internal_wormhole_message()
                     );
                     break;
                 }
@@ -5283,10 +5281,10 @@ namespace protobuf
                     );
                     break;
                 }
-            case kGarbageMessage:
+            case kResourceMessage:
                 {
-                    _this->_internal_mutable_garbage_message()->::protobuf::MessageOfGarbage::MergeFrom(
-                        from._internal_garbage_message()
+                    _this->_internal_mutable_resource_message()->::protobuf::MessageOfResource::MergeFrom(
+                        from._internal_resource_message()
                     );
                     break;
                 }
@@ -5367,11 +5365,11 @@ namespace protobuf
         // @@protoc_insertion_point(one_of_clear_start:protobuf.MessageOfObj)
         switch (message_of_obj_case())
         {
-            case kSweeperMessage:
+            case kShipMessage:
                 {
                     if (GetArenaForAllocation() == nullptr)
                     {
-                        delete _impl_.message_of_obj_.sweeper_message_;
+                        delete _impl_.message_of_obj_.ship_message_;
                     }
                     break;
                 }
@@ -5383,35 +5381,35 @@ namespace protobuf
                     }
                     break;
                 }
-            case kRecyclebankMessage:
+            case kFactoryMessage:
                 {
                     if (GetArenaForAllocation() == nullptr)
                     {
-                        delete _impl_.message_of_obj_.recyclebank_message_;
+                        delete _impl_.message_of_obj_.factory_message_;
                     }
                     break;
                 }
-            case kChargestationMessage:
+            case kCommunityMessage:
                 {
                     if (GetArenaForAllocation() == nullptr)
                     {
-                        delete _impl_.message_of_obj_.chargestation_message_;
+                        delete _impl_.message_of_obj_.community_message_;
                     }
                     break;
                 }
-            case kSignaltowerMessage:
+            case kFortMessage:
                 {
                     if (GetArenaForAllocation() == nullptr)
                     {
-                        delete _impl_.message_of_obj_.signaltower_message_;
+                        delete _impl_.message_of_obj_.fort_message_;
                     }
                     break;
                 }
-            case kBridgeMessage:
+            case kWormholeMessage:
                 {
                     if (GetArenaForAllocation() == nullptr)
                     {
-                        delete _impl_.message_of_obj_.bridge_message_;
+                        delete _impl_.message_of_obj_.wormhole_message_;
                     }
                     break;
                 }
@@ -5423,11 +5421,11 @@ namespace protobuf
                     }
                     break;
                 }
-            case kGarbageMessage:
+            case kResourceMessage:
                 {
                     if (GetArenaForAllocation() == nullptr)
                     {
-                        delete _impl_.message_of_obj_.garbage_message_;
+                        delete _impl_.message_of_obj_.resource_message_;
                     }
                     break;
                 }
@@ -5493,11 +5491,11 @@ namespace protobuf
             ptr = ::_pbi::ReadTag(ptr, &tag);
             switch (tag >> 3)
             {
-                // .protobuf.MessageOfSweeper sweeper_message = 1;
+                // .protobuf.MessageOfShip ship_message = 1;
                 case 1:
                     if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10))
                     {
-                        ptr = ctx->ParseMessage(_internal_mutable_sweeper_message(), ptr);
+                        ptr = ctx->ParseMessage(_internal_mutable_ship_message(), ptr);
                         CHK_(ptr);
                     }
                     else
@@ -5513,41 +5511,41 @@ namespace protobuf
                     else
                         goto handle_unusual;
                     continue;
-                // .protobuf.MessageOfRecycleBank recyclebank_message = 3;
+                // .protobuf.MessageOfFactory factory_message = 3;
                 case 3:
                     if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26))
                     {
-                        ptr = ctx->ParseMessage(_internal_mutable_recyclebank_message(), ptr);
+                        ptr = ctx->ParseMessage(_internal_mutable_factory_message(), ptr);
                         CHK_(ptr);
                     }
                     else
                         goto handle_unusual;
                     continue;
-                // .protobuf.MessageOfChargeStation chargestation_message = 4;
+                // .protobuf.MessageOfCommunity community_message = 4;
                 case 4:
                     if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34))
                     {
-                        ptr = ctx->ParseMessage(_internal_mutable_chargestation_message(), ptr);
+                        ptr = ctx->ParseMessage(_internal_mutable_community_message(), ptr);
                         CHK_(ptr);
                     }
                     else
                         goto handle_unusual;
                     continue;
-                // .protobuf.MessageOfSignalTower signaltower_message = 5;
+                // .protobuf.MessageOfFort fort_message = 5;
                 case 5:
                     if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42))
                     {
-                        ptr = ctx->ParseMessage(_internal_mutable_signaltower_message(), ptr);
+                        ptr = ctx->ParseMessage(_internal_mutable_fort_message(), ptr);
                         CHK_(ptr);
                     }
                     else
                         goto handle_unusual;
                     continue;
-                // .protobuf.MessageOfBridge bridge_message = 6;
+                // .protobuf.MessageOfWormhole wormhole_message = 6;
                 case 6:
                     if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50))
                     {
-                        ptr = ctx->ParseMessage(_internal_mutable_bridge_message(), ptr);
+                        ptr = ctx->ParseMessage(_internal_mutable_wormhole_message(), ptr);
                         CHK_(ptr);
                     }
                     else
@@ -5563,11 +5561,11 @@ namespace protobuf
                     else
                         goto handle_unusual;
                     continue;
-                // .protobuf.MessageOfGarbage garbage_message = 8;
+                // .protobuf.MessageOfResource resource_message = 8;
                 case 8:
                     if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 66))
                     {
-                        ptr = ctx->ParseMessage(_internal_mutable_garbage_message(), ptr);
+                        ptr = ctx->ParseMessage(_internal_mutable_resource_message(), ptr);
                         CHK_(ptr);
                     }
                     else
@@ -5647,11 +5645,11 @@ namespace protobuf
         uint32_t cached_has_bits = 0;
         (void)cached_has_bits;
 
-        // .protobuf.MessageOfSweeper sweeper_message = 1;
-        if (_internal_has_sweeper_message())
+        // .protobuf.MessageOfShip ship_message = 1;
+        if (_internal_has_ship_message())
         {
             target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-                InternalWriteMessage(1, _Internal::sweeper_message(this), _Internal::sweeper_message(this).GetCachedSize(), target, stream);
+                InternalWriteMessage(1, _Internal::ship_message(this), _Internal::ship_message(this).GetCachedSize(), target, stream);
         }
 
         // .protobuf.MessageOfBullet bullet_message = 2;
@@ -5661,32 +5659,32 @@ namespace protobuf
                 InternalWriteMessage(2, _Internal::bullet_message(this), _Internal::bullet_message(this).GetCachedSize(), target, stream);
         }
 
-        // .protobuf.MessageOfRecycleBank recyclebank_message = 3;
-        if (_internal_has_recyclebank_message())
+        // .protobuf.MessageOfFactory factory_message = 3;
+        if (_internal_has_factory_message())
         {
             target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-                InternalWriteMessage(3, _Internal::recyclebank_message(this), _Internal::recyclebank_message(this).GetCachedSize(), target, stream);
+                InternalWriteMessage(3, _Internal::factory_message(this), _Internal::factory_message(this).GetCachedSize(), target, stream);
         }
 
-        // .protobuf.MessageOfChargeStation chargestation_message = 4;
-        if (_internal_has_chargestation_message())
+        // .protobuf.MessageOfCommunity community_message = 4;
+        if (_internal_has_community_message())
         {
             target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-                InternalWriteMessage(4, _Internal::chargestation_message(this), _Internal::chargestation_message(this).GetCachedSize(), target, stream);
+                InternalWriteMessage(4, _Internal::community_message(this), _Internal::community_message(this).GetCachedSize(), target, stream);
         }
 
-        // .protobuf.MessageOfSignalTower signaltower_message = 5;
-        if (_internal_has_signaltower_message())
+        // .protobuf.MessageOfFort fort_message = 5;
+        if (_internal_has_fort_message())
         {
             target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-                InternalWriteMessage(5, _Internal::signaltower_message(this), _Internal::signaltower_message(this).GetCachedSize(), target, stream);
+                InternalWriteMessage(5, _Internal::fort_message(this), _Internal::fort_message(this).GetCachedSize(), target, stream);
         }
 
-        // .protobuf.MessageOfBridge bridge_message = 6;
-        if (_internal_has_bridge_message())
+        // .protobuf.MessageOfWormhole wormhole_message = 6;
+        if (_internal_has_wormhole_message())
         {
             target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-                InternalWriteMessage(6, _Internal::bridge_message(this), _Internal::bridge_message(this).GetCachedSize(), target, stream);
+                InternalWriteMessage(6, _Internal::wormhole_message(this), _Internal::wormhole_message(this).GetCachedSize(), target, stream);
         }
 
         // .protobuf.MessageOfHome home_message = 7;
@@ -5696,11 +5694,11 @@ namespace protobuf
                 InternalWriteMessage(7, _Internal::home_message(this), _Internal::home_message(this).GetCachedSize(), target, stream);
         }
 
-        // .protobuf.MessageOfGarbage garbage_message = 8;
-        if (_internal_has_garbage_message())
+        // .protobuf.MessageOfResource resource_message = 8;
+        if (_internal_has_resource_message())
         {
             target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-                InternalWriteMessage(8, _Internal::garbage_message(this), _Internal::garbage_message(this).GetCachedSize(), target, stream);
+                InternalWriteMessage(8, _Internal::resource_message(this), _Internal::resource_message(this).GetCachedSize(), target, stream);
         }
 
         // .protobuf.MessageOfMap map_message = 9;
@@ -5752,12 +5750,12 @@ namespace protobuf
 
         switch (message_of_obj_case())
         {
-            // .protobuf.MessageOfSweeper sweeper_message = 1;
-            case kSweeperMessage:
+            // .protobuf.MessageOfShip ship_message = 1;
+            case kShipMessage:
                 {
                     total_size += 1 +
                                   ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-                                      *_impl_.message_of_obj_.sweeper_message_
+                                      *_impl_.message_of_obj_.ship_message_
                                   );
                     break;
                 }
@@ -5770,39 +5768,39 @@ namespace protobuf
                                   );
                     break;
                 }
-            // .protobuf.MessageOfRecycleBank recyclebank_message = 3;
-            case kRecyclebankMessage:
+            // .protobuf.MessageOfFactory factory_message = 3;
+            case kFactoryMessage:
                 {
                     total_size += 1 +
                                   ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-                                      *_impl_.message_of_obj_.recyclebank_message_
+                                      *_impl_.message_of_obj_.factory_message_
                                   );
                     break;
                 }
-            // .protobuf.MessageOfChargeStation chargestation_message = 4;
-            case kChargestationMessage:
+            // .protobuf.MessageOfCommunity community_message = 4;
+            case kCommunityMessage:
                 {
                     total_size += 1 +
                                   ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-                                      *_impl_.message_of_obj_.chargestation_message_
+                                      *_impl_.message_of_obj_.community_message_
                                   );
                     break;
                 }
-            // .protobuf.MessageOfSignalTower signaltower_message = 5;
-            case kSignaltowerMessage:
+            // .protobuf.MessageOfFort fort_message = 5;
+            case kFortMessage:
                 {
                     total_size += 1 +
                                   ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-                                      *_impl_.message_of_obj_.signaltower_message_
+                                      *_impl_.message_of_obj_.fort_message_
                                   );
                     break;
                 }
-            // .protobuf.MessageOfBridge bridge_message = 6;
-            case kBridgeMessage:
+            // .protobuf.MessageOfWormhole wormhole_message = 6;
+            case kWormholeMessage:
                 {
                     total_size += 1 +
                                   ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-                                      *_impl_.message_of_obj_.bridge_message_
+                                      *_impl_.message_of_obj_.wormhole_message_
                                   );
                     break;
                 }
@@ -5815,12 +5813,12 @@ namespace protobuf
                                   );
                     break;
                 }
-            // .protobuf.MessageOfGarbage garbage_message = 8;
-            case kGarbageMessage:
+            // .protobuf.MessageOfResource resource_message = 8;
+            case kResourceMessage:
                 {
                     total_size += 1 +
                                   ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-                                      *_impl_.message_of_obj_.garbage_message_
+                                      *_impl_.message_of_obj_.resource_message_
                                   );
                     break;
                 }
@@ -5887,10 +5885,10 @@ namespace protobuf
 
         switch (from.message_of_obj_case())
         {
-            case kSweeperMessage:
+            case kShipMessage:
                 {
-                    _this->_internal_mutable_sweeper_message()->::protobuf::MessageOfSweeper::MergeFrom(
-                        from._internal_sweeper_message()
+                    _this->_internal_mutable_ship_message()->::protobuf::MessageOfShip::MergeFrom(
+                        from._internal_ship_message()
                     );
                     break;
                 }
@@ -5901,31 +5899,31 @@ namespace protobuf
                     );
                     break;
                 }
-            case kRecyclebankMessage:
+            case kFactoryMessage:
                 {
-                    _this->_internal_mutable_recyclebank_message()->::protobuf::MessageOfRecycleBank::MergeFrom(
-                        from._internal_recyclebank_message()
+                    _this->_internal_mutable_factory_message()->::protobuf::MessageOfFactory::MergeFrom(
+                        from._internal_factory_message()
                     );
                     break;
                 }
-            case kChargestationMessage:
+            case kCommunityMessage:
                 {
-                    _this->_internal_mutable_chargestation_message()->::protobuf::MessageOfChargeStation::MergeFrom(
-                        from._internal_chargestation_message()
+                    _this->_internal_mutable_community_message()->::protobuf::MessageOfCommunity::MergeFrom(
+                        from._internal_community_message()
                     );
                     break;
                 }
-            case kSignaltowerMessage:
+            case kFortMessage:
                 {
-                    _this->_internal_mutable_signaltower_message()->::protobuf::MessageOfSignalTower::MergeFrom(
-                        from._internal_signaltower_message()
+                    _this->_internal_mutable_fort_message()->::protobuf::MessageOfFort::MergeFrom(
+                        from._internal_fort_message()
                     );
                     break;
                 }
-            case kBridgeMessage:
+            case kWormholeMessage:
                 {
-                    _this->_internal_mutable_bridge_message()->::protobuf::MessageOfBridge::MergeFrom(
-                        from._internal_bridge_message()
+                    _this->_internal_mutable_wormhole_message()->::protobuf::MessageOfWormhole::MergeFrom(
+                        from._internal_wormhole_message()
                     );
                     break;
                 }
@@ -5936,10 +5934,10 @@ namespace protobuf
                     );
                     break;
                 }
-            case kGarbageMessage:
+            case kResourceMessage:
                 {
-                    _this->_internal_mutable_garbage_message()->::protobuf::MessageOfGarbage::MergeFrom(
-                        from._internal_garbage_message()
+                    _this->_internal_mutable_resource_message()->::protobuf::MessageOfResource::MergeFrom(
+                        from._internal_resource_message()
                     );
                     break;
                 }
@@ -7183,42 +7181,42 @@ namespace protobuf
 
     // ===================================================================
 
-    class SweeperInfoRes::_Internal
+    class ShipInfoRes::_Internal
     {
     public:
     };
 
-    SweeperInfoRes::SweeperInfoRes(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned) :
+    ShipInfoRes::ShipInfoRes(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned) :
         ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned)
     {
         SharedCtor(arena, is_message_owned);
-        // @@protoc_insertion_point(arena_constructor:protobuf.SweeperInfoRes)
+        // @@protoc_insertion_point(arena_constructor:protobuf.ShipInfoRes)
     }
-    SweeperInfoRes::SweeperInfoRes(const SweeperInfoRes& from) :
+    ShipInfoRes::ShipInfoRes(const ShipInfoRes& from) :
         ::PROTOBUF_NAMESPACE_ID::Message()
     {
-        SweeperInfoRes* const _this = this;
+        ShipInfoRes* const _this = this;
         (void)_this;
         new (&_impl_) Impl_{
-            decltype(_impl_.sweeper_info_){from._impl_.sweeper_info_}, /*decltype(_impl_._cached_size_)*/ {}};
+            decltype(_impl_.ship_info_){from._impl_.ship_info_}, /*decltype(_impl_._cached_size_)*/ {}};
 
         _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-        // @@protoc_insertion_point(copy_constructor:protobuf.SweeperInfoRes)
+        // @@protoc_insertion_point(copy_constructor:protobuf.ShipInfoRes)
     }
 
-    inline void SweeperInfoRes::SharedCtor(
+    inline void ShipInfoRes::SharedCtor(
         ::_pb::Arena* arena, bool is_message_owned
     )
     {
         (void)arena;
         (void)is_message_owned;
         new (&_impl_) Impl_{
-            decltype(_impl_.sweeper_info_){arena}, /*decltype(_impl_._cached_size_)*/ {}};
+            decltype(_impl_.ship_info_){arena}, /*decltype(_impl_._cached_size_)*/ {}};
     }
 
-    SweeperInfoRes::~SweeperInfoRes()
+    ShipInfoRes::~ShipInfoRes()
     {
-        // @@protoc_insertion_point(destructor:protobuf.SweeperInfoRes)
+        // @@protoc_insertion_point(destructor:protobuf.ShipInfoRes)
         if (auto* arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>())
         {
             (void)arena;
@@ -7227,29 +7225,29 @@ namespace protobuf
         SharedDtor();
     }
 
-    inline void SweeperInfoRes::SharedDtor()
+    inline void ShipInfoRes::SharedDtor()
     {
         GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-        _impl_.sweeper_info_.~RepeatedPtrField();
+        _impl_.ship_info_.~RepeatedPtrField();
     }
 
-    void SweeperInfoRes::SetCachedSize(int size) const
+    void ShipInfoRes::SetCachedSize(int size) const
     {
         _impl_._cached_size_.Set(size);
     }
 
-    void SweeperInfoRes::Clear()
+    void ShipInfoRes::Clear()
     {
-        // @@protoc_insertion_point(message_clear_start:protobuf.SweeperInfoRes)
+        // @@protoc_insertion_point(message_clear_start:protobuf.ShipInfoRes)
         uint32_t cached_has_bits = 0;
         // Prevent compiler warnings about cached_has_bits being unused
         (void)cached_has_bits;
 
-        _impl_.sweeper_info_.Clear();
+        _impl_.ship_info_.Clear();
         _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
     }
 
-    const char* SweeperInfoRes::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx)
+    const char* ShipInfoRes::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx)
     {
 #define CHK_(x)                       \
     if (PROTOBUF_PREDICT_FALSE(!(x))) \
@@ -7260,7 +7258,7 @@ namespace protobuf
             ptr = ::_pbi::ReadTag(ptr, &tag);
             switch (tag >> 3)
             {
-                // repeated .protobuf.MessageOfSweeper sweeper_info = 1;
+                // repeated .protobuf.MessageOfShip ship_info = 1;
                 case 1:
                     if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10))
                     {
@@ -7268,7 +7266,7 @@ namespace protobuf
                         do
                         {
                             ptr += 1;
-                            ptr = ctx->ParseMessage(_internal_add_sweeper_info(), ptr);
+                            ptr = ctx->ParseMessage(_internal_add_ship_info(), ptr);
                             CHK_(ptr);
                             if (!ctx->DataAvailable(ptr))
                                 break;
@@ -7303,21 +7301,21 @@ namespace protobuf
 #undef CHK_
     }
 
-    uint8_t* SweeperInfoRes::_InternalSerialize(
+    uint8_t* ShipInfoRes::_InternalSerialize(
         uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream
     ) const
     {
-        // @@protoc_insertion_point(serialize_to_array_start:protobuf.SweeperInfoRes)
+        // @@protoc_insertion_point(serialize_to_array_start:protobuf.ShipInfoRes)
         uint32_t cached_has_bits = 0;
         (void)cached_has_bits;
 
-        // repeated .protobuf.MessageOfSweeper sweeper_info = 1;
+        // repeated .protobuf.MessageOfShip ship_info = 1;
         for (unsigned i = 0,
-                      n = static_cast<unsigned>(this->_internal_sweeper_info_size());
+                      n = static_cast<unsigned>(this->_internal_ship_info_size());
              i < n;
              i++)
         {
-            const auto& repfield = this->_internal_sweeper_info(i);
+            const auto& repfield = this->_internal_ship_info(i);
             target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
                 InternalWriteMessage(1, repfield, repfield.GetCachedSize(), target, stream);
         }
@@ -7328,22 +7326,22 @@ namespace protobuf
                 _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream
             );
         }
-        // @@protoc_insertion_point(serialize_to_array_end:protobuf.SweeperInfoRes)
+        // @@protoc_insertion_point(serialize_to_array_end:protobuf.ShipInfoRes)
         return target;
     }
 
-    size_t SweeperInfoRes::ByteSizeLong() const
+    size_t ShipInfoRes::ByteSizeLong() const
     {
-        // @@protoc_insertion_point(message_byte_size_start:protobuf.SweeperInfoRes)
+        // @@protoc_insertion_point(message_byte_size_start:protobuf.ShipInfoRes)
         size_t total_size = 0;
 
         uint32_t cached_has_bits = 0;
         // Prevent compiler warnings about cached_has_bits being unused
         (void)cached_has_bits;
 
-        // repeated .protobuf.MessageOfSweeper sweeper_info = 1;
-        total_size += 1UL * this->_internal_sweeper_info_size();
-        for (const auto& msg : this->_impl_.sweeper_info_)
+        // repeated .protobuf.MessageOfShip ship_info = 1;
+        total_size += 1UL * this->_internal_ship_info_size();
+        for (const auto& msg : this->_impl_.ship_info_)
         {
             total_size +=
                 ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
@@ -7352,49 +7350,49 @@ namespace protobuf
         return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
     }
 
-    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData SweeperInfoRes::_class_data_ = {
+    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ShipInfoRes::_class_data_ = {
         ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
-        SweeperInfoRes::MergeImpl};
-    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData* SweeperInfoRes::GetClassData() const
+        ShipInfoRes::MergeImpl};
+    const ::PROTOBUF_NAMESPACE_ID::Message::ClassData* ShipInfoRes::GetClassData() const
     {
         return &_class_data_;
     }
 
-    void SweeperInfoRes::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg)
+    void ShipInfoRes::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg)
     {
-        auto* const _this = static_cast<SweeperInfoRes*>(&to_msg);
-        auto& from = static_cast<const SweeperInfoRes&>(from_msg);
-        // @@protoc_insertion_point(class_specific_merge_from_start:protobuf.SweeperInfoRes)
+        auto* const _this = static_cast<ShipInfoRes*>(&to_msg);
+        auto& from = static_cast<const ShipInfoRes&>(from_msg);
+        // @@protoc_insertion_point(class_specific_merge_from_start:protobuf.ShipInfoRes)
         GOOGLE_DCHECK_NE(&from, _this);
         uint32_t cached_has_bits = 0;
         (void)cached_has_bits;
 
-        _this->_impl_.sweeper_info_.MergeFrom(from._impl_.sweeper_info_);
+        _this->_impl_.ship_info_.MergeFrom(from._impl_.ship_info_);
         _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
     }
 
-    void SweeperInfoRes::CopyFrom(const SweeperInfoRes& from)
+    void ShipInfoRes::CopyFrom(const ShipInfoRes& from)
     {
-        // @@protoc_insertion_point(class_specific_copy_from_start:protobuf.SweeperInfoRes)
+        // @@protoc_insertion_point(class_specific_copy_from_start:protobuf.ShipInfoRes)
         if (&from == this)
             return;
         Clear();
         MergeFrom(from);
     }
 
-    bool SweeperInfoRes::IsInitialized() const
+    bool ShipInfoRes::IsInitialized() const
     {
         return true;
     }
 
-    void SweeperInfoRes::InternalSwap(SweeperInfoRes* other)
+    void ShipInfoRes::InternalSwap(ShipInfoRes* other)
     {
         using std::swap;
         _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-        _impl_.sweeper_info_.InternalSwap(&other->_impl_.sweeper_info_);
+        _impl_.ship_info_.InternalSwap(&other->_impl_.ship_info_);
     }
 
-    ::PROTOBUF_NAMESPACE_ID::Metadata SweeperInfoRes::GetMetadata() const
+    ::PROTOBUF_NAMESPACE_ID::Metadata ShipInfoRes::GetMetadata() const
     {
         return ::_pbi::AssignDescriptors(
             &descriptor_table_Message2Clients_2eproto_getter, &descriptor_table_Message2Clients_2eproto_once, file_level_metadata_Message2Clients_2eproto[17]
@@ -8016,10 +8014,10 @@ namespace protobuf
 }  // namespace protobuf
 PROTOBUF_NAMESPACE_OPEN
 template<>
-PROTOBUF_NOINLINE ::protobuf::MessageOfSweeper*
-    Arena::CreateMaybeMessage<::protobuf::MessageOfSweeper>(Arena* arena)
+PROTOBUF_NOINLINE ::protobuf::MessageOfShip*
+    Arena::CreateMaybeMessage<::protobuf::MessageOfShip>(Arena* arena)
 {
-    return Arena::CreateMessageInternal<::protobuf::MessageOfSweeper>(arena);
+    return Arena::CreateMessageInternal<::protobuf::MessageOfShip>(arena);
 }
 template<>
 PROTOBUF_NOINLINE ::protobuf::MessageOfBullet*
@@ -8034,34 +8032,34 @@ PROTOBUF_NOINLINE ::protobuf::MessageOfBombedBullet*
     return Arena::CreateMessageInternal<::protobuf::MessageOfBombedBullet>(arena);
 }
 template<>
-PROTOBUF_NOINLINE ::protobuf::MessageOfRecycleBank*
-    Arena::CreateMaybeMessage<::protobuf::MessageOfRecycleBank>(Arena* arena)
+PROTOBUF_NOINLINE ::protobuf::MessageOfFactory*
+    Arena::CreateMaybeMessage<::protobuf::MessageOfFactory>(Arena* arena)
 {
-    return Arena::CreateMessageInternal<::protobuf::MessageOfRecycleBank>(arena);
+    return Arena::CreateMessageInternal<::protobuf::MessageOfFactory>(arena);
 }
 template<>
-PROTOBUF_NOINLINE ::protobuf::MessageOfChargeStation*
-    Arena::CreateMaybeMessage<::protobuf::MessageOfChargeStation>(Arena* arena)
+PROTOBUF_NOINLINE ::protobuf::MessageOfCommunity*
+    Arena::CreateMaybeMessage<::protobuf::MessageOfCommunity>(Arena* arena)
 {
-    return Arena::CreateMessageInternal<::protobuf::MessageOfChargeStation>(arena);
+    return Arena::CreateMessageInternal<::protobuf::MessageOfCommunity>(arena);
 }
 template<>
-PROTOBUF_NOINLINE ::protobuf::MessageOfSignalTower*
-    Arena::CreateMaybeMessage<::protobuf::MessageOfSignalTower>(Arena* arena)
+PROTOBUF_NOINLINE ::protobuf::MessageOfFort*
+    Arena::CreateMaybeMessage<::protobuf::MessageOfFort>(Arena* arena)
 {
-    return Arena::CreateMessageInternal<::protobuf::MessageOfSignalTower>(arena);
+    return Arena::CreateMessageInternal<::protobuf::MessageOfFort>(arena);
 }
 template<>
-PROTOBUF_NOINLINE ::protobuf::MessageOfBridge*
-    Arena::CreateMaybeMessage<::protobuf::MessageOfBridge>(Arena* arena)
+PROTOBUF_NOINLINE ::protobuf::MessageOfWormhole*
+    Arena::CreateMaybeMessage<::protobuf::MessageOfWormhole>(Arena* arena)
 {
-    return Arena::CreateMessageInternal<::protobuf::MessageOfBridge>(arena);
+    return Arena::CreateMessageInternal<::protobuf::MessageOfWormhole>(arena);
 }
 template<>
-PROTOBUF_NOINLINE ::protobuf::MessageOfGarbage*
-    Arena::CreateMaybeMessage<::protobuf::MessageOfGarbage>(Arena* arena)
+PROTOBUF_NOINLINE ::protobuf::MessageOfResource*
+    Arena::CreateMaybeMessage<::protobuf::MessageOfResource>(Arena* arena)
 {
-    return Arena::CreateMessageInternal<::protobuf::MessageOfGarbage>(arena);
+    return Arena::CreateMessageInternal<::protobuf::MessageOfResource>(arena);
 }
 template<>
 PROTOBUF_NOINLINE ::protobuf::MessageOfHome*
@@ -8118,10 +8116,10 @@ PROTOBUF_NOINLINE ::protobuf::BoolRes*
     return Arena::CreateMessageInternal<::protobuf::BoolRes>(arena);
 }
 template<>
-PROTOBUF_NOINLINE ::protobuf::SweeperInfoRes*
-    Arena::CreateMaybeMessage<::protobuf::SweeperInfoRes>(Arena* arena)
+PROTOBUF_NOINLINE ::protobuf::ShipInfoRes*
+    Arena::CreateMaybeMessage<::protobuf::ShipInfoRes>(Arena* arena)
 {
-    return Arena::CreateMessageInternal<::protobuf::SweeperInfoRes>(arena);
+    return Arena::CreateMessageInternal<::protobuf::ShipInfoRes>(arena);
 }
 template<>
 PROTOBUF_NOINLINE ::protobuf::EcoRes*

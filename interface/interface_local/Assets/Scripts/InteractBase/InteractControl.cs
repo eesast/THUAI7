@@ -6,6 +6,7 @@ public class InteractControl : Singleton<InteractControl>
 {
     public enum InteractType
     {
+        NoneType,
         Base,
         Ship,
 
@@ -42,6 +43,8 @@ public class InteractControl : Singleton<InteractControl>
         RepairWormhole,
     }
     public readonly Dictionary<InteractType, List<InteractOption>> interactOptions = new Dictionary<InteractType, List<InteractOption>>(){
+        {InteractType.NoneType,
+            null},
         {InteractType.Base,
             new List<InteractOption>{
                 InteractOption.BuildCivil,
