@@ -109,6 +109,7 @@ public class PlayerControl : SingletonMono<PlayerControl>
     {
         if (selectedInt.Count > 0)
         {
+            // Debug.Log(selectedInt[0].interactType + "   " + InteractControl.GetInstance().interactOptions[selectedInt[0].interactType]);
             enabledInteract = new List<InteractControl.InteractOption>(InteractControl.GetInstance().interactOptions[selectedInt[0].interactType]);
             // Debug.Log(InteractControl.GetInstance().interactOptions[InteractControl.InteractType.Base].Count);
             foreach (InteractBase interactBase in selectedInt)
@@ -148,5 +149,9 @@ public class PlayerControl : SingletonMono<PlayerControl>
         {
             interactBase.attackOption = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
+    }
+    public void ButtonInteract(InteractControl.InteractOption option)
+    {
+        selectedOption = option;
     }
 }

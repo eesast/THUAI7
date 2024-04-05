@@ -111,6 +111,12 @@ MonoBehaviour:
     hp: 24000
     economy: 0
     playerTeam: 0
+    shipNum:
+      civilShipNum: 0
+      militaryShipNum: 0
+      flagShipNum: 0
+    shipTotalNum: 0
+  obj: {fileID: 0}
 --- !u!114 &3858766104968319131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 515cf190256e2214ea5daad3164a90b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactType: 0
+  interactType: 1
   interactOption: 0
   tobeSelected: 0
   selected: 0
@@ -133,6 +139,7 @@ MonoBehaviour:
   seObj: {fileID: 0}
   moveOption: {x: 0, y: 0}
   attackOption: {x: 0, y: 0}
+  enableMove: 0
 --- !u!61 &791497468914672102
 BoxCollider2D:
   m_ObjectHideFlags: 0

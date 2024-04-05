@@ -53,6 +53,8 @@ public class ConstructionControl : MonoBehaviour
         }
         else
         {
+            if (!repairIcon)
+                repairIcon = transform.Find("RepairIcon").gameObject;
             if (!repairIcon.activeInHierarchy)
                 repairIcon.SetActive(true);
             constructing++;
