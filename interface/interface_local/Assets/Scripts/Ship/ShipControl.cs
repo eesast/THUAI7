@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -74,7 +75,7 @@ public class ShipControl : MonoBehaviour
                     messageOfShip.weaponType = WeaponType.ARCGUN;
                 break;
             case InteractControl.InteractOption.ConstructFactory:
-                Debug.Log("choose to construct factory");
+                // Debug.Log("choose to construct factory");
                 for (int i = 0; i < PlaceManager.GetInstance().emptyConstruction.Count; i++)
                 {
                     if (Tool.GetInstance().CheckBeside(transform.position, PlaceManager.GetInstance().emptyConstruction[i]))
@@ -96,6 +97,56 @@ public class ShipControl : MonoBehaviour
                     {
                         if (messageOfShip.shipState != ShipState.CONSTRUCTING)
                             Construct(factory);
+                    }
+                }
+                break;
+            case InteractControl.InteractOption.ConstructCommunity:
+                for (int i = 0; i < PlaceManager.GetInstance().emptyConstruction.Count; i++)
+                {
+                    if (Tool.GetInstance().CheckBeside(transform.position, PlaceManager.GetInstance().emptyConstruction[i]))
+                    {
+                        obj = ObjCreater.GetInstance().CreateObj(ConstructionType.COMMUNITY,
+                            PlaceManager.GetInstance().emptyConstruction[i]);
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.playerTeam = messageOfShip.playerTeam;
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.x = (int)PlaceManager.GetInstance().emptyConstruction[i].x;
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.y = (int)PlaceManager.GetInstance().emptyConstruction[i].y;
+                        PlaceManager.GetInstance().emptyConstruction.Remove(PlaceManager.GetInstance().emptyConstruction[i]);
+                        PlaceManager.GetInstance().community.Add(obj.GetComponent<ConstructionControl>());
+                    }
+                }
+                foreach (ConstructionControl community in PlaceManager.GetInstance().community)
+                {
+                    if (community.messageOfConstruction.playerTeam == messageOfShip.playerTeam &&
+                    community.messageOfConstruction.hp < ParaDefine.GetInstance().communityData.hpMax &&
+                    Tool.GetInstance().CheckBeside(transform.position, new Vector2(community.messageOfConstruction.x, community.messageOfConstruction.y)))
+                    {
+                        if (messageOfShip.shipState != ShipState.CONSTRUCTING)
+                            Construct(community);
+                    }
+                }
+                break;
+            case InteractControl.InteractOption.ConstructFort:
+                for (int i = 0; i < PlaceManager.GetInstance().emptyConstruction.Count; i++)
+                {
+                    if (Tool.GetInstance().CheckBeside(transform.position, PlaceManager.GetInstance().emptyConstruction[i]))
+                    {
+                        obj = ObjCreater.GetInstance().CreateObj(ConstructionType.FORT,
+                            PlaceManager.GetInstance().emptyConstruction[i]);
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.playerTeam = messageOfShip.playerTeam;
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.x = (int)PlaceManager.GetInstance().emptyConstruction[i].x;
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.y = (int)PlaceManager.GetInstance().emptyConstruction[i].y;
+                        PlaceManager.GetInstance().emptyConstruction.Remove(PlaceManager.GetInstance().emptyConstruction[i]);
+                        PlaceManager.GetInstance().fort.Add(obj.GetComponent<ConstructionControl>());
+                    }
+                }
+                foreach (ConstructionControl fort in PlaceManager.GetInstance().fort)
+                {
+                    if (fort.messageOfConstruction.playerTeam == messageOfShip.playerTeam &&
+                    fort.messageOfConstruction.hp < ParaDefine.GetInstance().fortData.hpMax &&
+                    Tool.GetInstance().CheckBeside(transform.position, new Vector2(fort.messageOfConstruction.x, fort.messageOfConstruction.y)))
+                    {
+                        if (messageOfShip.shipState != ShipState.CONSTRUCTING)
+                            Construct(fort);
                     }
                 }
                 break;
@@ -158,6 +209,7 @@ public class ShipControl : MonoBehaviour
         messageOfShip.shipState = ShipState.CONSTRUCTING;
         while (messageOfShip.shipState == ShipState.CONSTRUCTING)
         {
+            Debug.Log("construct");
             construction.Construct(constructSpeed);
             yield return new WaitForSeconds(1);
         }
@@ -224,9 +276,37 @@ public class ShipControl : MonoBehaviour
             }
         }
     }
-    public void TakeDamage(int damage)
+    public void TakeDamage(BulletData bulletData)
     {
-        messageOfShip.hp -= damage;
+        if (messageOfShip.shield > 0 && bulletData.shieldDamageMultiplier != -1)
+        {
+            messageOfShip.shield -=
+                (int)bulletData.shieldDamageMultiplier *
+                bulletData.attackDamage.Count() <= 1 ?
+                bulletData.attackDamage[0] :
+                Tool.GetInstance().GetRandom(
+                    bulletData.attackDamage[0], bulletData.attackDamage[1]);
+            if (messageOfShip.shield < 0)
+                messageOfShip.shield = 0;
+            return;
+        }
+        if (messageOfShip.armor > 0 && bulletData.armorDamageMultiplier != -1)
+        {
+            messageOfShip.armor -=
+                (int)bulletData.armorDamageMultiplier *
+                bulletData.attackDamage.Count() <= 1 ?
+                bulletData.attackDamage[0] :
+                Tool.GetInstance().GetRandom(
+                    bulletData.attackDamage[0], bulletData.attackDamage[1]);
+            if (messageOfShip.shield < 0)
+                messageOfShip.shield = 0;
+            return;
+        }
+        messageOfShip.hp -=
+            bulletData.attackDamage.Count() <= 1 ?
+            bulletData.attackDamage[0] :
+            Tool.GetInstance().GetRandom(
+                bulletData.attackDamage[0], bulletData.attackDamage[1]);
         if (messageOfShip.hp < 0)
             messageOfShip.hp = 0;
         if (messageOfShip.hp == 0)
