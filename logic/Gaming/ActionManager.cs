@@ -2,6 +2,7 @@
 using GameClass.GameObj.Areas;
 using GameEngine;
 using Preparation.Utility;
+using System;
 using System.Threading;
 using Timothy.FrameRateTask;
 
@@ -10,8 +11,9 @@ namespace Gaming
     public partial class Game
     {
         private readonly ActionManager actionManager;
-        private class ActionManager(Map gameMap, ShipManager shipManager)
+        private class ActionManager(Game game, Map gameMap, ShipManager shipManager)
         {
+            private readonly Game game = game;
             private readonly Map gameMap = gameMap;
             private readonly ShipManager shipManager = shipManager;
             public readonly MoveEngine moveEngine = new(
@@ -178,6 +180,49 @@ namespace Gaming
                                 if (construction.HP == construction.HP.GetMaxV())
                                 {
                                     ship.ResetShipState(stateNum);
+                                    if (!construction.IsActivated)
+                                    {
+                                        switch (construction.ConstructionType)
+                                        {
+                                            case ConstructionType.Factory:
+                                                game.AddFactory(construction.TeamID);
+                                                break;
+                                            case ConstructionType.Community:
+                                                game.AddBirthPoint(construction.TeamID, construction.Position);
+                                                break;
+                                            case ConstructionType.Fort:
+                                                new Thread
+                                                (
+                                                    () =>
+                                                    {
+                                                        Thread.Sleep(GameData.CheckInterval);
+                                                        new FrameRateTaskExecutor<int>
+                                                        (
+                                                            loopCondition: () =>
+                                                                gameMap.Timer.IsGaming && construction.HP >
+                                                                construction.HP.GetMaxV() * 0.5,
+                                                            loopToDo: () =>
+                                                            {
+                                                                var ships = gameMap.ShipInTheRange(
+                                                                    construction.Position, GameData.FortRange);
+                                                                var random = new Random();
+                                                                if (ships.Count > 0)
+                                                                {
+                                                                    var ship = ships[random.Next(ships.Count)];
+                                                                    shipManager.BeAttacked(ship, GameData.FortDamage,
+                                                                        construction.TeamID);
+                                                                }
+                                                                return true;
+                                                            },
+                                                            timeInterval: GameData.CheckInterval,
+                                                            finallyReturn: () => 0
+                                                        ).Start();
+                                                    }
+                                                ) { IsBackground = true }.Start();
+                                                break;
+                                        }
+                                        construction.IsActivated = true;
+                                    }
                                     return false;
                                 }
                                 return true;

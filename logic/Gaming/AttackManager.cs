@@ -17,15 +17,15 @@ namespace Gaming
         private readonly AttackManager attackManager;
         private class AttackManager
         {
+            private readonly Game game;
             private readonly Map gameMap;
             private readonly ShipManager shipManager;
             private readonly MoveEngine moveEngine;
-            private readonly Game game;
-            public AttackManager(Map gameMap, ShipManager shipManager, Game game)
+            public AttackManager(Game game, Map gameMap, ShipManager shipManager)
             {
+                this.game = game;
                 this.gameMap = gameMap;
                 this.shipManager = shipManager;
-                this.game = game;
                 moveEngine = new(
                     gameMap: gameMap,
                     OnCollision: (obj, collisionObj, moveVec) =>
@@ -65,9 +65,9 @@ namespace Gaming
                         break;
                     case GameObjType.Construction:
                         var constructionType = ((Construction)objBeingShot).ConstructionType;
-                        ((Construction)objBeingShot).BeAttacked(bullet);
-                        if (constructionType == ConstructionType.Community) game.UpdateBirthPoint();
-                        else if (constructionType == ConstructionType.Factory) game.UpdateMoneyPerSecond();
+                        var flag = ((Construction)objBeingShot).BeAttacked(bullet);
+                        if (constructionType == ConstructionType.Community && flag) game.RemoveBirthPoint(((Construction)objBeingShot).TeamID, ((Construction)objBeingShot).Position);
+                        else if (constructionType == ConstructionType.Factory && flag) game.RemoveFactory(((Construction)objBeingShot).TeamID);
                         break;
                     case GameObjType.Wormhole:
                         ((Wormhole)objBeingShot).BeAttacked(bullet);

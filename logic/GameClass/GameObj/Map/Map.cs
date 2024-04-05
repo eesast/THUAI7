@@ -91,7 +91,6 @@ namespace GameClass.GameObj
                 (gameObjType == GameObjType.Wormhole && WormholeInteract((Wormhole)gameObj, Pos)))
                 );
         }
-
         public GameObj? OneInTheSameCell(XY Pos, GameObjType gameObjType)
         {
             return (GameObj?)GameObjDict[gameObjType].Find(gameObj => (GameData.IsInTheSameCell(gameObj.Position, Pos)));
@@ -104,6 +103,16 @@ namespace GameClass.GameObj
         {
             return (GameObj?)GameObjDict[gameObjType].Find(gameObj =>
                 GameData.ApproachToInteractInACross(gameObj.Position, Pos));
+        }
+        public GameObj? OneInTheRange(XY Pos, int range, GameObjType gameObjType)
+        {
+            return (GameObj?)GameObjDict[gameObjType].Find(gameObj =>
+                GameData.IsInTheRange(gameObj.Position, Pos, range));
+        }
+        public List<Ship> ShipInTheRange(XY Pos, int range)
+        {
+            return GameObjDict[GameObjType.Ship].Cast<Ship>()?.FindAll(ship =>
+                GameData.IsInTheRange(ship.Position, Pos, range))!;
         }
         public bool CanSee(Ship ship, GameObj gameObj)
         {

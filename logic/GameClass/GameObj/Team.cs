@@ -16,7 +16,8 @@ namespace GameClass.GameObj
         public List<XY> BirthPointList => birthPointList;
         public Home Home { get; set; }
         public MoneyPool MoneyPool { get; } = new();
-        public int MoneyAddPerSecond { get; set; } = GameData.ScoreHomePerSecond;
+        public AtomicInt FactoryNum { get; } = new(0);
+        public int MoneyAddPerSecond => GameData.ScoreHomePerSecond + FactoryNum * GameData.ScoreFactoryPerSecond;
         public Team(Home home)
         {
             TeamID = new(home.TeamID);

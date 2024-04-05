@@ -21,6 +21,21 @@ public class Construction(XY initPos)
         }
     }
     public AtomicInt ConstructNum { get; } = new AtomicInt(0);
+    private readonly object lockOfIsActivated = new();
+    private bool isActivated = false;
+    public bool IsActivated
+    {
+        get
+        {
+            lock (lockOfIsActivated)
+                return isActivated;
+        }
+        set
+        {
+            lock (lockOfIsActivated)
+                isActivated = value;
+        }
+    }
 
     public bool Construct(int constructSpeed, ConstructionType constructionType, Ship ship)
     {
@@ -58,9 +73,11 @@ public class Construction(XY initPos)
         {
             return false;
         }
-        return ship.MoneyPool.SubMoney(HP.AddV(addHP) / 10) > 0;
+        HP.AddV(addHP);
+        ship.MoneyPool.SubMoney(addHP / 10);
+        return true;
     }
-    public void BeAttacked(Bullet bullet)
+    public bool BeAttacked(Bullet bullet)
     {
         if (bullet!.Parent!.TeamID != TeamID)
         {
@@ -71,6 +88,7 @@ public class Construction(XY initPos)
         {
             constructionType = ConstructionType.Null;
         }
+        return HP < HP.GetMaxV() * 0.5;
     }
     public void AddConstructNum(int add = 1)
     {

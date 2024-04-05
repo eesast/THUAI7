@@ -7,9 +7,10 @@ namespace Gaming
     public partial class Game
     {
         private readonly ShipManager shipManager;
-        private class ShipManager(Map gameMap)
+        private class ShipManager(Game game, Map gameMap)
         {
-            readonly Map gameMap = gameMap;
+            private readonly Game game = game;
+            private readonly Map gameMap = gameMap;
             public Ship? AddShip(long teamID, long playerID, ShipType shipType, MoneyPool moneyPool)
             {
                 Ship newShip = new(GameData.ShipRadius, shipType, moneyPool);
@@ -72,6 +73,33 @@ namespace Gaming
                     var money = ship.GetCost();
                     bullet.Parent.AddMoney(money);
                     Debugger.Output(bullet.Parent, " get " + money.ToString() + " money because of destroying " + ship);
+                    Remove(ship);
+                }
+            }
+            public void BeAttacked(Ship ship, long AP, long teamID)
+            {
+                Debugger.Output(ship, " is attacked!");
+                Debugger.Output("AP is " + AP.ToString());
+                if (AP <= 0)
+                {
+                    return;
+                }
+                if (ship.Armor > 0)
+                {
+                    ship.Armor.SubPositiveV(AP);
+                    Debugger.Output(ship, " 's armor is " + ship.Armor.ToString());
+                }
+                else
+                {
+                    ship.HP.SubPositiveV(AP);
+                    Debugger.Output(ship, " 's HP is " + ship.HP.ToString());
+                }
+                if (ship.HP == 0)
+                {
+                    Debugger.Output(ship, " is destroyed!");
+                    var money = ship.GetCost();
+                    game.TeamList[(int)teamID].AddMoney(money);
+                    Debugger.Output(ship, " get " + money.ToString() + " money because of destroying " + ship);
                     Remove(ship);
                 }
             }
