@@ -422,24 +422,24 @@ namespace protobuf
             kPlayerIdFieldNumber = 1,
             kTeamIdFieldNumber = 2,
         };
-        // int64 player_id = 1;
+        // int32 player_id = 1;
         void clear_player_id();
-        int64_t player_id() const;
-        void set_player_id(int64_t value);
+        int32_t player_id() const;
+        void set_player_id(int32_t value);
 
     private:
-        int64_t _internal_player_id() const;
-        void _internal_set_player_id(int64_t value);
+        int32_t _internal_player_id() const;
+        void _internal_set_player_id(int32_t value);
 
     public:
-        // int64 team_id = 2;
+        // int32 team_id = 2;
         void clear_team_id();
-        int64_t team_id() const;
-        void set_team_id(int64_t value);
+        int32_t team_id() const;
+        void set_team_id(int32_t value);
 
     private:
-        int64_t _internal_team_id() const;
-        void _internal_set_team_id(int64_t value);
+        int32_t _internal_team_id() const;
+        void _internal_set_team_id(int32_t value);
 
     public:
         // @@protoc_insertion_point(class_scope:protobuf.IDMsg)
@@ -453,8 +453,8 @@ namespace protobuf
         typedef void DestructorSkippable_;
         struct Impl_
         {
-            int64_t player_id_;
-            int64_t team_id_;
+            int32_t player_id_;
+            int32_t team_id_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
         union
@@ -627,24 +627,24 @@ namespace protobuf
             kTeamIdFieldNumber = 2,
             kShipTypeFieldNumber = 3,
         };
-        // int64 player_id = 1;
+        // int32 player_id = 1;
         void clear_player_id();
-        int64_t player_id() const;
-        void set_player_id(int64_t value);
+        int32_t player_id() const;
+        void set_player_id(int32_t value);
 
     private:
-        int64_t _internal_player_id() const;
-        void _internal_set_player_id(int64_t value);
+        int32_t _internal_player_id() const;
+        void _internal_set_player_id(int32_t value);
 
     public:
-        // int64 team_id = 2;
+        // int32 team_id = 2;
         void clear_team_id();
-        int64_t team_id() const;
-        void set_team_id(int64_t value);
+        int32_t team_id() const;
+        void set_team_id(int32_t value);
 
     private:
-        int64_t _internal_team_id() const;
-        void _internal_set_team_id(int64_t value);
+        int32_t _internal_team_id() const;
+        void _internal_set_team_id(int32_t value);
 
     public:
         // .protobuf.ShipType ship_type = 3;
@@ -668,8 +668,8 @@ namespace protobuf
         typedef void DestructorSkippable_;
         struct Impl_
         {
-            int64_t player_id_;
-            int64_t team_id_;
+            int32_t player_id_;
+            int32_t team_id_;
             int ship_type_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
@@ -839,21 +839,11 @@ namespace protobuf
 
         enum : int
         {
-            kPlayerIdFieldNumber = 1,
             kAngleFieldNumber = 2,
-            kTimeInMillisecondsFieldNumber = 3,
+            kPlayerIdFieldNumber = 1,
             kTeamIdFieldNumber = 4,
+            kTimeInMillisecondsFieldNumber = 3,
         };
-        // int64 player_id = 1;
-        void clear_player_id();
-        int64_t player_id() const;
-        void set_player_id(int64_t value);
-
-    private:
-        int64_t _internal_player_id() const;
-        void _internal_set_player_id(int64_t value);
-
-    public:
         // double angle = 2;
         void clear_angle();
         double angle() const;
@@ -864,6 +854,26 @@ namespace protobuf
         void _internal_set_angle(double value);
 
     public:
+        // int32 player_id = 1;
+        void clear_player_id();
+        int32_t player_id() const;
+        void set_player_id(int32_t value);
+
+    private:
+        int32_t _internal_player_id() const;
+        void _internal_set_player_id(int32_t value);
+
+    public:
+        // int32 team_id = 4;
+        void clear_team_id();
+        int32_t team_id() const;
+        void set_team_id(int32_t value);
+
+    private:
+        int32_t _internal_team_id() const;
+        void _internal_set_team_id(int32_t value);
+
+    public:
         // int64 time_in_milliseconds = 3;
         void clear_time_in_milliseconds();
         int64_t time_in_milliseconds() const;
@@ -872,16 +882,6 @@ namespace protobuf
     private:
         int64_t _internal_time_in_milliseconds() const;
         void _internal_set_time_in_milliseconds(int64_t value);
-
-    public:
-        // int64 team_id = 4;
-        void clear_team_id();
-        int64_t team_id() const;
-        void set_team_id(int64_t value);
-
-    private:
-        int64_t _internal_team_id() const;
-        void _internal_set_team_id(int64_t value);
 
     public:
         // @@protoc_insertion_point(class_scope:protobuf.MoveMsg)
@@ -895,10 +895,10 @@ namespace protobuf
         typedef void DestructorSkippable_;
         struct Impl_
         {
-            int64_t player_id_;
             double angle_;
+            int32_t player_id_;
+            int32_t team_id_;
             int64_t time_in_milliseconds_;
-            int64_t team_id_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
         union
@@ -1080,34 +1080,34 @@ namespace protobuf
             kTextMessageFieldNumber = 3,
             kBinaryMessageFieldNumber = 4,
         };
-        // int64 player_id = 1;
+        // int32 player_id = 1;
         void clear_player_id();
-        int64_t player_id() const;
-        void set_player_id(int64_t value);
+        int32_t player_id() const;
+        void set_player_id(int32_t value);
 
     private:
-        int64_t _internal_player_id() const;
-        void _internal_set_player_id(int64_t value);
+        int32_t _internal_player_id() const;
+        void _internal_set_player_id(int32_t value);
 
     public:
-        // int64 to_player_id = 2;
+        // int32 to_player_id = 2;
         void clear_to_player_id();
-        int64_t to_player_id() const;
-        void set_to_player_id(int64_t value);
+        int32_t to_player_id() const;
+        void set_to_player_id(int32_t value);
 
     private:
-        int64_t _internal_to_player_id() const;
-        void _internal_set_to_player_id(int64_t value);
+        int32_t _internal_to_player_id() const;
+        void _internal_set_to_player_id(int32_t value);
 
     public:
-        // int64 team_id = 5;
+        // int32 team_id = 5;
         void clear_team_id();
-        int64_t team_id() const;
-        void set_team_id(int64_t value);
+        int32_t team_id() const;
+        void set_team_id(int32_t value);
 
     private:
-        int64_t _internal_team_id() const;
-        void _internal_set_team_id(int64_t value);
+        int32_t _internal_team_id() const;
+        void _internal_set_team_id(int32_t value);
 
     public:
         // string text_message = 3;
@@ -1170,9 +1170,9 @@ namespace protobuf
         typedef void DestructorSkippable_;
         struct Impl_
         {
-            int64_t player_id_;
-            int64_t to_player_id_;
-            int64_t team_id_;
+            int32_t player_id_;
+            int32_t to_player_id_;
+            int32_t team_id_;
             union MessageUnion
             {
                 constexpr MessageUnion() :
@@ -1352,20 +1352,10 @@ namespace protobuf
 
         enum : int
         {
-            kPlayerIdFieldNumber = 1,
             kAngleFieldNumber = 2,
+            kPlayerIdFieldNumber = 1,
             kTeamIdFieldNumber = 3,
         };
-        // int64 player_id = 1;
-        void clear_player_id();
-        int64_t player_id() const;
-        void set_player_id(int64_t value);
-
-    private:
-        int64_t _internal_player_id() const;
-        void _internal_set_player_id(int64_t value);
-
-    public:
         // double angle = 2;
         void clear_angle();
         double angle() const;
@@ -1376,14 +1366,24 @@ namespace protobuf
         void _internal_set_angle(double value);
 
     public:
-        // int64 team_id = 3;
-        void clear_team_id();
-        int64_t team_id() const;
-        void set_team_id(int64_t value);
+        // int32 player_id = 1;
+        void clear_player_id();
+        int32_t player_id() const;
+        void set_player_id(int32_t value);
 
     private:
-        int64_t _internal_team_id() const;
-        void _internal_set_team_id(int64_t value);
+        int32_t _internal_player_id() const;
+        void _internal_set_player_id(int32_t value);
+
+    public:
+        // int32 team_id = 3;
+        void clear_team_id();
+        int32_t team_id() const;
+        void set_team_id(int32_t value);
+
+    private:
+        int32_t _internal_team_id() const;
+        void _internal_set_team_id(int32_t value);
 
     public:
         // @@protoc_insertion_point(class_scope:protobuf.AttackMsg)
@@ -1397,9 +1397,9 @@ namespace protobuf
         typedef void DestructorSkippable_;
         struct Impl_
         {
-            int64_t player_id_;
             double angle_;
-            int64_t team_id_;
+            int32_t player_id_;
+            int32_t team_id_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
         union
@@ -1569,27 +1569,17 @@ namespace protobuf
         enum : int
         {
             kPlayerIdFieldNumber = 1,
-            kTeamIdFieldNumber = 3,
             kConstructionTypeFieldNumber = 2,
+            kTeamIdFieldNumber = 3,
         };
-        // int64 player_id = 1;
+        // int32 player_id = 1;
         void clear_player_id();
-        int64_t player_id() const;
-        void set_player_id(int64_t value);
+        int32_t player_id() const;
+        void set_player_id(int32_t value);
 
     private:
-        int64_t _internal_player_id() const;
-        void _internal_set_player_id(int64_t value);
-
-    public:
-        // int64 team_id = 3;
-        void clear_team_id();
-        int64_t team_id() const;
-        void set_team_id(int64_t value);
-
-    private:
-        int64_t _internal_team_id() const;
-        void _internal_set_team_id(int64_t value);
+        int32_t _internal_player_id() const;
+        void _internal_set_player_id(int32_t value);
 
     public:
         // .protobuf.ConstructionType construction_type = 2;
@@ -1600,6 +1590,16 @@ namespace protobuf
     private:
         ::protobuf::ConstructionType _internal_construction_type() const;
         void _internal_set_construction_type(::protobuf::ConstructionType value);
+
+    public:
+        // int32 team_id = 3;
+        void clear_team_id();
+        int32_t team_id() const;
+        void set_team_id(int32_t value);
+
+    private:
+        int32_t _internal_team_id() const;
+        void _internal_set_team_id(int32_t value);
 
     public:
         // @@protoc_insertion_point(class_scope:protobuf.ConstructMsg)
@@ -1613,9 +1613,9 @@ namespace protobuf
         typedef void DestructorSkippable_;
         struct Impl_
         {
-            int64_t player_id_;
-            int64_t team_id_;
+            int32_t player_id_;
             int construction_type_;
+            int32_t team_id_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
         union
@@ -1784,20 +1784,10 @@ namespace protobuf
 
         enum : int
         {
-            kPlayerIdFieldNumber = 1,
             kRecoverFieldNumber = 2,
+            kPlayerIdFieldNumber = 1,
             kTeamIdFieldNumber = 3,
         };
-        // int64 player_id = 1;
-        void clear_player_id();
-        int64_t player_id() const;
-        void set_player_id(int64_t value);
-
-    private:
-        int64_t _internal_player_id() const;
-        void _internal_set_player_id(int64_t value);
-
-    public:
         // int64 recover = 2;
         void clear_recover();
         int64_t recover() const;
@@ -1808,14 +1798,24 @@ namespace protobuf
         void _internal_set_recover(int64_t value);
 
     public:
-        // int64 team_id = 3;
-        void clear_team_id();
-        int64_t team_id() const;
-        void set_team_id(int64_t value);
+        // int32 player_id = 1;
+        void clear_player_id();
+        int32_t player_id() const;
+        void set_player_id(int32_t value);
 
     private:
-        int64_t _internal_team_id() const;
-        void _internal_set_team_id(int64_t value);
+        int32_t _internal_player_id() const;
+        void _internal_set_player_id(int32_t value);
+
+    public:
+        // int32 team_id = 3;
+        void clear_team_id();
+        int32_t team_id() const;
+        void set_team_id(int32_t value);
+
+    private:
+        int32_t _internal_team_id() const;
+        void _internal_set_team_id(int32_t value);
 
     public:
         // @@protoc_insertion_point(class_scope:protobuf.RecoverMsg)
@@ -1829,9 +1829,9 @@ namespace protobuf
         typedef void DestructorSkippable_;
         struct Impl_
         {
-            int64_t player_id_;
             int64_t recover_;
-            int64_t team_id_;
+            int32_t player_id_;
+            int32_t team_id_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
         union
@@ -2000,30 +2000,10 @@ namespace protobuf
 
         enum : int
         {
+            kModuleTypeFieldNumber = 1,
             kPlayerIdFieldNumber = 2,
             kTeamIdFieldNumber = 3,
-            kModuleTypeFieldNumber = 1,
         };
-        // int64 player_id = 2;
-        void clear_player_id();
-        int64_t player_id() const;
-        void set_player_id(int64_t value);
-
-    private:
-        int64_t _internal_player_id() const;
-        void _internal_set_player_id(int64_t value);
-
-    public:
-        // int64 team_id = 3;
-        void clear_team_id();
-        int64_t team_id() const;
-        void set_team_id(int64_t value);
-
-    private:
-        int64_t _internal_team_id() const;
-        void _internal_set_team_id(int64_t value);
-
-    public:
         // .protobuf.ModuleType module_type = 1;
         void clear_module_type();
         ::protobuf::ModuleType module_type() const;
@@ -2032,6 +2012,26 @@ namespace protobuf
     private:
         ::protobuf::ModuleType _internal_module_type() const;
         void _internal_set_module_type(::protobuf::ModuleType value);
+
+    public:
+        // int32 player_id = 2;
+        void clear_player_id();
+        int32_t player_id() const;
+        void set_player_id(int32_t value);
+
+    private:
+        int32_t _internal_player_id() const;
+        void _internal_set_player_id(int32_t value);
+
+    public:
+        // int32 team_id = 3;
+        void clear_team_id();
+        int32_t team_id() const;
+        void set_team_id(int32_t value);
+
+    private:
+        int32_t _internal_team_id() const;
+        void _internal_set_team_id(int32_t value);
 
     public:
         // @@protoc_insertion_point(class_scope:protobuf.InstallMsg)
@@ -2045,9 +2045,9 @@ namespace protobuf
         typedef void DestructorSkippable_;
         struct Impl_
         {
-            int64_t player_id_;
-            int64_t team_id_;
             int module_type_;
+            int32_t player_id_;
+            int32_t team_id_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
         union
@@ -2216,21 +2216,11 @@ namespace protobuf
 
         enum : int
         {
-            kTeamIdFieldNumber = 2,
             kShipTypeFieldNumber = 1,
-            kBirthpointIndexFieldNumber = 4,
+            kTeamIdFieldNumber = 2,
             kPlayerIdFieldNumber = 3,
+            kBirthpointIndexFieldNumber = 4,
         };
-        // int64 team_id = 2;
-        void clear_team_id();
-        int64_t team_id() const;
-        void set_team_id(int64_t value);
-
-    private:
-        int64_t _internal_team_id() const;
-        void _internal_set_team_id(int64_t value);
-
-    public:
         // .protobuf.ShipType ship_type = 1;
         void clear_ship_type();
         ::protobuf::ShipType ship_type() const;
@@ -2241,6 +2231,26 @@ namespace protobuf
         void _internal_set_ship_type(::protobuf::ShipType value);
 
     public:
+        // int32 team_id = 2;
+        void clear_team_id();
+        int32_t team_id() const;
+        void set_team_id(int32_t value);
+
+    private:
+        int32_t _internal_team_id() const;
+        void _internal_set_team_id(int32_t value);
+
+    public:
+        // int32 player_id = 3;
+        void clear_player_id();
+        int32_t player_id() const;
+        void set_player_id(int32_t value);
+
+    private:
+        int32_t _internal_player_id() const;
+        void _internal_set_player_id(int32_t value);
+
+    public:
         // int32 birthpoint_index = 4;
         void clear_birthpoint_index();
         int32_t birthpoint_index() const;
@@ -2249,16 +2259,6 @@ namespace protobuf
     private:
         int32_t _internal_birthpoint_index() const;
         void _internal_set_birthpoint_index(int32_t value);
-
-    public:
-        // int64 player_id = 3;
-        void clear_player_id();
-        int64_t player_id() const;
-        void set_player_id(int64_t value);
-
-    private:
-        int64_t _internal_player_id() const;
-        void _internal_set_player_id(int64_t value);
 
     public:
         // @@protoc_insertion_point(class_scope:protobuf.BuildShipMsg)
@@ -2272,10 +2272,10 @@ namespace protobuf
         typedef void DestructorSkippable_;
         struct Impl_
         {
-            int64_t team_id_;
             int ship_type_;
+            int32_t team_id_;
+            int32_t player_id_;
             int32_t birthpoint_index_;
-            int64_t player_id_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
         union
@@ -2298,49 +2298,49 @@ namespace protobuf
 
     // IDMsg
 
-    // int64 player_id = 1;
+    // int32 player_id = 1;
     inline void IDMsg::clear_player_id()
     {
-        _impl_.player_id_ = int64_t{0};
+        _impl_.player_id_ = 0;
     }
-    inline int64_t IDMsg::_internal_player_id() const
+    inline int32_t IDMsg::_internal_player_id() const
     {
         return _impl_.player_id_;
     }
-    inline int64_t IDMsg::player_id() const
+    inline int32_t IDMsg::player_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.IDMsg.player_id)
         return _internal_player_id();
     }
-    inline void IDMsg::_internal_set_player_id(int64_t value)
+    inline void IDMsg::_internal_set_player_id(int32_t value)
     {
         _impl_.player_id_ = value;
     }
-    inline void IDMsg::set_player_id(int64_t value)
+    inline void IDMsg::set_player_id(int32_t value)
     {
         _internal_set_player_id(value);
         // @@protoc_insertion_point(field_set:protobuf.IDMsg.player_id)
     }
 
-    // int64 team_id = 2;
+    // int32 team_id = 2;
     inline void IDMsg::clear_team_id()
     {
-        _impl_.team_id_ = int64_t{0};
+        _impl_.team_id_ = 0;
     }
-    inline int64_t IDMsg::_internal_team_id() const
+    inline int32_t IDMsg::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t IDMsg::team_id() const
+    inline int32_t IDMsg::team_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.IDMsg.team_id)
         return _internal_team_id();
     }
-    inline void IDMsg::_internal_set_team_id(int64_t value)
+    inline void IDMsg::_internal_set_team_id(int32_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void IDMsg::set_team_id(int64_t value)
+    inline void IDMsg::set_team_id(int32_t value)
     {
         _internal_set_team_id(value);
         // @@protoc_insertion_point(field_set:protobuf.IDMsg.team_id)
@@ -2350,49 +2350,49 @@ namespace protobuf
 
     // PlayerMsg
 
-    // int64 player_id = 1;
+    // int32 player_id = 1;
     inline void PlayerMsg::clear_player_id()
     {
-        _impl_.player_id_ = int64_t{0};
+        _impl_.player_id_ = 0;
     }
-    inline int64_t PlayerMsg::_internal_player_id() const
+    inline int32_t PlayerMsg::_internal_player_id() const
     {
         return _impl_.player_id_;
     }
-    inline int64_t PlayerMsg::player_id() const
+    inline int32_t PlayerMsg::player_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.PlayerMsg.player_id)
         return _internal_player_id();
     }
-    inline void PlayerMsg::_internal_set_player_id(int64_t value)
+    inline void PlayerMsg::_internal_set_player_id(int32_t value)
     {
         _impl_.player_id_ = value;
     }
-    inline void PlayerMsg::set_player_id(int64_t value)
+    inline void PlayerMsg::set_player_id(int32_t value)
     {
         _internal_set_player_id(value);
         // @@protoc_insertion_point(field_set:protobuf.PlayerMsg.player_id)
     }
 
-    // int64 team_id = 2;
+    // int32 team_id = 2;
     inline void PlayerMsg::clear_team_id()
     {
-        _impl_.team_id_ = int64_t{0};
+        _impl_.team_id_ = 0;
     }
-    inline int64_t PlayerMsg::_internal_team_id() const
+    inline int32_t PlayerMsg::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t PlayerMsg::team_id() const
+    inline int32_t PlayerMsg::team_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.PlayerMsg.team_id)
         return _internal_team_id();
     }
-    inline void PlayerMsg::_internal_set_team_id(int64_t value)
+    inline void PlayerMsg::_internal_set_team_id(int32_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void PlayerMsg::set_team_id(int64_t value)
+    inline void PlayerMsg::set_team_id(int32_t value)
     {
         _internal_set_team_id(value);
         // @@protoc_insertion_point(field_set:protobuf.PlayerMsg.team_id)
@@ -2426,25 +2426,25 @@ namespace protobuf
 
     // MoveMsg
 
-    // int64 player_id = 1;
+    // int32 player_id = 1;
     inline void MoveMsg::clear_player_id()
     {
-        _impl_.player_id_ = int64_t{0};
+        _impl_.player_id_ = 0;
     }
-    inline int64_t MoveMsg::_internal_player_id() const
+    inline int32_t MoveMsg::_internal_player_id() const
     {
         return _impl_.player_id_;
     }
-    inline int64_t MoveMsg::player_id() const
+    inline int32_t MoveMsg::player_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.MoveMsg.player_id)
         return _internal_player_id();
     }
-    inline void MoveMsg::_internal_set_player_id(int64_t value)
+    inline void MoveMsg::_internal_set_player_id(int32_t value)
     {
         _impl_.player_id_ = value;
     }
-    inline void MoveMsg::set_player_id(int64_t value)
+    inline void MoveMsg::set_player_id(int32_t value)
     {
         _internal_set_player_id(value);
         // @@protoc_insertion_point(field_set:protobuf.MoveMsg.player_id)
@@ -2498,25 +2498,25 @@ namespace protobuf
         // @@protoc_insertion_point(field_set:protobuf.MoveMsg.time_in_milliseconds)
     }
 
-    // int64 team_id = 4;
+    // int32 team_id = 4;
     inline void MoveMsg::clear_team_id()
     {
-        _impl_.team_id_ = int64_t{0};
+        _impl_.team_id_ = 0;
     }
-    inline int64_t MoveMsg::_internal_team_id() const
+    inline int32_t MoveMsg::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t MoveMsg::team_id() const
+    inline int32_t MoveMsg::team_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.MoveMsg.team_id)
         return _internal_team_id();
     }
-    inline void MoveMsg::_internal_set_team_id(int64_t value)
+    inline void MoveMsg::_internal_set_team_id(int32_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void MoveMsg::set_team_id(int64_t value)
+    inline void MoveMsg::set_team_id(int32_t value)
     {
         _internal_set_team_id(value);
         // @@protoc_insertion_point(field_set:protobuf.MoveMsg.team_id)
@@ -2526,49 +2526,49 @@ namespace protobuf
 
     // SendMsg
 
-    // int64 player_id = 1;
+    // int32 player_id = 1;
     inline void SendMsg::clear_player_id()
     {
-        _impl_.player_id_ = int64_t{0};
+        _impl_.player_id_ = 0;
     }
-    inline int64_t SendMsg::_internal_player_id() const
+    inline int32_t SendMsg::_internal_player_id() const
     {
         return _impl_.player_id_;
     }
-    inline int64_t SendMsg::player_id() const
+    inline int32_t SendMsg::player_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.SendMsg.player_id)
         return _internal_player_id();
     }
-    inline void SendMsg::_internal_set_player_id(int64_t value)
+    inline void SendMsg::_internal_set_player_id(int32_t value)
     {
         _impl_.player_id_ = value;
     }
-    inline void SendMsg::set_player_id(int64_t value)
+    inline void SendMsg::set_player_id(int32_t value)
     {
         _internal_set_player_id(value);
         // @@protoc_insertion_point(field_set:protobuf.SendMsg.player_id)
     }
 
-    // int64 to_player_id = 2;
+    // int32 to_player_id = 2;
     inline void SendMsg::clear_to_player_id()
     {
-        _impl_.to_player_id_ = int64_t{0};
+        _impl_.to_player_id_ = 0;
     }
-    inline int64_t SendMsg::_internal_to_player_id() const
+    inline int32_t SendMsg::_internal_to_player_id() const
     {
         return _impl_.to_player_id_;
     }
-    inline int64_t SendMsg::to_player_id() const
+    inline int32_t SendMsg::to_player_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.SendMsg.to_player_id)
         return _internal_to_player_id();
     }
-    inline void SendMsg::_internal_set_to_player_id(int64_t value)
+    inline void SendMsg::_internal_set_to_player_id(int32_t value)
     {
         _impl_.to_player_id_ = value;
     }
-    inline void SendMsg::set_to_player_id(int64_t value)
+    inline void SendMsg::set_to_player_id(int32_t value)
     {
         _internal_set_to_player_id(value);
         // @@protoc_insertion_point(field_set:protobuf.SendMsg.to_player_id)
@@ -2772,25 +2772,25 @@ namespace protobuf
         // @@protoc_insertion_point(field_set_allocated:protobuf.SendMsg.binary_message)
     }
 
-    // int64 team_id = 5;
+    // int32 team_id = 5;
     inline void SendMsg::clear_team_id()
     {
-        _impl_.team_id_ = int64_t{0};
+        _impl_.team_id_ = 0;
     }
-    inline int64_t SendMsg::_internal_team_id() const
+    inline int32_t SendMsg::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t SendMsg::team_id() const
+    inline int32_t SendMsg::team_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.SendMsg.team_id)
         return _internal_team_id();
     }
-    inline void SendMsg::_internal_set_team_id(int64_t value)
+    inline void SendMsg::_internal_set_team_id(int32_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void SendMsg::set_team_id(int64_t value)
+    inline void SendMsg::set_team_id(int32_t value)
     {
         _internal_set_team_id(value);
         // @@protoc_insertion_point(field_set:protobuf.SendMsg.team_id)
@@ -2812,25 +2812,25 @@ namespace protobuf
 
     // AttackMsg
 
-    // int64 player_id = 1;
+    // int32 player_id = 1;
     inline void AttackMsg::clear_player_id()
     {
-        _impl_.player_id_ = int64_t{0};
+        _impl_.player_id_ = 0;
     }
-    inline int64_t AttackMsg::_internal_player_id() const
+    inline int32_t AttackMsg::_internal_player_id() const
     {
         return _impl_.player_id_;
     }
-    inline int64_t AttackMsg::player_id() const
+    inline int32_t AttackMsg::player_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.AttackMsg.player_id)
         return _internal_player_id();
     }
-    inline void AttackMsg::_internal_set_player_id(int64_t value)
+    inline void AttackMsg::_internal_set_player_id(int32_t value)
     {
         _impl_.player_id_ = value;
     }
-    inline void AttackMsg::set_player_id(int64_t value)
+    inline void AttackMsg::set_player_id(int32_t value)
     {
         _internal_set_player_id(value);
         // @@protoc_insertion_point(field_set:protobuf.AttackMsg.player_id)
@@ -2860,25 +2860,25 @@ namespace protobuf
         // @@protoc_insertion_point(field_set:protobuf.AttackMsg.angle)
     }
 
-    // int64 team_id = 3;
+    // int32 team_id = 3;
     inline void AttackMsg::clear_team_id()
     {
-        _impl_.team_id_ = int64_t{0};
+        _impl_.team_id_ = 0;
     }
-    inline int64_t AttackMsg::_internal_team_id() const
+    inline int32_t AttackMsg::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t AttackMsg::team_id() const
+    inline int32_t AttackMsg::team_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.AttackMsg.team_id)
         return _internal_team_id();
     }
-    inline void AttackMsg::_internal_set_team_id(int64_t value)
+    inline void AttackMsg::_internal_set_team_id(int32_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void AttackMsg::set_team_id(int64_t value)
+    inline void AttackMsg::set_team_id(int32_t value)
     {
         _internal_set_team_id(value);
         // @@protoc_insertion_point(field_set:protobuf.AttackMsg.team_id)
@@ -2888,25 +2888,25 @@ namespace protobuf
 
     // ConstructMsg
 
-    // int64 player_id = 1;
+    // int32 player_id = 1;
     inline void ConstructMsg::clear_player_id()
     {
-        _impl_.player_id_ = int64_t{0};
+        _impl_.player_id_ = 0;
     }
-    inline int64_t ConstructMsg::_internal_player_id() const
+    inline int32_t ConstructMsg::_internal_player_id() const
     {
         return _impl_.player_id_;
     }
-    inline int64_t ConstructMsg::player_id() const
+    inline int32_t ConstructMsg::player_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.ConstructMsg.player_id)
         return _internal_player_id();
     }
-    inline void ConstructMsg::_internal_set_player_id(int64_t value)
+    inline void ConstructMsg::_internal_set_player_id(int32_t value)
     {
         _impl_.player_id_ = value;
     }
-    inline void ConstructMsg::set_player_id(int64_t value)
+    inline void ConstructMsg::set_player_id(int32_t value)
     {
         _internal_set_player_id(value);
         // @@protoc_insertion_point(field_set:protobuf.ConstructMsg.player_id)
@@ -2936,25 +2936,25 @@ namespace protobuf
         // @@protoc_insertion_point(field_set:protobuf.ConstructMsg.construction_type)
     }
 
-    // int64 team_id = 3;
+    // int32 team_id = 3;
     inline void ConstructMsg::clear_team_id()
     {
-        _impl_.team_id_ = int64_t{0};
+        _impl_.team_id_ = 0;
     }
-    inline int64_t ConstructMsg::_internal_team_id() const
+    inline int32_t ConstructMsg::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t ConstructMsg::team_id() const
+    inline int32_t ConstructMsg::team_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.ConstructMsg.team_id)
         return _internal_team_id();
     }
-    inline void ConstructMsg::_internal_set_team_id(int64_t value)
+    inline void ConstructMsg::_internal_set_team_id(int32_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void ConstructMsg::set_team_id(int64_t value)
+    inline void ConstructMsg::set_team_id(int32_t value)
     {
         _internal_set_team_id(value);
         // @@protoc_insertion_point(field_set:protobuf.ConstructMsg.team_id)
@@ -2964,25 +2964,25 @@ namespace protobuf
 
     // RecoverMsg
 
-    // int64 player_id = 1;
+    // int32 player_id = 1;
     inline void RecoverMsg::clear_player_id()
     {
-        _impl_.player_id_ = int64_t{0};
+        _impl_.player_id_ = 0;
     }
-    inline int64_t RecoverMsg::_internal_player_id() const
+    inline int32_t RecoverMsg::_internal_player_id() const
     {
         return _impl_.player_id_;
     }
-    inline int64_t RecoverMsg::player_id() const
+    inline int32_t RecoverMsg::player_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.RecoverMsg.player_id)
         return _internal_player_id();
     }
-    inline void RecoverMsg::_internal_set_player_id(int64_t value)
+    inline void RecoverMsg::_internal_set_player_id(int32_t value)
     {
         _impl_.player_id_ = value;
     }
-    inline void RecoverMsg::set_player_id(int64_t value)
+    inline void RecoverMsg::set_player_id(int32_t value)
     {
         _internal_set_player_id(value);
         // @@protoc_insertion_point(field_set:protobuf.RecoverMsg.player_id)
@@ -3012,25 +3012,25 @@ namespace protobuf
         // @@protoc_insertion_point(field_set:protobuf.RecoverMsg.recover)
     }
 
-    // int64 team_id = 3;
+    // int32 team_id = 3;
     inline void RecoverMsg::clear_team_id()
     {
-        _impl_.team_id_ = int64_t{0};
+        _impl_.team_id_ = 0;
     }
-    inline int64_t RecoverMsg::_internal_team_id() const
+    inline int32_t RecoverMsg::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t RecoverMsg::team_id() const
+    inline int32_t RecoverMsg::team_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.RecoverMsg.team_id)
         return _internal_team_id();
     }
-    inline void RecoverMsg::_internal_set_team_id(int64_t value)
+    inline void RecoverMsg::_internal_set_team_id(int32_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void RecoverMsg::set_team_id(int64_t value)
+    inline void RecoverMsg::set_team_id(int32_t value)
     {
         _internal_set_team_id(value);
         // @@protoc_insertion_point(field_set:protobuf.RecoverMsg.team_id)
@@ -3064,49 +3064,49 @@ namespace protobuf
         // @@protoc_insertion_point(field_set:protobuf.InstallMsg.module_type)
     }
 
-    // int64 player_id = 2;
+    // int32 player_id = 2;
     inline void InstallMsg::clear_player_id()
     {
-        _impl_.player_id_ = int64_t{0};
+        _impl_.player_id_ = 0;
     }
-    inline int64_t InstallMsg::_internal_player_id() const
+    inline int32_t InstallMsg::_internal_player_id() const
     {
         return _impl_.player_id_;
     }
-    inline int64_t InstallMsg::player_id() const
+    inline int32_t InstallMsg::player_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.InstallMsg.player_id)
         return _internal_player_id();
     }
-    inline void InstallMsg::_internal_set_player_id(int64_t value)
+    inline void InstallMsg::_internal_set_player_id(int32_t value)
     {
         _impl_.player_id_ = value;
     }
-    inline void InstallMsg::set_player_id(int64_t value)
+    inline void InstallMsg::set_player_id(int32_t value)
     {
         _internal_set_player_id(value);
         // @@protoc_insertion_point(field_set:protobuf.InstallMsg.player_id)
     }
 
-    // int64 team_id = 3;
+    // int32 team_id = 3;
     inline void InstallMsg::clear_team_id()
     {
-        _impl_.team_id_ = int64_t{0};
+        _impl_.team_id_ = 0;
     }
-    inline int64_t InstallMsg::_internal_team_id() const
+    inline int32_t InstallMsg::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t InstallMsg::team_id() const
+    inline int32_t InstallMsg::team_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.InstallMsg.team_id)
         return _internal_team_id();
     }
-    inline void InstallMsg::_internal_set_team_id(int64_t value)
+    inline void InstallMsg::_internal_set_team_id(int32_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void InstallMsg::set_team_id(int64_t value)
+    inline void InstallMsg::set_team_id(int32_t value)
     {
         _internal_set_team_id(value);
         // @@protoc_insertion_point(field_set:protobuf.InstallMsg.team_id)
@@ -3140,49 +3140,49 @@ namespace protobuf
         // @@protoc_insertion_point(field_set:protobuf.BuildShipMsg.ship_type)
     }
 
-    // int64 team_id = 2;
+    // int32 team_id = 2;
     inline void BuildShipMsg::clear_team_id()
     {
-        _impl_.team_id_ = int64_t{0};
+        _impl_.team_id_ = 0;
     }
-    inline int64_t BuildShipMsg::_internal_team_id() const
+    inline int32_t BuildShipMsg::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t BuildShipMsg::team_id() const
+    inline int32_t BuildShipMsg::team_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.BuildShipMsg.team_id)
         return _internal_team_id();
     }
-    inline void BuildShipMsg::_internal_set_team_id(int64_t value)
+    inline void BuildShipMsg::_internal_set_team_id(int32_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void BuildShipMsg::set_team_id(int64_t value)
+    inline void BuildShipMsg::set_team_id(int32_t value)
     {
         _internal_set_team_id(value);
         // @@protoc_insertion_point(field_set:protobuf.BuildShipMsg.team_id)
     }
 
-    // int64 player_id = 3;
+    // int32 player_id = 3;
     inline void BuildShipMsg::clear_player_id()
     {
-        _impl_.player_id_ = int64_t{0};
+        _impl_.player_id_ = 0;
     }
-    inline int64_t BuildShipMsg::_internal_player_id() const
+    inline int32_t BuildShipMsg::_internal_player_id() const
     {
         return _impl_.player_id_;
     }
-    inline int64_t BuildShipMsg::player_id() const
+    inline int32_t BuildShipMsg::player_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.BuildShipMsg.player_id)
         return _internal_player_id();
     }
-    inline void BuildShipMsg::_internal_set_player_id(int64_t value)
+    inline void BuildShipMsg::_internal_set_player_id(int32_t value)
     {
         _impl_.player_id_ = value;
     }
-    inline void BuildShipMsg::set_player_id(int64_t value)
+    inline void BuildShipMsg::set_player_id(int32_t value)
     {
         _internal_set_player_id(value);
         // @@protoc_insertion_point(field_set:protobuf.BuildShipMsg.player_id)

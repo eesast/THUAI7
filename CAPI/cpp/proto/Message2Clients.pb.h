@@ -394,24 +394,24 @@ namespace protobuf
         void _internal_set_shield(int32_t value);
 
     public:
-        // int64 team_id = 7;
+        // int32 team_id = 7;
         void clear_team_id();
-        int64_t team_id() const;
-        void set_team_id(int64_t value);
+        int32_t team_id() const;
+        void set_team_id(int32_t value);
 
     private:
-        int64_t _internal_team_id() const;
-        void _internal_set_team_id(int64_t value);
+        int32_t _internal_team_id() const;
+        void _internal_set_team_id(int32_t value);
 
     public:
-        // int64 player_id = 8;
+        // int32 player_id = 8;
         void clear_player_id();
-        int64_t player_id() const;
-        void set_player_id(int64_t value);
+        int32_t player_id() const;
+        void set_player_id(int32_t value);
 
     private:
-        int64_t _internal_player_id() const;
-        void _internal_set_player_id(int64_t value);
+        int32_t _internal_player_id() const;
+        void _internal_set_player_id(int32_t value);
 
     public:
         // int64 guid = 9;
@@ -531,8 +531,8 @@ namespace protobuf
             int32_t hp_;
             int32_t armor_;
             int32_t shield_;
-            int64_t team_id_;
-            int64_t player_id_;
+            int32_t team_id_;
+            int32_t player_id_;
             int64_t guid_;
             int ship_state_;
             int ship_type_;
@@ -716,10 +716,10 @@ namespace protobuf
             kFacingDirectionFieldNumber = 4,
             kYFieldNumber = 3,
             kDamageFieldNumber = 5,
-            kTeamIdFieldNumber = 6,
             kGuidFieldNumber = 7,
-            kBombRangeFieldNumber = 8,
+            kTeamIdFieldNumber = 6,
             kSpeedFieldNumber = 9,
+            kBombRangeFieldNumber = 8,
         };
         // .protobuf.BulletType type = 1;
         void clear_type();
@@ -771,16 +771,6 @@ namespace protobuf
         void _internal_set_damage(int32_t value);
 
     public:
-        // int64 team_id = 6;
-        void clear_team_id();
-        int64_t team_id() const;
-        void set_team_id(int64_t value);
-
-    private:
-        int64_t _internal_team_id() const;
-        void _internal_set_team_id(int64_t value);
-
-    public:
         // int64 guid = 7;
         void clear_guid();
         int64_t guid() const;
@@ -791,14 +781,14 @@ namespace protobuf
         void _internal_set_guid(int64_t value);
 
     public:
-        // double bomb_range = 8;
-        void clear_bomb_range();
-        double bomb_range() const;
-        void set_bomb_range(double value);
+        // int32 team_id = 6;
+        void clear_team_id();
+        int32_t team_id() const;
+        void set_team_id(int32_t value);
 
     private:
-        double _internal_bomb_range() const;
-        void _internal_set_bomb_range(double value);
+        int32_t _internal_team_id() const;
+        void _internal_set_team_id(int32_t value);
 
     public:
         // int32 speed = 9;
@@ -809,6 +799,16 @@ namespace protobuf
     private:
         int32_t _internal_speed() const;
         void _internal_set_speed(int32_t value);
+
+    public:
+        // double bomb_range = 8;
+        void clear_bomb_range();
+        double bomb_range() const;
+        void set_bomb_range(double value);
+
+    private:
+        double _internal_bomb_range() const;
+        void _internal_set_bomb_range(double value);
 
     public:
         // @@protoc_insertion_point(class_scope:protobuf.MessageOfBullet)
@@ -827,10 +827,10 @@ namespace protobuf
             double facing_direction_;
             int32_t y_;
             int32_t damage_;
-            int64_t team_id_;
             int64_t guid_;
-            double bomb_range_;
+            int32_t team_id_;
             int32_t speed_;
+            double bomb_range_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
         union
@@ -1253,8 +1253,8 @@ namespace protobuf
         {
             kXFieldNumber = 1,
             kYFieldNumber = 2,
-            kTeamIdFieldNumber = 4,
             kHpFieldNumber = 3,
+            kTeamIdFieldNumber = 4,
         };
         // int32 x = 1;
         void clear_x();
@@ -1276,16 +1276,6 @@ namespace protobuf
         void _internal_set_y(int32_t value);
 
     public:
-        // int64 team_id = 4;
-        void clear_team_id();
-        int64_t team_id() const;
-        void set_team_id(int64_t value);
-
-    private:
-        int64_t _internal_team_id() const;
-        void _internal_set_team_id(int64_t value);
-
-    public:
         // int32 hp = 3;
         void clear_hp();
         int32_t hp() const;
@@ -1294,6 +1284,16 @@ namespace protobuf
     private:
         int32_t _internal_hp() const;
         void _internal_set_hp(int32_t value);
+
+    public:
+        // int32 team_id = 4;
+        void clear_team_id();
+        int32_t team_id() const;
+        void set_team_id(int32_t value);
+
+    private:
+        int32_t _internal_team_id() const;
+        void _internal_set_team_id(int32_t value);
 
     public:
         // @@protoc_insertion_point(class_scope:protobuf.MessageOfFactory)
@@ -1309,8 +1309,8 @@ namespace protobuf
         {
             int32_t x_;
             int32_t y_;
-            int64_t team_id_;
             int32_t hp_;
+            int32_t team_id_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
         union
@@ -1481,8 +1481,8 @@ namespace protobuf
         {
             kXFieldNumber = 1,
             kYFieldNumber = 2,
-            kTeamIdFieldNumber = 4,
             kHpFieldNumber = 3,
+            kTeamIdFieldNumber = 4,
         };
         // int32 x = 1;
         void clear_x();
@@ -1504,16 +1504,6 @@ namespace protobuf
         void _internal_set_y(int32_t value);
 
     public:
-        // int64 team_id = 4;
-        void clear_team_id();
-        int64_t team_id() const;
-        void set_team_id(int64_t value);
-
-    private:
-        int64_t _internal_team_id() const;
-        void _internal_set_team_id(int64_t value);
-
-    public:
         // int32 hp = 3;
         void clear_hp();
         int32_t hp() const;
@@ -1522,6 +1512,16 @@ namespace protobuf
     private:
         int32_t _internal_hp() const;
         void _internal_set_hp(int32_t value);
+
+    public:
+        // int32 team_id = 4;
+        void clear_team_id();
+        int32_t team_id() const;
+        void set_team_id(int32_t value);
+
+    private:
+        int32_t _internal_team_id() const;
+        void _internal_set_team_id(int32_t value);
 
     public:
         // @@protoc_insertion_point(class_scope:protobuf.MessageOfCommunity)
@@ -1537,8 +1537,8 @@ namespace protobuf
         {
             int32_t x_;
             int32_t y_;
-            int64_t team_id_;
             int32_t hp_;
+            int32_t team_id_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
         union
@@ -1709,8 +1709,8 @@ namespace protobuf
         {
             kXFieldNumber = 1,
             kYFieldNumber = 2,
-            kTeamIdFieldNumber = 4,
             kHpFieldNumber = 3,
+            kTeamIdFieldNumber = 4,
         };
         // int32 x = 1;
         void clear_x();
@@ -1732,16 +1732,6 @@ namespace protobuf
         void _internal_set_y(int32_t value);
 
     public:
-        // int64 team_id = 4;
-        void clear_team_id();
-        int64_t team_id() const;
-        void set_team_id(int64_t value);
-
-    private:
-        int64_t _internal_team_id() const;
-        void _internal_set_team_id(int64_t value);
-
-    public:
         // int32 hp = 3;
         void clear_hp();
         int32_t hp() const;
@@ -1750,6 +1740,16 @@ namespace protobuf
     private:
         int32_t _internal_hp() const;
         void _internal_set_hp(int32_t value);
+
+    public:
+        // int32 team_id = 4;
+        void clear_team_id();
+        int32_t team_id() const;
+        void set_team_id(int32_t value);
+
+    private:
+        int32_t _internal_team_id() const;
+        void _internal_set_team_id(int32_t value);
 
     public:
         // @@protoc_insertion_point(class_scope:protobuf.MessageOfFort)
@@ -1765,8 +1765,8 @@ namespace protobuf
         {
             int32_t x_;
             int32_t y_;
-            int64_t team_id_;
             int32_t hp_;
+            int32_t team_id_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
         union
@@ -2369,8 +2369,8 @@ namespace protobuf
         {
             kXFieldNumber = 1,
             kYFieldNumber = 2,
-            kTeamIdFieldNumber = 4,
             kHpFieldNumber = 3,
+            kTeamIdFieldNumber = 4,
         };
         // int32 x = 1;
         void clear_x();
@@ -2392,16 +2392,6 @@ namespace protobuf
         void _internal_set_y(int32_t value);
 
     public:
-        // int64 team_id = 4;
-        void clear_team_id();
-        int64_t team_id() const;
-        void set_team_id(int64_t value);
-
-    private:
-        int64_t _internal_team_id() const;
-        void _internal_set_team_id(int64_t value);
-
-    public:
         // int32 hp = 3;
         void clear_hp();
         int32_t hp() const;
@@ -2410,6 +2400,16 @@ namespace protobuf
     private:
         int32_t _internal_hp() const;
         void _internal_set_hp(int32_t value);
+
+    public:
+        // int32 team_id = 4;
+        void clear_team_id();
+        int32_t team_id() const;
+        void set_team_id(int32_t value);
+
+    private:
+        int32_t _internal_team_id() const;
+        void _internal_set_team_id(int32_t value);
 
     public:
         // @@protoc_insertion_point(class_scope:protobuf.MessageOfHome)
@@ -2425,8 +2425,8 @@ namespace protobuf
         {
             int32_t x_;
             int32_t y_;
-            int64_t team_id_;
             int32_t hp_;
+            int32_t team_id_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
         union
@@ -3034,24 +3034,24 @@ namespace protobuf
             kScoreFieldNumber = 3,
             kEnergyFieldNumber = 4,
         };
-        // int64 team_id = 1;
+        // int32 team_id = 1;
         void clear_team_id();
-        int64_t team_id() const;
-        void set_team_id(int64_t value);
+        int32_t team_id() const;
+        void set_team_id(int32_t value);
 
     private:
-        int64_t _internal_team_id() const;
-        void _internal_set_team_id(int64_t value);
+        int32_t _internal_team_id() const;
+        void _internal_set_team_id(int32_t value);
 
     public:
-        // int64 player_id = 2;
+        // int32 player_id = 2;
         void clear_player_id();
-        int64_t player_id() const;
-        void set_player_id(int64_t value);
+        int32_t player_id() const;
+        void set_player_id(int32_t value);
 
     private:
-        int64_t _internal_player_id() const;
-        void _internal_set_player_id(int64_t value);
+        int32_t _internal_player_id() const;
+        void _internal_set_player_id(int32_t value);
 
     public:
         // int64 score = 3;
@@ -3085,8 +3085,8 @@ namespace protobuf
         typedef void DestructorSkippable_;
         struct Impl_
         {
-            int64_t team_id_;
-            int64_t player_id_;
+            int32_t team_id_;
+            int32_t player_id_;
             int64_t score_;
             int64_t energy_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -5102,34 +5102,34 @@ namespace protobuf
             kTextMessageFieldNumber = 1,
             kBinaryMessageFieldNumber = 2,
         };
-        // int64 from_id = 3;
+        // int32 from_id = 3;
         void clear_from_id();
-        int64_t from_id() const;
-        void set_from_id(int64_t value);
+        int32_t from_id() const;
+        void set_from_id(int32_t value);
 
     private:
-        int64_t _internal_from_id() const;
-        void _internal_set_from_id(int64_t value);
+        int32_t _internal_from_id() const;
+        void _internal_set_from_id(int32_t value);
 
     public:
-        // int64 to_id = 4;
+        // int32 to_id = 4;
         void clear_to_id();
-        int64_t to_id() const;
-        void set_to_id(int64_t value);
+        int32_t to_id() const;
+        void set_to_id(int32_t value);
 
     private:
-        int64_t _internal_to_id() const;
-        void _internal_set_to_id(int64_t value);
+        int32_t _internal_to_id() const;
+        void _internal_set_to_id(int32_t value);
 
     public:
-        // int64 team_id = 5;
+        // int32 team_id = 5;
         void clear_team_id();
-        int64_t team_id() const;
-        void set_team_id(int64_t value);
+        int32_t team_id() const;
+        void set_team_id(int32_t value);
 
     private:
-        int64_t _internal_team_id() const;
-        void _internal_set_team_id(int64_t value);
+        int32_t _internal_team_id() const;
+        void _internal_set_team_id(int32_t value);
 
     public:
         // string text_message = 1;
@@ -5192,9 +5192,9 @@ namespace protobuf
         typedef void DestructorSkippable_;
         struct Impl_
         {
-            int64_t from_id_;
-            int64_t to_id_;
-            int64_t team_id_;
+            int32_t from_id_;
+            int32_t to_id_;
+            int32_t team_id_;
             union NewsUnion
             {
                 constexpr NewsUnion() :
@@ -5368,49 +5368,49 @@ namespace protobuf
         // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.shield)
     }
 
-    // int64 team_id = 7;
+    // int32 team_id = 7;
     inline void MessageOfShip::clear_team_id()
     {
-        _impl_.team_id_ = int64_t{0};
+        _impl_.team_id_ = 0;
     }
-    inline int64_t MessageOfShip::_internal_team_id() const
+    inline int32_t MessageOfShip::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t MessageOfShip::team_id() const
+    inline int32_t MessageOfShip::team_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.MessageOfShip.team_id)
         return _internal_team_id();
     }
-    inline void MessageOfShip::_internal_set_team_id(int64_t value)
+    inline void MessageOfShip::_internal_set_team_id(int32_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void MessageOfShip::set_team_id(int64_t value)
+    inline void MessageOfShip::set_team_id(int32_t value)
     {
         _internal_set_team_id(value);
         // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.team_id)
     }
 
-    // int64 player_id = 8;
+    // int32 player_id = 8;
     inline void MessageOfShip::clear_player_id()
     {
-        _impl_.player_id_ = int64_t{0};
+        _impl_.player_id_ = 0;
     }
-    inline int64_t MessageOfShip::_internal_player_id() const
+    inline int32_t MessageOfShip::_internal_player_id() const
     {
         return _impl_.player_id_;
     }
-    inline int64_t MessageOfShip::player_id() const
+    inline int32_t MessageOfShip::player_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.MessageOfShip.player_id)
         return _internal_player_id();
     }
-    inline void MessageOfShip::_internal_set_player_id(int64_t value)
+    inline void MessageOfShip::_internal_set_player_id(int32_t value)
     {
         _impl_.player_id_ = value;
     }
-    inline void MessageOfShip::set_player_id(int64_t value)
+    inline void MessageOfShip::set_player_id(int32_t value)
     {
         _internal_set_player_id(value);
         // @@protoc_insertion_point(field_set:protobuf.MessageOfShip.player_id)
@@ -5780,25 +5780,25 @@ namespace protobuf
         // @@protoc_insertion_point(field_set:protobuf.MessageOfBullet.damage)
     }
 
-    // int64 team_id = 6;
+    // int32 team_id = 6;
     inline void MessageOfBullet::clear_team_id()
     {
-        _impl_.team_id_ = int64_t{0};
+        _impl_.team_id_ = 0;
     }
-    inline int64_t MessageOfBullet::_internal_team_id() const
+    inline int32_t MessageOfBullet::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t MessageOfBullet::team_id() const
+    inline int32_t MessageOfBullet::team_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.MessageOfBullet.team_id)
         return _internal_team_id();
     }
-    inline void MessageOfBullet::_internal_set_team_id(int64_t value)
+    inline void MessageOfBullet::_internal_set_team_id(int32_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void MessageOfBullet::set_team_id(int64_t value)
+    inline void MessageOfBullet::set_team_id(int32_t value)
     {
         _internal_set_team_id(value);
         // @@protoc_insertion_point(field_set:protobuf.MessageOfBullet.team_id)
@@ -6100,25 +6100,25 @@ namespace protobuf
         // @@protoc_insertion_point(field_set:protobuf.MessageOfFactory.hp)
     }
 
-    // int64 team_id = 4;
+    // int32 team_id = 4;
     inline void MessageOfFactory::clear_team_id()
     {
-        _impl_.team_id_ = int64_t{0};
+        _impl_.team_id_ = 0;
     }
-    inline int64_t MessageOfFactory::_internal_team_id() const
+    inline int32_t MessageOfFactory::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t MessageOfFactory::team_id() const
+    inline int32_t MessageOfFactory::team_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.MessageOfFactory.team_id)
         return _internal_team_id();
     }
-    inline void MessageOfFactory::_internal_set_team_id(int64_t value)
+    inline void MessageOfFactory::_internal_set_team_id(int32_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void MessageOfFactory::set_team_id(int64_t value)
+    inline void MessageOfFactory::set_team_id(int32_t value)
     {
         _internal_set_team_id(value);
         // @@protoc_insertion_point(field_set:protobuf.MessageOfFactory.team_id)
@@ -6200,25 +6200,25 @@ namespace protobuf
         // @@protoc_insertion_point(field_set:protobuf.MessageOfCommunity.hp)
     }
 
-    // int64 team_id = 4;
+    // int32 team_id = 4;
     inline void MessageOfCommunity::clear_team_id()
     {
-        _impl_.team_id_ = int64_t{0};
+        _impl_.team_id_ = 0;
     }
-    inline int64_t MessageOfCommunity::_internal_team_id() const
+    inline int32_t MessageOfCommunity::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t MessageOfCommunity::team_id() const
+    inline int32_t MessageOfCommunity::team_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.MessageOfCommunity.team_id)
         return _internal_team_id();
     }
-    inline void MessageOfCommunity::_internal_set_team_id(int64_t value)
+    inline void MessageOfCommunity::_internal_set_team_id(int32_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void MessageOfCommunity::set_team_id(int64_t value)
+    inline void MessageOfCommunity::set_team_id(int32_t value)
     {
         _internal_set_team_id(value);
         // @@protoc_insertion_point(field_set:protobuf.MessageOfCommunity.team_id)
@@ -6300,25 +6300,25 @@ namespace protobuf
         // @@protoc_insertion_point(field_set:protobuf.MessageOfFort.hp)
     }
 
-    // int64 team_id = 4;
+    // int32 team_id = 4;
     inline void MessageOfFort::clear_team_id()
     {
-        _impl_.team_id_ = int64_t{0};
+        _impl_.team_id_ = 0;
     }
-    inline int64_t MessageOfFort::_internal_team_id() const
+    inline int32_t MessageOfFort::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t MessageOfFort::team_id() const
+    inline int32_t MessageOfFort::team_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.MessageOfFort.team_id)
         return _internal_team_id();
     }
-    inline void MessageOfFort::_internal_set_team_id(int64_t value)
+    inline void MessageOfFort::_internal_set_team_id(int32_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void MessageOfFort::set_team_id(int64_t value)
+    inline void MessageOfFort::set_team_id(int32_t value)
     {
         _internal_set_team_id(value);
         // @@protoc_insertion_point(field_set:protobuf.MessageOfFort.team_id)
@@ -6552,25 +6552,25 @@ namespace protobuf
         // @@protoc_insertion_point(field_set:protobuf.MessageOfHome.hp)
     }
 
-    // int64 team_id = 4;
+    // int32 team_id = 4;
     inline void MessageOfHome::clear_team_id()
     {
-        _impl_.team_id_ = int64_t{0};
+        _impl_.team_id_ = 0;
     }
-    inline int64_t MessageOfHome::_internal_team_id() const
+    inline int32_t MessageOfHome::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t MessageOfHome::team_id() const
+    inline int32_t MessageOfHome::team_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.MessageOfHome.team_id)
         return _internal_team_id();
     }
-    inline void MessageOfHome::_internal_set_team_id(int64_t value)
+    inline void MessageOfHome::_internal_set_team_id(int32_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void MessageOfHome::set_team_id(int64_t value)
+    inline void MessageOfHome::set_team_id(int32_t value)
     {
         _internal_set_team_id(value);
         // @@protoc_insertion_point(field_set:protobuf.MessageOfHome.team_id)
@@ -6740,49 +6740,49 @@ namespace protobuf
 
     // MessageOfTeam
 
-    // int64 team_id = 1;
+    // int32 team_id = 1;
     inline void MessageOfTeam::clear_team_id()
     {
-        _impl_.team_id_ = int64_t{0};
+        _impl_.team_id_ = 0;
     }
-    inline int64_t MessageOfTeam::_internal_team_id() const
+    inline int32_t MessageOfTeam::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t MessageOfTeam::team_id() const
+    inline int32_t MessageOfTeam::team_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.MessageOfTeam.team_id)
         return _internal_team_id();
     }
-    inline void MessageOfTeam::_internal_set_team_id(int64_t value)
+    inline void MessageOfTeam::_internal_set_team_id(int32_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void MessageOfTeam::set_team_id(int64_t value)
+    inline void MessageOfTeam::set_team_id(int32_t value)
     {
         _internal_set_team_id(value);
         // @@protoc_insertion_point(field_set:protobuf.MessageOfTeam.team_id)
     }
 
-    // int64 player_id = 2;
+    // int32 player_id = 2;
     inline void MessageOfTeam::clear_player_id()
     {
-        _impl_.player_id_ = int64_t{0};
+        _impl_.player_id_ = 0;
     }
-    inline int64_t MessageOfTeam::_internal_player_id() const
+    inline int32_t MessageOfTeam::_internal_player_id() const
     {
         return _impl_.player_id_;
     }
-    inline int64_t MessageOfTeam::player_id() const
+    inline int32_t MessageOfTeam::player_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.MessageOfTeam.player_id)
         return _internal_player_id();
     }
-    inline void MessageOfTeam::_internal_set_player_id(int64_t value)
+    inline void MessageOfTeam::_internal_set_player_id(int32_t value)
     {
         _impl_.player_id_ = value;
     }
-    inline void MessageOfTeam::set_player_id(int64_t value)
+    inline void MessageOfTeam::set_player_id(int32_t value)
     {
         _internal_set_player_id(value);
         // @@protoc_insertion_point(field_set:protobuf.MessageOfTeam.player_id)
@@ -8729,73 +8729,73 @@ namespace protobuf
         // @@protoc_insertion_point(field_set_allocated:protobuf.MessageOfNews.binary_message)
     }
 
-    // int64 from_id = 3;
+    // int32 from_id = 3;
     inline void MessageOfNews::clear_from_id()
     {
-        _impl_.from_id_ = int64_t{0};
+        _impl_.from_id_ = 0;
     }
-    inline int64_t MessageOfNews::_internal_from_id() const
+    inline int32_t MessageOfNews::_internal_from_id() const
     {
         return _impl_.from_id_;
     }
-    inline int64_t MessageOfNews::from_id() const
+    inline int32_t MessageOfNews::from_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.MessageOfNews.from_id)
         return _internal_from_id();
     }
-    inline void MessageOfNews::_internal_set_from_id(int64_t value)
+    inline void MessageOfNews::_internal_set_from_id(int32_t value)
     {
         _impl_.from_id_ = value;
     }
-    inline void MessageOfNews::set_from_id(int64_t value)
+    inline void MessageOfNews::set_from_id(int32_t value)
     {
         _internal_set_from_id(value);
         // @@protoc_insertion_point(field_set:protobuf.MessageOfNews.from_id)
     }
 
-    // int64 to_id = 4;
+    // int32 to_id = 4;
     inline void MessageOfNews::clear_to_id()
     {
-        _impl_.to_id_ = int64_t{0};
+        _impl_.to_id_ = 0;
     }
-    inline int64_t MessageOfNews::_internal_to_id() const
+    inline int32_t MessageOfNews::_internal_to_id() const
     {
         return _impl_.to_id_;
     }
-    inline int64_t MessageOfNews::to_id() const
+    inline int32_t MessageOfNews::to_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.MessageOfNews.to_id)
         return _internal_to_id();
     }
-    inline void MessageOfNews::_internal_set_to_id(int64_t value)
+    inline void MessageOfNews::_internal_set_to_id(int32_t value)
     {
         _impl_.to_id_ = value;
     }
-    inline void MessageOfNews::set_to_id(int64_t value)
+    inline void MessageOfNews::set_to_id(int32_t value)
     {
         _internal_set_to_id(value);
         // @@protoc_insertion_point(field_set:protobuf.MessageOfNews.to_id)
     }
 
-    // int64 team_id = 5;
+    // int32 team_id = 5;
     inline void MessageOfNews::clear_team_id()
     {
-        _impl_.team_id_ = int64_t{0};
+        _impl_.team_id_ = 0;
     }
-    inline int64_t MessageOfNews::_internal_team_id() const
+    inline int32_t MessageOfNews::_internal_team_id() const
     {
         return _impl_.team_id_;
     }
-    inline int64_t MessageOfNews::team_id() const
+    inline int32_t MessageOfNews::team_id() const
     {
         // @@protoc_insertion_point(field_get:protobuf.MessageOfNews.team_id)
         return _internal_team_id();
     }
-    inline void MessageOfNews::_internal_set_team_id(int64_t value)
+    inline void MessageOfNews::_internal_set_team_id(int32_t value)
     {
         _impl_.team_id_ = value;
     }
-    inline void MessageOfNews::set_team_id(int64_t value)
+    inline void MessageOfNews::set_team_id(int32_t value)
     {
         _internal_set_team_id(value);
         // @@protoc_insertion_point(field_set:protobuf.MessageOfNews.team_id)
