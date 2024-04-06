@@ -28,7 +28,7 @@ namespace Gaming
             {
                 return GameObj.invalidID;
             }
-            if (playerInitInfo.shipType != ShipType.Null)
+            if (playerInitInfo.playerID != 0)
             {
                 // Add a ship
                 Ship? newShip = shipManager.AddShip(playerInitInfo.teamID, playerInitInfo.playerID,
@@ -46,13 +46,11 @@ namespace Gaming
                 return playerInitInfo.playerID;
             }
         }
-        public bool ActivateShip(long teamID, long playerID, ShipType shipType, int birthPointIndex = 0)
+        public long ActivateShip(long teamID, long playerID, ShipType shipType, int birthPointIndex = 0)
         {
             Ship? ship = teamList[(int)teamID].ShipPool.GetObj(shipType);
             if (ship == null)
-                return false;
-            else if (ship.IsRemoved == false)
-                return false;
+                return GameObj.invalidID;
             if (birthPointIndex < 0)
                 birthPointIndex = 0;
             if (birthPointIndex >= teamList[(int)teamID].BirthPointList.Count)
@@ -60,7 +58,11 @@ namespace Gaming
             XY pos = teamList[(int)teamID].BirthPointList[birthPointIndex];
             Random random = new();
             pos += new XY(((random.Next() & 2) - 1) * 1000, ((random.Next() & 2) - 1) * 1000);
-            return shipManager.ActivateShip(ship, pos);
+            if (shipManager.ActivateShip(ship, pos))
+            {
+                return ship.PlayerID;
+            }
+            return GameObj.invalidID;
         }
         public bool StartGame(int milliSeconds)
         {

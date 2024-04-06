@@ -519,7 +519,7 @@ namespace Server
                 boolRes.ActSuccess = false;
                 return Task.FromResult(boolRes);
             }
-            boolRes.ActSuccess = game.ActivateShip(request.TeamId, request.PlayerId, Transformation.ShipTypeFromProto(request.ShipType), request.BirthpointIndex);
+            boolRes.ActSuccess = game.ActivateShip(request.TeamId, request.PlayerId, Transformation.ShipTypeFromProto(request.ShipType), request.BirthpointIndex) != GameObj.invalidID;
 #if DEBUG
             Console.WriteLine("END BuildShip");
 #endif
