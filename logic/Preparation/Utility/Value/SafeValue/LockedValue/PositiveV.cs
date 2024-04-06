@@ -6,16 +6,17 @@ namespace Preparation.Utility
 {
     /// <summary>
     /// 一个保证大于0的可变值
+    /// 建议使用类似[0,int.MaxValue]的InVariableRange
     /// 其对应属性不应当有set访问器，避免不安全的=赋值
-    /// </summary>
-    public class PositiveValue<T> : LockedValue
-        where T : IConvertible, IComparable<T>, IComparable<int>, INumber<T>
+    /// </summa>
+    public class PositiveValue<T> : LockedValue, IIntAddable, IAddable<T>
+        where T : IConvertible, IComparable<T>, INumber<T>
     {
         protected T v;
         #region 构造与读取
         public PositiveValue(T value) : base()
         {
-            if (value.CompareTo(0) < 0)
+            if (value < T.Zero)
             {
                 Debugger.Output("Warning:Try to set PositiveValue to " + value.ToString() + ".");
                 value = T.Zero;
@@ -52,7 +53,7 @@ namespace Preparation.Utility
         #region 普通设置与计算
         public T SetRNow(T value)
         {
-            if (value.CompareTo(0) < 0)
+            if (value < T.Zero)
             {
                 lock (vLock)
                 {
@@ -80,9 +81,28 @@ namespace Preparation.Utility
             lock (vLock)
             {
                 v += addV;
-                if (v.CompareTo(0) < 0) v = T.Zero;
+                if (v < T.Zero) v = T.Zero;
             }
         }
+
+        public void Add(int addV)
+        {
+            lock (vLock)
+            {
+                v += T.CreateChecked(addV);
+                if (v < T.Zero) v = T.Zero;
+            }
+        }
+
+        public void Add<TA>(TA addV) where TA : IConvertible, INumber<TA>
+        {
+            lock (vLock)
+            {
+                v += T.CreateChecked(addV);
+                if (v < T.Zero) v = T.Zero;
+            }
+        }
+
         /// <returns>返回实际改变量</returns>
         public T AddRChange(T addV)
         {
@@ -90,7 +110,7 @@ namespace Preparation.Utility
             {
                 T previousV = v;
                 v += addV;
-                if (v.CompareTo(0) < 0) v = T.Zero;
+                if (v < T.Zero) v = T.Zero;
                 return v - previousV;
             }
         }
@@ -106,7 +126,7 @@ namespace Preparation.Utility
             }
             return addPositiveV;
         }
-        public void MulV(T mulV)
+        public void Mul(T mulV)
         {
             if (mulV.CompareTo(0) <= 0)
             {
@@ -118,9 +138,9 @@ namespace Preparation.Utility
                 v *= mulV;
             }
         }
-        public void MulV<TA>(TA mulV) where TA : IConvertible, INumber<TA>
+        public void Mul<TA>(TA mulV) where TA : IConvertible, INumber<TA>
         {
-            if (mulV.CompareTo(0) < 0)
+            if (mulV < TA.Zero)
             {
                 lock (vLock) v = T.Zero;
                 return;
@@ -169,25 +189,25 @@ namespace Preparation.Utility
         #endregion
 
         #region 与LockedValue类的运算，运算会影响该对象的值
-        public T AddRChange(IntInTheVariableRange a)
+        public T AddRChange<TA>(InVariableRange<TA> a) where TA : IConvertible, IComparable<TA>, INumber<TA>
         {
             return EnterOtherLock<T>(a, () =>
             {
                 T previousV = v;
                 v += T.CreateChecked(a.GetValue());
-                a.SubPositiveV((v - previousV).ToInt32(null));
+                a.SubPositiveVRChange(TA.CreateChecked(v - previousV));
                 return v - previousV;
             })!;
         }
-        public T SubV(IntInTheVariableRange a)
+        public T SubRChange<TA>(InVariableRange<TA> a) where TA : IConvertible, IComparable<TA>, INumber<TA>
         {
             return EnterOtherLock<T>(a, () =>
             {
                 T previousV = v;
                 v -= T.CreateChecked(a.GetValue());
-                if (v.CompareTo(0) < 0) v = T.Zero;
-                a.SubPositiveV((previousV - v).ToInt32(null));
-                return previousV - v;
+                if (v < T.Zero) v = T.Zero;
+                a.SubPositiveVRChange(TA.CreateChecked(previousV - v));
+                return v - previousV;
             })!;
         }
         #endregion

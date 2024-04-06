@@ -6,7 +6,7 @@ public class Construction(XY initPos)
     : Immovable(initPos, GameData.NumOfPosGridPerCell / 2, GameObjType.Construction)
 {
     public AtomicLong TeamID { get; } = new(long.MaxValue);
-    public LongInTheVariableRange HP { get; } = new(0, GameData.CommunityHP);
+    public InVariableRange<long> HP { get; } = new(0, GameData.CommunityHP);
     public override bool IsRigid => constructionType == ConstructionType.Community;
     public override ShapeType Shape => ShapeType.Square;
 
@@ -58,7 +58,7 @@ public class Construction(XY initPos)
         {
             return false;
         }
-        return ship.MoneyPool.SubMoney(HP.AddV(addHP) / 10) > 0;
+        return ship.MoneyPool.SubMoney(HP.AddPositiveVRChange(addHP) / 10) > 0;
     }
     public void BeAttacked(Bullet bullet)
     {
