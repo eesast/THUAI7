@@ -37,7 +37,7 @@ namespace installer.Model
         public HttpClient Client = new HttpClient();
         public EEsast Web;                                  // EEsast服务器
         public Logger Log;                                  // 日志管理器
-        public Logger LogError;
+        public StackLogger LogStack = new StackLogger();
         public enum UpdateStatus
         {
             success, unarchieving, downloading, hash_computing, exiting, error
@@ -60,7 +60,6 @@ namespace installer.Model
         }
         public enum UsingOS { Win, Linux, OSX };
         public UsingOS usingOS { get; set; }
-        public ExceptionStack Exceptions;
         public class Updater
         {
             public string Message = string.Empty;
@@ -79,10 +78,7 @@ namespace installer.Model
         {
             Data = new Local_Data();
             Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.log"));
-            LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.error.log"));
-            Exceptions = new ExceptionStack(LogError, this);
-            if ((Log.LastRecordTime != DateTime.MinValue && DateTime.Now.Month != Log.LastRecordTime.Month)
-                || (LogError.LastRecordTime != DateTime.MinValue && DateTime.Now.Month != LogError.LastRecordTime.Month))
+            if (Log.LastRecordTime != DateTime.MinValue && DateTime.Now.Month != Log.LastRecordTime.Month)
             {
                 string tardir = Path.Combine(Data.Config.InstallPath, "LogArchieved");
                 if (!Directory.Exists(tardir))
@@ -107,12 +103,14 @@ namespace installer.Model
             }
             Route = Data.Config.InstallPath;
             Cloud = new Tencent_Cos("1319625962", "ap-beijing", "bucket1",
-                LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.log")),
-                LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.error.log")));
-            Web = new EEsast(LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.log")),
-                LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.error.log")));
+                LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.log")));
+            Web = new EEsast(LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.log")));
             Web.Token_Changed += SaveToken;
-            LoggerBinding();
+
+            Data.Log.Partner = Log;
+            Cloud.Log.Partner = Log;
+            Web.Log.Partner = Log;
+            Log.Partner = LogStack;
 
             if (Data.Config.Remembered)
             {
@@ -122,58 +120,13 @@ namespace installer.Model
             Cloud.UpdateSecret(MauiProgram.SecretID, MauiProgram.SecretKey);
         }
 
-        public void LoggerBinding()
-        {
-            // Debug模式下将Exceptions直接抛出触发断点
-            if (Debugger.IsAttached && MauiProgram.ErrorTrigger_WhileDebug)
-            {
-                Exceptions.OnFailed += (obj, _) =>
-                {
-                    var e = Exceptions.Pop();
-                    if (e is not null)
-                        throw e;
-                };
-            }
-            Data.Exceptions.OnFailed += (obj, _) =>
-            {
-                var e = Data.Exceptions.Pop();
-                if (e is null) return;
-                if (obj is not null)
-                    e.Data["Source"] = obj.ToString();
-                LogError.LogError($"从Downloader.Data处提取的错误。");
-                Exceptions.Push(e);
-            };
-            Cloud.Exceptions.OnFailed += (obj, _) =>
-            {
-                var e = Cloud.Exceptions.Pop();
-                if (e is null) return;
-                if (obj is not null)
-                    e.Data["Source"] = obj.ToString();
-                LogError.LogError($"从Downloader.Cloud处提取的错误。");
-                Exceptions.Push(e);
-            };
-            Web.Exceptions.OnFailed += (obj, _) =>
-            {
-                var e = Web.Exceptions.Pop();
-                if (e is null) return;
-                if (obj is not null)
-                    e.Data["Source"] = obj.ToString();
-                LogError.LogError($"从Downloader.Web处提取的错误。");
-                Exceptions.Push(e);
-            };
-            Exceptions.OnFailClear += (_, _) =>
-            {
-                Status = UpdateStatus.success;
-            };
-        }
-
         public void UpdateMD5()
         {
             if (File.Exists(Data.MD5DataPath))
                 File.Delete(Data.MD5DataPath);
             Status = UpdateStatus.downloading;
             Cloud.DownloadFileAsync(Data.MD5DataPath, "hash.json").Wait();
-            if (Exceptions.Count > 0)
+            if (Log.CountDict[LogLevel.Error] > 0)
             {
                 Status = UpdateStatus.error;
                 return;
@@ -209,7 +162,6 @@ namespace installer.Model
             deleteTask(new DirectoryInfo(Data.Config.InstallPath));
 
             Data.ResetInstallPath(Data.Config.InstallPath);
-            LoggerBinding();
 
             string zp = Path.Combine(Data.Config.InstallPath, "THUAI7.tar.gz");
             Status = UpdateStatus.downloading;
@@ -252,11 +204,8 @@ namespace installer.Model
             {
                 Data.ResetInstallPath(newPath);
                 if (Cloud.Log is FileLogger) ((FileLogger)Cloud.Log).Path = Path.Combine(Data.LogPath, "TencentCos.log");
-                if (Cloud.LogError is FileLogger) ((FileLogger)Cloud.LogError).Path = Path.Combine(Data.LogPath, "TencentCos.error.log");
-                if (Web.LogError is FileLogger) ((FileLogger)Web.LogError).Path = Path.Combine(Data.LogPath, "EESAST.log");
-                if (Web.LogError is FileLogger) ((FileLogger)Web.LogError).Path = Path.Combine(Data.LogPath, "EESAST.error.log");
+                if (Web.Log is FileLogger) ((FileLogger)Web.Log).Path = Path.Combine(Data.LogPath, "EESAST.log");
                 if (Log is FileLogger) ((FileLogger)Log).Path = Path.Combine(Data.LogPath, "Main.log");
-                if (LogError is FileLogger) ((FileLogger)LogError).Path = Path.Combine(Data.LogPath, "Main.error.log");
             }
             Update();
         }
