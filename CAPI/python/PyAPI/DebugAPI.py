@@ -86,11 +86,11 @@ class ShipDebugAPI(IShipAPI, IGameTimer):
 
         return self.__pool.submit(logAttack)
 
-    def Recover(self) -> Future[bool]:
+    def Recover(self, recover: int) -> Future[bool]:
         self.__logger.info(f"Recover: called at {self.__GetTime()}ms")
 
         def logRecover() -> bool:
-            result = self.__logic.Recover()
+            result = self.__logic.Recover(recover)
             if not result:
                 self.__logger.warning(f"Recover failed at {self.__GetTime()}ms")
             return result
@@ -413,13 +413,13 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
 
         return self.__pool.submit(logRecycle)
 
-    def BuildShip(self, shipType: THUAI7.ShipType) -> Future[bool]:
+    def BuildShip(self, shipType: THUAI7.ShipType, birthIndex: int) -> Future[bool]:
         self.__logger.info(
-            f"BuildShip: shipType = {shipType}, called at {self.__GetTime()}ms"
+            f"BuildShip: shipType = {shipType},birthIndex:{birthIndex} called at {self.__GetTime()}ms"
         )
 
         def logBuildShip() -> bool:
-            result = self.__logic.BuildShip(shipType)
+            result = self.__logic.BuildShip(shipType, birthIndex)
             if not result:
                 self.__logger.warning(f"BuildShip: failed at {self.__GetTime()}ms")
             return result
