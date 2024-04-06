@@ -206,19 +206,21 @@ namespace Gaming
                                                                 var ships = gameMap.ShipInTheRange(
                                                                     construction.Position, GameData.FortRange);
                                                                 var random = new Random();
-                                                                if (ships.Count > 0)
+                                                                if (ships == null || ships.Count == 0)
                                                                 {
-                                                                    var ship = ships[random.Next(ships.Count)];
-                                                                    shipManager.BeAttacked(ship, GameData.FortDamage,
-                                                                        construction.TeamID);
+                                                                    return true;
                                                                 }
+                                                                var ship = ships[random.Next(ships.Count)];
+                                                                shipManager.BeAttacked(ship, GameData.FortDamage,
+                                                                    construction.TeamID);
                                                                 return true;
                                                             },
                                                             timeInterval: GameData.CheckInterval,
                                                             finallyReturn: () => 0
                                                         ).Start();
                                                     }
-                                                ) { IsBackground = true }.Start();
+                                                )
+                                                { IsBackground = true }.Start();
                                                 break;
                                         }
                                         construction.IsActivated.Set(true);

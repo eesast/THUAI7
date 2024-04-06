@@ -109,10 +109,10 @@ namespace GameClass.GameObj
             return (GameObj?)GameObjDict[gameObjType].Find(gameObj =>
                 GameData.IsInTheRange(gameObj.Position, Pos, range));
         }
-        public List<Ship> ShipInTheRange(XY Pos, int range)
+        public List<Ship>? ShipInTheRange(XY Pos, int range)
         {
             return GameObjDict[GameObjType.Ship].Cast<Ship>()?.FindAll(ship =>
-                GameData.IsInTheRange(ship.Position, Pos, range))!;
+                GameData.IsInTheRange(ship.Position, Pos, range));
         }
         public bool CanSee(Ship ship, GameObj gameObj)
         {
