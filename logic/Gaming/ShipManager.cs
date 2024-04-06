@@ -153,8 +153,7 @@ namespace Gaming
                 {
                     return false;
                 }
-                long actualRecover = ship.HP.AddPositiveV(recover);
-                Debugger.Output(ship, " 's HP is recovered to " + ship.HP.ToString());
+                long actualRecover = ship.HP.AddPositiveVRChange(recover);
                 ship.SubMoney((long)(actualRecover * 1.2));
                 return true;
             }
