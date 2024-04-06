@@ -37,7 +37,7 @@ namespace Gaming
                 {
                     return GameObj.invalidID;
                 }
-                //teamList[(int)playerInitInfo.teamID].AddShip(newShip);
+                teamList[(int)playerInitInfo.teamID].ShipPool.Append(newShip);
                 return newShip.PlayerID;
             }
             else
