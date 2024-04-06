@@ -281,13 +281,13 @@ MonoBehaviour:
     shield: 0
     playerTeam: 0
     shipState: 0
-    shipType: 0
+    shipType: 1
     viewRange: 0
     producerType: 1
     constructorType: 1
     armorType: 0
     shieldType: 0
-    weaponType: 1
+    weaponType: 4
 --- !u!114 &2882451378615938793
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -102,7 +102,7 @@ public class ObjCreater : SingletonMono<ObjCreater>
             return null;
         }
     }
-    public GameObject CreateObj(ConstructionType constructionType, Vector2 Pos)
+    public GameObject CreateObj(ConstructionType constructionType, Vector2 Pos, bool flip = false)
     {
         {
             switch (constructionType)
@@ -117,7 +117,10 @@ public class ObjCreater : SingletonMono<ObjCreater>
                     break;
                 case ConstructionType.FORT:
                     if (bulletList[2])
-                        return Instantiate(constructionList[2], Pos, Quaternion.identity);
+                        if (!flip)
+                            return Instantiate(constructionList[2], Pos, Quaternion.Euler(0, 0, 0));
+                        else
+                            return Instantiate(constructionList[2], Pos, Quaternion.Euler(0, 0, 180));
                     break;
                 default:
                     break;

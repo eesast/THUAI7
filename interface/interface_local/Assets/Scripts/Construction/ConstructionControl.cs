@@ -17,6 +17,8 @@ public class ConstructionControl : MonoBehaviour
     void SetQ()
     {
         transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(0, 0, faceAngle), 0.03f);
+        if (messageOfConstruction.playerTeam == PlayerTeam.BLUE)
+            faceAngle = 180;
     }
     // Start is called before the first frame update
     void Start()
@@ -79,15 +81,16 @@ public class ConstructionControl : MonoBehaviour
             }
         }
     }
-    public void Construct(int constructAmount)
+    public bool Construct(int constructAmount)
     {
         if (constructCD != 0)
-            return;
+            return false;
         constructCD = 1f;
         messageOfConstruction.hp += constructAmount;
-        if (messageOfConstruction.hp > constructionData.hpMax)
+        if (messageOfConstruction.hp >= constructionData.hpMax)
         {
             messageOfConstruction.hp = constructionData.hpMax;
+            return true;
         }
         else
         {
@@ -98,6 +101,7 @@ public class ConstructionControl : MonoBehaviour
             constructing++;
             StartCoroutine(RotateRepairIcon());
         }
+        return false;
     }
     IEnumerator RotateRepairIcon()
     {
@@ -131,7 +135,19 @@ public class ConstructionControl : MonoBehaviour
         if (messageOfConstruction.hp < 0)
             messageOfConstruction.hp = 0;
         EntityManager.GetInstance().emptyConstruction.Add(new Vector2(messageOfConstruction.x, messageOfConstruction.y));
-        EntityManager.GetInstance().factory.Remove(this);
+        switch (messageOfConstruction.constructionType)
+        {
+            case ConstructionType.FACTORY:
+                EntityManager.GetInstance().factory.Remove(this);
+                break;
+            case ConstructionType.COMMUNITY:
+                EntityManager.GetInstance().community.Remove(this);
+                break;
+            case ConstructionType.FORT:
+                EntityManager.GetInstance().fort.Remove(this);
+                break;
+            default: break;
+        }
         Destroy(gameObject);
     }
 }

@@ -10,6 +10,8 @@ public class ParaDefine : SingletonMono<ParaDefine>
     public ConstructorData constructor1Data, constructor2Data, constructor3Data;
     public ShipData civilShipData, militaryShipData, flagShipData;
     public ConstructionData factoryData, communityData, fortData;
+    public ArmorData armor1Data, armor2Data, armor3Data;
+    public ShieldData shield1Data, shield2Data, shield3Data;
     public BaseData baseData;
     [Serializable]
     public class litColorSetting

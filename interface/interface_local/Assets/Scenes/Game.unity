@@ -156,8 +156,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1043650395}
-  - {fileID: 1627875130}
-  - {fileID: 1934484270}
   m_Father: {fileID: 1507083278}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1332,6 +1330,12 @@ MonoBehaviour:
   factoryData: {fileID: 11400000, guid: 54c9136022665164c9024a91f2c26b1b, type: 2}
   communityData: {fileID: 11400000, guid: 69ca601dd1cfbf8438c108e04c5ba59a, type: 2}
   fortData: {fileID: 11400000, guid: c2ad340d1afc39741b0599c59d436b15, type: 2}
+  armor1Data: {fileID: 11400000, guid: 1ca49779f67d70f43b1fa0cf2d79bd18, type: 2}
+  armor2Data: {fileID: 11400000, guid: d6b198846fed184408a0404f0bd7d568, type: 2}
+  armor3Data: {fileID: 11400000, guid: 6f1d0505916296b44ba7eec09b88d093, type: 2}
+  shield1Data: {fileID: 11400000, guid: 6bbb779eb39e2434da70acc359c07bcc, type: 2}
+  shield2Data: {fileID: 11400000, guid: 20834d4ea16650646b0ebe71f98de3a3, type: 2}
+  shield3Data: {fileID: 11400000, guid: 050118415852b8844bb27e45f31a2ec9, type: 2}
   baseData: {fileID: 11400000, guid: 53955729635aa9847955fcce1133fe93, type: 2}
   Team0Color:
   - color: {r: 1, g: 0.027672624, b: 0, a: 0}
@@ -1392,7 +1396,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 674}
+  m_AnchoredPosition: {x: 0, y: 347.88007}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1043650396
@@ -2101,7 +2105,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 514075668}
   m_HandleRect: {fileID: 514075667}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2381,8 +2385,6 @@ RectTransform:
   - {fileID: 4894522585406175027}
   - {fileID: 6340287979568351601}
   - {fileID: 2076035942}
-  - {fileID: 2023572907905196562}
-  - {fileID: 6340287980270823683}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

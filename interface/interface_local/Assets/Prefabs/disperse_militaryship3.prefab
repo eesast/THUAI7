@@ -113,7 +113,7 @@ MonoBehaviour:
     shield: 400
     playerTeam: 0
     shipState: 0
-    shipType: 0
+    shipType: 2
     viewRange: 0
     producerType: 0
     constructorType: 0

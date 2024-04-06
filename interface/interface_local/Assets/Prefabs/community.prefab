@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 940564042307808193}
   - component: {fileID: 7343186342370500237}
   - component: {fileID: 612575302597527367}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: community
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,6 +106,8 @@ MonoBehaviour:
     playerTeam: 0
     constructed: 0
   constructionData: {fileID: 11400000, guid: 69ca601dd1cfbf8438c108e04c5ba59a, type: 2}
+  enemyInRange: []
+  selectedEnemy: {fileID: 0}
   repairIcon: {fileID: 0}
   iconRotateAngle: 30
   iconRotateTime: 0.6

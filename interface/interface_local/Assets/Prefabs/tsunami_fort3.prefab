@@ -279,7 +279,7 @@ Transform:
   m_GameObject: {fileID: 8302654837601584078}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.6276865, y: -1.1181314, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -360,6 +360,8 @@ MonoBehaviour:
     playerTeam: 0
     constructed: 0
   constructionData: {fileID: 11400000, guid: c2ad340d1afc39741b0599c59d436b15, type: 2}
+  enemyInRange: []
+  selectedEnemy: {fileID: 0}
   repairIcon: {fileID: 0}
   iconRotateAngle: 30
   iconRotateTime: 0.6
