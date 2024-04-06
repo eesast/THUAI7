@@ -53,12 +53,9 @@ public class Construction(XY initPos)
                 return false;
             }
         }
-        var addHP = HP.GetMaxV() - HP > constructSpeed ? constructSpeed : HP.GetMaxV() - HP;
-        if (ship.MoneyPool.Money < addHP / 10)
-        {
-            return false;
-        }
-        return ship.MoneyPool.SubMoney(HP.AddPositiveVRChange(addHP) / 10) > 0;
+
+        return HP.AddVUseOtherRChange<long>(constructSpeed, ship.MoneyPool.Money, 10) > 0;
+    
     }
     public void BeAttacked(Bullet bullet)
     {

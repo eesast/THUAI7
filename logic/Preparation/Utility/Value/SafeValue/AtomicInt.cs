@@ -43,18 +43,18 @@ namespace Preparation.Utility
 
     /// <summary>
     /// 参数要求倍率speed（默认1）
-    /// 可以设定ISafeConvertible<int>类的Score，默认初始为0的AtomicInt
+    /// 可以设定IIntAddable类的Score，默认初始为0的AtomicInt
     /// 在发生正向的变化时，自动给Score加上正向变化的差乘以speed（取整）。
     /// 注意：AtomicIntOnlyAddScore本身为AtomicInt，提供的Score可能构成环而死锁。
     /// </summary>
     public class AtomicIntOnlyAddScore(int x, double speed = 1.0) : AtomicInt(x)
     {
-        public IIntAddable score = new AtomicInt(0);
+        private IIntAddable score = new AtomicInt(0);
         public IIntAddable Score
         {
             get
             {
-                return Interlocked.CompareExchange(ref score, null, null);
+                return Interlocked.CompareExchange(ref score!, null, null);
             }
             set
             {

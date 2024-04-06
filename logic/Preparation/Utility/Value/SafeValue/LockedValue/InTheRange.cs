@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Preparation.Utility;
+using System;
 using System.Numerics;
+using System.Threading;
 
 namespace Preparation.Utility
 {
@@ -77,7 +79,7 @@ namespace Preparation.Utility
         /// <summary>
         /// 若maxValue<=0则maxValue设为0并返回False
         /// </summary>
-        public bool SetMaxV(T maxValue)
+        public virtual bool SetMaxV(T maxValue)
         {
             if (maxValue.CompareTo(0) <= 0)
             {
@@ -97,7 +99,7 @@ namespace Preparation.Utility
         /// <summary>
         /// 应当保证该maxValue>=0
         /// </summary>
-        public void SetPositiveMaxV(T maxValue)
+        public virtual void SetPositiveMaxV(T maxValue)
         {
             lock (vLock)
             {
@@ -106,7 +108,7 @@ namespace Preparation.Utility
             }
         }
 
-        public T SetRNow(T value)
+        public virtual T SetRNow(T value)
         {
             if (value.CompareTo(0) <= 0)
             {
@@ -123,7 +125,7 @@ namespace Preparation.Utility
         /// <summary>
         /// 应当保证该value>=0
         /// </summary>
-        public T SetPositiveVRNow(T value)
+        public virtual T SetPositiveVRNow(T value)
         {
             lock (vLock)
             {
@@ -136,7 +138,7 @@ namespace Preparation.Utility
         /// <summary>
         /// 如果当前值大于maxValue,则更新maxValue失败
         /// </summary>
-        public bool TrySetMaxV(T maxValue)
+        public virtual bool TrySetMaxV(T maxValue)
         {
             lock (vLock)
             {
@@ -145,21 +147,21 @@ namespace Preparation.Utility
                 return true;
             }
         }
-        public void SetVToMaxV()
+        public virtual void SetVToMaxV()
         {
             lock (vLock)
             {
                 v = maxV;
             }
         }
-        public void SetVToMaxV(double ratio)
+        public virtual void SetVToMaxV(double ratio)
         {
             lock (vLock)
             {
                 v = T.CreateChecked(maxV.ToDouble(null) * ratio);
             }
         }
-        public bool Set0IfNotMaxor0()
+        public virtual bool Set0IfNotMaxor0()
         {
             lock (vLock)
             {
@@ -171,7 +173,7 @@ namespace Preparation.Utility
             }
             return false;
         }
-        public bool Set0IfMax()
+        public virtual bool Set0IfMax()
         {
             lock (vLock)
             {
@@ -186,7 +188,7 @@ namespace Preparation.Utility
         #endregion
 
         #region 普通运算
-        public void Add(T addV)
+        public virtual void Add(T addV)
         {
             lock (vLock)
             {
@@ -195,7 +197,7 @@ namespace Preparation.Utility
                 if (v > maxV) v = maxV;
             }
         }
-        public void Add(int addV)
+        public virtual void Add(int addV)
         {
             lock (vLock)
             {
@@ -205,8 +207,19 @@ namespace Preparation.Utility
             }
         }
 
+        public virtual T AddRNow(T addV)
+        {
+            lock (vLock)
+            {
+                v += addV;
+                if (v < T.Zero) v = T.Zero;
+                if (v > maxV) v = maxV;
+                return v;
+            }
+        }
+
         /// <returns>返回实际改变量</returns>
-        public T AddRChange(T addV)
+        public virtual T AddRChange(T addV)
         {
             lock (vLock)
             {
@@ -221,7 +234,7 @@ namespace Preparation.Utility
         /// 应当保证增加值大于0
         /// </summary>
         /// <returns>返回实际改变量</returns>
-        public T AddPositiveVRChange(T addPositiveV)
+        public virtual T AddPositiveVRChange(T addPositiveV)
         {
             lock (vLock)
             {
@@ -233,7 +246,7 @@ namespace Preparation.Utility
         /// <summary>
         /// 应当保证增加值大于0
         /// </summary>
-        public void AddPositiveV(T addPositiveV)
+        public virtual void AddPositiveV(T addPositiveV)
         {
             lock (vLock)
             {
@@ -242,7 +255,7 @@ namespace Preparation.Utility
             }
         }
 
-        public void Mul(T mulV)
+        public virtual void Mul(T mulV)
         {
             if (mulV <= T.Zero)
             {
@@ -255,7 +268,7 @@ namespace Preparation.Utility
                 else v *= mulV;
             }
         }
-        public void Mul<TA>(TA mulV) where TA : IConvertible, INumber<TA>
+        public virtual void Mul<TA>(TA mulV) where TA : IConvertible, INumber<TA>
         {
             if (mulV < TA.Zero)
             {
@@ -272,7 +285,7 @@ namespace Preparation.Utility
         /// <summary>
         /// 应当保证乘数大于0
         /// </summary>
-        public void MulPositiveV(T mulPositiveV)
+        public virtual void MulPositiveV(T mulPositiveV)
         {
             lock (vLock)
             {
@@ -283,7 +296,7 @@ namespace Preparation.Utility
         /// <summary>
         /// 应当保证乘数大于0
         /// </summary>
-        public void MulPositiveV<TA>(TA mulV) where TA : IConvertible, INumber<TA>
+        public virtual void MulPositiveV<TA>(TA mulV) where TA : IConvertible, INumber<TA>
         {
             lock (vLock)
             {
@@ -293,7 +306,7 @@ namespace Preparation.Utility
             }
         }
         /// <returns>返回实际改变量</returns>
-        public T SubRChange(T subV)
+        public virtual T SubRChange(T subV)
         {
             lock (vLock)
             {
@@ -304,11 +317,23 @@ namespace Preparation.Utility
                 return v - previousV;
             }
         }
+
+        public virtual T SubRNow(T subV)
+        {
+            lock (vLock)
+            {
+                v -= subV;
+                if (v < T.Zero) v = T.Zero;
+                if (v > maxV) v = maxV;
+                return v;
+            }
+        }
+
         /// <summary>
         /// 应当保证该减少值大于0
         /// </summary>
         /// <returns>返回实际改变量</returns>
-        public T SubPositiveVRChange(T subPositiveV)
+        public virtual T SubPositiveVRChange(T subPositiveV)
         {
             lock (vLock)
             {
@@ -320,7 +345,7 @@ namespace Preparation.Utility
         /// <summary>
         /// 应当保证该减少值大于0
         /// </summary>
-        public void SubPositiveV(T subPositiveV)
+        public virtual void SubPositiveV(T subPositiveV)
         {
             lock (vLock)
             {
@@ -334,7 +359,7 @@ namespace Preparation.Utility
         /// 试图加到满，如果无法加到maxValue则不加并返回-1
         /// </summary>
         /// <returns>返回实际改变量</returns>
-        public T TryAddToMaxVRChange(T addV)
+        public virtual T TryAddToMaxVRChange(T addV)
         {
             lock (vLock)
             {
@@ -352,7 +377,7 @@ namespace Preparation.Utility
         /// ratio可以为负
         /// </summary>
         /// <returns>返回实际改变量</returns>
-        public T VAddPartMaxVRChange(double ratio)
+        public virtual T VAddPartMaxVRChange(double ratio)
         {
             lock (vLock)
             {
@@ -366,18 +391,31 @@ namespace Preparation.Utility
         #endregion
 
         #region 与InVariableRange类的运算，运算会影响该对象的值
-        public T AddRChange<TA>(InVariableRange<TA> a) where TA : IConvertible, IComparable<TA>, INumber<TA>
+        public virtual T AddRChange<TA>(InVariableRange<TA> a, double speed = 1.0) where TA : IConvertible, IComparable<TA>, INumber<TA>
         {
             return EnterOtherLock<T>(a, () =>
             {
                 T previousV = v;
-                v += T.CreateChecked(a.GetValue());
+                v += T.CreateChecked(a.GetValue().ToDouble(null)*speed);
                 if (v > maxV) v = maxV;
                 a.SubPositiveVRChange(TA.CreateChecked(v - previousV));
                 return v - previousV;
             })!;
         }
-        public T SubRChange<TA>(InVariableRange<TA> a) where TA : IConvertible, IComparable<TA>, IComparable<int>, INumber<TA>
+        public virtual T AddVUseOtherRChange<TA>(T value,InVariableRange<TA> other, double speed = 1.0) where TA : IConvertible, IComparable<TA>, INumber<TA>
+        {
+            return EnterOtherLock<T>(other, () =>
+            {
+                T previousV = v;
+                T otherValue = T.CreateChecked(other.GetValue().ToDouble(null)*speed);
+                value = value > otherValue ? otherValue : value;
+                v += value;
+                if (v > maxV) v = maxV;
+                other.SubPositiveVRChange(TA.CreateChecked((v - previousV).ToDouble(null)/speed));
+                return v - previousV;
+            })!;
+        }
+        public virtual T SubRChange<TA>(InVariableRange<TA> a) where TA : IConvertible, IComparable<TA>, IComparable<int>, INumber<TA>
         {
             return EnterOtherLock<T>(a, () =>
             {
@@ -396,7 +434,7 @@ namespace Preparation.Utility
         /// 如果无法加到maxValue则不加
         /// </summary>
         /// <returns>返回试图加到的值与最大值</returns>
-        public (T, T, long) TryAddToMaxV(StartTime startTime, double speed = 1.0)
+        public virtual (T, T, long) TryAddToMaxV(StartTime startTime, double speed = 1.0)
         {
             lock (vLock)
             {
@@ -410,7 +448,7 @@ namespace Preparation.Utility
         /// 增加量为时间差*速度，并将startTime变为long.MaxValue
         /// </summary>
         /// <returns>返回实际改变量</returns>
-        public T AddRChange(StartTime startTime, double speed = 1.0)
+        public virtual T AddRChange(StartTime startTime, double speed = 1.0)
         {
             lock (vLock)
             {
@@ -428,7 +466,7 @@ namespace Preparation.Utility
         /// 如果无法加到maxValue则清零
         /// </summary>
         /// <returns>返回是否清零</returns>
-        public bool Set0IfNotAddToMaxV(StartTime startTime, double speed = 1.0)
+        public virtual bool Set0IfNotAddToMaxV(StartTime startTime, double speed = 1.0)
         {
             lock (vLock)
             {
@@ -451,4 +489,204 @@ namespace Preparation.Utility
         #endregion
     }
 
+    /// <summary>
+    /// 可以设定IIntAddable类的Score，默认初始为0的AtomicInt
+    /// 在发生正向的变化时，自动给Score加上正向变化的差乘以speed（取整）。
+    /// </summary>
+    public class InVariableRangeOnlyAddScore<T>(T value, T maxValue, double speed = 1.0) : InVariableRange<T>(value, maxValue), IIntAddable, IAddable<T>
+        where T : IConvertible, IComparable<T>, INumber<T>
+    {
+        private IIntAddable score = new AtomicInt(0);
+        public IIntAddable Score
+        {
+            get
+            {
+                return Interlocked.CompareExchange(ref score!, null, null);
+            }
+            set
+            {
+                Interlocked.Exchange(ref score, value);
+            }
+        }
+
+        public AtomicDouble speed = new(speed);
+
+        public TA ScoreAdd<TA>(Func<TA> x)
+            {
+                lock (vLock) 
+                {
+                    T previousV = v;
+                    TA ans = x();
+                    if(v>previousV)
+                        Score.Add((int)((v-previousV).ToDouble(null)*speed));
+                    return ans;
+                }
+            }
+        public void ScoreAdd(Action x)
+        {
+            lock (vLock)
+            {
+                T previousV = v;
+                x();
+                if (v>previousV)
+                    Score.Add((int)((v-previousV).ToDouble(null)*speed));
+            }
+        }
+
+        public override bool SetMaxV(T maxValue)
+        {
+            return ScoreAdd<bool>(() => base.SetMaxV(maxValue));
+        }
+
+        public override void SetPositiveMaxV(T maxValue)
+        {
+            ScoreAdd(() => base.SetPositiveMaxV(maxValue));
+        }
+
+        public override T SetRNow(T value)
+        {
+            return ScoreAdd<T>(() => base.SetRNow(value));
+        }
+
+        public override T SetPositiveVRNow(T value)
+        {
+            return ScoreAdd<T>(() => base.SetPositiveVRNow(value));
+        }
+
+        public override bool TrySetMaxV(T maxValue)
+        {
+            return ScoreAdd<bool>(() => base.TrySetMaxV(maxValue));
+        }
+
+        public override void SetVToMaxV()
+        {
+            ScoreAdd(() => base.SetVToMaxV());
+        }
+
+        public override void SetVToMaxV(double ratio)
+        {
+            ScoreAdd(() => base.SetVToMaxV(ratio));
+        }
+
+        public override bool Set0IfNotMaxor0()
+        {
+            return ScoreAdd<bool>(() => base.Set0IfNotMaxor0());
+        }
+
+        public override bool Set0IfMax()
+        {
+            return ScoreAdd<bool>(() => base.Set0IfMax());
+        }
+
+        public override void Add(T addV)
+        {
+            ScoreAdd(() => base.Add(addV));
+        }
+
+        public override void Add(int addV)
+        {
+            ScoreAdd(() => base.Add(addV));
+        }
+
+        public override T AddRNow(T addV)
+        {
+            return ScoreAdd(() => base.AddRNow(addV));
+        }
+
+        public override T AddRChange(T addV)
+        {
+            return ScoreAdd<T>(() => base.AddRChange(addV));
+        }
+
+        public override T AddPositiveVRChange(T addPositiveV)
+        {
+            return ScoreAdd<T>(() => base.AddPositiveVRChange(addPositiveV));
+        }
+
+        public override void AddPositiveV(T addPositiveV)
+        {
+            ScoreAdd(() => base.AddPositiveV(addPositiveV));
+        }
+
+        public override void Mul(T mulV)
+        {
+            ScoreAdd(() => base.Mul(mulV));
+        }
+
+        public override void Mul<TA>(TA mulV)
+        {
+            ScoreAdd(() => base.Mul(mulV));
+        }
+
+        public override void MulPositiveV(T mulPositiveV)
+        {
+            ScoreAdd(() => base.MulPositiveV(mulPositiveV));
+        }
+
+        public override void MulPositiveV<TA>(TA mulV)
+        {
+            ScoreAdd(() => base.MulPositiveV(mulV));
+        }
+
+        public override T SubRChange(T subV)
+        {
+            return ScoreAdd<T>(() => base.SubRChange(subV));
+        }
+
+        public override T SubRNow(T subV)
+        {
+            return ScoreAdd<T>(() => base.SubRNow(subV));
+        }
+
+        public override T SubPositiveVRChange(T subPositiveV)
+        {
+            return ScoreAdd<T>(() => base.SubPositiveVRChange(subPositiveV));
+        }
+
+        public override void SubPositiveV(T subPositiveV)
+        {
+            ScoreAdd(() => base.SubPositiveV(subPositiveV));
+        }
+
+        public override T TryAddToMaxVRChange(T addV)
+        {
+            return ScoreAdd<T>(() => base.TryAddToMaxVRChange(addV));
+        }
+
+        public override T VAddPartMaxVRChange(double ratio)
+        {
+            return ScoreAdd<T>(() => base.VAddPartMaxVRChange(ratio));
+        }
+
+        public override T AddRChange<TA>(InVariableRange<TA> a, double speed = 1.0)
+        {
+            return ScoreAdd<T>(() => base.AddRChange(a, speed));
+        }
+
+        public override T AddVUseOtherRChange<TA>(T value, InVariableRange<TA> other, double speed = 1.0)
+        {
+            return ScoreAdd<T>(() => base.AddVUseOtherRChange(value, other, speed));
+        }
+
+        public override T SubRChange<TA>(InVariableRange<TA> a)
+        {
+            return ScoreAdd<T>(() => base.SubRChange(a));
+        }
+
+        public override (T, T, long) TryAddToMaxV(StartTime startTime, double speed = 1.0)
+        {
+            return ScoreAdd<(T, T, long)>(() => base.TryAddToMaxV(startTime, speed));
+        }
+
+        public override T AddRChange(StartTime startTime, double speed = 1.0)
+        {
+            return ScoreAdd<T>(() => base.AddRChange(startTime, speed));
+        }
+
+        public override bool Set0IfNotAddToMaxV(StartTime startTime, double speed = 1.0)
+        {
+            return ScoreAdd<bool>(() => base.Set0IfNotAddToMaxV(startTime, speed));
+        }
+
+    }
 }

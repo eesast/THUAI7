@@ -72,7 +72,7 @@ namespace GameClass.GameObj
         }
         public void SubMoney(long sub)
         {
-            MoneyPool.Money.Sub(sub);
+            MoneyPool.Money.SubRNow(sub);
         }
     }
 }
