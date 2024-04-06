@@ -13,17 +13,22 @@ using installer.Model;
 
 namespace installer.ViewModel
 {
+    public class ExceptionRecord
+    {
+        public LogLevel Level { get; set; }
+        public string Message { get; set; } = string.Empty;
+    }
     public class InstallViewModel : BaseViewModel
     {
         private readonly Downloader Downloader;
         private readonly IFolderPicker FolderPicker;
-        public ObservableCollection<Exception> Exceptions { get; private set; }
+        public ObservableCollection<ExceptionRecord> Exceptions { get; private set; }
 
         public InstallViewModel(IFolderPicker folderPicker, Downloader downloader)
         {
             Downloader = downloader;
             FolderPicker = folderPicker;
-            Exceptions = new ObservableCollection<Exception>();
+            Exceptions = new ObservableCollection<ExceptionRecord>();
 
             downloadPath = Downloader.Data.Config.InstallPath;
 
@@ -134,14 +139,11 @@ namespace installer.ViewModel
 
         public void UpdateExceptions()
         {
-            while (Downloader.Exceptions.Count > 0)
+            while (Downloader.LogStack.Stack.Count > 0)
             {
-                var exception = Downloader.Exceptions.Pop();
-                if (exception != null)
-                {
-                    Exceptions.Add(exception);
-                }
-            }
+                var exception = Downloader.LogStack.Stack.Pop();
+                Exceptions.Add(new ExceptionRecord { Level = exception.level, Message = exception.message });
+            };
         }
 
         public ICommand BrowseBtnClickedCommand { get; }
