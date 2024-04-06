@@ -23,4 +23,10 @@ public class Tool : Singleton<Tool>
             return true;
         return false;
     }
+    public bool CheckDistance(Vector2 grid, Vector2 cell, float dist)
+    {
+        if ((grid - cell).magnitude <= dist)
+            return true;
+        return false;
+    }
 }

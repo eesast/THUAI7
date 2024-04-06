@@ -271,8 +271,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactBase: {fileID: 0}
-  speed: 3
+  targetQ: 0
   messageOfShip:
+    x: 0
+    y: 0
+    speed: 3
     hp: 3000
     armor: 0
     shield: 0

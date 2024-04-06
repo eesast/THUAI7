@@ -107,7 +107,9 @@ MonoBehaviour:
     constructed: 0
   constructionData: {fileID: 11400000, guid: 69ca601dd1cfbf8438c108e04c5ba59a, type: 2}
   repairIcon: {fileID: 0}
-  repairIconRotateAngle: 30
+  iconRotateAngle: 30
+  iconRotateTime: 0.6
+  constructing: 0
 --- !u!1 &8904761873208969172
 GameObject:
   m_ObjectHideFlags: 0

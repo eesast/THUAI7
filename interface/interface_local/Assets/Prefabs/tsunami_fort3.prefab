@@ -361,4 +361,6 @@ MonoBehaviour:
     constructed: 0
   constructionData: {fileID: 11400000, guid: c2ad340d1afc39741b0599c59d436b15, type: 2}
   repairIcon: {fileID: 0}
-  repairIconRotateAngle: 30
+  iconRotateAngle: 30
+  iconRotateTime: 0.6
+  constructing: 0

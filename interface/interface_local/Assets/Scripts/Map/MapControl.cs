@@ -39,7 +39,7 @@ public class MapControl : SingletonMono<MapControl>
                         break;
                     case PlaceType.RESOURCE:
                         obj = ObjCreater.GetInstance().CreateObj(PlaceType.RESOURCE, new Vector2(j, 50 - i));
-                        PlaceManager.GetInstance().resource.Add(new Vector2(j, 50 - i));
+                        EntityManager.GetInstance().resource.Add(new Vector2(j, 50 - i));
                         break;
                     case PlaceType.WORMHOLE:
                         ObjCreater.GetInstance().CreateObj((PlaceType)map[i, j], new Vector2(j, 50 - i),
@@ -48,7 +48,7 @@ public class MapControl : SingletonMono<MapControl>
                         break;
                     case PlaceType.CONSTRUCTION:
                         obj = ObjCreater.GetInstance().CreateObj(PlaceType.CONSTRUCTION, new Vector2(j, 50 - i));
-                        PlaceManager.GetInstance().emptyConstruction.Add(new Vector2(j, 50 - i));
+                        EntityManager.GetInstance().emptyConstruction.Add(new Vector2(j, 50 - i));
                         break;
                     default:
                         ObjCreater.GetInstance().CreateObj((PlaceType)map[i, j], new Vector2(j, 50 - i));

@@ -16,7 +16,10 @@ public class BulletControl : MonoBehaviour
         lifeTime += Time.deltaTime;
         // Debug.Log(rb.velocity);
         if (lifeTime > bulletData.attackDistance / bulletData.speed)
+        {
+            // GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             Destroy(gameObject);
+        }
     }
     private void OnTriggerEnter2D(Collider2D collider2D)
     {
