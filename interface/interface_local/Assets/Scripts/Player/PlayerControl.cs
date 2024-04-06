@@ -31,11 +31,14 @@ public class PlayerControl : SingletonMono<PlayerControl>
         CheckInteract();
         UpdateInteractList();
         Interact();
-        ShipMpve();
         // ShipAttack();
     }
     void testInput()
     {
+        if (Input.GetKeyDown(KeyCode.P))
+            selectedOption = InteractControl.InteractOption.Produce;
+        if (Input.GetKeyDown(KeyCode.C))
+            selectedOption = InteractControl.InteractOption.ConstructFactory;
     }
     void CheckInteract()
     {
@@ -69,6 +72,10 @@ public class PlayerControl : SingletonMono<PlayerControl>
                         selectedInt.Add(raycaster.GetComponent<InteractBase>());
                     }
                 }
+                if (Input.GetMouseButtonDown(1))
+                {
+                    ShipMove(raycaster.transform.position);
+                }
             }
         }
         else
@@ -80,6 +87,7 @@ public class PlayerControl : SingletonMono<PlayerControl>
                     i.tobeSelected = false;
                 }
                 tobeSelectedInt.Clear();
+                // Debug.Log("clear" + tobeSelectedInt.Count);
 
                 if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
                 {
@@ -90,6 +98,10 @@ public class PlayerControl : SingletonMono<PlayerControl>
                     // selectedInt.Clear();
                     ShipAttack();
                 }
+                if (Input.GetMouseButtonDown(1))
+                {
+                    ShipMove(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                }
             }
         }
     }
@@ -97,6 +109,7 @@ public class PlayerControl : SingletonMono<PlayerControl>
     {
         if (selectedInt.Count > 0)
         {
+            // Debug.Log(selectedInt[0].interactType + "   " + InteractControl.GetInstance().interactOptions[selectedInt[0].interactType]);
             enabledInteract = new List<InteractControl.InteractOption>(InteractControl.GetInstance().interactOptions[selectedInt[0].interactType]);
             // Debug.Log(InteractControl.GetInstance().interactOptions[InteractControl.InteractType.Base].Count);
             foreach (InteractBase interactBase in selectedInt)
@@ -107,7 +120,6 @@ public class PlayerControl : SingletonMono<PlayerControl>
                         enabledInteract.Remove(enabledInteract[i]);
                     }
             }
-
         }
         else
         {
@@ -123,15 +135,12 @@ public class PlayerControl : SingletonMono<PlayerControl>
         }
         selectedOption = InteractControl.InteractOption.None;
     }
-    void ShipMpve()
+    void ShipMove(Vector2 movePos)
     {
-        if (Input.GetMouseButtonDown(1))
+        foreach (InteractBase interactBase in selectedInt)
         {
-            foreach (InteractBase interactBase in selectedInt)
-            {
-                interactBase.enableMove = true;
-                interactBase.moveOption = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            }
+            interactBase.enableMove = true;
+            interactBase.moveOption = movePos;
         }
     }
     void ShipAttack()
@@ -140,5 +149,9 @@ public class PlayerControl : SingletonMono<PlayerControl>
         {
             interactBase.attackOption = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
+    }
+    public void ButtonInteract(InteractControl.InteractOption option)
+    {
+        selectedOption = option;
     }
 }

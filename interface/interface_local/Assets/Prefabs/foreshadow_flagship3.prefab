@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 7800904211505029374}
   m_Layer: 6
   m_Name: foreshadow_flagship3
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -199,7 +199,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.55, y: 0.55, z: 0.55}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8795451193146998850}
@@ -271,15 +271,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactBase: {fileID: 0}
-  speed: 2.7
+  targetQ: 0
   messageOfShip:
+    x: 0
+    y: 0
+    speed: 2.7
     hp: 12000
     armor: 800
     shield: 800
     playerTeam: 0
+    shipState: 0
     shipType: 3
     viewRange: 0
-    producerType: 0
+    producerType: 1
     constructorType: 0
     armorType: 0
     shieldType: 0
@@ -296,7 +300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 515cf190256e2214ea5daad3164a90b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactType: 1
+  interactType: 2
   interactOption: 0
   tobeSelected: 0
   selected: 0
@@ -306,6 +310,7 @@ MonoBehaviour:
   seObj: {fileID: 0}
   moveOption: {x: 0, y: 0}
   attackOption: {x: 0, y: 0}
+  enableMove: 0
 --- !u!50 &3397589707071195213
 Rigidbody2D:
   serializedVersion: 4

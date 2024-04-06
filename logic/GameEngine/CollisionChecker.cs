@@ -60,38 +60,38 @@ namespace GameEngine
         //     return tmpMax;
         // }
 
-        // private double FindMaxOnlyConsiderWall(IMoveable obj, Vector moveVec)
+        // private double FindMaxOnlyConsiderRuin(IMoveable obj, Vector moveVec)
         //{
         //     var desination = moveVec;
-        //     double maxOnlyConsiderWall = moveVec.length;
+        //     double maxOnlyConsiderRuin = moveVec.length;
         //     if (desination.length > 0)  //如果length足够长，还是有可能穿墙的
         //     {
         //         XYPosition nextXY = Vector.Vector2XY(desination) + obj.Position + new XYPosition((int)(obj.Radius * Math.Cos(moveVec.angle)), (int)(obj.Radius * Math.Sin(moveVec.angle)));
-        //         if (gameMap.IsWall(nextXY)) //对下一步的位置进行检查，但这里只是考虑移动物体的宽度，只是考虑下一步能达到的最远位置
+        //         if (gameMap.IsRuin(nextXY)) //对下一步的位置进行检查，但这里只是考虑移动物体的宽度，只是考虑下一步能达到的最远位置
         //         {
-        //             maxOnlyConsiderWall = MaxMoveToSquare(obj, gameMap.GetCell(nextXY));
+        //             maxOnlyConsiderRuin = MaxMoveToSquare(obj, gameMap.GetCell(nextXY));
         //         }
         //         else //考虑物体宽度
         //         {
         //             double dist = 0;
         //             XYPosition nextXYConsiderWidth;
         //             nextXYConsiderWidth = nextXY + new XYPosition((int)(obj.Radius * Math.Cos(moveVec.angle + Math.PI / 4)), (int)(obj.Radius * Math.Sin(moveVec.angle + Math.PI / 4)));
-        //             if (gameMap.IsWall(nextXYConsiderWidth)) //对下一步的位置进行检查，但这里只是考虑移动物体的宽度，只是考虑下一步能达到的最远位置
+        //             if (gameMap.IsRuin(nextXYConsiderWidth)) //对下一步的位置进行检查，但这里只是考虑移动物体的宽度，只是考虑下一步能达到的最远位置
         //             {
         //                 dist = MaxMoveToSquare(obj, gameMap.GetCell(nextXYConsiderWidth));
-        //                 if (dist < maxOnlyConsiderWall)
-        //                     maxOnlyConsiderWall = dist;
+        //                 if (dist < maxOnlyConsiderRuin)
+        //                     maxOnlyConsiderRuin = dist;
         //             }
         //             nextXYConsiderWidth = nextXY + new XYPosition((int)(obj.Radius * Math.Cos(moveVec.angle - Math.PI / 4)), (int)(obj.Radius * Math.Sin(moveVec.angle - Math.PI / 4)));
-        //             if (gameMap.IsWall(nextXYConsiderWidth)) //对下一步的位置进行检查，但这里只是考虑移动物体的宽度，只是考虑下一步能达到的最远位置
+        //             if (gameMap.IsRuin(nextXYConsiderWidth)) //对下一步的位置进行检查，但这里只是考虑移动物体的宽度，只是考虑下一步能达到的最远位置
         //             {
         //                 dist = MaxMoveToSquare(obj, gameMap.GetCell(nextXYConsiderWidth));
-        //                 if (dist < maxOnlyConsiderWall)
-        //                     maxOnlyConsiderWall = dist;
+        //                 if (dist < maxOnlyConsiderRuin)
+        //                     maxOnlyConsiderRuin = dist;
         //             }
         //         }
         //     }
-        //     return maxOnlyConsiderWall;
+        //     return maxOnlyConsiderRuin;
         // }
 
         /// <summary>

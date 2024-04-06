@@ -9,16 +9,16 @@
 extern const bool asynchronous = false;
 
 // 选手需要依次将player1到player4的船类型在这里定义
-extern const std::array<THUAI7::SweeperType, 4> SweeperTypeDict = {
-    THUAI7::SweeperType::CivilianSweeper,
-    THUAI7::SweeperType::MilitarySweeper,
-    THUAI7::SweeperType::MilitarySweeper,
-    THUAI7::SweeperType::FlagSweeper,
+extern const std::array<THUAI7::ShipType, 4> ShipTypeDict = {
+    THUAI7::ShipType::CivilianShip,
+    THUAI7::ShipType::MilitaryShip,
+    THUAI7::ShipType::MilitaryShip,
+    THUAI7::ShipType::FlagShip,
 };
 
 // 可以在AI.cpp内部声明变量与函数
 
-void AI::play(ISweeperAPI& api)
+void AI::play(IShipAPI& api)
 {
     if (this->playerID == 1)
     {

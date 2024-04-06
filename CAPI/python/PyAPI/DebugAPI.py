@@ -1,5 +1,5 @@
 import PyAPI.structures as THUAI7
-from PyAPI.Interface import ILogic, ISweeperAPI, ITeamAPI, IGameTimer, IAI
+from PyAPI.Interface import ILogic, IShipAPI, ITeamAPI, IGameTimer, IAI
 from math import pi
 from concurrent.futures import ThreadPoolExecutor, Future
 from typing import List, cast, Tuple, Union
@@ -8,7 +8,7 @@ import os
 import datetime
 
 
-class SweeperDebugAPI(ISweeperAPI, IGameTimer):
+class ShipDebugAPI(IShipAPI, IGameTimer):
     def __init__(
         self, logic: ILogic, file: bool, screen: bool, warnOnly: bool, playerID: int
     ) -> None:
@@ -186,11 +186,11 @@ class SweeperDebugAPI(ISweeperAPI, IGameTimer):
     def GetFrameCount(self) -> int:
         return self.__logic.GetFrameCount()
 
-    def GetSweepers(self) -> List[THUAI7.Sweeper]:
-        return self.__logic.GetSweepers()
+    def GetShips(self) -> List[THUAI7.Ship]:
+        return self.__logic.GetShips()
 
-    def GetEnemySweepers(self) -> List[THUAI7.Sweeper]:
-        return self.__logic.GetEnemySweepers()
+    def GetEnemyShips(self) -> List[THUAI7.Ship]:
+        return self.__logic.GetEnemyShips()
 
     def GetBullets(self) -> List[THUAI7.Bullet]:
         return self.__logic.GetBullets()
@@ -204,11 +204,11 @@ class SweeperDebugAPI(ISweeperAPI, IGameTimer):
     def GetConstructionHp(self, cellX: int, cellY: int) -> int:
         return self.__logic.GetConstructionHp(cellX, cellY)
 
-    def GetBridgeHp(self, cellX: int, cellY: int) -> int:
-        return self.__logic.GetBridgeHp(cellX, cellY)
+    def GetWormholeHp(self, cellX: int, cellY: int) -> int:
+        return self.__logic.GetWormholeHp(cellX, cellY)
 
-    def GetGarbageState(self, cellX: int, cellY: int) -> int:
-        return self.__logic.GetGarbageState(cellX, cellY)
+    def GetResourceState(self, cellX: int, cellY: int) -> int:
+        return self.__logic.GetResourceState(cellX, cellY)
 
     def GetHomeHp(self) -> int:
         return self.__logic.GetHomeHp()
@@ -219,8 +219,8 @@ class SweeperDebugAPI(ISweeperAPI, IGameTimer):
     def GetPlayerGUIDs(self) -> List[int]:
         return self.__logic.GetPlayerGUIDs()
 
-    def GetSelfInfo(self) -> THUAI7.Sweeper:
-        return cast(THUAI7.Sweepers, self.__logic.GetSelfInfo())
+    def GetSelfInfo(self) -> THUAI7.Ship:
+        return cast(THUAI7.Ships, self.__logic.GetSelfInfo())
 
     def GetEnergy(self) -> int:
         return self.__logic.GetEnergy()
@@ -240,23 +240,23 @@ class SweeperDebugAPI(ISweeperAPI, IGameTimer):
     def Print(self, cont: str) -> None:
         self.__logger.info(cont)
 
-    def PrintSweeper(self) -> None:
-        for sweeper in self.__logic.GetSweepers():
-            self.__logger.info("******sweeper Info******")
+    def PrintShip(self) -> None:
+        for ship in self.__logic.GetShips():
+            self.__logger.info("******ship Info******")
             self.__logger.info(
-                f"teamID={sweeper.teamID} playerID={sweeper.playerID}, GUID={sweeper.guid} sweeperType:{sweeper.sweeperType}"
+                f"teamID={ship.teamID} playerID={ship.playerID}, GUID={ship.guid} shipType:{ship.shipType}"
             )
             self.__logger.info(
-                f"x={sweeper.x}, y={sweeper.y} hp={sweeper.hp} armor={sweeper.armor} shield={sweeper.shield} state:{sweeper.sweeperState}"
+                f"x={ship.x}, y={ship.y} hp={ship.hp} armor={ship.armor} shield={ship.shield} state:{ship.shipState}"
             )
             self.__logger.info(
-                f"speed={sweeper.speed}, view range={sweeper.viewRange}, facingDirection={sweeper.facingDirection}"
+                f"speed={ship.speed}, view range={ship.viewRange}, facingDirection={ship.facingDirection}"
             )
             self.__logger.info(
-                f"producerType:{sweeper.producerType} constructorType:{sweeper.constructorType}"
+                f"producerType:{ship.producerType} constructorType:{ship.constructorType}"
             )
             self.__logger.info(
-                f"armorType:{sweeper.armorType} shieldType:{sweeper.shieldType} weaponType:{sweeper.weaponType}"
+                f"armorType:{ship.armorType} shieldType:{ship.shieldType} weaponType:{ship.weaponType}"
             )
             self.__logger.info("************************\n")
 
@@ -264,22 +264,22 @@ class SweeperDebugAPI(ISweeperAPI, IGameTimer):
         pass
 
     def PrintSelfInfo(self) -> None:
-        sweeper = self.__logic.GetSelfInfo()
-        self.__logger.info("******sweeper Info******")
+        ship = self.__logic.GetSelfInfo()
+        self.__logger.info("******ship Info******")
         self.__logger.info(
-            f"teamID={sweeper.teamID} playerID={sweeper.playerID}, GUID={sweeper.guid} sweeperType:{sweeper.sweeperType}"
+            f"teamID={ship.teamID} playerID={ship.playerID}, GUID={ship.guid} shipType:{ship.shipType}"
         )
         self.__logger.info(
-            f"x={sweeper.x}, y={sweeper.y} hp={sweeper.hp} armor={sweeper.armor} shield={sweeper.shield} state:{sweeper.sweeperState}"
+            f"x={ship.x}, y={ship.y} hp={ship.hp} armor={ship.armor} shield={ship.shield} state:{ship.shipState}"
         )
         self.__logger.info(
-            f"speed={sweeper.speed}, view range={sweeper.viewRange}, facingDirection={sweeper.facingDirection}"
+            f"speed={ship.speed}, view range={ship.viewRange}, facingDirection={ship.facingDirection}"
         )
         self.__logger.info(
-            f"producerType:{sweeper.producerType} constructorType:{sweeper.constructorType}"
+            f"producerType:{ship.producerType} constructorType:{ship.constructorType}"
         )
         self.__logger.info(
-            f"armorType:{sweeper.armorType} shieldType:{sweeper.shieldType} weaponType:{sweeper.weaponType}"
+            f"armorType:{ship.armorType} shieldType:{ship.shieldType} weaponType:{ship.weaponType}"
         )
         self.__logger.info("************************\n")
 
@@ -297,7 +297,7 @@ class SweeperDebugAPI(ISweeperAPI, IGameTimer):
         self.__logger.info(f"Time elapsed: {self.__GetTime()}ms")
 
     def Play(self, ai: IAI) -> None:
-        ai.SweeperPlay(self)
+        ai.ShipPlay(self)
 
 
 class TeamDebugAPI(ITeamAPI, IGameTimer):
@@ -413,18 +413,18 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
 
         return self.__pool.submit(logRecycle)
 
-    def BuildSweeper(self, sweeperType: THUAI7.SweeperType) -> Future[bool]:
+    def BuildShip(self, shipType: THUAI7.ShipType) -> Future[bool]:
         self.__logger.info(
-            f"BuildSweeper: sweeperType = {sweeperType}, called at {self.__GetTime()}ms"
+            f"BuildShip: shipType = {shipType}, called at {self.__GetTime()}ms"
         )
 
-        def logBuildSweeper() -> bool:
-            result = self.__logic.BuildSweeper(sweeperType)
+        def logBuildShip() -> bool:
+            result = self.__logic.BuildShip(shipType)
             if not result:
-                self.__logger.warning(f"BuildSweeper: failed at {self.__GetTime()}ms")
+                self.__logger.warning(f"BuildShip: failed at {self.__GetTime()}ms")
             return result
 
-        return self.__pool.submit(logBuildSweeper)
+        return self.__pool.submit(logBuildShip)
 
     def GetFrameCount(self) -> int:
         return self.__logic.GetFrameCount()
@@ -432,11 +432,11 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
     def GetBullets(self) -> List[THUAI7.Bullet]:
         return self.__logic.GetBullets()
 
-    def GetSweepers(self) -> List[THUAI7.Sweeper]:
-        return self.__logic.GetSweepers()
+    def GetShips(self) -> List[THUAI7.Ship]:
+        return self.__logic.GetShips()
 
-    def GetEnemySweepers(self) -> List[THUAI7.Sweeper]:
-        return self.__logic.GetEnemySweepers()
+    def GetEnemyShips(self) -> List[THUAI7.Ship]:
+        return self.__logic.GetEnemyShips()
 
     def GetFullMap(self) -> List[List[THUAI7.PlaceType]]:
         return self.__logic.GetFullMap()
@@ -447,11 +447,11 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
     def GetConstructionHp(self, cellX: int, cellY: int) -> int:
         return self.__logic.GetConstructionHp(cellX, cellY)
 
-    def GetBridgeHp(self, cellX: int, cellY: int) -> int:
-        return self.__logic.GetBridgeHp(cellX, cellY)
+    def GetWormholeHp(self, cellX: int, cellY: int) -> int:
+        return self.__logic.GetWormholeHp(cellX, cellY)
 
-    def GetResouceState(self, cellX: int, cellY: int) -> int:
-        return self.__logic.GetResouceState(cellX, cellY)
+    def GetResourceState(self, cellX: int, cellY: int) -> int:
+        return self.__logic.GetResourceState(cellX, cellY)
 
     def GetHomeHp(self) -> int:
         return self.__logic.GetHomeHp()
@@ -472,13 +472,37 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
         return self.__logic.GetEnergy()
 
     def Print(self, string: str) -> None:
-        pass
+        self.__logger.info(string)
+
+    def PrintShip(self) -> None:
+        for ship in self.__logic.GetShips():
+            self.__logger.info("******ship Info******")
+            self.__logger.info(
+                f"teamID={ship.teamID} playerID={ship.playerID}, GUID={ship.guid} shipType:{ship.shipType}"
+            )
+            self.__logger.info(
+                f"x={ship.x}, y={ship.y} hp={ship.hp} armor={ship.armor} shield={ship.shield} state:{ship.shipState}"
+            )
+            self.__logger.info(
+                f"speed={ship.speed}, view range={ship.viewRange}, facingDirection={ship.facingDirection}"
+            )
+            self.__logger.info(
+                f"producerType:{ship.producerType} constructorType:{ship.constructorType}"
+            )
+            self.__logger.info(
+                f"armorType:{ship.armorType} shieldType:{ship.shieldType} weaponType:{ship.weaponType}"
+            )
+            self.__logger.info("************************\n")
 
     def PrintTeam(self) -> None:
-        pass
+        self.PrintSelfInfo()
 
     def PrintSelfInfo(self) -> None:
-        pass
+        selfInfo = self.__logic.GetSelfInfo()
+        self.__logger.info("******self team info******")
+        self.__logger.info(f"teamID:{selfInfo.teamID} playerID:{selfInfo.playerID}")
+        self.__logger.info(f"score:{selfInfo.score} energy:{selfInfo.energy}")
+        self.__logger.info("************************\n")
 
     def __GetTime(self) -> float:
         return (datetime.datetime.now() - self.__startPoint) / datetime.timedelta(
@@ -494,4 +518,4 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
         self.__logger.info(f"Time elapsed: {self.__GetTime()}ms")
 
     def Play(self, ai: IAI) -> None:
-        ai.SweeperPlay(self)
+        ai.ShipPlay(self)

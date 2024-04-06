@@ -18,13 +18,13 @@ class GameState(Enum):
 class PlaceType(Enum):
     NullPlaceType = 0
     Home = 1
-    Ground = 2
-    Wall = 3
-    Grass = 4
-    River = 5
-    Garbage = 6
+    Space = 2
+    Ruin = 3
+    Shadow = 4
+    Asteroid = 5
+    Resource = 6
     Construction = 7
-    Bridge = 8
+    Wormhole = 8
 
 
 class ShapeType(Enum):
@@ -34,25 +34,22 @@ class ShapeType(Enum):
 
 
 class PlayerTeam(Enum):
-    NullTeam = 0
-    Red = 1
-    Blue = 2
-
-
-playerTeamDict = {PlayerTeam.NullTeam: 0, PlayerTeam.Red: 1, PlayerTeam.Blue: 2}
+    Red = 0
+    Blue = 1
+    NullTeam = 2
 
 
 class PlayerType(Enum):
     NullPlayerType = 0
-    Sweeper = 1
+    Ship = 1
     Team = 2
 
 
-class SweeperType(Enum):
-    NullSweeperType = 0
-    CivilianSweeper = 1
-    MilitarySweeper = 2
-    FlagSweeper = 3
+class ShipType(Enum):
+    NullShipType = 0
+    CivilianShip = 1
+    MilitaryShip = 2
+    FlagShip = 3
 
 
 class WeaponType(Enum):
@@ -113,7 +110,7 @@ class ModuleType(Enum):
     ModuleArcGun = 17
 
 
-class SweeperState(Enum):
+class ShipState(Enum):
     NullStatus = 0
     Idle = 1
     Producing = 2
@@ -137,21 +134,21 @@ class BulletType(Enum):
 
 class ConstructionType(Enum):
     NullConstructionType = 0
-    RecycleBank = 1
-    ChargeStation = 2
-    SignalTower = 3
+    Factory = 1
+    Community = 2
+    Fort = 3
 
 
 class MessageOfObj(Enum):
     NullMessageOfObj = 0
-    SweeperMessage = 1
+    ShipMessage = 1
     BulletMessage = 2
-    RecycleBankMessage = 3
-    ChargeStationMessage = 4
-    SignalTowerMessage = 5
-    BridgeMessage = 6
+    FactoryMessage = 3
+    CommunityMessage = 4
+    FortMessage = 5
+    WormholeMessage = 6
     HomeMessage = 7
-    GarbageMessage = 8
+    ResourceMessage = 8
     MapMessage = 9
     NewsMessage = 10
     BombedBulletMessage = 11
@@ -164,7 +161,7 @@ class NewsType(Enum):
     BinaryMessage = 2
 
 
-class Sweeper:
+class Ship:
     def __init__(self):
         self.x: int = 0
         self.y: int = 0
@@ -175,8 +172,8 @@ class Sweeper:
         self.playerID: int = 0
         self.teamID: int = 0
         self.guid: int = 0
-        self.sweeperState: SweeperState = SweeperState.NullStatus
-        self.sweeperType: SweeperType = SweeperType.NullSweeperType
+        self.shipState: ShipState = ShipState.NullStatus
+        self.shipType: ShipType = ShipType.NullShipType
         self.viewRange: int = 0
         self.producerType: ProducerType = ProducerType.NullProducerType
         self.constructorType: ConstructorType = ConstructorType.NullConstructorType
@@ -220,12 +217,12 @@ class Bullet:
 
 class GameMap:
     def __init__(self):
-        self.recycleBankState: Dict[Tuple[int, int], Tuple[int, int]] = {}
-        self.chargeStationState: Dict[Tuple[int, int], Tuple[int, int]] = {}
-        self.signalTowerState: Dict[Tuple[int, int], Tuple[int, int]] = {}
+        self.factoryState: Dict[Tuple[int, int], Tuple[int, int]] = {}
+        self.communityState: Dict[Tuple[int, int], Tuple[int, int]] = {}
+        self.fortState: Dict[Tuple[int, int], Tuple[int, int]] = {}
         self.homeState: Dict[Tuple[int, int], Tuple[int, int]] = {}
-        self.bridgeState: Dict[Tuple[int, int], int] = {}
-        self.garbageState: Dict[Tuple[int, int], int] = {}
+        self.wormholeState: Dict[Tuple[int, int], int] = {}
+        self.resourceState: Dict[Tuple[int, int], int] = {}
 
 
 class GameInfo:

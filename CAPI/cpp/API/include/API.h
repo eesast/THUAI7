@@ -36,18 +36,18 @@ class ILogic
 
 public:
     // 获取服务器发来的消息
-    [[nodiscard]] virtual std::vector<std::shared_ptr<const THUAI7::Sweeper>> GetSweepers() const = 0;
-    [[nodiscard]] virtual std::vector<std::shared_ptr<const THUAI7::Sweeper>> GetEnemySweepers() const = 0;
+    [[nodiscard]] virtual std::vector<std::shared_ptr<const THUAI7::Ship>> GetShips() const = 0;
+    [[nodiscard]] virtual std::vector<std::shared_ptr<const THUAI7::Ship>> GetEnemyShips() const = 0;
     [[nodiscard]] virtual std::vector<std::shared_ptr<const THUAI7::Bullet>> GetBullets() const = 0;
-    [[nodiscard]] virtual std::shared_ptr<const THUAI7::Sweeper> SweeperGetSelfInfo() const = 0;
+    [[nodiscard]] virtual std::shared_ptr<const THUAI7::Ship> ShipGetSelfInfo() const = 0;
     [[nodiscard]] virtual std::shared_ptr<const THUAI7::Team> TeamGetSelfInfo() const = 0;
     [[nodiscard]] virtual std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const = 0;
     [[nodiscard]] virtual std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const = 0;
     [[nodiscard]] virtual std::vector<int64_t> GetPlayerGUIDs() const = 0;
     [[nodiscard]] virtual THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const = 0;
     [[nodiscard]] virtual int32_t GetConstructionHp(int32_t cellX, int32_t cellY) const = 0;
-    [[nodiscard]] virtual int32_t GetBridgeHp(int32_t cellX, int32_t cellY) const = 0;
-    [[nodiscard]] virtual int32_t GetGarbageState(int32_t cellX, int32_t cellY) const = 0;
+    [[nodiscard]] virtual int32_t GetWormholeHp(int32_t cellX, int32_t cellY) const = 0;
+    [[nodiscard]] virtual int32_t GetResourceState(int32_t cellX, int32_t cellY) const = 0;
     [[nodiscard]] virtual int32_t GetHomeHp() const = 0;
     [[nodiscard]] virtual int32_t GetEnergy() const = 0;
     [[nodiscard]] virtual int32_t GetScore() const = 0;
@@ -60,7 +60,7 @@ public:
     virtual int32_t GetCounter() const = 0;
     virtual bool EndAllAction() = 0;
 
-    // ISweeperAPI使用的部分
+    // IShipAPI使用的部分
     virtual bool Move(int64_t time, double angle) = 0;
     virtual bool Recover() = 0;
     virtual bool Produce() = 0;
@@ -72,7 +72,7 @@ public:
     // Team使用的部分
     virtual bool Recycle(int64_t playerID) = 0;
     virtual bool InstallModule(int64_t playerID, THUAI7::ModuleType moduleType) = 0;
-    virtual bool BuildSweeper(THUAI7::SweeperType SweeperType) = 0;
+    virtual bool BuildShip(THUAI7::ShipType ShipType) = 0;
 };
 
 class IAPI
@@ -91,15 +91,15 @@ public:
     // 等待下一帧
     virtual bool Wait() = 0;
     virtual std::future<bool> EndAllAction() = 0;
-    [[nodiscard]] virtual std::vector<std::shared_ptr<const THUAI7::Sweeper>> GetSweepers() const = 0;
-    [[nodiscard]] virtual std::vector<std::shared_ptr<const THUAI7::Sweeper>> GetEnemySweepers() const = 0;
+    [[nodiscard]] virtual std::vector<std::shared_ptr<const THUAI7::Ship>> GetShips() const = 0;
+    [[nodiscard]] virtual std::vector<std::shared_ptr<const THUAI7::Ship>> GetEnemyShips() const = 0;
     [[nodiscard]] virtual std::vector<std::shared_ptr<const THUAI7::Bullet>> GetBullets() const = 0;
     [[nodiscard]] virtual std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const = 0;
     [[nodiscard]] virtual std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const = 0;
     [[nodiscard]] virtual THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const = 0;
     [[nodiscard]] virtual int32_t GetConstructionHp(int32_t cellX, int32_t cellY) const = 0;
-    [[nodiscard]] virtual int32_t GetBridgeHp(int32_t cellX, int32_t cellY) const = 0;
-    [[nodiscard]] virtual int32_t GetGarbageState(int32_t cellX, int32_t cellY) const = 0;
+    [[nodiscard]] virtual int32_t GetWormholeHp(int32_t cellX, int32_t cellY) const = 0;
+    [[nodiscard]] virtual int32_t GetResourceState(int32_t cellX, int32_t cellY) const = 0;
     [[nodiscard]] virtual int32_t GetHomeHp() const = 0;
     [[nodiscard]] virtual int32_t GetEnergy() const = 0;
     [[nodiscard]] virtual int32_t GetScore() const = 0;
@@ -122,12 +122,12 @@ public:
     // 用于DEBUG的输出函数，选手仅在开启Debug模式的情况下可以使用
 
     virtual void Print(std::string str) const = 0;
-    virtual void PrintSweeper() const = 0;
+    virtual void PrintShip() const = 0;
     virtual void PrintTeam() const = 0;
     virtual void PrintSelfInfo() const = 0;
 };
 
-class ISweeperAPI : public IAPI
+class IShipAPI : public IAPI
 {
 public:
     virtual std::future<bool> Move(int64_t timeInMilliseconds, double angleInRadian) = 0;
@@ -141,7 +141,7 @@ public:
     virtual std::future<bool> Produce() = 0;
     virtual std::future<bool> Rebuild(THUAI7::ConstructionType constructionType) = 0;
     virtual std::future<bool> Construct(THUAI7::ConstructionType constructionType) = 0;
-    virtual std::shared_ptr<const THUAI7::Sweeper> GetSelfInfo() const = 0;
+    virtual std::shared_ptr<const THUAI7::Ship> GetSelfInfo() const = 0;
     virtual bool HaveView(int32_t targetX, int32_t targetY) const = 0;
 };
 
@@ -151,7 +151,7 @@ public:
     [[nodiscard]] virtual std::shared_ptr<const THUAI7::Team> GetSelfInfo() const = 0;
     virtual std::future<bool> InstallModule(int64_t playerID, THUAI7::ModuleType moduletype) = 0;
     virtual std::future<bool> Recycle(int64_t playerID) = 0;
-    virtual std::future<bool> BuildSweeper(THUAI7::SweeperType SweeperType) = 0;
+    virtual std::future<bool> BuildShip(THUAI7::ShipType ShipType) = 0;
 };
 
 class IGameTimer
@@ -163,10 +163,10 @@ public:
     virtual void Play(IAI& ai) = 0;
 };
 
-class SweeperAPI : public ISweeperAPI, public IGameTimer
+class ShipAPI : public IShipAPI, public IGameTimer
 {
 public:
-    SweeperAPI(ILogic& logic) :
+    ShipAPI(ILogic& logic) :
         logic(logic)
     {
     }
@@ -198,25 +198,25 @@ public:
     std::future<bool> Rebuild(THUAI7::ConstructionType constructionType) override;
     std::future<bool> Construct(THUAI7::ConstructionType constructionType) override;
 
-    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Sweeper>> GetSweepers() const override;
-    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Sweeper>> GetEnemySweepers() const override;
+    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Ship>> GetShips() const override;
+    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Ship>> GetEnemyShips() const override;
     [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Bullet>> GetBullets() const override;
     [[nodiscard]] std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const override;
     [[nodiscard]] THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] int32_t GetConstructionHp(int32_t cellX, int32_t cellY) const override;
-    [[nodiscard]] int32_t GetBridgeHp(int32_t x, int32_t y) const override;
-    [[nodiscard]] int32_t GetGarbageState(int32_t cellX, int32_t cellY) const override;
+    [[nodiscard]] int32_t GetWormholeHp(int32_t x, int32_t y) const override;
+    [[nodiscard]] int32_t GetResourceState(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const override;
     [[nodiscard]] int32_t GetHomeHp() const override;
     [[nodiscard]] int32_t GetEnergy() const override;
     [[nodiscard]] int32_t GetScore() const override;
     [[nodiscard]] std::vector<int64_t> GetPlayerGUIDs() const override;
-    [[nodiscard]] std::shared_ptr<const THUAI7::Sweeper> GetSelfInfo() const override;
+    [[nodiscard]] std::shared_ptr<const THUAI7::Ship> GetSelfInfo() const override;
     [[nodiscard]] bool HaveView(int32_t targetX, int32_t targetY) const override;
     void Print(std::string str) const
     {
     }
-    void PrintSweeper() const
+    void PrintShip() const
     {
     }
     void PrintTeam() const
@@ -254,14 +254,14 @@ public:
     bool Wait() override;
     std::future<bool> EndAllAction() override;
 
-    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Sweeper>> GetSweepers() const override;
-    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Sweeper>> GetEnemySweepers() const override;
+    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Ship>> GetShips() const override;
+    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Ship>> GetEnemyShips() const override;
     [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Bullet>> GetBullets() const override;
     [[nodiscard]] std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const override;
     [[nodiscard]] THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] int32_t GetConstructionHp(int32_t cellX, int32_t cellY) const override;
-    [[nodiscard]] int32_t GetBridgeHp(int32_t x, int32_t y) const override;
-    [[nodiscard]] int32_t GetGarbageState(int32_t cellX, int32_t cellY) const override;
+    [[nodiscard]] int32_t GetWormholeHp(int32_t x, int32_t y) const override;
+    [[nodiscard]] int32_t GetResourceState(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] int32_t GetHomeHp() const override;
     [[nodiscard]] std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const override;
     [[nodiscard]] std::vector<int64_t> GetPlayerGUIDs() const override;
@@ -271,11 +271,11 @@ public:
     [[nodiscard]] int32_t GetEnergy() const override;
     std::future<bool> InstallModule(int64_t playerID, THUAI7::ModuleType moduleType) override;
     std::future<bool> Recycle(int64_t playerID) override;
-    std::future<bool> BuildSweeper(THUAI7::SweeperType SweeperType) override;
+    std::future<bool> BuildShip(THUAI7::ShipType ShipType) override;
     void Print(std::string str) const
     {
     }
-    void PrintSweeper() const
+    void PrintShip() const
     {
     }
     void PrintTeam() const
@@ -289,10 +289,10 @@ private:
     ILogic& logic;
 };
 
-class SweeperDebugAPI : public ISweeperAPI, public IGameTimer
+class ShipDebugAPI : public IShipAPI, public IGameTimer
 {
 public:
-    SweeperDebugAPI(ILogic& logic, bool file, bool print, bool warnOnly, int64_t SweeperID);
+    ShipDebugAPI(ILogic& logic, bool file, bool print, bool warnOnly, int64_t ShipID);
     void StartTimer() override;
     void EndTimer() override;
     void Play(IAI& ai) override;
@@ -315,24 +315,24 @@ public:
     std::future<bool> Rebuild(THUAI7::ConstructionType constructionType) override;
     std::future<bool> Construct(THUAI7::ConstructionType constructionType) override;
 
-    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Sweeper>> GetSweepers() const override;
-    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Sweeper>> GetEnemySweepers() const override;
+    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Ship>> GetShips() const override;
+    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Ship>> GetEnemyShips() const override;
     [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Bullet>> GetBullets() const override;
     [[nodiscard]] std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const override;
     [[nodiscard]] THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] int32_t GetConstructionHp(int32_t cellX, int32_t cellY) const override;
-    [[nodiscard]] int32_t GetBridgeHp(int32_t x, int32_t y) const override;
-    [[nodiscard]] int32_t GetGarbageState(int32_t cellX, int32_t cellY) const override;
+    [[nodiscard]] int32_t GetWormholeHp(int32_t x, int32_t y) const override;
+    [[nodiscard]] int32_t GetResourceState(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] int32_t GetHomeHp() const override;
     [[nodiscard]] std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const override;
     [[nodiscard]] std::vector<int64_t> GetPlayerGUIDs() const override;
-    [[nodiscard]] std::shared_ptr<const THUAI7::Sweeper> GetSelfInfo() const override;
+    [[nodiscard]] std::shared_ptr<const THUAI7::Ship> GetSelfInfo() const override;
     [[nodiscard]] bool HaveView(int32_t targetX, int32_t targetY) const override;
     [[nodiscard]] int32_t GetEnergy() const override;
     [[nodiscard]] int32_t GetScore() const override;
 
     void Print(std::string str) const override;
-    void PrintSweeper() const override;
+    void PrintShip() const override;
     void PrintSelfInfo() const override;
     void PrintTeam() const
     {
@@ -361,14 +361,14 @@ public:
     bool Wait() override;
     std::future<bool> EndAllAction() override;
 
-    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Sweeper>> GetSweepers() const override;
-    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Sweeper>> GetEnemySweepers() const override;
+    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Ship>> GetShips() const override;
+    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Ship>> GetEnemyShips() const override;
     [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Bullet>> GetBullets() const override;
     [[nodiscard]] std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const override;
     [[nodiscard]] THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] int32_t GetConstructionHp(int32_t cellX, int32_t cellY) const override;
-    [[nodiscard]] int32_t GetBridgeHp(int32_t x, int32_t y) const override;
-    [[nodiscard]] int32_t GetGarbageState(int32_t cellX, int32_t cellY) const override;
+    [[nodiscard]] int32_t GetWormholeHp(int32_t x, int32_t y) const override;
+    [[nodiscard]] int32_t GetResourceState(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] int32_t GetHomeHp() const override;
     [[nodiscard]] std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const override;
     [[nodiscard]] std::vector<int64_t> GetPlayerGUIDs() const override;
@@ -378,14 +378,14 @@ public:
     [[nodiscard]] int32_t GetEnergy() const override;
     std::future<bool> InstallModule(int64_t playerID, THUAI7::ModuleType moduleType) override;
     std::future<bool> Recycle(int64_t playerID) override;
-    std::future<bool> BuildSweeper(THUAI7::SweeperType SweeperType) override;
+    std::future<bool> BuildShip(THUAI7::ShipType ShipType) override;
     void Print(std::string str) const override;
     void PrintSelfInfo() const override;
     // TODO
     void PrintTeam() const
     {
     }
-    void PrintSweeper() const
+    void PrintShip() const
     {
     }
 
