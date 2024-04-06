@@ -19,7 +19,7 @@ public class ShipControl : MonoBehaviour
         if ((rb.velocity.normalized - targetV.normalized).magnitude < 1.5f || rb.velocity.magnitude < 0.1f)
             rb.velocity = Vector2.Lerp(rb.velocity, targetV, 0.1f);
         else
-            rb.velocity = Vector2.Lerp(rb.velocity, Vector2.zero, 0.1f);
+            rb.velocity = Vector2.Lerp(rb.velocity, Vector2.zero, 0.3f);
         rb.rotation = Mathf.Lerp(rb.rotation, targetQ, 0.03f);
     }
     float DealQ(float qTar)
@@ -414,7 +414,7 @@ public class ShipControl : MonoBehaviour
         }
         if (messageOfShip.shipState == ShipState.MOVING)
         {
-            if ((pos - (Vector2)transform.position).magnitude > 0.1f)
+            if ((pos - (Vector2)transform.position).magnitude > 0.3f)
             {
                 targetQ = DealQ(Mathf.Atan2(pos.y - transform.position.y, pos.x - transform.position.x) * Mathf.Rad2Deg - 90);
                 SetVQTo((pos - (Vector2)transform.position).normalized * messageOfShip.speed);
