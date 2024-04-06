@@ -396,22 +396,22 @@ namespace Preparation.Utility
             return EnterOtherLock<T>(a, () =>
             {
                 T previousV = v;
-                v += T.CreateChecked(a.GetValue().ToDouble(null)*speed);
+                v += T.CreateChecked(a.GetValue().ToDouble(null) * speed);
                 if (v > maxV) v = maxV;
                 a.SubPositiveVRChange(TA.CreateChecked(v - previousV));
                 return v - previousV;
             })!;
         }
-        public virtual T AddVUseOtherRChange<TA>(T value,InVariableRange<TA> other, double speed = 1.0) where TA : IConvertible, IComparable<TA>, INumber<TA>
+        public virtual T AddVUseOtherRChange<TA>(T value, InVariableRange<TA> other, double speed = 1.0) where TA : IConvertible, IComparable<TA>, INumber<TA>
         {
             return EnterOtherLock<T>(other, () =>
             {
                 T previousV = v;
-                T otherValue = T.CreateChecked(other.GetValue().ToDouble(null)*speed);
+                T otherValue = T.CreateChecked(other.GetValue().ToDouble(null) * speed);
                 value = value > otherValue ? otherValue : value;
                 v += value;
                 if (v > maxV) v = maxV;
-                other.SubPositiveVRChange(TA.CreateChecked((v - previousV).ToDouble(null)/speed));
+                other.SubPositiveVRChange(TA.CreateChecked((v - previousV).ToDouble(null) / speed));
                 return v - previousV;
             })!;
         }
@@ -512,24 +512,24 @@ namespace Preparation.Utility
         public AtomicDouble speed = new(speed);
 
         public TA ScoreAdd<TA>(Func<TA> x)
+        {
+            lock (vLock)
             {
-                lock (vLock) 
-                {
-                    T previousV = v;
-                    TA ans = x();
-                    if(v>previousV)
-                        Score.Add((int)((v-previousV).ToDouble(null)*speed));
-                    return ans;
-                }
+                T previousV = v;
+                TA ans = x();
+                if (v > previousV)
+                    Score.Add((int)((v - previousV).ToDouble(null) * speed));
+                return ans;
             }
+        }
         public void ScoreAdd(Action x)
         {
             lock (vLock)
             {
                 T previousV = v;
                 x();
-                if (v>previousV)
-                    Score.Add((int)((v-previousV).ToDouble(null)*speed));
+                if (v > previousV)
+                    Score.Add((int)((v - previousV).ToDouble(null) * speed));
             }
         }
 

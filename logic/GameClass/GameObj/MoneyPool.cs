@@ -5,7 +5,7 @@ namespace GameClass.GameObj;
 
 public class MoneyPool : IMoneyPool
 {
-    public InVariableRangeOnlyAddScore<long> Money { get; } = new(0,long.MaxValue);
+    public InVariableRangeOnlyAddScore<long> Money { get; } = new(0, long.MaxValue);
     public AtomicLong Score { get; } = new AtomicLong(0);
     public MoneyPool()
     {

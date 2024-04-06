@@ -50,6 +50,9 @@ namespace Preparation.Utility
     public class AtomicIntOnlyAddScore(int x, double speed = 1.0) : AtomicInt(x)
     {
         private IIntAddable score = new AtomicInt(0);
+        /// <summary>
+        /// 注意：Score的set操作（即=）的真正意义是改变其引用，单纯改变值不应当使用该操作
+        /// </summary>
         public IIntAddable Score
         {
             get
