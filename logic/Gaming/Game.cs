@@ -158,7 +158,21 @@ namespace Gaming
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
             if (ship != null)
-                return shipManager.Recycle(ship);
+            {
+                bool validRecyclePoint = false;
+                foreach (XY recyclePoint in teamList[(int)ship.TeamID].BirthPointList)
+                {
+                    if (GameData.ApproachToInteract(ship.Position, recyclePoint) && ship.Position != recyclePoint)
+                    {
+                        validRecyclePoint = true;
+                        break;
+                    }
+                }
+                if (validRecyclePoint)
+                {
+                    return shipManager.Recycle(ship);
+                }
+            }
             return false;
         }
         public bool Repair(long teamID, long shipID)
