@@ -5,6 +5,6 @@ namespace Preparation.Interface
     public interface IHome
     {
         public long TeamID { get; }
-        public LongInTheVariableRange HP { get; }
+        public InVariableRange<long> HP { get; }
     }
 }

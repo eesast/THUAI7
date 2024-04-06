@@ -4,9 +4,9 @@ namespace Preparation.Interface
 {
     public interface IShip : IMovable, IPlayer
     {
-        public LongInTheVariableRange HP { get; }
-        public LongInTheVariableRange Armor { get; }
-        public LongInTheVariableRange Shield { get; }
+        public InVariableRange<long> HP { get; }
+        public InVariableRange<long> Armor { get; }
+        public InVariableRange<long> Shield { get; }
         public ShipType ShipType { get; }
         public ShipStateType ShipState { get; }
         public IntNumUpdateEachCD BulletNum { get; }
