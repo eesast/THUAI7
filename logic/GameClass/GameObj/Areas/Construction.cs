@@ -6,7 +6,7 @@ public class Construction(XY initPos)
     : Immovable(initPos, GameData.NumOfPosGridPerCell / 2, GameObjType.Construction)
 {
     public AtomicLong TeamID { get; } = new(long.MaxValue);
-    public LongInTheVariableRange HP { get; } = new(0, GameData.CommunityHP);
+    public InVariableRange<long> HP { get; } = new(0, GameData.CommunityHP);
     public override bool IsRigid => constructionType == ConstructionType.Community;
     public override ShapeType Shape => ShapeType.Square;
 
@@ -20,7 +20,8 @@ public class Construction(XY initPos)
                 return constructionType;
         }
     }
-    public AtomicInt ConstructNum { get; } = new AtomicInt(0);
+    public AtomicInt ConstructNum { get; } = new(0);
+    public AtomicBool IsActivated { get; } = new(false);
 
     public bool Construct(int constructSpeed, ConstructionType constructionType, Ship ship)
     {
@@ -58,9 +59,11 @@ public class Construction(XY initPos)
         {
             return false;
         }
-        return ship.MoneyPool.SubMoney(HP.AddV(addHP) / 10) > 0;
+        HP.AddPositiveVRChange(addHP);
+        ship.MoneyPool.SubMoney(addHP / 10);
+        return true;
     }
-    public void BeAttacked(Bullet bullet)
+    public bool BeAttacked(Bullet bullet)
     {
         if (bullet!.Parent!.TeamID != TeamID)
         {
@@ -71,6 +74,7 @@ public class Construction(XY initPos)
         {
             constructionType = ConstructionType.Null;
         }
+        return HP < HP.GetMaxV() * 0.5;
     }
     public void AddConstructNum(int add = 1)
     {

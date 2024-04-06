@@ -7,7 +7,7 @@ namespace GameClass.GameObj.Areas;
 public class Wormhole(XY initPos, List<XY> grids)
     : Immovable(initPos, GameData.NumOfPosGridPerCell / 2, GameObjType.Wormhole), IWormhole
 {
-    public LongInTheVariableRange HP = new(GameData.WormholeHP);
+    public InVariableRange<long> HP = new(GameData.WormholeHP);
     private readonly List<XY> grids = grids;
     public List<XY> Grids => grids;
     public override bool IsRigid => HP > GameData.WormholeHP / 2;
@@ -20,7 +20,7 @@ public class Wormhole(XY initPos, List<XY> grids)
         {
             return false;
         }
-        return ship.MoneyPool.SubMoney(HP.AddV(addHP) / 10) > 0;
+        return ship.MoneyPool.SubMoney(HP.AddRChange(addHP) / 10) > 0;
     }
     public void BeAttacked(Bullet bullet)
     {
