@@ -16,7 +16,8 @@ namespace GameClass.GameObj
         public List<XY> BirthPointList => birthPointList;
         public Home Home { get; set; }
         public MoneyPool MoneyPool { get; } = new();
-
+        public AtomicInt FactoryNum { get; } = new(0);
+        public int MoneyAddPerSecond => GameData.ScoreHomePerSecond + FactoryNum * GameData.ScoreFactoryPerSecond;
         public Team(Home home)
         {
             TeamID = new(home.TeamID);
@@ -41,30 +42,6 @@ namespace GameClass.GameObj
             ShipPool.Initiate(ShipType.FlagShip, GameData.MaxFlagShipNum,
                               () => new(GameData.ShipRadius, ShipType.FlagShip, MoneyPool));
         }
-
-        /*public bool AddShip(Ship ship)
-        {
-            switch (ship.ShipType)
-            {
-                case ShipType.CivilShip:
-                    if (GetCivilShipNum() >= GameData.MaxCivilShipNum)
-                        return false;
-                    break;
-                case ShipType.WarShip:
-                    if (GetWarShipNum() >= GameData.MaxWarShipNum)
-                        return false;
-                    break;
-                case ShipType.FlagShip:
-                    if (GetFlagShipNum() >= GameData.MaxFlagShipNum)
-                        return false;
-                    break;
-                default:
-                    return false;
-            }
-            //shipList.Add(ship);
-            return true;
-        }*/
-
         public void AddMoney(long add)
         {
             MoneyPool.Money.Add(add);
