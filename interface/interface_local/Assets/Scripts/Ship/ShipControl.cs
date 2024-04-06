@@ -177,27 +177,33 @@ public class ShipControl : MonoBehaviour
                 }
                 break;
             case InteractControl.InteractOption.InstallModuleProducer1:
-                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().producer1Data.cost))
+                if (messageOfShip.shipType != ShipType.MILITARY_SHIP &&
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().producer1Data.cost))
                     messageOfShip.producerType = ProducerType.PRODUCER1;
                 break;
             case InteractControl.InteractOption.InstallModuleProducer2:
-                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().producer2Data.cost))
+                if (messageOfShip.shipType != ShipType.MILITARY_SHIP &&
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().producer2Data.cost))
                     messageOfShip.producerType = ProducerType.PRODUCER2;
                 break;
             case InteractControl.InteractOption.InstallModuleProducer3:
-                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().producer3Data.cost))
+                if (messageOfShip.shipType != ShipType.MILITARY_SHIP &&
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().producer3Data.cost))
                     messageOfShip.producerType = ProducerType.PRODUCER3;
                 break;
             case InteractControl.InteractOption.InstallModuleConstructor1:
-                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().constructor1Data.cost))
+                if (messageOfShip.shipType != ShipType.MILITARY_SHIP &&
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().constructor1Data.cost))
                     messageOfShip.constructorType = ConstructorType.CONSTRUCTOR1;
                 break;
             case InteractControl.InteractOption.InstallModuleConstructor2:
-                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().constructor2Data.cost))
+                if (messageOfShip.shipType != ShipType.MILITARY_SHIP &&
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().constructor2Data.cost))
                     messageOfShip.constructorType = ConstructorType.CONSTRUCTOR2;
                 break;
             case InteractControl.InteractOption.InstallModuleConstructor3:
-                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().constructor3Data.cost))
+                if (messageOfShip.shipType != ShipType.MILITARY_SHIP &&
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().constructor3Data.cost))
                     messageOfShip.constructorType = ConstructorType.CONSTRUCTOR3;
                 break;
             case InteractControl.InteractOption.ConstructFactory:

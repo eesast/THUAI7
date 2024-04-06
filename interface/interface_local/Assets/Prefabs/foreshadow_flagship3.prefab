@@ -283,7 +283,7 @@ MonoBehaviour:
     shipState: 0
     shipType: 3
     viewRange: 0
-    producerType: 1
+    producerType: 0
     constructorType: 0
     armorType: 0
     shieldType: 0

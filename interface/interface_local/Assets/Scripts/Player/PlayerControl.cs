@@ -20,7 +20,7 @@ public class PlayerControl : SingletonMono<PlayerControl>
     void Update()
     {
         // testInput();
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             foreach (InteractBase i in selectedInt)
             {
