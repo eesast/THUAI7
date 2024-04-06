@@ -42,6 +42,11 @@ public class PlayerControl : SingletonMono<PlayerControl>
     }
     void CheckInteract()
     {
+        for (int i = 0; i < selectedInt.Count; i++)
+            if (!selectedInt[i])
+            {
+                selectedInt.Remove(selectedInt[i]);
+            }
         raycaster = Physics2D.OverlapPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition), interactableLayer);
         if (raycaster)
         {

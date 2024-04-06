@@ -49,6 +49,7 @@ public class ShipControl : MonoBehaviour
             default:
                 break;
         }
+        messageOfShip.shipState = ShipState.IDLE;
         EntityManager.GetInstance().ship.Add(this);
     }
 
@@ -428,6 +429,7 @@ public class ShipControl : MonoBehaviour
             else
             {
                 SetVQTo(Vector2.zero);
+                messageOfShip.shipState = ShipState.IDLE;
                 interactBase.enableMove = false;
             }
         }
@@ -436,10 +438,12 @@ public class ShipControl : MonoBehaviour
     }
     void AttackTowards(Vector2 pos)
     {
-        if (pos != Vector2.zero)
+        if (pos != Vector2.zero && messageOfShip.weaponType != WeaponType.NULL_WEAPON_TYPE)
         {
 
             messageOfShip.shipState = ShipState.ATTACKING;
+            targetQ = DealQ(Mathf.Atan2(pos.y - transform.position.y, pos.x - transform.position.x) * Mathf.Rad2Deg - 90);
+            SetVQTo(Vector2.zero);
             switch (messageOfShip.weaponType)
             {
                 case WeaponType.LASERGUN:
@@ -473,6 +477,7 @@ public class ShipControl : MonoBehaviour
                     obj.GetComponent<BulletControl>().messageOfBullet.playerTeam = messageOfShip.playerTeam;
                     break;
             }
+            messageOfShip.shipState = ShipState.IDLE;
         }
     }
     public void TakeDamage(BulletData bulletData)
