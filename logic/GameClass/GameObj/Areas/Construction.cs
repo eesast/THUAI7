@@ -20,22 +20,8 @@ public class Construction(XY initPos)
                 return constructionType;
         }
     }
-    public AtomicInt ConstructNum { get; } = new AtomicInt(0);
-    private readonly object lockOfIsActivated = new();
-    private bool isActivated = false;
-    public bool IsActivated
-    {
-        get
-        {
-            lock (lockOfIsActivated)
-                return isActivated;
-        }
-        set
-        {
-            lock (lockOfIsActivated)
-                isActivated = value;
-        }
-    }
+    public AtomicInt ConstructNum { get; } = new(0);
+    public AtomicBool IsActivated { get; } = new(false);
 
     public bool Construct(int constructSpeed, ConstructionType constructionType, Ship ship)
     {

@@ -221,7 +221,7 @@ namespace Gaming
                                                 ) { IsBackground = true }.Start();
                                                 break;
                                         }
-                                        construction.IsActivated = true;
+                                        construction.IsActivated.Set(true);
                                     }
                                     return false;
                                 }
