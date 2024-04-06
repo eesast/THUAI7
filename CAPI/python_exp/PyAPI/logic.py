@@ -4,8 +4,7 @@ import threading
 import logging
 import copy
 import platform
-import proto.MessageType_pb2 as MessageType
-import proto.Message2Server_pb2 as Message2Server
+from PyAPI.ProcessEnv import ProcessEnv
 import proto.Message2Clients_pb2 as Message2Clients
 from queue import Queue
 import PyAPI.structures as THUAI7
@@ -25,6 +24,8 @@ class Logic(ILogic):
         teamID: int,
         playerType: THUAI7.PlayerType,
         shipType: THUAI7.ShipType,
+        processEnv: ProcessEnv,
+        start: Callable
     ) -> None:
         self.__playerID: int = playerID
         self.__teamID: int = teamID
@@ -61,6 +62,9 @@ class Logic(ILogic):
         self.__logger: logging.Logger = logging.getLogger("Logic")
 
         self.__messageQueue: Queue = Queue()
+
+        self.__processEnv: ProcessEnv = processEnv
+        self.__start = start
 
     def GetShips(self) -> List[THUAI7.Ship]:
         with self.__mtxState:
@@ -830,21 +834,10 @@ class Logic(ILogic):
         with self.__cvBuffer:
             self.__cvBuffer.wait_for(lambda: self.__freshed)
 
-    def Main(
-        self,
-        createAI: Callable,
-        IP: str,
-        port: str,
-        file: bool,
-        screen: bool,
-        warnOnly: bool,
-    ) -> None:
+    def Main(self, createAI: Callable) -> None:
         # 建立日志组件
         self.__logger.setLevel(logging.DEBUG)
-        formatter = logging.Formatter(
-            "[%(name)s] [%(asctime)s.%(msecs)03d] [%(levelname)s] %(message)s",
-            "%H:%M:%S",
-        )
+        formatter = logging.Formatter("[%(name)s] [%(asctime)s.%(msecs)03d] [%(levelname)s] %(message)s", "%H:%M:%S")
         # 确保文件存在
         # if not os.path.exists(os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/logs'):
         #     os.makedirs(os.path.dirname(os.path.dirname(
@@ -868,12 +861,12 @@ class Logic(ILogic):
             encoding="utf-8",
         )
         screenHandler = logging.StreamHandler()
-        if file:
+        if self.__processEnv.file:
             fileHandler.setLevel(logging.DEBUG)
             fileHandler.setFormatter(formatter)
             self.__logger.addHandler(fileHandler)
-        if screen:
-            if warnOnly:
+        if self.__processEnv.screen:
+            if self.__processEnv.warnOnly:
                 screenHandler.setLevel(logging.WARNING)
             else:
                 screenHandler.setLevel(logging.INFO)
@@ -882,16 +875,16 @@ class Logic(ILogic):
 
         self.__logger.info("*********Basic Info*********")
         self.__logger.info("asynchronous: %s", Setting.Asynchronous())
-        self.__logger.info("server: %s:%s", IP, port)
+        self.__logger.info("server: %s:%s", self.__processEnv.sIP, self.__processEnv.sPort)
         self.__logger.info("playerID: %s", self.__playerID)
         self.__logger.info("player type: %s", self.__playerType.name)
         self.__logger.info("****************************")
 
         # 建立通信组件
-        self.__comm = Communication(IP, port)
+        self.__comm = Communication(self.__processEnv, self.__start)
 
         # 构造timer
-        if not file and not screen:
+        if not self.__processEnv.file and not self.__processEnv.screen:
             if self.__playerID == 0:
                 self.__timer = TeamAPI(self)
             else:
@@ -899,12 +892,18 @@ class Logic(ILogic):
         else:
             if self.__playerID == 0:
                 self.__timer = TeamDebugAPI(
-                    self, file, screen, warnOnly, self.__playerID
-                )
+                    self,
+                    self.__processEnv.file,
+                    self.__processEnv.screen,
+                    self.__processEnv.warnOnly,
+                    self.__playerID)
             else:
                 self.__timer = ShipDebugAPI(
-                    self, file, screen, warnOnly, self.__playerID
-                )
+                    self,
+                    self.__processEnv.file,
+                    self.__processEnv.screen,
+                    self.__processEnv.warnOnly,
+                    self.__playerID)
 
         # 构建AI线程
         def AIThread():

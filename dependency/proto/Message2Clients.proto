@@ -160,6 +160,12 @@ message MoveRes // 如果打算设计撞墙保留平行速度分量，且需要�
     bool act_success = 3;
 }
 
+message BuildShipRes
+{
+    bool act_success = 1;
+    int64 player_id = 2;
+}
+
 message BoolRes
 {
     bool act_success = 1;

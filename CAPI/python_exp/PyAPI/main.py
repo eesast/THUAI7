@@ -1,4 +1,4 @@
-import argparse
+from argparse import ArgumentParser
 import platform
 import os
 import sys
@@ -7,6 +7,7 @@ import multiprocessing as mp
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/proto")
 
+from PyAPI.ProcessEnv import ProcessEnv  # NOQA: E402
 import PyAPI.structures as THUAI7  # NOQA: E402
 from PyAPI.logic import Logic  # NOQA: E402
 from PyAPI.AI import AI  # NOQA: E402
@@ -31,7 +32,7 @@ def PrintWelcomeString() -> None:
     print(welcomeString)
 
 
-parser = argparse.ArgumentParser(
+parser = ArgumentParser(
     description="THUAI7 Python Interface Commandline Parameter Introduction"
 )
 parser.add_argument(
@@ -77,37 +78,27 @@ parser.add_argument(
     dest="warnOnly",
 )
 
-tID: int = 0
-sIP: str = "127.0.0.1"
-sPort: str = "8888"
-file: bool = True
-screen: bool = True
-warnOnly: bool = False
 
+def StartLogic(pID: int,
+               playerType: THUAI7.PlayerType,
+               shipType: THUAI7.ShipType) -> None:
+    processEnv = ProcessEnv()
+    logic = Logic(pID, processEnv.tID, playerType, shipType, processEnv, StartLogic)
+    logic.Main(lambda pID: AI(pID))
 
-def StartLogic(pID: int, playerType: THUAI7.PlayerType, sweeperType: THUAI7.ShipType) -> None:
-    logic = Logic(pID, tID, playerType, sweeperType)
-    logic.Main(lambda pID: AI(pID), sIP, sPort, file, screen, warnOnly)
-
-
-def StartLogicMap(t) -> None:
-    StartLogic(*t)
 
 if __name__ == "__main__":
     args = parser.parse_args()
-    tID = args.tID
-    sIP = args.sIP
-    sPort = args.sPort
-    file = args.file
-    screen = args.screen
-    warnOnly = args.warnOnly
 
     if platform.system().lower() == "windows":
         PrintWelcomeString()
 
-    AIs = mp.Pool(processes=5)
-    initArgs = [
-        (0, THUAI7.PlayerType.Team, THUAI7.ShipType.NullShipType),
-        (1, THUAI7.PlayerType.Ship, THUAI7.ShipType.CivilianShip)
-    ]
-    AIs.map(StartLogicMap, initArgs)
+    processEnv = ProcessEnv(args.tID,
+                            args.sIP, args.sPort,
+                            args.file, args.screen, args.warnOnly)
+    teamProcess = mp.Process(target=StartLogic,
+                             args=(0, THUAI7.PlayerType.Team, THUAI7.ShipType.NullShipType))
+    teamProcess.start()
+    mp.Process(target=StartLogic,
+               args=(1, THUAI7.PlayerType.Ship, THUAI7.ShipType.CivilianShip)).start()
+    teamProcess.join()

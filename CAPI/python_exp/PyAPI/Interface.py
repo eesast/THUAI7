@@ -334,10 +334,3 @@ class IGameTimer(metaclass=ABCMeta):
     @abstractmethod
     def Play(self, ai: IAI) -> None:
         pass
-
-
-class IErrorHandler(metaclass=ABCMeta):
-    @staticmethod
-    @abstractmethod
-    def result():
-        pass

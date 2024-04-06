@@ -1,24 +1,18 @@
+from multiprocessing import Process
+from PyAPI.ProcessEnv import ProcessEnv
 import PyAPI.structures as THUAI7
-from PyAPI.AI import Setting
 from PyAPI.utils import THUAI72Proto
-from PyAPI.Interface import IErrorHandler
 import proto.Services_pb2_grpc as Services
 import proto.Message2Clients_pb2 as Message2Clients
 import threading
 import grpc
 
-from typing import Union
-
-
-class BoolErrorHandler(IErrorHandler):
-    @staticmethod
-    def result():
-        return False
+from typing import Callable, Union
 
 
 class Communication:
-    def __init__(self, sIP: str, sPort: str):
-        aim = sIP + ":" + sPort
+    def __init__(self, processEnv: ProcessEnv, start: Callable):
+        aim = processEnv.sIP + ":" + processEnv.sPort
         channel = grpc.insecure_channel(aim)
         self.__THUAI7Stub = Services.AvailableServiceStub(channel)
         self.__haveNewMessage = False
@@ -29,6 +23,7 @@ class Communication:
         self.__counterMove = 0
         self.__limit = 50
         self.__moveLimit = 10
+        self.__start = start
 
     def Move(self, time: int, angle: float, playerID: int) -> bool:
         try:
@@ -224,9 +219,14 @@ class Communication:
                 if self.__counter >= self.__limit:
                     return False
                 self.__counter += 1
-            buildResult: Message2Clients.BoolRes = self.__THUAI7Stub.BuildShip(
+            buildResult: Message2Clients.BuildShipRes = self.__THUAI7Stub.BuildShipRID(
                 THUAI72Proto.THUAI72ProtobufBuildShipMsg(teamID, shipType)
             )
+            if buildResult.act_success:
+                Process(target=self.__start,
+                        args=(buildResult.player_id,
+                              THUAI7.PlayerType.Ship,
+                              shipType)).start()
         except grpc.RpcError:
             return False
         else:
