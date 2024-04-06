@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Preparation.Utility;
+using System;
 using System.Threading;
-using Preparation.Utility;
 
 namespace Preparation.Interface
 {

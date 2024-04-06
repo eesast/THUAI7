@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using GameClass.GameObj.Areas;
+using GameClass.MapGenerator;
 using Preparation.Interface;
 using Preparation.Utility;
 using System;
-using GameClass.GameObj.Areas;
-using System.Linq;
-using GameClass.MapGenerator;
+using System.Collections.Generic;
 
 namespace GameClass.GameObj
 {
@@ -180,6 +178,7 @@ namespace GameClass.GameObj
         public void Add(IGameObj gameObj)
         {
             GameObjDict[gameObj.Type].Add(gameObj);
+            Debugger.Output("Found a " + gameObj.Type.ToString() + " at " + gameObj.Position.ToString());
         }
         public Map(MapStruct mapResource)
         {

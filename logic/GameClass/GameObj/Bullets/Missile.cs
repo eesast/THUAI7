@@ -1,5 +1,5 @@
-﻿using System;
-using Preparation.Utility;
+﻿using Preparation.Utility;
+using System;
 
 namespace GameClass.GameObj.Bullets;
 
@@ -8,7 +8,7 @@ internal sealed class Missile : Bullet
     public Missile(Ship ship, XY pos, int radius = GameData.BulletRadius) :
         base(ship, radius, pos)
     {
-        AP.SetReturnOri(GameData.MissileDamage);
+        AP.SetROri(GameData.MissileDamage);
     }
     public override double BulletBombRange => GameData.MissileBombRange;
     public override double AttackDistance => GameData.MissileRange;

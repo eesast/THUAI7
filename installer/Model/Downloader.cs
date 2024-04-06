@@ -36,7 +36,7 @@ namespace installer.Model
 
         public HttpClient Client = new HttpClient();
         public EEsast Web;                                  // EEsast服务器
-        public Logger Log;                               // 日志管理器
+        public Logger Log;                                  // 日志管理器
         public Logger LogError;
         public enum UpdateStatus
         {

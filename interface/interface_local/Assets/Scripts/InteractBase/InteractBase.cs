@@ -10,6 +10,7 @@ public class InteractBase : MonoBehaviour
     public bool tobeSelected, selected;
     public GameObject selectedSign, tobeSelectedSign, tobeseObj, seObj;
     public Vector2 moveOption, attackOption;
+    public bool enableMove;
     void Update()
     {
         if (tobeSelected)
