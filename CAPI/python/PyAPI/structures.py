@@ -221,8 +221,8 @@ class GameMap:
         self.communityState: Dict[Tuple[int, int], Tuple[int, int]] = {}
         self.fortState: Dict[Tuple[int, int], Tuple[int, int]] = {}
         self.homeState: Dict[Tuple[int, int], Tuple[int, int]] = {}
-        self.bridgeState: Dict[Tuple[int, int], int] = {}
-        self.garbageState: Dict[Tuple[int, int], int] = {}
+        self.wormholeState: Dict[Tuple[int, int], int] = {}
+        self.resourceState: Dict[Tuple[int, int], int] = {}
 
 
 class GameInfo:

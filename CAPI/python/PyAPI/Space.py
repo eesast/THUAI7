@@ -39,11 +39,11 @@ class SingleObservation:
         self.fortInfo = np.array(
             [[*key, *value] for key, value in state.mapInfo.communityState.items()]
         )
-        self.bridgeInfo = np.array(
-            [[*key, value] for key, value in state.mapInfo.bridgeState.items()]
+        self.wormholeInfo = np.array(
+            [[*key, value] for key, value in state.mapInfo.wormholeState.items()]
         )
-        self.garbageInfo = np.array(
-            [[*key, value] for key, value in state.mapInfo.garbageState.items()]
+        self.resourceInfo = np.array(
+            [[*key, value] for key, value in state.mapInfo.resourceState.items()]
         )
         self.gameInfo = np.array(self.__ObsGame(state.gameInfo))
 

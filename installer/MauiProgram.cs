@@ -2,11 +2,15 @@
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Storage;
 using installer.ViewModel;
 using installer.Model;
+using System.Text;
+using System.Diagnostics;
+using Microsoft.Maui.LifecycleEvents;
 
 namespace installer
 {
@@ -19,14 +23,20 @@ namespace installer
         public static string SecretKey = "***";
         public static MauiApp CreateMauiApp()
         {
-
             // read SecretID & SecretKey from filePath for debug
-            var filePath = @"D:\SecretKey.csv";
+            var filePath = Debugger.IsAttached ? "D:\\Secret.csv" : Path.Combine(AppContext.BaseDirectory, "Secret.csv");
             var lines = File.ReadAllLines(filePath);
             if (lines.Length > 0)
             {
-                SecretID = lines[1];
-                SecretKey = lines[2];
+                var param = new CspParameters();
+                param.KeyContainerName = lines[0];
+                using (var rsa = new RSACryptoServiceProvider(param))
+                {
+                    var b1 = Convert.FromBase64String(lines[1]);
+                    var b2 = Convert.FromBase64String(lines[2]);
+                    SecretID = Encoding.ASCII.GetString(rsa.Decrypt(b1, false));
+                    SecretKey = Encoding.ASCII.GetString(rsa.Decrypt(b2, false));
+                }
             }
 
             var builder = MauiApp.CreateBuilder();
