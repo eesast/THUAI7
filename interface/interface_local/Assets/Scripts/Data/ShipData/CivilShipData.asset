@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: CivilShipData
   m_EditorClassIdentifier: 
   cost: 400
+  maxHp: 3000

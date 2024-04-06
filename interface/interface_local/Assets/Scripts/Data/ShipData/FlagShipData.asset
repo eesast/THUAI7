@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: FlagShipData
   m_EditorClassIdentifier: 
   cost: 5000
+  maxHp: 12000

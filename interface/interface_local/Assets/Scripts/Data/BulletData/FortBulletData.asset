@@ -9,8 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce1ec383cada7554392f235710c9ea52, type: 3}
-  m_Name: MilitaryShipData
+  m_Script: {fileID: 11500000, guid: f5a82f5376adfa14893e400fba4af4f5, type: 3}
+  m_Name: FortBulletData
   m_EditorClassIdentifier: 
-  cost: 1200
-  maxHp: 4000
+  cost: 0
+  attackDistance: 0
+  explosionRange: 0
+  attackDamage: b0040000
+  armorDamageMultiplier: 1
+  shieldDamageMultiplier: 1
+  speed: 1000
