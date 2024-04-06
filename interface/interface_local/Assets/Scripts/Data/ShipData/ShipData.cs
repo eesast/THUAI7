@@ -6,4 +6,5 @@ using UnityEngine;
 public class ShipData : ScriptableObject
 {
     public int cost;
+    public int maxHp;
 }
