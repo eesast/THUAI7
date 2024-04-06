@@ -16,6 +16,7 @@ namespace Gaming
             private readonly Game game = game;
             private readonly Map gameMap = gameMap;
             private readonly ShipManager shipManager = shipManager;
+            private readonly Random random = new();
             public readonly MoveEngine moveEngine = new(
                     gameMap: gameMap,
                     OnCollision: (obj, collisionObj, moveVec) =>
@@ -205,7 +206,6 @@ namespace Gaming
                                                             {
                                                                 var ships = gameMap.ShipInTheRange(
                                                                     construction.Position, GameData.FortRange);
-                                                                var random = new Random();
                                                                 if (ships == null || ships.Count == 0)
                                                                 {
                                                                     return true;
