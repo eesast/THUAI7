@@ -103,14 +103,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactBase: {fileID: 0}
-  speed: 2.8
+  targetQ: 0
   messageOfShip:
+    x: 0
+    y: 0
+    speed: 2.8
     hp: 4000
     armor: 400
     shield: 400
     playerTeam: 0
     shipState: 0
-    shipType: 0
+    shipType: 2
     viewRange: 0
     producerType: 0
     constructorType: 0
@@ -129,7 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 515cf190256e2214ea5daad3164a90b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactType: 1
+  interactType: 2
   interactOption: 0
   tobeSelected: 0
   selected: 0

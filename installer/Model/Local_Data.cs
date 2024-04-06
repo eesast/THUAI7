@@ -16,7 +16,6 @@ namespace installer.Model
 {
     public class Local_Data
     {
-        public string ConfigPath;       // 标记路径记录文件THUAI7.json的路径
         public string MD5DataPath;      // 标记MD5本地缓存文件的路径
         public MD5DataFile FileHashData = new MD5DataFile();
         public ConfigData Config;
@@ -34,61 +33,43 @@ namespace installer.Model
         public bool Installed = false;  // 项目是否安装
         public bool RememberMe = false; // 是否记录账号密码
         public Logger Log;
-        public Logger LogError;
-        public ExceptionStack Exceptions;
         public Local_Data()
         {
             MD5Update = new ConcurrentBag<(DataRowState state, string name)>();
-            if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)))
-                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
-            ConfigPath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                "THUAI7.json");
-            if (File.Exists(ConfigPath))
+            Config = new ConfigData();
+            if (Directory.Exists(Config.InstallPath))
             {
-                Config = new ConfigData(ConfigPath);
-                if (Directory.Exists(Config.InstallPath))
+                if (File.Exists(Config.MD5DataPath))
                 {
-                    if (File.Exists(Config.MD5DataPath))
-                    {
-                        MD5DataPath = Config.MD5DataPath.StartsWith('.') ?
-                            Path.Combine(Config.InstallPath, Config.MD5DataPath) :
-                            Config.MD5DataPath;
-                        if (!File.Exists(MD5DataPath))
-                            SaveMD5Data();
-                        ReadMD5Data();
-                        CurrentVersion = FileHashData.Version;
-                        MD5Update.Clear();
-                    }
-                    else
-                    {
-                        MD5DataPath = Path.Combine(Config.InstallPath, $".{Path.DirectorySeparatorChar}hash.json");
-                        Config.MD5DataPath = $".{Path.DirectorySeparatorChar}hash.json";
-                        CurrentVersion = FileHashData.Version;
+                    MD5DataPath = Config.MD5DataPath.StartsWith('.') ?
+                        Path.Combine(Config.InstallPath, Config.MD5DataPath) :
+                        Config.MD5DataPath;
+                    if (!File.Exists(MD5DataPath))
                         SaveMD5Data();
-                    }
-                    RememberMe = (Config.Remembered && Convert.ToBoolean(Config.Remembered));
-                    Installed = true;
+                    ReadMD5Data();
+                    CurrentVersion = FileHashData.Version;
+                    MD5Update.Clear();
                 }
                 else
                 {
-                    var dir = Directory.CreateDirectory(Path.Combine(AppContext.BaseDirectory, "THUAI7"));
-                    Config.InstallPath = dir.FullName;
-                    Config.MD5DataPath = Config.InstallPath;
                     MD5DataPath = Path.Combine(Config.InstallPath, $".{Path.DirectorySeparatorChar}hash.json");
                     Config.MD5DataPath = $".{Path.DirectorySeparatorChar}hash.json";
                     CurrentVersion = FileHashData.Version;
                     SaveMD5Data();
                 }
+                RememberMe = (Config.Remembered && Convert.ToBoolean(Config.Remembered));
+                Installed = true;
             }
             else
             {
-                Config = new ConfigData();
-                var dir = Directory.CreateDirectory(Path.Combine(AppContext.BaseDirectory, "THUAI7"));
+                var dir = Directory.CreateDirectory(Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                    , "THUAI7", "Data"));
                 Config.InstallPath = dir.FullName;
-                MD5DataPath = Path.Combine(Config.InstallPath, $".{Path.DirectorySeparatorChar}hash.json");
-                CurrentVersion = FileHashData.Version;
+                Config.MD5DataPath = Config.InstallPath;
+                MD5DataPath = Path.Combine(Config.InstallPath, "hash.json");
                 Config.MD5DataPath = $".{Path.DirectorySeparatorChar}hash.json";
+                CurrentVersion = FileHashData.Version;
                 SaveMD5Data();
             }
             if (!Directory.Exists(LogPath))
@@ -102,8 +83,7 @@ namespace installer.Model
                 }
             }
             Log = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.log"));
-            LogError = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.error.log"));
-            Exceptions = new ExceptionStack(LogError, this);
+            Log.PartnerInfo = "[LocalData]";
             LangEnabled = new Dictionary<LanguageOption, (bool, string)>();
             foreach (var a in typeof(LanguageOption).GetEnumValues())
             {
@@ -129,7 +109,6 @@ namespace installer.Model
                         Directory.CreateDirectory(newPath);
                     }
                     Log.LogInfo($"Move work started: {Config.InstallPath} -> {newPath}");
-                    Log.Dispose(); LogError.Dispose(); Exceptions.logger.Dispose();
                     Action<DirectoryInfo> action = (dir) => { };
                     var moveTask = (DirectoryInfo dir) =>
                     {
@@ -161,7 +140,7 @@ namespace installer.Model
             }
             catch (Exception e)
             {
-                Exceptions.Push(e);
+                Log.LogError(e.Message);
             }
             finally
             {
@@ -169,9 +148,7 @@ namespace installer.Model
                 {
                     Directory.CreateDirectory(LogPath);
                 }
-                Log = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.log"));
-                LogError = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.error.log"));
-                Exceptions = new ExceptionStack(LogError, this);
+                if (Log is FileLogger) ((FileLogger)Log).Path = Path.Combine(LogPath, "LocalData.log");
                 Log.LogInfo($"Move work finished: {Config.InstallPath} -> {newPath}");
             }
         }
@@ -198,7 +175,7 @@ namespace installer.Model
             }
             catch (Exception e)
             {
-                Exceptions.Push(e);
+                Log.LogError(e.Message);
                 r.Close(); r.Dispose();
             }
             foreach (var item in FileHashData.Data)
@@ -235,7 +212,7 @@ namespace installer.Model
             }
             catch (Exception e)
             {
-                Exceptions.Push(e);
+                Log.LogError(e.Message);
             }
         }
 
@@ -322,6 +299,7 @@ namespace installer.Model
                 dict[LanguageOption.python] = (true, filename);
             return IsUserFile(filename);
         }
+
         public static int CountFile(string folder, string? root = null)
         {
             int result = (from f in Directory.EnumerateFiles(folder)
