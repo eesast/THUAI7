@@ -289,19 +289,19 @@ public class ShipControl : MonoBehaviour
             case ShipType.CIVILIAN_SHIP:
                 if (ParaDefine.GetInstance().civilShipData.maxHp - messageOfShip.hp > 0 &&
                     MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(
-                    (int)((ParaDefine.GetInstance().civilShipData.maxHp - messageOfShip.hp) * 1.2f)))
+                    (int)((ParaDefine.GetInstance().civilShipData.maxHp / messageOfShip.hp - 1) * 1.2f * ParaDefine.GetInstance().civilShipData.cost)))
                     messageOfShip.hp = ParaDefine.GetInstance().civilShipData.maxHp;
                 break;
             case ShipType.MILITARY_SHIP:
                 if (ParaDefine.GetInstance().militaryShipData.maxHp - messageOfShip.hp > 0 &&
                     MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(
-                    (int)((ParaDefine.GetInstance().militaryShipData.maxHp - messageOfShip.hp) * 1.2f)))
+                    (int)((ParaDefine.GetInstance().militaryShipData.maxHp / messageOfShip.hp - 1) * 1.2f * ParaDefine.GetInstance().militaryShipData.cost)))
                     messageOfShip.hp = ParaDefine.GetInstance().militaryShipData.maxHp;
                 break;
             case ShipType.FLAG_SHIP:
                 if (ParaDefine.GetInstance().flagShipData.maxHp - messageOfShip.hp > 0 &&
                     MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(
-                    (int)((ParaDefine.GetInstance().flagShipData.maxHp - messageOfShip.hp) * 1.2f)))
+                    (int)((ParaDefine.GetInstance().flagShipData.maxHp / messageOfShip.hp - 1) * 1.2f * ParaDefine.GetInstance().flagShipData.cost)))
                     messageOfShip.hp = ParaDefine.GetInstance().flagShipData.maxHp;
                 break;
             default:
@@ -311,8 +311,26 @@ public class ShipControl : MonoBehaviour
     }
     void Recycle()
     {
-        MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].AddEconomy(messageOfShip.hp / 2);
-        DestroyShip();
+        switch (messageOfShip.shipType)
+        {
+            case ShipType.CIVILIAN_SHIP:
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].AddEconomy(
+                    (int)(messageOfShip.hp / ParaDefine.GetInstance().civilShipData.maxHp * ParaDefine.GetInstance().civilShipData.cost * 0.5f));
+                DestroyShip();
+                break;
+            case ShipType.MILITARY_SHIP:
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].AddEconomy(
+                    (int)(messageOfShip.hp / ParaDefine.GetInstance().militaryShipData.maxHp * ParaDefine.GetInstance().militaryShipData.cost * 0.5f));
+                DestroyShip();
+                break;
+            case ShipType.FLAG_SHIP:
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].AddEconomy(
+                    (int)(messageOfShip.hp / ParaDefine.GetInstance().flagShipData.maxHp * ParaDefine.GetInstance().flagShipData.cost * 0.5f));
+                DestroyShip();
+                break;
+            default:
+                break;
+        }
         // StartCoroutine(RecoverIE());
     }
     void Produce()
@@ -382,6 +400,8 @@ public class ShipControl : MonoBehaviour
                     messageOfShip.shipState = ShipState.IDLE;
                 else
                     yield return new WaitForSeconds(1);
+            else
+                yield return null;
         }
 
     }
