@@ -4,4 +4,9 @@
     {
         public void Add(T value);
     }
+
+    public interface IIntAddable
+    {
+        public void Add(int value);
+    }
 }

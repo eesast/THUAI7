@@ -40,7 +40,7 @@ namespace installer.Model
         public Logger LogError;
         public enum UpdateStatus
         {
-            success, unarchieving, downloading, hash_computing, error
+            success, unarchieving, downloading, hash_computing, exiting, error
         }
         public UpdateStatus Status = UpdateStatus.success;                         // 当前工作状态
 
@@ -80,6 +80,7 @@ namespace installer.Model
             Data = new Local_Data();
             Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.log"));
             LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.error.log"));
+            Exceptions = new ExceptionStack(LogError, this);
             if ((Log.LastRecordTime != DateTime.MinValue && DateTime.Now.Month != Log.LastRecordTime.Month)
                 || (LogError.LastRecordTime != DateTime.MinValue && DateTime.Now.Month != LogError.LastRecordTime.Month))
             {
@@ -91,11 +92,6 @@ namespace installer.Model
                     File.Delete(tarPath);
                 if (File.Exists(tarPath + ".gz"))
                     File.Delete(tarPath + ".gz");
-                Data.Log.Dispose();
-                Data.LogError.Dispose();
-                Data.Exceptions.logger.Dispose();
-                Log.Dispose();
-                LogError.Dispose();
                 TarFile.CreateFromDirectory(Data.LogPath, tarPath, false);
                 using (FileStream tar = File.Open(tarPath, FileMode.Open))
                 using (FileStream gz = File.Create(tarPath + ".gz"))
@@ -108,13 +104,7 @@ namespace installer.Model
                 {
                     File.Delete(log);
                 }
-                Data.Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "LocalData.log"));
-                Data.LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "LocalData.error.log"));
-                Data.Exceptions = new ExceptionStack(Data.LogError);
-                Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.log"));
-                LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.error.log"));
             }
-            Exceptions = new ExceptionStack(LogError, this);
             Route = Data.Config.InstallPath;
             Cloud = new Tencent_Cos("1319625962", "ap-beijing", "bucket1",
                 LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.log")),
@@ -219,15 +209,6 @@ namespace installer.Model
             deleteTask(new DirectoryInfo(Data.Config.InstallPath));
 
             Data.ResetInstallPath(Data.Config.InstallPath);
-            Cloud.Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.log"));
-            Cloud.LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.error.log"));
-            Cloud.Exceptions = new ExceptionStack(Cloud.LogError, Cloud);
-            Web.Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.log"));
-            Web.LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.error.log"));
-            Web.Exceptions = new ExceptionStack(Web.LogError, Web);
-            Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.log"));
-            LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.error.log"));
-            Exceptions = new ExceptionStack(LogError, this);
             LoggerBinding();
 
             string zp = Path.Combine(Data.Config.InstallPath, "THUAI7.tar.gz");
@@ -248,6 +229,14 @@ namespace installer.Model
             else
             {
                 Status = UpdateStatus.success;
+                if (DeviceInfo.Platform == DevicePlatform.WinUI)
+                {
+                    Process.Start(new ProcessStartInfo()
+                    {
+                        Arguments = Data.Config.InstallPath,
+                        FileName = "explorer.exe"
+                    });
+                }
             }
         }
 
@@ -261,21 +250,13 @@ namespace installer.Model
             var installPath = Data.Config.InstallPath.EndsWith(Path.DirectorySeparatorChar) ? Data.Config.InstallPath[0..-1] : Data.Config.InstallPath;
             if (newPath != installPath)
             {
-                Log.Dispose(); LogError.Dispose(); Exceptions.logger.Dispose();
-                Cloud.Log.Dispose(); Cloud.LogError.Dispose(); Cloud.Exceptions.logger.Dispose();
-                Web.Log.Dispose(); Web.LogError.Dispose(); Web.Exceptions.logger.Dispose();
                 Data.ResetInstallPath(newPath);
-
-                Cloud.Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.log"));
-                Cloud.LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.error.log"));
-                Cloud.Exceptions = new ExceptionStack(Cloud.LogError, Cloud);
-                Web.Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.log"));
-                Web.LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.error.log"));
-                Web.Exceptions = new ExceptionStack(Web.LogError, Web);
-                Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.log"));
-                LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.error.log"));
-                Exceptions = new ExceptionStack(LogError, this);
-                LoggerBinding();
+                if (Cloud.Log is FileLogger) ((FileLogger)Cloud.Log).Path = Path.Combine(Data.LogPath, "TencentCos.log");
+                if (Cloud.LogError is FileLogger) ((FileLogger)Cloud.LogError).Path = Path.Combine(Data.LogPath, "TencentCos.error.log");
+                if (Web.LogError is FileLogger) ((FileLogger)Web.LogError).Path = Path.Combine(Data.LogPath, "EESAST.log");
+                if (Web.LogError is FileLogger) ((FileLogger)Web.LogError).Path = Path.Combine(Data.LogPath, "EESAST.error.log");
+                if (Log is FileLogger) ((FileLogger)Log).Path = Path.Combine(Data.LogPath, "Main.log");
+                if (LogError is FileLogger) ((FileLogger)LogError).Path = Path.Combine(Data.LogPath, "Main.error.log");
             }
             Update();
         }
@@ -303,28 +284,48 @@ namespace installer.Model
             int result = 0;
             if (CheckUpdate())
             {
-                // 处理AI.cpp/AI.py合并问题
-                if (CurrentVersion < Data.FileHashData.Version)
+                // 如果Major版本号不一致，说明启动器本身需要更新，返回结果为16
+                if (CurrentVersion.Major < Data.FileHashData.Version.Major)
                 {
-                    var c = CurrentVersion;
-                    var v = Data.FileHashData.Version;
+                    var dataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "THUAI7");
+                    var local = Path.Combine(dataDir, "Cache", $"setup_thuai7installer_{Data.FileHashData.Version.Major}.exe");
+                    Status = UpdateStatus.downloading;
+                    var i = Cloud.DownloadFileAsync(local, $"Setup/{Data.FileHashData.Version.Major}.exe").Result;
+                    if (i >= 0)
+                    {
+                        Status = UpdateStatus.exiting;
+                        Process.Start(local);
+                        return 16;
+                    }
+                    else
+                    {
+                        // 下载失败
+                        return -1;
+                    }
+                }
+                // 如果Minor版本号不一致，说明AI.cpp/AI.py有改动
+                // 返回结果为Flags，1: AI.cpp升级；2: AI.py升级
+                else if (CurrentVersion.Minor < Data.FileHashData.Version.Minor)
+                {
+                    var c = $"{CurrentVersion.Major}_{CurrentVersion.Minor}";
+                    var v = $"{Data.FileHashData.Version.Major}_{Data.FileHashData.Version.Minor}";
                     Status = UpdateStatus.downloading;
                     var p = Path.Combine(Data.Config.InstallPath, "Templates");
-                    var tocpp = Cloud.DownloadFileAsync(Path.Combine(p, $"v{c}.cpp.t"),
+                    var tocpp = Cloud.DownloadFileAsync(Path.Combine(p, $"{c}.cpp.t"),
                         $"./Template/v{c}.cpp.t");
-                    var topy = Cloud.DownloadFileAsync(Path.Combine(p, $"v{c}.py.t"),
+                    var topy = Cloud.DownloadFileAsync(Path.Combine(p, $"{c}.py.t"),
                         $"./Template/v{c}.py.t");
-                    var tncpp = Cloud.DownloadFileAsync(Path.Combine(p, $"v{v}.cpp.t"),
+                    var tncpp = Cloud.DownloadFileAsync(Path.Combine(p, $"{v}.cpp.t"),
                         $"./Template/v{v}.cpp.t");
-                    var tnpy = Cloud.DownloadFileAsync(Path.Combine(p, $"v{v}.py.t"),
+                    var tnpy = Cloud.DownloadFileAsync(Path.Combine(p, $"{v}.py.t"),
                         $"./Template/v{v}.py.t");
                     Task.WaitAll(tocpp, topy, tncpp, tnpy);
-                    if (Directory.GetFiles(p).Count() == 4)
+                    if (tocpp.Result >= 0 && topy.Result >= 0 && tncpp.Result >= 0 && tnpy.Result >= 0)
                     {
                         if (Data.LangEnabled[LanguageOption.cpp].Item1)
                         {
-                            var so = FileService.ReadToEnd(Path.Combine(p, $"v{c}.cpp.t"));
-                            var sn = FileService.ReadToEnd(Path.Combine(p, $"v{v}.cpp.t"));
+                            var so = FileService.ReadToEnd(Path.Combine(p, $"{c}.cpp.t"));
+                            var sn = FileService.ReadToEnd(Path.Combine(p, $"{v}.cpp.t"));
                             var sa = FileService.ReadToEnd(Data.LangEnabled[LanguageOption.cpp].Item2);
                             var s = FileService.MergeUserCode(sa, so, sn);
                             using (var f = new FileStream(Data.LangEnabled[LanguageOption.cpp].Item2 + ".temp", FileMode.Create))
@@ -334,11 +335,19 @@ namespace installer.Model
                                 w.Flush();
                             }
                             result |= 1;
+                            if (DeviceInfo.Platform == DevicePlatform.WinUI)
+                            {
+                                Process.Start(new ProcessStartInfo()
+                                {
+                                    Arguments = Directory.GetParent(Data.LangEnabled[LanguageOption.cpp].Item2)?.FullName,
+                                    FileName = "explorer.exe"
+                                });
+                            }
                         }
                         if (Data.LangEnabled[LanguageOption.python].Item1)
                         {
-                            var so = FileService.ReadToEnd(Path.Combine(p, $"v{c}.py.t"));
-                            var sn = FileService.ReadToEnd(Path.Combine(p, $"v{v}.py.t"));
+                            var so = FileService.ReadToEnd(Path.Combine(p, $"{c}.py.t"));
+                            var sn = FileService.ReadToEnd(Path.Combine(p, $"{v}.py.t"));
                             var sa = FileService.ReadToEnd(Data.LangEnabled[LanguageOption.python].Item2);
                             var s = FileService.MergeUserCode(sa, so, sn);
                             using (var f = new FileStream(Data.LangEnabled[LanguageOption.python].Item2 + ".temp", FileMode.Create))
@@ -348,11 +357,20 @@ namespace installer.Model
                                 w.Flush();
                             }
                             result |= 2;
+                            if (DeviceInfo.Platform == DevicePlatform.WinUI)
+                            {
+                                Process.Start(new ProcessStartInfo()
+                                {
+                                    Arguments = Directory.GetParent(Data.LangEnabled[LanguageOption.python].Item2)?.FullName,
+                                    FileName = "explorer.exe"
+                                });
+                            }
                         }
                     }
                 }
                 downloadFailed.Clear();
 
+                // 后两位留给其他更新，更新成功后返回值Flags增加0x8
                 Status = UpdateStatus.downloading;
                 Cloud.DownloadQueueAsync(Data.Config.InstallPath,
                     from item in Data.MD5Update where item.state != System.Data.DataRowState.Added select item.name,
@@ -372,6 +390,7 @@ namespace installer.Model
                     if (Data.MD5Update.Count == 0)
                     {
                         Status = UpdateStatus.success;
+                        result |= 8;
                         return result;
                     }
                 }
@@ -379,10 +398,10 @@ namespace installer.Model
             else
             {
                 Status = UpdateStatus.success;
-                return result;
+                return 0;
             }
             Status = UpdateStatus.error;
-            return result;
+            return -1;
         }
 
         /// <summary>

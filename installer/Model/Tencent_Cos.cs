@@ -84,12 +84,14 @@ namespace installer.Model
                 // 请求成功
                 if (result.httpCode != 200)
                     throw new Exception($"Download task: {{\"{remotePath}\"->\"{savePath}\"}} failed, message: {result.httpCode} {result.httpMessage}");
+                Log.LogInfo(thID, $"Download task: {{\"{remotePath}\"->\"{savePath}\"}} finished.");
             }
             catch (Exception ex)
             {
                 Exceptions.Push(ex, thID);
+                Log.LogInfo(thID, $"Download task: {{\"{remotePath}\"->\"{savePath}\"}} finished with error.");
+                thID = -1;
             }
-            Log.LogInfo(thID, $"Download task: {{\"{remotePath}\"->\"{savePath}\"}} finished.");
             return thID;
         }
 
