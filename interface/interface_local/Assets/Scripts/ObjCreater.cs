@@ -1,48 +1,55 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
+[Serializable]
+public struct GameObjectList
+{
+    public List<GameObject> p;
+}
 public class ObjCreater : SingletonMono<ObjCreater>
 {
-    public GameObject[] placeList, shiplist, bulletList, constructionList;
+    public List<GameObjectList> placeList;
+    public GameObject[] shiplist, bulletList, constructionList;
     public Transform mapfa;
     public GameObject CreateObj(PlaceType placeType, Vector2 Pos, Quaternion? quaternion = null)
     {
         switch (placeType)
         {
             case PlaceType.SPACE:
-                if (placeList[0])
-                    return Instantiate(placeList[0], Pos, quaternion ?? Quaternion.identity, mapfa);
+                if (placeList[0].p.Count > 0)
+                    return Instantiate(placeList[0].p[Tool.GetInstance().GetRandom(0, placeList[0].p.Count)], Pos, quaternion ?? Quaternion.identity, mapfa);
                 break;
             case PlaceType.RUIN:
-                if (placeList[1])
-                    return Instantiate(placeList[1], Pos, quaternion ?? Quaternion.identity, mapfa);
+                if (placeList[1].p.Count > 0)
+                    return Instantiate(placeList[1].p[Tool.GetInstance().GetRandom(0, placeList[1].p.Count)], Pos, quaternion ?? Quaternion.identity, mapfa);
                 break;
             case PlaceType.SHADOW:
-                if (placeList[2])
-                    return Instantiate(placeList[2], Pos, quaternion ?? Quaternion.identity, mapfa);
+                if (placeList[2].p.Count > 0)
+                    return Instantiate(placeList[2].p[Tool.GetInstance().GetRandom(0, placeList[2].p.Count)], Pos, quaternion ?? Quaternion.identity, mapfa);
                 break;
             case PlaceType.ASTEROID:
-                if (placeList[3])
-                    return Instantiate(placeList[3], Pos, quaternion ?? Quaternion.identity, mapfa);
+                if (placeList[3].p.Count > 0)
+                    return Instantiate(placeList[3].p[Tool.GetInstance().GetRandom(0, placeList[3].p.Count)], Pos, quaternion ?? Quaternion.identity, mapfa);
                 break;
             case PlaceType.RESOURCE:
-                if (placeList[4])
-                    return Instantiate(placeList[4], Pos, quaternion ?? Quaternion.identity, mapfa);
+                if (placeList[4].p.Count > 0)
+                    return Instantiate(placeList[4].p[Tool.GetInstance().GetRandom(0, placeList[4].p.Count)], Pos, quaternion ?? Quaternion.identity, mapfa);
                 break;
             case PlaceType.CONSTRUCTION:
-                if (placeList[5])
-                    return Instantiate(placeList[5], Pos, quaternion ?? Quaternion.identity, mapfa);
+                if (placeList[5].p.Count > 0)
+                    return Instantiate(placeList[5].p[Tool.GetInstance().GetRandom(0, placeList[5].p.Count)], Pos, quaternion ?? Quaternion.identity, mapfa);
                 break;
             case PlaceType.WORMHOLE:
-                if (placeList[6])
-                    return Instantiate(placeList[6], Pos, quaternion ?? Quaternion.identity, mapfa);
+                if (placeList[6].p.Count > 0)
+                    return Instantiate(placeList[6].p[Tool.GetInstance().GetRandom(0, placeList[6].p.Count)], Pos, quaternion ?? Quaternion.identity, mapfa);
                 break;
             case PlaceType.HOME:
-                if (placeList[7])
-                    return Instantiate(placeList[7], Pos, quaternion ?? Quaternion.identity, mapfa);
+                if (placeList[7].p.Count > 0)
+                    return Instantiate(placeList[7].p[Tool.GetInstance().GetRandom(0, placeList[7].p.Count)], Pos, quaternion ?? Quaternion.identity, mapfa);
                 break;
         }
         return null;
@@ -95,7 +102,7 @@ public class ObjCreater : SingletonMono<ObjCreater>
             return null;
         }
     }
-    public GameObject CreateObj(ConstructionType constructionType, Vector2 Pos)
+    public GameObject CreateObj(ConstructionType constructionType, Vector2 Pos, bool flip = false)
     {
         {
             switch (constructionType)
@@ -110,7 +117,10 @@ public class ObjCreater : SingletonMono<ObjCreater>
                     break;
                 case ConstructionType.FORT:
                     if (bulletList[2])
-                        return Instantiate(constructionList[2], Pos, Quaternion.identity);
+                        if (!flip)
+                            return Instantiate(constructionList[2], Pos, Quaternion.Euler(0, 0, 0));
+                        else
+                            return Instantiate(constructionList[2], Pos, Quaternion.Euler(0, 0, 180));
                     break;
                 default:
                     break;

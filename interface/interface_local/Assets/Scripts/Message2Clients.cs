@@ -5,9 +5,9 @@ using UnityEngine;
 [System.Serializable]
 public struct MessageOfShip
 {
-    // public int x;
-    // public int y;
-    // public int speed;
+    public float x;
+    public float y;
+    public float speed;
     public int hp;
     public int armor;
     public int shield;

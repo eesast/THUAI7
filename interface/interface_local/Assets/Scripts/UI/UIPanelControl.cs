@@ -19,6 +19,7 @@ public class UIPanelControl : MonoBehaviour
             obj = Instantiate(button_, transform.Find("Content"));
             obj.name = "Button_" + option.ToString();
             obj.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = InteractControl.GetInstance().textDic[option];
+            obj.transform.Find("Cost").GetComponent<TextMeshProUGUI>().text = InteractControl.GetInstance().textCost[option];
             // Debug.Log(obj.GetComponent<Button>());
             buttonDic.TryAdd(option, obj);
             // Debug.Log(buttonDic.Count);
