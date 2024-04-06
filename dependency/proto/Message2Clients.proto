@@ -12,8 +12,8 @@ message MessageOfShip
     int32 hp = 4; 
     int32 armor = 5; 
     int32 shield = 6; 
-    int32 team_id = 7;
-    int32 player_id = 8;
+    int64 team_id = 7;
+    int64 player_id = 8;
     int64 guid = 9;
     ShipState ship_state = 10;
     ShipType ship_type = 11;
@@ -34,7 +34,7 @@ message MessageOfBullet
     int32 y = 3;
     double facing_direction = 4;
     int32 damage = 5;
-    int32 team_id = 6;
+    int64 team_id = 6;
     int64 guid = 7;
     double bomb_range = 8;
     int32 speed = 9;
@@ -55,7 +55,7 @@ message MessageOfFactory
     int32 x = 1;
     int32 y = 2;
     int32 hp = 3; // 剩余的血量
-    int32 team_id = 4;
+    int64 team_id = 4;
 }
 
 message MessageOfCommunity
@@ -63,7 +63,7 @@ message MessageOfCommunity
     int32 x = 1;
     int32 y = 2;
     int32 hp = 3; // 剩余的血量
-    int32 team_id = 4;
+    int64 team_id = 4;
 }
 
 message MessageOfFort
@@ -71,7 +71,7 @@ message MessageOfFort
     int32 x = 1;
     int32 y = 2;
     int32 hp = 3; // 剩余的血量
-    int32 team_id = 4;
+    int64 team_id = 4;
 }
 
 message MessageOfWormhole
@@ -93,7 +93,7 @@ message MessageOfHome
     int32 x = 1;
     int32 y = 2;
     int32 hp = 3;
-    int32 team_id = 4;
+    int64 team_id = 4;
 }
 
 message MessageOfMap
@@ -109,8 +109,8 @@ message MessageOfMap
 
 message MessageOfTeam
 {
-    int32 team_id = 1;
-    int32 player_id = 2;
+    int64 team_id = 1;
+    int64 player_id = 2;
     int64 score = 3;
     int64 energy = 4;
 //    int64 guid=5;
@@ -182,13 +182,13 @@ message MessageOfNews
         string text_message = 1;
         bytes binary_message = 2;
     }
-    int32 from_id = 3;
-    int32 to_id = 4;
-    int32 team_id = 5;
+    int64 from_id = 3;
+    int64 to_id = 4;
+    int64 team_id = 5;
 }
 // message MsgRes // 用于获取队友发来的消息
 // {
 //     bool have_message = 1; // 是否有待接收的消息
-//     int32 from_player_id = 2;
+//     int64 from_player_id = 2;
 //     string message_received = 3;
 // }
