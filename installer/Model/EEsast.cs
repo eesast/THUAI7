@@ -38,19 +38,16 @@ namespace installer.Model
         public string Email { get; protected set; } = string.Empty;
 
         public Logger Log;
-        public Logger LogError;
-        public ExceptionStack Exceptions;
         public enum WebStatus
         {
             disconnected, offline, logined
         }
         public WebStatus Status = WebStatus.disconnected;
         public Tencent_Cos EEsast_Cos { get; protected set; } = new Tencent_Cos("1255334966", "ap-beijing", "eesast");
-        public EEsast(Logger? _log = null, Logger? _logError = null)
+        public EEsast(Logger? _log = null)
         {
             Log = _log ?? LoggerProvider.FromConsole();
-            LogError = _logError ?? Log;
-            Exceptions = new ExceptionStack(LogError, this);
+            Log.PartnerInfo = "[EESAST]";
         }
         public async Task LoginToEEsast(HttpClient client, string useremail = "", string userpassword = "")
         {
@@ -76,11 +73,11 @@ namespace installer.Model
                             int code = ((int)response.StatusCode);
                             if (code == 401)
                             {
-                                Exceptions.Push(new Exception("邮箱或密码错误！"));
+                                Log.LogError("邮箱或密码错误！");
                             }
                             else
                             {
-                                Exceptions.Push(new Exception($"HTTP错误，错误码：{code}"));
+                                Log.LogError($"HTTP错误，错误码：{code}");
                             }
                             break;
                     }
@@ -88,7 +85,7 @@ namespace installer.Model
             }
             catch (Exception ex)
             {
-                Exceptions.Push(ex);
+                Log.LogError(ex.Message);
             }
         }
 
@@ -104,7 +101,7 @@ namespace installer.Model
         {
             if (Status != WebStatus.logined)
             {
-                Exceptions.Push(new UnauthorizedAccessException("用户未登录。"));
+                Log.LogError("用户未登录。");
                 return -1;
             }
             try
@@ -113,7 +110,7 @@ namespace installer.Model
                 client.DefaultRequestHeaders.Authorization = new("Bearer", Token);
                 if (!File.Exists(userfile))
                 {
-                    Exceptions.Push(new IOException("选手文件(AI.cpp or AI.py)不存在。"));
+                    Log.LogError("选手文件(AI.cpp or AI.py)不存在。");
                     return -2;
                 }
                 using FileStream fs = new FileStream(userfile, FileMode.Open, FileAccess.Read);
@@ -137,22 +134,22 @@ namespace installer.Model
                             Log.LogInfo($"{userfile}上传成功。");
                             break;
                         case System.Net.HttpStatusCode.Unauthorized:
-                            Exceptions.Push(new UnauthorizedAccessException("未登录或登录过期，无法向EEsast上传文件。"));
+                            Log.LogError("未登录或登录过期，无法向EEsast上传文件。");
                             return -4;
                         default:
-                            Exceptions.Push(new Exception("向eesast服务器上传时发生了未知的错误。"));
+                            Log.LogError("向eesast服务器上传时发生了未知的错误。");
                             return -5;
                     }
                 }
             }
             catch (IOException)
             {
-                Exceptions.Push(new IOException($"{userfile}读取错误，请检查文件是否被其它应用占用。"));
+                Log.LogError($"{userfile}读取错误，请检查文件是否被其它应用占用。");
                 return -6;
             }
             catch
             {
-                Exceptions.Push(new Exception("请求错误，无法连接到eesast服务器。"));
+                Log.LogError("请求错误，无法连接到eesast服务器。");
                 return -7;
             }
             return 0;
@@ -162,7 +159,7 @@ namespace installer.Model
         {
             if (Status != WebStatus.logined)  // 读取token失败
             {
-                Exceptions.Push(new UnauthorizedAccessException("用户未登录。"));
+                Log.LogError("用户未登录。");
                 return;
             }
             try
@@ -180,7 +177,7 @@ namespace installer.Model
                             int code = ((int)response.StatusCode);
                             if (code == 401)
                             {
-                                Exceptions.Push(new UnauthorizedAccessException("您未登录或登录过期，请先登录。"));
+                                Log.LogError("您未登录或登录过期，请先登录。");
                             }
                             return;
                     }
@@ -188,7 +185,7 @@ namespace installer.Model
             }
             catch
             {
-                Console.WriteLine("请求错误！请检查网络连接！");
+                Log.LogError("请求错误！请检查网络连接！");
             }
         }
 

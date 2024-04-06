@@ -33,8 +33,6 @@ namespace installer.Model
         public bool Installed = false;  // 项目是否安装
         public bool RememberMe = false; // 是否记录账号密码
         public Logger Log;
-        public Logger LogError;
-        public ExceptionStack Exceptions;
         public Local_Data()
         {
             MD5Update = new ConcurrentBag<(DataRowState state, string name)>();
@@ -85,8 +83,7 @@ namespace installer.Model
                 }
             }
             Log = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.log"));
-            LogError = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.error.log"));
-            Exceptions = new ExceptionStack(LogError, this);
+            Log.PartnerInfo = "[LocalData]";
             LangEnabled = new Dictionary<LanguageOption, (bool, string)>();
             foreach (var a in typeof(LanguageOption).GetEnumValues())
             {
@@ -143,7 +140,7 @@ namespace installer.Model
             }
             catch (Exception e)
             {
-                Exceptions.Push(e);
+                Log.LogError(e.Message);
             }
             finally
             {
@@ -152,7 +149,6 @@ namespace installer.Model
                     Directory.CreateDirectory(LogPath);
                 }
                 if (Log is FileLogger) ((FileLogger)Log).Path = Path.Combine(LogPath, "LocalData.log");
-                if (LogError is FileLogger) ((FileLogger)LogError).Path = Path.Combine(LogPath, "LocalData.error.log");
                 Log.LogInfo($"Move work finished: {Config.InstallPath} -> {newPath}");
             }
         }
@@ -179,7 +175,7 @@ namespace installer.Model
             }
             catch (Exception e)
             {
-                Exceptions.Push(e);
+                Log.LogError(e.Message);
                 r.Close(); r.Dispose();
             }
             foreach (var item in FileHashData.Data)
@@ -216,7 +212,7 @@ namespace installer.Model
             }
             catch (Exception e)
             {
-                Exceptions.Push(e);
+                Log.LogError(e.Message);
             }
         }
 
