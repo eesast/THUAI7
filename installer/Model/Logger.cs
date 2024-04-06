@@ -158,15 +158,31 @@ namespace installer.Model
     }
     public class FileLogger : Logger
     {
-        private StreamWriter writer;
         private DateTime time = DateTime.MinValue;
-        public override DateTime LastRecordTime => time;
-        public FileLogger(string path)
+        private string path;
+        private Mutex mutex = new Mutex();
+        public string Path
         {
+            get => path; set
+            {
+                path = value;
+                LoadTime();
+            }
+        }
+        public override DateTime LastRecordTime => time;
+        public FileLogger(string _path)
+        {
+            path = _path;
             if (!File.Exists(path))
             {
                 File.Create(path).Dispose();
             }
+            LoadTime();
+        }
+
+        public void LoadTime()
+        {
+            mutex.WaitOne();
             using (var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite))
             using (var reader = new StreamReader(stream))
             {
@@ -179,15 +195,7 @@ namespace installer.Model
                     }
                 }
             }
-            var option = new FileStreamOptions();
-            option.Mode = FileMode.Append;
-            option.Access = FileAccess.Write;
-            option.Share = FileShare.ReadWrite;
-            writer = new StreamWriter(path, Encoding.UTF8, option);
-        }
-        ~FileLogger()
-        {
-            writer.Dispose();
+            mutex.ReleaseMutex();
         }
         protected override bool IsEnabled(LogLevel logLevel)
         {
@@ -202,17 +210,30 @@ namespace installer.Model
         }
         protected void LogDate()
         {
+            mutex.WaitOne();
+            using var writer = new StreamWriter(path, Encoding.UTF8, new FileStreamOptions()
+            {
+                Mode = FileMode.Append,
+                Access = FileAccess.Write
+            });
             if (DateTime.Now.Date != time.Date)
             {
                 time = DateTime.Now;
-                writer.WriteLine($"\nLogged on {time:yyyy-MM-dd}\n\n");
+                writer.WriteLine($"\nLogged on {time:yyyy-MM-dd}\n");
             }
+            mutex.ReleaseMutex();
         }
         protected override void Log(LogLevel logLevel, int eventId, string message)
         {
             if (!IsEnabled(logLevel))
                 return;
             LogDate();
+            mutex.WaitOne();
+            using var writer = new StreamWriter(path, Encoding.UTF8, new FileStreamOptions()
+            {
+                Mode = FileMode.Append,
+                Access = FileAccess.Write
+            });
             switch (logLevel)
             {
                 case LogLevel.Trace:
@@ -239,6 +260,7 @@ namespace installer.Model
                     break;
             }
             writer.Flush();
+            mutex.ReleaseMutex();
         }
 
         protected override void Log(LogLevel logLevel, string message)
@@ -246,6 +268,12 @@ namespace installer.Model
             if (!IsEnabled(logLevel))
                 return;
             LogDate();
+            mutex.WaitOne();
+            using var writer = new StreamWriter(path, Encoding.UTF8, new FileStreamOptions()
+            {
+                Mode = FileMode.Append,
+                Access = FileAccess.Write
+            });
             switch (logLevel)
             {
                 case LogLevel.Trace:
@@ -272,11 +300,7 @@ namespace installer.Model
                     break;
             }
             writer.Flush();
-        }
-        public override void Dispose()
-        {
-            writer.Dispose();
-            base.Dispose();
+            mutex.ReleaseMutex();
         }
     }
 
