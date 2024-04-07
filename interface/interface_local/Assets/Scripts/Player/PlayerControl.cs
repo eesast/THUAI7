@@ -19,7 +19,7 @@ public class PlayerControl : SingletonMono<PlayerControl>
     // Update is called once per frame
     void Update()
     {
-        testInput();
+        // testInput();
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             foreach (InteractBase i in selectedInt)

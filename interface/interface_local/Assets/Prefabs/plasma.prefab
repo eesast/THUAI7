@@ -135,6 +135,7 @@ MonoBehaviour:
   messageOfBullet:
     type: 2
     playerTeam: 0
+  lifeTime: 0
 --- !u!50 &1888889249344211522
 Rigidbody2D:
   serializedVersion: 4

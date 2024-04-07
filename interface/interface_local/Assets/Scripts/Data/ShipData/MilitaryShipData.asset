@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: MilitaryShipData
   m_EditorClassIdentifier: 
   cost: 1200
+  maxHp: 4000
