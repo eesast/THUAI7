@@ -35,7 +35,7 @@ namespace Preparation.Utility
         }
     }
 
-    public class LongInTheVariableRangeWithStartTime : LongInTheVariableRange
+    public class LongInTheVariableRangeWithStartTime : InVariableRange<long>
     {
         public StartTime startTime = new();
         public LongInTheVariableRangeWithStartTime(long value, long maxValue) : base(value, maxValue) { }
@@ -43,7 +43,6 @@ namespace Preparation.Utility
         /// 默认使Value=maxValue
         /// </summary>
         public LongInTheVariableRangeWithStartTime(long maxValue) : base(maxValue) { }
-        public LongInTheVariableRangeWithStartTime() : base() { }
 
         #region 读取
         public (long, long) GetValueWithStartTime()
