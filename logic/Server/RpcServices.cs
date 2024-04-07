@@ -507,18 +507,6 @@ namespace Server
             Console.WriteLine($"TRY BuildShip: ShipType {request.ShipType} from Team {request.TeamId}");
 #endif
             BoolRes boolRes = new();
-            var ship = game.TeamList[(int)request.TeamId].ShipPool.Find(
-                (ship) => ship.PlayerID == request.PlayerId);
-            if (ship == null)
-            {
-                boolRes.ActSuccess = false;
-                return Task.FromResult(boolRes);
-            }
-            else if (ship.IsRemoved == false)
-            {
-                boolRes.ActSuccess = false;
-                return Task.FromResult(boolRes);
-            }
             boolRes.ActSuccess = game.ActivateShip(request.TeamId, Transformation.ShipTypeFromProto(request.ShipType), request.BirthpointIndex) != GameObj.invalidID;
 #if DEBUG
             Console.WriteLine("END BuildShip");
