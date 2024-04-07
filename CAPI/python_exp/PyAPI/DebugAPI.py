@@ -1,33 +1,27 @@
-import PyAPI.structures as THUAI7
-from PyAPI.Interface import ILogic, IShipAPI, ITeamAPI, IGameTimer, IAI
-from math import pi
-from concurrent.futures import ThreadPoolExecutor, Future
 from typing import List, cast, Tuple, Union
 import logging
 import os
 import datetime
+from math import pi
+from concurrent.futures import ThreadPoolExecutor, Future
+
+import PyAPI.structures as THUAI7
+from PyAPI.Interface import ILogic, IShipAPI, ITeamAPI, IGameTimer, IAI
 
 
 class ShipDebugAPI(IShipAPI, IGameTimer):
-    def __init__(
-        self, logic: ILogic, file: bool, screen: bool, warnOnly: bool, playerID: int
-    ) -> None:
+    def __init__(self, logic: ILogic, file: bool, screen: bool, warnOnly: bool, playerID: int) -> None:
         self.__logic = logic
         self.__pool = ThreadPoolExecutor(20)
         self.__startPoint = datetime.datetime.now()
         self.__logger = logging.getLogger("api " + str(playerID))
         self.__logger.setLevel(logging.DEBUG)
         formatter = logging.Formatter(
-            "[%(name)s] [%(asctime)s.%(msecs)03d] [%(levelname)s] %(message)s",
-            "%H:%M:%S",
+            "[%(name)s] [%(asctime)s.%(msecs)03d] [%(levelname)s] %(message)s", "%H:%M:%S"
         )
         # 确保文件存在
-        if not os.path.exists(
-            os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/logs"
-        ):
-            os.makedirs(
-                os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/logs"
-            )
+        if not os.path.exists(os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/logs"):
+            os.makedirs(os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/logs")
 
         fileHandler = logging.FileHandler(
             os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -220,7 +214,7 @@ class ShipDebugAPI(IShipAPI, IGameTimer):
         return self.__logic.GetPlayerGUIDs()
 
     def GetSelfInfo(self) -> THUAI7.Ship:
-        return cast(THUAI7.Ships, self.__logic.GetSelfInfo())
+        return cast(THUAI7.Ship, self.__logic.GetSelfInfo())
 
     def GetEnergy(self) -> int:
         return self.__logic.GetEnergy()

@@ -81,8 +81,9 @@ parser.add_argument(
 
 def StartLogic(pID: int,
                playerType: THUAI7.PlayerType,
-               shipType: THUAI7.ShipType) -> None:
-    processEnv = ProcessEnv()
+               shipType: THUAI7.ShipType,
+               shmName: str) -> None:
+    processEnv = ProcessEnv(shmName)
     logic = Logic(pID, processEnv.tID, playerType, shipType, processEnv, StartLogic)
     logic.Main(lambda pID: AI(pID))
 
@@ -97,8 +98,8 @@ if __name__ == "__main__":
                             args.sIP, args.sPort,
                             args.file, args.screen, args.warnOnly)
     teamProcess = mp.Process(target=StartLogic,
-                             args=(0, THUAI7.PlayerType.Team, THUAI7.ShipType.NullShipType))
+                             args=(0, THUAI7.PlayerType.Team, THUAI7.ShipType.NullShipType, processEnv.shmName))
     teamProcess.start()
     mp.Process(target=StartLogic,
-               args=(1, THUAI7.PlayerType.Ship, THUAI7.ShipType.CivilianShip)).start()
+               args=(1, THUAI7.PlayerType.Ship, THUAI7.ShipType.CivilianShip, processEnv.shmName)).start()
     teamProcess.join()

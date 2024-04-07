@@ -1,5 +1,5 @@
-from enum import Enum
 from typing import List, Dict
+from enum import Enum
 import sys
 
 if sys.version_info < (3, 9):

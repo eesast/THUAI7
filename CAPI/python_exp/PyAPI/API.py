@@ -1,8 +1,9 @@
-import PyAPI.structures as THUAI7
-from PyAPI.Interface import ILogic, IShipAPI, ITeamAPI, IGameTimer, IAI
+from typing import List, cast, Tuple, Union
 from math import pi
 from concurrent.futures import ThreadPoolExecutor, Future
-from typing import List, cast, Tuple, Union
+
+import PyAPI.structures as THUAI7
+from PyAPI.Interface import ILogic, IShipAPI, ITeamAPI, IGameTimer, IAI
 
 
 class ShipAPI(IShipAPI, IGameTimer):

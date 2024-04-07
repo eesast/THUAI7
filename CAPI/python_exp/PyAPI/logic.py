@@ -1,12 +1,14 @@
-import os
 from typing import List, Union, Callable, Tuple
+import os
 import threading
 import logging
 import copy
 import platform
-from PyAPI.ProcessEnv import ProcessEnv
-import proto.Message2Clients_pb2 as Message2Clients
 from queue import Queue
+
+import proto.Message2Clients_pb2 as Message2Clients
+
+from PyAPI.ProcessEnv import ProcessEnv
 import PyAPI.structures as THUAI7
 from PyAPI.utils import Proto2THUAI7, AssistFunction
 from PyAPI.API import ShipAPI, TeamAPI

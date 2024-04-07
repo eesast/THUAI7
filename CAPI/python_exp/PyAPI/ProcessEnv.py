@@ -1,7 +1,5 @@
-from multiprocessing.shared_memory import ShareableList
 from typing import overload
-
-ShareMemName: str = 'THUAI7ShareMEM'
+from multiprocessing.shared_memory import ShareableList
 
 
 class ProcessEnv:
@@ -29,16 +27,20 @@ class ProcessEnv:
     def warnOnly(self) -> bool:
         return self.__sharedList[5]
 
+    @property
+    def shmName(self) -> str:
+        return self.__sharedList.shm.name
+
     @overload
     def __init__(self, tID: int,
                  sIP: str, sPort: str,
                  file: bool, screen: bool, warnOnly: bool) -> None: ...
 
     @overload
-    def __init__(self) -> None: ...
+    def __init__(self, shmName: str) -> None: ...
 
     def __init__(self, *args) -> None:
-        if args == ():
-            self.__sharedList = ShareableList(name=ShareMemName)
+        if len(args) == 1:
+            self.__sharedList = ShareableList(name=args[0])
         else:
-            self.__sharedList = ShareableList([args[0], args[1], args[2], args[3], args[4], args[5]], name=ShareMemName)
+            self.__sharedList = ShareableList([args[0], args[1], args[2], args[3], args[4], args[5]])

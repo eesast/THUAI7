@@ -95,7 +95,7 @@ class ShipAPI(IShipAPI, IGameTimer):
         return self.__logic.GetPlayerGUIDs()
 
     def GetSelfInfo(self) -> THUAI7.Ship:
-        return cast(THUAI7.Ships, self.__logic.GetSelfInfo())
+        return cast(THUAI7.Ship, self.__logic.GetSelfInfo())
 
     def GetEnergy(self) -> int:
         return self.__logic.GetEnergy()

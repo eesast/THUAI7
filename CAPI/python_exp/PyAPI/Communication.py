@@ -1,13 +1,14 @@
+from typing import Callable, Union
+import threading
 from multiprocessing import Process
+
+import proto.Services_pb2_grpc as Services
+import proto.Message2Clients_pb2 as Message2Clients
+import grpc
+
 from PyAPI.ProcessEnv import ProcessEnv
 import PyAPI.structures as THUAI7
 from PyAPI.utils import THUAI72Proto
-import proto.Services_pb2_grpc as Services
-import proto.Message2Clients_pb2 as Message2Clients
-import threading
-import grpc
-
-from typing import Callable, Union
 
 
 class Communication:
@@ -24,14 +25,12 @@ class Communication:
         self.__limit = 50
         self.__moveLimit = 10
         self.__start = start
+        self.__processEnv = processEnv
 
     def Move(self, time: int, angle: float, playerID: int) -> bool:
         try:
             with self.__mtxLimit:
-                if (
-                    self.__counter >= self.__limit
-                    or self.__counterMove >= self.__moveLimit
-                ):
+                if (self.__counter >= self.__limit or self.__counterMove >= self.__moveLimit):
                     return False
                 self.__counter += 1
                 self.__counterMove += 1
@@ -43,9 +42,7 @@ class Communication:
         else:
             return moveResult.act_success
 
-    def SendMessage(
-        self, toID: int, message: Union[str, bytes], playerID: int, teamID: int
-    ) -> bool:
+    def SendMessage(self, toID: int, message: Union[str, bytes], playerID: int, teamID: int) -> bool:
         try:
             with self.__mtxLimit:
                 if self.__counter >= self.__limit:
@@ -53,10 +50,7 @@ class Communication:
                 self.__counter += 1
             sendResult: Message2Clients.BoolRes = self.__THUAI7Stub.Send(
                 THUAI72Proto.THUAI72ProtobufSendMsg(
-                    playerID,
-                    toID,
-                    teamID,
-                    message,
+                    playerID, toID, teamID, message,
                     True if isinstance(message, bytes) else False,
                 )
             )
@@ -107,36 +101,28 @@ class Communication:
         else:
             return produceResult.act_success
 
-    def Rebuild(
-        self, constructionType: THUAI7.ConstructionType, playerID: int, teamID: int
-    ) -> bool:
+    def Rebuild(self, constructionType: THUAI7.ConstructionType, playerID: int, teamID: int) -> bool:
         try:
             with self.__mtxLimit:
                 if self.__counter >= self.__limit:
                     return False
                 self.__counter += 1
             rebuildResult: Message2Clients.BoolRes = self.__THUAI7Stub.Rebuild(
-                THUAI72Proto.THUAI72ProtobufConstructMsg(
-                    playerID, teamID, constructionType
-                )
+                THUAI72Proto.THUAI72ProtobufConstructMsg(playerID, teamID, constructionType)
             )
         except grpc.RpcError:
             return False
         else:
             return rebuildResult.act_success
 
-    def Construct(
-        self, constructionType: THUAI7.ConstructionType, playerID: int, teamID: int
-    ) -> bool:
+    def Construct(self, constructionType: THUAI7.ConstructionType, playerID: int, teamID: int) -> bool:
         try:
             with self.__mtxLimit:
                 if self.__counter >= self.__limit:
                     return False
                 self.__counter += 1
             constructResult: Message2Clients.BoolRes = self.__THUAI7Stub.Construct(
-                THUAI72Proto.THUAI72ProtobufConstructMsg(
-                    playerID, teamID, constructionType
-                )
+                THUAI72Proto.THUAI72ProtobufConstructMsg(playerID, teamID, constructionType)
             )
         except grpc.RpcError:
             return False
@@ -146,10 +132,7 @@ class Communication:
     def EndAllAction(self, playerID: int, teamID: int) -> bool:
         try:
             with self.__mtxLimit:
-                if (
-                    self.__counter >= self.__limit
-                    or self.__counterMove >= self.__moveLimit
-                ):
+                if (self.__counter >= self.__limit or self.__counterMove >= self.__moveLimit):
                     return False
                 self.__counter += 1
                 self.__counterMove += 1
@@ -161,9 +144,7 @@ class Communication:
         else:
             return endResult.act_success
 
-    def SendMessage(
-        self, toID: int, message: Union[str, bytes], playerID: int, teamID: int
-    ) -> bool:
+    def SendMessage(self, toID: int, message: Union[str, bytes], playerID: int, teamID: int) -> bool:
         try:
             with self.__mtxLimit:
                 if self.__counter >= self.__limit:
@@ -171,10 +152,7 @@ class Communication:
                 self.__counter += 1
             sendResult: Message2Clients.BoolRes = self.__THUAI7Stub.Send(
                 THUAI72Proto.THUAI72ProtobufSendMsg(
-                    playerID,
-                    toID,
-                    teamID,
-                    message,
+                    playerID, toID, teamID, message,
                     True if isinstance(message, bytes) else False,
                 )
             )
@@ -183,9 +161,7 @@ class Communication:
         else:
             return sendResult.act_success
 
-    def InstallModule(
-        self, moduleType: THUAI7.ModuleType, playerID: int, teamID: int
-    ) -> bool:
+    def InstallModule(self, moduleType: THUAI7.ModuleType, playerID: int, teamID: int) -> bool:
         try:
             with self.__mtxLimit:
                 if self.__counter >= self.__limit:
@@ -224,9 +200,7 @@ class Communication:
             )
             if buildResult.act_success:
                 Process(target=self.__start,
-                        args=(buildResult.player_id,
-                              THUAI7.PlayerType.Ship,
-                              shipType)).start()
+                        args=(buildResult.player_id, THUAI7.PlayerType.Ship, shipType, self.__processEnv.shmName)).start()
         except grpc.RpcError:
             return False
         else:
@@ -264,9 +238,7 @@ class Communication:
                                 self.__counter = 0
                                 self.__counterMove = 0
                 elif playerID >= 1 and playerID <= 8:
-                    playerMsg = THUAI72Proto.THUAI72ProtobufPlayerMsg(
-                        playerID, teamID, shipType
-                    )
+                    playerMsg = THUAI72Proto.THUAI72ProtobufPlayerMsg(playerID, teamID, shipType)
                     for msg in self.__THUAI7Stub.AddPlayer(playerMsg):
                         with self.__cvMessage:
                             self.__haveNewMessage = True

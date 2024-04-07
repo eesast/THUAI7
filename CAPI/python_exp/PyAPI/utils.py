@@ -1,8 +1,9 @@
+from typing import Final, List
+
 import proto.MessageType_pb2 as MessageType
 import proto.Message2Server_pb2 as Message2Server
 import proto.Message2Clients_pb2 as Message2Clients
 import PyAPI.structures as THUAI7
-from typing import Final, List
 
 numOfGridPerCell: Final[int] = 1000
 

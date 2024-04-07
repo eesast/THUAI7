@@ -1,10 +1,8 @@
 from typing import List, Union, Tuple
 from concurrent.futures import Future
 from abc import abstractmethod, ABCMeta
-import PyAPI.structures as THUAI7
 
-from abc import ABCMeta, abstractmethod
-from typing import List, Tuple, Union
+import PyAPI.structures as THUAI7
 
 
 class ILogic(metaclass=ABCMeta):
