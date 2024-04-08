@@ -13,7 +13,7 @@ module.exports = {
     favicon: 'img/favicon.ico',
 
     // Set the production url of your site here
-    url: 'https://eesast.github.io/THUAI7/',
+    url: 'https://eesast.github.io/',
     // Set the /<baseUrl>/ pathname under which your site is served
     // For GitHub pages deployment, it is often '/<projectName>/'
     baseUrl: '/THUAI7/',
