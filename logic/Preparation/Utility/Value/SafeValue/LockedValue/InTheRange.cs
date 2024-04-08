@@ -110,7 +110,7 @@ namespace Preparation.Utility
 
         public virtual T SetRNow(T value)
         {
-            if (value.CompareTo(0) <= 0)
+            if (value < T.Zero)
             {
                 lock (vLock)
                 {
@@ -122,6 +122,23 @@ namespace Preparation.Utility
                 return v = (value > maxV) ? maxV : value;
             }
         }
+
+        public virtual void Set(double value)
+        {
+            if (value < 0)
+            {
+                lock (vLock)
+                {
+                    v = T.Zero;
+                }
+            }
+            T va = T.CreateChecked(value);
+            lock (vLock)
+            {
+                v = (va > maxV) ? maxV : va;
+            }
+        }
+
         /// <summary>
         /// 应当保证该value>=0
         /// </summary>
@@ -165,7 +182,7 @@ namespace Preparation.Utility
         {
             lock (vLock)
             {
-                if (v < maxV && v.CompareTo(0) > 0)
+                if (v < maxV && v > T.Zero)
                 {
                     v = T.Zero;
                     return true;
@@ -541,6 +558,11 @@ namespace Preparation.Utility
         public override void SetPositiveMaxV(T maxValue)
         {
             ScoreAdd(() => base.SetPositiveMaxV(maxValue));
+        }
+
+        public override void Set(double value)
+        {
+            ScoreAdd(() => base.Set(value));
         }
 
         public override T SetRNow(T value)

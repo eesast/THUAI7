@@ -9,7 +9,7 @@ namespace Preparation.Utility
         protected object VLock => vLock;
         private static int numOfClass = 0;
         public static int NumOfClass => numOfClass;
-        public readonly int idInClass;
+        private readonly int idInClass;
         public int IdInClass => idInClass;
 
         public LockedValue()

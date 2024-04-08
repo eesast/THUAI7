@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace Preparation.Utility
 {
-    public class LockedDouble(double x) : LockedValue
+    public class LockedDouble(double x) : LockedValue, IDouble
     {
         private double v = x;
 
@@ -17,6 +17,7 @@ namespace Preparation.Utility
             lock (vLock)
                 return v;
         }
+        public double ToDouble() => Get();
         public static implicit operator double(LockedDouble adouble) => adouble.Get();
 
         public void Set(double value)
