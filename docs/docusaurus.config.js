@@ -13,15 +13,15 @@ module.exports = {
     favicon: 'img/favicon.ico',
 
     // Set the production url of your site here
-    url: 'https://thuai7.panxuc.com',
+    url: 'https://eesast.github.io/THUAI7/',
     // Set the /<baseUrl>/ pathname under which your site is served
     // For GitHub pages deployment, it is often '/<projectName>/'
-    baseUrl: '/',
+    baseUrl: '/THUAI7/',
 
     // GitHub pages deployment config.
     // If you aren't using GitHub pages, you don't need these.
-    organizationName: 'Panxuc', // Usually your GitHub org/user name.
-    projectName: 'THUAI7-Docs', // Usually your repo name.
+    organizationName: 'eesast', // Usually your GitHub org/user name.
+    projectName: 'THUAI7', // Usually your repo name.
 
     onBrokenLinks: 'warn',
     onBrokenMarkdownLinks: 'warn',
