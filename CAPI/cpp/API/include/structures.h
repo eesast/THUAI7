@@ -197,8 +197,8 @@ namespace THUAI7
         int32_t hp;        // 血量
         int32_t armor;     // 装甲
         int32_t shield;    // 护盾
-        int64_t playerID;  // 船的id
-        int64_t teamID;
+        int32_t playerID;  // 船的id
+        int32_t teamID;
         int64_t guid;         // 全局唯一ID
         ShipState shipState;  // 船所处状态
         ShipType shipType;
@@ -213,8 +213,8 @@ namespace THUAI7
 
     struct Team
     {
-        int64_t playerID;
-        int64_t teamID;
+        int32_t playerID;
+        int32_t teamID;
         int32_t score;
         int32_t energy;
     };
@@ -224,7 +224,7 @@ namespace THUAI7
         int32_t x;
         int32_t y;
         int32_t hp;
-        int64_t teamID;
+        int32_t teamID;
         int64_t guid;
     };
 
@@ -234,7 +234,7 @@ namespace THUAI7
         int32_t y;               // y坐标
         double facingDirection;  // 朝向
         int64_t guid;            //
-        int64_t teamID;          // 子弹所属队伍
+        int32_t teamID;          // 子弹所属队伍
         BulletType bulletType;   // 子弹类型
         int32_t damage;          // 伤害值
         int32_t attackRange;
@@ -256,10 +256,10 @@ namespace THUAI7
     struct GameMap
     {
         // x,y,id,hp
-        std::map<std::pair<int32_t, int32_t>, std::pair<int64_t, int32_t>> factoryState;
-        std::map<std::pair<int32_t, int32_t>, std::pair<int64_t, int32_t>> communityState;
-        std::map<std::pair<int32_t, int32_t>, std::pair<int64_t, int32_t>> fortState;
-        std::map<std::pair<int32_t, int32_t>, std::pair<int64_t, int32_t>> homeState;
+        std::map<std::pair<int32_t, int32_t>, std::pair<int32_t, int32_t>> factoryState;
+        std::map<std::pair<int32_t, int32_t>, std::pair<int32_t, int32_t>> communityState;
+        std::map<std::pair<int32_t, int32_t>, std::pair<int32_t, int32_t>> fortState;
+        std::map<std::pair<int32_t, int32_t>, std::pair<int32_t, int32_t>> homeState;
         std::map<std::pair<int32_t, int32_t>, int32_t> wormholeState;
         std::map<std::pair<int32_t, int32_t>, int32_t> resourceState;
     };

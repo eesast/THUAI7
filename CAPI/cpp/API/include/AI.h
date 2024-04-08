@@ -17,12 +17,12 @@ public:
     virtual void play(ITeamAPI& api) = 0;
 };
 
-using CreateAIFunc = std::unique_ptr<IAI> (*)(int64_t playerID);
+using CreateAIFunc = std::unique_ptr<IAI> (*)(int32_t playerID);
 
 class AI : public IAI
 {
 public:
-    AI(int64_t pID) :
+    AI(int32_t pID) :
         IAI(),
         playerID(pID)
     {
@@ -31,7 +31,7 @@ public:
     void play(ITeamAPI& api) override;
 
 private:
-    int64_t playerID;
+    int32_t playerID;
 };
 
 #endif

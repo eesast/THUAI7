@@ -95,7 +95,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def Recover(self) -> bool:
+    def Recover(self, recover: int) -> bool:
         pass
 
     @abstractmethod
@@ -129,7 +129,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def BuildShip(self, shipType: THUAI7.ShipType) -> bool:
+    def BuildShip(self, shipType: THUAI7.ShipType, birthIndex: int) -> bool:
         pass
 
 
@@ -268,7 +268,7 @@ class IShipAPI(IAPI, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def Recover(self) -> Future[bool]:
+    def Recover(self, recover: int) -> Future[bool]:
         pass
 
     @abstractmethod
@@ -308,7 +308,7 @@ class ITeamAPI(IAPI, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def BuildShip(self, shipType: THUAI7.ShipType) -> Future[bool]:
+    def BuildShip(self, shipType: THUAI7.ShipType, birthIndex: int) -> Future[bool]:
         pass
 
 
