@@ -98,6 +98,7 @@ namespace Gaming
             foreach (var team in TeamList)
             {
                 actionManager.AddMoneyNaturally(team);
+                ActivateShip(team.TeamID, ShipType.CivilShip);
             }
             new Thread
             (
