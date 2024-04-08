@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class BaseControl : MonoBehaviour
@@ -52,6 +53,7 @@ public class BaseControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        RendererControl.GetInstance().SetColToChild(messageOfBase.playerTeam, gameObject.transform, 0.5f);
         switch (interactBase.interactOption)
         {
             case InteractControl.InteractOption.BuildCivil:
@@ -108,6 +110,7 @@ public class BaseControl : MonoBehaviour
     }
     void DestroyBase()
     {
+        UIControl.GetInstance().updateUI();
         Destroy(gameObject);
     }
 }
