@@ -2,8 +2,6 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - dev
     paths:
       - '.github/workflows/deploy.yml'
       - 'docs/**'
