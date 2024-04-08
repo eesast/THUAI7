@@ -13,22 +13,16 @@ using installer.Model;
 
 namespace installer.ViewModel
 {
-    public class ExceptionRecord
-    {
-        public LogLevel Level { get; set; }
-        public string Message { get; set; } = string.Empty;
-    }
     public class InstallViewModel : BaseViewModel
     {
         private readonly Downloader Downloader;
         private readonly IFolderPicker FolderPicker;
-        public ObservableCollection<ExceptionRecord> Exceptions { get; private set; }
+        public ObservableCollection<LogRecord> Exceptions { get => Downloader.LogList.List; }
 
         public InstallViewModel(IFolderPicker folderPicker, Downloader downloader)
         {
             Downloader = downloader;
             FolderPicker = folderPicker;
-            Exceptions = new ObservableCollection<ExceptionRecord>();
 
             downloadPath = Downloader.Data.Config.InstallPath;
 
@@ -137,15 +131,6 @@ namespace installer.ViewModel
             }
         }
 
-        public void UpdateExceptions()
-        {
-            while (Downloader.LogStack.Stack.Count > 0)
-            {
-                var exception = Downloader.LogStack.Stack.Pop();
-                Exceptions.Add(new ExceptionRecord { Level = exception.level, Message = exception.message });
-            };
-        }
-
         public ICommand BrowseBtnClickedCommand { get; }
         private async Task BrowseBtnClicked()
         {
@@ -164,7 +149,6 @@ namespace installer.ViewModel
                 DownloadPath = DownloadPath;
             }
             BrowseEnabled = true;
-            UpdateExceptions();
         }
         public ICommand CheckUpdBtnClickedCommand { get; }
         private async void CheckUpdBtnClicked()
@@ -187,7 +171,6 @@ namespace installer.ViewModel
             }
             BrowseEnabled = true;
             CheckEnabled = true;
-            UpdateExceptions();
         }
         public ICommand DownloadBtnClickedCommand { get; }
         private async Task DownloadBtnClicked()
@@ -207,7 +190,6 @@ namespace installer.ViewModel
             }
             CheckEnabled = true;
             BrowseEnabled = true;
-            UpdateExceptions();
             // DebugAlert2 = "Installed" + Downloader.Data.Installed.ToString();
         }
         public ICommand UpdateBtnClickedCommand { get; }
@@ -221,7 +203,6 @@ namespace installer.ViewModel
             await Task.Run(() => Downloader.Update());
             CheckEnabled = true;
             BrowseEnabled = true;
-            UpdateExceptions();
         }
     }
 }
