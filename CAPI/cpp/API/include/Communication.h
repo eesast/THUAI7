@@ -27,22 +27,22 @@ public:
     ~Communication()
     {
     }
-    bool TryConnection(int64_t playerID, int64_t teamID);
+    bool TryConnection(int32_t playerID, int32_t teamID);
     protobuf::MessageToClient GetMessage2Client();
-    void AddPlayer(int64_t playerID, int64_t teamID, THUAI7::ShipType ShipType);
-    bool EndAllAction(int64_t playerID, int64_t teamID);
+    void AddPlayer(int32_t playerID, int32_t teamID, THUAI7::ShipType ShipType);
+    bool EndAllAction(int32_t playerID, int32_t teamID);
     // Ship
-    bool Move(int64_t playerID, int64_t teamID, int64_t time, double angle);
-    bool Recover(int64_t playerID, int64_t recover, int64_t teamID);
-    bool Produce(int64_t playerID, int64_t teamID);
-    bool Rebuild(int64_t playerID, int64_t teamID, THUAI7::ConstructionType constructionType);
-    bool Construct(int64_t playerID, int64_t teamID, THUAI7::ConstructionType constructionType);
-    bool Attack(int64_t playerID, int64_t teamID, double angle);
-    bool Send(int64_t playerID, int64_t toPlayerID, int64_t teamID, std::string message, bool binary);
+    bool Move(int32_t playerID, int32_t teamID, int64_t time, double angle);
+    bool Recover(int32_t playerID, int64_t recover, int32_t teamID);
+    bool Produce(int32_t playerID, int32_t teamID);
+    bool Rebuild(int32_t playerID, int32_t teamID, THUAI7::ConstructionType constructionType);
+    bool Construct(int32_t playerID, int32_t teamID, THUAI7::ConstructionType constructionType);
+    bool Attack(int32_t playerID, int32_t teamID, double angle);
+    bool Send(int32_t playerID, int32_t toPlayerID, int32_t teamID, std::string message, bool binary);
     // Team
-    bool InstallModule(int64_t playerID, int64_t teamID, THUAI7::ModuleType moduleType);
-    bool BuildShip(int64_t teamID, THUAI7::ShipType ShipType);
-    bool Recycle(int64_t playerID, int64_t teamID);
+    bool InstallModule(int32_t playerID, int32_t teamID, THUAI7::ModuleType moduleType);
+    bool BuildShip(int32_t teamID, THUAI7::ShipType ShipType, int32_t birthIndex);
+    bool Recycle(int32_t playerID, int32_t teamID);
 
 private:
     std::unique_ptr<protobuf::AvailableService::Stub> THUAI7Stub;

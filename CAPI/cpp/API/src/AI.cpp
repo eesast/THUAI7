@@ -47,4 +47,5 @@ void AI::play(IShipAPI& api)
 void AI::play(ITeamAPI& api)  // 默认team playerID 为0
 {
     api.PrintSelfInfo();
+    api.InstallModule(1, THUAI7::ModuleType::ModuleArcGun);
 }
