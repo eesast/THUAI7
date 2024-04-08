@@ -127,7 +127,7 @@ int THUAI7Main(int argc, char** argv, CreateAIFunc AIBuilder)
     return 0;
 }
 
-std::unique_ptr<IAI> CreateAI(int64_t pID)
+std::unique_ptr<IAI> CreateAI(int32_t pID)
 {
     return std::make_unique<AI>(pID);
 }
