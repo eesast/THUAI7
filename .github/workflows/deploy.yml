@@ -5,7 +5,7 @@ on:
     paths:
       - '.github/workflows/deploy.yml'
       - 'docs/**'
-  pull_request:
+  # pull_request:
 
 jobs:
   deploy:
