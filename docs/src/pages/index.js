@@ -35,7 +35,7 @@ const features = [
         title: "实用",
         description: (
             <>
-                我们致力于提供全方面的实用 THUAI7 说明。
+                此页面提供 THUAI7 电子系赛道的比赛规则说明。
                 <ul>
                     <li>
                         <Link to="/docs/intro">引入</Link>:

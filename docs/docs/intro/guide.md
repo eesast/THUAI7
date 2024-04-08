@@ -6,11 +6,11 @@
 
 [**THUAI7**](https://github.com/eesast/THUAI7) 是一个由 [**EESΛST**](https://eesast.com/) 软件部带来的一个将即时战略、团队合作对抗、多人射击巧妙~~缝合~~结合的新型游戏。
 
-与一般的游戏不同的是，它并不需要各位选手亲手操作，而是通过 C++、Python 等编程语言，编写 AI 程序，让 AI 代替你进行游戏。
+与一般的游戏不同的是，它并不需要各位选手亲手操作，而是通过 C++、Python 等编程语言，编写程序，让你的程序代替你进行游戏。
 
-## 我应该如何游玩 THUAI7？
+<!-- ## 我应该如何游玩 THUAI7？
 
-这是一张[**地图**](../map/map.md)。你和你的对手的 AI 程序将会在这张[**地图**](../map/map.md)上运行。可以看到，[**地图**](../map/map.md)上有很多不同的[**区域类型**](../map/placetype.md)。它们分别是[**基地**](../map/placetype.md#基地home)、[**空间**](../map/placetype.md#空间space)、[**太空废墟**](../map/placetype.md#太空废墟ruin)、[**阴影**](../map/placetype.md#阴影shadow)、[**小行星带**](../map/placetype.md#小行星带asteroid)、[**资源**](../map/placetype.md#资源resource)、[**建筑**](../map/placetype.md#建筑construction)和[**虫洞**](../map/placetype.md#虫洞wormhole)。
+这是一张[**地图**](../map/map.md)。你和你的对手的程序将会在这张[**地图**](../map/map.md)上运行。可以看到，[**地图**](../map/map.md)上有很多不同的[**区域类型**](../map/placetype.md)。它们分别是[**基地**](../map/placetype.md#基地home)、[**空间**](../map/placetype.md#空间space)、[**太空废墟**](../map/placetype.md#太空废墟ruin)、[**阴影**](../map/placetype.md#阴影shadow)、[**小行星带**](../map/placetype.md#小行星带asteroid)、[**资源**](../map/placetype.md#资源resource)、[**建筑**](../map/placetype.md#建筑construction)和[**虫洞**](../map/placetype.md#虫洞wormhole)。
 
 你初始拥有一台[**民用舰船**](../ship/civilship.md)。它将在你的[**基地**](../map/placetype.md#基地home)出生。你的对手初始也拥有一台[**民用舰船**](../ship/civilship.md)，它将在对手的[**基地**](../map/placetype.md#基地home)出生。你的目标是摧毁对手的[**基地**](../map/home.md)。你可以通过发射子弹来摧毁对手的[**基地**](../map/home.md)。你的对手也可以通过发射子弹来摧毁你的[**基地**](../map/home.md)。可是，你的[**民用舰船**](../ship/civilship.md)并不能发射子弹。想让你的舰船发射子弹，你需要给你的[**民用舰船**](../ship/civilship.md)安装一门激光炮，或是建造一台[**军用舰船**](../ship/warship.md)。
 
@@ -34,10 +34,10 @@
 
 参加 THUAI7 的选手应该多为[**清华大学**](https://www.tsinghua.edu.cn/)[**电子工程系**](https://www.ee.tsinghua.edu.cn/)的三字班或二字班学生。以下内容将会以此为前提。如有冒犯，敬请谅解。
 
-有的选手可能会对编写“AI 程序”感到困惑、担心。事实上，这是不必要的。诚然，有的同学可能计算机基础较为薄弱，在“计算机程序设计基础”课上才第一次接触到程序设计；有的同学可能经验、接触较多，参加过 [**NOI**](https://www.noi.cn/) 等竞赛，对编程有着一定的了解。然而，事实上，编写 THUAI7 所需的“AI 程序”并不需要你有很深的编程基础。只要你能够使用 C++ 或 Python 等编程语言，理解我们给大家提供的接口，并能合理调用它们，就可以编写出一份出色的“AI 程序”。
+有的选手可能会对编写“程序”感到困惑、担心。事实上，这是不必要的。诚然，有的同学可能计算机基础较为薄弱，在“计算机程序设计基础”课上才第一次接触到程序设计；有的同学可能经验、接触较多，参加过 [**NOI**](https://www.noi.cn/) 等竞赛，对编程有着一定的了解。然而，事实上，编写 THUAI7 所需的“程序”并不需要你有很深的编程基础。只要你能够使用 C++ 或 Python 等编程语言，理解我们给大家提供的接口，并能合理调用它们，就可以编写出一份出色的“程序”。
 
 在具体层面上，比赛形式是多元的。通常而言，你需要准备 4 份不同的代码，分别控制基地、民用舰船、军用舰船和旗舰。你需要在每一份代码中，实现我们给你提供的接口。这些接口将会在[**接口**](../interface/interface.md)中详细介绍。当然，如果你使用 PyTorch 等深度学习框架，取得了不错的效果，也可以与我们联系，我们将给予帮助，让你的模型成功运行在 THUAI7 上。
 
 如果你还是感到有点困惑，不妨来看看 [**THUAI6 选手代码**](https://github.com/eesast/THUAI6/tree/dev/players)以及 [**C++ 相关小知识**](../faq/cpptips.md)。相信它们会对你有所帮助。
 
-我们相信，参加 THUAI7 会给各位选手带来与“计算机程序设计基础”和 NOI 等不同的体验。我们希望各位选手能够在 THUAI7 中，体会到编程的乐趣。
+我们相信，参加 THUAI7 会给各位选手带来与“计算机程序设计基础”和 NOI 等不同的体验。我们希望各位选手能够在 THUAI7 中，体会到编程的乐趣。 -->
