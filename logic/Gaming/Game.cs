@@ -37,7 +37,7 @@ namespace Gaming
                 {
                     return GameObj.invalidID;
                 }
-                //teamList[(int)playerInitInfo.teamID].AddShip(newShip);
+                teamList[(int)playerInitInfo.teamID].ShipPool.Append(newShip);
                 return newShip.PlayerID;
             }
             else
@@ -67,6 +67,10 @@ namespace Gaming
             if (gameMap.Timer.IsGaming)
                 return false;
             // 开始游戏
+            foreach (var team in TeamList)
+            {
+                actionManager.AddMoneyNaturally(team);
+            }
             new Thread
             (
                 () =>
@@ -112,12 +116,7 @@ namespace Gaming
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
             if (ship != null)
             {
-                var flag = actionManager.Construct(ship, constructionType);
-                if (constructionType == ConstructionType.Community && flag)
-                {
-                    UpdateBirthPoint();
-                }
-                return flag;
+                return actionManager.Construct(ship, constructionType);
             }
             return false;
         }
@@ -159,7 +158,21 @@ namespace Gaming
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
             if (ship != null)
-                return shipManager.Recycle(ship);
+            {
+                bool validRecyclePoint = false;
+                foreach (XY recyclePoint in teamList[(int)ship.TeamID].BirthPointList)
+                {
+                    if (GameData.ApproachToInteract(ship.Position, recyclePoint) && ship.Position != recyclePoint)
+                    {
+                        validRecyclePoint = true;
+                        break;
+                    }
+                }
+                if (validRecyclePoint)
+                {
+                    return shipManager.Recycle(ship);
+                }
+            }
             return false;
         }
         public bool Repair(long teamID, long shipID)
@@ -228,55 +241,41 @@ namespace Gaming
             }
             return gameObjList;
         }
-        public void UpdateBirthPoint()
+        public void AddBirthPoint(long teamID, XY pos)
         {
-            gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>()?.ForEach(
-                delegate (Construction construction)
-                {
-                    if (construction.ConstructionType == ConstructionType.Community)
-                    {
-                        bool exist = false;
-                        foreach (XY birthPoint in teamList[(int)construction.TeamID].BirthPointList)
-                        {
-                            if (construction.Position == birthPoint)
-                            {
-                                exist = true;
-                                break;
-                            }
-                        }
-                        if (!exist)
-                        {
-                            teamList[(int)construction.TeamID].BirthPointList.Add(construction.Position);
-                        }
-                    }
-                }
-            );
-            foreach (Team team in teamList)
-            {
-                foreach (XY birthPoint in team.BirthPointList)
-                {
-                    gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>()?.ForEach(
-                        delegate (Construction construction)
-                    {
-                        if (construction.Position == birthPoint)
-                        {
-                            if (construction.ConstructionType != ConstructionType.Community || construction.TeamID != team.TeamID)
-                            {
-                                team.BirthPointList.Remove(birthPoint);
-                            }
-                        }
-                    }
-                    );
-                }
-            }
+            if (!gameMap.TeamExists(teamID))
+                return;
+            if (teamList[(int)teamID].BirthPointList.Contains(pos))
+                return;
+            teamList[(int)teamID].BirthPointList.Add(pos);
+        }
+        public void RemoveBirthPoint(long teamID, XY pos)
+        {
+            if (!gameMap.TeamExists(teamID))
+                return;
+            if (!teamList[(int)teamID].BirthPointList.Contains(pos))
+                return;
+            teamList[(int)teamID].BirthPointList.Remove(pos);
+        }
+        public void AddFactory(long teamID)
+        {
+            if (!gameMap.TeamExists(teamID))
+                return;
+            teamList[(int)teamID].FactoryNum.Add(1);
+        }
+        public void RemoveFactory(long teamID)
+        {
+            if (!gameMap.TeamExists(teamID))
+                return;
+            teamList[(int)teamID].FactoryNum.Sub(1);
         }
         public Game(MapStruct mapResource, int numOfTeam)
         {
             gameMap = new(mapResource);
-            shipManager = new(gameMap);
+            shipManager = new(this, gameMap);
             moduleManager = new();
-            actionManager = new(gameMap, shipManager);
-            attackManager = new(gameMap, shipManager);
+            actionManager = new(this, gameMap, shipManager);
+            attackManager = new(this, gameMap, shipManager);
             teamList = [];
             gameMap.GameObjDict[GameObjType.Home].Cast<GameObj>()?.ForEach(
                 delegate (GameObj gameObj)
@@ -287,13 +286,8 @@ namespace Gaming
                         teamList.Last().BirthPointList.Add(gameObj.Position);
                         teamList.Last().AddMoney(GameData.InitialMoney);
                     }
-                    /*         if (teamList.Count == numOfTeam)
-                             {
-                                 break;
-                             }*/
                 }
-                );
-
+            );
         }
     }
 }

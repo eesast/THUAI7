@@ -67,5 +67,6 @@ public class CameraControl : MonoBehaviour
                 }
             }
         }
+        // Debug.Log(RectTransformUtility.RectangleContainsScreenPoint(sideBarRect, Input.mousePosition, Camera.main));
     }
 }

@@ -11,7 +11,6 @@ public class ShipControl : MonoBehaviour
     Rigidbody2D rb;
     public InteractBase interactBase;
     [SerializeField]
-    float speed;
     private float targetQ;
     public MessageOfShip messageOfShip;
     GameObject obj;
@@ -20,7 +19,7 @@ public class ShipControl : MonoBehaviour
         if ((rb.velocity.normalized - targetV.normalized).magnitude < 1.5f || rb.velocity.magnitude < 0.1f)
             rb.velocity = Vector2.Lerp(rb.velocity, targetV, 0.1f);
         else
-            rb.velocity = Vector2.Lerp(rb.velocity, Vector2.zero, 0.1f);
+            rb.velocity = Vector2.Lerp(rb.velocity, Vector2.zero, 0.3f);
         rb.rotation = Mathf.Lerp(rb.rotation, targetQ, 0.03f);
     }
     float DealQ(float qTar)
@@ -36,21 +35,82 @@ public class ShipControl : MonoBehaviour
     {
         interactBase = GetComponent<InteractBase>();
         rb = GetComponent<Rigidbody2D>();
+        switch (messageOfShip.shipType)
+        {
+            case ShipType.CIVILIAN_SHIP:
+                messageOfShip.hp = ParaDefine.GetInstance().civilShipData.maxHp;
+                break;
+            case ShipType.MILITARY_SHIP:
+                messageOfShip.hp = ParaDefine.GetInstance().militaryShipData.maxHp;
+                break;
+            case ShipType.FLAG_SHIP:
+                messageOfShip.hp = ParaDefine.GetInstance().flagShipData.maxHp;
+                break;
+            default:
+                break;
+        }
+        EntityManager.GetInstance().ship.Add(this);
     }
 
     // Update is called once per frame
     void Update()
     {
+        messageOfShip.x = transform.position.x;
+        messageOfShip.y = transform.position.y;
         RendererControl.GetInstance().SetColToChild(messageOfShip.playerTeam, gameObject.transform);
         switch (interactBase.interactOption)
         {
             case InteractControl.InteractOption.Produce:
-                foreach (Vector2 resourcePos in PlaceManager.GetInstance().resource)
+                foreach (Vector2 resourcePos in EntityManager.GetInstance().resource)
                 {
                     if (Tool.GetInstance().CheckBeside(transform.position, resourcePos))
                     {
                         if (messageOfShip.shipState != ShipState.PRODUCING)
                             Produce();
+                    }
+                }
+                break;
+            case InteractControl.InteractOption.RecoverShip:
+                if (Tool.GetInstance().CheckBeside(transform.position,
+                    new Vector2(MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].messageOfBase.x,
+                        MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].messageOfBase.y)))
+                {
+                    if (messageOfShip.shipState != ShipState.RECOVERING)
+                        Recover();
+                }
+                else
+                {
+                    foreach (ConstructionControl community in EntityManager.GetInstance().community)
+                    {
+                        if (community.messageOfConstruction.playerTeam == messageOfShip.playerTeam &&
+                        Tool.GetInstance().CheckBeside(transform.position, new Vector2(community.messageOfConstruction.x, community.messageOfConstruction.y)))
+                        {
+                            if (messageOfShip.shipState != ShipState.RECOVERING)
+                                Recover();
+                            break;
+                        }
+                    }
+                }
+                break;
+            case InteractControl.InteractOption.RecycleShip:
+                if (Tool.GetInstance().CheckBeside(transform.position,
+                    new Vector2(MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].messageOfBase.x,
+                        MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].messageOfBase.y)))
+                {
+                    if (messageOfShip.shipState != ShipState.RECYCLING)
+                        Recycle();
+                }
+                else
+                {
+                    foreach (ConstructionControl community in EntityManager.GetInstance().community)
+                    {
+                        if (community.messageOfConstruction.playerTeam == messageOfShip.playerTeam &&
+                        Tool.GetInstance().CheckBeside(transform.position, new Vector2(community.messageOfConstruction.x, community.messageOfConstruction.y)))
+                        {
+                            if (messageOfShip.shipState != ShipState.RECYCLING)
+                                Recycle();
+                            break;
+                        }
                     }
                 }
                 break;
@@ -74,22 +134,87 @@ public class ShipControl : MonoBehaviour
                 if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().arcData.cost))
                     messageOfShip.weaponType = WeaponType.ARCGUN;
                 break;
-            case InteractControl.InteractOption.ConstructFactory:
-                // Debug.Log("choose to construct factory");
-                for (int i = 0; i < PlaceManager.GetInstance().emptyConstruction.Count; i++)
+            case InteractControl.InteractOption.InstallModuleArmor1:
+                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().armor1Data.cost))
                 {
-                    if (Tool.GetInstance().CheckBeside(transform.position, PlaceManager.GetInstance().emptyConstruction[i]))
+                    messageOfShip.armorType = ArmorType.ARMOR1;
+                    messageOfShip.armor = ParaDefine.GetInstance().armor1Data.armor;
+                }
+                break;
+            case InteractControl.InteractOption.InstallModuleArmor2:
+                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().armor2Data.cost))
+                {
+                    messageOfShip.armorType = ArmorType.ARMOR2;
+                    messageOfShip.armor = ParaDefine.GetInstance().armor2Data.armor;
+                }
+                break;
+            case InteractControl.InteractOption.InstallModuleArmor3:
+                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().armor3Data.cost))
+                {
+                    messageOfShip.armorType = ArmorType.ARMOR3;
+                    messageOfShip.armor = ParaDefine.GetInstance().armor3Data.armor;
+                }
+                break;
+            case InteractControl.InteractOption.InstallModuleShield1:
+                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().armor1Data.cost))
+                {
+                    messageOfShip.shieldType = ShieldType.SHIELD1;
+                    messageOfShip.shield = ParaDefine.GetInstance().armor1Data.armor;
+                }
+                break;
+            case InteractControl.InteractOption.InstallModuleShield2:
+                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().armor2Data.cost))
+                {
+                    messageOfShip.shieldType = ShieldType.SHIELD2;
+                    messageOfShip.shield = ParaDefine.GetInstance().armor2Data.armor;
+                }
+                break;
+            case InteractControl.InteractOption.InstallModuleShield3:
+                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().armor3Data.cost))
+                {
+                    messageOfShip.shieldType = ShieldType.SHIELD3;
+                    messageOfShip.shield = ParaDefine.GetInstance().armor3Data.armor;
+                }
+                break;
+            case InteractControl.InteractOption.InstallModuleProducer1:
+                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().producer1Data.cost))
+                    messageOfShip.producerType = ProducerType.PRODUCER1;
+                break;
+            case InteractControl.InteractOption.InstallModuleProducer2:
+                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().producer2Data.cost))
+                    messageOfShip.producerType = ProducerType.PRODUCER2;
+                break;
+            case InteractControl.InteractOption.InstallModuleProducer3:
+                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().producer3Data.cost))
+                    messageOfShip.producerType = ProducerType.PRODUCER3;
+                break;
+            case InteractControl.InteractOption.InstallModuleConstructor1:
+                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().constructor1Data.cost))
+                    messageOfShip.constructorType = ConstructorType.CONSTRUCTOR1;
+                break;
+            case InteractControl.InteractOption.InstallModuleConstructor2:
+                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().constructor2Data.cost))
+                    messageOfShip.constructorType = ConstructorType.CONSTRUCTOR2;
+                break;
+            case InteractControl.InteractOption.InstallModuleConstructor3:
+                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().constructor3Data.cost))
+                    messageOfShip.constructorType = ConstructorType.CONSTRUCTOR3;
+                break;
+            case InteractControl.InteractOption.ConstructFactory:
+                for (int i = 0; i < EntityManager.GetInstance().emptyConstruction.Count; i++)
+                {
+                    if (Tool.GetInstance().CheckBeside(transform.position, EntityManager.GetInstance().emptyConstruction[i]))
                     {
                         obj = ObjCreater.GetInstance().CreateObj(ConstructionType.FACTORY,
-                            PlaceManager.GetInstance().emptyConstruction[i]);
+                            EntityManager.GetInstance().emptyConstruction[i]);
                         obj.GetComponent<ConstructionControl>().messageOfConstruction.playerTeam = messageOfShip.playerTeam;
-                        obj.GetComponent<ConstructionControl>().messageOfConstruction.x = (int)PlaceManager.GetInstance().emptyConstruction[i].x;
-                        obj.GetComponent<ConstructionControl>().messageOfConstruction.y = (int)PlaceManager.GetInstance().emptyConstruction[i].y;
-                        PlaceManager.GetInstance().emptyConstruction.Remove(PlaceManager.GetInstance().emptyConstruction[i]);
-                        PlaceManager.GetInstance().factory.Add(obj.GetComponent<ConstructionControl>());
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.x = (int)EntityManager.GetInstance().emptyConstruction[i].x;
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.y = (int)EntityManager.GetInstance().emptyConstruction[i].y;
+                        EntityManager.GetInstance().emptyConstruction.Remove(EntityManager.GetInstance().emptyConstruction[i]);
+                        EntityManager.GetInstance().factory.Add(obj.GetComponent<ConstructionControl>());
                     }
                 }
-                foreach (ConstructionControl factory in PlaceManager.GetInstance().factory)
+                foreach (ConstructionControl factory in EntityManager.GetInstance().factory)
                 {
                     if (factory.messageOfConstruction.playerTeam == messageOfShip.playerTeam &&
                     factory.messageOfConstruction.hp < ParaDefine.GetInstance().factoryData.hpMax &&
@@ -101,20 +226,20 @@ public class ShipControl : MonoBehaviour
                 }
                 break;
             case InteractControl.InteractOption.ConstructCommunity:
-                for (int i = 0; i < PlaceManager.GetInstance().emptyConstruction.Count; i++)
+                for (int i = 0; i < EntityManager.GetInstance().emptyConstruction.Count; i++)
                 {
-                    if (Tool.GetInstance().CheckBeside(transform.position, PlaceManager.GetInstance().emptyConstruction[i]))
+                    if (Tool.GetInstance().CheckBeside(transform.position, EntityManager.GetInstance().emptyConstruction[i]))
                     {
                         obj = ObjCreater.GetInstance().CreateObj(ConstructionType.COMMUNITY,
-                            PlaceManager.GetInstance().emptyConstruction[i]);
+                            EntityManager.GetInstance().emptyConstruction[i]);
                         obj.GetComponent<ConstructionControl>().messageOfConstruction.playerTeam = messageOfShip.playerTeam;
-                        obj.GetComponent<ConstructionControl>().messageOfConstruction.x = (int)PlaceManager.GetInstance().emptyConstruction[i].x;
-                        obj.GetComponent<ConstructionControl>().messageOfConstruction.y = (int)PlaceManager.GetInstance().emptyConstruction[i].y;
-                        PlaceManager.GetInstance().emptyConstruction.Remove(PlaceManager.GetInstance().emptyConstruction[i]);
-                        PlaceManager.GetInstance().community.Add(obj.GetComponent<ConstructionControl>());
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.x = (int)EntityManager.GetInstance().emptyConstruction[i].x;
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.y = (int)EntityManager.GetInstance().emptyConstruction[i].y;
+                        EntityManager.GetInstance().emptyConstruction.Remove(EntityManager.GetInstance().emptyConstruction[i]);
+                        EntityManager.GetInstance().community.Add(obj.GetComponent<ConstructionControl>());
                     }
                 }
-                foreach (ConstructionControl community in PlaceManager.GetInstance().community)
+                foreach (ConstructionControl community in EntityManager.GetInstance().community)
                 {
                     if (community.messageOfConstruction.playerTeam == messageOfShip.playerTeam &&
                     community.messageOfConstruction.hp < ParaDefine.GetInstance().communityData.hpMax &&
@@ -126,20 +251,20 @@ public class ShipControl : MonoBehaviour
                 }
                 break;
             case InteractControl.InteractOption.ConstructFort:
-                for (int i = 0; i < PlaceManager.GetInstance().emptyConstruction.Count; i++)
+                for (int i = 0; i < EntityManager.GetInstance().emptyConstruction.Count; i++)
                 {
-                    if (Tool.GetInstance().CheckBeside(transform.position, PlaceManager.GetInstance().emptyConstruction[i]))
+                    if (Tool.GetInstance().CheckBeside(transform.position, EntityManager.GetInstance().emptyConstruction[i]))
                     {
                         obj = ObjCreater.GetInstance().CreateObj(ConstructionType.FORT,
-                            PlaceManager.GetInstance().emptyConstruction[i]);
+                            EntityManager.GetInstance().emptyConstruction[i], messageOfShip.playerTeam == PlayerTeam.BLUE);
                         obj.GetComponent<ConstructionControl>().messageOfConstruction.playerTeam = messageOfShip.playerTeam;
-                        obj.GetComponent<ConstructionControl>().messageOfConstruction.x = (int)PlaceManager.GetInstance().emptyConstruction[i].x;
-                        obj.GetComponent<ConstructionControl>().messageOfConstruction.y = (int)PlaceManager.GetInstance().emptyConstruction[i].y;
-                        PlaceManager.GetInstance().emptyConstruction.Remove(PlaceManager.GetInstance().emptyConstruction[i]);
-                        PlaceManager.GetInstance().fort.Add(obj.GetComponent<ConstructionControl>());
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.x = (int)EntityManager.GetInstance().emptyConstruction[i].x;
+                        obj.GetComponent<ConstructionControl>().messageOfConstruction.y = (int)EntityManager.GetInstance().emptyConstruction[i].y;
+                        EntityManager.GetInstance().emptyConstruction.Remove(EntityManager.GetInstance().emptyConstruction[i]);
+                        EntityManager.GetInstance().fort.Add(obj.GetComponent<ConstructionControl>());
                     }
                 }
-                foreach (ConstructionControl fort in PlaceManager.GetInstance().fort)
+                foreach (ConstructionControl fort in EntityManager.GetInstance().fort)
                 {
                     if (fort.messageOfConstruction.playerTeam == messageOfShip.playerTeam &&
                     fort.messageOfConstruction.hp < ParaDefine.GetInstance().fortData.hpMax &&
@@ -156,6 +281,57 @@ public class ShipControl : MonoBehaviour
         MoveTowards(interactBase.moveOption);
         AttackTowards(interactBase.attackOption);
         interactBase.attackOption = Vector2.zero;
+    }
+    void Recover()
+    {
+        switch (messageOfShip.shipType)
+        {
+            case ShipType.CIVILIAN_SHIP:
+                if (ParaDefine.GetInstance().civilShipData.maxHp - messageOfShip.hp > 0 &&
+                    MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(
+                    (int)((ParaDefine.GetInstance().civilShipData.maxHp / messageOfShip.hp - 1) * 1.2f * ParaDefine.GetInstance().civilShipData.cost)))
+                    messageOfShip.hp = ParaDefine.GetInstance().civilShipData.maxHp;
+                break;
+            case ShipType.MILITARY_SHIP:
+                if (ParaDefine.GetInstance().militaryShipData.maxHp - messageOfShip.hp > 0 &&
+                    MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(
+                    (int)((ParaDefine.GetInstance().militaryShipData.maxHp / messageOfShip.hp - 1) * 1.2f * ParaDefine.GetInstance().militaryShipData.cost)))
+                    messageOfShip.hp = ParaDefine.GetInstance().militaryShipData.maxHp;
+                break;
+            case ShipType.FLAG_SHIP:
+                if (ParaDefine.GetInstance().flagShipData.maxHp - messageOfShip.hp > 0 &&
+                    MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(
+                    (int)((ParaDefine.GetInstance().flagShipData.maxHp / messageOfShip.hp - 1) * 1.2f * ParaDefine.GetInstance().flagShipData.cost)))
+                    messageOfShip.hp = ParaDefine.GetInstance().flagShipData.maxHp;
+                break;
+            default:
+                break;
+        }
+        // StartCoroutine(RecoverIE());
+    }
+    void Recycle()
+    {
+        switch (messageOfShip.shipType)
+        {
+            case ShipType.CIVILIAN_SHIP:
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].AddEconomy(
+                    (int)(messageOfShip.hp / ParaDefine.GetInstance().civilShipData.maxHp * ParaDefine.GetInstance().civilShipData.cost * 0.5f));
+                DestroyShip();
+                break;
+            case ShipType.MILITARY_SHIP:
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].AddEconomy(
+                    (int)(messageOfShip.hp / ParaDefine.GetInstance().militaryShipData.maxHp * ParaDefine.GetInstance().militaryShipData.cost * 0.5f));
+                DestroyShip();
+                break;
+            case ShipType.FLAG_SHIP:
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].AddEconomy(
+                    (int)(messageOfShip.hp / ParaDefine.GetInstance().flagShipData.maxHp * ParaDefine.GetInstance().flagShipData.cost * 0.5f));
+                DestroyShip();
+                break;
+            default:
+                break;
+        }
+        // StartCoroutine(RecoverIE());
     }
     void Produce()
     {
@@ -193,6 +369,15 @@ public class ShipControl : MonoBehaviour
             }
         }
     }
+    // IEnumerator RecoverIE()
+    // {
+    // messageOfShip.shipState = ShipState.RECOVERING;
+    // while (messageOfShip.shipState == ShipState.RECOVERING)
+    // {
+    //     yield return new WaitForSeconds(1);
+    // }
+
+    // }
     IEnumerator ProduceIE(int economy)
     {
         // Debug.Log("try produce");
@@ -210,8 +395,13 @@ public class ShipControl : MonoBehaviour
         while (messageOfShip.shipState == ShipState.CONSTRUCTING)
         {
             Debug.Log("construct");
-            construction.Construct(constructSpeed);
-            yield return new WaitForSeconds(1);
+            if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(constructSpeed))
+                if (construction.Construct(constructSpeed))
+                    messageOfShip.shipState = ShipState.IDLE;
+                else
+                    yield return new WaitForSeconds(1);
+            else
+                yield return null;
         }
 
     }
@@ -219,18 +409,21 @@ public class ShipControl : MonoBehaviour
     {
         if (interactBase.enableMove)
         {
-            if ((pos - (Vector2)transform.position).magnitude > 0.1f)
+            interactBase.enableMove = false;
+            messageOfShip.shipState = ShipState.MOVING;
+        }
+        if (messageOfShip.shipState == ShipState.MOVING)
+        {
+            if ((pos - (Vector2)transform.position).magnitude > 0.3f)
             {
                 targetQ = DealQ(Mathf.Atan2(pos.y - transform.position.y, pos.x - transform.position.x) * Mathf.Rad2Deg - 90);
-                SetVQTo((pos - (Vector2)transform.position).normalized * speed);
+                SetVQTo((pos - (Vector2)transform.position).normalized * messageOfShip.speed);
             }
             else
             {
                 SetVQTo(Vector2.zero);
                 interactBase.enableMove = false;
             }
-
-            messageOfShip.shipState = ShipState.MOVING;
         }
         else
             SetVQTo(Vector2.zero);
@@ -316,6 +509,7 @@ public class ShipControl : MonoBehaviour
     }
     void DestroyShip()
     {
+        EntityManager.GetInstance().ship.Remove(this);
         Destroy(gameObject);
     }
 }

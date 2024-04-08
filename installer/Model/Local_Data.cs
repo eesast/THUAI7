@@ -33,34 +33,32 @@ namespace installer.Model
         public bool Installed = false;  // 项目是否安装
         public bool RememberMe = false; // 是否记录账号密码
         public Logger Log;
-        public Logger LogError;
-        public ExceptionStack Exceptions;
         public Local_Data()
         {
             MD5Update = new ConcurrentBag<(DataRowState state, string name)>();
             Config = new ConfigData();
             if (Directory.Exists(Config.InstallPath))
             {
-                if (File.Exists(Config.MD5DataPath))
+                MD5DataPath = Config.MD5DataPath.StartsWith('.') ?
+                    Path.Combine(Config.InstallPath, Config.MD5DataPath) :
+                    Config.MD5DataPath;
+                if (File.Exists(MD5DataPath))
                 {
-                    MD5DataPath = Config.MD5DataPath.StartsWith('.') ?
-                        Path.Combine(Config.InstallPath, Config.MD5DataPath) :
-                        Config.MD5DataPath;
                     if (!File.Exists(MD5DataPath))
                         SaveMD5Data();
                     ReadMD5Data();
                     CurrentVersion = FileHashData.Version;
                     MD5Update.Clear();
+                    Installed = true;
                 }
                 else
                 {
-                    MD5DataPath = Path.Combine(Config.InstallPath, $".{Path.DirectorySeparatorChar}hash.json");
+                    MD5DataPath = Path.Combine(Config.InstallPath, $"hash.json");
                     Config.MD5DataPath = $".{Path.DirectorySeparatorChar}hash.json";
                     CurrentVersion = FileHashData.Version;
                     SaveMD5Data();
                 }
                 RememberMe = (Config.Remembered && Convert.ToBoolean(Config.Remembered));
-                Installed = true;
             }
             else
             {
@@ -85,8 +83,7 @@ namespace installer.Model
                 }
             }
             Log = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.log"));
-            LogError = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.error.log"));
-            Exceptions = new ExceptionStack(LogError, this);
+            Log.PartnerInfo = "[LocalData]";
             LangEnabled = new Dictionary<LanguageOption, (bool, string)>();
             foreach (var a in typeof(LanguageOption).GetEnumValues())
             {
@@ -143,7 +140,7 @@ namespace installer.Model
             }
             catch (Exception e)
             {
-                Exceptions.Push(e);
+                Log.LogError(e.Message);
             }
             finally
             {
@@ -152,7 +149,6 @@ namespace installer.Model
                     Directory.CreateDirectory(LogPath);
                 }
                 if (Log is FileLogger) ((FileLogger)Log).Path = Path.Combine(LogPath, "LocalData.log");
-                if (LogError is FileLogger) ((FileLogger)LogError).Path = Path.Combine(LogPath, "LocalData.error.log");
                 Log.LogInfo($"Move work finished: {Config.InstallPath} -> {newPath}");
             }
         }
@@ -179,7 +175,7 @@ namespace installer.Model
             }
             catch (Exception e)
             {
-                Exceptions.Push(e);
+                Log.LogError(e.Message);
                 r.Close(); r.Dispose();
             }
             foreach (var item in FileHashData.Data)
@@ -198,11 +194,12 @@ namespace installer.Model
             }
         }
 
-        public void SaveMD5Data()
+        public void SaveMD5Data(bool VersionRefresh = true)
         {
             try
             {
-                FileHashData.Version = CurrentVersion;
+                if (VersionRefresh)
+                    FileHashData.Version = CurrentVersion;
                 using (FileStream fs = new FileStream(MD5DataPath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 using (StreamWriter sw = new StreamWriter(fs))
                 {
@@ -210,17 +207,20 @@ namespace installer.Model
                     var exp1 = from i in MD5Data
                                select new KeyValuePair<string, string>(i.Key.Replace(Path.DirectorySeparatorChar, '/'), i.Value);
                     FileHashData.Data = exp1.ToDictionary();
-                    sw.Write(JsonSerializer.Serialize(FileHashData));
+                    sw.Write(JsonSerializer.Serialize(FileHashData, new JsonSerializerOptions
+                    {
+                        WriteIndented = Debugger.IsAttached
+                    }));
                     sw.Flush();
                 }
             }
             catch (Exception e)
             {
-                Exceptions.Push(e);
+                Log.LogError(e.Message);
             }
         }
 
-        public void ScanDir()
+        public void ScanDir(bool VersionRefresh = true)
         {
             foreach (var _file in MD5Data.Keys)
             {
@@ -275,7 +275,7 @@ namespace installer.Model
                     });
                 }
             });
-            SaveMD5Data();
+            SaveMD5Data(VersionRefresh);
         }
 
         public static bool IsUserFile(string filename)

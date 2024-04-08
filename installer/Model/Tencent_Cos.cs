@@ -19,19 +19,16 @@ namespace installer.Model
         public string Appid { get; init; }      // 设置腾讯云账户的账户标识（APPID）
         public string Region { get; init; }     // 设置一个默认的存储桶地域
         public string BucketName { get; set; }
-        public ExceptionStack Exceptions { get; set; }
         public Logger Log;
-        public Logger LogError;
 
         protected CosXmlConfig config;
         protected CosXmlServer cosXml;
 
-        public Tencent_Cos(string appid, string region, string bucketName, Logger? _log = null, Logger? _logError = null)
+        public Tencent_Cos(string appid, string region, string bucketName, Logger? _log = null)
         {
             Appid = appid; Region = region; BucketName = bucketName;
             Log = _log ?? LoggerProvider.FromConsole();
-            LogError = _logError ?? Log;
-            Exceptions = new ExceptionStack(LogError, this);
+            Log.PartnerInfo = "[COS]";
             // 初始化CosXmlConfig（提供配置SDK接口）
             config = new CosXmlConfig.Builder()
                         .IsHttps(true)      // 设置默认 HTTPS 请求
@@ -69,16 +66,38 @@ namespace installer.Model
                 if (File.Exists(savePath))
                 {
                     File.Delete(savePath);
-                    Log.LogInfo(thID, $"{savePath} has existed. Original file has been deleted.");
+                    Log.LogWarning(thID, $"{savePath} has existed. Original file has been deleted.");
                 }
                 string bucket = $"{BucketName}-{Appid}";                                // 格式：BucketName-APPID
                 string localDir = Path.GetDirectoryName(savePath)     // 本地文件夹
                     ?? throw new Exception("本地文件夹路径获取失败");
                 string localFileName = Path.GetFileName(savePath);    // 指定本地保存的文件名
                 remotePath = remotePath?.Replace('\\', '/')?.TrimStart('.', '/');
+                var head = cosXml.HeadObject(new HeadObjectRequest(bucket, remotePath ?? localFileName));
                 GetObjectRequest request = new GetObjectRequest(bucket, remotePath ?? localFileName, localDir, localFileName);
+                long c = 0;
+                if (head.size > (100 << 20))
+                {
+                    // 文件大小大于100MB则设置回调函数
+                    var size = (head.size > 1 << 30) ?
+                        string.Format("{0:##.#}GB", ((double)head.size) / (1 << 30)) :
+                        string.Format("{0:##.#}MB", ((double)head.size) / (1 << 20));
+                    Log.LogWarning($"Big file({size}) detected! Please keep network steady!");
+                    request.SetCosProgressCallback((completed, total) =>
+                    {
+                        if (completed > 1 << 30 && completed - c > 100 << 20)
+                        {
+                            Log.LogInfo(string.Format("downloaded = {0:##.#}GB, progress = {1:##.##}%", ((double)completed) / (1 << 30), completed * 100.0 / total));
+                            c = completed;
+                        }
+                        if (completed < 1 << 30 && completed - c > 10 << 20)
+                        {
+                            Log.LogInfo(string.Format("downloaded = {0:##.#}MB, progress = {1:##.##}%", ((double)completed) / (1 << 20), completed * 100.0 / total));
+                            c = completed;
+                        }
+                    });
+                }
 
-                Dictionary<string, string> test = request.GetRequestHeaders();
                 // 执行请求
                 GetObjectResult result = cosXml.GetObject(request);
                 // 请求成功
@@ -88,14 +107,14 @@ namespace installer.Model
             }
             catch (Exception ex)
             {
-                Exceptions.Push(ex, thID);
-                Log.LogInfo(thID, $"Download task: {{\"{remotePath}\"->\"{savePath}\"}} finished with error.");
+                Log.LogError(thID, ex.Message);
+                Log.LogInfo(thID, $"Download task: {{\"{remotePath}\"->\"{savePath}\"}} ended unexpectedly.");
                 thID = -1;
             }
             return thID;
         }
 
-        public async Task<int> DownloadQueueAsync(string basePath, IEnumerable<string> queue, ConcurrentQueue<string> downloadFailed)
+        public async Task<int> DownloadQueueAsync(string basePath, IEnumerable<string> queue)
         {
             int thID = Log.StartNew();
             Log.LogInfo(thID, "Batch download task started.");
@@ -119,8 +138,7 @@ namespace installer.Model
                     }
                     catch (Exception ex)
                     {
-                        downloadFailed.Enqueue(array[i]);
-                        Exceptions.Push(ex);
+                        Log.LogError(ex.Message + " on " + array[i]);
                     }
                     finally
                     {
@@ -193,13 +211,13 @@ namespace installer.Model
             {
                 COSXMLUploadTask.UploadTaskResult r = await transferManager.UploadAsync(uploadTask);
                 if (r.httpCode != 200)
-                    Exceptions.Push(new Exception($"Upload task: {{\"{localPath}\"->\"{targetPath}\"}} failed, message: {r.httpMessage}"), thID);
+                    Log.LogError(thID, $"Upload task: {{\"{localPath}\"->\"{targetPath}\"}} failed, message: {r.httpMessage}");
                 string eTag = r.eTag;
                 //到这里应该是成功了，但是因为我没有试过，也不知道具体情况，可能还要根据result的内容判断
             }
             catch (Exception ex)
             {
-                Exceptions.Push(ex);
+                Log.LogError(ex.Message);
             }
             Log.LogInfo(thID, $"Upload task: {{\"{localPath}\"->\"{targetPath}\"}} finished.");
         }

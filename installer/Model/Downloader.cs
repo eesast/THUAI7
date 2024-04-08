@@ -37,14 +37,13 @@ namespace installer.Model
         public HttpClient Client = new HttpClient();
         public EEsast Web;                                  // EEsast服务器
         public Logger Log;                                  // 日志管理器
-        public Logger LogError;
+        public ListLogger LogList = new ListLogger();
         public enum UpdateStatus
         {
             success, unarchieving, downloading, hash_computing, exiting, error
         }
         public UpdateStatus Status = UpdateStatus.success;                         // 当前工作状态
 
-        public ConcurrentQueue<string> downloadFailed = new ConcurrentQueue<string>();
         public string Route { get; set; }
         public string Username { get => Web.Username; set { Web.Username = value; } }
         public string Password { get => Web.Password; set { Web.Password = value; } }
@@ -60,7 +59,6 @@ namespace installer.Model
         }
         public enum UsingOS { Win, Linux, OSX };
         public UsingOS usingOS { get; set; }
-        public ExceptionStack Exceptions;
         public class Updater
         {
             public string Message = string.Empty;
@@ -79,10 +77,7 @@ namespace installer.Model
         {
             Data = new Local_Data();
             Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.log"));
-            LogError = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.error.log"));
-            Exceptions = new ExceptionStack(LogError, this);
-            if ((Log.LastRecordTime != DateTime.MinValue && DateTime.Now.Month != Log.LastRecordTime.Month)
-                || (LogError.LastRecordTime != DateTime.MinValue && DateTime.Now.Month != LogError.LastRecordTime.Month))
+            if (Log.LastRecordTime != DateTime.MinValue && DateTime.Now.Month != Log.LastRecordTime.Month)
             {
                 string tardir = Path.Combine(Data.Config.InstallPath, "LogArchieved");
                 if (!Directory.Exists(tardir))
@@ -106,13 +101,15 @@ namespace installer.Model
                 }
             }
             Route = Data.Config.InstallPath;
-            Cloud = new Tencent_Cos("1319625962", "ap-beijing", "bucket1",
-                LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.log")),
-                LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.error.log")));
-            Web = new EEsast(LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.log")),
-                LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.error.log")));
+            Cloud = new Tencent_Cos("1319625962", "ap-beijing", "thuai7",
+                LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.log")));
+            Web = new EEsast(LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.log")));
             Web.Token_Changed += SaveToken;
-            LoggerBinding();
+
+            Data.Log.Partner = Log;
+            Cloud.Log.Partner = Log;
+            Web.Log.Partner = Log;
+            Log.Partner = LogList;
 
             if (Data.Config.Remembered)
             {
@@ -122,58 +119,15 @@ namespace installer.Model
             Cloud.UpdateSecret(MauiProgram.SecretID, MauiProgram.SecretKey);
         }
 
-        public void LoggerBinding()
-        {
-            // Debug模式下将Exceptions直接抛出触发断点
-            if (Debugger.IsAttached && MauiProgram.ErrorTrigger_WhileDebug)
-            {
-                Exceptions.OnFailed += (obj, _) =>
-                {
-                    var e = Exceptions.Pop();
-                    if (e is not null)
-                        throw e;
-                };
-            }
-            Data.Exceptions.OnFailed += (obj, _) =>
-            {
-                var e = Data.Exceptions.Pop();
-                if (e is null) return;
-                if (obj is not null)
-                    e.Data["Source"] = obj.ToString();
-                LogError.LogError($"从Downloader.Data处提取的错误。");
-                Exceptions.Push(e);
-            };
-            Cloud.Exceptions.OnFailed += (obj, _) =>
-            {
-                var e = Cloud.Exceptions.Pop();
-                if (e is null) return;
-                if (obj is not null)
-                    e.Data["Source"] = obj.ToString();
-                LogError.LogError($"从Downloader.Cloud处提取的错误。");
-                Exceptions.Push(e);
-            };
-            Web.Exceptions.OnFailed += (obj, _) =>
-            {
-                var e = Web.Exceptions.Pop();
-                if (e is null) return;
-                if (obj is not null)
-                    e.Data["Source"] = obj.ToString();
-                LogError.LogError($"从Downloader.Web处提取的错误。");
-                Exceptions.Push(e);
-            };
-            Exceptions.OnFailClear += (_, _) =>
-            {
-                Status = UpdateStatus.success;
-            };
-        }
-
         public void UpdateMD5()
         {
             if (File.Exists(Data.MD5DataPath))
                 File.Delete(Data.MD5DataPath);
+            Log.LogInfo($"正在下载校验文件……");
             Status = UpdateStatus.downloading;
+            Log.CountDict[LogLevel.Error] = 0;
             Cloud.DownloadFileAsync(Data.MD5DataPath, "hash.json").Wait();
-            if (Exceptions.Count > 0)
+            if (Log.CountDict[LogLevel.Error] > 0)
             {
                 Status = UpdateStatus.error;
                 return;
@@ -190,8 +144,13 @@ namespace installer.Model
             Data.Installed = false;
             Data.Config.InstallPath = path ?? Data.Config.InstallPath;
             UpdateMD5();
-            if (Status == UpdateStatus.error) return;
+            if (Status == UpdateStatus.error)
+            {
+                Log.LogError($"校验文件下载失败，退出安装。");
+                return;
+            }
 
+            Log.CountDict[LogLevel.Error] = 0;
             Action<DirectoryInfo> action = (dir) => { };
             var deleteTask = (DirectoryInfo dir) =>
             {
@@ -206,29 +165,52 @@ namespace installer.Model
                 }
             };
             action = deleteTask;
+            Log.LogWarning($"全新安装开始，所有位于{Data.Config.InstallPath}的文件都将被删除。");
             deleteTask(new DirectoryInfo(Data.Config.InstallPath));
 
             Data.ResetInstallPath(Data.Config.InstallPath);
-            LoggerBinding();
 
             string zp = Path.Combine(Data.Config.InstallPath, "THUAI7.tar.gz");
             Status = UpdateStatus.downloading;
+            Log.LogInfo($"正在下载安装包……");
             Cloud.DownloadFileAsync(zp, "THUAI7.tar.gz").Wait();
             Status = UpdateStatus.unarchieving;
+            Log.LogInfo($"安装包下载完毕，正在解压……");
             Cloud.ArchieveUnzip(zp, Data.Config.InstallPath);
+            Log.LogInfo($"解压完成");
             File.Delete(zp);
 
+            CurrentVersion = Data.FileHashData.Version;
+            Log.LogInfo("正在下载选手代码……");
+            Status = UpdateStatus.downloading;
+            var c = $"{CurrentVersion.Major}_{CurrentVersion.Minor}";
+            var tocpp = Cloud.DownloadFileAsync(Path.Combine(Data.Config.InstallPath, "CAPI", "cpp", "API", "src", "AI.cpp"),
+                $"./Templates/t.{c}.cpp").Result;
+            var topy = Cloud.DownloadFileAsync(Path.Combine(Data.Config.InstallPath, "CAPI", "python", "PyAPI", "AI.py"),
+                $"./Templates/t.{c}.py").Result;
+            if (tocpp >= 0 && topy >= 0)
+            {
+                Log.LogInfo("选手代码下载成功！");
+            }
+            else
+            {
+                Log.LogError("选手代码下载失败，选手可自行下载，网址：https://github.com/eesast/THUAI7/tree/dev/CAPI/cpp/API/src/AI.cpp，https://github.com/eesast/THUAI7/tree/dev/CAPI/python/PyAPI/AI.py");
+            }
+
             Status = UpdateStatus.hash_computing;
+            Log.LogInfo($"正在校验……");
+            Data.MD5Update.Clear();
             Data.ScanDir();
             if (Data.MD5Update.Count != 0)
             {
-                // TO DO: 下载文件与hash校验值不匹配修复
                 Status = UpdateStatus.error;
+                Log.LogInfo($"校验失败，试图进行升级以修复……");
                 Update();
             }
             else
             {
                 Status = UpdateStatus.success;
+                Log.LogInfo($"安装成功！开始您的THUAI7探索之旅吧！");
                 if (DeviceInfo.Platform == DevicePlatform.WinUI)
                 {
                     Process.Start(new ProcessStartInfo()
@@ -252,11 +234,8 @@ namespace installer.Model
             {
                 Data.ResetInstallPath(newPath);
                 if (Cloud.Log is FileLogger) ((FileLogger)Cloud.Log).Path = Path.Combine(Data.LogPath, "TencentCos.log");
-                if (Cloud.LogError is FileLogger) ((FileLogger)Cloud.LogError).Path = Path.Combine(Data.LogPath, "TencentCos.error.log");
-                if (Web.LogError is FileLogger) ((FileLogger)Web.LogError).Path = Path.Combine(Data.LogPath, "EESAST.log");
-                if (Web.LogError is FileLogger) ((FileLogger)Web.LogError).Path = Path.Combine(Data.LogPath, "EESAST.error.log");
+                if (Web.Log is FileLogger) ((FileLogger)Web.Log).Path = Path.Combine(Data.LogPath, "EESAST.log");
                 if (Log is FileLogger) ((FileLogger)Log).Path = Path.Combine(Data.LogPath, "Main.log");
-                if (LogError is FileLogger) ((FileLogger)LogError).Path = Path.Combine(Data.LogPath, "Main.error.log");
             }
             Update();
         }
@@ -270,10 +249,20 @@ namespace installer.Model
         {
             UpdateMD5();
             Data.MD5Update.Clear();
+            Log.LogInfo("校验文件中……");
             Status = UpdateStatus.hash_computing;
-            Data.ScanDir();
+            Data.ScanDir(false);
             Status = UpdateStatus.success;
-            return Data.MD5Update.Count != 0 || CurrentVersion < Data.FileHashData.Version;
+            if (Data.MD5Update.Count != 0 || CurrentVersion < Data.FileHashData.Version)
+            {
+                Log.LogInfo("需要更新，请点击更新按钮以更新。");
+                return true;
+            }
+            else
+            {
+                Log.LogInfo("您的版本已经是最新版本！");
+                return false;
+            }
         }
 
         /// <summary>
@@ -289,17 +278,27 @@ namespace installer.Model
                 {
                     var dataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "THUAI7");
                     var local = Path.Combine(dataDir, "Cache", $"setup_thuai7installer_{Data.FileHashData.Version.Major}.exe");
+                    Log.LogWarning("启动器即将升级，正在下载安装程序……");
                     Status = UpdateStatus.downloading;
+                    Log.CountDict[LogLevel.Error] = 0;
                     var i = Cloud.DownloadFileAsync(local, $"Setup/{Data.FileHashData.Version.Major}.exe").Result;
                     if (i >= 0)
                     {
+                        Log.LogWarning("下载完成，安装程序即将启动，请手动关闭程序，否则本程序将于10s后自动关闭。");
                         Status = UpdateStatus.exiting;
                         Process.Start(local);
+                        Task.Run(() =>
+                        {
+                            var t = DateTime.Now;
+                            while ((DateTime.Now - t).TotalSeconds < 10) ;
+                            Application.Current?.Quit();
+                        });
                         return 16;
                     }
                     else
                     {
                         // 下载失败
+                        Log.LogError("启动器下载失败。");
                         return -1;
                     }
                 }
@@ -309,23 +308,26 @@ namespace installer.Model
                 {
                     var c = $"{CurrentVersion.Major}_{CurrentVersion.Minor}";
                     var v = $"{Data.FileHashData.Version.Major}_{Data.FileHashData.Version.Minor}";
+                    Log.LogWarning("检测到选手代码升级，即将下载选手代码模板……");
                     Status = UpdateStatus.downloading;
                     var p = Path.Combine(Data.Config.InstallPath, "Templates");
-                    var tocpp = Cloud.DownloadFileAsync(Path.Combine(p, $"{c}.cpp.t"),
-                        $"./Template/v{c}.cpp.t");
-                    var topy = Cloud.DownloadFileAsync(Path.Combine(p, $"{c}.py.t"),
-                        $"./Template/v{c}.py.t");
-                    var tncpp = Cloud.DownloadFileAsync(Path.Combine(p, $"{v}.cpp.t"),
-                        $"./Template/v{v}.cpp.t");
-                    var tnpy = Cloud.DownloadFileAsync(Path.Combine(p, $"{v}.py.t"),
-                        $"./Template/v{v}.py.t");
+                    Log.CountDict[LogLevel.Error] = 0;
+                    var tocpp = Cloud.DownloadFileAsync(Path.Combine(p, $"t.{c}.cpp"),
+                        $"./Templates/t.{c}.cpp");
+                    var topy = Cloud.DownloadFileAsync(Path.Combine(p, $"t.{c}.py"),
+                        $"./Templates/t.{c}.py");
+                    var tncpp = Cloud.DownloadFileAsync(Path.Combine(p, $"t.{v}.cpp"),
+                        $"./Templates/t.{v}.cpp");
+                    var tnpy = Cloud.DownloadFileAsync(Path.Combine(p, $"t.{v}.py"),
+                        $"./Templates/t.{v}.py.t");
                     Task.WaitAll(tocpp, topy, tncpp, tnpy);
                     if (tocpp.Result >= 0 && topy.Result >= 0 && tncpp.Result >= 0 && tnpy.Result >= 0)
                     {
+                        Log.LogWarning("下载完毕，即将合并模板与用户代码，结果可能出现问题，请务必确认正确后用同名temp文件覆盖源文件");
                         if (Data.LangEnabled[LanguageOption.cpp].Item1)
                         {
-                            var so = FileService.ReadToEnd(Path.Combine(p, $"{c}.cpp.t"));
-                            var sn = FileService.ReadToEnd(Path.Combine(p, $"{v}.cpp.t"));
+                            var so = FileService.ReadToEnd(Path.Combine(p, $"t.{c}.cpp"));
+                            var sn = FileService.ReadToEnd(Path.Combine(p, $"t.{v}.cpp"));
                             var sa = FileService.ReadToEnd(Data.LangEnabled[LanguageOption.cpp].Item2);
                             var s = FileService.MergeUserCode(sa, so, sn);
                             using (var f = new FileStream(Data.LangEnabled[LanguageOption.cpp].Item2 + ".temp", FileMode.Create))
@@ -346,8 +348,8 @@ namespace installer.Model
                         }
                         if (Data.LangEnabled[LanguageOption.python].Item1)
                         {
-                            var so = FileService.ReadToEnd(Path.Combine(p, $"{c}.py.t"));
-                            var sn = FileService.ReadToEnd(Path.Combine(p, $"{v}.py.t"));
+                            var so = FileService.ReadToEnd(Path.Combine(p, $"t.{c}.py"));
+                            var sn = FileService.ReadToEnd(Path.Combine(p, $"t.{v}.py"));
                             var sa = FileService.ReadToEnd(Data.LangEnabled[LanguageOption.python].Item2);
                             var s = FileService.MergeUserCode(sa, so, sn);
                             using (var f = new FileStream(Data.LangEnabled[LanguageOption.python].Item2 + ".temp", FileMode.Create))
@@ -368,13 +370,14 @@ namespace installer.Model
                         }
                     }
                 }
-                downloadFailed.Clear();
+                Log.CountDict[LogLevel.Error] = 0;
 
                 // 后两位留给其他更新，更新成功后返回值Flags增加0x8
                 Status = UpdateStatus.downloading;
+                Log.LogInfo("正在更新……");
                 Cloud.DownloadQueueAsync(Data.Config.InstallPath,
-                    from item in Data.MD5Update where item.state != System.Data.DataRowState.Added select item.name,
-                    downloadFailed).Wait();
+                    from item in Data.MD5Update where item.state != System.Data.DataRowState.Added select item.name).Wait();
+                Log.LogWarning("正在删除冗余文件……");
                 foreach (var item in Data.MD5Update.Where((s) => s.state == System.Data.DataRowState.Added))
                 {
                     var _file = item.name;
@@ -382,13 +385,16 @@ namespace installer.Model
                         Path.Combine(Data.Config.InstallPath, _file) : _file;
                     File.Delete(file);
                 }
-                if (downloadFailed.Count == 0)
+                if (Log.CountDict[LogLevel.Error] == 0)
                 {
                     Data.MD5Update.Clear();
+                    CurrentVersion = Data.FileHashData.Version;
                     Status = UpdateStatus.hash_computing;
+                    Log.LogInfo("正在校验……");
                     Data.ScanDir();
                     if (Data.MD5Update.Count == 0)
                     {
+                        Log.LogInfo("更新成功！");
                         Status = UpdateStatus.success;
                         result |= 8;
                         return result;
@@ -397,9 +403,11 @@ namespace installer.Model
             }
             else
             {
+                Log.LogInfo("已经是最新版本啦！");
                 Status = UpdateStatus.success;
                 return 0;
             }
+            Log.LogError("更新出问题了 -_-b");
             Status = UpdateStatus.error;
             return -1;
         }

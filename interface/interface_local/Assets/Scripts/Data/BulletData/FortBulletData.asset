@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5a82f5376adfa14893e400fba4af4f5, type: 3}
+  m_Name: FortBulletData
+  m_EditorClassIdentifier: 
+  cost: 0
+  attackDistance: 0
+  explosionRange: 0
+  attackDamage: b0040000
+  armorDamageMultiplier: 1
+  shieldDamageMultiplier: 1
+  speed: 1000

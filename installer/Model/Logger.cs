@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -16,7 +17,6 @@ namespace installer.Model
         public static Logger FromConsole() => new ConsoleLogger();
         public static Logger FromFile(string path) => new FileLogger(path);
     }
-
     public enum LogLevel
     {
         Trace = 0,
@@ -27,15 +27,51 @@ namespace installer.Model
         Critical = 5,
         None = 6,
     }
+    public class LogRecord
+    {
+        public LogLevel Level { get; set; }
+        public string Message { get; set; } = string.Empty;
+    }
 
     public abstract class Logger : IDisposable
     {
         private int jobID = 0;
+        public Logger? Partner;
+        public string PartnerInfo = string.Empty;
+        public Dictionary<LogLevel, int> CountDict = new Dictionary<LogLevel, int>
+        {
+            { LogLevel.Trace, 0 }, { LogLevel.Debug, 1 },
+            { LogLevel.Information, 2 }, { LogLevel.Warning, 3 },
+            { LogLevel.Error, 4 }, { LogLevel.Critical, 5 },
+            { LogLevel.None, 6 }
+        };
         public abstract DateTime LastRecordTime { get; }
-        protected abstract bool IsEnabled(LogLevel level);
-        protected abstract void Log(LogLevel logLevel, int eventId, string message);
-        protected abstract void Log(LogLevel logLevel, string message);
+        protected virtual bool IsEnabled(LogLevel level)
+        {
+            if (Debugger.IsAttached)
+            {
+                return level >= LogLevel.Trace;
+            }
+            else
+            {
+                return level >= LogLevel.Information;
+            }
+        }
+        protected virtual void Log(LogLevel logLevel, int eventId, string message)
+        {
+            CountDict[logLevel] += 1;
+            Partner?.Log(logLevel, eventId, PartnerInfo + message);
+        }
+        protected virtual void Log(LogLevel logLevel, string message)
+        {
+            CountDict[logLevel] += 1;
+            Partner?.Log(logLevel, PartnerInfo + message);
+        }
         public int StartNew() => (jobID++);
+        public void LogDebug(int eventId, string message)
+            => Log(LogLevel.Debug, eventId, message);
+        public void LogDebug(string message)
+            => Log(LogLevel.Debug, message);
         public void LogInfo(int eventId, string message)
             => Log(LogLevel.Information, eventId, message);
         public void LogInfo(string message)
@@ -50,22 +86,10 @@ namespace installer.Model
             => Log(LogLevel.Error, message);
         public virtual void Dispose() { }
     }
-
     public class ConsoleLogger : Logger
     {
         private DateTime time = DateTime.MinValue;
         public override DateTime LastRecordTime => time;
-        protected override bool IsEnabled(LogLevel logLevel)
-        {
-            if (Debugger.IsAttached)
-            {
-                return logLevel >= LogLevel.Trace;
-            }
-            else
-            {
-                return logLevel >= LogLevel.Warning;
-            }
-        }
         protected void LogDate()
         {
             if (DateTime.Now.Date != time.Date)
@@ -114,6 +138,7 @@ namespace installer.Model
                 default:
                     break;
             }
+            base.Log(logLevel, eventId, message);
         }
         protected override void Log(LogLevel logLevel, string message)
         {
@@ -154,6 +179,7 @@ namespace installer.Model
                 default:
                     break;
             }
+            base.Log(logLevel, message);
         }
     }
     public class FileLogger : Logger
@@ -196,17 +222,6 @@ namespace installer.Model
                 }
             }
             mutex.ReleaseMutex();
-        }
-        protected override bool IsEnabled(LogLevel logLevel)
-        {
-            if (Debugger.IsAttached)
-            {
-                return logLevel >= LogLevel.Trace;
-            }
-            else
-            {
-                return logLevel >= LogLevel.Warning;
-            }
         }
         protected void LogDate()
         {
@@ -261,6 +276,7 @@ namespace installer.Model
             }
             writer.Flush();
             mutex.ReleaseMutex();
+            base.Log(logLevel, eventId, message);
         }
 
         protected override void Log(LogLevel logLevel, string message)
@@ -301,53 +317,22 @@ namespace installer.Model
             }
             writer.Flush();
             mutex.ReleaseMutex();
+            base.Log(logLevel, message);
         }
     }
-
-    public class ExceptionStack
+    public class ListLogger : Logger
     {
-        public Logger logger;
-        protected ConcurrentStack<Exception> Exceptions;
-        protected object? Source;
-        public event EventHandler? OnFailed;
-        public event EventHandler? OnFailProcessed;
-        public event EventHandler? OnFailClear;
-        public int Count { get => Exceptions.Count; }
-        public ExceptionStack(Logger _logger, object? _source = null)
+        public ObservableCollection<LogRecord> List = new ObservableCollection<LogRecord>();
+        public override DateTime LastRecordTime => DateTime.Now;
+        protected override void Log(LogLevel logLevel, int eventId, string message)
         {
-            logger = _logger;
-            Exceptions = new ConcurrentStack<Exception>();
-            Source = _source;
+            List.Add(new LogRecord { Level = logLevel, Message = message });
+            base.Log(logLevel, eventId, message);
         }
-        public void Push(Exception e, int eventID = -1)
+        protected override void Log(LogLevel logLevel, string message)
         {
-            if (eventID > 0)
-            {
-                e.Data.Add("Event ID", eventID);
-                logger.LogError(eventID, $"{e}: {e.Message}");
-            }
-            else
-            {
-                logger.LogError($"{e}: {e.Message}");
-            }
-            Exceptions.Push(e);
-            OnFailed?.Invoke(Source, new EventArgs());
-        }
-        public Exception? Pop()
-        {
-            Exception? e;
-            if (!Exceptions.TryPop(out e))
-                e = null;
-            else
-                OnFailProcessed?.Invoke(Source, new EventArgs());
-            return e;
-        }
-        public void Clear()
-        {
-            bool invoke = Count > 0;
-            Exceptions.Clear();
-            if (invoke)
-                OnFailClear?.Invoke(Source, new EventArgs());
+            List.Add(new LogRecord { Level = logLevel, Message = message });
+            base.Log(logLevel, message);
         }
     }
 }
