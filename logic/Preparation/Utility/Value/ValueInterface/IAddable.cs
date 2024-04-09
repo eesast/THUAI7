@@ -9,4 +9,9 @@
     {
         public void Add(int value);
     }
+
+    public interface IDoubleAddable
+    {
+        public void Add(double value);
+    }
 }
