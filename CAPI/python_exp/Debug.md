@@ -9,13 +9,10 @@
 + start = Interlocked.Increment(ref playerCountNow) == 4;
 ```
 
-另外，需要将 `Communication.py` 的以下行取消注释：
+另外，需要将 `Communication.py` 的 `BuildShip` 加上以下行：
 
 ```Git
-@@ -201 +201 @@ class Logic(ILogic):
--           # if buildResult.act_success:
--           #     Process(target=self.__start,
--           #             args=(buildResult.player_id, THUAI7.PlayerType.Ship, shipType, self.__processEnv.shmName)).start()
+@@ +201 @@ class Logic(ILogic):
 +           if buildResult.act_success:
 +               Process(target=self.__start,
 +                       args=(buildResult.player_id, THUAI7.PlayerType.Ship, shipType, self.__processEnv.shmName)).start()

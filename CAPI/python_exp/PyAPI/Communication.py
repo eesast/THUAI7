@@ -198,9 +198,6 @@ class Communication:
             buildResult: Message2Clients.BuildShipRes = self.__THUAI7Stub.BuildShipRID(
                 THUAI72Proto.THUAI72ProtobufBuildShipMsg(teamID, shipType)
             )
-            # if buildResult.act_success:
-            #     Process(target=self.__start,
-            #             args=(buildResult.player_id, THUAI7.PlayerType.Ship, shipType, self.__processEnv.shmName)).start()
         except grpc.RpcError:
             return False
         else:

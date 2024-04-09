@@ -614,7 +614,7 @@ class Logic(ILogic):
             def HaveOverView(targetX: int, targetY: int):
                 for ship in self.__bufferState.ships:
                     if AssistFunction.HaveView(
-                        ship.viewRange, ship.x, ship.y, targetX, targetY
+                        ship.viewRange, ship.x, ship.y, targetX, targetY, self.__bufferState.gameMap
                     ):
                         return True
                 return False
