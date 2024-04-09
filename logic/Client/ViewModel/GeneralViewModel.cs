@@ -173,7 +173,7 @@ namespace Client.ViewModel
         {
             try
             {
-                //System.Diagnostics.Debug.WriteLine("============= OnReceiving Server Stream ================");
+                System.Diagnostics.Debug.WriteLine("============= OnReceiving Server Stream ================");
                 //if (responseStream != null)
                 //    System.Diagnostics.Debug.WriteLine("============= responseStream != null ================");
 
@@ -200,181 +200,181 @@ namespace Client.ViewModel
                             //System.Diagnostics.Debug.WriteLine(String.Format("OnReceive--cou:{0}, coud{1}", cou, Countdow));
 
                             listOfAll.Clear();
-                            listOfSweeper.Clear();
+                            listOfShip.Clear();
                             listOfBullet.Clear();
                             listOfBombedBullet.Clear();
-                            listOfRecycleBank.Clear();
-                            listOfChargeStation.Clear();
-                            listOfSignalTower.Clear();
-                            listOfGarbage.Clear();
+                            listOfFactory.Clear();
+                            listOfCommunity.Clear();
+                            listOfFort.Clear();
+                            listOfResource.Clear();
                             listOfHome.Clear();
-                            listOfBridge.Clear();
+                            listOfWormhole.Clear();
 
                             MessageToClient content = responseStream.ResponseStream.Current;
                             MessageOfMap mapMassage = new();
                             bool mapMessageExist = false;
-                            switch (content.GameState)
-                            {
-                                case GameState.GameStart:
-                                    System.Diagnostics.Debug.WriteLine("============= GameState: Game Start ================");
-                                    foreach (var obj in content.ObjMessage)
-                                    {
-                                        switch (obj.MessageOfObjCase)
-                                        {
-                                            case MessageOfObj.MessageOfObjOneofCase.SweeperMessage:
-                                                listOfSweeper.Add(obj.SweeperMessage);
-                                                break;
+                            //switch (content.GameState)
+                            //{
+                            //    case GameState.GameStart:
+                            //        System.Diagnostics.Debug.WriteLine("============= GameState: Game Start ================");
+                            //        foreach (var obj in content.ObjMessage)
+                            //        {
+                            //            switch (obj.MessageOfObjCase)
+                            //            {
+                            //                case MessageOfObj.MessageOfObjOneofCase.ShipMessage:
+                            //                    listOfShip.Add(obj.ShipMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
-                                                listOfBullet.Add(obj.BulletMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
+                            //                    listOfBullet.Add(obj.BulletMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.BombedBulletMessage:
-                                                listOfBombedBullet.Add(obj.BombedBulletMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.BombedBulletMessage:
+                            //                    listOfBombedBullet.Add(obj.BombedBulletMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
-                                                listOfRecycleBank.Add(obj.RecyclebankMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
+                            //                    listOfFactory.Add(obj.FactoryMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
-                                                listOfChargeStation.Add(obj.ChargestationMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
+                            //                    listOfCommunity.Add(obj.CommunityMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
-                                                listOfSignalTower.Add(obj.SignaltowerMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.FortMessage:
+                            //                    listOfFort.Add(obj.FortMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
-                                                listOfGarbage.Add(obj.GarbageMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
+                            //                    listOfResource.Add(obj.ResourceMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
-                                                listOfHome.Add(obj.HomeMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
+                            //                    listOfHome.Add(obj.HomeMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.MapMessage:
-                                                mapMassage = obj.MapMessage;
-                                                break;
-                                        }
-                                    }
-                                    listOfAll.Add(content.AllMessage);
-                                    countMap.Clear();
-                                    countMap.Add((int)MapPatchType.Resource, listOfResource.Count);
-                                    countMap.Add((int)MapPatchType.Factory, listOfFactory.Count);
-                                    countMap.Add((int)MapPatchType.Community, listOfCommunity.Count);
-                                    countMap.Add((int)MapPatchType.Fort, listOfFort.Count);
-                                    GetMap(mapMassage);
-                                    break;
-                                case GameState.GameRunning:
-                                    System.Diagnostics.Debug.WriteLine("============= GameState: Game Running ================");
-                                    foreach (var obj in content.ObjMessage)
-                                    {
-                                        switch (obj.MessageOfObjCase)
-                                        {
-                                            case MessageOfObj.MessageOfObjOneofCase.SweeperMessage:
-                                                System.Diagnostics.Debug.WriteLine(String.Format("============= SweeperOrd: {0},{1} ============", obj.SweeperMessage.X, obj.SweeperMessage.Y));
-                                                listOfSweeper.Add(obj.SweeperMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.MapMessage:
+                            //                    mapMassage = obj.MapMessage;
+                            //                    break;
+                            //            }
+                            //        }
+                            //        listOfAll.Add(content.AllMessage);
+                            //        countMap.Clear();
+                            //        countMap.Add((int)MapPatchType.Resource, listOfResource.Count);
+                            //        countMap.Add((int)MapPatchType.Factory, listOfFactory.Count);
+                            //        countMap.Add((int)MapPatchType.Community, listOfCommunity.Count);
+                            //        countMap.Add((int)MapPatchType.Fort, listOfFort.Count);
+                            //        GetMap(mapMassage);
+                            //        break;
+                            //    case GameState.GameRunning:
+                            //        System.Diagnostics.Debug.WriteLine("============= GameState: Game Running ================");
+                            //        foreach (var obj in content.ObjMessage)
+                            //        {
+                            //            switch (obj.MessageOfObjCase)
+                            //            {
+                            //                case MessageOfObj.MessageOfObjOneofCase.ShipMessage:
+                            //                    System.Diagnostics.Debug.WriteLine(String.Format("============= ShipOrd: {0},{1} ============", obj.ShipMessage.X, obj.ShipMessage.Y));
+                            //                    listOfShip.Add(obj.ShipMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
-                                                listOfRecycleBank.Add(obj.RecyclebankMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
+                            //                    listOfFactory.Add(obj.FactoryMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
-                                                listOfChargeStation.Add(obj.ChargestationMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
+                            //                    listOfCommunity.Add(obj.CommunityMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
-                                                listOfSignalTower.Add(obj.SignaltowerMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.FortMessage:
+                            //                    listOfFort.Add(obj.FortMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
-                                                listOfBullet.Add(obj.BulletMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
+                            //                    listOfBullet.Add(obj.BulletMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.BombedBulletMessage:
-                                                listOfBombedBullet.Add(obj.BombedBulletMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.BombedBulletMessage:
+                            //                    listOfBombedBullet.Add(obj.BombedBulletMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
-                                                listOfGarbage.Add(obj.GarbageMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
+                            //                    listOfResource.Add(obj.ResourceMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
-                                                listOfHome.Add(obj.HomeMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
+                            //                    listOfHome.Add(obj.HomeMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.MapMessage:
-                                                mapMassage = obj.MapMessage;
-                                                mapMessageExist = true;
-                                                break;
-                                        }
-                                    }
-                                    listOfAll.Add(content.AllMessage);
-                                    if (mapMessageExist)
-                                    {
-                                        countMap.Clear();
-                                        countMap.Add((int)MapPatchType.Garbage, listOfGarbage.Count);
-                                        countMap.Add((int)MapPatchType.RecycleBank, listOfRecycleBank.Count);
-                                        countMap.Add((int)MapPatchType.ChargeStation, listOfChargeStation.Count);
-                                        countMap.Add((int)MapPatchType.SignalTower, listOfSignalTower.Count);
-                                        GetMap(mapMassage);
-                                        mapMessageExist = false;
-                                    }
-                                    break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.MapMessage:
+                            //                    mapMassage = obj.MapMessage;
+                            //                    mapMessageExist = true;
+                            //                    break;
+                            //            }
+                            //        }
+                            //        listOfAll.Add(content.AllMessage);
+                            //        if (mapMessageExist)
+                            //        {
+                            //            countMap.Clear();
+                            //            countMap.Add((int)MapPatchType.Resource, listOfResource.Count);
+                            //            countMap.Add((int)MapPatchType.Factory, listOfFactory.Count);
+                            //            countMap.Add((int)MapPatchType.Community, listOfCommunity.Count);
+                            //            countMap.Add((int)MapPatchType.Fort, listOfFort.Count);
+                            //            GetMap(mapMassage);
+                            //            mapMessageExist = false;
+                            //        }
+                            //        break;
 
-                                case GameState.GameEnd:
-                                    System.Diagnostics.Debug.WriteLine("============= GameState: Game End ================");
-                                    //DisplayAlert("Info", "Game End", "OK");
-                                    foreach (var obj in content.ObjMessage)
-                                    {
-                                        switch (obj.MessageOfObjCase)
-                                        {
-                                            case MessageOfObj.MessageOfObjOneofCase.SweeperMessage:
-                                                listOfSweeper.Add(obj.SweeperMessage);
-                                                break;
+                            //    case GameState.GameEnd:
+                            //        System.Diagnostics.Debug.WriteLine("============= GameState: Game End ================");
+                            //        //DisplayAlert("Info", "Game End", "OK");
+                            //        foreach (var obj in content.ObjMessage)
+                            //        {
+                            //            switch (obj.MessageOfObjCase)
+                            //            {
+                            //                case MessageOfObj.MessageOfObjOneofCase.ShipMessage:
+                            //                    listOfShip.Add(obj.ShipMessage);
+                            //                    break;
 
-                                            //case MessageOfObj.MessageOfObjOneofCase.BuildingMessage:
-                                            //    listOfBuilding.Add(obj.BuildingMessage);
-                                            //    break;
+                            //                //case MessageOfObj.MessageOfObjOneofCase.BuildingMessage:
+                            //                //    listOfBuilding.Add(obj.BuildingMessage);
+                            //                //    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
-                                                listOfRecycleBank.Add(obj.RecyclebankMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
+                            //                    listOfFactory.Add(obj.FactoryMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
-                                                listOfChargeStation.Add(obj.ChargestationMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
+                            //                    listOfCommunity.Add(obj.CommunityMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
-                                                listOfSignalTower.Add(obj.SignaltowerMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.FortMessage:
+                            //                    listOfFort.Add(obj.FortMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
-                                                listOfBullet.Add(obj.BulletMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
+                            //                    listOfBullet.Add(obj.BulletMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.BombedBulletMessage:
-                                                listOfBombedBullet.Add(obj.BombedBulletMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.BombedBulletMessage:
+                            //                    listOfBombedBullet.Add(obj.BombedBulletMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
-                                                listOfGarbage.Add(obj.GarbageMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
+                            //                    listOfResource.Add(obj.ResourceMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
-                                                listOfHome.Add(obj.HomeMessage);
-                                                break;
+                            //                case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
+                            //                    listOfHome.Add(obj.HomeMessage);
+                            //                    break;
 
-                                            case MessageOfObj.MessageOfObjOneofCase.MapMessage:
-                                                mapMassage = obj.MapMessage;
-                                                break;
-                                        }
-                                    }
-                                    listOfAll.Add(content.AllMessage);
-                                    break;
-                            }
+                            //                case MessageOfObj.MessageOfObjOneofCase.MapMessage:
+                            //                    mapMassage = obj.MapMessage;
+                            //                    break;
+                            //            }
+                            //        }
+                            //        listOfAll.Add(content.AllMessage);
+                            //        break;
+                            //}
                         }
                         if (responseStream == null)
                         {
@@ -448,9 +448,9 @@ namespace Client.ViewModel
                         System.Diagnostics.Debug.WriteLine("============= Draw Home ================");
 
 
-                        RedPlayer.Sweepers.Clear();
-                        BluePlayer.Sweepers.Clear();
-                        foreach (var data in listOfSweeper)
+                        RedPlayer.Ships.Clear();
+                        BluePlayer.Ships.Clear();
+                        foreach (var data in listOfShip)
                         {
                             if (data.TeamId == (long)PlayerTeam.Red)
                             {
@@ -496,26 +496,26 @@ namespace Client.ViewModel
                             }
                             else
                             {
-                                Sweeper ship = new Sweeper
+                                Ship ship = new Ship
                                 {
-                                    Type = data.SweeperType,
-                                    State = data.SweeperState,
+                                    Type = data.ShipType,
+                                    State = data.ShipState,
                                     ArmorModule = data.ArmorType,
                                     ShieldModule = data.ShieldType,
                                     WeaponModule = data.WeaponType,
                                     ProducerModule = data.ProducerType,
                                     ConstuctorModule = data.ConstructorType,
-                                    Type_s = UtilInfo.SweeperTypeNameDict[data.SweeperType],
-                                    State_s = UtilInfo.SweeperStateNameDict[data.SweeperState],
-                                    ArmorModule_s = UtilInfo.SweeperArmorTypeNameDict[data.ArmorType],
-                                    ShieldModule_s = UtilInfo.SweeperShieldTypeNameDict[data.ShieldType],
-                                    WeaponModule_s = UtilInfo.SweeperWeaponTypeNameDict[data.WeaponType],
-                                    ConstuctorModule_s = UtilInfo.SweeperConstructorNameDict[data.ConstructorType],
-                                    ProducerModule_s = UtilInfo.SweeperProducerTypeNameDict[data.ProducerType]
+                                    Type_s = UtilInfo.ShipTypeNameDict[data.ShipType],
+                                    State_s = UtilInfo.ShipStateNameDict[data.ShipState],
+                                    ArmorModule_s = UtilInfo.ShipArmorTypeNameDict[data.ArmorType],
+                                    ShieldModule_s = UtilInfo.ShipShieldTypeNameDict[data.ShieldType],
+                                    WeaponModule_s = UtilInfo.ShipWeaponTypeNameDict[data.WeaponType],
+                                    ConstuctorModule_s = UtilInfo.ShipConstructorNameDict[data.ConstructorType],
+                                    ProducerModule_s = UtilInfo.ShipProducerTypeNameDict[data.ProducerType]
                                 };
-                                RedPlayer.Sweepers.Add(ship);
+                                RedPlayer.Ships.Add(ship);
                             }
-                            System.Diagnostics.Debug.WriteLine("============= Draw sweeper list ================");
+                            System.Diagnostics.Debug.WriteLine("============= Draw Ship list ================");
                         }
 
                         foreach (var data in listOfCommunity)
@@ -552,8 +552,6 @@ namespace Client.ViewModel
             //counter++;
         }
 
-
-        int ballx, bally;
         private void UpdateTest(object sender, EventArgs e)
         {
             lock (drawPicLock)
@@ -575,15 +573,15 @@ namespace Client.ViewModel
                 //    testcounter++;
                 //    if (testcounter % 3 == 0)
                 //    {
-                //        Sweeper ship = new Sweeper
+                //        Ship ship = new Ship
                 //        {
-                //            Type = SweeperType.MilitarySweeper,
-                //            State = SweeperState.Stunned,
-                //            Type_s = UtilInfo.SweeperTypeNameDict[SweeperType.MilitarySweeper],
-                //            State_s = UtilInfo.SweeperStateNameDict[SweeperState.Stunned]
+                //            Type = ShipType.MilitaryShip,
+                //            State = ShipState.Stunned,
+                //            Type_s = UtilInfo.ShipTypeNameDict[ShipType.MilitaryShip],
+                //            State_s = UtilInfo.ShipStateNameDict[ShipState.Stunned]
                 //        };
-                //        RedPlayer.Sweepers.Add(ship);
-                //        BluePlayer.Sweepers.Add(ship);
+                //        RedPlayer.Ships.Add(ship);
+                //        BluePlayer.Ships.Add(ship);
                 //    }
                 //}
                 //DrawHome(new MessageOfHome

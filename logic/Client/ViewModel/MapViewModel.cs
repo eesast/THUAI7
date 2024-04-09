@@ -122,7 +122,7 @@ namespace Client.ViewModel
         //            BombRange = 5
         //        }, canvas);
 
-        //        DrawSweeper(new MessageOfSweeper
+        //        DrawShip(new MessageOfShip
         //        {
         //            X = 10,
         //            Y = 11,
@@ -138,7 +138,7 @@ namespace Client.ViewModel
         //            BombRange = 5
         //        }, canvas);
 
-        //        DrawSweeper(new MessageOfSweeper
+        //        DrawShip(new MessageOfShip
         //        {
         //            X = 10,
         //            Y = 12,
@@ -154,7 +154,7 @@ namespace Client.ViewModel
         //            BombRange = 5
         //        });
 
-        //        listOfSweeper.Add(new MessageOfSweeper
+        //        listOfShip.Add(new MessageOfShip
         //        {
         //            X = 10,
         //            Y = 12,
@@ -172,9 +172,9 @@ namespace Client.ViewModel
 
         //        if (listOfBullet.Count > 0)
         //        {
-        //            foreach (var data in listOfSweeper)
+        //            foreach (var data in listOfShip)
         //            {
-        //                DrawSweeper(data, canvas);
+        //                DrawShip(data, canvas);
         //            }
         //        }
         //    }
@@ -211,17 +211,17 @@ namespace Client.ViewModel
                                 MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Colors.Blue; break; //Blue Home
                             case MapPatchType.Ruin:
                                 MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Colors.Black; break; // Ruin
-                            case MapPatchType.Grass:
+                            case MapPatchType.Shadow:
                                 MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Colors.Gray; break; // Grass
-                            case MapPatchType.River:
+                            case MapPatchType.Asteroid:
                                 MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Colors.Brown; break; // River
-                            case MapPatchType.Garbage:
+                            case MapPatchType.Resource:
                                 MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Colors.Yellow; break; //Resource
-                            case MapPatchType.RecycleBank:
+                            case MapPatchType.Factory:
                                 MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Colors.Orange; break; //RecycleBank
-                            case MapPatchType.ChargeStation:
+                            case MapPatchType.Community:
                                 MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Colors.Chocolate; break; //ChargeStation
-                            case MapPatchType.SignalTower:
+                            case MapPatchType.Fort:
                                 MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Colors.Azure; break; //SignalTower
                             default:
                                 break;
@@ -238,11 +238,11 @@ namespace Client.ViewModel
                 ShipCircList[i].Color = Colors.Transparent;
                 ShipCircList[i].Text = "";
             }
-            System.Diagnostics.Debug.WriteLine(String.Format("listOfSweeper.Count:{0}", listOfSweeper.Count));
-            System.Diagnostics.Debug.WriteLine(String.Format("listOfShip.Count:{0}", ShipCircList.Count));
-            for (int i = 0; i < listOfSweeper.Count; i++)
+            System.Diagnostics.Debug.WriteLine(String.Format("listOfShip.Count:{0}", listOfShip.Count));
+            System.Diagnostics.Debug.WriteLine(String.Format("ShipCircList.Count:{0}", ShipCircList.Count));
+            for (int i = 0; i < listOfShip.Count; i++)
             {
-                MessageOfSweeper data = listOfSweeper[i];
+                MessageOfShip data = listOfShip[i];
                 DrawCircLabel shipinfo = ShipCircList[i];
                 PointF point = UtilFunctions.getMapCenter(data.X, data.Y);
                 shipinfo.X = point.X;
@@ -635,7 +635,7 @@ namespace Client.ViewModel
         }
 
         
-        private void DrawSweeper(MessageOfSweeper data, ICanvas canvas)
+        private void DrawShip(MessageOfShip data, ICanvas canvas)
         {
             PointF point = UtilFunctions.getMapCenter(data.X, data.Y);
             float x = point.X;

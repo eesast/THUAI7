@@ -65,7 +65,7 @@ namespace Client.Model
                 if (value != null && value.Count > 0) 
                 {
                     ships = value;
-                    OnPropertyChanged(nameof(Sweepers));
+                    OnPropertyChanged(nameof(Ships));
                 }
             }
         }
