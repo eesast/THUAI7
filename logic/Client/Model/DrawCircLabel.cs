@@ -39,9 +39,9 @@ namespace Client.Model
         private Thickness thick;
         public Thickness Thick
         {
-            get 
-            { 
-                thick.Left = x; 
+            get
+            {
+                thick.Left = x;
                 thick.Top = y;
                 return thick;
             }

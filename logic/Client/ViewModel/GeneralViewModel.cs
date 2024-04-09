@@ -447,7 +447,7 @@ namespace Client.ViewModel
 
                         //RedPlayer.Ships.Clear();
                         //BluePlayer.Ships.Clear();
-                        for(int i = 0; i < listOfShip.Count; i++)
+                        for (int i = 0; i < listOfShip.Count; i++)
                         {
                             MessageOfShip data = listOfShip[i];
                             if (data.TeamId == (long)PlayerTeam.Red)
@@ -719,7 +719,7 @@ namespace Client.ViewModel
                     X = 0,
                     Y = 0,
                     Color = Colors.Transparent
-                }); 
+                });
             }
 
 

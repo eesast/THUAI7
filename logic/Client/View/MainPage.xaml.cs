@@ -31,7 +31,7 @@ namespace Client
             viewModel = new GeneralViewModel();
             Console.WriteLine("Hello World");
             BindingContext = viewModel;
-            
+
             Application.Current.UserAppTheme = AppTheme.Light;  //Light Theme Mode
             InitializeComponent();
 
@@ -81,7 +81,7 @@ namespace Client
             {
                 CircleLabel bulletinfo = new()
                 {
-                    CLDiameter= unitWidth * 0.4,
+                    CLDiameter = unitWidth * 0.4,
                     HorizontalOptions = LayoutOptions.Start,
                     VerticalOptions = LayoutOptions.Start,
                     CLBackgroundColor = Colors.Black,

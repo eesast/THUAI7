@@ -255,7 +255,7 @@
                     <Button x:Name="MoveRightDown" Text="↘" Grid.Column="2" Grid.Row="2"></Button>
                     <Button x:Name="Shoot" Text="⚡" Grid.Column="1" Grid.Row="1"></Button>
                 </Grid>
-                
+
 
                 <Grid x:Name="MapGrid" x:FieldModifier="public" WidthRequest="{Binding MapWidth}" HeightRequest="{Binding MapHeight}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" BackgroundColor="Yellow" VerticalOptions="Center" HorizontalOptions="Center">
                 </Grid>
@@ -272,7 +272,7 @@
 
                 <!--<GraphicsView x:Name ="DrawGraphicsView" WidthRequest="{Binding MapWidth}" Drawable="{StaticResource drawable}" HeightRequest="{Binding MapHeight}" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" BackgroundColor="Blue" />-->
                 <!--<skia:SKCanvasView x:Name="SkiaView" WidthRequest="{Binding MapWidth}" HeightRequest="{Binding MapHeight}" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" BackgroundColor="Blue" PaintSurface="OnPaintSurface"/>-->
-             
+
             </Grid>
 
         </VerticalStackLayout>

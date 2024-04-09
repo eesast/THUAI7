@@ -670,7 +670,7 @@ namespace Client.ViewModel
             MapPatchesList[index].TextColor = Colors.White;
         }
 
-        
+
         private void DrawShip(MessageOfShip data, ICanvas canvas)
         {
             PointF point = UtilFunctions.getMapCenter(data.X, data.Y);

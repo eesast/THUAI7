@@ -44,7 +44,7 @@ namespace Client.Util
 
         public static bool IsShipEqual(Ship a, Ship b)
         {
-            System.Diagnostics.Debug.WriteLine($"{Convert.ToString(a.TeamID)}, {Convert.ToString(b.TeamID)},{Convert.ToString(a.Type)}, {Convert.ToString(b.Type)},{ Convert.ToString(a.State)}, {Convert.ToString(b.State)},{ Convert.ToString(a.HP)}, { Convert.ToString(b.HP)},{ Convert.ToString(a.ProducerModule)}, { Convert.ToString(b.ProducerModule)},{ Convert.ToString(a.ConstuctorModule)}, { Convert.ToString(b.ConstuctorModule)},{ Convert.ToString(a.ShieldModule)}, { Convert.ToString(b.ShieldModule)},{ Convert.ToString(a.WeaponModule)}, { Convert.ToString(b.WeaponModule)}");
+            System.Diagnostics.Debug.WriteLine($"{Convert.ToString(a.TeamID)}, {Convert.ToString(b.TeamID)},{Convert.ToString(a.Type)}, {Convert.ToString(b.Type)},{Convert.ToString(a.State)}, {Convert.ToString(b.State)},{Convert.ToString(a.HP)}, {Convert.ToString(b.HP)},{Convert.ToString(a.ProducerModule)}, {Convert.ToString(b.ProducerModule)},{Convert.ToString(a.ConstuctorModule)}, {Convert.ToString(b.ConstuctorModule)},{Convert.ToString(a.ShieldModule)}, {Convert.ToString(b.ShieldModule)},{Convert.ToString(a.WeaponModule)}, {Convert.ToString(b.WeaponModule)}");
             if (a == null || b == null) return false;
             if (
                 a.TeamID == b.TeamID &&

@@ -62,7 +62,7 @@ namespace Client.Model
             }
             set
             {
-                if (value != null && value.Count > 0) 
+                if (value != null && value.Count > 0)
                 {
                     ships = value;
                     OnPropertyChanged(nameof(Ships));
