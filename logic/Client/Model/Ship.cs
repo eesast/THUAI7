@@ -120,7 +120,8 @@ namespace Client.Model
             set
             {
                 producerModule = value;
-                OnPropertyChanged();
+                //if (Util.UtilInfo.isRedPlayerShipsEmpty)
+                    OnPropertyChanged();
             }
         }
         public ConstructorType ConstuctorModule
@@ -129,7 +130,8 @@ namespace Client.Model
             set
             {
                 constuctorModule = value;
-                OnPropertyChanged();
+                //if (Util.UtilInfo.isRedPlayerShipsEmpty)
+                    OnPropertyChanged();
             }
         }
         public ArmorType ArmorModule
@@ -138,7 +140,8 @@ namespace Client.Model
             set
             {
                 armorModule = value;
-                OnPropertyChanged();
+                //if (Util.UtilInfo.isRedPlayerShipsEmpty)
+                    OnPropertyChanged();
             }
         }
         public ShieldType ShieldModule
@@ -147,7 +150,8 @@ namespace Client.Model
             set
             {
                 shieldModule = value;
-                OnPropertyChanged();
+                //if (Util.UtilInfo.isRedPlayerShipsEmpty)
+                    OnPropertyChanged();
             }
         }
         public WeaponType WeaponModule
@@ -156,7 +160,8 @@ namespace Client.Model
             set
             {
                 weaponModule = value;
-                OnPropertyChanged();
+                //if (Util.UtilInfo.isRedPlayerShipsEmpty)
+                    OnPropertyChanged();
             }
         }
         public string Type_s
@@ -166,7 +171,8 @@ namespace Client.Model
             set
             {
                 type_s = value;
-                OnPropertyChanged();
+                //if (Util.UtilInfo.isRedPlayerShipsEmpty)
+                    OnPropertyChanged();
             }
         }
         public string State_s
@@ -176,7 +182,8 @@ namespace Client.Model
             set
             {
                 state_s = value;
-                OnPropertyChanged();
+                //if (Util.UtilInfo.isRedPlayerShipsEmpty)
+                    OnPropertyChanged();
             }
         }
         public string ProducerModule_s
@@ -186,7 +193,8 @@ namespace Client.Model
             set
             {
                 producerModule_s = value;
-                OnPropertyChanged();
+                //if (Util.UtilInfo.isRedPlayerShipsEmpty)
+                    OnPropertyChanged();
             }
         }
         public string ConstuctorModule_s
@@ -196,7 +204,8 @@ namespace Client.Model
             set
             {
                 constuctorModule_s = value;
-                OnPropertyChanged();
+                //if (Util.UtilInfo.isRedPlayerShipsEmpty)
+                    OnPropertyChanged();
             }
         }
         public string ArmorModule_s
@@ -206,7 +215,8 @@ namespace Client.Model
             set
             {
                 armorModule_s = value;
-                OnPropertyChanged();
+                //if (Util.UtilInfo.isRedPlayerShipsEmpty)
+                    OnPropertyChanged();
             }
         }
         public string ShieldModule_s
@@ -216,7 +226,8 @@ namespace Client.Model
             set
             {
                 shieldModule_s = value;
-                OnPropertyChanged();
+                //if (Util.UtilInfo.isRedPlayerShipsEmpty)
+                    OnPropertyChanged();
             }
         }
         public string WeaponModule_s
@@ -226,7 +237,8 @@ namespace Client.Model
             set
             {
                 weaponModule_s = value;
-                OnPropertyChanged();
+                //if (Util.UtilInfo.isRedPlayerShipsEmpty)
+                    OnPropertyChanged();
             }
         }
     }

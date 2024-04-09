@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:Client.ViewModel"
              xmlns:model="clr-namespace:Client.Model"
+             xmlns:skia="clr-namespace:SkiaSharp.Views.Maui.Controls;assembly=SkiaSharp.Views.Maui.Controls"
+             xmlns:view ="clr-namespace:Client.View"
              x:Class="Client.MainPage"
              x:DataType="viewmodel:GeneralViewModel"
              Title="{Binding Title}">
@@ -66,7 +68,7 @@
                         <Grid x:Name="RedPlayerRoleInfoGrid" Grid.Row="0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*" />
-                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="3*" />
                                 <ColumnDefinition Width="3*" />
                             </Grid.ColumnDefinitions>
 
@@ -77,9 +79,9 @@
                             <BoxView x:Name="RedColor" Color="Red" Grid.Row="0" Grid.Column="0" HeightRequest="15" WidthRequest="15" HorizontalOptions="Center" VerticalOptions="Center" />
                             <Label x:Name="RedName" Text="Red Player" Grid.Row="0" Grid.Column="1" FontSize="15" HorizontalOptions="Start" HorizontalTextAlignment="Start" WidthRequest="300" VerticalOptions="Center" />
                             <Label x:Name="RedHpData" Text="{Binding RedPlayer.Hp, StringFormat='{0}/100'}" Grid.Row="0" Grid.Column="2" FontSize="15" HorizontalOptions="End" HorizontalTextAlignment="Start" VerticalOptions="Center" />
-                            <BoxView x:Name="RedHpSlide" Color="Red" Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="0" HorizontalOptions="Start" WidthRequest="260"/>
+                            <BoxView x:Name="RedHpSlide" Color="Red" Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="0" HorizontalOptions="StartAndExpand" WidthRequest="230"/>
                         </Grid>
-                        <Label x:Name="RedMoney" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3" Text="{Binding RedPlayer.Money, StringFormat='💰总经济： {0}'}" Style="{StaticResource littleAttributes}" />
+                        <Label x:Name="RedMoney" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3" Text="{Binding RedPlayer.Money, StringFormat='💰总经济： 0'}" Style="{StaticResource littleAttributes}" />
                     </Grid>
 
                     <Grid x:Name="RedSweeperStatusAttributesGrid" Grid.Row="1">
@@ -146,7 +148,7 @@
                         <Grid x:Name="BluePlayerRoleInfoGrid" Grid.Row="0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*" />
-                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="3*" />
                                 <ColumnDefinition Width="3*" />
                             </Grid.ColumnDefinitions>
 
@@ -157,7 +159,7 @@
                             <BoxView x:Name="BlueColor" Color="Blue" Grid.Row="0" Grid.Column="0" HeightRequest="15" WidthRequest="15" HorizontalOptions="Center" VerticalOptions="Center" />
                             <Label x:Name="BlueName" Text="Blue Player" Grid.Row="0" Grid.Column="1" FontSize="15" HorizontalOptions="Start" HorizontalTextAlignment="Start" WidthRequest="300" VerticalOptions="Center" />
                             <Label x:Name="BlueHpData" Text="{Binding BluePlayer.Hp, StringFormat='{0}/100'}" Grid.Row="0" Grid.Column="2" FontSize="15" HorizontalOptions="End" HorizontalTextAlignment="Start" VerticalOptions="Center" />
-                            <BoxView x:Name="BlueHpSlide" Grid.Row="1" Color="Blue" Grid.ColumnSpan="3" Grid.Column="0" HorizontalOptions="Start" WidthRequest="260"/>
+                            <BoxView x:Name="BlueHpSlide" Grid.Row="1" Color="Blue" Grid.ColumnSpan="3" Grid.Column="0" HorizontalOptions="Start" WidthRequest="230"/>
                         </Grid>
                         <Label x:Name="BlueMoney" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3" Text="{Binding BluePlayer.Money, StringFormat='💰总经济： {0}'}" Style="{StaticResource littleAttributes}" />
                     </Grid>
@@ -208,7 +210,7 @@
                     </CollectionView>
                 </Grid>
 
-                <Grid x:Name="GameStatusGrid" Grid.Row="0" Grid.Column="4" Grid.RowSpan="2">
+                <Grid x:Name="GameStatusGrid" Grid.Row="0" Grid.Column="4" Grid.RowSpan="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="5*" />
                         <RowDefinition Height="10*"/>
@@ -230,7 +232,33 @@
                     <BoxView x:Name="WormHole3HpSlide" Color="Green" HeightRequest="3" WidthRequest="{Binding WormHole3Length}"  Grid.Row="7" HorizontalOptions="Start" VerticalOptions="End"/>
                 </Grid>
 
-                <Grid x:Name="MapGrid" x:FieldModifier="public" WidthRequest="{Binding MapWidth}" HeightRequest="{Binding MapHeight}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" BackgroundColor="Yellow" VerticalOptions="Center" HorizontalOptions="Center"/>
+                <Grid x:Name="Button" Grid.Row="1" Grid.Column="4" HeightRequest="130" WidthRequest="130" Margin="0, 0, 15, 0" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="5*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="5*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="MoveUp" Text="↑" Grid.Column="1" Grid.Row="0" Command="{Binding MoveUpCommand}"></Button>
+                    <Button x:Name="MoveLeftUp" Text="↖" Grid.Column="0" Grid.Row="0"></Button>
+                    <Button x:Name="MoveRightUp" Text="↗" Grid.Column="2" Grid.Row="0"></Button>
+                    <Button x:Name="MoveLeft" Text="←" Grid.Column="0" Grid.Row="1"></Button>
+                    <Button x:Name="MoveRight" Text="→" Grid.Column="2" Grid.Row="1"></Button>
+                    <Button x:Name="MoveDown" Text="↓" Grid.Column="1" Grid.Row="2" Command="{Binding MoveDownCommand}"></Button>
+                    <Button x:Name="MoveLeftDown" Text="↙" Grid.Column="0" Grid.Row="2"></Button>
+                    <Button x:Name="MoveRightDown" Text="↘" Grid.Column="2" Grid.Row="2"></Button>
+                    <Button x:Name="Shoot" Text="⚡" Grid.Column="1" Grid.Row="1"></Button>
+                </Grid>
+                
+
+                <Grid x:Name="MapGrid" x:FieldModifier="public" WidthRequest="{Binding MapWidth}" HeightRequest="{Binding MapHeight}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" BackgroundColor="Yellow" VerticalOptions="Center" HorizontalOptions="Center">
+                </Grid>
                 <!--<CollectionView ItemsSource="{Binding MapPatchesList}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" >
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout Orientation="Vertical" Span="50" />
@@ -242,8 +270,9 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>-->
 
-                <GraphicsView x:Name ="DrawGraphicsView" WidthRequest="{Binding MapWidth}" Drawable="{StaticResource drawable}" HeightRequest="{Binding MapHeight}" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" BackgroundColor="Blue" />
-
+                <!--<GraphicsView x:Name ="DrawGraphicsView" WidthRequest="{Binding MapWidth}" Drawable="{StaticResource drawable}" HeightRequest="{Binding MapHeight}" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" BackgroundColor="Blue" />-->
+                <!--<skia:SKCanvasView x:Name="SkiaView" WidthRequest="{Binding MapWidth}" HeightRequest="{Binding MapHeight}" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" BackgroundColor="Blue" PaintSurface="OnPaintSurface"/>-->
+             
             </Grid>
 
         </VerticalStackLayout>

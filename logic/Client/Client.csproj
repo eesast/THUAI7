@@ -70,8 +70,13 @@
 
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.10" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="SkiaSharp" Version="2.88.7" />
 
 		<PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
+		
+		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.7" />
+		<PackageReference Include="SkiaSharp.Views.Maui.Core" Version="2.88.7" />
+		
 	</ItemGroup>
 
 
@@ -85,6 +90,9 @@
 		<Compile Update="Old\PlayerStatusBar.xaml.cs">
 			<DependentUpon>PlayerStatusBar.xaml</DependentUpon>
 		</Compile>
+		<Compile Update="View\CircleLabel.xaml.cs">
+		  <DependentUpon>CircleLabel.xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 
@@ -94,6 +102,9 @@
 		</MauiXaml>
 		<MauiXaml Update="Old\PlayerStatusBar.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="View\CircleLabel.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 	</ItemGroup>
 

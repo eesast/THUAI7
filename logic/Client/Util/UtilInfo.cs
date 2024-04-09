@@ -70,6 +70,9 @@ namespace Client.Util
             { WeaponType.Missilegun, "Missilegun" },
             { WeaponType.Shellgun, "Shellgun" }
         };
+
+        public static bool isRedPlayerShipsEmpty = true;
+        public static bool isBluePlayerShipsEmpty = false;
     }
 
 
