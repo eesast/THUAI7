@@ -326,10 +326,10 @@ class Logic(ILogic):
                 for obj in message.obj_message:
                     if obj.WhichOneof("message_of_obj") == "ship_message":
                         self.__bufferState.guids.append(obj.ship_message.guid)
-            else:
-                for obj in message.obj_message:
-                    if obj.WhichOneof("message_of_obj") == "team_message":
-                        self.__bufferState.guids.append(obj.team_message.guid)
+            # else:
+            #     for obj in message.obj_message:
+            #         if obj.WhichOneof("message_of_obj") == "team_message":
+            #             self.__bufferState.guids.append(obj.team_message.guid)
 
             self.__bufferState.gameInfo = Proto2THUAI7.Protobuf2THUAI7GameInfo(
                 message.all_message

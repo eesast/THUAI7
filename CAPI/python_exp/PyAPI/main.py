@@ -97,9 +97,11 @@ if __name__ == "__main__":
     processEnv = ProcessEnv(args.tID,
                             args.sIP, args.sPort,
                             args.file, args.screen, args.warnOnly)
-    teamProcess = mp.Process(target=StartLogic,
-                             args=(0, THUAI7.PlayerType.Team, THUAI7.ShipType.NullShipType, processEnv.shmName))
-    teamProcess.start()
-    mp.Process(target=StartLogic,
-               args=(1, THUAI7.PlayerType.Ship, THUAI7.ShipType.CivilianShip, processEnv.shmName)).start()
-    teamProcess.join()
+    initArgs = [
+        (0, THUAI7.PlayerType.Team, THUAI7.ShipType.NullShipType, processEnv.shmName),
+        (1, THUAI7.PlayerType.Ship, THUAI7.ShipType.CivilianShip, processEnv.shmName),
+        (2, THUAI7.PlayerType.Ship, THUAI7.ShipType.CivilianShip, processEnv.shmName),
+        (3, THUAI7.PlayerType.Ship, THUAI7.ShipType.MilitaryShip, processEnv.shmName),
+        (4, THUAI7.PlayerType.Ship, THUAI7.ShipType.FlagShip, processEnv.shmName)
+    ]
+    mp.Pool(processes=5).starmap(StartLogic, initArgs)
