@@ -10,7 +10,7 @@ namespace Preparation.Utility
     /// <summary>
     /// 一个保证在[0,maxValue]的可变值，支持可变的maxValue（请确保大于0）
     /// </summary>
-    public class InVariableRange<T> : LockedValue, IIntAddable, IAddable<T>
+    public class InVariableRange<T> : LockedValue, IIntAddable, IAddable<T>, IDouble
         where T : IConvertible, IComparable<T>, INumber<T>
     {
         protected T v;
@@ -52,6 +52,7 @@ namespace Preparation.Utility
             }
         }
         public T GetValue() { lock (vLock) return v; }
+        public double ToDouble() => GetValue().ToDouble(null);
         public static implicit operator T(InVariableRange<T> aint) => aint.GetValue();
         public T GetMaxV() { lock (vLock) return maxV; }
         public (T, T) GetValueAndMaxV() { lock (vLock) return (v, maxV); }
@@ -81,7 +82,7 @@ namespace Preparation.Utility
         /// </summary>
         public virtual bool SetMaxV(T maxValue)
         {
-            if (maxValue.CompareTo(0) <= 0)
+            if (maxValue <= T.Zero)
             {
                 lock (vLock)
                 {
@@ -153,7 +154,7 @@ namespace Preparation.Utility
 
         #region 特殊条件的设置MaxV与Value的值的方法
         /// <summary>
-        /// 如果当前值大于maxValue,则更新maxValue失败
+        /// 如果当前值大于试图更新的maxValue,则更新maxValue失败
         /// </summary>
         public virtual bool TrySetMaxV(T maxValue)
         {
@@ -514,6 +515,9 @@ namespace Preparation.Utility
         where T : IConvertible, IComparable<T>, INumber<T>
     {
         private IIntAddable score = new AtomicInt(0);
+        /// <summary>
+        /// 注意：Score的set操作（即=）的真正意义是改变其引用，单纯改变值不应当使用该操作
+        /// </summary>
         public IIntAddable Score
         {
             get
@@ -526,7 +530,21 @@ namespace Preparation.Utility
             }
         }
 
-        public AtomicDouble speed = new(speed);
+        private IDouble speed = new AtomicDouble(speed);
+        /// <summary>
+        /// 注意：set操作（即=）的真正意义是改变其引用，单纯改变值不应当使用该操作
+        /// </summary>
+        public IDouble Speed
+        {
+            get
+            {
+                return Interlocked.CompareExchange(ref speed!, null, null);
+            }
+            set
+            {
+                Interlocked.Exchange(ref speed, value);
+            }
+        }
 
         public TA ScoreAdd<TA>(Func<TA> x)
         {
