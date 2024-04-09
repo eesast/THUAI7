@@ -133,19 +133,21 @@ namespace Server
 #endif
             lock (addPlayerLock)
             {
-                Game.PlayerInitInfo playerInitInfo = new(request.TeamId, request.PlayerId, Transformation.ShipTypeFromProto(request.ShipType));
+                Game.PlayerInitInfo playerInitInfo = new(request.TeamId,
+                                                         request.PlayerId,
+                                                         Transformation.ShipTypeFromProto(request.ShipType));
                 long newPlayerID = game.AddPlayer(playerInitInfo);
                 if (newPlayerID == GameObj.invalidID)
                 {
 #if DEBUG
-                    Console.WriteLine("Fail Add Ship");
+                    Console.WriteLine("FAIL AddPlayer");
 #endif
                     return;
                 }
                 communicationToGameID[request.TeamId][request.PlayerId] = newPlayerID;
                 var temp = (new SemaphoreSlim(0, 1), new SemaphoreSlim(0, 1));
                 bool start = false;
-                Console.WriteLine($"Id: {request.PlayerId} joins.");
+                Console.WriteLine($"Player {request.PlayerId} from Team {request.TeamId} joins.");
                 lock (spectatorJoinLock)  // 为了保证绝对安全，还是加上这个锁吧
                 {
                     if (request.TeamId == 0)
@@ -154,7 +156,7 @@ namespace Server
                         {
                             start = Interlocked.Increment(ref playerCountNow) == (playerNum * TeamCount);
                             Console.WriteLine($"PlayerCountNow: {playerCountNow}");
-                            Console.WriteLine($"PlayerNum: {playerNum * TeamCount}");
+                            Console.WriteLine($"PlayerTotalNum: {playerNum * TeamCount}");
                         }
                     }
                     else if (request.TeamId == 1)

@@ -22,7 +22,7 @@ namespace Gaming
         public List<Team> TeamList => teamList;
         private readonly Map gameMap;
         public Map GameMap => gameMap;
-        private Random random = new();
+        private readonly Random random = new();
         public long AddPlayer(PlayerInitInfo playerInitInfo)
         {
             if (!gameMap.TeamExists(playerInitInfo.teamID))
@@ -38,19 +38,22 @@ namespace Gaming
                     case ShipType.Null:
                         return GameObj.invalidID;
                     case ShipType.CivilShip:
-                        if (teamList[(int)playerInitInfo.teamID].ShipPool.GetNum(ShipType.CivilShip) >= GameData.MaxCivilShipNum)
+                        if (teamList[(int)playerInitInfo.teamID].ShipPool.GetNum(ShipType.CivilShip)
+                            >= GameData.MaxCivilShipNum)
                         {
                             return GameObj.invalidID;
                         }
                         break;
                     case ShipType.WarShip:
-                        if (teamList[(int)playerInitInfo.teamID].ShipPool.GetNum(ShipType.WarShip) >= GameData.MaxWarShipNum)
+                        if (teamList[(int)playerInitInfo.teamID].ShipPool.GetNum(ShipType.WarShip)
+                            >= GameData.MaxWarShipNum)
                         {
                             return GameObj.invalidID;
                         }
                         break;
                     case ShipType.FlagShip:
-                        if (teamList[(int)playerInitInfo.teamID].ShipPool.GetNum(ShipType.FlagShip) >= GameData.MaxFlagShipNum)
+                        if (teamList[(int)playerInitInfo.teamID].ShipPool.GetNum(ShipType.FlagShip)
+                            >= GameData.MaxFlagShipNum)
                         {
                             return GameObj.invalidID;
                         }
@@ -58,8 +61,10 @@ namespace Gaming
                     default:
                         return GameObj.invalidID;
                 }
-                Ship? newShip = shipManager.AddShip(playerInitInfo.teamID, playerInitInfo.playerID,
-                    playerInitInfo.shipType, teamList[(int)playerInitInfo.teamID].MoneyPool);
+                Ship? newShip = shipManager.AddShip(playerInitInfo.teamID,
+                                                    playerInitInfo.playerID,
+                                                    playerInitInfo.shipType,
+                                                    teamList[(int)playerInitInfo.teamID].MoneyPool);
                 if (newShip == null)
                 {
                     return GameObj.invalidID;
