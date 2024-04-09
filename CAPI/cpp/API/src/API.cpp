@@ -8,25 +8,25 @@
 
 #define PI 3.14159265358979323846
 
-std::future<bool> ShipAPI::SendTextMessage(int64_t toID, std::string message)
+std::future<bool> ShipAPI::SendTextMessage(int32_t toID, std::string message)
 {
     return std::async(std::launch::async, [=, message = std::move(message)]()
                       { return logic.Send(toID, std::move(message), false); });
 }
 
-std::future<bool> TeamAPI::SendTextMessage(int64_t toID, std::string message)
+std::future<bool> TeamAPI::SendTextMessage(int32_t toID, std::string message)
 {
     return std::async(std::launch::async, [=, message = std::move(message)]()
                       { return logic.Send(toID, std::move(message), false); });
 }
 
-std::future<bool> ShipAPI::SendBinaryMessage(int64_t toID, std::string message)
+std::future<bool> ShipAPI::SendBinaryMessage(int32_t toID, std::string message)
 {
     return std::async(std::launch::async, [=, message = std::move(message)]()
                       { return logic.Send(toID, std::move(message), true); });
 }
 
-std::future<bool> TeamAPI::SendBinaryMessage(int64_t toID, std::string message)
+std::future<bool> TeamAPI::SendBinaryMessage(int32_t toID, std::string message)
 {
     return std::async(std::launch::async, [=, message = std::move(message)]()
                       { return logic.Send(toID, std::move(message), true); });
@@ -42,12 +42,12 @@ bool TeamAPI::HaveMessage()
     return logic.HaveMessage();
 }
 
-std::pair<int64_t, std::string> ShipAPI::GetMessage()
+std::pair<int32_t, std::string> ShipAPI::GetMessage()
 {
     return logic.GetMessage();
 }
 
-std::pair<int64_t, std::string> TeamAPI::GetMessage()
+std::pair<int32_t, std::string> TeamAPI::GetMessage()
 {
     return logic.GetMessage();
 }
@@ -263,10 +263,10 @@ std::future<bool> ShipAPI::Attack(double angleInRadian)
                       { return logic.Attack(angleInRadian); });
 }
 
-std::future<bool> ShipAPI::Recover()
+std::future<bool> ShipAPI::Recover(int64_t recover)
 {
     return std::async(std::launch::async, [=]()
-                      { return logic.Recover(); });
+                      { return logic.Recover(recover); });
 }
 
 std::future<bool> ShipAPI::Produce()
@@ -294,22 +294,22 @@ bool ShipAPI::HaveView(int32_t targetX, int32_t targetY) const
 }
 
 // Team独有
-std::future<bool> TeamAPI::InstallModule(int64_t playerID, const THUAI7::ModuleType moduleType)
+std::future<bool> TeamAPI::InstallModule(int32_t playerID, const THUAI7::ModuleType moduleType)
 {
     return std::async(std::launch::async, [=]()
                       { return logic.InstallModule(playerID, moduleType); });
 }
 
-std::future<bool> TeamAPI::Recycle(int64_t playerID)
+std::future<bool> TeamAPI::Recycle(int32_t playerID)
 {
     return std::async(std::launch::async, [=]()
                       { return logic.Recycle(playerID); });
 }
 
-std::future<bool> TeamAPI::BuildShip(THUAI7::ShipType ShipType)
+std::future<bool> TeamAPI::BuildShip(THUAI7::ShipType ShipType, int32_t birthIndex)
 {
     return std::async(std::launch::async, [=]()
-                      { return logic.BuildShip(ShipType); });
+                      { return logic.BuildShip(ShipType, birthIndex); });
 }
 
 void ShipAPI::Play(IAI& ai)

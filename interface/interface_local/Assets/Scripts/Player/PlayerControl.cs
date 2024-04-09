@@ -19,8 +19,8 @@ public class PlayerControl : SingletonMono<PlayerControl>
     // Update is called once per frame
     void Update()
     {
-        testInput();
-        if (Input.GetKeyDown(KeyCode.Escape))
+        // testInput();
+        if (Input.GetKeyDown(KeyCode.E))
         {
             foreach (InteractBase i in selectedInt)
             {
@@ -42,6 +42,11 @@ public class PlayerControl : SingletonMono<PlayerControl>
     }
     void CheckInteract()
     {
+        for (int i = 0; i < selectedInt.Count; i++)
+            if (!selectedInt[i])
+            {
+                selectedInt.Remove(selectedInt[i]);
+            }
         raycaster = Physics2D.OverlapPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition), interactableLayer);
         if (raycaster)
         {

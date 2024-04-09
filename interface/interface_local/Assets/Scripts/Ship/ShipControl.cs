@@ -19,7 +19,7 @@ public class ShipControl : MonoBehaviour
         if ((rb.velocity.normalized - targetV.normalized).magnitude < 1.5f || rb.velocity.magnitude < 0.1f)
             rb.velocity = Vector2.Lerp(rb.velocity, targetV, 0.1f);
         else
-            rb.velocity = Vector2.Lerp(rb.velocity, Vector2.zero, 0.1f);
+            rb.velocity = Vector2.Lerp(rb.velocity, Vector2.zero, 0.3f);
         rb.rotation = Mathf.Lerp(rb.rotation, targetQ, 0.03f);
     }
     float DealQ(float qTar)
@@ -49,6 +49,7 @@ public class ShipControl : MonoBehaviour
             default:
                 break;
         }
+        messageOfShip.shipState = ShipState.IDLE;
         EntityManager.GetInstance().ship.Add(this);
     }
 
@@ -177,27 +178,33 @@ public class ShipControl : MonoBehaviour
                 }
                 break;
             case InteractControl.InteractOption.InstallModuleProducer1:
-                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().producer1Data.cost))
+                if (messageOfShip.shipType != ShipType.MILITARY_SHIP &&
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().producer1Data.cost))
                     messageOfShip.producerType = ProducerType.PRODUCER1;
                 break;
             case InteractControl.InteractOption.InstallModuleProducer2:
-                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().producer2Data.cost))
+                if (messageOfShip.shipType != ShipType.MILITARY_SHIP &&
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().producer2Data.cost))
                     messageOfShip.producerType = ProducerType.PRODUCER2;
                 break;
             case InteractControl.InteractOption.InstallModuleProducer3:
-                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().producer3Data.cost))
+                if (messageOfShip.shipType != ShipType.MILITARY_SHIP &&
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().producer3Data.cost))
                     messageOfShip.producerType = ProducerType.PRODUCER3;
                 break;
             case InteractControl.InteractOption.InstallModuleConstructor1:
-                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().constructor1Data.cost))
+                if (messageOfShip.shipType != ShipType.MILITARY_SHIP &&
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().constructor1Data.cost))
                     messageOfShip.constructorType = ConstructorType.CONSTRUCTOR1;
                 break;
             case InteractControl.InteractOption.InstallModuleConstructor2:
-                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().constructor2Data.cost))
+                if (messageOfShip.shipType != ShipType.MILITARY_SHIP &&
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().constructor2Data.cost))
                     messageOfShip.constructorType = ConstructorType.CONSTRUCTOR2;
                 break;
             case InteractControl.InteractOption.InstallModuleConstructor3:
-                if (MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().constructor3Data.cost))
+                if (messageOfShip.shipType != ShipType.MILITARY_SHIP &&
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(ParaDefine.GetInstance().constructor3Data.cost))
                     messageOfShip.constructorType = ConstructorType.CONSTRUCTOR3;
                 break;
             case InteractControl.InteractOption.ConstructFactory:
@@ -289,19 +296,19 @@ public class ShipControl : MonoBehaviour
             case ShipType.CIVILIAN_SHIP:
                 if (ParaDefine.GetInstance().civilShipData.maxHp - messageOfShip.hp > 0 &&
                     MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(
-                    (int)((ParaDefine.GetInstance().civilShipData.maxHp - messageOfShip.hp) * 1.2f)))
+                    (int)((ParaDefine.GetInstance().civilShipData.maxHp / messageOfShip.hp - 1) * 1.2f * ParaDefine.GetInstance().civilShipData.cost)))
                     messageOfShip.hp = ParaDefine.GetInstance().civilShipData.maxHp;
                 break;
             case ShipType.MILITARY_SHIP:
                 if (ParaDefine.GetInstance().militaryShipData.maxHp - messageOfShip.hp > 0 &&
                     MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(
-                    (int)((ParaDefine.GetInstance().militaryShipData.maxHp - messageOfShip.hp) * 1.2f)))
+                    (int)((ParaDefine.GetInstance().militaryShipData.maxHp / messageOfShip.hp - 1) * 1.2f * ParaDefine.GetInstance().militaryShipData.cost)))
                     messageOfShip.hp = ParaDefine.GetInstance().militaryShipData.maxHp;
                 break;
             case ShipType.FLAG_SHIP:
                 if (ParaDefine.GetInstance().flagShipData.maxHp - messageOfShip.hp > 0 &&
                     MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].CostEconomy(
-                    (int)((ParaDefine.GetInstance().flagShipData.maxHp - messageOfShip.hp) * 1.2f)))
+                    (int)((ParaDefine.GetInstance().flagShipData.maxHp / messageOfShip.hp - 1) * 1.2f * ParaDefine.GetInstance().flagShipData.cost)))
                     messageOfShip.hp = ParaDefine.GetInstance().flagShipData.maxHp;
                 break;
             default:
@@ -311,8 +318,26 @@ public class ShipControl : MonoBehaviour
     }
     void Recycle()
     {
-        MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].AddEconomy(messageOfShip.hp / 2);
-        DestroyShip();
+        switch (messageOfShip.shipType)
+        {
+            case ShipType.CIVILIAN_SHIP:
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].AddEconomy(
+                    (int)(messageOfShip.hp / ParaDefine.GetInstance().civilShipData.maxHp * ParaDefine.GetInstance().civilShipData.cost * 0.5f));
+                DestroyShip();
+                break;
+            case ShipType.MILITARY_SHIP:
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].AddEconomy(
+                    (int)(messageOfShip.hp / ParaDefine.GetInstance().militaryShipData.maxHp * ParaDefine.GetInstance().militaryShipData.cost * 0.5f));
+                DestroyShip();
+                break;
+            case ShipType.FLAG_SHIP:
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].AddEconomy(
+                    (int)(messageOfShip.hp / ParaDefine.GetInstance().flagShipData.maxHp * ParaDefine.GetInstance().flagShipData.cost * 0.5f));
+                DestroyShip();
+                break;
+            default:
+                break;
+        }
         // StartCoroutine(RecoverIE());
     }
     void Produce()
@@ -382,6 +407,8 @@ public class ShipControl : MonoBehaviour
                     messageOfShip.shipState = ShipState.IDLE;
                 else
                     yield return new WaitForSeconds(1);
+            else
+                yield return null;
         }
 
     }
@@ -394,7 +421,7 @@ public class ShipControl : MonoBehaviour
         }
         if (messageOfShip.shipState == ShipState.MOVING)
         {
-            if ((pos - (Vector2)transform.position).magnitude > 0.1f)
+            if ((pos - (Vector2)transform.position).magnitude > 0.3f)
             {
                 targetQ = DealQ(Mathf.Atan2(pos.y - transform.position.y, pos.x - transform.position.x) * Mathf.Rad2Deg - 90);
                 SetVQTo((pos - (Vector2)transform.position).normalized * messageOfShip.speed);
@@ -402,6 +429,7 @@ public class ShipControl : MonoBehaviour
             else
             {
                 SetVQTo(Vector2.zero);
+                messageOfShip.shipState = ShipState.IDLE;
                 interactBase.enableMove = false;
             }
         }
@@ -410,10 +438,12 @@ public class ShipControl : MonoBehaviour
     }
     void AttackTowards(Vector2 pos)
     {
-        if (pos != Vector2.zero)
+        if (pos != Vector2.zero && messageOfShip.weaponType != WeaponType.NULL_WEAPON_TYPE)
         {
 
             messageOfShip.shipState = ShipState.ATTACKING;
+            targetQ = DealQ(Mathf.Atan2(pos.y - transform.position.y, pos.x - transform.position.x) * Mathf.Rad2Deg - 90);
+            SetVQTo(Vector2.zero);
             switch (messageOfShip.weaponType)
             {
                 case WeaponType.LASERGUN:
@@ -447,6 +477,7 @@ public class ShipControl : MonoBehaviour
                     obj.GetComponent<BulletControl>().messageOfBullet.playerTeam = messageOfShip.playerTeam;
                     break;
             }
+            messageOfShip.shipState = ShipState.IDLE;
         }
     }
     public void TakeDamage(BulletData bulletData)

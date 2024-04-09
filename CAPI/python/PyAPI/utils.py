@@ -482,10 +482,12 @@ class THUAI72Proto:
 
     @staticmethod
     def THUAI72ProtobufBuildShipMsg(
-        teamID: int, shipType: THUAI7.ShipType
+        teamID: int, shipType: THUAI7.ShipType, birthIndex: int
     ) -> Message2Server.BuildShipMsg:
         return Message2Server.BuildShipMsg(
-            team_id=teamID, ship_type=THUAI72Proto.shipTypeDict[shipType]
+            team_id=teamID,
+            ship_type=THUAI72Proto.shipTypeDict[shipType],
+            birthpoint_index=birthIndex,
         )
 
     @staticmethod
@@ -496,12 +498,4 @@ class THUAI72Proto:
             player_id=playerID,
             team_id=teamID,
             ship_type=THUAI72Proto.shipTypeDict[shipType],
-        )
-
-    @staticmethod
-    def THUAI72ProtobufRecoverMsg(
-        playerID: int, recover: int, teamID: int
-    ) -> Message2Server.RecoverMsg:
-        return Message2Server.RecoverMsg(
-            player_id=playerID, team_id=teamID, recover=recover
         )

@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Build.Content;
+using TMPro;
 using UnityEngine;
 
 public class BaseControl : MonoBehaviour
@@ -10,6 +8,8 @@ public class BaseControl : MonoBehaviour
     [SerializeField]
     public MessageOfBase messageOfBase;
     public GameObject obj;
+    float timer = 0;
+    int deltaEco, ecoStamp = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,7 +27,6 @@ public class BaseControl : MonoBehaviour
             BuildMilitary();
         for (int i = 1; i <= messageOfBase.shipNum.flagShipNum; i++)
             BuildFlag();
-        StartCoroutine(economyUpdate());
     }
     void BuildCivil()
     {
@@ -54,6 +53,7 @@ public class BaseControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        RendererControl.GetInstance().SetColToChild(messageOfBase.playerTeam, gameObject.transform, 0.5f);
         switch (interactBase.interactOption)
         {
             case InteractControl.InteractOption.BuildCivil:
@@ -82,12 +82,10 @@ public class BaseControl : MonoBehaviour
                 break;
             default: break;
         }
-    }
-    IEnumerator economyUpdate()
-    {
-        AddEconomy(1);
-        yield return new WaitForSeconds(0.05f);
-        StartCoroutine(economyUpdate());
+        timer += Time.deltaTime;
+        deltaEco = (int)((timer - ecoStamp * 1.0f / 20) * 20);
+        ecoStamp += deltaEco;
+        AddEconomy(deltaEco);
     }
     public void AddEconomy(int economy)
     {
@@ -112,6 +110,7 @@ public class BaseControl : MonoBehaviour
     }
     void DestroyBase()
     {
+        UIControl.GetInstance().updateUI();
         Destroy(gameObject);
     }
 }

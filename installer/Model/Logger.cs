@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -27,6 +27,12 @@ namespace installer.Model
         Critical = 5,
         None = 6,
     }
+    public class LogRecord
+    {
+        public LogLevel Level { get; set; }
+        public string Message { get; set; } = string.Empty;
+    }
+
     public abstract class Logger : IDisposable
     {
         private int jobID = 0;
@@ -62,6 +68,10 @@ namespace installer.Model
             Partner?.Log(logLevel, PartnerInfo + message);
         }
         public int StartNew() => (jobID++);
+        public void LogDebug(int eventId, string message)
+            => Log(LogLevel.Debug, eventId, message);
+        public void LogDebug(string message)
+            => Log(LogLevel.Debug, message);
         public void LogInfo(int eventId, string message)
             => Log(LogLevel.Information, eventId, message);
         public void LogInfo(string message)
@@ -310,18 +320,18 @@ namespace installer.Model
             base.Log(logLevel, message);
         }
     }
-    public class StackLogger : Logger
+    public class ListLogger : Logger
     {
-        public Stack<(LogLevel level, string message)> Stack = new Stack<(LogLevel level, string message)>();
+        public ObservableCollection<LogRecord> List = new ObservableCollection<LogRecord>();
         public override DateTime LastRecordTime => DateTime.Now;
         protected override void Log(LogLevel logLevel, int eventId, string message)
         {
-            Stack.Push((logLevel, message));
+            List.Add(new LogRecord { Level = logLevel, Message = message });
             base.Log(logLevel, eventId, message);
         }
         protected override void Log(LogLevel logLevel, string message)
         {
-            Stack.Push((logLevel, message));
+            List.Add(new LogRecord { Level = logLevel, Message = message });
             base.Log(logLevel, message);
         }
     }
