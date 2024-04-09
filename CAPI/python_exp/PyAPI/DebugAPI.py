@@ -1,33 +1,27 @@
-import PyAPI.structures as THUAI7
-from PyAPI.Interface import ILogic, IShipAPI, ITeamAPI, IGameTimer, IAI
-from math import pi
-from concurrent.futures import ThreadPoolExecutor, Future
 from typing import List, cast, Tuple, Union
 import logging
 import os
 import datetime
+from math import pi
+from concurrent.futures import ThreadPoolExecutor, Future
+
+import PyAPI.structures as THUAI7
+from PyAPI.Interface import ILogic, IShipAPI, ITeamAPI, IGameTimer, IAI
 
 
 class ShipDebugAPI(IShipAPI, IGameTimer):
-    def __init__(
-        self, logic: ILogic, file: bool, screen: bool, warnOnly: bool, playerID: int
-    ) -> None:
+    def __init__(self, logic: ILogic, file: bool, screen: bool, warnOnly: bool, playerID: int) -> None:
         self.__logic = logic
         self.__pool = ThreadPoolExecutor(20)
         self.__startPoint = datetime.datetime.now()
         self.__logger = logging.getLogger("api " + str(playerID))
         self.__logger.setLevel(logging.DEBUG)
         formatter = logging.Formatter(
-            "[%(name)s] [%(asctime)s.%(msecs)03d] [%(levelname)s] %(message)s",
-            "%H:%M:%S",
+            "[%(name)s] [%(asctime)s.%(msecs)03d] [%(levelname)s] %(message)s", "%H:%M:%S"
         )
         # 确保文件存在
-        if not os.path.exists(
-            os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/logs"
-        ):
-            os.makedirs(
-                os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/logs"
-            )
+        if not os.path.exists(os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/logs"):
+            os.makedirs(os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/logs")
 
         fileHandler = logging.FileHandler(
             os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -86,11 +80,11 @@ class ShipDebugAPI(IShipAPI, IGameTimer):
 
         return self.__pool.submit(logAttack)
 
-    def Recover(self, recover: int) -> Future[bool]:
+    def Recover(self) -> Future[bool]:
         self.__logger.info(f"Recover: called at {self.__GetTime()}ms")
 
         def logRecover() -> bool:
-            result = self.__logic.Recover(recover)
+            result = self.__logic.Recover()
             if not result:
                 self.__logger.warning(f"Recover failed at {self.__GetTime()}ms")
             return result
@@ -413,13 +407,13 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
 
         return self.__pool.submit(logRecycle)
 
-    def BuildShip(self, shipType: THUAI7.ShipType, birthIndex: int) -> Future[bool]:
+    def BuildShip(self, shipType: THUAI7.ShipType) -> Future[bool]:
         self.__logger.info(
-            f"BuildShip: shipType = {shipType},birthIndex:{birthIndex} called at {self.__GetTime()}ms"
+            f"BuildShip: shipType = {shipType}, called at {self.__GetTime()}ms"
         )
 
         def logBuildShip() -> bool:
-            result = self.__logic.BuildShip(shipType, birthIndex)
+            result = self.__logic.BuildShip(shipType)
             if not result:
                 self.__logger.warning(f"BuildShip: failed at {self.__GetTime()}ms")
             return result
@@ -471,8 +465,8 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
     def GetEnergy(self) -> int:
         return self.__logic.GetEnergy()
 
-    def Print(self, string: str) -> None:
-        self.__logger.info(string)
+    def Print(self, cont: str) -> None:
+        self.__logger.info(cont)
 
     def PrintShip(self) -> None:
         for ship in self.__logic.GetShips():
