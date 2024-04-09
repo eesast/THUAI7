@@ -453,7 +453,7 @@ namespace THUAI72Proto
         {THUAI7::NewsType::BinaryMessage, protobuf::MessageOfNews::NewsCase::kBinaryMessage},
     };
 
-    inline protobuf::MoveMsg THUAI72ProtobufMoveMsg(int64_t playerID, int64_t teamID, int64_t time, double angle)
+    inline protobuf::MoveMsg THUAI72ProtobufMoveMsg(int32_t playerID, int32_t teamID, int64_t time, double angle)
     {
         protobuf::MoveMsg moveMsg;
         moveMsg.set_time_in_milliseconds(time);
@@ -463,7 +463,7 @@ namespace THUAI72Proto
         return moveMsg;
     }
 
-    inline protobuf::IDMsg THUAI72ProtobufIDMsg(int64_t playerID, int64_t teamID)
+    inline protobuf::IDMsg THUAI72ProtobufIDMsg(int32_t playerID, int32_t teamID)
     {
         protobuf::IDMsg IDMsg;
         IDMsg.set_player_id(playerID);
@@ -471,7 +471,7 @@ namespace THUAI72Proto
         return IDMsg;
     }
 
-    inline protobuf::RecoverMsg THUAI72ProtobufRecoverMsg(int64_t playerID, int64_t recover, int64_t teamID)
+    inline protobuf::RecoverMsg THUAI72ProtobufRecoverMsg(int32_t playerID, int64_t recover, int32_t teamID)
     {
         protobuf::RecoverMsg RecoverMsg;
         RecoverMsg.set_player_id(playerID);
@@ -480,7 +480,7 @@ namespace THUAI72Proto
         return RecoverMsg;
     }
 
-    inline protobuf::ConstructMsg THUAI72ProtobufConstructMsg(int64_t playerID, int64_t teamID, THUAI7::ConstructionType constructionType)
+    inline protobuf::ConstructMsg THUAI72ProtobufConstructMsg(int32_t playerID, int32_t teamID, THUAI7::ConstructionType constructionType)
     {
         protobuf::ConstructMsg constructMsg;
         constructMsg.set_player_id(playerID);
@@ -489,7 +489,7 @@ namespace THUAI72Proto
         return constructMsg;
     }
 
-    inline protobuf::AttackMsg THUI72ProtobufAttackMsg(int64_t playerID, int64_t teamID, double angle)
+    inline protobuf::AttackMsg THUI72ProtobufAttackMsg(int32_t playerID, int32_t teamID, double angle)
     {
         protobuf::AttackMsg attackMsg;
         attackMsg.set_player_id(playerID);
@@ -498,7 +498,7 @@ namespace THUAI72Proto
         return attackMsg;
     }
 
-    inline protobuf::SendMsg THUAI72ProtobufSendMsg(int64_t playerID, int64_t toPlayerID, int64_t teamID, std::string msg, bool binary)
+    inline protobuf::SendMsg THUAI72ProtobufSendMsg(int32_t playerID, int32_t toPlayerID, int32_t teamID, std::string msg, bool binary)
     {
         protobuf::SendMsg sendMsg;
         if (binary)
@@ -511,7 +511,7 @@ namespace THUAI72Proto
         return sendMsg;
     }
 
-    inline protobuf::InstallMsg THUAI72ProtobufInstallMsg(int64_t playerID, int64_t teamID, THUAI7::ModuleType moduleType)
+    inline protobuf::InstallMsg THUAI72ProtobufInstallMsg(int32_t playerID, int32_t teamID, THUAI7::ModuleType moduleType)
     {
         protobuf::InstallMsg installMsg;
         installMsg.set_module_type(THUAI72Proto::moduleTypeDict[moduleType]);
@@ -520,15 +520,16 @@ namespace THUAI72Proto
         return installMsg;
     }
 
-    inline protobuf::BuildShipMsg THUAI72ProtobufBuildShipMsg(int64_t teamID, THUAI7::ShipType ShipType)
+    inline protobuf::BuildShipMsg THUAI72ProtobufBuildShipMsg(int32_t teamID, THUAI7::ShipType ShipType, int32_t birthIndex)
     {
         protobuf::BuildShipMsg buildShipMsg;
         buildShipMsg.set_team_id(teamID);
         buildShipMsg.set_ship_type(THUAI72Proto::shipTypeDict[ShipType]);
+        buildShipMsg.set_birthpoint_index(birthIndex);
         return buildShipMsg;
     }
 
-    inline protobuf::PlayerMsg THUAI72ProtobufPlayerMsg(int64_t playerID, int64_t teamID, THUAI7::ShipType ShipType)
+    inline protobuf::PlayerMsg THUAI72ProtobufPlayerMsg(int32_t playerID, int32_t teamID, THUAI7::ShipType ShipType)
     {
         protobuf::PlayerMsg playerMsg;
         playerMsg.set_player_id(playerID);

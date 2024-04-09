@@ -71,6 +71,21 @@ namespace Gaming
                         break;
                     case GameObjType.Wormhole:
                         ((Wormhole)objBeingShot).BeAttacked(bullet);
+                        if (((Wormhole)objBeingShot).HP < GameData.WormholeHP / 2)
+                        {
+                            var shipList = gameMap.ShipInTheList(((Wormhole)objBeingShot).Cells);
+                            if (shipList != null)
+                            {
+                                foreach (Ship ship in shipList)
+                                {
+                                    Debugger.Output(ship, " is destroyed!");
+                                    var money = ship.GetCost();
+                                    bullet.Parent.AddMoney(money);
+                                    Debugger.Output(bullet.Parent, " get " + money.ToString() + " money because of destroying " + ship);
+                                    shipManager.Remove(ship);
+                                }
+                            }
+                        }
                         break;
                     case GameObjType.Home:
                         ((Home)objBeingShot).BeAttacked(bullet);

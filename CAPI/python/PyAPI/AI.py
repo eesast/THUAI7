@@ -34,6 +34,8 @@ class AI(IAI):
         # 公共操作
         if self.__playerID == 1:
             api.PrintSelfInfo()
+            api.Move(100, 1.1)
+            api.Attack(10.0)
             time.sleep(1)
             # player1的操作
             return
@@ -50,5 +52,6 @@ class AI(IAI):
 
     def TeamPlay(self, api: ITeamAPI) -> None:
         assert self.__playerID == 0, "Team's playerID must be 0"
+        api.BuildShip(shipType=THUAI7.ShipType.CivilianShip)
         # 操作
         return

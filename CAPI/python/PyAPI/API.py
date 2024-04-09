@@ -28,8 +28,8 @@ class ShipAPI(IShipAPI, IGameTimer):
     def Attack(self, angle: float) -> Future[bool]:
         return self.__pool.submit(self.__logic.Attack, angle)
 
-    def Recover(self) -> Future[bool]:
-        return self.__pool.submit(self.__logic.Recover)
+    def Recover(self, recover: int) -> Future[bool]:
+        return self.__pool.submit(self.__logic.Recover, recover)
 
     def Produce(self) -> Future[bool]:
         return self.__pool.submit(self.__logic.Produce)
@@ -217,8 +217,8 @@ class TeamAPI(ITeamAPI, IGameTimer):
     def Recycle(self, ID: int) -> Future[bool]:
         return self.__pool.submit(self.__logic.Recycle, ID)
 
-    def BuildShip(self, shipType: THUAI7.ShipType) -> Future[bool]:
-        return self.__pool.submit(self.__logic.BuildShip, shipType)
+    def BuildShip(self, shipType: THUAI7.ShipType, birthIndex: int) -> Future[bool]:
+        return self.__pool.submit(self.__logic.BuildShip, shipType, birthIndex)
 
     def Print(self, string: str) -> None:
         pass
