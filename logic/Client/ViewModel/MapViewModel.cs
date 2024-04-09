@@ -63,7 +63,39 @@ namespace Client.ViewModel
                 {
                     for (int j = 0; j < 50; j++)
                     {
-                        map[i, j] = Convert.ToInt32(obj.Rows[i].Cols[j]) + 4; // 与proto一致
+                        switch (obj.Rows[i].Cols[j])
+                        {
+                            case PlaceType.NullPlaceType:
+                                map[i, j] = (int)MapPatchType.Null;
+                                break;
+                            case PlaceType.Space:
+                                map[i, j] = (int)MapPatchType.Space;
+                                break;
+                            case PlaceType.Ruin:
+                                map[i, j] = (int)MapPatchType.Ruin;
+                                break;
+                            case PlaceType.Shadow:
+                                map[i, j] = (int)MapPatchType.Shadow;
+                                break;
+                            case PlaceType.Asteroid:
+                                map[i, j] = (int)MapPatchType.Asteroid;
+                                break;
+                            case PlaceType.Resource:
+                                map[i, j] = (int)MapPatchType.Resource;
+                                break;
+                            case PlaceType.Construction:
+                                map[i, j] = (int)MapPatchType.Factory;
+                                break;
+                            case PlaceType.Wormhole:
+                                map[i, j] = (int)MapPatchType.WormHole;
+                                break;
+                            case PlaceType.Home:
+                                map[i, j] = (int)MapPatchType.RedHome;
+                                break;
+                            default:
+                                map[i, j] = (int)MapPatchType.Null;
+                                break;
+                        }
                     }
                 }
             }
@@ -206,23 +238,27 @@ namespace Client.ViewModel
                         switch ((MapPatchType)Map[i, j])
                         {
                             case MapPatchType.RedHome:
-                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Colors.Red; break;  //Red Home
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Color.FromRgb(237, 49, 47); break;  //Red Home
                             case MapPatchType.BlueHome:
                                 MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Colors.Blue; break; //Blue Home
                             case MapPatchType.Ruin:
-                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Colors.Black; break; // Ruin
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Color.FromRgb(181, 122, 88); break; // Ruin
                             case MapPatchType.Shadow:
-                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Colors.Gray; break; // Grass
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Color.FromRgb(73, 177, 82); break; // Grass
                             case MapPatchType.Asteroid:
-                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Colors.Brown; break; // River
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Color.FromRgb(164, 217, 235); break; // River
                             case MapPatchType.Resource:
-                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Colors.Yellow; break; //Resource
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Color.FromRgb(160, 75, 166); break; //Resource
                             case MapPatchType.Factory:
-                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Colors.Orange; break; //RecycleBank
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Color.FromRgb(231, 144, 74); break; //RecycleBank
                             case MapPatchType.Community:
-                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Colors.Chocolate; break; //ChargeStation
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Color.FromRgb(231, 144, 74); break; //ChargeStation
                             case MapPatchType.Fort:
-                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Colors.Azure; break; //SignalTower
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Color.FromRgb(231, 144, 74); break; //SignalTower
+                            case MapPatchType.Space:
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Color.FromRgb(255, 255, 255); break; //SignalTower
+                            case MapPatchType.WormHole:
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Color.FromRgb(137, 17, 26); break; //SignalTower
                             default:
                                 break;
                         }
