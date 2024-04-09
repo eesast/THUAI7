@@ -553,7 +553,7 @@ namespace Preparation.Utility
                 T previousV = v;
                 TA ans = x();
                 if (v > previousV)
-                    Score.Add((int)((v - previousV).ToDouble(null) * speed));
+                    Score.Add((int)((v - previousV).ToDouble(null) * speed.ToDouble()));
                 return ans;
             }
         }
@@ -564,7 +564,7 @@ namespace Preparation.Utility
                 T previousV = v;
                 x();
                 if (v > previousV)
-                    Score.Add((int)((v - previousV).ToDouble(null) * speed));
+                    Score.Add((int)((v - previousV).ToDouble(null) * speed.ToDouble()));
             }
         }
 
