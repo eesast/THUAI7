@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Client.Model;
+using Microsoft.Maui.Controls.Internals;
+using Protobuf;
 
 namespace Client.Util
 {
@@ -37,6 +40,29 @@ namespace Client.Util
         public static PointF getMapCenter(float i, float j)
         {
             return new PointF(10 * i + 5, 10 * j + 5);
+        }
+
+        public static bool IsShipEqual(Ship a, Ship b)
+        {
+            System.Diagnostics.Debug.WriteLine($"{Convert.ToString(a.TeamID)}, {Convert.ToString(b.TeamID)},{Convert.ToString(a.Type)}, {Convert.ToString(b.Type)},{ Convert.ToString(a.State)}, {Convert.ToString(b.State)},{ Convert.ToString(a.HP)}, { Convert.ToString(b.HP)},{ Convert.ToString(a.ProducerModule)}, { Convert.ToString(b.ProducerModule)},{ Convert.ToString(a.ConstuctorModule)}, { Convert.ToString(b.ConstuctorModule)},{ Convert.ToString(a.ShieldModule)}, { Convert.ToString(b.ShieldModule)},{ Convert.ToString(a.WeaponModule)}, { Convert.ToString(b.WeaponModule)}");
+            if (a == null || b == null) return false;
+            if (
+                a.TeamID == b.TeamID &&
+                a.Type == b.Type &&
+                a.State == b.State &&
+                a.HP == b.HP &&
+                a.ProducerModule == b.ProducerModule &&
+                a.ConstuctorModule == b.ConstuctorModule &&
+                a.ArmorModule == b.ArmorModule &&
+                a.ShieldModule == b.ShieldModule &&
+                a.WeaponModule == b.WeaponModule
+                )
+            {
+                System.Diagnostics.Debug.WriteLine("Equal!");
+                return true;
+            }
+            else
+                return false;
         }
     }
 }
