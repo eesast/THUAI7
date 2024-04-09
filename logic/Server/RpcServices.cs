@@ -506,8 +506,14 @@ namespace Server
 #if DEBUG
             Console.WriteLine($"TRY BuildShip: ShipType {request.ShipType} from Team {request.TeamId}");
 #endif
-            BoolRes boolRes = new();
-            boolRes.ActSuccess = game.ActivateShip(request.TeamId, Transformation.ShipTypeFromProto(request.ShipType), request.BirthpointIndex) != GameObj.invalidID;
+            BoolRes boolRes = new()
+            {
+                ActSuccess =
+                    game.ActivateShip(request.TeamId,
+                                      Transformation.ShipTypeFromProto(request.ShipType),
+                                      request.BirthpointIndex)
+                    != GameObj.invalidID
+            };
 #if DEBUG
             Console.WriteLine("END BuildShip");
 #endif
@@ -517,28 +523,18 @@ namespace Server
         public override Task<BuildShipRes> BuildShipRID(BuildShipMsg request, ServerCallContext context)
         {
 #if DEBUG
-            Console.WriteLine($"TRY BuildShip: ShipType {request.ShipType} from Team {request.TeamId}");
+            Console.WriteLine($"TRY BuildShipRID: ShipType {request.ShipType} from Team {request.TeamId}");
 #endif
-            BuildShipRes buildShipRes = new();
-            var ship = game.TeamList[(int)request.TeamId].ShipPool.GetObj(
-                Transformation.ShipTypeFromProto(request.ShipType));
-            if (ship == null)
+            var playerId = game.ActivateShip(request.TeamId,
+                                             Transformation.ShipTypeFromProto(request.ShipType),
+                                             request.BirthpointIndex);
+            BuildShipRes buildShipRes = new()
             {
-                buildShipRes.ActSuccess = false;
-                return Task.FromResult(buildShipRes);
-            }
-            else if (ship.IsRemoved == false)
-            {
-                buildShipRes.ActSuccess = false;
-                return Task.FromResult(buildShipRes);
-            }
-            buildShipRes.ActSuccess = game.ActivateShip(
-                request.TeamId, request.PlayerId,
-                Transformation.ShipTypeFromProto(request.ShipType),
-                request.BirthpointIndex);
-            buildShipRes.PlayerId = ship.PlayerID;
+                ActSuccess = playerId != GameObj.invalidID,
+                PlayerId = playerId
+            };
 #if DEBUG
-            Console.WriteLine("END BuildShip");
+            Console.WriteLine("END BuildShipRID");
 #endif
             return Task.FromResult(buildShipRes);
         }
