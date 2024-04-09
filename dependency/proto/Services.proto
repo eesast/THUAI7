@@ -23,5 +23,6 @@ service AvailableService
     rpc InstallModule(InstallMsg) returns (BoolRes);
     rpc Recycle(IDMsg) returns (BoolRes);
     rpc BuildShip(BuildShipMsg) returns (BoolRes);
+    rpc BuildShipRID(BuildShipMsg) returns (BuildShipRes);
     rpc EndAllAction(IDMsg) returns (BoolRes); // 结束所有动作
 }

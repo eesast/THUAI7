@@ -320,10 +320,10 @@ class Logic(ILogic):
                 for obj in message.obj_message:
                     if obj.WhichOneof("message_of_obj") == "ship_message":
                         self.__bufferState.guids.append(obj.ship_message.guid)
-            else:
-                for obj in message.obj_message:
-                    if obj.WhichOneof("message_of_obj") == "team_message":
-                        self.__bufferState.guids.append(obj.team_message.guid)
+            # else:
+            #     for obj in message.obj_message:
+            #         if obj.WhichOneof("message_of_obj") == "team_message":
+            #             self.__bufferState.guids.append(obj.team_message.guid)
 
             self.__bufferState.gameInfo = Proto2THUAI7.Protobuf2THUAI7GameInfo(
                 message.all_message
@@ -614,7 +614,7 @@ class Logic(ILogic):
             def HaveOverView(targetX: int, targetY: int):
                 for ship in self.__bufferState.ships:
                     if AssistFunction.HaveView(
-                        ship.viewRange, ship.x, ship.y, targetX, targetY
+                        ship.viewRange, ship.x, ship.y, targetX, targetY, self.__bufferState.gameMap
                     ):
                         return True
                 return False
