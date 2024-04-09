@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace GameClass.GameObj.Areas;
 
-public class Wormhole(XY initPos, List<XY> grids)
+public class Wormhole(XY initPos, List<CellXY> cells)
     : Immovable(initPos, GameData.NumOfPosGridPerCell / 2, GameObjType.Wormhole), IWormhole
 {
     public InVariableRange<long> HP = new(GameData.WormholeHP);
-    private readonly List<XY> grids = grids;
-    public List<XY> Grids => grids;
+    private readonly List<CellXY> cells = cells;
+    public List<CellXY> Cells => cells;
     public override bool IsRigid => HP > GameData.WormholeHP / 2;
     public override ShapeType Shape => ShapeType.Square;
     public AtomicInt RepairNum { get; } = new AtomicInt(0);

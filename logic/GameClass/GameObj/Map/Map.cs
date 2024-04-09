@@ -77,7 +77,7 @@ namespace GameClass.GameObj
 
         public static bool WormholeInteract(Wormhole gameObj, XY Pos)
         {
-            foreach (XY xy in gameObj.Grids)
+            foreach (CellXY xy in gameObj.Cells)
             {
                 if (GameData.ApproachToInteract(xy, Pos))
                     return true;
@@ -113,6 +113,11 @@ namespace GameClass.GameObj
         {
             return GameObjDict[GameObjType.Ship].Cast<Ship>()?.FindAll(ship =>
                 GameData.IsInTheRange(ship.Position, Pos, range));
+        }
+        public List<Ship>? ShipInTheList(List<CellXY> PosList)
+        {
+            return GameObjDict[GameObjType.Ship].Cast<Ship>()?.FindAll(ship =>
+                PosList.Contains(GameData.PosGridToCellXY(ship.Position)));
         }
         public bool CanSee(Ship ship, GameObj gameObj)
         {
@@ -215,13 +220,13 @@ namespace GameClass.GameObj
                         case PlaceType.Wormhole:
                             Func<Wormhole, bool> HasWormhole = (Wormhole wormhole) =>
                             {
-                                if (wormhole.Grids.Contains(new XY(i, j)))
+                                if (wormhole.Cells.Contains(new CellXY(i, j)))
                                     return true;
-                                foreach (XY xy in wormhole.Grids)
+                                foreach (CellXY xy in wormhole.Cells)
                                 {
                                     if (Math.Abs(xy.x - i) <= 1 && Math.Abs(xy.y - j) <= 1)
                                     {
-                                        wormhole.Grids.Add(new XY(i, j));
+                                        wormhole.Cells.Add(new CellXY(i, j));
                                         return true;
                                     }
                                 }
@@ -230,8 +235,8 @@ namespace GameClass.GameObj
 
                             if (GameObjDict[GameObjType.Wormhole].Cast<Wormhole>()?.Find(wormhole => HasWormhole(wormhole)) == null)
                             {
-                                List<XY> grids = [new XY(i, j)];
-                                Add(new Wormhole(GameData.GetCellCenterPos(i, j), grids));
+                                List<CellXY> cells = [new CellXY(i, j)];
+                                Add(new Wormhole(GameData.GetCellCenterPos(i, j), cells));
                             }
                             break;
                         case PlaceType.Home:
