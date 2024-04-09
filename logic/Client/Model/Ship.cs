@@ -16,9 +16,9 @@ namespace Client.Model
 
     //public enum TypeEnum
     //{
-    //    CivilSweeper,
-    //    WarSweeper,
-    //    FlagSweeper
+    //    CivilShip,
+    //    WarShip,
+    //    FlagShip
     //}
 
     //public enum StateEnum
@@ -58,11 +58,11 @@ namespace Client.Model
 
     //}
 
-    public class Sweeper : BindableObject
+    public class Ship : BindableObject
     {
         private long teamID;
-        private SweeperType type;
-        private SweeperState state;
+        private ShipType type;
+        private ShipState state;
         private int Hp;
         private ProducerType producerModule;
         private ConstructorType constuctorModule;
@@ -87,7 +87,7 @@ namespace Client.Model
                 OnPropertyChanged();
             }
         }
-        public SweeperType Type
+        public ShipType Type
         {
             get => type;
             set
@@ -96,7 +96,7 @@ namespace Client.Model
                 OnPropertyChanged();
             }
         }
-        public SweeperState State
+        public ShipState State
         {
             get => state;
             set
@@ -166,7 +166,7 @@ namespace Client.Model
         }
         public string Type_s
         {
-            get => UtilInfo.SweeperTypeNameDict[Type];
+            get => UtilInfo.ShipTypeNameDict[Type];
             //get => type_s;
             set
             {
@@ -177,7 +177,7 @@ namespace Client.Model
         }
         public string State_s
         {
-            get => UtilInfo.SweeperStateNameDict[State];
+            get => UtilInfo.ShipStateNameDict[State];
             //get => state_s;
             set
             {
@@ -188,7 +188,7 @@ namespace Client.Model
         }
         public string ProducerModule_s
         {
-            get => UtilInfo.SweeperProducerTypeNameDict[ProducerModule];
+            get => UtilInfo.ShipProducerTypeNameDict[ProducerModule];
             //get => producerModule_s;
             set
             {
@@ -199,7 +199,7 @@ namespace Client.Model
         }
         public string ConstuctorModule_s
         {
-            get => UtilInfo.SweeperConstructorNameDict[ConstuctorModule];
+            get => UtilInfo.ShipConstructorNameDict[ConstuctorModule];
             //get => constuctorModule_s;
             set
             {
@@ -210,7 +210,7 @@ namespace Client.Model
         }
         public string ArmorModule_s
         {
-            get => UtilInfo.SweeperArmorTypeNameDict[ArmorModule];
+            get => UtilInfo.ShipArmorTypeNameDict[ArmorModule];
             //get => armorModule_s;
             set
             {
@@ -221,7 +221,7 @@ namespace Client.Model
         }
         public string ShieldModule_s
         {
-            get => UtilInfo.SweeperShieldTypeNameDict[ShieldModule];
+            get => UtilInfo.ShipShieldTypeNameDict[ShieldModule];
             //get => shieldModule_s;
             set
             {
@@ -232,7 +232,7 @@ namespace Client.Model
         }
         public string WeaponModule_s
         {
-            get => UtilInfo.SweeperWeaponTypeNameDict[WeaponModule];
+            get => UtilInfo.ShipWeaponTypeNameDict[WeaponModule];
             //get => weaponModule_s;
             set
             {

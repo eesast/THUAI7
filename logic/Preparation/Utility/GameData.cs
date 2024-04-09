@@ -57,11 +57,20 @@ namespace Preparation.Utility
             return Math.Abs(PosGridToCellX(pos1) - PosGridToCellX(pos2)) <= 1
                 && Math.Abs(PosGridToCellY(pos1) - PosGridToCellY(pos2)) <= 1;
         }
+        public static bool ApproachToInteract(CellXY pos1, XY pos2)
+        {
+            return Math.Abs(pos1.x - PosGridToCellX(pos2)) <= 1
+                && Math.Abs(pos1.y - PosGridToCellY(pos2)) <= 1;
+        }
         public static bool ApproachToInteractInACross(XY pos1, XY pos2)
         {
             if (pos1 == pos2) return false;
             return (Math.Abs(PosGridToCellX(pos1) - PosGridToCellX(pos2))
                   + Math.Abs(PosGridToCellY(pos1) - PosGridToCellY(pos2))) <= 1;
+        }
+        public static bool IsInTheRange(XY pos1, XY pos2, int range)
+        {
+            return (pos1 - pos2).Length() <= range;
         }
 
         public const int ShipRadius = 400;
@@ -185,5 +194,8 @@ namespace Preparation.Utility
         public const int FortHP = 12000;
         public const int WormholeHP = 18000;
         public const int HomeHP = 24000;
+
+        public const int FortRange = 6000;
+        public const int FortDamage = 50;
     }
 }

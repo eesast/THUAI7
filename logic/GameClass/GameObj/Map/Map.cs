@@ -77,7 +77,7 @@ namespace GameClass.GameObj
 
         public static bool WormholeInteract(Wormhole gameObj, XY Pos)
         {
-            foreach (XY xy in gameObj.Grids)
+            foreach (CellXY xy in gameObj.Cells)
             {
                 if (GameData.ApproachToInteract(xy, Pos))
                     return true;
@@ -91,7 +91,6 @@ namespace GameClass.GameObj
                 (gameObjType == GameObjType.Wormhole && WormholeInteract((Wormhole)gameObj, Pos)))
                 );
         }
-
         public GameObj? OneInTheSameCell(XY Pos, GameObjType gameObjType)
         {
             return (GameObj?)GameObjDict[gameObjType].Find(gameObj => (GameData.IsInTheSameCell(gameObj.Position, Pos)));
@@ -104,6 +103,21 @@ namespace GameClass.GameObj
         {
             return (GameObj?)GameObjDict[gameObjType].Find(gameObj =>
                 GameData.ApproachToInteractInACross(gameObj.Position, Pos));
+        }
+        public GameObj? OneInTheRange(XY Pos, int range, GameObjType gameObjType)
+        {
+            return (GameObj?)GameObjDict[gameObjType].Find(gameObj =>
+                GameData.IsInTheRange(gameObj.Position, Pos, range));
+        }
+        public List<Ship>? ShipInTheRange(XY Pos, int range)
+        {
+            return GameObjDict[GameObjType.Ship].Cast<Ship>()?.FindAll(ship =>
+                GameData.IsInTheRange(ship.Position, Pos, range));
+        }
+        public List<Ship>? ShipInTheList(List<CellXY> PosList)
+        {
+            return GameObjDict[GameObjType.Ship].Cast<Ship>()?.FindAll(ship =>
+                PosList.Contains(GameData.PosGridToCellXY(ship.Position)));
         }
         public bool CanSee(Ship ship, GameObj gameObj)
         {
@@ -178,6 +192,7 @@ namespace GameClass.GameObj
         public void Add(IGameObj gameObj)
         {
             GameObjDict[gameObj.Type].Add(gameObj);
+            Debugger.Output("Found a " + gameObj.Type.ToString() + " at " + gameObj.Position.ToString());
         }
         public Map(MapStruct mapResource)
         {
@@ -205,13 +220,13 @@ namespace GameClass.GameObj
                         case PlaceType.Wormhole:
                             Func<Wormhole, bool> HasWormhole = (Wormhole wormhole) =>
                             {
-                                if (wormhole.Grids.Contains(new XY(i, j)))
+                                if (wormhole.Cells.Contains(new CellXY(i, j)))
                                     return true;
-                                foreach (XY xy in wormhole.Grids)
+                                foreach (CellXY xy in wormhole.Cells)
                                 {
                                     if (Math.Abs(xy.x - i) <= 1 && Math.Abs(xy.y - j) <= 1)
                                     {
-                                        wormhole.Grids.Add(new XY(i, j));
+                                        wormhole.Cells.Add(new CellXY(i, j));
                                         return true;
                                     }
                                 }
@@ -220,8 +235,8 @@ namespace GameClass.GameObj
 
                             if (GameObjDict[GameObjType.Wormhole].Cast<Wormhole>()?.Find(wormhole => HasWormhole(wormhole)) == null)
                             {
-                                List<XY> grids = [new XY(i, j)];
-                                Add(new Wormhole(GameData.GetCellCenterPos(i, j), grids));
+                                List<CellXY> cells = [new CellXY(i, j)];
+                                Add(new Wormhole(GameData.GetCellCenterPos(i, j), cells));
                             }
                             break;
                         case PlaceType.Home:

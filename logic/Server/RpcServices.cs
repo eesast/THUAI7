@@ -133,7 +133,7 @@ namespace Server
 #endif
             lock (addPlayerLock)
             {
-                Game.PlayerInitInfo playerInitInfo = new(request.TeamId, request.PlayerId, Transformation.ShipTypeFromProto(request.SweeperType));
+                Game.PlayerInitInfo playerInitInfo = new(request.TeamId, request.PlayerId, Transformation.ShipTypeFromProto(request.ShipType));
                 long newPlayerID = game.AddPlayer(playerInitInfo);
                 if (newPlayerID == GameObj.invalidID)
                 {
@@ -238,7 +238,7 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             // var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.ActivateShip(request.TeamId, Transformation.ShipTypeFromProto(request.SweeperType));
+            boolRes.ActSuccess = game.ActivateShip(request.TeamId, Transformation.ShipTypeFromProto(request.ShipType));
             if (!game.GameMap.Timer.IsGaming) boolRes.ActSuccess = false;
 #if DEBUG
             Console.WriteLine($"END Activate: {boolRes.ActSuccess}");
@@ -501,27 +501,15 @@ namespace Server
             return Task.FromResult(boolRes);
         }
 
-        public override Task<BoolRes> BuildSweeper(BuildSweeperMsg request, ServerCallContext context)
+        public override Task<BoolRes> BuildShip(BuildShipMsg request, ServerCallContext context)
         {
 #if DEBUG
-            Console.WriteLine($"TRY BuildSweeper: SweeperType {request.SweeperType} from Team {request.TeamId}");
+            Console.WriteLine($"TRY BuildShip: ShipType {request.ShipType} from Team {request.TeamId}");
 #endif
             BoolRes boolRes = new();
-            var ship = game.TeamList[(int)request.TeamId].ShipPool.Find(
-                (ship) => ship.PlayerID == request.PlayerId);
-            if (ship == null)
-            {
-                boolRes.ActSuccess = false;
-                return Task.FromResult(boolRes);
-            }
-            else if (ship.IsRemoved == false)
-            {
-                boolRes.ActSuccess = false;
-                return Task.FromResult(boolRes);
-            }
-            boolRes.ActSuccess = game.ActivateShip(request.TeamId, request.PlayerId, Transformation.ShipTypeFromProto(request.SweeperType), request.BirthpointIndex);
+            boolRes.ActSuccess = game.ActivateShip(request.TeamId, Transformation.ShipTypeFromProto(request.ShipType), request.BirthpointIndex) != GameObj.invalidID;
 #if DEBUG
-            Console.WriteLine("END BuildSweeper");
+            Console.WriteLine("END BuildShip");
 #endif
             return Task.FromResult(boolRes);
         }

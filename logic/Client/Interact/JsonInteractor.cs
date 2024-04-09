@@ -27,7 +27,7 @@ namespace Client.Interact
                 string port = o["port"].ToString();
                 string teamid = o["teamid"].ToString();
                 string playerid = o["playerid"].ToString();
-                string sweepertype = o["sweepertype"].ToString();
+                string shiptype = o["shiptype"].ToString();
                 string index = o["index"].ToString();
 
                 reader.Close();
@@ -37,7 +37,7 @@ namespace Client.Interact
                 cominfo[1] = port;
                 cominfo[2] = teamid;
                 cominfo[3] = playerid;
-                cominfo[4] = sweepertype;
+                cominfo[4] = shiptype;
 
                 //FileStream writetxt_fs = new FileStream(result1, FileMode.Create);
                 //StreamWriter wr = new StreamWriter(writetxt_fs, System.Text.Encoding.Default);
@@ -48,18 +48,19 @@ namespace Client.Interact
             return cominfo;
         }
 
-        //public static string[] FileInteract()
-        //{
-        //    string[] cominfo = new string[10];
-        //    ConfigData d = new();
-        //    if (d.Commands.Launched == false)
-        //    {
-        //        cominfo[0] = d.Commands.IP;
-        //        cominfo[1] = d.Commands.Port;
-        //        cominfo[2] = d.Commands.PlayerID;
-        //        cominfo[3] = d.Commands.TeamID;
-        //        cominfo[4] = d.Commands.SweeperType;
 
+        public static string[] FileInteract()
+        {
+            string[] cominfo = new string[10];
+            ConfigData d = new();
+            if (d.Commands.Launched == false)
+            {
+                cominfo[0] = d.Commands.IP;
+                cominfo[1] = d.Commands.Port;
+                cominfo[2] = d.Commands.PlayerID;
+                cominfo[3] = d.Commands.TeamID;
+                cominfo[4] = d.Commands.ShipType;
+            }
         //        d.Commands.Launched = true;
         //    }
 

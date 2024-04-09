@@ -42,7 +42,7 @@ namespace installer.Data
         public string MD5DataPath { get; set; } = ".\\hash.json";
         public string InstallPath { get; set; } = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-            "THUAI7"
+            "THUAI7", "Data"
         );
         public string Token { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;
@@ -171,7 +171,6 @@ namespace installer.Data
             }
         }
 
-
         public int LaunchID
         {
             get => file.LaunchID;
@@ -203,17 +202,20 @@ namespace installer.Data
     {
         public ConfigData(string? p = null, bool autoSave = true)
         {
-            path = string.IsNullOrEmpty(p) ? Path.Combine(
+            var dataDir = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                "THUAI7.json") : p;
+                "THUAI7");
+            if (!Directory.Exists(dataDir))
+                Directory.CreateDirectory(dataDir);
+            path = string.IsNullOrEmpty(p) ? Path.Combine(dataDir, "config.json") : p;
             file = new ConfigDataFile();
             com = new Command(file.Commands);
             ReadFile();
 
             if (autoSave)
                 OnMemoryChanged += (_, _) => SaveFile();
-            watcher = new FileSystemWatcher(Directory.GetParent(path)?.FullName ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
-            watcher.Filter = "THUAI*.json";
+            watcher = new FileSystemWatcher(Directory.GetParent(path)?.FullName ?? dataDir);
+            watcher.Filter = "*.json";
             watcher.NotifyFilter = NotifyFilters.Attributes
                                  | NotifyFilters.CreationTime
                                  | NotifyFilters.DirectoryName
@@ -250,6 +252,10 @@ namespace installer.Data
             }
             com = new Command(file.Commands);
             com.OnMemoryChanged += (_, _) => OnMemoryChanged?.Invoke(this, new EventArgs());
+        }
+
+        public void ReadFileOnWindows()
+        {
         }
 
         public void SaveFile()
@@ -363,6 +369,7 @@ namespace installer.Data
                 com = value;
                 if (temp != value)
                     OnMemoryChanged?.Invoke(this, new EventArgs());
+                com.OnMemoryChanged += (_, _) => OnMemoryChanged?.Invoke(this, new EventArgs());
             }
         }
     }

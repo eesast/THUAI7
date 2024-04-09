@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,7 +37,7 @@ public enum PlayerType
     SHIP,
     TEAM,
 }
-
+[Serializable]
 public enum ShipType
 {
     NULL_SHIP_TYPE,
@@ -150,7 +151,7 @@ public enum NewsType
 
 public enum PlayerTeam
 {
-    NULL_TEAM,
     RED,
     BLUE,
+    NULL_TEAM,
 }

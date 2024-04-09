@@ -24,9 +24,9 @@ public class Ship : Movable, IShip
         return false;
     }
     // 属性值
-    public LongInTheVariableRange HP { get; }
-    public LongInTheVariableRange Armor { get; }
-    public LongInTheVariableRange Shield { get; }
+    public InVariableRange<long> HP { get; }
+    public InVariableRange<long> Armor { get; }
+    public InVariableRange<long> Shield { get; }
     public ShipType ShipType { get; }
     private ShipStateType shipState = ShipStateType.Null;
     public ShipStateType ShipState => shipState;
@@ -160,37 +160,37 @@ public class Ship : Movable, IShip
                 case ModuleType.Armor1:
                     armorType = ArmorType.Armor1;
                     armor = ModuleFactory.FindIArmor(ShipType, armorType);
-                    Armor.SetV(armor.ArmorHP);
+                    Armor.SetRNow(armor.ArmorHP);
                     SubMoney(armor.Cost);
                     return true;
                 case ModuleType.Armor2:
                     armorType = ArmorType.Armor2;
                     armor = ModuleFactory.FindIArmor(ShipType, armorType);
-                    Armor.SetV(armor.ArmorHP);
+                    Armor.SetRNow(armor.ArmorHP);
                     SubMoney(armor.Cost);
                     return true;
                 case ModuleType.Armor3:
                     armorType = ArmorType.Armor3;
                     armor = ModuleFactory.FindIArmor(ShipType, armorType);
-                    Armor.SetV(armor.ArmorHP);
+                    Armor.SetRNow(armor.ArmorHP);
                     SubMoney(armor.Cost);
                     return true;
                 case ModuleType.Shield1:
                     shieldType = ShieldType.Shield1;
                     shield = ModuleFactory.FindIShield(ShipType, shieldType);
-                    Shield.SetV(shield.ShieldHP);
+                    Shield.SetRNow(shield.ShieldHP);
                     SubMoney(shield.Cost);
                     return true;
                 case ModuleType.Shield2:
                     shieldType = ShieldType.Shield2;
                     shield = ModuleFactory.FindIShield(ShipType, shieldType);
-                    Shield.SetV(shield.ShieldHP);
+                    Shield.SetRNow(shield.ShieldHP);
                     SubMoney(shield.Cost);
                     return true;
                 case ModuleType.Shield3:
                     shieldType = ShieldType.Shield3;
                     shield = ModuleFactory.FindIShield(ShipType, shieldType);
-                    Shield.SetV(shield.ShieldHP);
+                    Shield.SetRNow(shield.ShieldHP);
                     SubMoney(shield.Cost);
                     return true;
                 case ModuleType.LaserGun:
@@ -450,5 +450,6 @@ public class Ship : Movable, IShip
             ModuleFactory.FindIShield(ShipType, shieldType),
             ModuleFactory.FindIWeapon(ShipType, weaponType)
         );
+        Debugger.Output(this, "Ship created");
     }
 }

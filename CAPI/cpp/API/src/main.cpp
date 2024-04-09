@@ -40,7 +40,7 @@ int THUAI7Main(int argc, char** argv, CreateAIFunc AIBuilder)
     bool file = false;
     bool print = false;
     bool warnOnly = false;
-    extern const std::array<THUAI7::SweeperType, 4> SweeperTypeDict;
+    extern const std::array<THUAI7::ShipType, 4> ShipTypeDict;
     // {
     //     file = true;
     //     print = true;
@@ -101,19 +101,19 @@ int THUAI7Main(int argc, char** argv, CreateAIFunc AIBuilder)
     try
     {
         THUAI7::PlayerType playerType;
-        THUAI7::SweeperType SweeperType = THUAI7::SweeperType::NullSweeperType;
+        THUAI7::ShipType ShipType = THUAI7::ShipType::NullShipType;
         if (pID == 0)
             playerType = THUAI7::PlayerType::Team;
         else
         {
-            playerType = THUAI7::PlayerType::Sweeper;
-            SweeperType = SweeperTypeDict[pID];
+            playerType = THUAI7::PlayerType::Ship;
+            ShipType = ShipTypeDict[pID - 1];
         }
 #ifdef _MSC_VER
         std::cout
             << welcomeString << std::endl;
 #endif
-        Logic logic(pID, tID, playerType, SweeperType);
+        Logic logic(pID, tID, playerType, ShipType);
         logic.Main(AIBuilder, sIP, sPort, file, print, warnOnly);
     }
     catch (const std::exception& e)
@@ -127,7 +127,7 @@ int THUAI7Main(int argc, char** argv, CreateAIFunc AIBuilder)
     return 0;
 }
 
-std::unique_ptr<IAI> CreateAI(int64_t pID)
+std::unique_ptr<IAI> CreateAI(int32_t pID)
 {
     return std::make_unique<AI>(pID);
 }

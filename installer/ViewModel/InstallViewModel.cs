@@ -17,13 +17,12 @@ namespace installer.ViewModel
     {
         private readonly Downloader Downloader;
         private readonly IFolderPicker FolderPicker;
-        public ObservableCollection<Exception> Exceptions { get; private set; }
+        public ObservableCollection<LogRecord> Exceptions { get => Downloader.LogList.List; }
 
         public InstallViewModel(IFolderPicker folderPicker, Downloader downloader)
         {
             Downloader = downloader;
             FolderPicker = folderPicker;
-            Exceptions = new ObservableCollection<Exception>();
 
             downloadPath = Downloader.Data.Config.InstallPath;
 
@@ -132,18 +131,6 @@ namespace installer.ViewModel
             }
         }
 
-        public void UpdateExceptions()
-        {
-            while (Downloader.Exceptions.Count > 0)
-            {
-                var exception = Downloader.Exceptions.Pop();
-                if (exception != null)
-                {
-                    Exceptions.Add(exception);
-                }
-            }
-        }
-
         public ICommand BrowseBtnClickedCommand { get; }
         private async Task BrowseBtnClicked()
         {
@@ -162,7 +149,6 @@ namespace installer.ViewModel
                 DownloadPath = DownloadPath;
             }
             BrowseEnabled = true;
-            UpdateExceptions();
         }
         public ICommand CheckUpdBtnClickedCommand { get; }
         private async void CheckUpdBtnClicked()
@@ -185,7 +171,6 @@ namespace installer.ViewModel
             }
             BrowseEnabled = true;
             CheckEnabled = true;
-            UpdateExceptions();
         }
         public ICommand DownloadBtnClickedCommand { get; }
         private async Task DownloadBtnClicked()
@@ -205,7 +190,6 @@ namespace installer.ViewModel
             }
             CheckEnabled = true;
             BrowseEnabled = true;
-            UpdateExceptions();
             // DebugAlert2 = "Installed" + Downloader.Data.Installed.ToString();
         }
         public ICommand UpdateBtnClickedCommand { get; }
@@ -219,7 +203,6 @@ namespace installer.ViewModel
             await Task.Run(() => Downloader.Update());
             CheckEnabled = true;
             BrowseEnabled = true;
-            UpdateExceptions();
         }
     }
 }

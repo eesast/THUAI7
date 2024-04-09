@@ -65,12 +65,12 @@ namespace Client.ViewModel
         }
 
         private long playerID;
-        private SweeperType SweeperType;
+        private ShipType ShipType;
         private long teamID;
         AvailableService.AvailableServiceClient? client;
         AsyncServerStreamingCall<MessageToClient>? responseStream;
         bool isSpectatorMode = false;
-        // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID 3-teamID 4-SweeperType
+        // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID 3-teamID 4-ShipType
         public void ConnectToServer(string[] comInfo)
         {
             if (!isSpectatorMode && comInfo.Length != 5 || isSpectatorMode && comInfo.Length != 4)
@@ -91,15 +91,15 @@ namespace Client.ViewModel
             //playerMsg.Y = 0;
             if (!isSpectatorMode)
             {
-                SweeperType = Convert.ToInt64(comInfo[4]) switch
+                ShipType = Convert.ToInt64(comInfo[4]) switch
                 {
-                    0 => SweeperType.NullSweeperType,
-                    1 => SweeperType.CivilianSweeper,
-                    2 => SweeperType.MilitarySweeper,
-                    3 => SweeperType.FlagSweeper,
-                    _ => SweeperType.NullSweeperType
+                    0 => ShipType.NullShipType,
+                    1 => ShipType.CivilianShip,
+                    2 => ShipType.MilitaryShip,
+                    3 => ShipType.FlagShip,
+                    _ => ShipType.NullShipType
                 };
-                playerMsg.SweeperType = SweeperType;
+                playerMsg.ShipType = ShipType;
             }
             responseStream = client.AddPlayer(playerMsg);
             isClientStocked = false;
@@ -260,10 +260,10 @@ namespace Client.ViewModel
                                     }
                                     listOfAll.Add(content.AllMessage);
                                     countMap.Clear();
-                                    countMap.Add((int)MapPatchType.Garbage, listOfGarbage.Count);
-                                    countMap.Add((int)MapPatchType.RecycleBank, listOfRecycleBank.Count);
-                                    countMap.Add((int)MapPatchType.ChargeStation, listOfChargeStation.Count);
-                                    countMap.Add((int)MapPatchType.SignalTower, listOfSignalTower.Count);
+                                    countMap.Add((int)MapPatchType.Resource, listOfResource.Count);
+                                    countMap.Add((int)MapPatchType.Factory, listOfFactory.Count);
+                                    countMap.Add((int)MapPatchType.Community, listOfCommunity.Count);
+                                    countMap.Add((int)MapPatchType.Fort, listOfFort.Count);
                                     GetMap(mapMassage);
                                     break;
                                 case GameState.GameRunning:
@@ -454,45 +454,45 @@ namespace Client.ViewModel
                         {
                             if (data.TeamId == (long)PlayerTeam.Red)
                             {
-                                Sweeper ship = new Sweeper
+                                Ship ship = new Ship
                                 {
-                                    Type = data.SweeperType,
-                                    State = data.SweeperState,
+                                    Type = data.ShipType,
+                                    State = data.ShipState,
                                     ArmorModule = data.ArmorType,
                                     ShieldModule = data.ShieldType,
                                     WeaponModule = data.WeaponType,
                                     ProducerModule = data.ProducerType,
                                     ConstuctorModule = data.ConstructorType,
-                                    Type_s = UtilInfo.SweeperTypeNameDict[data.SweeperType],
-                                    State_s = UtilInfo.SweeperStateNameDict[data.SweeperState],
-                                    ArmorModule_s = UtilInfo.SweeperArmorTypeNameDict[data.ArmorType],
-                                    ShieldModule_s = UtilInfo.SweeperShieldTypeNameDict[data.ShieldType],
-                                    WeaponModule_s = UtilInfo.SweeperWeaponTypeNameDict[data.WeaponType],
-                                    ConstuctorModule_s = UtilInfo.SweeperConstructorNameDict[data.ConstructorType],
-                                    ProducerModule_s = UtilInfo.SweeperProducerTypeNameDict[data.ProducerType]
+                                    Type_s = UtilInfo.ShipTypeNameDict[data.ShipType],
+                                    State_s = UtilInfo.ShipStateNameDict[data.ShipState],
+                                    ArmorModule_s = UtilInfo.ShipArmorTypeNameDict[data.ArmorType],
+                                    ShieldModule_s = UtilInfo.ShipShieldTypeNameDict[data.ShieldType],
+                                    WeaponModule_s = UtilInfo.ShipWeaponTypeNameDict[data.WeaponType],
+                                    ConstuctorModule_s = UtilInfo.ShipConstructorNameDict[data.ConstructorType],
+                                    ProducerModule_s = UtilInfo.ShipProducerTypeNameDict[data.ProducerType]
                                 };
-                                RedPlayer.Sweepers.Add(ship);
+                                RedPlayer.Ships.Add(ship);
                             }
                             else if (data.TeamId == (long)PlayerTeam.Blue)
                             {
-                                Sweeper ship = new Sweeper
+                                Ship ship = new Ship
                                 {
-                                    Type = data.SweeperType,
-                                    State = data.SweeperState,
+                                    Type = data.ShipType,
+                                    State = data.ShipState,
                                     ArmorModule = data.ArmorType,
                                     ShieldModule = data.ShieldType,
                                     WeaponModule = data.WeaponType,
                                     ProducerModule = data.ProducerType,
                                     ConstuctorModule = data.ConstructorType,
-                                    Type_s = UtilInfo.SweeperTypeNameDict[data.SweeperType],
-                                    State_s = UtilInfo.SweeperStateNameDict[data.SweeperState],
-                                    ArmorModule_s = UtilInfo.SweeperArmorTypeNameDict[data.ArmorType],
-                                    ShieldModule_s = UtilInfo.SweeperShieldTypeNameDict[data.ShieldType],
-                                    WeaponModule_s = UtilInfo.SweeperWeaponTypeNameDict[data.WeaponType],
-                                    ConstuctorModule_s = UtilInfo.SweeperConstructorNameDict[data.ConstructorType],
-                                    ProducerModule_s = UtilInfo.SweeperProducerTypeNameDict[data.ProducerType]
+                                    Type_s = UtilInfo.ShipTypeNameDict[data.ShipType],
+                                    State_s = UtilInfo.ShipStateNameDict[data.ShipState],
+                                    ArmorModule_s = UtilInfo.ShipArmorTypeNameDict[data.ArmorType],
+                                    ShieldModule_s = UtilInfo.ShipShieldTypeNameDict[data.ShieldType],
+                                    WeaponModule_s = UtilInfo.ShipWeaponTypeNameDict[data.WeaponType],
+                                    ConstuctorModule_s = UtilInfo.ShipConstructorNameDict[data.ConstructorType],
+                                    ProducerModule_s = UtilInfo.ShipProducerTypeNameDict[data.ProducerType]
                                 };
-                                BluePlayer.Sweepers.Add(ship);
+                                BluePlayer.Ships.Add(ship);
                             }
                             else
                             {
@@ -518,27 +518,27 @@ namespace Client.ViewModel
                             System.Diagnostics.Debug.WriteLine("============= Draw sweeper list ================");
                         }
 
-                        foreach (var data in listOfChargeStation)
+                        foreach (var data in listOfCommunity)
                         {
-                            DrawChargeStation(data);
+                            DrawCommunity(data);
                         }
 
-                        foreach (var data in listOfRecycleBank)
+                        foreach (var data in listOfFactory)
                         {
-                            DrawRecycleBank(data);
+                            DrawFactory(data);
                         }
 
-                        foreach (var data in listOfBridge)
+                        foreach (var data in listOfWormhole)
                         {
                             DrawWormHole(data);
                         }
 
-                        foreach (var data in listOfSignalTower)
+                        foreach (var data in listOfFort)
                         {
-                            DrawSignalTower(data);
+                            DrawFort(data);
                         }
 
-                        foreach (var data in listOfGarbage)
+                        foreach (var data in listOfResource)
                         {
                             DrawResource(data);
                         }
@@ -659,13 +659,13 @@ namespace Client.ViewModel
             RedPlayer.Hp = 100;
             RedPlayer.Money = 1000;
 
-            Sweeper ship = new Sweeper
+            Ship ship = new Ship
             {
-                Type_s = "CivilSweeper",
+                Type_s = "CivilShip",
                 State_s = "Idle",
                 ArmorModule_s = "LightArmor"
             };
-            RedPlayer.Sweepers.Add(ship);
+            RedPlayer.Ships.Add(ship);
 
             WormHole1HP = 100;
             WormHole2HP = 100;

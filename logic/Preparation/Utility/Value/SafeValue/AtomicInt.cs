@@ -5,7 +5,7 @@ namespace Preparation.Utility
 {
     //其对应属性不应当有set访问器，避免不安全的=赋值
 
-    public class AtomicInt(int x) : Atomic, IAddable<int>
+    public class AtomicInt(int x) : Atomic, IIntAddable
     {
         protected int v = x;
 
@@ -49,8 +49,8 @@ namespace Preparation.Utility
     /// </summary>
     public class AtomicIntOnlyAddScore(int x, double speed = 1.0) : AtomicInt(x)
     {
-        public IAddable<int> score = new AtomicInt(0);
-        public IAddable<int> Score
+        public IIntAddable score = new AtomicInt(0);
+        public IIntAddable Score
         {
             get
             {
@@ -154,8 +154,8 @@ namespace Preparation.Utility
     /// </summary>
     public class AtomicIntChangeAffectScore(int x, double speed = 1.0) : AtomicInt(x)
     {
-        public IAddable<int> score = new AtomicInt(0);
-        public IAddable<int> Score
+        public IIntAddable score = new AtomicInt(0);
+        public IIntAddable Score
         {
             get
             {
@@ -260,7 +260,7 @@ namespace Preparation.Utility
         }
     }
 
-    public class AtomicLong(long x) : Atomic, IAddable<int>, IAddable<long>
+    public class AtomicLong(long x) : Atomic, IIntAddable, IAddable<long>
     {
         protected long v = x;
 

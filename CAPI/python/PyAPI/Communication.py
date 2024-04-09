@@ -91,7 +91,7 @@ class Communication:
                     return False
                 self.__counter += 1
             recoverResult: Message2Clients.BoolRes = self.__THUAI7Stub.Recover(
-                THUAI72Proto.THUAI72ProtobufRecoverMsg(playerID, recover, teamID)
+                THUAI72Proto.THUAI72ProtobufRecoverMsg(playerID, teamID, recover)
             )
         except grpc.RpcError:
             return False
@@ -218,14 +218,16 @@ class Communication:
         else:
             return recycleResult.act_success
 
-    def BuildSweeper(self, sweeperType: THUAI7.SweeperType, teamID: int) -> bool:
+    def BuildShip(
+        self, teamID: int, shipType: THUAI7.ShipType, birthIndex: int
+    ) -> bool:
         try:
             with self.__mtxLimit:
                 if self.__counter >= self.__limit:
                     return False
                 self.__counter += 1
-            buildResult: Message2Clients.BoolRes = self.__THUAI7Stub.BuildSweeper(
-                THUAI72Proto.THUAI72ProtobufBuildSweeperMsg(teamID, sweeperType)
+            buildResult: Message2Clients.BoolRes = self.__THUAI7Stub.BuildShip(
+                THUAI72Proto.THUAI72ProtobufBuildShipMsg(teamID, shipType, birthIndex)
             )
         except grpc.RpcError:
             return False
@@ -248,14 +250,12 @@ class Communication:
             self.__haveNewMessage = False
             return self.__message2Client
 
-    def AddPlayer(
-        self, playerID: int, teamID: int, sweeperType: THUAI7.SweeperType
-    ) -> None:
+    def AddPlayer(self, playerID: int, teamID: int, shipType: THUAI7.ShipType) -> None:
         def tMessage():
             try:
                 if playerID == 0:
                     playerMsg = THUAI72Proto.THUAI72ProtobufPlayerMsg(
-                        playerID, teamID, sweeperType
+                        playerID, teamID, shipType
                     )
                     for msg in self.__THUAI7Stub.AddPlayer(playerMsg):
                         with self.__cvMessage:
@@ -267,7 +267,7 @@ class Communication:
                                 self.__counterMove = 0
                 elif playerID >= 1 and playerID <= 8:
                     playerMsg = THUAI72Proto.THUAI72ProtobufPlayerMsg(
-                        playerID, teamID, sweeperType
+                        playerID, teamID, shipType
                     )
                     for msg in self.__THUAI7Stub.AddPlayer(playerMsg):
                         with self.__cvMessage:

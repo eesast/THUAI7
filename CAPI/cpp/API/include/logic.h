@@ -47,10 +47,10 @@ private:
 
     // ID
     THUAI7::PlayerType playerType;
-    int64_t playerID;
-    int64_t teamID;
+    int32_t playerID;
+    int32_t teamID;
     THUAI7::PlayerTeam playerTeam;
-    THUAI7::SweeperType SweeperType;
+    THUAI7::ShipType ShipType;
     std::unique_ptr<IGameTimer> timer;
     std::thread tAI;  // 用于运行AI的线程
 
@@ -62,7 +62,7 @@ private:
     std::condition_variable cvAI;
 
     // 信息队列
-    ConcurrentQueue<std::pair<int64_t, std::string>> messageQueue;
+    ConcurrentQueue<std::pair<int32_t, std::string>> messageQueue;
 
     // 存储状态，分别是现在的状态和缓冲区的状态。
     State state[2];
@@ -89,33 +89,33 @@ private:
 
     // 提供给API使用的函数
 
-    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Sweeper>> GetSweepers() const;
-    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Sweeper>> GetEnemySweepers() const;
+    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Ship>> GetShips() const;
+    [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Ship>> GetEnemyShips() const;
     [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Bullet>> GetBullets() const;
-    [[nodiscard]] std::shared_ptr<const THUAI7::Sweeper> SweeperGetSelfInfo() const;
+    [[nodiscard]] std::shared_ptr<const THUAI7::Ship> ShipGetSelfInfo() const;
     [[nodiscard]] std::shared_ptr<const THUAI7::Team> TeamGetSelfInfo() const;
     [[nodiscard]] std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const;
     [[nodiscard]] std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const;
     [[nodiscard]] THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const;
     [[nodiscard]] std::vector<int64_t> GetPlayerGUIDs() const;
     [[nodiscard]] int32_t GetConstructionHp(int32_t cellX, int32_t cellY) const;
-    [[nodiscard]] int32_t GetBridgeHp(int32_t cellX, int32_t cellY) const;
-    [[nodiscard]] int32_t GetGarbageState(int32_t cellX, int32_t cellY) const;
+    [[nodiscard]] int32_t GetWormholeHp(int32_t cellX, int32_t cellY) const;
+    [[nodiscard]] int32_t GetResourceState(int32_t cellX, int32_t cellY) const;
     [[nodiscard]] int32_t GetHomeHp() const;
     [[nodiscard]] int32_t GetEnergy() const;
     [[nodiscard]] int32_t GetScore() const;
 
     // 供IAPI使用的操作相关的部分
-    bool Send(int64_t toPlayerID, std::string message, bool binary);
+    bool Send(int32_t toPlayerID, std::string message, bool binary);
     bool HaveMessage();
-    std::pair<int64_t, std::string> GetMessage();
+    std::pair<int32_t, std::string> GetMessage();
     bool WaitThread();
     int32_t GetCounter() const;
     bool EndAllAction();
 
-    // ISweeperAPI使用的部分
+    // IShipAPI使用的部分
     bool Move(int64_t time, double angle);
-    bool Recover();
+    bool Recover(int64_t recover);
     bool Produce();
     bool Rebuild(THUAI7::ConstructionType constructionType);
     bool Construct(THUAI7::ConstructionType constructionType);
@@ -123,9 +123,9 @@ private:
     [[nodiscard]] bool HaveView(int32_t selfX, int32_t selfY, int32_t targetX, int32_t targetY, int32_t viewRange) const;
 
     // ITeamAPI
-    bool Recycle(int64_t playerID);
-    bool InstallModule(int64_t playerID, THUAI7::ModuleType moduleType);
-    bool BuildSweeper(THUAI7::SweeperType SweeperType);
+    bool Recycle(int32_t playerID);
+    bool InstallModule(int32_t playerID, THUAI7::ModuleType moduleType);
+    bool BuildShip(THUAI7::ShipType ShipType, int32_t birth_index);
 
     bool TryConnection();
     void ProcessMessage();
@@ -146,7 +146,7 @@ private:
 
 public:
     // 构造函数还需要传更多参数，有待补充
-    Logic(int64_t playerID, int64_t teamID, THUAI7::PlayerType playerType, THUAI7::SweeperType SweeperType);
+    Logic(int32_t playerID, int32_t teamID, THUAI7::PlayerType playerType, THUAI7::ShipType ShipType);
 
     ~Logic()
     {

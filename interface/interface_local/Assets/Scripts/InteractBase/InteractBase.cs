@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class InteractBase : MonoBehaviour
@@ -33,5 +34,9 @@ public class InteractBase : MonoBehaviour
             if (seObj)
                 Destroy(seObj);
         }
+        if (tobeseObj)
+            tobeseObj.transform.rotation = Quaternion.Euler(0, 0, 0);
+        if (seObj)
+            seObj.transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 }
