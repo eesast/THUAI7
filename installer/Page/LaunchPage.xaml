@@ -67,13 +67,13 @@
             <HorizontalStackLayout>
                 <Label
                     WidthRequest="170"
-                    Text="Sweeper Type"
+                    Text="Ship Type"
                     VerticalOptions="Center"
                     FontSize="{Binding ConstFontSize}"/>
                 <Entry
                     WidthRequest="400"
                     Placeholder=""
-                    Text="{Binding SweeperType}"
+                    Text="{Binding ShipType}"
                     FontSize="16"/>
             </HorizontalStackLayout>
             <HorizontalStackLayout>
