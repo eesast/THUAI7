@@ -578,10 +578,6 @@ namespace Client.ViewModel
                 }
                 DrawShip();
                 DrawBullet();
-                ShipCircList[5].Text = "111";
-                ShipCircList[5].Color = Colors.Blue;
-                ShipCircList[5].X += 4;
-                ShipCircList[5].Y += 4;
                 //if (testcounter < 30)
                 //{
                 //    testcounter++;
@@ -650,7 +646,7 @@ namespace Client.ViewModel
                     MoveMsg movemsg = new MoveMsg();
                     movemsg.PlayerId = playerID;
                     movemsg.TeamId = teamID;
-                    movemsg.Angle = 2;
+                    movemsg.Angle = double.Pi * 3 / 2;
                     movemsg.TimeInMilliseconds = 50;
                     client.Move(movemsg);
                 }

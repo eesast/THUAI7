@@ -281,8 +281,8 @@ namespace Client.ViewModel
                 MessageOfShip data = listOfShip[i];
                 DrawCircLabel shipinfo = ShipCircList[i];
                 PointF point = UtilFunctions.getMapCenter(data.X, data.Y);
-                shipinfo.X = point.X;
-                shipinfo.Y = point.Y;
+                shipinfo.X = point.X / 1000;
+                shipinfo.Y = point.Y / 1000;
                 System.Diagnostics.Debug.WriteLine(String.Format("shipinfo.X:{0}", data.X));
                 System.Diagnostics.Debug.WriteLine(String.Format("shipinfo.Y:{0}", data.Y));
                 shipinfo.Text = Convert.ToString(data.Hp);
