@@ -11,7 +11,7 @@
 
 #define PI 3.14159265358979323846
 
-ShipDebugAPI::ShipDebugAPI(ILogic& logic, bool file, bool print, bool warnOnly, int64_t playerID) :
+ShipDebugAPI::ShipDebugAPI(ILogic& logic, bool file, bool print, bool warnOnly, int32_t playerID) :
     logic(logic)
 {
     std::string fileName = "logs/api-" + std::to_string(playerID) + "-log.txt";
@@ -52,7 +52,7 @@ int32_t ShipDebugAPI::GetFrameCount() const
     return logic.GetCounter();
 }
 
-std::future<bool> ShipDebugAPI::SendTextMessage(int64_t toID, std::string message)
+std::future<bool> ShipDebugAPI::SendTextMessage(int32_t toID, std::string message)
 {
     logger->info("SendTextMessage: toID = {}, message = {}, called at {}ms", toID, message, Time::TimeSinceStart(startPoint));
     return std::async(std::launch::async, [=, message = std::move(message)]()
@@ -62,7 +62,7 @@ std::future<bool> ShipDebugAPI::SendTextMessage(int64_t toID, std::string messag
                         return result; });
 }
 
-std::future<bool> ShipDebugAPI::SendBinaryMessage(int64_t toID, std::string message)
+std::future<bool> ShipDebugAPI::SendBinaryMessage(int32_t toID, std::string message)
 {
     logger->info("SendBinaryMessage: toID = {}, message = {}, called at {}ms", toID, message, Time::TimeSinceStart(startPoint));
     return std::async(std::launch::async, [=, message = std::move(message)]()
@@ -81,7 +81,7 @@ bool ShipDebugAPI::HaveMessage()
     return result;
 }
 
-std::pair<int64_t, std::string> ShipDebugAPI::GetMessage()
+std::pair<int32_t, std::string> ShipDebugAPI::GetMessage()
 {
     logger->info("GetMessage: called at {}ms", Time::TimeSinceStart(startPoint));
     auto result = logic.GetMessage();
@@ -138,10 +138,10 @@ std::future<bool> ShipDebugAPI::Attack(double angleInRadian)
                         return result; });
 }
 
-std::future<bool> ShipDebugAPI::Recover()
+std::future<bool> ShipDebugAPI::Recover(int64_t recover)
 {
     return std::async(std::launch::async, [=]()
-                      { return logic.Recover(); });
+                      { return logic.Recover(recover); });
 }
 std::future<bool> ShipDebugAPI::Produce()
 {
@@ -267,7 +267,7 @@ std::future<bool> ShipDebugAPI::EndAllAction()
                       { return logic.EndAllAction(); });
 }
 
-TeamDebugAPI::TeamDebugAPI(ILogic& logic, bool file, bool print, bool warnOnly, int64_t playerID) :
+TeamDebugAPI::TeamDebugAPI(ILogic& logic, bool file, bool print, bool warnOnly, int32_t playerID) :
     logic(logic)
 {
     std::string fileName = "logs/api-" + std::to_string(playerID) + "-log.txt";
@@ -307,7 +307,7 @@ int32_t TeamDebugAPI::GetFrameCount() const
     return logic.GetCounter();
 }
 
-std::future<bool> TeamDebugAPI::SendTextMessage(int64_t toID, std::string message)
+std::future<bool> TeamDebugAPI::SendTextMessage(int32_t toID, std::string message)
 {
     logger->info("SendTextMessage: toID = {}, message = {}, called at {}ms", toID, message, Time::TimeSinceStart(startPoint));
     return std::async(std::launch::async, [=, message = std::move(message)]()
@@ -317,7 +317,7 @@ std::future<bool> TeamDebugAPI::SendTextMessage(int64_t toID, std::string messag
                         return result; });
 }
 
-std::future<bool> TeamDebugAPI::SendBinaryMessage(int64_t toID, std::string message)
+std::future<bool> TeamDebugAPI::SendBinaryMessage(int32_t toID, std::string message)
 {
     logger->info("SendBinaryMessage: toID = {}, message = {}, called at {}ms", toID, message, Time::TimeSinceStart(startPoint));
     return std::async(std::launch::async, [=, message = std::move(message)]()
@@ -336,7 +336,7 @@ bool TeamDebugAPI::HaveMessage()
     return result;
 }
 
-std::pair<int64_t, std::string> TeamDebugAPI::GetMessage()
+std::pair<int32_t, std::string> TeamDebugAPI::GetMessage()
 {
     logger->info("GetMessage: called at {}ms", Time::TimeSinceStart(startPoint));
     auto result = logic.GetMessage();
@@ -424,22 +424,22 @@ int32_t TeamDebugAPI::GetScore() const
     return logic.GetScore();
 }
 
-std::future<bool> TeamDebugAPI::InstallModule(int64_t playerID, THUAI7::ModuleType moduleType)
+std::future<bool> TeamDebugAPI::InstallModule(int32_t playerID, THUAI7::ModuleType moduleType)
 {
     return std::async(std::launch::async, [=]()
                       { return logic.InstallModule(playerID, moduleType); });
 }
 
-std::future<bool> TeamDebugAPI::Recycle(int64_t playerID)
+std::future<bool> TeamDebugAPI::Recycle(int32_t playerID)
 {
     return std::async(std::launch::async, [=]()
                       { return logic.Recycle(playerID); });
 }
 
-std::future<bool> TeamDebugAPI::BuildShip(THUAI7::ShipType ShipType)
+std::future<bool> TeamDebugAPI::BuildShip(THUAI7::ShipType ShipType, int32_t birthIndex)
 {
     return std::async(std::launch::async, [=]()
-                      { return logic.BuildShip(ShipType); });
+                      { return logic.BuildShip(ShipType, birthIndex); });
 }
 
 void TeamDebugAPI::PrintSelfInfo() const
