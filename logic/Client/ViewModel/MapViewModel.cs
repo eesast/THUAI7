@@ -15,17 +15,7 @@ using Client.Util;
 
 namespace Client.ViewModel
 {
-    public class GraphicsDrawable : IDrawable
-    {
-        public void Draw(ICanvas canvas, RectF dirtyRect)
-        {
-            //canvas.FillColor = Colors.Red;
-
-            //// 绘制小球
-            //canvas.FillEllipse(ballX, 10, 20, 20);
-        }
-    }
-    public partial class GeneralViewModel : BindableObject, IDrawable
+    public partial class GeneralViewModel : BindableObject
     {
 
         private List<MessageOfAll> listOfAll;
@@ -73,7 +63,39 @@ namespace Client.ViewModel
                 {
                     for (int j = 0; j < 50; j++)
                     {
-                        map[i, j] = Convert.ToInt32(obj.Rows[i].Cols[j]) + 4; // 与proto一致
+                        switch (obj.Rows[i].Cols[j])
+                        {
+                            case PlaceType.NullPlaceType:
+                                map[i, j] = (int)MapPatchType.Null;
+                                break;
+                            case PlaceType.Space:
+                                map[i, j] = (int)MapPatchType.Space;
+                                break;
+                            case PlaceType.Ruin:
+                                map[i, j] = (int)MapPatchType.Ruin;
+                                break;
+                            case PlaceType.Shadow:
+                                map[i, j] = (int)MapPatchType.Shadow;
+                                break;
+                            case PlaceType.Asteroid:
+                                map[i, j] = (int)MapPatchType.Asteroid;
+                                break;
+                            case PlaceType.Resource:
+                                map[i, j] = (int)MapPatchType.Resource;
+                                break;
+                            case PlaceType.Construction:
+                                map[i, j] = (int)MapPatchType.Factory;
+                                break;
+                            case PlaceType.Wormhole:
+                                map[i, j] = (int)MapPatchType.WormHole;
+                                break;
+                            case PlaceType.Home:
+                                map[i, j] = (int)MapPatchType.RedHome;
+                                break;
+                            default:
+                                map[i, j] = (int)MapPatchType.Null;
+                                break;
+                        }
                     }
                 }
             }
@@ -88,78 +110,107 @@ namespace Client.ViewModel
             }
         }
 
-        int ballX = 0;
-        int ballY = 0;
-        public void Draw(ICanvas canvas, RectF dirtyRect)
-        {
-            canvas.FillColor = Colors.Red;
+        //public class XY
+        //{
+        //    volatile int x = 10;
+        //    volatile int y = 10;
+        //    public int X 
+        //    {
+        //        get => Interlocked.CompareExchange(ref x,-1,-1); 
+        //        set => Interlocked.Exchange(ref x, value); 
+        //    }
+        //    public int Y 
+        //    {
+        //        get => Interlocked.CompareExchange(ref y,-1,-1); 
+        //        set => Interlocked.Exchange(ref y, value);
+        //    } 
+        //    public void AddX(int value) => Interlocked.Add(ref x, value);
+        //    public void AddY(int value) => Interlocked.Add(ref y, value);
+        //}
 
-            // 绘制小球
-            canvas.FillEllipse(ballX, ballY, 20, 20);
-            DrawBullet(new MessageOfBullet
-            {
-                X = 10,
-                Y = 10,
-                Type = BulletType.NullBulletType,
-                BombRange = 5
-            }, canvas);
+        //private XY ballxy = new XY();
 
-            DrawShip(new MessageOfShip
-            {
-                X = 10,
-                Y = 11,
-                Hp = 100,
-                TeamId = 0
-            }, canvas);
+        //public void Draw(ICanvas canvas, RectF dirtyRect)
+        //{
+        //    lock (drawPicLock)
+        //    {
+        //        System.Diagnostics.Debug.WriteLine(String.Format("Draw--cou:{0}, coud{1}", cou, Countdow));
 
-            DrawBullet(new MessageOfBullet
-            {
-                X = 9,
-                Y = 11,
-                Type = BulletType.NullBulletType,
-                BombRange = 5
-            }, canvas);
+        //        System.Diagnostics.Debug.WriteLine("Draw");
+        //        canvas.FillColor = Colors.Red;
 
-            DrawShip(new MessageOfShip
-            {
-                X = 10,
-                Y = 12,
-                Hp = 100,
-                TeamId = 1
-            }, canvas);
+        //        // 绘制小球
+        //        ballx = ballx_receive;
+        //        bally = bally_receive;
+        //        canvas.FillEllipse(ballx, bally, 20, 20);
+        //        System.Diagnostics.Debug.WriteLine(String.Format("============= Draw: ballX:{0}, ballY:{1} ================", ballx, bally));
+        //        System.Diagnostics.Debug.WriteLine(String.Format("============= Draw Receive: ballX:{0}, ballY:{1} ================", ballx_receive, bally_receive));
 
-            listOfBullet.Add(new MessageOfBullet
-            {
-                X = 20,
-                Y = 20,
-                Type = BulletType.NullBulletType,
-                BombRange = 5
-            });
+        //        DrawBullet(new MessageOfBullet
+        //        {
+        //            X = 10,
+        //            Y = 10,
+        //            Type = BulletType.NullBulletType,
+        //            BombRange = 5
+        //        }, canvas);
 
-            listOfShip.Add(new MessageOfShip
-            {
-                X = 10,
-                Y = 12,
-                Hp = 100,
-                TeamId = 1
-            });
+        //        DrawShip(new MessageOfShip
+        //        {
+        //            X = 10,
+        //            Y = 11,
+        //            Hp = 100,
+        //            TeamId = 0
+        //        }, canvas);
 
-            if (listOfBullet.Count > 0)
-            {
-                foreach (var data in listOfBullet)
-                {
-                    DrawBullet(data, canvas);
-                }
-            }
+        //        DrawBullet(new MessageOfBullet
+        //        {
+        //            X = 9,
+        //            Y = 11,
+        //            Type = BulletType.NullBulletType,
+        //            BombRange = 5
+        //        }, canvas);
 
-            if (listOfBullet.Count > 0)
-            {
-                foreach (var data in listOfShip)
-                {
-                    DrawShip(data, canvas);
-                }
-            }
-        }
+        //        DrawShip(new MessageOfShip
+        //        {
+        //            X = 10,
+        //            Y = 12,
+        //            Hp = 100,
+        //            TeamId = 1
+        //        }, canvas);
+
+        //        listOfBullet.Add(new MessageOfBullet
+        //        {
+        //            X = 20,
+        //            Y = 20,
+        //            Type = BulletType.NullBulletType,
+        //            BombRange = 5
+        //        });
+
+        //        listOfShip.Add(new MessageOfShip
+        //        {
+        //            X = 10,
+        //            Y = 12,
+        //            Hp = 100,
+        //            TeamId = 1
+        //        });
+
+        //        if (listOfBullet.Count > 0)
+        //        {
+        //            foreach (var data in listOfBullet)
+        //            {
+        //                DrawBullet(data, canvas);
+        //            }
+        //        }
+
+        //        if (listOfBullet.Count > 0)
+        //        {
+        //            foreach (var data in listOfShip)
+        //            {
+        //                DrawShip(data, canvas);
+        //            }
+        //        }
+        //    }
+        //}
 
         private Dictionary<MapPatchType, Color> PatchColorDict = new Dictionary<MapPatchType, Color>
         {
@@ -178,36 +229,141 @@ namespace Client.ViewModel
 
         private void PureDrawMap(int[,] Map)
         {
-            for (int i = 0; i < 50; i++)
+            lock (drawPicLock)
             {
-                for (int j = 0; j < 50; j++)
+                for (int i = 0; i < 50; i++)
                 {
-                    switch ((MapPatchType)Map[i, j])
+                    for (int j = 0; j < 50; j++)
                     {
-                        case MapPatchType.RedHome:
-                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Red; break;  //Red Home
-                        case MapPatchType.BlueHome:
-                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Blue; break; //Blue Home
-                        case MapPatchType.Ruin:
-                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Black; break; // Ruin
-                        case MapPatchType.Shadow:
-                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Gray; break; // Shadow
-                        case MapPatchType.Asteroid:
-                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Brown; break; // Asteroid
-                        case MapPatchType.Resource:
-                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Yellow; break; //Resource
-                        case MapPatchType.Factory:
-                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Orange; break; //Factory
-                        case MapPatchType.Community:
-                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Chocolate; break; //Community
-                        case MapPatchType.Fort:
-                            MapPatchesList[UtilFunctions.getIndex(i, j)].PatchColor = Colors.Azure; break; //Fort
-                        default:
-                            break;
+                        switch ((MapPatchType)Map[i, j])
+                        {
+                            case MapPatchType.RedHome:
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Color.FromRgb(237, 49, 47); break;  //Red Home
+                            case MapPatchType.BlueHome:
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Colors.Blue; break; //Blue Home
+                            case MapPatchType.Ruin:
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Color.FromRgb(181, 122, 88); break; // Ruin
+                            case MapPatchType.Shadow:
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Color.FromRgb(73, 177, 82); break; // Grass
+                            case MapPatchType.Asteroid:
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Color.FromRgb(164, 217, 235); break; // River
+                            case MapPatchType.Resource:
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Color.FromRgb(160, 75, 166); break; //Resource
+                            case MapPatchType.Factory:
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Color.FromRgb(231, 144, 74); break; //RecycleBank
+                            case MapPatchType.Community:
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Color.FromRgb(231, 144, 74); break; //ChargeStation
+                            case MapPatchType.Fort:
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Color.FromRgb(231, 144, 74); break; //SignalTower
+                            case MapPatchType.Space:
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Color.FromRgb(255, 255, 255); break; //SignalTower
+                            case MapPatchType.WormHole:
+                                MapPatchesList[UtilFunctions.getCellIndex(i, j)].PatchColor = Color.FromRgb(137, 17, 26); break; //SignalTower
+                            default:
+                                break;
+                        }
                     }
                 }
             }
         }
+
+        private void DrawShip()
+        {
+            for (int i = 0; i < ShipCircList.Count; i++)
+            {
+                ShipCircList[i].Color = Colors.Transparent;
+                ShipCircList[i].Text = "";
+            }
+            System.Diagnostics.Debug.WriteLine(String.Format("listOfShip.Count:{0}", listOfShip.Count));
+            System.Diagnostics.Debug.WriteLine(String.Format("ShipCircList.Count:{0}", ShipCircList.Count));
+            for (int i = 0; i < listOfShip.Count; i++)
+            {
+                MessageOfShip data = listOfShip[i];
+                DrawCircLabel shipinfo = ShipCircList[i];
+                PointF point = UtilFunctions.getMapCenter(data.X, data.Y);
+                shipinfo.X = point.X / 1000;
+                shipinfo.Y = point.Y / 1000;
+                System.Diagnostics.Debug.WriteLine(String.Format("shipinfo.X:{0}", data.X));
+                System.Diagnostics.Debug.WriteLine(String.Format("shipinfo.Y:{0}", data.Y));
+                shipinfo.Text = Convert.ToString(data.Hp);
+                long team_id = data.TeamId;
+                switch (team_id)
+                {
+                    case (long)PlayerTeam.Red:
+                        System.Diagnostics.Debug.WriteLine("shipinfo.color = red");
+                        shipinfo.Color = Colors.DarkRed;
+                        break;
+
+                    case (long)PlayerTeam.Blue:
+                        System.Diagnostics.Debug.WriteLine("shipinfo.color = blue");
+
+                        shipinfo.Color = Colors.DarkBlue;
+                        break;
+
+                    default:
+                        System.Diagnostics.Debug.WriteLine("shipinfo.color = black");
+
+                        shipinfo.Color = Colors.DarkGreen;
+                        break;
+                }
+                //shipinfo.Radius = 4.5F;
+                //shipinfo.FontSize = 5.5F;
+                //shipinfo.TextColor = Colors.White;
+                //ShipCircList.Add(shipinfo);
+            }
+            //shipCircList.Add(
+            //    new DrawCircLabel
+            //    {
+            //        Radius = 4.5F,
+            //        Color = Colors.Purple,
+            //        Text = "100",
+            //        FontSize = 5.5F,
+            //        TextColor = Colors.White
+            //    }
+            //);
+        }
+
+        private void DrawBullet()
+        {
+            for (int i = 0; i < BulletCircList.Count; i++)
+            {
+                BulletCircList[i].Color = Colors.Transparent;
+                BulletCircList[i].Text = "";
+            }
+            System.Diagnostics.Debug.WriteLine(String.Format("listOfBullet.Count:{0}", listOfBullet.Count));
+            System.Diagnostics.Debug.WriteLine(String.Format("BulletCircList.Count:{0}", BulletCircList.Count));
+            for (int i = 0; i < listOfBullet.Count; i++)
+            {
+                MessageOfBullet data = listOfBullet[i];
+                DrawCircLabel bulletinfo = BulletCircList[i];
+                PointF point = UtilFunctions.getMapCenter(data.X, data.Y);
+                bulletinfo.X = point.X;
+                bulletinfo.Y = point.Y;
+                long team_id = data.TeamId;
+                switch (team_id)
+                {
+                    case (long)PlayerTeam.Red:
+                        System.Diagnostics.Debug.WriteLine("bulletinfo.color = red");
+                        bulletinfo.Color = Colors.DarkRed;
+                        break;
+
+                    case (long)PlayerTeam.Blue:
+                        System.Diagnostics.Debug.WriteLine("bulletinfo.color = blue");
+                        bulletinfo.Color = Colors.DarkBlue;
+                        break;
+
+                    default:
+                        System.Diagnostics.Debug.WriteLine("bulletinfo.color = black");
+                        bulletinfo.Color = Colors.DarkGreen;
+                        break;
+                }
+                //shipinfo.Radius = 4.5F;
+                //shipinfo.FontSize = 5.5F;
+                //shipinfo.TextColor = Colors.White;
+                //ShipCircList.Add(shipinfo);
+            }
+        }
+
 
         //private void DrawMap()
         //{
@@ -384,11 +540,13 @@ namespace Client.ViewModel
 
         private void DrawHome(MessageOfHome data)
         {
-            int x = data.X;
-            int y = data.Y;
+            int x = data.X / 1000;
+            int y = data.Y / 1000;
             int hp = data.Hp;
             long team_id = data.TeamId;
-            int index = UtilFunctions.getIndex(x, y);
+            int index = UtilFunctions.getCellIndex(x, y);
+            System.Diagnostics.Debug.WriteLine(String.Format("Draw Home index: {0}", index));
+
             MapPatchesList[index].Text = Convert.ToString(hp);
             switch (team_id)
             {
@@ -415,7 +573,7 @@ namespace Client.ViewModel
             int y = data.Y;
             int hp = data.Hp;
             long team_id = data.TeamId;
-            int index = UtilFunctions.getIndex(x, y);
+            int index = UtilFunctions.getGridIndex(x, y);
             MapPatchesList[index].Text = Convert.ToString(hp);
             switch (team_id)
             {
@@ -442,7 +600,7 @@ namespace Client.ViewModel
             int y = data.Y;
             int hp = data.Hp;
             long team_id = data.TeamId;
-            int index = UtilFunctions.getIndex(x, y);
+            int index = UtilFunctions.getGridIndex(x, y);
             MapPatchesList[index].Text = Convert.ToString(hp);
             switch (team_id)
             {
@@ -469,7 +627,7 @@ namespace Client.ViewModel
             int y = data.Y;
             int hp = data.Hp;
             long team_id = data.TeamId;
-            int index = UtilFunctions.getIndex(x, y);
+            int index = UtilFunctions.getGridIndex(x, y);
             MapPatchesList[index].Text = Convert.ToString(hp);
             switch (team_id)
             {
@@ -495,7 +653,7 @@ namespace Client.ViewModel
             int x = data.X;
             int y = data.Y;
             int hp = data.Hp;
-            int index = UtilFunctions.getIndex(x, y);
+            int index = UtilFunctions.getGridIndex(x, y);
             MapPatchesList[index].Text = Convert.ToString(hp);
             MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.WormHole];
             MapPatchesList[index].TextColor = Colors.White;
@@ -506,40 +664,12 @@ namespace Client.ViewModel
             int x = data.X;
             int y = data.Y;
             int hp = data.Progress;
-            int index = UtilFunctions.getIndex(x, y);
+            int index = UtilFunctions.getGridIndex(x, y);
             MapPatchesList[index].Text = Convert.ToString(hp);
             MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Resource];
             MapPatchesList[index].TextColor = Colors.White;
         }
 
-        private void DrawBullet(MessageOfBullet data, ICanvas canvas)
-        {
-            PointF point = UtilFunctions.getMapCenter(data.X, data.Y);
-            float x = point.X;
-            float y = point.Y;
-            switch (data.Type)
-            {
-                case BulletType.Plasma:
-                    canvas.FillColor = Colors.Red;
-                    break;
-                case BulletType.Laser:
-                    canvas.FillColor = Colors.Orange;
-                    break;
-                case BulletType.Missile:
-                    canvas.FillColor = Colors.Yellow;
-                    break;
-                case BulletType.Arc:
-                    canvas.FillColor = Colors.Green;
-                    break;
-                case BulletType.Shell:
-                    canvas.FillColor = Colors.Green;
-                    break;
-                default:
-                    canvas.FillColor = Colors.Black;
-                    break;
-            }
-            canvas.FillCircle(x, y, 2);
-        }
 
         private void DrawShip(MessageOfShip data, ICanvas canvas)
         {
@@ -571,7 +701,7 @@ namespace Client.ViewModel
         private bool isClientStocked = false;
         private bool hasDrawn = false;
         private bool getMapFlag = false;
-        private object drawPicLock;
+        public readonly object drawPicLock = new();
         //private bool isPlaybackMode;
         //private double unit;
         //private double unitFontSize = 10;
@@ -593,6 +723,36 @@ namespace Client.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        public ObservableCollection<DrawCircLabel> shipCircList;
+        public ObservableCollection<DrawCircLabel> ShipCircList
+        {
+            get
+            {
+                return shipCircList ??= new ObservableCollection<DrawCircLabel>();
+            }
+            set
+            {
+                shipCircList = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<DrawCircLabel> bulletCircList;
+        public ObservableCollection<DrawCircLabel> BulletCircList
+        {
+            get
+            {
+                return bulletCircList ??= new ObservableCollection<DrawCircLabel>();
+            }
+            set
+            {
+                bulletCircList = value;
+                OnPropertyChanged();
+            }
+        }
+
+
 
 
 
@@ -656,5 +816,13 @@ namespace Client.ViewModel
             }
         }
 
+        public Command MoveUpCommand { get; }
+        public Command MoveDownCommand { get; }
+        public Command MoveLeftCommand { get; }
+        public Command MoveRightCommand { get; }
+        public Command MoveLeftUpCommand { get; }
+        public Command MoveLeftDownCommand { get; }
+        public Command MoveRightUpCommand { get; }
+        public Command MoveRightDownCommand { get; }
     }
 }

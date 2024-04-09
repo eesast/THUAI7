@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,6 +52,7 @@ namespace Client.Model
             }
         }
 
+
         private ObservableCollection<Ship> ships;
         public ObservableCollection<Ship> Ships
         {
@@ -60,8 +62,11 @@ namespace Client.Model
             }
             set
             {
-                ships = value;
-                OnPropertyChanged();
+                if (value != null && value.Count > 0)
+                {
+                    ships = value;
+                    OnPropertyChanged(nameof(Ships));
+                }
             }
         }
     }
