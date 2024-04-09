@@ -11,6 +11,8 @@ namespace Server
     {
         public static MessageOfObj? Auto(GameObj gameObj, long time)
         {
+            if (gameObj.IsRemoved == true) 
+                return null;
             switch (gameObj.Type)
             {
                 case GameObjType.Ship:
