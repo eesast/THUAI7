@@ -5,6 +5,6 @@ namespace Preparation.Interface
 {
     public interface IWormhole : IGameObj
     {
-        public List<XY> Grids { get; }
+        public List<CellXY> Cells { get; }
     }
 }
