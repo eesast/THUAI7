@@ -818,5 +818,11 @@ namespace Client.ViewModel
 
         public Command MoveUpCommand { get; }
         public Command MoveDownCommand { get; }
+        public Command MoveLeftCommand { get; }
+        public Command MoveRightCommand { get; }
+        public Command MoveLeftUpCommand { get; }
+        public Command MoveLeftDownCommand { get; }
+        public Command MoveRightUpCommand { get; }
+        public Command MoveRightDownCommand { get; }
     }
 }

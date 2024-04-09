@@ -670,6 +670,66 @@ namespace Client.ViewModel
                 movemsg.TimeInMilliseconds = 50;
                 client.Move(movemsg);
             });
+
+            MoveLeftCommand = new Command(() =>
+            {
+                MoveMsg movemsg = new MoveMsg();
+                movemsg.PlayerId = playerID;
+                movemsg.TeamId = teamID;
+                movemsg.Angle = double.Pi;
+                movemsg.TimeInMilliseconds = 50;
+                client.Move(movemsg);
+            });
+
+            MoveRightCommand = new Command(() =>
+            {
+                MoveMsg movemsg = new MoveMsg();
+                movemsg.PlayerId = playerID;
+                movemsg.TeamId = teamID;
+                movemsg.Angle = double.NegativeZero;
+                movemsg.TimeInMilliseconds = 50;
+                client.Move(movemsg);
+            });
+
+            MoveLeftUpCommand = new Command(() =>
+            {
+                MoveMsg movemsg = new MoveMsg();
+                movemsg.PlayerId = playerID;
+                movemsg.TeamId = teamID;
+                movemsg.Angle = double.Pi * 5 / 4;
+                movemsg.TimeInMilliseconds = 50;
+                client.Move(movemsg);
+            });
+
+            MoveRightUpCommand = new Command(() =>
+            {
+                MoveMsg movemsg = new MoveMsg();
+                movemsg.PlayerId = playerID;
+                movemsg.TeamId = teamID;
+                movemsg.Angle = double.Pi * 7 / 4;
+                movemsg.TimeInMilliseconds = 50;
+                client.Move(movemsg);
+            });
+
+            MoveLeftDownCommand = new Command(() =>
+            {
+                MoveMsg movemsg = new MoveMsg();
+                movemsg.PlayerId = playerID;
+                movemsg.TeamId = teamID;
+                movemsg.Angle = double.Pi * 3 / 4;
+                movemsg.TimeInMilliseconds = 50;
+                client.Move(movemsg);
+            });
+
+            MoveRightDownCommand = new Command(() =>
+            {
+                MoveMsg movemsg = new MoveMsg();
+                movemsg.PlayerId = playerID;
+                movemsg.TeamId = teamID;
+                movemsg.Angle = double.Pi / 4;
+                movemsg.TimeInMilliseconds = 50;
+                client.Move(movemsg);
+            });
             //Links = [
             //    new Link { Name = "天梯信息", Url = "" },
             //    new Link { Name = "获取更新", Url = "" },

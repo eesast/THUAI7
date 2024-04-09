@@ -246,13 +246,13 @@
                     </Grid.ColumnDefinitions>
 
                     <Button x:Name="MoveUp" Text="↑" Grid.Column="1" Grid.Row="0" Command="{Binding MoveUpCommand}"></Button>
-                    <Button x:Name="MoveLeftUp" Text="↖" Grid.Column="0" Grid.Row="0"></Button>
-                    <Button x:Name="MoveRightUp" Text="↗" Grid.Column="2" Grid.Row="0"></Button>
-                    <Button x:Name="MoveLeft" Text="←" Grid.Column="0" Grid.Row="1"></Button>
-                    <Button x:Name="MoveRight" Text="→" Grid.Column="2" Grid.Row="1"></Button>
+                    <Button x:Name="MoveLeftUp" Text="↖" Grid.Column="0" Grid.Row="0" Command="{Binding MoveLeftUpCommand}"></Button>
+                    <Button x:Name="MoveRightUp" Text="↗" Grid.Column="2" Grid.Row="0" Command="{Binding MoveRightUpCommand}"></Button>
+                    <Button x:Name="MoveLeft" Text="←" Grid.Column="0" Grid.Row="1" Command="{Binding MoveLeftCommand}"></Button>
+                    <Button x:Name="MoveRight" Text="→" Grid.Column="2" Grid.Row="1" Command="{Binding MoveRightCommand}"></Button>
                     <Button x:Name="MoveDown" Text="↓" Grid.Column="1" Grid.Row="2" Command="{Binding MoveDownCommand}"></Button>
-                    <Button x:Name="MoveLeftDown" Text="↙" Grid.Column="0" Grid.Row="2"></Button>
-                    <Button x:Name="MoveRightDown" Text="↘" Grid.Column="2" Grid.Row="2"></Button>
+                    <Button x:Name="MoveLeftDown" Text="↙" Grid.Column="0" Grid.Row="2" Command="{Binding MoveLeftDownCommand}"></Button>
+                    <Button x:Name="MoveRightDown" Text="↘" Grid.Column="2" Grid.Row="2" Command="{Binding MoveRightDownCommand}"></Button>
                     <Button x:Name="Shoot" Text="⚡" Grid.Column="1" Grid.Row="1"></Button>
                 </Grid>
 
