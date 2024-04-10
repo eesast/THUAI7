@@ -35,7 +35,8 @@ namespace Client
             Application.Current.UserAppTheme = AppTheme.Light;  //Light Theme Mode
             InitializeComponent();
 
-
+            unitWidth = viewModel.unitWidth;
+            unitHeight = viewModel.unitHeight;
             for (int i = 0; i < 50; i++)
             {
                 for (int j = 0; j < 50; j++)
@@ -46,7 +47,7 @@ namespace Client
                         HeightRequest = unitHeight,
                         HorizontalOptions = LayoutOptions.Start,
                         VerticalOptions = LayoutOptions.Start,
-                        Margin = new Thickness(unitWidth * j, unitHeight * i, 0, 0),
+                        Margin = new Thickness(unitWidth * (49 - j), unitHeight * (49 - i), 0, 0),
                         FontSize = 5
                     };
                     int index = i * 50 + j;
@@ -54,8 +55,8 @@ namespace Client
                     mapPatches_[i, j].SetBinding(Label.TextProperty, new Binding($"MapPatchesList[{index}].Text"));
                     mapPatches_[i, j].SetBinding(Label.TextColorProperty, new Binding($"MapPatchesList[{index}].TextColor"));
                     MapGrid.Children.Add(mapPatches_[i, j]);
-                    MapGrid.SetColumn(mapPatches_[i, j], i);
-                    MapGrid.SetRow(mapPatches_[i, j], j);
+                    //MapGrid.SetColumn(mapPatches_[i, j], i);
+                    //MapGrid.SetRow(mapPatches_[i, j], j);
                 }
             }
 
@@ -115,8 +116,8 @@ namespace Client
         private List<CircleLabel> bulletCirc = new List<CircleLabel>();
         private readonly IDispatcherTimer timer;
         private long counter;
-        private double unitWidth = 10;
-        private double unitHeight = 10;
+        public float unitWidth = 10;
+        public float unitHeight = 10;
 
         private void TestRefresh(object sender, EventArgs e)
         {

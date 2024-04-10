@@ -1,16 +1,7 @@
 ﻿using Client.Model;
-using Protobuf;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Maui.Dispatching;
-using Grpc.Core;
 using Client.Util;
+using Protobuf;
+using System.Collections.ObjectModel;
 
 
 namespace Client.ViewModel
@@ -280,11 +271,11 @@ namespace Client.ViewModel
             {
                 MessageOfShip data = listOfShip[i];
                 DrawCircLabel shipinfo = ShipCircList[i];
-                PointF point = UtilFunctions.getMapCenter(data.X, data.Y);
-                shipinfo.X = point.X / 1000;
-                shipinfo.Y = point.Y / 1000;
-                System.Diagnostics.Debug.WriteLine(String.Format("shipinfo.X:{0}", data.X));
-                System.Diagnostics.Debug.WriteLine(String.Format("shipinfo.Y:{0}", data.Y));
+                PointF point = UtilFunctions.Grid2CellPoint(data.X, data.Y);
+                shipinfo.X = point.X;
+                shipinfo.Y = point.Y;
+                System.Diagnostics.Debug.WriteLine(String.Format("shipinfo.X:{0}", shipinfo.X));
+                System.Diagnostics.Debug.WriteLine(String.Format("shipinfo.Y:{0}", shipinfo.Y));
                 shipinfo.Text = Convert.ToString(data.Hp);
                 long team_id = data.TeamId;
                 switch (team_id)
@@ -336,7 +327,7 @@ namespace Client.ViewModel
             {
                 MessageOfBullet data = listOfBullet[i];
                 DrawCircLabel bulletinfo = BulletCircList[i];
-                PointF point = UtilFunctions.getMapCenter(data.X, data.Y);
+                PointF point = UtilFunctions.Grid2CellPoint(data.X, data.Y);
                 bulletinfo.X = point.X;
                 bulletinfo.Y = point.Y;
                 long team_id = data.TeamId;
@@ -670,34 +661,6 @@ namespace Client.ViewModel
             MapPatchesList[index].TextColor = Colors.White;
         }
 
-
-        private void DrawShip(MessageOfShip data, ICanvas canvas)
-        {
-            PointF point = UtilFunctions.getMapCenter(data.X, data.Y);
-            float x = point.X;
-            float y = point.Y;
-            int hp = data.Hp;
-            long team_id = data.TeamId;
-            switch (team_id)
-            {
-                case (long)PlayerTeam.Red:
-                    canvas.FillColor = Colors.Red;
-                    break;
-
-                case (long)PlayerTeam.Blue:
-                    canvas.FillColor = Colors.Blue;
-                    break;
-
-                default:
-                    canvas.FillColor = Colors.Black;
-                    break;
-            }
-            canvas.FillCircle(x, y, (float)4.5);
-            canvas.FontSize = 5.5F;
-            canvas.FontColor = Colors.White;
-            canvas.DrawString(Convert.ToString(hp), x - 5, y - 5, 10, 10, HorizontalAlignment.Left, VerticalAlignment.Top);
-        }
-
         private bool isClientStocked = false;
         private bool hasDrawn = false;
         private bool getMapFlag = false;
@@ -824,5 +787,6 @@ namespace Client.ViewModel
         public Command MoveLeftDownCommand { get; }
         public Command MoveRightUpCommand { get; }
         public Command MoveRightDownCommand { get; }
+        public Command AttackCommand { get; }
     }
 }
