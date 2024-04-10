@@ -129,6 +129,7 @@ namespace GameEngine
 
         public void MoveObj(IMovable obj, int moveTime, double direction, long stateNum)
         {
+            Debugger.Output(obj, $"Position {obj.Position}, Start moving in direction {direction}.");
             if (!gameTimer.IsGaming) return;
             lock (obj.ActionLock)
             {
