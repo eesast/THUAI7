@@ -71,6 +71,7 @@ namespace Server
                     ShipState = Transformation.ShipStateToProto(player.ShipState),
                     ShipType = Transformation.ShipTypeToProto(player.ShipType),
                     ViewRange = player.ViewRange,
+                    ProducerType = Transformation.ProducerToProto(player.ProducerModuleType),
                     ConstructorType = Transformation.ConstructorToProto(player.ConstructorModuleType),
                     ArmorType = Transformation.ArmorToProto(player.ArmorModuleType),
                     ShieldType = Transformation.ShieldToProto(player.ShieldModuleType),
