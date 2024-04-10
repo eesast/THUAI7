@@ -253,7 +253,7 @@
                     <Button x:Name="MoveDown" Text="↓" Grid.Column="1" Grid.Row="2" Command="{Binding MoveDownCommand}"></Button>
                     <Button x:Name="MoveLeftDown" Text="↙" Grid.Column="0" Grid.Row="2" Command="{Binding MoveLeftDownCommand}"></Button>
                     <Button x:Name="MoveRightDown" Text="↘" Grid.Column="2" Grid.Row="2" Command="{Binding MoveRightDownCommand}"></Button>
-                    <Button x:Name="Shoot" Text="⚡" Grid.Column="1" Grid.Row="1"></Button>
+                    <Button x:Name="Shoot" Text="⚡" Grid.Column="1" Grid.Row="1" Command="{Binding AttackCommand}"></Button>
                 </Grid>
 
 

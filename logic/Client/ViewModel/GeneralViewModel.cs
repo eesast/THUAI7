@@ -626,7 +626,10 @@ namespace Client.ViewModel
         public readonly int numOfShips = 16;
         public readonly int numOfBullets = 40;
 
+        public double lastMoveAngle;
 
+        public readonly float unitWidth = UtilInfo.unitWidth;
+        public readonly float unitHeight = UtilInfo.unitHeight;
 
         public GeneralViewModel()
         {
@@ -646,7 +649,8 @@ namespace Client.ViewModel
                     MoveMsg movemsg = new MoveMsg();
                     movemsg.PlayerId = playerID;
                     movemsg.TeamId = teamID;
-                    movemsg.Angle = double.Pi * 3 / 2;
+                    movemsg.Angle = double.Pi;
+                    lastMoveAngle = movemsg.Angle;
                     movemsg.TimeInMilliseconds = 50;
                     client.Move(movemsg);
                 }
@@ -668,7 +672,8 @@ namespace Client.ViewModel
                 MoveMsg movemsg = new MoveMsg();
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
-                movemsg.Angle = double.Pi / 2;
+                movemsg.Angle = double.NegativeZero;
+                lastMoveAngle = movemsg.Angle;
                 movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
             });
@@ -678,7 +683,8 @@ namespace Client.ViewModel
                 MoveMsg movemsg = new MoveMsg();
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
-                movemsg.Angle = double.Pi;
+                movemsg.Angle = double.Pi * 3 / 2;
+                lastMoveAngle = movemsg.Angle;
                 movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
             });
@@ -688,7 +694,8 @@ namespace Client.ViewModel
                 MoveMsg movemsg = new MoveMsg();
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
-                movemsg.Angle = double.NegativeZero;
+                movemsg.Angle = double.Pi / 2;
+                lastMoveAngle = movemsg.Angle;
                 movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
             });
@@ -699,6 +706,7 @@ namespace Client.ViewModel
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
                 movemsg.Angle = double.Pi * 5 / 4;
+                lastMoveAngle = movemsg.Angle;
                 movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
             });
@@ -708,7 +716,8 @@ namespace Client.ViewModel
                 MoveMsg movemsg = new MoveMsg();
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
-                movemsg.Angle = double.Pi * 7 / 4;
+                movemsg.Angle = double.Pi * 3 / 4;
+                lastMoveAngle = movemsg.Angle;
                 movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
             });
@@ -718,7 +727,8 @@ namespace Client.ViewModel
                 MoveMsg movemsg = new MoveMsg();
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
-                movemsg.Angle = double.Pi * 3 / 4;
+                movemsg.Angle = double.Pi * 7 / 4;
+                lastMoveAngle = movemsg.Angle;
                 movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
             });
@@ -729,9 +739,20 @@ namespace Client.ViewModel
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
                 movemsg.Angle = double.Pi / 4;
+                lastMoveAngle = movemsg.Angle;
                 movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
             });
+
+            AttackCommand = new Command(() =>
+            {
+                AttackMsg attackMsg = new AttackMsg();
+                attackMsg.PlayerId = playerID;
+                attackMsg.TeamId = teamID;
+                attackMsg.Angle = 0;
+                client.Attack(attackMsg);
+            });
+
             //Links = [
             //    new Link { Name = "天梯信息", Url = "" },
             //    new Link { Name = "获取更新", Url = "" },
@@ -789,7 +810,7 @@ namespace Client.ViewModel
             ConnectToServer(new string[]{
                 "localhost",
                 "8888",
-                "1",
+                "0",
                 "0",
                 "1"
             });
