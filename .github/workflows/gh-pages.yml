@@ -5,7 +5,7 @@ on:
     branches: [dev, main, master]
     paths:
       - '.github/workflows/gh-pages.yml'
-      - 'docs/**'
+      - 'gh-pages/**'
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages  
 permissions:  
