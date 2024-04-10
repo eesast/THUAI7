@@ -42,7 +42,7 @@ namespace Preparation.Utility
                 if (thatLock) Monitor.Exit(a.VLock);
             }
         }
-        public void EnterOtherLock<TResult>(LockedValue a, Action func)
+        public void EnterOtherLock(LockedValue a, Action func)
         {
             if (this.idInClass == a.idInClass) return;
             bool thisLock = false;
