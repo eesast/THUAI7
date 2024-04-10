@@ -73,6 +73,9 @@ namespace Client.Util
 
         public static bool isRedPlayerShipsEmpty = true;
         public static bool isBluePlayerShipsEmpty = false;
+
+        public static int unitWidth = 10;
+        public static int unitHeight = 10;
     }
 
 

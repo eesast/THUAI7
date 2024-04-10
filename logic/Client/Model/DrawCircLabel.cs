@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -41,8 +42,8 @@ namespace Client.Model
         {
             get
             {
-                thick.Left = x;
-                thick.Top = y;
+                thick.Left = (y - 0.5) * UtilInfo.unitWidth >= 0 ? (y - 0.5) * UtilInfo.unitWidth : 0;
+                thick.Top = (x - 0.5) * UtilInfo.unitHeight >= 0 ? (x - 0.5) * UtilInfo.unitHeight : 0;
                 return thick;
             }
             set
