@@ -37,9 +37,9 @@ namespace Client.Util
             return 50 * (int)i / 1000 + (int)j / 1000;
         }
 
-        public static PointF getMapCenter(float i, float j)
+        public static PointF Grid2CellPoint(float i, float j)
         {
-            return new PointF(10 * i + 5, 10 * j + 5);
+            return new PointF(i / 1000, j / 1000);
         }
 
         public static bool IsShipEqual(Ship a, Ship b)
