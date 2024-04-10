@@ -165,7 +165,7 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
                 return moduleManager.InstallModule(ship, moduleType);
             return false;
         }
@@ -197,7 +197,7 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
             {
                 bool validRecyclePoint = false;
                 foreach (XY recyclePoint in teamList[(int)ship.TeamID].BirthPointList)
@@ -212,7 +212,7 @@ namespace Gaming
                 {
                     return shipManager.Recycle(ship);
                 }
-            }
+            } 
             return false;
         }
         public bool Repair(long teamID, long shipID)
