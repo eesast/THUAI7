@@ -131,7 +131,7 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
             {
                 Debugger.Output("Trying to move: " + teamID + " " + shipID + " " + moveTimeInMilliseconds + " " + angle);
                 return actionManager.MoveShip(ship, moveTimeInMilliseconds, angle);
@@ -147,7 +147,7 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
                 return actionManager.Produce(ship);
             return false;
         }
@@ -156,7 +156,7 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
             {
                 return actionManager.Construct(ship, constructionType);
             }
@@ -167,7 +167,7 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
                 return moduleManager.InstallModule(ship, moduleType);
             return false;
         }
@@ -176,7 +176,7 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
             {
                 bool validRecoverPoint = false;
                 foreach (XY recoverPoint in teamList[(int)ship.TeamID].BirthPointList)
@@ -199,7 +199,7 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
             {
                 bool validRecyclePoint = false;
                 foreach (XY recyclePoint in teamList[(int)ship.TeamID].BirthPointList)
@@ -240,7 +240,7 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
                 return attackManager.Attack(ship, angle);
             return false;
         }
