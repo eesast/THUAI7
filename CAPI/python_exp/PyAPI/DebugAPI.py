@@ -10,7 +10,9 @@ from PyAPI.Interface import ILogic, IShipAPI, ITeamAPI, IGameTimer, IAI
 
 
 class ShipDebugAPI(IShipAPI, IGameTimer):
-    def __init__(self, logic: ILogic, file: bool, screen: bool, warnOnly: bool, playerID: int) -> None:
+    def __init__(self, logic: ILogic,
+                 file: bool, screen: bool, warnOnly: bool,
+                 playerID: int, teamID: int) -> None:
         self.__logic = logic
         self.__pool = ThreadPoolExecutor(20)
         self.__startPoint = datetime.datetime.now()
@@ -25,11 +27,9 @@ class ShipDebugAPI(IShipAPI, IGameTimer):
 
         fileHandler = logging.FileHandler(
             os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-            + "/logs/api-"
-            + str(playerID)
-            + "-log.txt",
+            + f"/logs/api-{teamID}-{playerID}-log.txt",
             mode="w+",
-            encoding="utf-8",
+            encoding="utf-8"
         )
         screenHandler = logging.StreamHandler()
         if file:
@@ -224,10 +224,8 @@ class ShipDebugAPI(IShipAPI, IGameTimer):
 
     def HaveView(self, gridX: int, gridY: int) -> bool:
         return self.__logic.HaveView(
-            gridX,
-            gridY,
-            self.GetSelfInfo().x,
-            self.GetSelfInfo().y,
+            gridX, gridY,
+            self.GetSelfInfo().x, self.GetSelfInfo().y,
             self.GetSelfInfo().viewRange,
         )
 
@@ -235,6 +233,7 @@ class ShipDebugAPI(IShipAPI, IGameTimer):
         self.__logger.info(cont)
 
     def PrintShip(self) -> None:
+        self.__logger.info("START PrintShip")
         for ship in self.__logic.GetShips():
             self.__logger.info("******ship Info******")
             self.__logger.info(
@@ -253,6 +252,7 @@ class ShipDebugAPI(IShipAPI, IGameTimer):
                 f"armorType:{ship.armorType} shieldType:{ship.shieldType} weaponType:{ship.weaponType}"
             )
             self.__logger.info("************************\n")
+        self.__logger.info("END PrintShip")
 
     def PrintTeam(self) -> None:
         pass
@@ -295,33 +295,26 @@ class ShipDebugAPI(IShipAPI, IGameTimer):
 
 
 class TeamDebugAPI(ITeamAPI, IGameTimer):
-    def __init__(
-        self, logic: ILogic, file: bool, screen: bool, warnOnly: bool, playerID: int
-    ) -> None:
+    def __init__(self, logic: ILogic,
+                 file: bool, screen: bool, warnOnly: bool,
+                 playerID: int, teamID: int) -> None:
         self.__logic = logic
         self.__pool = ThreadPoolExecutor(20)
         self.__startPoint = datetime.datetime.now()
         self.__logger = logging.getLogger("api " + str(playerID))
         self.__logger.setLevel(logging.DEBUG)
         formatter = logging.Formatter(
-            "[%(name)s] [%(asctime)s.%(msecs)03d] [%(levelname)s] %(message)s",
-            "%H:%M:%S",
+            "[%(name)s] [%(asctime)s.%(msecs)03d] [%(levelname)s] %(message)s", "%H:%M:%S"
         )
         # 确保文件存在
-        if not os.path.exists(
-            os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/logs"
-        ):
-            os.makedirs(
-                os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/logs"
-            )
+        if not os.path.exists(os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/logs"):
+            os.makedirs(os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/logs")
 
         fileHandler = logging.FileHandler(
             os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-            + "/logs/api-"
-            + str(playerID)
-            + "-log.txt",
+            + f"/logs/api-{teamID}-{playerID}-log.txt",
             mode="w+",
-            encoding="utf-8",
+            encoding="utf-8"
         )
         screenHandler = logging.StreamHandler()
         if file:
@@ -469,6 +462,7 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
         self.__logger.info(cont)
 
     def PrintShip(self) -> None:
+        self.__logger.info("START PrintShip")
         for ship in self.__logic.GetShips():
             self.__logger.info("******ship Info******")
             self.__logger.info(
@@ -487,6 +481,7 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
                 f"armorType:{ship.armorType} shieldType:{ship.shieldType} weaponType:{ship.weaponType}"
             )
             self.__logger.info("************************\n")
+        self.__logger.info("END PrintShip")
 
     def PrintTeam(self) -> None:
         self.PrintSelfInfo()
@@ -499,9 +494,7 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
         self.__logger.info("************************\n")
 
     def __GetTime(self) -> float:
-        return (datetime.datetime.now() - self.__startPoint) / datetime.timedelta(
-            milliseconds=1
-        )
+        return (datetime.datetime.now() - self.__startPoint) / datetime.timedelta(milliseconds=1)
 
     def StartTimer(self) -> None:
         self.__startPoint = datetime.datetime.now()
@@ -512,4 +505,4 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
         self.__logger.info(f"Time elapsed: {self.__GetTime()}ms")
 
     def Play(self, ai: IAI) -> None:
-        ai.ShipPlay(self)
+        ai.TeamPlay(self)
