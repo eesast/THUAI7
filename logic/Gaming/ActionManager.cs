@@ -243,7 +243,7 @@ namespace Gaming
             }
             public bool Repair(Ship ship)
             {
-                Wormhole? wormhole = (Wormhole?)gameMap.OneForInteract(ship.Position, GameObjType.Wormhole);
+                Wormhole? wormhole = ((WormholeCell?)gameMap.OneForInteract(ship.Position, GameObjType.Wormhole))?.Wormhole;
                 if (wormhole == null)
                 {
                     return false;
