@@ -48,24 +48,26 @@ namespace Client.Interact
             return cominfo;
         }
 
-        public static string[] FileInteract()
-        {
-            string[] cominfo = new string[10];
-            ConfigData d = new();
-            if (d.Commands.Launched == false)
-            {
-                cominfo[0] = d.Commands.IP;
-                cominfo[1] = d.Commands.Port;
-                cominfo[2] = d.Commands.PlayerID;
-                cominfo[3] = d.Commands.TeamID;
-                cominfo[4] = d.Commands.ShipType;
 
-                d.Commands.Launched = true;
-            }
+        //public static string[] FileInteract()
+        //{
+        //    string[] cominfo = new string[10];
+        //    ConfigData d = new();
+        //    if (d.Commands.Launched == false)
+        //    {
+        //        cominfo[0] = d.Commands.IP;
+        //        cominfo[1] = d.Commands.Port;
+        //        cominfo[2] = d.Commands.PlayerID;
+        //        cominfo[3] = d.Commands.TeamID;
+        //        cominfo[4] = d.Commands.ShipType;
+        //    }
+        //}
+        //        d.Commands.Launched = true;
+        //    }
 
 
-            return cominfo;
-        }
+        //    return cominfo;
+        //}
 
     }
 }

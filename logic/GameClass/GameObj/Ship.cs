@@ -28,7 +28,7 @@ public class Ship : Movable, IShip
     public InVariableRange<long> Armor { get; }
     public InVariableRange<long> Shield { get; }
     public ShipType ShipType { get; }
-    private ShipStateType shipState = ShipStateType.Null;
+    private ShipStateType shipState = ShipStateType.Deceased;
     public ShipStateType ShipState => shipState;
     public IOccupation Occupation { get; }
     public MoneyPool MoneyPool { get; }
