@@ -242,7 +242,7 @@ namespace GameClass.GameObj
                         case PlaceType.Wormhole:
                             Func<Wormhole, bool> WormholeHasCell = (Wormhole wormhole) =>
                             {
-                                if (wormhole.Cells.Find(cell => GameData.PosGridToCellXY(cell.Position) == new CellXY(i,j)) != null)
+                                if (wormhole.Cells.Find(cell => GameData.PosGridToCellXY(cell.Position) == new CellXY(i, j)) != null)
                                     return true;
                                 foreach (WormholeCell cell in wormhole.Cells)
                                 {
