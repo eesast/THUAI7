@@ -85,6 +85,7 @@ function saveAsTxt() {
     for (var i = 0; i < 50; i++) {
         for (var j = 0; j < 50; j++) {
             str += map[j][i];
+            str += " ";
         }
         str += "\n";
     }
