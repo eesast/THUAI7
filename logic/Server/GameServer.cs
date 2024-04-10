@@ -234,6 +234,11 @@ namespace Server
             int[] score = GetScore();
             msg.RedTeamScore = score[0];
             msg.BlueTeamScore = score[1];
+            int[] energy = GetMoney();
+            msg.RedTeamEnergy = energy[0];
+            msg.BlueTeamEnergy = energy[1];
+            msg.RedHomeHp = (int)game.TeamList[0].Home.HP;
+            msg.BlueHomeHp = (int)game.TeamList[1].Home.HP;
             return msg;
         }
 

@@ -70,10 +70,10 @@ namespace Gaming
                         else if (constructionType == ConstructionType.Factory && flag) game.RemoveFactory(((Construction)objBeingShot).TeamID);
                         break;
                     case GameObjType.Wormhole:
-                        ((Wormhole)objBeingShot).BeAttacked(bullet);
-                        if (((Wormhole)objBeingShot).HP < GameData.WormholeHP / 2)
+                        ((WormholeCell)objBeingShot).Wormhole.BeAttacked(bullet);
+                        if (((WormholeCell)objBeingShot).Wormhole.HP < GameData.WormholeHP / 2)
                         {
-                            var shipList = gameMap.ShipInTheList(((Wormhole)objBeingShot).Cells);
+                            var shipList = gameMap.ShipInTheList(((WormholeCell)objBeingShot).Wormhole.Cells);
                             if (shipList != null)
                             {
                                 foreach (Ship ship in shipList)

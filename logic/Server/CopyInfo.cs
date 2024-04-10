@@ -35,7 +35,7 @@ namespace Server
                         return Fort(construction);
                     return null;
                 case GameObjType.Wormhole:
-                    return Wormhole((Wormhole)gameObj);
+                    return Wormhole(((WormholeCell)gameObj).Wormhole);
                 default: return null;
             }
         }
@@ -71,6 +71,7 @@ namespace Server
                     ShipState = Transformation.ShipStateToProto(player.ShipState),
                     ShipType = Transformation.ShipTypeToProto(player.ShipType),
                     ViewRange = player.ViewRange,
+                    ProducerType = Transformation.ProducerToProto(player.ProducerModuleType),
                     ConstructorType = Transformation.ConstructorToProto(player.ConstructorModuleType),
                     ArmorType = Transformation.ArmorToProto(player.ArmorModuleType),
                     ShieldType = Transformation.ShieldToProto(player.ShieldModuleType),
@@ -212,8 +213,6 @@ namespace Server
             {
                 WormholeMessage = new()
                 {
-                    X = wormhole.Position.x,
-                    Y = wormhole.Position.y,
                     Hp = (int)wormhole.HP,
                 }
             };
