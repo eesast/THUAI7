@@ -7,7 +7,7 @@ public class Construction(XY initPos)
 {
     public AtomicLong TeamID { get; } = new(long.MaxValue);
     public InVariableRange<long> HP { get; } = new(0, GameData.CommunityHP);
-    public override bool IsRigid => constructionType == ConstructionType.Community;
+    public override bool IsRigid => true;
     public override ShapeType Shape => ShapeType.Square;
 
     private readonly object lockOfConstructionType = new();

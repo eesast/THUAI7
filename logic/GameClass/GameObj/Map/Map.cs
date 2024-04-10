@@ -211,6 +211,15 @@ namespace GameClass.GameObj
                 {
                     switch (mapResource.map[i, j])
                     {
+                        case PlaceType.Ruin:
+                            Add(new Ruin(GameData.GetCellCenterPos(i, j)));
+                            break;
+                        case PlaceType.Shadow:
+                            Add(new Shadow(GameData.GetCellCenterPos(i, j)));
+                            break;
+                        case PlaceType.Asteroid:
+                            Add(new Asteroid(GameData.GetCellCenterPos(i, j)));
+                            break;
                         case PlaceType.Resource:
                             Add(new Resource(GameData.GetCellCenterPos(i, j)));
                             break;
