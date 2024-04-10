@@ -46,11 +46,13 @@ namespace Gaming
             {
                 if (moveTimeInMilliseconds < 5)
                 {
+                    Debugger.Output("Move time is too short.");
                     return false;
                 }
                 long stateNum = shipToMove.SetShipState(RunningStateType.Waiting, ShipStateType.Moving);
                 if (stateNum == -1)
                 {
+                    Debugger.Output("Ship is not commandable.");
                     return false;
                 }
                 new Thread

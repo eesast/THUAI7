@@ -661,13 +661,15 @@ namespace Client.ViewModel
                 }
             });
 
+            int moveTime = 100;
+
             MoveDownCommand = new Command(() =>
             {
                 MoveMsg movemsg = new MoveMsg();
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
                 movemsg.Angle = double.Pi / 2;
-                movemsg.TimeInMilliseconds = 50;
+                movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
             });
 
@@ -677,7 +679,7 @@ namespace Client.ViewModel
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
                 movemsg.Angle = double.Pi;
-                movemsg.TimeInMilliseconds = 50;
+                movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
             });
 
@@ -687,7 +689,7 @@ namespace Client.ViewModel
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
                 movemsg.Angle = double.NegativeZero;
-                movemsg.TimeInMilliseconds = 50;
+                movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
             });
 
@@ -697,7 +699,7 @@ namespace Client.ViewModel
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
                 movemsg.Angle = double.Pi * 5 / 4;
-                movemsg.TimeInMilliseconds = 50;
+                movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
             });
 
@@ -707,7 +709,7 @@ namespace Client.ViewModel
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
                 movemsg.Angle = double.Pi * 7 / 4;
-                movemsg.TimeInMilliseconds = 50;
+                movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
             });
 
@@ -717,7 +719,7 @@ namespace Client.ViewModel
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
                 movemsg.Angle = double.Pi * 3 / 4;
-                movemsg.TimeInMilliseconds = 50;
+                movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
             });
 
@@ -727,7 +729,7 @@ namespace Client.ViewModel
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
                 movemsg.Angle = double.Pi / 4;
-                movemsg.TimeInMilliseconds = 50;
+                movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
             });
             //Links = [
