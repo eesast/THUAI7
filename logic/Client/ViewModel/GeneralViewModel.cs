@@ -418,9 +418,8 @@ namespace Client.ViewModel
                         //ShipCircList[5].Y += 4;
                         foreach (var data in listOfAll)
                         {
-                            System.Diagnostics.Debug.Write($"Red team Energy: {0}", Convert.ToString(data.RedTeamEnergy));
-                            System.Diagnostics.Debug.Write($"Blue team Energy: {0}", Convert.ToString(data.BlueTeamEnergy));
-                            System.Diagnostics.Debug.Write(data.BlueTeamEnergy);
+                            System.Diagnostics.Debug.WriteLine(String.Format("Red team Energy: {0}", Convert.ToString(data.RedTeamEnergy)));
+                            System.Diagnostics.Debug.WriteLine(String.Format("Blue team Energy: {0}", Convert.ToString(data.BlueTeamEnergy)));
                             RedPlayer.Money = data.RedTeamEnergy;
                             RedPlayer.Hp = data.RedHomeHp;
                             RedPlayer.Score = data.RedTeamScore;
@@ -811,7 +810,7 @@ namespace Client.ViewModel
                 "localhost",
                 "8888",
                 "0",
-                "0",
+                "1",
                 "1"
             });
 
