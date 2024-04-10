@@ -11,6 +11,7 @@ namespace GameClass.GameObj
     {
         private readonly Dictionary<GameObjType, LockedClassList<IGameObj>> gameObjDict;
         public Dictionary<GameObjType, LockedClassList<IGameObj>> GameObjDict => gameObjDict;
+        private readonly List<Wormhole> wormholes = new();
         private readonly uint height;
         public uint Height => height;
         private readonly uint width;
@@ -77,9 +78,9 @@ namespace GameClass.GameObj
 
         public static bool WormholeInteract(Wormhole gameObj, XY Pos)
         {
-            foreach (CellXY xy in gameObj.Cells)
+            foreach (WormholeCell cell in gameObj.Cells)
             {
-                if (GameData.ApproachToInteract(xy, Pos))
+                if (GameData.ApproachToInteract(cell.Position, Pos))
                     return true;
             }
             return false;
@@ -118,6 +119,18 @@ namespace GameClass.GameObj
         {
             return GameObjDict[GameObjType.Ship].Cast<Ship>()?.FindAll(ship =>
                 PosList.Contains(GameData.PosGridToCellXY(ship.Position)));
+        }
+        public List<Ship>? ShipInTheList(List<WormholeCell> ObjList)
+        {
+            return GameObjDict[GameObjType.Ship].Cast<Ship>()?.FindAll(ship =>
+            {
+                foreach (var obj in ObjList)
+                {
+                    if (GameData.IsInTheSameCell(ship.Position, obj.Position))
+                        return true;
+                }
+                return false;
+            });
         }
         public bool CanSee(Ship ship, GameObj gameObj)
         {
@@ -227,25 +240,31 @@ namespace GameClass.GameObj
                             Add(new Construction(GameData.GetCellCenterPos(i, j)));
                             break;
                         case PlaceType.Wormhole:
-                            Func<Wormhole, bool> HasWormhole = (Wormhole wormhole) =>
+                            Func<Wormhole, bool> WormholeHasCell = (Wormhole wormhole) =>
                             {
-                                if (wormhole.Cells.Contains(new CellXY(i, j)))
+                                if (wormhole.Cells.Find(cell => GameData.PosGridToCellXY(cell.Position) == new CellXY(i,j)) != null)
                                     return true;
-                                foreach (CellXY xy in wormhole.Cells)
+                                foreach (WormholeCell cell in wormhole.Cells)
                                 {
+                                    var xy = GameData.PosGridToCellXY(cell.Position);
                                     if (Math.Abs(xy.x - i) <= 1 && Math.Abs(xy.y - j) <= 1)
                                     {
-                                        wormhole.Cells.Add(new CellXY(i, j));
+                                        var newCell = new WormholeCell(GameData.GetCellCenterPos(i, j), wormhole);
+                                        Add(newCell);
+                                        wormhole.Cells.Add(newCell);
                                         return true;
                                     }
                                 }
                                 return false;
                             };
 
-                            if (GameObjDict[GameObjType.Wormhole].Cast<Wormhole>()?.Find(wormhole => HasWormhole(wormhole)) == null)
+                            if (wormholes.Find(wormhole => WormholeHasCell(wormhole)) == null)
                             {
-                                List<CellXY> cells = [new CellXY(i, j)];
-                                Add(new Wormhole(GameData.GetCellCenterPos(i, j), cells));
+                                var newWormhole = new Wormhole([]);
+                                var newCell = new WormholeCell(GameData.GetCellCenterPos(i, j), newWormhole);
+                                Add(newCell);
+                                newWormhole.Cells.Add(newCell);
+                                wormholes.Add(newWormhole);
                             }
                             break;
                         case PlaceType.Home:
