@@ -787,7 +787,7 @@ namespace Client.ViewModel
 
             // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID 3-teamID 4-ShipType
             ConnectToServer(new string[]{
-                "127.0.0.1",
+                "localhost",
                 "8888",
                 "1",
                 "0",
