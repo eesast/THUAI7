@@ -843,9 +843,7 @@ class Logic(ILogic):
 
         fileHandler = logging.FileHandler(
             os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-            + "/logs/logic"
-            + str(self.__playerID)
-            + "-log.txt",
+            + f"/logs/logic-{self.__teamID}-{self.__playerID}-log.txt",
             "w+",
             encoding="utf-8",
         )
@@ -881,11 +879,11 @@ class Logic(ILogic):
         else:
             if self.__playerID == 0:
                 self.__timer = TeamDebugAPI(
-                    self, file, screen, warnOnly, self.__playerID
+                    self, file, screen, warnOnly, self.__playerID, self.__teamID
                 )
             else:
                 self.__timer = ShipDebugAPI(
-                    self, file, screen, warnOnly, self.__playerID
+                    self, file, screen, warnOnly, self.__playerID, self.__teamID
                 )
 
         # 构建AI线程
