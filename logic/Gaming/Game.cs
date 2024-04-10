@@ -133,10 +133,12 @@ namespace Gaming
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
             if (ship != null && ship.IsRemoved == false)
             {
+                Debugger.Output("Trying to move: " + teamID + " " + shipID + " " + moveTimeInMilliseconds + " " + angle);
                 return actionManager.MoveShip(ship, moveTimeInMilliseconds, angle);
             }
             else
             {
+                Debugger.Output("Failed to move: " + teamID + " " + shipID + ", no ship found");
                 return false;
             }
         }

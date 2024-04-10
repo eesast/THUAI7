@@ -320,6 +320,7 @@ public class Ship : Movable, IShip
         lock (actionLock)
         {
             ShipStateType nowShipState = ShipState;
+            Debugger.Output(this, "SetShipState from " + nowShipState + " to " + value);
             if (nowShipState == value) return -1;
             GameObj? lastObj = whatInteractingWith;
             switch (nowShipState)
@@ -334,6 +335,10 @@ public class Ship : Movable, IShip
                     else return -1;
                 case ShipStateType.Swinging:
                     if (value == ShipStateType.Null || value == ShipStateType.Stunned)
+                        return ChangeShipState(running, value, gameObj);
+                    else return -1;
+                case ShipStateType.Deceased:
+                    if (value == ShipStateType.Null)
                         return ChangeShipState(running, value, gameObj);
                     else return -1;
                 default:
@@ -355,11 +360,16 @@ public class Ship : Movable, IShip
     {
         lock (actionLock)
         {
-            if (state != stateNum) return false;
+            if (state != stateNum)
+            {
+                Debugger.Output(this, "ResetShipState failed");
+                return false;
+            }
             runningState = running;
             whatInteractingWith = (GameObj?)obj;
             shipState = value;
             ++stateNum;
+            Debugger.Output(this, "ResetShipState succeeded" + stateNum);
             return true;
         }
     }
@@ -380,10 +390,12 @@ public class Ship : Movable, IShip
         {
             if (StateNum == stateNum)
             {
+                Debugger.Output(this, "StartThread succeeded");
                 this.runningState = runningState;
                 return true;
             }
         }
+        Debugger.Output(this, "StartThread failed");
         return false;
     }
     public bool TryToRemoveFromGame(ShipStateType shipStateType)
