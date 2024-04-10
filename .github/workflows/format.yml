@@ -1,5 +1,9 @@
 name: format
-on: [push, pull_request]
+on:
+  push:
+    branches: [dev, main, master]
+  pull_request:
+    branches: [dev, main, master]
 jobs:
   clang-format-checking:
     runs-on: ubuntu-latest
