@@ -323,15 +323,21 @@ public class ShipControl : MonoBehaviour
             case ShipType.CIVILIAN_SHIP:
                 MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].AddEconomy(
                     (int)(messageOfShip.hp / ParaDefine.GetInstance().civilShipData.maxHp * ParaDefine.GetInstance().civilShipData.cost * 0.5f));
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].AddScoreminus(
+                    (int)(messageOfShip.hp / ParaDefine.GetInstance().civilShipData.maxHp * ParaDefine.GetInstance().civilShipData.cost * 0.5f));
                 DestroyShip();
                 break;
             case ShipType.MILITARY_SHIP:
                 MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].AddEconomy(
                     (int)(messageOfShip.hp / ParaDefine.GetInstance().militaryShipData.maxHp * ParaDefine.GetInstance().militaryShipData.cost * 0.5f));
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].AddScoreminus(
+                    (int)(messageOfShip.hp / ParaDefine.GetInstance().militaryShipData.maxHp * ParaDefine.GetInstance().militaryShipData.cost * 0.5f));
                 DestroyShip();
                 break;
             case ShipType.FLAG_SHIP:
                 MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].AddEconomy(
+                    (int)(messageOfShip.hp / ParaDefine.GetInstance().flagShipData.maxHp * ParaDefine.GetInstance().flagShipData.cost * 0.5f));
+                MapControl.GetInstance().bases[(int)messageOfShip.playerTeam].AddScoreminus(
                     (int)(messageOfShip.hp / ParaDefine.GetInstance().flagShipData.maxHp * ParaDefine.GetInstance().flagShipData.cost * 0.5f));
                 DestroyShip();
                 break;

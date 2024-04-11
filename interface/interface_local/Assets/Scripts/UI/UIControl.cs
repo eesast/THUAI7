@@ -32,17 +32,23 @@ public class UIControl : SingletonMono<UIControl>
     }
     public void updateUI()
     {
-        if (GameObject.Find("Base1").TryGetComponent<BaseControl>(out base1))
+        if (GameObject.Find("Base1"))
         {
-            healthText1.text = "Health: " + base1.messageOfBase.hp.ToString();
-            healthSlider1.value = base1.messageOfBase.hp / 24000f;
-            ecoText1.text = "Eco: " + base1.messageOfBase.economy.ToString();
+            if (GameObject.Find("Base1").TryGetComponent<BaseControl>(out base1))
+            {
+                healthText1.text = "Health: " + base1.messageOfBase.hp.ToString();
+                healthSlider1.value = base1.messageOfBase.hp / 24000f;
+                ecoText1.text = "$" + base1.messageOfBase.economy.ToString();
+            }
         }
-        if (GameObject.Find("Base2").TryGetComponent<BaseControl>(out base2))
+        if (GameObject.Find("Base2"))
         {
-            healthText2.text = "Health: " + base2.messageOfBase.hp.ToString();
-            healthSlider2.value = base2.messageOfBase.hp / 24000f;
-            ecoText2.text = "Eco: " + base2.messageOfBase.economy.ToString();
+            if (GameObject.Find("Base2").TryGetComponent<BaseControl>(out base2))
+            {
+                healthText2.text = "Health: " + base2.messageOfBase.hp.ToString();
+                healthSlider2.value = base2.messageOfBase.hp / 24000f;
+                ecoText2.text = "$" + base2.messageOfBase.economy.ToString();
+            }
         }
 
     }
