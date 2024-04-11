@@ -45,7 +45,6 @@ namespace GameClass.GameObj
         public void AddMoney(long add)
         {
             MoneyPool.Money.Add(add);
-            MoneyPool.Score.Add(add);
         }
         public void SubMoney(long sub)
         {

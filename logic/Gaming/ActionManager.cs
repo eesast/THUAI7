@@ -309,7 +309,7 @@ namespace Gaming
                             loopCondition: () => gameMap.Timer.IsGaming,
                             loopToDo: () =>
                             {
-                                team.AddMoney(team.MoneyAddPerSecond);
+                                team.AddMoney(team.MoneyAddPerSecond / GameData.NumOfStepPerSecond);
                                 return true;
                             },
                             timeInterval: GameData.CheckInterval,
