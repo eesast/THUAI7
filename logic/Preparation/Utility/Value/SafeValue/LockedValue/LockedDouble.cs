@@ -9,31 +9,26 @@ namespace Preparation.Utility
 
         public override string ToString()
         {
-            lock (vLock)
-                return v.ToString();
+            return ReadNeed(() => v.ToString());
         }
         public double Get()
         {
-            lock (vLock)
-                return v;
+            return ReadNeed(() => v);
         }
         public double ToDouble() => Get();
         public static implicit operator double(LockedDouble adouble) => adouble.Get();
 
         public void Set(double value)
         {
-            lock (vLock)
-                v = value;
+            WriteNeed(() => v = value);
         }
         public double AddRNow(double value)
         {
-            lock (vLock)
-                return v += value;
+            return WriteNeed(() => v += value);
         }
         public double MulRNow(double value)
         {
-            lock (vLock)
-                return v *= value;
+            return WriteNeed(() => v *= value);
         }
     }
 }
