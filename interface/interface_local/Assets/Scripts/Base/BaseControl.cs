@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class BaseControl : MonoBehaviour
@@ -52,6 +53,7 @@ public class BaseControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        RendererControl.GetInstance().SetColToChild(messageOfBase.playerTeam, gameObject.transform, 0.5f);
         switch (interactBase.interactOption)
         {
             case InteractControl.InteractOption.BuildCivil:
@@ -83,11 +85,16 @@ public class BaseControl : MonoBehaviour
         timer += Time.deltaTime;
         deltaEco = (int)((timer - ecoStamp * 1.0f / 20) * 20);
         ecoStamp += deltaEco;
-        AddEconomy(deltaEco);
+        if (!GameManager.GetInstance().gameover)
+            AddEconomy(deltaEco);
     }
     public void AddEconomy(int economy)
     {
         messageOfBase.economy += economy;
+    }
+    public void AddScoreminus(int score)
+    {
+        messageOfBase.scoreminus += score;
     }
     public void TakeDamage(int damage)
     {
@@ -104,10 +111,12 @@ public class BaseControl : MonoBehaviour
         if (messageOfBase.economy < cost)
             return false;
         messageOfBase.economy -= cost;
+        messageOfBase.scoreminus -= cost;
         return true;
     }
     void DestroyBase()
     {
+        UIControl.GetInstance().updateUI();
         Destroy(gameObject);
     }
 }

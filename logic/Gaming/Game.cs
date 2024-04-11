@@ -18,21 +18,53 @@ namespace Gaming
             public long playerID = playerID;
             public ShipType shipType = shipType;
         }
-        private readonly List<Team> teamList;
-        public List<Team> TeamList => teamList;
+        private readonly List<Base> teamList;
+        public List<Base> TeamList => teamList;
         private readonly Map gameMap;
         public Map GameMap => gameMap;
+        private readonly Random random = new();
         public long AddPlayer(PlayerInitInfo playerInitInfo)
         {
             if (!gameMap.TeamExists(playerInitInfo.teamID))
             {
                 return GameObj.invalidID;
             }
-            if (playerInitInfo.shipType != ShipType.Null)
+            if (playerInitInfo.playerID != 0)
             {
                 // Add a ship
-                Ship? newShip = shipManager.AddShip(playerInitInfo.teamID, playerInitInfo.playerID,
-                    playerInitInfo.shipType, teamList[(int)playerInitInfo.teamID].MoneyPool);
+                var shipType = playerInitInfo.shipType;
+                switch (shipType)
+                {
+                    case ShipType.Null:
+                        return GameObj.invalidID;
+                    case ShipType.CivilShip:
+                        if (teamList[(int)playerInitInfo.teamID].ShipPool.GetNum(ShipType.CivilShip)
+                            >= GameData.MaxCivilShipNum)
+                        {
+                            return GameObj.invalidID;
+                        }
+                        break;
+                    case ShipType.WarShip:
+                        if (teamList[(int)playerInitInfo.teamID].ShipPool.GetNum(ShipType.WarShip)
+                            >= GameData.MaxWarShipNum)
+                        {
+                            return GameObj.invalidID;
+                        }
+                        break;
+                    case ShipType.FlagShip:
+                        if (teamList[(int)playerInitInfo.teamID].ShipPool.GetNum(ShipType.FlagShip)
+                            >= GameData.MaxFlagShipNum)
+                        {
+                            return GameObj.invalidID;
+                        }
+                        break;
+                    default:
+                        return GameObj.invalidID;
+                }
+                Ship? newShip = shipManager.AddShip(playerInitInfo.teamID,
+                                                    playerInitInfo.playerID,
+                                                    playerInitInfo.shipType,
+                                                    teamList[(int)playerInitInfo.teamID].MoneyPool);
                 if (newShip == null)
                 {
                     return GameObj.invalidID;
@@ -46,21 +78,28 @@ namespace Gaming
                 return playerInitInfo.playerID;
             }
         }
-        public bool ActivateShip(long teamID, long playerID, ShipType shipType, int birthPointIndex = 0)
+        public long ActivateShip(long teamID, ShipType shipType, int birthPointIndex = 0)
         {
+            Debugger.Output("Trying to activate: " + teamID + " " + shipType + " at " + birthPointIndex);
             Ship? ship = teamList[(int)teamID].ShipPool.GetObj(shipType);
             if (ship == null)
-                return false;
-            else if (ship.IsRemoved == false)
-                return false;
+            {
+                Debugger.Output("Failed to activate: " + teamID + " " + shipType + ", no ship available");
+                return GameObj.invalidID;
+            }
             if (birthPointIndex < 0)
                 birthPointIndex = 0;
             if (birthPointIndex >= teamList[(int)teamID].BirthPointList.Count)
                 birthPointIndex = teamList[(int)teamID].BirthPointList.Count - 1;
             XY pos = teamList[(int)teamID].BirthPointList[birthPointIndex];
-            Random random = new();
             pos += new XY(((random.Next() & 2) - 1) * 1000, ((random.Next() & 2) - 1) * 1000);
-            return shipManager.ActivateShip(ship, pos);
+            if (shipManager.ActivateShip(ship, pos))
+            {
+                Debugger.Output("Successfully activated: " + teamID + " " + shipType + " at " + pos);
+                return ship.PlayerID;
+            }
+            Debugger.Output("Failed to activate: " + teamID + " " + shipType + " at " + pos + ", rule not permitted");
+            return GameObj.invalidID;
         }
         public bool StartGame(int milliSeconds)
         {
@@ -70,6 +109,7 @@ namespace Gaming
             foreach (var team in TeamList)
             {
                 actionManager.AddMoneyNaturally(team);
+                ActivateShip(team.TeamID, ShipType.CivilShip);
             }
             new Thread
             (
@@ -91,12 +131,14 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
             {
+                Debugger.Output("Trying to move: " + teamID + " " + shipID + " " + moveTimeInMilliseconds + " " + angle);
                 return actionManager.MoveShip(ship, moveTimeInMilliseconds, angle);
             }
             else
             {
+                Debugger.Output("Failed to move: " + teamID + " " + shipID + ", no ship found");
                 return false;
             }
         }
@@ -105,7 +147,7 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
                 return actionManager.Produce(ship);
             return false;
         }
@@ -114,7 +156,7 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
             {
                 return actionManager.Construct(ship, constructionType);
             }
@@ -125,7 +167,7 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
                 return moduleManager.InstallModule(ship, moduleType);
             return false;
         }
@@ -134,7 +176,7 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
             {
                 bool validRecoverPoint = false;
                 foreach (XY recoverPoint in teamList[(int)ship.TeamID].BirthPointList)
@@ -157,7 +199,7 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
             {
                 bool validRecyclePoint = false;
                 foreach (XY recyclePoint in teamList[(int)ship.TeamID].BirthPointList)
@@ -198,7 +240,7 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
                 return attackManager.Attack(ship, angle);
             return false;
         }
@@ -282,7 +324,7 @@ namespace Gaming
                 {
                     if (gameObj.Type == GameObjType.Home)
                     {
-                        teamList.Add(new Team((Home)gameObj));
+                        teamList.Add(new Base((Home)gameObj));
                         teamList.Last().BirthPointList.Add(gameObj.Position);
                         teamList.Last().AddMoney(GameData.InitialMoney);
                     }

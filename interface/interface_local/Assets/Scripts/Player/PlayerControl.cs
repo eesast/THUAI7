@@ -11,6 +11,8 @@ public class PlayerControl : SingletonMono<PlayerControl>
     public bool selectingAll;
     public List<InteractControl.InteractOption> enabledInteract;
     public InteractControl.InteractOption selectedOption;
+    public float longClickTime, longClickTimer;
+    public Vector2 clickPnt, cameraPos;
     void Start()
     {
 
@@ -20,7 +22,7 @@ public class PlayerControl : SingletonMono<PlayerControl>
     void Update()
     {
         // testInput();
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             foreach (InteractBase i in selectedInt)
             {
@@ -28,6 +30,15 @@ public class PlayerControl : SingletonMono<PlayerControl>
             }
             selectedInt.Clear();
         }
+        if (Input.GetMouseButtonDown(0))
+        {
+            longClickTimer = longClickTime;
+            cameraPos = Camera.main.transform.position;
+            clickPnt = Input.mousePosition;
+        }
+        longClickTimer -= Time.deltaTime;
+        if (longClickTimer < 0)
+            longClickTimer = 0;
         CheckInteract();
         UpdateInteractList();
         Interact();
@@ -42,6 +53,11 @@ public class PlayerControl : SingletonMono<PlayerControl>
     }
     void CheckInteract()
     {
+        for (int i = 0; i < selectedInt.Count; i++)
+            if (!selectedInt[i])
+            {
+                selectedInt.Remove(selectedInt[i]);
+            }
         raycaster = Physics2D.OverlapPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition), interactableLayer);
         if (raycaster)
         {
@@ -88,15 +104,17 @@ public class PlayerControl : SingletonMono<PlayerControl>
                 }
                 tobeSelectedInt.Clear();
                 // Debug.Log("clear" + tobeSelectedInt.Count);
-
-                if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+                if (!EventSystem.current.IsPointerOverGameObject())
                 {
-                    // foreach (InteractBase i in selectedInt)
-                    // {
-                    //     i.selected = false;
-                    // }
-                    // selectedInt.Clear();
-                    ShipAttack();
+                    if (Input.GetMouseButtonUp(0) && longClickTimer > 0)
+                    {
+                        ShipAttack();
+                    }
+                    if (Input.GetMouseButton(0))
+                    {
+                        Camera.main.transform.position = ((Vector3)cameraPos - Camera.main.ScreenToWorldPoint(Input.mousePosition) + (Vector3)Camera.main.ScreenToWorldPoint(clickPnt));
+                        Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, -10);
+                    }
                 }
                 if (Input.GetMouseButtonDown(1))
                 {

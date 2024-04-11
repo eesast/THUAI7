@@ -17,6 +17,14 @@ namespace Gaming
                 gameMap.Add(newShip);
                 newShip.TeamID.SetROri(teamID);
                 newShip.PlayerID.SetROri(playerID);
+                Debugger.Output(
+                    "Added ship: " + newShip.ShipType + " with "
+                    + newShip.ProducerModuleType + ", "
+                    + newShip.ConstructorModuleType + ", "
+                    + newShip.ArmorModuleType + ", "
+                    + newShip.ShieldModuleType + ", "
+                    + newShip.WeaponModuleType
+                );
                 return newShip;
             }
             public bool ActivateShip(Ship ship, XY pos)

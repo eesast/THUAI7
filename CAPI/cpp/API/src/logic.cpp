@@ -14,7 +14,7 @@
 
 extern const bool asynchronous;
 
-Logic::Logic(int64_t pID, int64_t tID, THUAI7::PlayerType pType, THUAI7::ShipType sType) :
+Logic::Logic(int32_t pID, int32_t tID, THUAI7::PlayerType pType, THUAI7::ShipType sType) :
     playerID(pID),
     teamID(tID),
     playerType(pType),
@@ -199,7 +199,7 @@ bool Logic::Move(int64_t time, double angle)
     return pComm->Move(playerID, teamID, time, angle);
 }
 
-bool Logic::Send(int64_t toID, std::string message, bool binary)
+bool Logic::Send(int32_t toID, std::string message, bool binary)
 {
     logger->debug("Called SendMessage");
     return pComm->Send(playerID, teamID, toID, std::move(message), binary);
@@ -211,7 +211,7 @@ bool Logic::HaveMessage()
     return !messageQueue.empty();
 }
 
-std::pair<int64_t, std::string> Logic::GetMessage()
+std::pair<int32_t, std::string> Logic::GetMessage()
 {
     logger->debug("Called GetMessage");
     auto msg = messageQueue.tryPop();
@@ -230,11 +230,9 @@ bool Logic::Attack(double angle)
     return pComm->Attack(playerID, teamID, angle);
 }
 
-bool Logic::Recover()
+bool Logic::Recover(int64_t recover)
 {
     logger->debug("Called Recover");
-    // TODO recover
-    int64_t recover = 1;
     return pComm->Recover(playerID, recover, teamID);
 }
 
@@ -244,14 +242,14 @@ bool Logic::Construct(THUAI7::ConstructionType constructiontype)
     return pComm->Construct(playerID, teamID, constructiontype);
 }
 
-bool Logic::BuildShip(THUAI7::ShipType Shiptype)
+bool Logic::BuildShip(THUAI7::ShipType Shiptype, int32_t birthIndex)
 {
     logger->debug("Called BuildShip");
-    return pComm->BuildShip(teamID, Shiptype);
+    return pComm->BuildShip(teamID, Shiptype, birthIndex);
 }
 
 // 等待完成
-bool Logic::Recycle(int64_t targetID)
+bool Logic::Recycle(int32_t targetID)
 {
     logger->debug("Called Recycle");
     return pComm->Recycle(targetID, teamID);
@@ -269,7 +267,7 @@ bool Logic::Rebuild(THUAI7::ConstructionType constructionType)
     return pComm->Rebuild(playerID, teamID, constructionType);
 }
 
-bool Logic::InstallModule(int64_t playerID, THUAI7::ModuleType moduleType)
+bool Logic::InstallModule(int32_t playerID, THUAI7::ModuleType moduleType)
 {
     logger->debug("Called InstallModule");
     return pComm->InstallModule(playerID, teamID, moduleType);

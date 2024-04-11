@@ -130,7 +130,7 @@ public class InteractControl : Singleton<InteractControl>
         {InteractOption.InstallModuleConstructor1, "＄0"},
         {InteractOption.InstallModuleConstructor2, "＄400"},
         {InteractOption.InstallModuleConstructor3, "＄800"},
-        {InteractOption.InstallModuleLaserGun, "＄0"},
+        {InteractOption.InstallModuleLaserGun, "＄1000"},
         {InteractOption.InstallModulePlasmaGun, "＄1200"},
         {InteractOption.InstallModuleShellGun, "＄1300"},
         {InteractOption.InstallModuleMissileGun, "＄1800"},

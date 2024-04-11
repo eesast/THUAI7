@@ -7,7 +7,7 @@ public class Construction(XY initPos)
 {
     public AtomicLong TeamID { get; } = new(long.MaxValue);
     public InVariableRange<long> HP { get; } = new(0, GameData.CommunityHP);
-    public override bool IsRigid => constructionType == ConstructionType.Community;
+    public override bool IsRigid => true;
     public override ShapeType Shape => ShapeType.Square;
 
     private readonly object lockOfConstructionType = new();
@@ -54,14 +54,9 @@ public class Construction(XY initPos)
                 return false;
             }
         }
-        var addHP = HP.GetMaxV() - HP > constructSpeed ? constructSpeed : HP.GetMaxV() - HP;
-        if (ship.MoneyPool.Money < addHP / 10)
-        {
-            return false;
-        }
-        HP.AddPositiveVRChange(addHP);
-        ship.MoneyPool.SubMoney(addHP / 10);
-        return true;
+
+        return HP.AddVUseOtherRChange<long>(constructSpeed, ship.MoneyPool.Money, 10) > 0;
+
     }
     public bool BeAttacked(Bullet bullet)
     {

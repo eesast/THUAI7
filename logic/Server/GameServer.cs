@@ -140,7 +140,7 @@ namespace Server
                             MessageOfObj? msg = CopyInfo.Auto(gameObj, time);
                             if (msg != null) currentGameInfo.ObjMessage.Add(msg);
                         }
-                        foreach (Team team in game.TeamList)
+                        foreach (Base team in game.TeamList)
                         {
                             MessageOfObj? msg = CopyInfo.Auto(team, time);
                             if (msg != null) currentGameInfo.ObjMessage.Add(msg);
@@ -195,7 +195,7 @@ namespace Server
         public override int[] GetMoney()
         {
             int[] money = new int[2]; // 0代表RedTeam，1代表BlueTeam
-            foreach (Team team in game.TeamList)
+            foreach (Base team in game.TeamList)
             {
                 money[(int)team.TeamID] = (int)game.GetTeamMoney(team.TeamID);
             }
@@ -205,7 +205,7 @@ namespace Server
         public override int[] GetScore()
         {
             int[] score = new int[2]; // 0代表RedTeam，1代表BlueTeam
-            foreach (Team team in game.TeamList)
+            foreach (Base team in game.TeamList)
             {
                 score[(int)team.TeamID] = (int)game.GetTeamScore(team.TeamID);
             }
@@ -234,6 +234,11 @@ namespace Server
             int[] score = GetScore();
             msg.RedTeamScore = score[0];
             msg.BlueTeamScore = score[1];
+            int[] energy = GetMoney();
+            msg.RedTeamEnergy = energy[0];
+            msg.BlueTeamEnergy = energy[1];
+            msg.RedHomeHp = (int)game.TeamList[0].Home.HP;
+            msg.BlueHomeHp = (int)game.TeamList[1].Home.HP;
             return msg;
         }
 
@@ -262,47 +267,61 @@ namespace Server
                 game = new(MapInfo.defaultMapStruct, options.TeamCount);
             else
             {
-                uint[,] map = new uint[GameData.MapRows, GameData.MapCols];
-                try
+                // txt文本方案
+                if (options.MapResource.EndsWith(".txt"))
                 {
-                    string? line;
-                    int i = 0, j = 0;
-                    using StreamReader sr = new(options.MapResource);
-                    while (!sr.EndOfStream && i < GameData.MapRows)
+                    try
                     {
-                        if ((line = sr.ReadLine()) != null)
+                        uint[,] map = new uint[GameData.MapRows, GameData.MapCols];
+                        string? line;
+                        int i = 0, j = 0;
+                        using StreamReader sr = new(options.MapResource);
+                        #region 读取txt地图
+                        while (!sr.EndOfStream && i < GameData.MapRows)
                         {
-                            string[] nums = line.Split(' ');
-                            foreach (string item in nums)
+                            if ((line = sr.ReadLine()) != null)
                             {
-                                if (item.Length > 1)//以兼容原方案
+                                string[] nums = line.Split(' ');
+                                foreach (string item in nums)
                                 {
-                                    map[i, j] = (uint)int.Parse(item);
+                                    if (item.Length > 1)//以兼容原方案
+                                        map[i, j] = (uint)int.Parse(item);
+                                    else
+                                        //2022-04-22 by LHR 十六进制编码地图方案（防止地图编辑员瞎眼x
+                                        map[i, j] = (uint)MapEncoder.Hex2Dec(char.Parse(item));
+                                    j++;
+                                    if (j >= GameData.MapCols)
+                                    {
+                                        j = 0;
+                                        break;
+                                    }
                                 }
-                                else
-                                {
-                                    //2022-04-22 by LHR 十六进制编码地图方案（防止地图编辑员瞎眼x
-                                    map[i, j] = (uint)MapEncoder.Hex2Dec(char.Parse(item));
-                                }
-                                j++;
-                                if (j >= GameData.MapCols)
-                                {
-                                    j = 0;
-                                    break;
-                                }
+                                i++;
                             }
-                            i++;
                         }
+                        #endregion
+                        game = new(new(GameData.MapRows, GameData.MapCols, map), options.TeamCount);
+                    }
+                    catch
+                    {
+                        game = new(MapInfo.defaultMapStruct, options.TeamCount);
                     }
                 }
-                catch
+                // MapStruct二进制方案
+                else if (options.MapResource.EndsWith(".map"))
                 {
-                    map = MapInfo.defaultMap;
+                    try
+                    {
+                        game = new(MapStruct.FromFile(options.MapResource), options.TeamCount);
+                    }
+                    catch
+                    {
+                        game = new(MapInfo.defaultMapStruct, options.TeamCount);
+                    }
                 }
-                finally
+                else
                 {
-                    MapStruct mapResource = new(GameData.MapRows, GameData.MapCols, map);
-                    game = new(mapResource, options.TeamCount);
+                    game = new(MapInfo.defaultMapStruct, options.TeamCount);
                 }
             }
             currentMapMsg = new() { MapMessage = MapMsg() };

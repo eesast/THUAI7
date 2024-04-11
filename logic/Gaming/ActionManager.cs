@@ -46,11 +46,13 @@ namespace Gaming
             {
                 if (moveTimeInMilliseconds < 5)
                 {
+                    Debugger.Output("Move time is too short.");
                     return false;
                 }
                 long stateNum = shipToMove.SetShipState(RunningStateType.Waiting, ShipStateType.Moving);
                 if (stateNum == -1)
                 {
+                    Debugger.Output("Ship is not commandable.");
                     return false;
                 }
                 new Thread
@@ -211,7 +213,8 @@ namespace Gaming
                                                                     return true;
                                                                 }
                                                                 var ship = ships[random.Next(ships.Count)];
-                                                                shipManager.BeAttacked(ship, GameData.FortDamage,
+                                                                shipManager.BeAttacked(ship,
+                                                                    GameData.FortDamage / GameData.NumOfStepPerSecond,
                                                                     construction.TeamID);
                                                                 return true;
                                                             },
@@ -241,7 +244,7 @@ namespace Gaming
             }
             public bool Repair(Ship ship)
             {
-                Wormhole? wormhole = (Wormhole?)gameMap.OneForInteract(ship.Position, GameObjType.Wormhole);
+                Wormhole? wormhole = ((WormholeCell?)gameMap.OneForInteract(ship.Position, GameObjType.Wormhole))?.Wormhole;
                 if (wormhole == null)
                 {
                     return false;
@@ -295,7 +298,7 @@ namespace Gaming
                 { IsBackground = true }.Start();
                 return false;
             }
-            public bool AddMoneyNaturally(Team team)
+            public bool AddMoneyNaturally(Base team)
             {
                 new Thread
                 (
@@ -307,7 +310,7 @@ namespace Gaming
                             loopCondition: () => gameMap.Timer.IsGaming,
                             loopToDo: () =>
                             {
-                                team.AddMoney(team.MoneyAddPerSecond);
+                                team.AddMoney(team.MoneyAddPerSecond / GameData.NumOfStepPerSecond);
                                 return true;
                             },
                             timeInterval: GameData.CheckInterval,

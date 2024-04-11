@@ -10,7 +10,7 @@ import datetime
 
 class ShipDebugAPI(IShipAPI, IGameTimer):
     def __init__(
-        self, logic: ILogic, file: bool, screen: bool, warnOnly: bool, playerID: int
+        self, logic: ILogic, file: bool, screen: bool, warnOnly: bool, playerID: int, teamID: int
     ) -> None:
         self.__logic = logic
         self.__pool = ThreadPoolExecutor(20)
@@ -31,9 +31,7 @@ class ShipDebugAPI(IShipAPI, IGameTimer):
 
         fileHandler = logging.FileHandler(
             os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-            + "/logs/api-"
-            + str(playerID)
-            + "-log.txt",
+            + f"/logs/api-{teamID}-{playerID}-log.txt",
             mode="w+",
             encoding="utf-8",
         )
@@ -86,11 +84,11 @@ class ShipDebugAPI(IShipAPI, IGameTimer):
 
         return self.__pool.submit(logAttack)
 
-    def Recover(self) -> Future[bool]:
+    def Recover(self, recover: int) -> Future[bool]:
         self.__logger.info(f"Recover: called at {self.__GetTime()}ms")
 
         def logRecover() -> bool:
-            result = self.__logic.Recover()
+            result = self.__logic.Recover(recover)
             if not result:
                 self.__logger.warning(f"Recover failed at {self.__GetTime()}ms")
             return result
@@ -220,7 +218,7 @@ class ShipDebugAPI(IShipAPI, IGameTimer):
         return self.__logic.GetPlayerGUIDs()
 
     def GetSelfInfo(self) -> THUAI7.Ship:
-        return cast(THUAI7.Ships, self.__logic.GetSelfInfo())
+        return cast(THUAI7.Ship, self.__logic.GetSelfInfo())
 
     def GetEnergy(self) -> int:
         return self.__logic.GetEnergy()
@@ -302,7 +300,7 @@ class ShipDebugAPI(IShipAPI, IGameTimer):
 
 class TeamDebugAPI(ITeamAPI, IGameTimer):
     def __init__(
-        self, logic: ILogic, file: bool, screen: bool, warnOnly: bool, playerID: int
+        self, logic: ILogic, file: bool, screen: bool, warnOnly: bool, playerID: int, teamID: int
     ) -> None:
         self.__logic = logic
         self.__pool = ThreadPoolExecutor(20)
@@ -323,9 +321,7 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
 
         fileHandler = logging.FileHandler(
             os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-            + "/logs/api-"
-            + str(playerID)
-            + "-log.txt",
+            + f"/logs/api-{teamID}-{playerID}-log.txt",
             mode="w+",
             encoding="utf-8",
         )
@@ -413,13 +409,13 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
 
         return self.__pool.submit(logRecycle)
 
-    def BuildShip(self, shipType: THUAI7.ShipType) -> Future[bool]:
+    def BuildShip(self, shipType: THUAI7.ShipType, birthIndex: int) -> Future[bool]:
         self.__logger.info(
-            f"BuildShip: shipType = {shipType}, called at {self.__GetTime()}ms"
+            f"BuildShip: shipType = {shipType},birthIndex:{birthIndex} called at {self.__GetTime()}ms"
         )
 
         def logBuildShip() -> bool:
-            result = self.__logic.BuildShip(shipType)
+            result = self.__logic.BuildShip(shipType, birthIndex)
             if not result:
                 self.__logger.warning(f"BuildShip: failed at {self.__GetTime()}ms")
             return result
@@ -518,4 +514,4 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
         self.__logger.info(f"Time elapsed: {self.__GetTime()}ms")
 
     def Play(self, ai: IAI) -> None:
-        ai.ShipPlay(self)
+        ai.TeamPlay(self)

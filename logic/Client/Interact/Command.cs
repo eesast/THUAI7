@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Client.Interact
+namespace installer.Data
 {
     public enum LanguageOption
     {
@@ -48,7 +48,7 @@ namespace Client.Interact
         public string UserName { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public bool Remembered { get; set; } = false;
-        public Command Commands { get; set; } = new Command();
+        public CommandFile Commands { get; set; } = new CommandFile();
     }
 
     public class Command
@@ -207,8 +207,9 @@ namespace Client.Interact
                 Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 "THUAI7.json") : p;
             file = new ConfigDataFile();
-
+            com = new Command(file.Commands);
             ReadFile();
+
             if (autoSave)
                 OnMemoryChanged += (_, _) => SaveFile();
             watcher = new FileSystemWatcher(Directory.GetParent(path)?.FullName ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
@@ -221,6 +222,8 @@ namespace Client.Interact
                                  | NotifyFilters.LastWrite
                                  | NotifyFilters.Security
                                  | NotifyFilters.Size;
+            watcher.IncludeSubdirectories = false;
+            watcher.EnableRaisingEvents = true;
             watcher.Changed += (_, _) =>
             {
                 ReadFile();
@@ -235,7 +238,7 @@ namespace Client.Interact
                 using (FileStream s = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
                 using (StreamReader r = new StreamReader(s))
                 {
-                    var f = JsonSerializer.Deserialize<ConfigDataFile>(path);
+                    var f = JsonSerializer.Deserialize<ConfigDataFile>(r.ReadToEnd());
                     if (f is null)
                         throw new JsonException();
                     else file = f;
@@ -245,11 +248,13 @@ namespace Client.Interact
             {
                 file = new ConfigDataFile();
             }
-            file.Commands.OnMemoryChanged += (_, _) => OnMemoryChanged?.Invoke(this, new EventArgs());
+            com = new Command(file.Commands);
+            com.OnMemoryChanged += (_, _) => OnMemoryChanged?.Invoke(this, new EventArgs());
         }
 
         public void SaveFile()
         {
+            file.Commands = com.file;
             using FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
             using StreamWriter sw = new StreamWriter(fs);
             fs.SetLength(0);
@@ -263,6 +268,7 @@ namespace Client.Interact
         protected string path;
         protected ConfigDataFile file;
         protected FileSystemWatcher watcher;
+        protected Command com;
 
         public string Description
         {
@@ -350,11 +356,11 @@ namespace Client.Interact
 
         public Command Commands
         {
-            get => file.Commands;
+            get => com;
             set
             {
-                var temp = file.Commands;
-                file.Commands = value;
+                var temp = com;
+                com = value;
                 if (temp != value)
                     OnMemoryChanged?.Invoke(this, new EventArgs());
             }
