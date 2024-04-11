@@ -213,7 +213,8 @@ namespace Gaming
                                                                     return true;
                                                                 }
                                                                 var ship = ships[random.Next(ships.Count)];
-                                                                shipManager.BeAttacked(ship, GameData.FortDamage,
+                                                                shipManager.BeAttacked(ship,
+                                                                    GameData.FortDamage / GameData.NumOfStepPerSecond,
                                                                     construction.TeamID);
                                                                 return true;
                                                             },
