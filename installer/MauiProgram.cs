@@ -26,16 +26,30 @@ namespace installer
             // read SecretID & SecretKey from filePath for debug
             var filePath = Debugger.IsAttached ? "D:\\Secret.csv" : Path.Combine(AppContext.BaseDirectory, "Secret.csv");
             var lines = File.ReadAllLines(filePath);
-            if (lines.Length > 0)
+            if (lines.Length >= 4)
             {
-                var param = new CspParameters();
-                param.KeyContainerName = lines[0];
-                using (var rsa = new RSACryptoServiceProvider(param))
+                lines = lines.Select(s => s.Trim().Trim('\r', '\n')).ToArray();
+                using (Aes aes = Aes.Create())
                 {
-                    var b1 = Convert.FromBase64String(lines[1]);
-                    var b2 = Convert.FromBase64String(lines[2]);
-                    SecretID = Encoding.ASCII.GetString(rsa.Decrypt(b1, false));
-                    SecretKey = Encoding.ASCII.GetString(rsa.Decrypt(b2, false));
+                    aes.Key = Convert.FromBase64String(lines[0]);
+                    aes.IV = Convert.FromBase64String(lines[1]);
+                    var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+                    using (MemoryStream memory = new MemoryStream(Convert.FromBase64String(lines[2])))
+                    {
+                        using (CryptoStream crypto = new CryptoStream(memory, decryptor, CryptoStreamMode.Read))
+                        {
+                            using (StreamReader reader = new StreamReader(crypto, Encoding.ASCII))
+                                SecretID = reader.ReadToEnd();
+                        }
+                    }
+                    using (MemoryStream memory = new MemoryStream(Convert.FromBase64String(lines[3])))
+                    {
+                        using (CryptoStream crypto = new CryptoStream(memory, decryptor, CryptoStreamMode.Read))
+                        {
+                            using (StreamReader reader = new StreamReader(crypto, Encoding.ASCII))
+                                SecretKey = reader.ReadToEnd();
+                        }
+                    }
                 }
             }
 
