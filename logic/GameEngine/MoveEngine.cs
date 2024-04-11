@@ -56,38 +56,38 @@ namespace GameEngine
             /*由于四周是墙，所以人物永远不可能与越界方块碰撞*/
             double maxLen = collisionChecker.FindMax(obj, moveVec);
             maxLen = Math.Min(maxLen, obj.MoveSpeed / GameData.NumOfStepPerSecond);
-            if (maxLen == 0)
-            {
-                // 尝试滑动
-                IGameObj? collisionObj = collisionChecker.CheckCollisionWhenMoving(obj, moveVec);
-                XY slideVec = new(0, 0);
-                switch (collisionObj?.Shape)
-                {
-                    case ShapeType.Circle:
-                        XY connectVec = collisionObj.Position - obj.Position;
-                        slideVec = new XY(
-                             connectVec.Perpendicular(),
-                             moveVec.Length() * Math.Cos(connectVec.Angle() - moveVec.Angle())
-                        );
-                        break;
-                    case ShapeType.Square:
-                        if (Math.Abs(collisionObj.Position.x - obj.Position.x) == collisionObj.Radius + obj.Radius)
-                        {
-                            slideVec = new XY(0, moveVec.y * Math.Sign(collisionObj.Position.y - obj.Position.y));
-                        }
-                        else if (Math.Abs(collisionObj.Position.y - obj.Position.y) == collisionObj.Radius + obj.Radius)
-                        {
-                            slideVec = new XY(moveVec.x * Math.Sign(collisionObj.Position.x - obj.Position.x), 0);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-                double slideLen = collisionChecker.FindMax(obj, slideVec);
-                slideLen = Math.Min(slideLen, slideVec.Length());
-                slideLen = Math.Min(slideLen, obj.MoveSpeed / GameData.NumOfStepPerSecond);
-                return (obj.MovingSetPos(new XY(slideVec, slideLen), stateNum)) >= 0;
-            }
+            //if (maxLen == 0)
+            //{
+            //    // 尝试滑动
+            //    IGameObj? collisionObj = collisionChecker.CheckCollisionWhenMoving(obj, moveVec);
+            //    XY slideVec = new(0, 0);
+            //    switch (collisionObj?.Shape)
+            //    {
+            //        case ShapeType.Circle:
+            //            XY connectVec = collisionObj.Position - obj.Position;
+            //            slideVec = new XY(
+            //                 connectVec.Perpendicular(),
+            //                 moveVec.Length() * Math.Cos(connectVec.Angle() - moveVec.Angle())
+            //            );
+            //            break;
+            //        case ShapeType.Square:
+            //            if (Math.Abs(collisionObj.Position.x - obj.Position.x) == collisionObj.Radius + obj.Radius)
+            //            {
+            //                slideVec = new XY(0, moveVec.y * Math.Sign(collisionObj.Position.y - obj.Position.y));
+            //            }
+            //            else if (Math.Abs(collisionObj.Position.y - obj.Position.y) == collisionObj.Radius + obj.Radius)
+            //            {
+            //                slideVec = new XY(moveVec.x * Math.Sign(collisionObj.Position.x - obj.Position.x), 0);
+            //            }
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //    double slideLen = collisionChecker.FindMax(obj, slideVec);
+            //    slideLen = Math.Min(slideLen, slideVec.Length());
+            //    slideLen = Math.Min(slideLen, obj.MoveSpeed / GameData.NumOfStepPerSecond);
+            //    return (obj.MovingSetPos(new XY(slideVec, slideLen), stateNum)) >= 0;
+            //}
             return (obj.MovingSetPos(new XY(moveVec, maxLen), stateNum)) >= 0;
         }
 
@@ -129,6 +129,7 @@ namespace GameEngine
 
         public void MoveObj(IMovable obj, int moveTime, double direction, long stateNum)
         {
+            Debugger.Output(obj, $"Position {obj.Position}, Start moving in direction {direction}.");
             if (!gameTimer.IsGaming) return;
             lock (obj.ActionLock)
             {

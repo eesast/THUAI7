@@ -11,6 +11,8 @@ namespace Server
     {
         public static MessageOfObj? Auto(GameObj gameObj, long time)
         {
+            if (gameObj.IsRemoved == true)
+                return null;
             switch (gameObj.Type)
             {
                 case GameObjType.Ship:
@@ -33,14 +35,14 @@ namespace Server
                         return Fort(construction);
                     return null;
                 case GameObjType.Wormhole:
-                    return Wormhole((Wormhole)gameObj);
+                    return Wormhole(((WormholeCell)gameObj).Wormhole);
                 default: return null;
             }
         }
 
-        public static MessageOfObj? Auto(Team team, long time)
+        public static MessageOfObj? Auto(Base @base, long time)
         {
-            return Team(team, time);
+            return Base(@base, time);
         }
         public static MessageOfObj? Auto(MessageOfNews news)
         {
@@ -69,6 +71,7 @@ namespace Server
                     ShipState = Transformation.ShipStateToProto(player.ShipState),
                     ShipType = Transformation.ShipTypeToProto(player.ShipType),
                     ViewRange = player.ViewRange,
+                    ProducerType = Transformation.ProducerToProto(player.ProducerModuleType),
                     ConstructorType = Transformation.ConstructorToProto(player.ConstructorModuleType),
                     ArmorType = Transformation.ArmorToProto(player.ArmorModuleType),
                     ShieldType = Transformation.ShieldToProto(player.ShieldModuleType),
@@ -94,7 +97,7 @@ namespace Server
             return msg;
         }
 
-        private static MessageOfObj? Team(Team player, long time)
+        private static MessageOfObj? Base(Base player, long time)
         {
             MessageOfObj msg = new()
             {
@@ -210,8 +213,6 @@ namespace Server
             {
                 WormholeMessage = new()
                 {
-                    X = wormhole.Position.x,
-                    Y = wormhole.Position.y,
                     Hp = (int)wormhole.HP,
                 }
             };

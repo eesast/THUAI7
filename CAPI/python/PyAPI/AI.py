@@ -52,6 +52,6 @@ class AI(IAI):
 
     def TeamPlay(self, api: ITeamAPI) -> None:
         assert self.__playerID == 0, "Team's playerID must be 0"
-        api.BuildShip(shipType=THUAI7.ShipType.CivilianShip)
+        # api.BuildShip(shipType=THUAI7.ShipType.CivilianShip)
         # 操作
         return

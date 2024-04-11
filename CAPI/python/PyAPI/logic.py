@@ -320,10 +320,10 @@ class Logic(ILogic):
                 for obj in message.obj_message:
                     if obj.WhichOneof("message_of_obj") == "ship_message":
                         self.__bufferState.guids.append(obj.ship_message.guid)
-            else:
-                for obj in message.obj_message:
-                    if obj.WhichOneof("message_of_obj") == "team_message":
-                        self.__bufferState.guids.append(obj.team_message.guid)
+            # else:
+            #     for obj in message.obj_message:
+            #         if obj.WhichOneof("message_of_obj") == "team_message":
+            #             self.__bufferState.guids.append(obj.team_message.guid)
 
             self.__bufferState.gameInfo = Proto2THUAI7.Protobuf2THUAI7GameInfo(
                 message.all_message
@@ -614,7 +614,7 @@ class Logic(ILogic):
             def HaveOverView(targetX: int, targetY: int):
                 for ship in self.__bufferState.ships:
                     if AssistFunction.HaveView(
-                        ship.viewRange, ship.x, ship.y, targetX, targetY
+                        ship.viewRange, ship.x, ship.y, targetX, targetY, self.__bufferState.gameMap
                     ):
                         return True
                 return False
@@ -843,9 +843,7 @@ class Logic(ILogic):
 
         fileHandler = logging.FileHandler(
             os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-            + "/logs/logic"
-            + str(self.__playerID)
-            + "-log.txt",
+            + f"/logs/logic-{self.__teamID}-{self.__playerID}-log.txt",
             "w+",
             encoding="utf-8",
         )
@@ -881,11 +879,11 @@ class Logic(ILogic):
         else:
             if self.__playerID == 0:
                 self.__timer = TeamDebugAPI(
-                    self, file, screen, warnOnly, self.__playerID
+                    self, file, screen, warnOnly, self.__playerID, self.__teamID
                 )
             else:
                 self.__timer = ShipDebugAPI(
-                    self, file, screen, warnOnly, self.__playerID
+                    self, file, screen, warnOnly, self.__playerID, self.__teamID
                 )
 
         # 构建AI线程

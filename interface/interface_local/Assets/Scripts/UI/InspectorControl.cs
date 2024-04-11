@@ -41,7 +41,7 @@ public class InspectorControl : MonoBehaviour
                             shipControl = interactBase.GetComponent<ShipControl>();
                         showText.text = "类型：" + ShipTypeToString(shipControl.messageOfShip.shipType)
                         + (shipControl.messageOfShip.playerTeam == PlayerTeam.RED ? "(RED)" : "(BLUE)") + "\n"
-                        + "血量：" + baseControl.messageOfBase.hp + " "
+                        + "血量：" + shipControl.messageOfShip.hp + " "
                         + WeaponTypeToString(shipControl.messageOfShip.weaponType) + "\n"
                         + ProducerTypeToString(shipControl.messageOfShip.producerType) + " "
                         + ConstructorTypeToString(shipControl.messageOfShip.constructorType) + "\n"

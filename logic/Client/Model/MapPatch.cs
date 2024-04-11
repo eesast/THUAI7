@@ -20,7 +20,8 @@ namespace Client.Model
         Community = 8,
         Fort = 9,
         WormHole = 10,
-        Null = 11
+        Null = 11,
+        Construction = 12
     };
 
     public class MapPatch : BindableObject

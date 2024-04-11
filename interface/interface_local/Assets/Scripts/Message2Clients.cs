@@ -69,6 +69,7 @@ public struct MessageOfBase
     public int y;
     public int hp;
     public int economy;
+    public int scoreminus;
     public PlayerTeam playerTeam;
     public ShipDic shipNum;
     public int shipTotalNum;
