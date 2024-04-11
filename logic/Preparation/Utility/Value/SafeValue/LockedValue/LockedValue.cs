@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Threading;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Preparation.Utility
 {
@@ -98,6 +101,27 @@ namespace Preparation.Utility
             {
                 if (thisLock) Monitor.Exit(vLock);
                 if (thatLock) Monitor.Exit(a.VLock);
+            }
+        }
+
+        public static TResult? EnterLocks<TResult>(List<LockedValue> a, Func<TResult?> func)
+        {
+            bool[] locks = Enumerable.Repeat(false, a.Count).ToArray();
+            try
+            {
+                a.Sort(delegate (LockedValue x, LockedValue y)
+                {
+                    if (x.IdInClass == y.IdInClass) return 0;
+                    else return x.IdInClass < y.IdInClass ? -1 : 1;
+                });
+                for (int i = 0; i <= a.Count; ++i)
+                    Monitor.Enter(a[i].VLock, ref locks[i]);
+                return func();
+            }
+            finally
+            {
+                for (int i = 0; i <= a.Count; ++i)
+                    if (locks[i]) Monitor.Exit(a[i].VLock);
             }
         }
     }
