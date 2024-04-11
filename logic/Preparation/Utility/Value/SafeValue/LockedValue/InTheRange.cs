@@ -16,38 +16,6 @@ namespace Preparation.Utility
         protected T v;
         protected T maxV;
 
-        #region NeedToDo
-        public virtual TResult ReadNeed<TResult>(Func<TResult> func)
-        {
-            lock (vLock)
-            {
-                return func();
-            }
-        }
-        public virtual void ReadNeed(Action func)
-        {
-            lock (vLock)
-            {
-                func();
-            }
-        }
-
-        public virtual TResult WriteNeed<TResult>(Func<TResult> func)
-        {
-            lock (vLock)
-            {
-                return func();
-            }
-        }
-        public virtual void WriteNeed(Action func)
-        {
-            lock (vLock)
-            {
-                func();
-            }
-        }
-        #endregion
-
         #region 构造与读取
         public InVariableRange(T value, T maxValue) : base()
         {
