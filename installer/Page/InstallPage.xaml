@@ -80,16 +80,24 @@
 
                 <CollectionView
                     BackgroundColor="LightGray"
-                    ItemsSource="{Binding Exceptions}"
+                    ItemsSource="{Binding LogCollection}"
                     ItemsUpdatingScrollMode="KeepLastItemInView"
                     VerticalScrollBarVisibility="Always">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid
-                                HorizontalOptions="Center"
-                                WidthRequest="550">
+                                ColumnDefinitions="*,*,*,*,*"
+                                WidthRequest="570">
 
                                 <Label
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="1"
+                                    Text="{Binding LevelStr}"
+                                    TextColor="{Binding Color}"/>
+
+                                <Label
+                                    Grid.Column="1"
+                                    Grid.ColumnSpan="4"
                                     Text="{Binding Message}"
                                     TextColor="Black"/>
 
@@ -101,8 +109,7 @@
             </Frame>
 
         </VerticalStackLayout>
-        
-        
+
     </Grid>
 
 </ContentPage>
