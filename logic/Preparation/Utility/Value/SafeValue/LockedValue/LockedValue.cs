@@ -7,6 +7,39 @@ namespace Preparation.Utility
     {
         protected readonly object vLock = new();
         protected object VLock => vLock;
+
+        #region NeedToDo
+        public virtual TResult ReadNeed<TResult>(Func<TResult> func)
+        {
+            lock (vLock)
+            {
+                return func();
+            }
+        }
+        public virtual void ReadNeed(Action func)
+        {
+            lock (vLock)
+            {
+                func();
+            }
+        }
+
+        public virtual TResult WriteNeed<TResult>(Func<TResult> func)
+        {
+            lock (vLock)
+            {
+                return func();
+            }
+        }
+        public virtual void WriteNeed(Action func)
+        {
+            lock (vLock)
+            {
+                func();
+            }
+        }
+        #endregion
+
         private static int numOfClass = 0;
         public static int NumOfClass => numOfClass;
         private readonly int idInClass;
