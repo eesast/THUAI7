@@ -13,13 +13,13 @@ namespace installer.ViewModel
         public List<HelpMessage> InstallerHelp { get; }
         public List<HelpMessage> LauncherHelp { get; }
         public List<HelpMessage> OtherHelp { get; }
-        
+
         public HelpViewModel()
         {
             InstallerHelp = new List<HelpMessage>();
             LauncherHelp = new List<HelpMessage>();
             OtherHelp = new List<HelpMessage>();
-            
+
             InstallerHelp.Add(new HelpMessage { Title = "Installer", Content = "> 下载功能需要选择空文件夹路径" });
             InstallerHelp.Add(new HelpMessage { Title = "Installer", Content = "> 更新前请先进行检查更新操作" });
 
