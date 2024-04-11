@@ -809,8 +809,8 @@ namespace Client.ViewModel
             ConnectToServer(new string[]{
                 "localhost",
                 "8888",
-                "0",
                 "1",
+                "0",
                 "1"
             });
 

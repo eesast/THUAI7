@@ -24,7 +24,7 @@ namespace Preparation.Utility
         public const int MapRows = 50;                  // 行数
         public const int MapCols = 50;                  // 列数
 
-        public const int InitialMoney = 500;             // 初始金钱
+        public const int InitialMoney = 5000;             // 初始金钱
 
         public static bool IsGameObjMap(GameObjType gameObjType) => (uint)gameObjType > 3;
         public static bool NeedCopy(GameObjType gameObjType)
@@ -71,7 +71,7 @@ namespace Preparation.Utility
         public const int ShipRadius = 400;
         public static readonly XY PosNotInGame = new(1, 1);
 
-        public const int BulletRadius = 200;  // 子弹半径
+        public const int BulletRadius = 200;            // 子弹半径
         public const int LaserRange = 4000;             // 激光射程
         public const int LaserDamage = 1200;            // 激光伤害
         public const double LaserArmorModifier = 1.5;   // 激光装甲修正
@@ -109,41 +109,41 @@ namespace Preparation.Utility
         public const int ArcCastTime = 600;             // 电弧前摇时间
         public const int ArcSwingTime = 600;            // 电弧后摇时间
 
-        public const int CivilShipCost = 400;
+        public const int CivilShipCost = 4000;
         public const int CivilShipMaxHP = 3000;
         public const int CivilShipMoveSpeed = 3000;
         public const int CivilShipViewRange = 8000;
         public const int CivilShipBaseArmor = 0;
         public const int CivilShipBaseShield = 0;
         public const int CivilShipProducer1Cost = 0;
-        public const int CivilShipProducer2Cost = 400;
-        public const int CivilShipProducer3Cost = 800;
+        public const int CivilShipProducer2Cost = 4000;
+        public const int CivilShipProducer3Cost = 8000;
         public const int CivilShipConstructor1Cost = 0;
-        public const int CivilShipConstructor2Cost = 400;
-        public const int CivilShipConstructor3Cost = 800;
-        public const int CivilShipArmor1Cost = 600;
-        public const int CivilShipShield1Cost = 600;
-        public const int CivilShipLaserGunCost = 1000;
+        public const int CivilShipConstructor2Cost = 4000;
+        public const int CivilShipConstructor3Cost = 8000;
+        public const int CivilShipArmor1Cost = 6000;
+        public const int CivilShipShield1Cost = 6000;
+        public const int CivilShipLaserGunCost = 10000;
 
-        public const int WarShipCost = 1200;
+        public const int WarShipCost = 12000;
         public const int WarShipMaxHP = 4000;
         public const int WarShipMoveSpeed = 2800;
         public const int WarShipViewRange = 8000;
         public const int WarShipBaseArmor = 400;
         public const int WarShipBaseShield = 400;
-        public const int WarShipArmor1Cost = 600;
-        public const int WarShipArmor2Cost = 1200;
-        public const int WarShipArmor3Cost = 1800;
-        public const int WarShipShield1Cost = 600;
-        public const int WarShipShield2Cost = 1200;
-        public const int WarShipShield3Cost = 1800;
+        public const int WarShipArmor1Cost = 6000;
+        public const int WarShipArmor2Cost = 12000;
+        public const int WarShipArmor3Cost = 18000;
+        public const int WarShipShield1Cost = 6000;
+        public const int WarShipShield2Cost = 12000;
+        public const int WarShipShield3Cost = 18000;
         public const int WarShipLaserGunCost = 0;
-        public const int WarShipPlasmaGunCost = 1200;
-        public const int WarShipShellGunCost = 1300;
-        public const int WarShipMissileGunCost = 1800;
-        public const int WarShipArcGunCost = 2400;
+        public const int WarShipPlasmaGunCost = 12000;
+        public const int WarShipShellGunCost = 13000;
+        public const int WarShipMissileGunCost = 18000;
+        public const int WarShipArcGunCost = 24000;
 
-        public const int FlagShipCost = 5000;
+        public const int FlagShipCost = 40000;
         public const int FlagShipMaxHP = 12000;
         public const int FlagShipMoveSpeed = 2700;
         public const int FlagShipViewRange = 8000;
@@ -151,23 +151,23 @@ namespace Preparation.Utility
         public const int FlagShipBaseShield = 800;
         public const int FlagShipProducer1Cost = 400;
         public const int FlagShipConstructor1Cost = 400;
-        public const int FlagShipArmor1Cost = 600;
-        public const int FlagShipArmor2Cost = 1200;
-        public const int FlagShipArmor3Cost = 1800;
-        public const int FlagShipShield1Cost = 600;
-        public const int FlagShipShield2Cost = 1200;
-        public const int FlagShipShield3Cost = 1800;
+        public const int FlagShipArmor1Cost = 6000;
+        public const int FlagShipArmor2Cost = 12000;
+        public const int FlagShipArmor3Cost = 18000;
+        public const int FlagShipShield1Cost = 6000;
+        public const int FlagShipShield2Cost = 12000;
+        public const int FlagShipShield3Cost = 18000;
         public const int FlagShipLaserGunCost = 0;
-        public const int FlagShipPlasmaGunCost = 1200;
-        public const int FlagShipShellGunCost = 1300;
-        public const int FlagShipMissileGunCost = 1800;
-        public const int FlagShipArcGunCost = 2400;
+        public const int FlagShipPlasmaGunCost = 12000;
+        public const int FlagShipShellGunCost = 13000;
+        public const int FlagShipMissileGunCost = 18000;
+        public const int FlagShipArcGunCost = 24000;
 
-        public const int ScoreHomePerSecond = 20;
-        public const int ScoreFactoryPerSecond = 50;
-        public const int ScoreProducer1PerSecond = 20;
-        public const int ScoreProducer2PerSecond = 30;
-        public const int ScoreProducer3PerSecond = 40;
+        public const int ScoreHomePerSecond = 100;
+        public const int ScoreFactoryPerSecond = 300;
+        public const int ScoreProducer1PerSecond = 100;
+        public const int ScoreProducer2PerSecond = 200;
+        public const int ScoreProducer3PerSecond = 300;
         public const int ScoreConstructionDamaged = 200;
         public static int ScoreShipKilled(int totalScore) => totalScore / 5;
         public static int ScoreShipRecovered(int totalRecovery) => totalRecovery * 6 / 5;
@@ -191,6 +191,6 @@ namespace Preparation.Utility
         public const int HomeHP = 24000;
 
         public const int FortRange = 6000;
-        public const int FortDamage = 50;
+        public const int FortDamage = 500;
     }
 }

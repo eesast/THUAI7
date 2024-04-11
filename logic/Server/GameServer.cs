@@ -140,7 +140,7 @@ namespace Server
                             MessageOfObj? msg = CopyInfo.Auto(gameObj, time);
                             if (msg != null) currentGameInfo.ObjMessage.Add(msg);
                         }
-                        foreach (Team team in game.TeamList)
+                        foreach (Base team in game.TeamList)
                         {
                             MessageOfObj? msg = CopyInfo.Auto(team, time);
                             if (msg != null) currentGameInfo.ObjMessage.Add(msg);
@@ -195,7 +195,7 @@ namespace Server
         public override int[] GetMoney()
         {
             int[] money = new int[2]; // 0代表RedTeam，1代表BlueTeam
-            foreach (Team team in game.TeamList)
+            foreach (Base team in game.TeamList)
             {
                 money[(int)team.TeamID] = (int)game.GetTeamMoney(team.TeamID);
             }
@@ -205,7 +205,7 @@ namespace Server
         public override int[] GetScore()
         {
             int[] score = new int[2]; // 0代表RedTeam，1代表BlueTeam
-            foreach (Team team in game.TeamList)
+            foreach (Base team in game.TeamList)
             {
                 score[(int)team.TeamID] = (int)game.GetTeamScore(team.TeamID);
             }
