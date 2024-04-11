@@ -40,9 +40,9 @@ namespace Server
             }
         }
 
-        public static MessageOfObj? Auto(Team team, long time)
+        public static MessageOfObj? Auto(Base @base, long time)
         {
-            return Team(team, time);
+            return Base(@base, time);
         }
         public static MessageOfObj? Auto(MessageOfNews news)
         {
@@ -97,7 +97,7 @@ namespace Server
             return msg;
         }
 
-        private static MessageOfObj? Team(Team player, long time)
+        private static MessageOfObj? Base(Base player, long time)
         {
             MessageOfObj msg = new()
             {

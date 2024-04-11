@@ -297,7 +297,7 @@ namespace Gaming
                 { IsBackground = true }.Start();
                 return false;
             }
-            public bool AddMoneyNaturally(Team team)
+            public bool AddMoneyNaturally(Base team)
             {
                 new Thread
                 (

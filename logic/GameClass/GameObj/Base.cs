@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace GameClass.GameObj
 {
-    public class Team : IPlayer
+    public class Base : IPlayer
     {
         public AtomicLong TeamID { get; }
         public AtomicLong PlayerID { get; } = new(0);
@@ -18,7 +18,7 @@ namespace GameClass.GameObj
         public MoneyPool MoneyPool { get; } = new();
         public AtomicInt FactoryNum { get; } = new(0);
         public int MoneyAddPerSecond => GameData.ScoreHomePerSecond + FactoryNum * GameData.ScoreFactoryPerSecond;
-        public Team(Home home)
+        public Base(Home home)
         {
             TeamID = new(home.TeamID);
             Home = home;
