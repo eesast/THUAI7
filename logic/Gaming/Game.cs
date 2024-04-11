@@ -18,8 +18,8 @@ namespace Gaming
             public long playerID = playerID;
             public ShipType shipType = shipType;
         }
-        private readonly List<Team> teamList;
-        public List<Team> TeamList => teamList;
+        private readonly List<Base> teamList;
+        public List<Base> TeamList => teamList;
         private readonly Map gameMap;
         public Map GameMap => gameMap;
         private readonly Random random = new();
@@ -324,7 +324,7 @@ namespace Gaming
                 {
                     if (gameObj.Type == GameObjType.Home)
                     {
-                        teamList.Add(new Team((Home)gameObj));
+                        teamList.Add(new Base((Home)gameObj));
                         teamList.Last().BirthPointList.Add(gameObj.Position);
                         teamList.Last().AddMoney(GameData.InitialMoney);
                     }
