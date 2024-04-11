@@ -35,14 +35,12 @@ namespace GameClass.GameObj
                     ship.CanMove.SetROri(false);
                     ship.IsRemoved.SetROri(true);
                 });
-            /*
-            ShipPool.Initiate(ShipType.CivilShip, GameData.MaxCivilShipNum,
+            ShipPool.Initiate(ShipType.CivilShip, 0,
                               () => new(GameData.ShipRadius, ShipType.CivilShip, MoneyPool));
-            ShipPool.Initiate(ShipType.WarShip, GameData.MaxWarShipNum,
+            ShipPool.Initiate(ShipType.WarShip, 0,
                               () => new(GameData.ShipRadius, ShipType.WarShip, MoneyPool));
-            ShipPool.Initiate(ShipType.FlagShip, GameData.MaxFlagShipNum,
+            ShipPool.Initiate(ShipType.FlagShip, 0,
                               () => new(GameData.ShipRadius, ShipType.FlagShip, MoneyPool));
-            */
         }
         public void AddMoney(long add)
         {
@@ -51,7 +49,7 @@ namespace GameClass.GameObj
         }
         public void SubMoney(long sub)
         {
-            MoneyPool.Money.Sub(sub);
+            MoneyPool.Money.SubRNow(sub);
         }
     }
 }

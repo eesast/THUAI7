@@ -13,27 +13,30 @@ using System.Linq.Expressions;
 using Client.ViewModel;
 using Client.Interact;
 using Client.Model;
+using Client.View;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
+using System.Globalization;
+using Microsoft.Maui.Converters;
 
 namespace Client
 {
     public partial class MainPage : ContentPage
     {
         private bool UIinitiated = false;
+
         GeneralViewModel viewModel;
         public MainPage()
         {
             viewModel = new GeneralViewModel();
             Console.WriteLine("Hello World");
             BindingContext = viewModel;
-            timer = Dispatcher.CreateTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(50);
-            timer.Tick += new EventHandler(TestRefresh);
-            //timer.Tick += new EventHandler(Refresh);
-            timer.Start();
+
             Application.Current.UserAppTheme = AppTheme.Light;  //Light Theme Mode
             InitializeComponent();
 
+            unitWidth = viewModel.unitWidth;
+            unitHeight = viewModel.unitHeight;
             for (int i = 0; i < 50; i++)
             {
                 for (int j = 0; j < 50; j++)
@@ -44,7 +47,7 @@ namespace Client
                         HeightRequest = unitHeight,
                         HorizontalOptions = LayoutOptions.Start,
                         VerticalOptions = LayoutOptions.Start,
-                        Margin = new Thickness(unitWidth * j, unitHeight * i, 0, 0),
+                        Margin = new Thickness(unitWidth * (49 - j), unitHeight * (49 - i), 0, 0),
                         FontSize = 5
                     };
                     int index = i * 50 + j;
@@ -52,10 +55,51 @@ namespace Client
                     mapPatches_[i, j].SetBinding(Label.TextProperty, new Binding($"MapPatchesList[{index}].Text"));
                     mapPatches_[i, j].SetBinding(Label.TextColorProperty, new Binding($"MapPatchesList[{index}].TextColor"));
                     MapGrid.Children.Add(mapPatches_[i, j]);
-                    MapGrid.SetColumn(mapPatches_[i, j], i);
-                    MapGrid.SetRow(mapPatches_[i, j], j);
+                    //MapGrid.SetColumn(mapPatches_[i, j], i);
+                    //MapGrid.SetRow(mapPatches_[i, j], j);
                 }
             }
+
+            for (int i = 0; i < viewModel.numOfShips; i++)
+            {
+                CircleLabel shipinfo = new()
+                {
+                    CLDiameter = unitWidth * 0.8,
+                    HorizontalOptions = LayoutOptions.Start,
+                    VerticalOptions = LayoutOptions.Start,
+                    CLBackgroundColor = Colors.Red,
+                    CLFontSize = 5,
+                    CLTextColor = Colors.White,
+                };
+                shipCirc.Add(shipinfo);
+                shipCirc[i].SetBinding(CircleLabel.CLTextProperty, new Binding($"ShipCircList[{i}].Text"));
+                shipCirc[i].SetBinding(CircleLabel.CLBackgroundColorProperty, new Binding($"ShipCircList[{i}].Color"));
+                shipCirc[i].SetBinding(CircleLabel.CLMarginProperty, new Binding($"ShipCircList[{i}].Thick"));
+                MapGrid.Children.Add(shipCirc[i]);
+            }
+
+            for (int i = 0; i < viewModel.numOfBullets; i++)
+            {
+                CircleLabel bulletinfo = new()
+                {
+                    CLDiameter = unitWidth * 0.4,
+                    HorizontalOptions = LayoutOptions.Start,
+                    VerticalOptions = LayoutOptions.Start,
+                    CLBackgroundColor = Colors.Black,
+                    CLText = "",
+                    Margin = new Thickness(i * unitWidth, i * unitHeight)
+                };
+                bulletCirc.Add(bulletinfo);
+                System.Diagnostics.Debug.WriteLine(String.Format("BulletCircList.Count:{0}", bulletCirc.Count));
+                bulletCirc[i].SetBinding(CircleLabel.CLBackgroundColorProperty, new Binding($"BulletCircList[{i}].Color"));
+                bulletCirc[i].SetBinding(CircleLabel.CLMarginProperty, new Binding($"BulletCircList[{i}].Thick"));
+                MapGrid.Children.Add(bulletCirc[i]);
+            }
+
+            //timer = Dispatcher.CreateTimer();
+            //timer.Interval = TimeSpan.FromMilliseconds(500);
+            //timer.Tick += new EventHandler(TestRefresh);
+            //timer.Start();
 
             //CommandLineProcess.StartProcess();
             //string[] args = Environment.GetCommandLineArgs();
@@ -68,14 +112,24 @@ namespace Client
             UIinitiated = true;
         }
         private Label[,] mapPatches_ = new Label[50, 50];
+        private List<CircleLabel> shipCirc = new List<CircleLabel>();
+        private List<CircleLabel> bulletCirc = new List<CircleLabel>();
         private readonly IDispatcherTimer timer;
         private long counter;
-        private double unitWidth = 10;
-        private double unitHeight = 10;
+        public float unitWidth = 10;
+        public float unitHeight = 10;
+
         private void TestRefresh(object sender, EventArgs e)
         {
-            counter++;
-            DrawGraphicsView.Invalidate();
+            lock (viewModel.drawPicLock)
+            {
+                for (int i = 0; i < viewModel.ShipCircList.Count; i++)
+                {
+                    System.Diagnostics.Debug.WriteLine(String.Format("ship{0}.xy=({1}, {2})", i, viewModel.ShipCircList[i].X, viewModel.ShipCircList[i].Y));
+                    System.Diagnostics.Debug.WriteLine(String.Format("numOfShipCirc{0}", shipCirc.Count));
+                    //shipCirc[i].Margin = XY2Margin(viewModel.ShipCircList[i].X, viewModel.ShipCircList[i].Y);
+                }
+            }
         }
 
 
@@ -566,6 +620,9 @@ namespace Client
             }
             //counter++;
         }
+
+
+
         private readonly object drawPicLock = new();
 
         private readonly object locklock = new();

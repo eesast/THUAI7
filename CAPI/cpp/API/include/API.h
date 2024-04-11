@@ -53,16 +53,16 @@ public:
     [[nodiscard]] virtual int32_t GetScore() const = 0;
 
     // 供IAPI使用的操作相关的公共部分
-    virtual bool Send(int64_t toPlayerID, std::string message, bool binary) = 0;
+    virtual bool Send(int32_t toPlayerID, std::string message, bool binary) = 0;
     virtual bool HaveMessage() = 0;
-    virtual std::pair<int64_t, std::string> GetMessage() = 0;
+    virtual std::pair<int32_t, std::string> GetMessage() = 0;
     virtual bool WaitThread() = 0;
     virtual int32_t GetCounter() const = 0;
     virtual bool EndAllAction() = 0;
 
     // IShipAPI使用的部分
     virtual bool Move(int64_t time, double angle) = 0;
-    virtual bool Recover() = 0;
+    virtual bool Recover(int64_t recover) = 0;
     virtual bool Produce() = 0;
     virtual bool Rebuild(THUAI7::ConstructionType constructionType) = 0;
     virtual bool Construct(THUAI7::ConstructionType constructionType) = 0;
@@ -70,9 +70,9 @@ public:
     [[nodiscard]] virtual bool HaveView(int32_t selfX, int32_t selfY, int32_t targetX, int32_t targetY, int32_t viewRange) const = 0;
 
     // Team使用的部分
-    virtual bool Recycle(int64_t playerID) = 0;
-    virtual bool InstallModule(int64_t playerID, THUAI7::ModuleType moduleType) = 0;
-    virtual bool BuildShip(THUAI7::ShipType ShipType) = 0;
+    virtual bool Recycle(int32_t playerID) = 0;
+    virtual bool InstallModule(int32_t playerID, THUAI7::ModuleType moduleType) = 0;
+    virtual bool BuildShip(THUAI7::ShipType ShipType, int32_t birthIndex) = 0;
 };
 
 class IAPI
@@ -81,10 +81,10 @@ public:
     // 选手可执行的操作，应当保证所有函数的返回值都应当为std::future，例如下面的移动函数：
     // 指挥本角色进行移动，`timeInMilliseconds` 为移动时间，单位为毫秒；`angleInRadian` 表示移动的方向，单位是弧度，使用极坐标——竖直向下方向为 x 轴，水平向右方向为 y 轴
     // 发送信息、接受信息，注意收消息时无消息则返回nullopt
-    virtual std::future<bool> SendTextMessage(int64_t toPlayerID, std::string) = 0;
-    virtual std::future<bool> SendBinaryMessage(int64_t toPlayerID, std::string) = 0;
+    virtual std::future<bool> SendTextMessage(int32_t toPlayerID, std::string) = 0;
+    virtual std::future<bool> SendBinaryMessage(int32_t toPlayerID, std::string) = 0;
     [[nodiscard]] virtual bool HaveMessage() = 0;
-    [[nodiscard]] virtual std::pair<int64_t, std::string> GetMessage() = 0;
+    [[nodiscard]] virtual std::pair<int32_t, std::string> GetMessage() = 0;
 
     // 获取游戏目前所进行的帧数
     [[nodiscard]] virtual int32_t GetFrameCount() const = 0;
@@ -137,7 +137,7 @@ public:
     virtual std::future<bool> MoveLeft(int64_t timeInMilliseconds) = 0;
     virtual std::future<bool> MoveDown(int64_t timeInMilliseconds) = 0;
     virtual std::future<bool> Attack(double angleInRadian) = 0;
-    virtual std::future<bool> Recover() = 0;
+    virtual std::future<bool> Recover(int64_t recover) = 0;
     virtual std::future<bool> Produce() = 0;
     virtual std::future<bool> Rebuild(THUAI7::ConstructionType constructionType) = 0;
     virtual std::future<bool> Construct(THUAI7::ConstructionType constructionType) = 0;
@@ -149,9 +149,9 @@ class ITeamAPI : public IAPI
 {
 public:
     [[nodiscard]] virtual std::shared_ptr<const THUAI7::Team> GetSelfInfo() const = 0;
-    virtual std::future<bool> InstallModule(int64_t playerID, THUAI7::ModuleType moduletype) = 0;
-    virtual std::future<bool> Recycle(int64_t playerID) = 0;
-    virtual std::future<bool> BuildShip(THUAI7::ShipType ShipType) = 0;
+    virtual std::future<bool> InstallModule(int32_t playerID, THUAI7::ModuleType moduletype) = 0;
+    virtual std::future<bool> Recycle(int32_t playerID) = 0;
+    virtual std::future<bool> BuildShip(THUAI7::ShipType ShipType, int32_t birthIndex) = 0;
 };
 
 class IGameTimer
@@ -178,10 +178,10 @@ public:
     }
     void Play(IAI& ai) override;
 
-    std::future<bool> SendTextMessage(int64_t, std::string) override;
-    std::future<bool> SendBinaryMessage(int64_t, std::string) override;
+    std::future<bool> SendTextMessage(int32_t, std::string) override;
+    std::future<bool> SendBinaryMessage(int32_t, std::string) override;
     [[nodiscard]] bool HaveMessage() override;
-    [[nodiscard]] std::pair<int64_t, std::string> GetMessage() override;
+    [[nodiscard]] std::pair<int32_t, std::string> GetMessage() override;
 
     [[nodiscard]] int32_t GetFrameCount() const override;
     bool Wait() override;
@@ -193,7 +193,7 @@ public:
     std::future<bool> MoveLeft(int64_t timeInMilliseconds) override;
     std::future<bool> MoveDown(int64_t timeInMilliseconds) override;
     std::future<bool> Attack(double angleInRadian) override;
-    std::future<bool> Recover() override;
+    std::future<bool> Recover(int64_t recover) override;
     std::future<bool> Produce() override;
     std::future<bool> Rebuild(THUAI7::ConstructionType constructionType) override;
     std::future<bool> Construct(THUAI7::ConstructionType constructionType) override;
@@ -245,10 +245,10 @@ public:
     }
     void Play(IAI& ai) override;
 
-    std::future<bool> SendTextMessage(int64_t, std::string) override;
-    std::future<bool> SendBinaryMessage(int64_t, std::string) override;
+    std::future<bool> SendTextMessage(int32_t, std::string) override;
+    std::future<bool> SendBinaryMessage(int32_t, std::string) override;
     [[nodiscard]] bool HaveMessage() override;
-    [[nodiscard]] std::pair<int64_t, std::string> GetMessage() override;
+    [[nodiscard]] std::pair<int32_t, std::string> GetMessage() override;
 
     [[nodiscard]] int32_t GetFrameCount() const override;
     bool Wait() override;
@@ -269,9 +269,9 @@ public:
 
     [[nodiscard]] int32_t GetScore() const override;
     [[nodiscard]] int32_t GetEnergy() const override;
-    std::future<bool> InstallModule(int64_t playerID, THUAI7::ModuleType moduleType) override;
-    std::future<bool> Recycle(int64_t playerID) override;
-    std::future<bool> BuildShip(THUAI7::ShipType ShipType) override;
+    std::future<bool> InstallModule(int32_t playerID, THUAI7::ModuleType moduleType) override;
+    std::future<bool> Recycle(int32_t playerID) override;
+    std::future<bool> BuildShip(THUAI7::ShipType ShipType, int32_t birthIndex) override;
     void Print(std::string str) const
     {
     }
@@ -292,14 +292,14 @@ private:
 class ShipDebugAPI : public IShipAPI, public IGameTimer
 {
 public:
-    ShipDebugAPI(ILogic& logic, bool file, bool print, bool warnOnly, int64_t ShipID);
+    ShipDebugAPI(ILogic& logic, bool file, bool print, bool warnOnly, int32_t ShipID);
     void StartTimer() override;
     void EndTimer() override;
     void Play(IAI& ai) override;
-    std::future<bool> SendTextMessage(int64_t, std::string) override;
-    std::future<bool> SendBinaryMessage(int64_t, std::string) override;
+    std::future<bool> SendTextMessage(int32_t, std::string) override;
+    std::future<bool> SendBinaryMessage(int32_t, std::string) override;
     [[nodiscard]] bool HaveMessage() override;
-    [[nodiscard]] std::pair<int64_t, std::string> GetMessage() override;
+    [[nodiscard]] std::pair<int32_t, std::string> GetMessage() override;
     bool Wait() override;
     [[nodiscard]] int32_t GetFrameCount() const override;
     std::future<bool> EndAllAction() override;
@@ -310,7 +310,7 @@ public:
     std::future<bool> MoveLeft(int64_t timeInMilliseconds) override;
     std::future<bool> MoveDown(int64_t timeInMilliseconds) override;
     std::future<bool> Attack(double angleInRadian) override;
-    std::future<bool> Recover() override;
+    std::future<bool> Recover(int64_t recover) override;
     std::future<bool> Produce() override;
     std::future<bool> Rebuild(THUAI7::ConstructionType constructionType) override;
     std::future<bool> Construct(THUAI7::ConstructionType constructionType) override;
@@ -347,15 +347,15 @@ private:
 class TeamDebugAPI : public ITeamAPI, public IGameTimer
 {
 public:
-    TeamDebugAPI(ILogic& logic, bool file, bool print, bool warnOnly, int64_t TeamID);
+    TeamDebugAPI(ILogic& logic, bool file, bool print, bool warnOnly, int32_t TeamID);
     void StartTimer() override;
     void EndTimer() override;
     void Play(IAI& ai) override;
 
-    std::future<bool> SendTextMessage(int64_t, std::string) override;
-    std::future<bool> SendBinaryMessage(int64_t, std::string) override;
+    std::future<bool> SendTextMessage(int32_t, std::string) override;
+    std::future<bool> SendBinaryMessage(int32_t, std::string) override;
     [[nodiscard]] bool HaveMessage() override;
-    [[nodiscard]] std::pair<int64_t, std::string> GetMessage() override;
+    [[nodiscard]] std::pair<int32_t, std::string> GetMessage() override;
 
     [[nodiscard]] int32_t GetFrameCount() const override;
     bool Wait() override;
@@ -376,9 +376,9 @@ public:
 
     [[nodiscard]] int32_t GetScore() const override;
     [[nodiscard]] int32_t GetEnergy() const override;
-    std::future<bool> InstallModule(int64_t playerID, THUAI7::ModuleType moduleType) override;
-    std::future<bool> Recycle(int64_t playerID) override;
-    std::future<bool> BuildShip(THUAI7::ShipType ShipType) override;
+    std::future<bool> InstallModule(int32_t playerID, THUAI7::ModuleType moduleType) override;
+    std::future<bool> Recycle(int32_t playerID) override;
+    std::future<bool> BuildShip(THUAI7::ShipType ShipType, int32_t birthIndex) override;
     void Print(std::string str) const override;
     void PrintSelfInfo() const override;
     // TODO

@@ -91,7 +91,7 @@ class Communication:
                     return False
                 self.__counter += 1
             recoverResult: Message2Clients.BoolRes = self.__THUAI7Stub.Recover(
-                THUAI72Proto.THUAI72ProtobufRecoverMsg(playerID, recover, teamID)
+                THUAI72Proto.THUAI72ProtobufRecoverMsg(playerID, teamID, recover)
             )
         except grpc.RpcError:
             return False
@@ -218,14 +218,16 @@ class Communication:
         else:
             return recycleResult.act_success
 
-    def BuildShip(self, shipType: THUAI7.ShipType, teamID: int) -> bool:
+    def BuildShip(
+        self, teamID: int, shipType: THUAI7.ShipType, birthIndex: int
+    ) -> bool:
         try:
             with self.__mtxLimit:
                 if self.__counter >= self.__limit:
                     return False
                 self.__counter += 1
             buildResult: Message2Clients.BoolRes = self.__THUAI7Stub.BuildShip(
-                THUAI72Proto.THUAI72ProtobufBuildShipMsg(teamID, shipType)
+                THUAI72Proto.THUAI72ProtobufBuildShipMsg(teamID, shipType, birthIndex)
             )
         except grpc.RpcError:
             return False

@@ -250,9 +250,9 @@ class Logic(ILogic):
         self.__logger.debug("Called Recycle")
         return self.__comm.Recycle(self.__playerID, self.__playerID, self.__teamID)
 
-    def BuildShip(self, shipType: THUAI7.ShipType) -> bool:
+    def BuildShip(self, shipType: THUAI7.ShipType, birthIndex: int) -> bool:
         self.__logger.debug("Called BuildShip")
-        return self.__comm.BuildShip(shipType, self.__teamID)
+        return self.__comm.BuildShip(self.__teamID, shipType, birthIndex)
 
     def __TryConnection(self) -> bool:
         self.__logger.info("Try to connect to the server.")
@@ -320,10 +320,10 @@ class Logic(ILogic):
                 for obj in message.obj_message:
                     if obj.WhichOneof("message_of_obj") == "ship_message":
                         self.__bufferState.guids.append(obj.ship_message.guid)
-            else:
-                for obj in message.obj_message:
-                    if obj.WhichOneof("message_of_obj") == "team_message":
-                        self.__bufferState.guids.append(obj.team_message.guid)
+            # else:
+            #     for obj in message.obj_message:
+            #         if obj.WhichOneof("message_of_obj") == "team_message":
+            #             self.__bufferState.guids.append(obj.team_message.guid)
 
             self.__bufferState.gameInfo = Proto2THUAI7.Protobuf2THUAI7GameInfo(
                 message.all_message
@@ -491,14 +491,10 @@ class Logic(ILogic):
                         AssistFunction.GridToCell(item.fort_message.y),
                     )
                     if pos not in self.__bufferState.mapInfo.fortState:
-                        self.__bufferState.mapInfo.fortState[pos] = (
-                            item.fort_message.hp
-                        )
+                        self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
                         self.__logger.debug("New Fort")
                     else:
-                        self.__bufferState.mapInfo.fortState[pos] = (
-                            item.fort_message.hp
-                        )
+                        self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
                         self.__logger.debug("Update Fort")
                 elif AssistFunction.HaveView(
                     self.__bufferState.self.viewRange,
@@ -513,14 +509,10 @@ class Logic(ILogic):
                         AssistFunction.GridToCell(item.fort_message.y),
                     )
                     if pos not in self.__bufferState.mapInfo.fortState:
-                        self.__bufferState.mapInfo.fortState[pos] = (
-                            item.fort_message.hp
-                        )
+                        self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
                         self.__logger.debug("New Fort")
                     else:
-                        self.__bufferState.mapInfo.fortState[pos] = (
-                            item.fort_message.hp
-                        )
+                        self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
                         self.__logger.debug("Update Fort")
 
             elif item.WhichOneof("message_of_obj") == "wormhole_message":
@@ -536,7 +528,9 @@ class Logic(ILogic):
                         AssistFunction.GridToCell(item.wormhole_message.x),
                         AssistFunction.GridToCell(item.wormhole_message.y),
                     )
-                    self.__bufferState.mapInfo.wormholeState[pos] = item.wormhole_message.hp
+                    self.__bufferState.mapInfo.wormholeState[pos] = (
+                        item.wormhole_message.hp
+                    )
                     self.__logger.debug("Update Wormhole")
 
             elif item.WhichOneof("message_of_obj") == "home_message":
@@ -620,7 +614,7 @@ class Logic(ILogic):
             def HaveOverView(targetX: int, targetY: int):
                 for ship in self.__bufferState.ships:
                     if AssistFunction.HaveView(
-                        ship.viewRange, ship.x, ship.y, targetX, targetY
+                        ship.viewRange, ship.x, ship.y, targetX, targetY, self.__bufferState.gameMap
                     ):
                         return True
                 return False
@@ -649,9 +643,7 @@ class Logic(ILogic):
                             item.factory_message.hp
                         )
                         self.__logger.debug("Update Factory")
-                elif HaveOverView(
-                    item.factory_message.x, item.factory_message.y
-                ):
+                elif HaveOverView(item.factory_message.x, item.factory_message.y):
                     pos = (
                         AssistFunction.GridToCell(item.factory_message.x),
                         AssistFunction.GridToCell(item.factory_message.y),
@@ -683,9 +675,7 @@ class Logic(ILogic):
                             item.community_message.hp
                         )
                         self.__logger.debug("Update Community")
-                elif HaveOverView(
-                    item.community_message.x, item.community_message.y
-                ):
+                elif HaveOverView(item.community_message.x, item.community_message.y):
                     pos = (
                         AssistFunction.GridToCell(item.community_message.x),
                         AssistFunction.GridToCell(item.community_message.y),
@@ -708,31 +698,21 @@ class Logic(ILogic):
                         AssistFunction.GridToCell(item.fort_message.y),
                     )
                     if pos not in self.__bufferState.mapInfo.fortState:
-                        self.__bufferState.mapInfo.fortState[pos] = (
-                            item.fort_message.hp
-                        )
+                        self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
                         self.__logger.debug("New Fort")
                     else:
-                        self.__bufferState.mapInfo.fortState[pos] = (
-                            item.fort_message.hp
-                        )
+                        self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
                         self.__logger.debug("Update Fort")
-                elif HaveOverView(
-                    item.fort_message.x, item.fort_message.y
-                ):
+                elif HaveOverView(item.fort_message.x, item.fort_message.y):
                     pos = (
                         AssistFunction.GridToCell(item.fort_message.x),
                         AssistFunction.GridToCell(item.fort_message.y),
                     )
                     if pos not in self.__bufferState.mapInfo.fortState:
-                        self.__bufferState.mapInfo.fortState[pos] = (
-                            item.fort_message.hp
-                        )
+                        self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
                         self.__logger.debug("New Fort")
                     else:
-                        self.__bufferState.mapInfo.fortState[pos] = (
-                            item.fort_message.hp
-                        )
+                        self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
                         self.__logger.debug("Update Fort")
 
             elif item.WhichOneof("message_of_obj") == "wormhole_message":
@@ -741,7 +721,9 @@ class Logic(ILogic):
                         AssistFunction.GridToCell(item.wormhole_message.x),
                         AssistFunction.GridToCell(item.wormhole_message.y),
                     )
-                    self.__bufferState.mapInfo.wormholeState[pos] = item.wormhole_message.hp
+                    self.__bufferState.mapInfo.wormholeState[pos] = (
+                        item.wormhole_message.hp
+                    )
                     self.__logger.debug("Update Wormhole")
 
             elif item.WhichOneof("message_of_obj") == "home_message":
@@ -861,9 +843,7 @@ class Logic(ILogic):
 
         fileHandler = logging.FileHandler(
             os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-            + "/logs/logic"
-            + str(self.__playerID)
-            + "-log.txt",
+            + f"/logs/logic-{self.__teamID}-{self.__playerID}-log.txt",
             "w+",
             encoding="utf-8",
         )
@@ -899,11 +879,11 @@ class Logic(ILogic):
         else:
             if self.__playerID == 0:
                 self.__timer = TeamDebugAPI(
-                    self, file, screen, warnOnly, self.__playerID
+                    self, file, screen, warnOnly, self.__playerID, self.__teamID
                 )
             else:
                 self.__timer = ShipDebugAPI(
-                    self, file, screen, warnOnly, self.__playerID
+                    self, file, screen, warnOnly, self.__playerID, self.__teamID
                 )
 
         # 构建AI线程

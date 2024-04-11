@@ -70,7 +70,22 @@ namespace Gaming
                         else if (constructionType == ConstructionType.Factory && flag) game.RemoveFactory(((Construction)objBeingShot).TeamID);
                         break;
                     case GameObjType.Wormhole:
-                        ((Wormhole)objBeingShot).BeAttacked(bullet);
+                        ((WormholeCell)objBeingShot).Wormhole.BeAttacked(bullet);
+                        if (((WormholeCell)objBeingShot).Wormhole.HP < GameData.WormholeHP / 2)
+                        {
+                            var shipList = gameMap.ShipInTheList(((WormholeCell)objBeingShot).Wormhole.Cells);
+                            if (shipList != null)
+                            {
+                                foreach (Ship ship in shipList)
+                                {
+                                    Debugger.Output(ship, " is destroyed!");
+                                    var money = ship.GetCost();
+                                    bullet.Parent.AddMoney(money);
+                                    Debugger.Output(bullet.Parent, " get " + money.ToString() + " money because of destroying " + ship);
+                                    shipManager.Remove(ship);
+                                }
+                            }
+                        }
                         break;
                     case GameObjType.Home:
                         ((Home)objBeingShot).BeAttacked(bullet);

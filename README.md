@@ -1,6 +1,14 @@
 # THUAI7
 清华大学第七届人工智能挑战赛电子系赛道（原电子系第 25 届队式程序设计大赛 teamstyle25）
 
+Gitee 镜像地址：[THUAI7: Gitee Mirror](https://gitee.com/eesast/thuai7)
+
+GitLink 镜像地址：[THUAI7: GitLink Mirror](https://www.gitlink.org.cn/EESAST/THUAI7)
+
+项目主页：[THUAI7 Project Home Page](https://eesast.github.io/THUAI7)
+
+关于本届及历届清华大学人工智能挑战赛与队式程序设计大赛的更多内容参见：[THUAI7 Github Wiki](https://github.com/eesast/THUAI7/wiki)  
+
 ## 赛题背景
 
 待定
