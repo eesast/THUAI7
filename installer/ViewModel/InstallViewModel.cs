@@ -17,7 +17,7 @@ namespace installer.ViewModel
     {
         private readonly Downloader Downloader;
         private readonly IFolderPicker FolderPicker;
-        public ObservableCollection<LogRecord> Exceptions { get => Downloader.LogList.List; }
+        public ObservableCollection<LogRecord> LogCollection { get => Downloader.LogList.List; }
 
         public InstallViewModel(IFolderPicker folderPicker, Downloader downloader)
         {
@@ -160,7 +160,6 @@ namespace installer.ViewModel
             }
             CheckEnabled = true;
             BrowseEnabled = true;
-            // DebugAlert2 = "Installed" + Downloader.Data.Installed.ToString();
         }
         public ICommand UpdateBtnClickedCommand { get; }
         private async Task UpdateBtnClicked()

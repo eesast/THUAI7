@@ -75,6 +75,7 @@
             <Frame
                 BorderColor="Gray"
                 Padding="3"
+                Margin="5"
                 WidthRequest="600"
                 HeightRequest="250">
 
@@ -86,20 +87,14 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid
-                                ColumnDefinitions="*,*,*,*,*"
+                                ColumnDefinitions="*,*,*,*,*,*,*,*,*,*,*,*"
                                 WidthRequest="570">
 
                                 <Label
-                                    Grid.Column="0"
-                                    Grid.ColumnSpan="1"
-                                    Text="{Binding LevelStr}"
-                                    TextColor="{Binding Color}"/>
-
-                                <Label
                                     Grid.Column="1"
-                                    Grid.ColumnSpan="4"
+                                    Grid.ColumnSpan="10"
                                     Text="{Binding Message}"
-                                    TextColor="Black"/>
+                                    TextColor="{Binding Color}"/>
 
                             </Grid>
                         </DataTemplate>

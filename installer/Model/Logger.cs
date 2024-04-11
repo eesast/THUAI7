@@ -30,31 +30,15 @@ namespace installer.Model
     public class LogRecord
     {
         public LogLevel Level { get; set; }
-        public string LevelStr
-        {
-            get
-            {
-                return Level switch
-                {
-                    LogLevel.Trace => "Trace",
-                    LogLevel.Debug => "Debug",
-                    LogLevel.Information => "Info",
-                    LogLevel.Warning => "Warning",
-                    LogLevel.Error => "Error",
-                    LogLevel.Critical => "Critical",
-                    _ => "None",
-                };
-            }
-        }
         public string Color
         {
             get
             {
                 return Level switch
                 {
-                    LogLevel.Trace => "LightGary",
-                    LogLevel.Debug => "LightGray",
-                    LogLevel.Information => "LightGary",
+                    LogLevel.Trace => "Black",
+                    LogLevel.Debug => "Black",
+                    LogLevel.Information => "Black",
                     LogLevel.Warning => "Yellow",
                     LogLevel.Error => "Red",
                     LogLevel.Critical => "DarkRed",
