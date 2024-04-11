@@ -23,7 +23,7 @@ namespace installer.ViewModel
             Port = Downloader.Data.Config.Commands.Port;
             TeamID = Downloader.Data.Config.Commands.TeamID;
             PlayerID = Downloader.Data.Config.Commands.PlayerID;
-            SweeperType = Downloader.Data.Config.Commands.SweeperType;
+            ShipType = Downloader.Data.Config.Commands.ShipType;
             PlaybackFile = Downloader.Data.Config.Commands.PlaybackFile;
             PlaybackSpeed = Downloader.Data.Config.Commands.PlaybackSpeed.ToString();
 
@@ -31,7 +31,7 @@ namespace installer.ViewModel
             portChanged = false;
             teamIDChanged = false;
             playerIDChanged = false;
-            sweeperTypeChanged = false;
+            shipTypeChanged = false;
             playbackFileChanged = false;
             playbackSpeedChanged = false;
 
@@ -67,7 +67,7 @@ namespace installer.ViewModel
         private string? port;
         private string? teamID;
         private string? playerID;
-        private string? sweeperType;
+        private string? shipType;
         private string? playbackFile;
         private string? playbackSpeed;
         private bool cppSelect;
@@ -77,7 +77,7 @@ namespace installer.ViewModel
         private bool portChanged;
         private bool teamIDChanged;
         private bool playerIDChanged;
-        private bool sweeperTypeChanged;
+        private bool shipTypeChanged;
         private bool playbackFileChanged;
         private bool playbackSpeedChanged;
         private bool languageChanged;
@@ -96,7 +96,7 @@ namespace installer.ViewModel
                             && !portChanged
                             && !teamIDChanged
                             && !playerIDChanged
-                            && !sweeperTypeChanged
+                            && !shipTypeChanged
                             && !playbackFileChanged
                             && !playbackSpeedChanged
                             && !languageChanged;
@@ -117,7 +117,7 @@ namespace installer.ViewModel
                             && !portChanged
                             && !teamIDChanged
                             && !playerIDChanged
-                            && !sweeperTypeChanged
+                            && !shipTypeChanged
                             && !playbackFileChanged
                             && !playbackSpeedChanged
                             && !languageChanged;
@@ -138,7 +138,7 @@ namespace installer.ViewModel
                             && !portChanged
                             && !teamIDChanged
                             && !playerIDChanged
-                            && !sweeperTypeChanged
+                            && !shipTypeChanged
                             && !playbackFileChanged
                             && !playbackSpeedChanged
                             && !languageChanged;
@@ -159,28 +159,28 @@ namespace installer.ViewModel
                             && !portChanged
                             && !teamIDChanged
                             && !playerIDChanged
-                            && !sweeperTypeChanged
+                            && !shipTypeChanged
                             && !playbackFileChanged
                             && !playbackSpeedChanged
                             && !languageChanged;
                 OnPropertyChanged();
             }
         }
-        public string? SweeperType
+        public string? ShipType
         {
-            get => sweeperType;
+            get => shipType;
             set
             {
-                sweeperType = value;
-                if (sweeperType == Downloader.Data.Config.Commands.SweeperType)
-                    sweeperTypeChanged = false;
+                shipType = value;
+                if (shipType == Downloader.Data.Config.Commands.ShipType)
+                    shipTypeChanged = false;
                 else
-                    sweeperTypeChanged = true;
+                    shipTypeChanged = true;
                 StartEnabled = !ipChanged
                             && !portChanged
                             && !teamIDChanged
                             && !playerIDChanged
-                            && !sweeperTypeChanged
+                            && !shipTypeChanged
                             && !playbackFileChanged
                             && !playbackSpeedChanged
                             && !languageChanged;
@@ -201,7 +201,7 @@ namespace installer.ViewModel
                             && !portChanged
                             && !teamIDChanged
                             && !playerIDChanged
-                            && !sweeperTypeChanged
+                            && !shipTypeChanged
                             && !playbackFileChanged
                             && !playbackSpeedChanged
                             && !languageChanged;
@@ -222,7 +222,7 @@ namespace installer.ViewModel
                             && !portChanged
                             && !teamIDChanged
                             && !playerIDChanged
-                            && !sweeperTypeChanged
+                            && !shipTypeChanged
                             && !playbackFileChanged
                             && !playbackSpeedChanged
                             && !languageChanged;
@@ -249,7 +249,7 @@ namespace installer.ViewModel
                             && !portChanged
                             && !teamIDChanged
                             && !playerIDChanged
-                            && !sweeperTypeChanged
+                            && !shipTypeChanged
                             && !playbackFileChanged
                             && !playbackSpeedChanged
                             && !languageChanged;
@@ -276,7 +276,7 @@ namespace installer.ViewModel
                             && !portChanged
                             && !teamIDChanged
                             && !playerIDChanged
-                            && !sweeperTypeChanged
+                            && !shipTypeChanged
                             && !playbackFileChanged
                             && !playbackSpeedChanged
                             && !languageChanged;
@@ -319,7 +319,7 @@ namespace installer.ViewModel
                         && !portChanged
                         && !teamIDChanged
                         && !playerIDChanged
-                        && !sweeperTypeChanged
+                        && !shipTypeChanged
                         && !playbackFileChanged
                         && !playbackSpeedChanged
                         && !languageChanged;
@@ -391,14 +391,14 @@ namespace installer.ViewModel
             {
                 try
                 {
-                    if (SweeperType == null)
+                    if (ShipType == null)
                         throw new Exception("empty");
-                    Downloader.Data.Config.Commands.SweeperType = SweeperType;
-                    sweeperTypeChanged = false;
+                    Downloader.Data.Config.Commands.ShipType = ShipType;
+                    shipTypeChanged = false;
                 }
                 catch (Exception e)
                 {
-                    DebugAlert = "Sweeper Type: " + e.Message;
+                    DebugAlert = "Ship Type: " + e.Message;
                 }
             });
             Task.Run(() =>
@@ -457,7 +457,7 @@ namespace installer.ViewModel
                        + Port + " "
                        + TeamID + " "
                        + PlayerID + " "
-                       + SweeperType + " "
+                       + ShipType + " "
                        + PlaybackFile + " "
                        + PlaybackSpeed;
         }
