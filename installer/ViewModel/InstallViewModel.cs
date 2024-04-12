@@ -17,7 +17,7 @@ namespace installer.ViewModel
     {
         private readonly Downloader Downloader;
         private readonly IFolderPicker FolderPicker;
-        public ObservableCollection<LogRecord> Exceptions { get => Downloader.LogList.List; }
+        public ObservableCollection<LogRecord> LogCollection { get => Downloader.LogList.List; }
 
         public InstallViewModel(IFolderPicker folderPicker, Downloader downloader)
         {
@@ -39,36 +39,6 @@ namespace installer.ViewModel
             set
             {
                 debugAlert1 = value;
-                OnPropertyChanged();
-            }
-        }
-        private string? debugAlert2;
-        public string? DebugAlert2
-        {
-            get => debugAlert2;
-            set
-            {
-                debugAlert2 = value;
-                OnPropertyChanged();
-            }
-        }
-        private string? debugAlert3;
-        public string? DebugAlert3
-        {
-            get => debugAlert3;
-            set
-            {
-                debugAlert3 = value;
-                OnPropertyChanged();
-            }
-        }
-        private string? debugAlert4;
-        public string? DebugAlert4
-        {
-            get => debugAlert4;
-            set
-            {
-                debugAlert4 = value;
                 OnPropertyChanged();
             }
         }
@@ -134,7 +104,7 @@ namespace installer.ViewModel
         public ICommand BrowseBtnClickedCommand { get; }
         private async Task BrowseBtnClicked()
         {
-            DebugAlert1 = "Browse Button Clicked";
+            // DebugAlert1 = "Browse Button Clicked";
             BrowseEnabled = false;
             CheckEnabled = false;
             DownloadEnabled = false;
@@ -153,7 +123,7 @@ namespace installer.ViewModel
         public ICommand CheckUpdBtnClickedCommand { get; }
         private async void CheckUpdBtnClicked()
         {
-            DebugAlert1 = "Check Button Clicked";
+            // DebugAlert1 = "Check Button Clicked";
             BrowseEnabled = false;
             CheckEnabled = false;
             DownloadEnabled = false;
@@ -175,7 +145,7 @@ namespace installer.ViewModel
         public ICommand DownloadBtnClickedCommand { get; }
         private async Task DownloadBtnClicked()
         {
-            DebugAlert1 = "Download Button Clicked";
+            // DebugAlert1 = "Download Button Clicked";
             BrowseEnabled = false;
             CheckEnabled = false;
             DownloadEnabled = false;
@@ -190,12 +160,11 @@ namespace installer.ViewModel
             }
             CheckEnabled = true;
             BrowseEnabled = true;
-            // DebugAlert2 = "Installed" + Downloader.Data.Installed.ToString();
         }
         public ICommand UpdateBtnClickedCommand { get; }
         private async Task UpdateBtnClicked()
         {
-            DebugAlert1 = "Update Button Clicked";
+            // DebugAlert1 = "Update Button Clicked";
             BrowseEnabled = false;
             CheckEnabled = false;
             DownloadEnabled = false;
