@@ -276,7 +276,6 @@ namespace Client.ViewModel
                 shipinfo.Y = point.Y;
                 System.Diagnostics.Debug.WriteLine(String.Format("shipinfo.X:{0}", shipinfo.X));
                 System.Diagnostics.Debug.WriteLine(String.Format("shipinfo.Y:{0}", shipinfo.Y));
-                shipinfo.Text = Convert.ToString(data.Hp);
                 long team_id = data.TeamId;
                 switch (team_id)
                 {
