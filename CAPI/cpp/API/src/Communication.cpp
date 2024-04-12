@@ -189,6 +189,12 @@ bool Communication::Attack(int32_t playerID, int32_t teamID, double angle)
 
 bool Communication::BuildShip(int32_t teamID, THUAI7::ShipType ShipType, int32_t birthIndex)
 {
+    {
+        std::lock_guard<std::mutex> lock(mtxLimit);
+        if (counter >= limit)
+            return false;
+        counter++;
+    }
     protobuf::BoolRes reply;
     ClientContext context;
     auto request = THUAI72Proto::THUAI72ProtobufBuildShipMsg(teamID, ShipType, birthIndex);
@@ -201,6 +207,12 @@ bool Communication::BuildShip(int32_t teamID, THUAI7::ShipType ShipType, int32_t
 
 bool Communication::Recycle(int32_t playerID, int32_t teamID)
 {
+    {
+        std::lock_guard<std::mutex> lock(mtxLimit);
+        if (counter >= limit)
+            return false;
+        counter++;
+    }
     protobuf::BoolRes reply;
     ClientContext context;
     auto request = THUAI72Proto::THUAI72ProtobufIDMsg(playerID, teamID);
