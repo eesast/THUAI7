@@ -829,6 +829,7 @@ void Logic::LoadBuffer(const protobuf::MessageToClient& message)
                 bufferState->guids.push_back(obj.ship_message().guid());
         bufferState->gameInfo = Proto2THUAI7::Protobuf2THUAI7GameInfo(message.all_message());
         LoadBufferSelf(message);
+        // 确保这是一个活着的船，否则会使用空指针
         if (playerType == THUAI7::PlayerType::Ship && !bufferState->shipSelf)
             return;
         for (const auto& item : message.obj_message())
