@@ -250,6 +250,10 @@ namespace Client.ViewModel
                                                 listOfHome.Add(obj.HomeMessage);
                                                 break;
 
+                                            case MessageOfObj.MessageOfObjOneofCase.WormholeMessage:
+                                                listOfWormhole.Add(obj.WormholeMessage);
+                                                break;
+
                                             case MessageOfObj.MessageOfObjOneofCase.MapMessage:
                                                 mapMassage = obj.MapMessage;
                                                 break;
@@ -287,6 +291,7 @@ namespace Client.ViewModel
                                                 break;
 
                                             case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
+                                                System.Diagnostics.Debug.WriteLine(String.Format("============= BulletOrd: {0},{1} ============", obj.BulletMessage.X, obj.BulletMessage.Y));
                                                 listOfBullet.Add(obj.BulletMessage);
                                                 break;
 
@@ -300,6 +305,10 @@ namespace Client.ViewModel
 
                                             case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
                                                 listOfHome.Add(obj.HomeMessage);
+                                                break;
+
+                                            case MessageOfObj.MessageOfObjOneofCase.WormholeMessage:
+                                                listOfWormhole.Add(obj.WormholeMessage);
                                                 break;
 
                                             case MessageOfObj.MessageOfObjOneofCase.MapMessage:
@@ -362,6 +371,10 @@ namespace Client.ViewModel
 
                                             case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
                                                 listOfHome.Add(obj.HomeMessage);
+                                                break;
+
+                                            case MessageOfObj.MessageOfObjOneofCase.WormholeMessage:
+                                                listOfWormhole.Add(obj.WormholeMessage);
                                                 break;
 
                                             case MessageOfObj.MessageOfObjOneofCase.MapMessage:
@@ -453,6 +466,7 @@ namespace Client.ViewModel
                             {
                                 Ship ship = new Ship
                                 {
+                                    HP = data.Hp,
                                     Type = data.ShipType,
                                     State = data.ShipState,
                                     ArmorModule = data.ArmorType,
@@ -460,13 +474,6 @@ namespace Client.ViewModel
                                     WeaponModule = data.WeaponType,
                                     ProducerModule = data.ProducerType,
                                     ConstuctorModule = data.ConstructorType,
-                                    Type_s = UtilInfo.ShipTypeNameDict[data.ShipType],
-                                    State_s = UtilInfo.ShipStateNameDict[data.ShipState],
-                                    //ArmorModule_s = UtilInfo.ShipArmorTypeNameDict[data.ArmorType],
-                                    //ShieldModule_s = UtilInfo.ShipShieldTypeNameDict[data.ShieldType],
-                                    //WeaponModule_s = UtilInfo.ShipWeaponTypeNameDict[data.WeaponType],
-                                    //ConstuctorModule_s = UtilInfo.ShipConstructorNameDict[data.ConstructorType],
-                                    //ProducerModule_s = UtilInfo.ShipProducerTypeNameDict[data.ProducerType]
                                 };
                                 System.Diagnostics.Debug.WriteLine(String.Format("i:{0}, Redplayers.ships.count:{1}", i, RedPlayer.Ships.Count));
                                 if (i < RedPlayer.Ships.Count && UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[i]))
@@ -479,6 +486,7 @@ namespace Client.ViewModel
                             {
                                 Ship ship = new Ship
                                 {
+                                    HP = data.Hp,
                                     Type = data.ShipType,
                                     State = data.ShipState,
                                     ArmorModule = data.ArmorType,
@@ -486,13 +494,6 @@ namespace Client.ViewModel
                                     WeaponModule = data.WeaponType,
                                     ProducerModule = data.ProducerType,
                                     ConstuctorModule = data.ConstructorType,
-                                    //Type_s = UtilInfo.ShipTypeNameDict[data.ShipType],
-                                    //State_s = UtilInfo.ShipStateNameDict[data.ShipState],
-                                    //ArmorModule_s = UtilInfo.ShipArmorTypeNameDict[data.ArmorType],
-                                    //ShieldModule_s = UtilInfo.ShipShieldTypeNameDict[data.ShieldType],
-                                    //WeaponModule_s = UtilInfo.ShipWeaponTypeNameDict[data.WeaponType],
-                                    //ConstuctorModule_s = UtilInfo.ShipConstructorNameDict[data.ConstructorType],
-                                    //ProducerModule_s = UtilInfo.ShipProducerTypeNameDict[data.ProducerType]
                                 };
                                 System.Diagnostics.Debug.WriteLine(String.Format("i:{0}, Blueplayer.ships.count:{1}", i, BluePlayer.Ships.Count));
 
@@ -506,6 +507,7 @@ namespace Client.ViewModel
                             {
                                 Ship ship = new Ship
                                 {
+                                    HP = data.Hp,
                                     Type = data.ShipType,
                                     State = data.ShipState,
                                     ArmorModule = data.ArmorType,
@@ -545,6 +547,17 @@ namespace Client.ViewModel
                         {
                             DrawWormHole(data);
                         }
+                        listOfWormhole.Sort(
+                            delegate (MessageOfWormhole h1, MessageOfWormhole h2)
+                            {
+                                int re = h1.X.CompareTo(h2.X);
+                                if (0 == re)
+                                {
+                                    return h1.Y.CompareTo(h2.Y);
+                                }
+                                return re;
+                            }
+                        );
 
                         foreach (var data in listOfFort)
                         {
@@ -629,6 +642,8 @@ namespace Client.ViewModel
 
         public readonly float unitWidth = UtilInfo.unitWidth;
         public readonly float unitHeight = UtilInfo.unitHeight;
+
+        public readonly int ShipStatusAttributesFontSize = 13;
 
         public GeneralViewModel()
         {
@@ -810,7 +825,7 @@ namespace Client.ViewModel
                 "localhost",
                 "8888",
                 "1",
-                "0",
+                "1",
                 "1"
             });
 
