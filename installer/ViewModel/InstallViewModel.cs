@@ -59,6 +59,18 @@ namespace installer.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        private bool installed;
+        public bool Installed
+        {
+            get => installed;
+            set
+            {
+                installed = value;
+                OnPropertyChanged();
+            }
+        }
+
         private bool browseEnabled = true;
         public bool BrowseEnabled
         {
@@ -158,6 +170,7 @@ namespace installer.ViewModel
             {
                 await Task.Run(() => Downloader.Install(DownloadPath));
             }
+            Installed = Downloader.Data.Installed;
             CheckEnabled = true;
             BrowseEnabled = true;
         }
