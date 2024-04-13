@@ -1,0 +1,30 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Team 0",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "./PyAPI/main.py",
+            "console": "integratedTerminal",
+            "args": "-I localhost -P 8888 -t 0 -d -o"
+        },
+        {
+            "name": "Team 1",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "./PyAPI/main.py",
+            "console": "integratedTerminal",
+            "args": "-I localhost -P 8888 -t 1 -d -o"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Compound",
+            "configurations": ["Team 0", "Team 1"]
+        }
+    ]
+}
