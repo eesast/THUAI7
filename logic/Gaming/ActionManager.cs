@@ -120,7 +120,6 @@ namespace Gaming
                             {
                                 if (!resource.Produce(ship.ProduceSpeed * GameData.CheckInterval, ship))
                                 {
-                                    ship.ThreadNum.Release();
                                     ship.ResetShipState(stateNum);
                                     return false;
                                 }
