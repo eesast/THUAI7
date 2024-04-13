@@ -70,6 +70,7 @@ namespace installer.Model
         public bool LoginFailed { get; set; } = false;
         public bool RememberMe { get => Data.RememberMe; set { Data.RememberMe = value; } }
 
+        public DownloadReport CloudReport { get => Cloud.Report; }
         #endregion
 
         #region 方法区
@@ -106,10 +107,10 @@ namespace installer.Model
             Web = new EEsast(LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.log")));
             Web.Token_Changed += SaveToken;
 
-            Data.Log.Partner = Log;
-            Cloud.Log.Partner = Log;
-            Web.Log.Partner = Log;
-            Log.Partner = LogList;
+            Data.Log.Partner.Add(Log);
+            Cloud.Log.Partner.Add(Log);
+            Web.Log.Partner.Add(Log);
+            Log.Partner.Add(LogList);
 
             if (Data.Config.Remembered)
             {
@@ -172,6 +173,7 @@ namespace installer.Model
 
             string zp = Path.Combine(Data.Config.InstallPath, "THUAI7.tar.gz");
             Status = UpdateStatus.downloading;
+            (CloudReport.Count, CloudReport.ComCount) = (1, 1);
             Log.LogInfo($"正在下载安装包……");
             Cloud.DownloadFileAsync(zp, "THUAI7.tar.gz").Wait();
             Status = UpdateStatus.unarchieving;
@@ -232,10 +234,20 @@ namespace installer.Model
             var installPath = Data.Config.InstallPath.EndsWith(Path.DirectorySeparatorChar) ? Data.Config.InstallPath[0..-1] : Data.Config.InstallPath;
             if (newPath != installPath)
             {
+                if (!Directory.Exists(newPath))
+                {
+                    Directory.CreateDirectory(newPath);
+                }
+                if (Directory.Exists(Path.Combine(newPath, "Logs")))
+                {
+                    Directory.Delete(Path.Combine(newPath, "Logs"), true);
+                }
+                Directory.Move(Path.Combine(installPath, "Logs"), Path.Combine(newPath, "Logs"));
+                if (Cloud.Log is FileLogger) ((FileLogger)Cloud.Log).Path = Path.Combine(newPath, "Logs", "TencentCos.log");
+                if (Web.Log is FileLogger) ((FileLogger)Web.Log).Path = Path.Combine(newPath, "Logs", "EESAST.log");
+                if (Data.Log is FileLogger) ((FileLogger)Data.Log).Path = Path.Combine(newPath, "Logs", "Local_Data.log");
+                if (Log is FileLogger) ((FileLogger)Log).Path = Path.Combine(newPath, "Logs", "Main.log");
                 Data.ResetInstallPath(newPath);
-                if (Cloud.Log is FileLogger) ((FileLogger)Cloud.Log).Path = Path.Combine(Data.LogPath, "TencentCos.log");
-                if (Web.Log is FileLogger) ((FileLogger)Web.Log).Path = Path.Combine(Data.LogPath, "EESAST.log");
-                if (Log is FileLogger) ((FileLogger)Log).Path = Path.Combine(Data.LogPath, "Main.log");
             }
             Update();
         }
@@ -391,8 +403,7 @@ namespace installer.Model
                     CurrentVersion = Data.FileHashData.Version;
                     Status = UpdateStatus.hash_computing;
                     Log.LogInfo("正在校验……");
-                    Data.ScanDir();
-                    if (Data.MD5Update.Count == 0)
+                    if (!CheckUpdate())
                     {
                         Log.LogInfo("更新成功！");
                         Status = UpdateStatus.success;
