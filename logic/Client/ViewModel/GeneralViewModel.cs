@@ -92,8 +92,6 @@ namespace Client.ViewModel
             PlayerMsg playerMsg = new PlayerMsg();
             playerID = Convert.ToInt64(comInfo[2]);
             playerMsg.PlayerId = playerID;
-            //playerMsg.X = 0;
-            //playerMsg.Y = 0;
             if (!isSpectatorMode)
             {
                 teamID = Convert.ToInt64(comInfo[3]);
@@ -390,6 +388,16 @@ namespace Client.ViewModel
                                         }
                                     }
                                     listOfAll.Add(content.AllMessage);
+                                    if (mapMessageExist)
+                                    {
+                                        countMap.Clear();
+                                        countMap.Add((int)MapPatchType.Resource, listOfResource.Count);
+                                        countMap.Add((int)MapPatchType.Factory, listOfFactory.Count);
+                                        countMap.Add((int)MapPatchType.Community, listOfCommunity.Count);
+                                        countMap.Add((int)MapPatchType.Fort, listOfFort.Count);
+                                        GetMap(mapMassage);
+                                        mapMessageExist = false;
+                                    }
                                     break;
                             }
                         }
