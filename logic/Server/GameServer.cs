@@ -85,7 +85,7 @@ namespace Server
 
         public override void WaitForEnd()
         {
-            this.endGameSem.Wait();
+            endGameSem.Wait();
             mwr?.Dispose();
         }
 
