@@ -48,9 +48,10 @@ namespace Client
                         HorizontalOptions = LayoutOptions.Start,
                         VerticalOptions = LayoutOptions.Start,
                         Margin = new Thickness(unitWidth * (49 - j), unitHeight * (49 - i), 0, 0),
-                        HorizontalTextAlignment = TextAlignment.Start,
-                        VerticalTextAlignment = TextAlignment.Start,
-                        FontSize = 5
+                        HorizontalTextAlignment = TextAlignment.Center,
+                        VerticalTextAlignment = TextAlignment.Center,
+                        Padding = 0,
+                        FontSize = 4
                     };
                     int index = i * 50 + j;
                     mapPatches_[i, j].SetBinding(Label.BackgroundColorProperty, new Binding($"MapPatchesList[{index}].PatchColor"));
