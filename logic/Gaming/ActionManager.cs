@@ -118,12 +118,7 @@ namespace Gaming
                             loopCondition: () => stateNum == ship.StateNum && gameMap.Timer.IsGaming,
                             loopToDo: () =>
                             {
-                                if (!resource.Produce(ship.ProduceSpeed / GameData.NumOfStepPerSecond, ship))
-                                {
-                                    ship.ThreadNum.Release();
-                                    ship.ResetShipState(stateNum);
-                                    return false;
-                                }
+                                resource.Produce(ship.ProduceSpeed / GameData.NumOfStepPerSecond, ship))
                                 if (resource.HP == 0)
                                 {
                                     ship.ResetShipState(stateNum);
