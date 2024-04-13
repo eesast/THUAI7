@@ -11,11 +11,16 @@ namespace Playback
         /// </summary>
         public string FileName { get; }
 
-        private readonly CodedOutputStream cos; // Protobuf类型二进制输出流
+        /// <summary>
+        /// 写入消息数量
+        /// </summary>
+        public uint WrittenNum { get; private set; } = 0;
+        private readonly uint FlushNum; // 刷新间隔
 
+        private readonly CodedOutputStream cos; // Protobuf类型二进制输出流
         public bool Disposed { get; private set; } = false;
 
-        public MessageWriter(string fileName, uint teamCount, uint playerCount)
+        public MessageWriter(string fileName, uint teamCount, uint playerCount, uint flushNum = 500)
         {
             Utils.FileNameRegular(ref fileName);
             FileStream fs = File.Create(fileName);
@@ -23,12 +28,15 @@ namespace Playback
             fs.WriteHeader(teamCount, playerCount);
             GZipStream gzs = new(fs, CompressionMode.Compress);
             cos = new(gzs);
+            FlushNum = flushNum;
         }
 
         public void WriteOne(MessageToClient msg)
         {
             if (Disposed) return;
             cos.WriteMessage(msg);
+            WrittenNum++;
+            if (WrittenNum % FlushNum == 0) Flush();
         }
 
         public void Flush()
