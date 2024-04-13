@@ -32,13 +32,13 @@ namespace installer.ViewModel
             UpdateBtnClickedCommand = new AsyncRelayCommand(UpdateBtnClicked);
         }
 
-        private string? debugAlert1;
-        public string? DebugAlert1
+        private string? debugAlert;
+        public string? DebugAlert
         {
-            get => debugAlert1;
+            get => debugAlert;
             set
             {
-                debugAlert1 = value;
+                debugAlert = value;
                 OnPropertyChanged();
             }
         }
@@ -59,6 +59,37 @@ namespace installer.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        private bool installed;
+        public bool Installed
+        {
+            get => installed;
+            set
+            {
+                installed = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double NumProgress
+        {
+            get
+            {
+                if (Downloader.CloudReport.Count == 0)
+                    return 1;
+                return Downloader.CloudReport.ComCount / Downloader.CloudReport.Count;
+            }
+        }
+        public double FileProgress
+        {
+            get
+            {
+                if (!Downloader.CloudReport.BigFileTraceEnabled)
+                    return 1;
+                return Downloader.CloudReport.Completed / Downloader.CloudReport.Total;
+            }
+        }
+
         private bool browseEnabled = true;
         public bool BrowseEnabled
         {
@@ -104,7 +135,7 @@ namespace installer.ViewModel
         public ICommand BrowseBtnClickedCommand { get; }
         private async Task BrowseBtnClicked()
         {
-            // DebugAlert1 = "Browse Button Clicked";
+            // DebugAlert = "Browse Button Clicked";
             BrowseEnabled = false;
             CheckEnabled = false;
             DownloadEnabled = false;
@@ -123,7 +154,7 @@ namespace installer.ViewModel
         public ICommand CheckUpdBtnClickedCommand { get; }
         private async void CheckUpdBtnClicked()
         {
-            // DebugAlert1 = "Check Button Clicked";
+            // DebugAlert = "Check Button Clicked";
             BrowseEnabled = false;
             CheckEnabled = false;
             DownloadEnabled = false;
@@ -131,12 +162,12 @@ namespace installer.ViewModel
             bool updated = await Task.Run(() => Downloader.CheckUpdate());
             if (updated)
             {
-                DebugAlert1 = "Need to update.";
+                DebugAlert = "Need to update.";
                 UpdateEnabled = true;
             }
             else
             {
-                DebugAlert1 = "Nothing to update.";
+                DebugAlert = "Nothing to update.";
                 UpdateEnabled = false;
             }
             BrowseEnabled = true;
@@ -145,7 +176,7 @@ namespace installer.ViewModel
         public ICommand DownloadBtnClickedCommand { get; }
         private async Task DownloadBtnClicked()
         {
-            // DebugAlert1 = "Download Button Clicked";
+            // DebugAlert = "Download Button Clicked";
             BrowseEnabled = false;
             CheckEnabled = false;
             DownloadEnabled = false;
@@ -158,13 +189,14 @@ namespace installer.ViewModel
             {
                 await Task.Run(() => Downloader.Install(DownloadPath));
             }
+            Installed = Downloader.Data.Installed;
             CheckEnabled = true;
             BrowseEnabled = true;
         }
         public ICommand UpdateBtnClickedCommand { get; }
         private async Task UpdateBtnClicked()
         {
-            // DebugAlert1 = "Update Button Clicked";
+            // DebugAlert = "Update Button Clicked";
             BrowseEnabled = false;
             CheckEnabled = false;
             DownloadEnabled = false;
