@@ -4,12 +4,13 @@ using System.Collections.Generic;
 
 namespace GameClass.GameObj.Areas;
 
-public class Wormhole(List<WormholeCell> cells)
+public class Wormhole(List<WormholeCell> cells, int id)
 {
     public InVariableRange<long> HP = new(GameData.WormholeHP);
     private readonly List<WormholeCell> cells = cells;
     public List<WormholeCell> Cells => cells;
     public AtomicInt RepairNum { get; } = new AtomicInt(0);
+    public int ID { get; } = id;
     public bool Repair(int constructSpeed, Ship ship)
     {
         var addHP = HP.GetMaxV() - HP > constructSpeed ? constructSpeed : HP.GetMaxV() - HP;

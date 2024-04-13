@@ -76,9 +76,8 @@ message MessageOfFort
 
 message MessageOfWormhole
 {
-    int32 x = 1;
-    int32 y = 2;
-    int32 hp = 3; // 剩余的血量
+    int32 hp = 1; // 剩余的血量
+    int32 id = 2;
 }
 
 message MessageOfResource

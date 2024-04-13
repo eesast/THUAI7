@@ -214,6 +214,7 @@ namespace Server
                 WormholeMessage = new()
                 {
                     Hp = (int)wormhole.HP,
+                    Id = wormhole.ID,
                 }
             };
             return msg;
