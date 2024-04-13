@@ -21,9 +21,9 @@ namespace installer.ViewModel
 
             IP = Downloader.Data.Config.Commands.IP;
             Port = Downloader.Data.Config.Commands.Port;
-            TeamID = Downloader.Data.Config.Commands.TeamID.ToString();
-            PlayerID = Downloader.Data.Config.Commands.PlayerID.ToString();
-            ShipType = Downloader.Data.Config.Commands.ShipType.ToString();
+            TeamID = Downloader.Data.Config.Commands.TeamID;
+            PlayerID = Downloader.Data.Config.Commands.PlayerID;
+            ShipType = Downloader.Data.Config.Commands.ShipType;
             PlaybackFile = Downloader.Data.Config.Commands.PlaybackFile;
             PlaybackSpeed = Downloader.Data.Config.Commands.PlaybackSpeed.ToString();
 
@@ -65,9 +65,9 @@ namespace installer.ViewModel
 
         private string? ip;
         private string? port;
-        private string? teamID;
-        private string? playerID;
-        private string? shipType;
+        private int teamID;
+        private int playerID;
+        private int shipType;
         private string? playbackFile;
         private string? playbackSpeed;
         private bool cppSelect;
@@ -124,13 +124,13 @@ namespace installer.ViewModel
                 OnPropertyChanged();
             }
         }
-        public string? TeamID
+        public int TeamID
         {
             get => teamID;
             set
             {
                 teamID = value;
-                if (teamID == Downloader.Data.Config.Commands.TeamID.ToString())
+                if (teamID == Downloader.Data.Config.Commands.TeamID)
                     teamIDChanged = false;
                 else
                     teamIDChanged = true;
@@ -145,13 +145,13 @@ namespace installer.ViewModel
                 OnPropertyChanged();
             }
         }
-        public string? PlayerID
+        public int PlayerID
         {
             get => playerID;
             set
             {
                 playerID = value;
-                if (playerID == Downloader.Data.Config.Commands.PlayerID.ToString())
+                if (playerID == Downloader.Data.Config.Commands.PlayerID)
                     playerIDChanged = false;
                 else
                     playerIDChanged = true;
@@ -166,13 +166,13 @@ namespace installer.ViewModel
                 OnPropertyChanged();
             }
         }
-        public string? ShipType
+        public int ShipType
         {
             get => shipType;
             set
             {
                 shipType = value;
-                if (shipType == Downloader.Data.Config.Commands.ShipType.ToString())
+                if (shipType == Downloader.Data.Config.Commands.ShipType)
                     shipTypeChanged = false;
                 else
                     shipTypeChanged = true;
@@ -286,7 +286,6 @@ namespace installer.ViewModel
 
 
         private bool saveEnabled;
-        private bool startEnabled;
         public bool SaveEnabled
         {
             get => saveEnabled;
@@ -296,6 +295,7 @@ namespace installer.ViewModel
                 OnPropertyChanged();
             }
         }
+        private bool startEnabled;
         public bool StartEnabled
         {
 
@@ -363,12 +363,7 @@ namespace installer.ViewModel
             {
                 try
                 {
-                    if (TeamID == null)
-                        throw new Exception("empty");
-                    var tmp = Convert.ToInt16(TeamID);
-                    if (tmp != 0 && tmp != 1)
-                        throw new Exception("Team ID can only be 0 or 1");
-                    Downloader.Data.Config.Commands.TeamID = tmp;
+                    Downloader.Data.Config.Commands.TeamID = TeamID;
                     teamIDChanged = false;
                 }
                 catch (Exception e)
@@ -380,12 +375,7 @@ namespace installer.ViewModel
             {
                 try
                 {
-                    if (PlayerID == null)
-                        throw new Exception("empty");
-                    var tmp = Convert.ToInt16(PlayerID);
-                    if (tmp < 0 || tmp > 3)
-                        throw new Exception("Player ID can only be an integer from 0 to 3");
-                    Downloader.Data.Config.Commands.PlayerID = tmp;
+                    Downloader.Data.Config.Commands.PlayerID = PlayerID;
                     playerIDChanged = false;
                 }
                 catch (Exception e)
@@ -397,12 +387,7 @@ namespace installer.ViewModel
             {
                 try
                 {
-                    if (ShipType == null)
-                        throw new Exception("empty");
-                    var tmp = Convert.ToInt16(ShipType);
-                    if (tmp < 0 || tmp > 4)
-                        throw new Exception("Ship Type can only be an integer from 0 to 4");
-                    Downloader.Data.Config.Commands.ShipType = tmp;
+                    Downloader.Data.Config.Commands.ShipType = PlayerID;
                     shipTypeChanged = false;
                 }
                 catch (Exception e)
@@ -468,7 +453,6 @@ namespace installer.ViewModel
                        + PlaybackFile + " "
                        + PlaybackSpeed;
         }
-
 
         private string? debugAlert;
         public string? DebugAlert

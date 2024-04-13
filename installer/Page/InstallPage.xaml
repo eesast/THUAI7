@@ -80,7 +80,7 @@
             </HorizontalStackLayout>
                 
             <Label
-                Text="{Binding DebugAlert1}"/>
+                Text="{Binding DebugAlert}"/>
 
             <ProgressBar
                 Progress="{Binding NumProgress}"
