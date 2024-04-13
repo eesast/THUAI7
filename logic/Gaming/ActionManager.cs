@@ -275,7 +275,7 @@ namespace Gaming
                             loopCondition: () => stateNum == ship.StateNum && gameMap.Timer.IsGaming,
                             loopToDo: () =>
                             {
-                                if (!wormhole.Repair(ship.ConstructSpeed * GameData.CheckInterval, ship))
+                                if (!wormhole.Repair(ship.ConstructSpeed / GameData.NumOfStepPerSecond, ship))
                                 {
                                     ship.ThreadNum.Release();
                                     ship.ResetShipState(stateNum);
