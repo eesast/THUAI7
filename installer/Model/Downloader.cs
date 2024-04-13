@@ -213,6 +213,7 @@ namespace installer.Model
             {
                 Status = UpdateStatus.success;
                 Log.LogInfo($"安装成功！开始您的THUAI7探索之旅吧！");
+                Data.Installed = true;
                 if (DeviceInfo.Platform == DevicePlatform.WinUI)
                 {
                     Process.Start(new ProcessStartInfo()
@@ -323,6 +324,10 @@ namespace installer.Model
                     Log.LogWarning("检测到选手代码升级，即将下载选手代码模板……");
                     Status = UpdateStatus.downloading;
                     var p = Path.Combine(Data.Config.InstallPath, "Templates");
+                    if (!Directory.Exists(p))
+                    {
+                        Directory.CreateDirectory(p);
+                    }
                     Log.CountDict[LogLevel.Error] = 0;
                     var tocpp = Cloud.DownloadFileAsync(Path.Combine(p, $"t.{c}.cpp"),
                         $"./Templates/t.{c}.cpp");
@@ -331,7 +336,7 @@ namespace installer.Model
                     var tncpp = Cloud.DownloadFileAsync(Path.Combine(p, $"t.{v}.cpp"),
                         $"./Templates/t.{v}.cpp");
                     var tnpy = Cloud.DownloadFileAsync(Path.Combine(p, $"t.{v}.py"),
-                        $"./Templates/t.{v}.py.t");
+                        $"./Templates/t.{v}.py");
                     Task.WaitAll(tocpp, topy, tncpp, tnpy);
                     if (tocpp.Result >= 0 && topy.Result >= 0 && tncpp.Result >= 0 && tnpy.Result >= 0)
                     {
@@ -407,6 +412,7 @@ namespace installer.Model
                     {
                         Log.LogInfo("更新成功！");
                         Status = UpdateStatus.success;
+                        Data.Installed = true;
                         result |= 8;
                         return result;
                     }
@@ -415,6 +421,7 @@ namespace installer.Model
             else
             {
                 Log.LogInfo("已经是最新版本啦！");
+                Data.Installed = true;
                 Status = UpdateStatus.success;
                 return 0;
             }
