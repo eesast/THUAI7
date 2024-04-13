@@ -47,7 +47,8 @@ namespace Client
                         HeightRequest = unitHeight,
                         HorizontalOptions = LayoutOptions.Start,
                         VerticalOptions = LayoutOptions.Start,
-                        Margin = new Thickness(unitWidth * (49 - j), unitHeight * (49 - i), 0, 0),
+                        //Margin = new Thickness(unitWidth * (49 - j), unitHeight * (49 - i), 0, 0),
+                        Margin = new Thickness(unitWidth * (j), unitHeight * (i), 0, 0),
                         HorizontalTextAlignment = TextAlignment.Center,
                         VerticalTextAlignment = TextAlignment.Center,
                         Padding = 0,
@@ -85,7 +86,7 @@ namespace Client
             {
                 CircleLabel bulletinfo = new()
                 {
-                    CLDiameter = unitWidth * 1,
+                    CLDiameter = unitWidth * 0.4,
                     HorizontalOptions = LayoutOptions.Start,
                     VerticalOptions = LayoutOptions.Start,
                     CLBackgroundColor = Colors.Black,
