@@ -18,10 +18,10 @@ namespace Server
         public ushort ServerPort { get; set; } = 8888;
 
         [Option("teamCount", Required = false, HelpText = "The number of teams, 2 by defualt")]
-        public ushort TeamCount { get; set; } = 2;
+        public ushort TeamCount { get; set; } = 1;
 
         [Option("shipNum", Required = false, HelpText = "The max number of Ship, 4 by default")]
-        public ushort ShipCount { get; set; } = 4;
+        public ushort ShipCount { get; set; } = 0;
 
         [Option("homeNum", Required = false, HelpText = "The number of Home , 1 by default")]
         public ushort HomeCount { get; set; } = 1;
