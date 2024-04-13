@@ -83,7 +83,7 @@ namespace Client.ViewModel
             {
                 throw new Exception("Error Registration Information！");
             }
-            
+
             string connect = new string(comInfo[0]);
             connect += ':';
             connect += comInfo[1];
