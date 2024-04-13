@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Protobuf;
 using Playback;
@@ -9,6 +10,8 @@ using System.Threading;
 using System.Windows;
 using Timothy.FrameRateTask;
 using System.Runtime.CompilerServices;
+using Client.Util;
+using Client.Model;
 
 namespace Client
 {
@@ -77,10 +80,41 @@ namespace Client
                             {
                                 for (int j = 0; j < 50; j++)
                                 {
-                                    map[i, j] = Convert.ToInt32(obj.MapMessage.Rows[i].Cols[j]) + 4;
+                                    switch (obj.MapMessage.Rows[i].Cols[j])
+                                    {
+                                        case PlaceType.NullPlaceType:
+                                            map[i, j] = (int)MapPatchType.Null;
+                                            break;
+                                        case PlaceType.Space:
+                                            map[i, j] = (int)MapPatchType.Space;
+                                            break;
+                                        case PlaceType.Ruin:
+                                            map[i, j] = (int)MapPatchType.Ruin;
+                                            break;
+                                        case PlaceType.Shadow:
+                                            map[i, j] = (int)MapPatchType.Shadow;
+                                            break;
+                                        case PlaceType.Asteroid:
+                                            map[i, j] = (int)MapPatchType.Asteroid;
+                                            break;
+                                        case PlaceType.Resource:
+                                            map[i, j] = (int)MapPatchType.Resource;
+                                            break;
+                                        case PlaceType.Construction:
+                                            map[i, j] = (int)MapPatchType.Factory;
+                                            break;
+                                        case PlaceType.Wormhole:
+                                            map[i, j] = (int)MapPatchType.WormHole;
+                                            break;
+                                        case PlaceType.Home:
+                                            map[i, j] = (int)MapPatchType.RedHome;
+                                            break;
+                                        default:
+                                            map[i, j] = (int)MapPatchType.Null;
+                                            break;
+                                    }
                                 }
                             }
-                            break;
                         }
                         catch
                         {
@@ -106,12 +140,17 @@ namespace Client
                            var content = Reader.ReadOne();
                            if (content == null)
                            {
+                               System.Diagnostics.Debug.WriteLine("============= endFile! ================");
                                endFile = true;
                            }
                            else
                            {
+                               System.Diagnostics.Debug.WriteLine("============= enter game! ================");
+
                                lock (datalock)
                                {
+                                   System.Diagnostics.Debug.WriteLine("============= enter datalock! ================");
+
                                    listOfAll.Clear();
                                    listOfShip.Clear();
                                    listOfBullet.Clear();
@@ -322,8 +361,8 @@ namespace Client
                 {
                     System.Diagnostics.Debug.WriteLine(e.Message);
                 }
-            });
-            //{ IsBackground = true }.Start();
+            })
+            { IsBackground = true }.Start();
             return map;
         }
     }
