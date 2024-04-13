@@ -260,7 +260,7 @@ namespace GameClass.GameObj
 
                             if (wormholes.Find(wormhole => WormholeHasCell(wormhole)) == null)
                             {
-                                var newWormhole = new Wormhole([]);
+                                var newWormhole = new Wormhole([], wormholes.Count);
                                 var newCell = new WormholeCell(GameData.GetCellCenterPos(i, j), newWormhole);
                                 Add(newCell);
                                 newWormhole.Cells.Add(newCell);
@@ -275,6 +275,13 @@ namespace GameClass.GameObj
                 }
             }
             Homes = GameObjDict[GameObjType.Home].Cast<Home>()?.ToNewList()!;
+            for (var i = 0; i < wormholes.Count; i++)
+            {
+                if (i != wormholes.Count / 2)
+                {
+                    wormholes[i].HP.SetRNow(0);
+                }
+            }
         }
     }
 }

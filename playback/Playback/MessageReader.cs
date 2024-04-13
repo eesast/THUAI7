@@ -15,7 +15,6 @@ namespace Playback
         public readonly uint playerCount;
 
         private readonly CodedInputStream cis;  // Protobuf类型二进制输入流
-
         public bool Disposed { get; private set; } = false;
 
         public MessageReader(string fileName)

@@ -14,6 +14,7 @@ using CommandLine;
 using Newtonsoft;
 using System.Globalization;
 using System.Collections.ObjectModel;
+using installer;
 
 namespace Client.ViewModel
 {
@@ -65,14 +66,19 @@ namespace Client.ViewModel
         }
 
         private long playerID;
-        private ShipType ShipType;
+        private string ip;
+        private string port;
+        private int shipTypeID;
         private long teamID;
+        ShipType shipType;
         AvailableService.AvailableServiceClient? client;
         AsyncServerStreamingCall<MessageToClient>? responseStream;
         bool isSpectatorMode = false;
+        bool isPlaybackMode = false;
         // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID 3-teamID 4-ShipType
         public void ConnectToServer(string[] comInfo)
         {
+            if (isPlaybackMode) return;
             if (Convert.ToInt64(comInfo[2]) > 2023)
             {
                 isSpectatorMode = true;
@@ -96,7 +102,7 @@ namespace Client.ViewModel
             {
                 teamID = Convert.ToInt64(comInfo[3]);
                 playerMsg.TeamId = teamID;
-                ShipType = Convert.ToInt64(comInfo[4]) switch
+                shipType = Convert.ToInt64(comInfo[4]) switch
                 {
                     0 => ShipType.NullShipType,
                     1 => ShipType.CivilianShip,
@@ -104,14 +110,30 @@ namespace Client.ViewModel
                     3 => ShipType.FlagShip,
                     _ => ShipType.NullShipType
                 };
-                playerMsg.ShipType = ShipType;
+                playerMsg.ShipType = shipType;
             }
             responseStream = client.AddPlayer(playerMsg);
             isClientStocked = false;
         }
 
+        string playbackFile;
+        double playbackSpeed;
         private void Playback(string fileName, double pbSpeed = 2.0)
         {
+            var pbClient = new PlaybackClient(fileName, pbSpeed);
+            int[,]? map;
+            if ((map = pbClient.ReadDataFromFile(listOfAll, listOfShip, listOfBullet, listOfBombedBullet, listOfFactory, listOfCommunity, listOfFort, listOfResource, listOfHome, listOfWormhole, drawPicLock)) != null)
+            {
+                isClientStocked = false;
+                isPlaybackMode = true;
+                defaultMap = map;
+                getMapFlag = true;
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Playback failed");
+                isClientStocked = true;
+            }
         }
 
         string[] comInfo = new string[10];
@@ -460,11 +482,13 @@ namespace Client.ViewModel
                         foreach (var data in listOfHome)
                         {
                             DrawHome(data);
-                            if (data.TeamId == (long)PlayerTeam.Red)
+                            // if (data.TeamId == (long)PlayerTeam.Red)
+                            if (data.TeamId == 0)
                             {
                                 RedPlayer.Team = data.TeamId;
                             }
-                            else if (data.TeamId == (long)PlayerTeam.Blue)
+                            // else if (data.TeamId == (long)PlayerTeam.Blue)
+                            else if (data.TeamId == 1)
                             {
                                 BluePlayer.Team = data.TeamId;
                             }
@@ -477,7 +501,8 @@ namespace Client.ViewModel
                         for (int i = 0; i < listOfShip.Count; i++)
                         {
                             MessageOfShip data = listOfShip[i];
-                            if (data.TeamId == (long)PlayerTeam.Red)
+                            // if (data.TeamId == (long)PlayerTeam.Red)
+                            if (data.TeamId == 0)
                             {
                                 Ship ship = new Ship
                                 {
@@ -497,7 +522,8 @@ namespace Client.ViewModel
                                     RedPlayer.Ships[i] = ship;
                                 else RedPlayer.Ships.Add(ship);
                             }
-                            else if (data.TeamId == (long)PlayerTeam.Blue)
+                            // else if (data.TeamId == (long)PlayerTeam.Blue)
+                            else if (data.TeamId == 1)
                             {
                                 Ship ship = new Ship
                                 {
@@ -562,17 +588,17 @@ namespace Client.ViewModel
                         {
                             DrawWormHole(data);
                         }
-                        listOfWormhole.Sort(
-                            delegate (MessageOfWormhole h1, MessageOfWormhole h2)
-                            {
-                                int re = h1.X.CompareTo(h2.X);
-                                if (0 == re)
-                                {
-                                    return h1.Y.CompareTo(h2.Y);
-                                }
-                                return re;
-                            }
-                        );
+                        //listOfWormhole.Sort(
+                        //    delegate (MessageOfWormhole h1, MessageOfWormhole h2)
+                        //    {
+                        //        int re = h1.X.CompareTo(h2.X);
+                        //        if (0 == re)
+                        //        {
+                        //            return h1.Y.CompareTo(h2.Y);
+                        //        }
+                        //        return re;
+                        //    }
+                        //);
 
                         foreach (var data in listOfFort)
                         {
@@ -675,9 +701,9 @@ namespace Client.ViewModel
             {
                 try
                 {
-                    if (client == null || isSpectatorMode)
+                    if (client == null || isSpectatorMode || isPlaybackMode)
                     {
-                        System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                        System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
                         return;
                     }
                     MoveMsg movemsg = new MoveMsg();
@@ -703,9 +729,9 @@ namespace Client.ViewModel
 
             MoveDownCommand = new Command(() =>
             {
-                if (client == null || isSpectatorMode)
+                if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 MoveMsg movemsg = new MoveMsg();
@@ -719,9 +745,9 @@ namespace Client.ViewModel
 
             MoveLeftCommand = new Command(() =>
             {
-                if (client == null || isSpectatorMode)
+                if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 MoveMsg movemsg = new MoveMsg();
@@ -735,9 +761,9 @@ namespace Client.ViewModel
 
             MoveRightCommand = new Command(() =>
             {
-                if (client == null || isSpectatorMode)
+                if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 MoveMsg movemsg = new MoveMsg();
@@ -751,9 +777,9 @@ namespace Client.ViewModel
 
             MoveLeftUpCommand = new Command(() =>
             {
-                if (client == null || isSpectatorMode)
+                if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 MoveMsg movemsg = new MoveMsg();
@@ -767,9 +793,9 @@ namespace Client.ViewModel
 
             MoveRightUpCommand = new Command(() =>
             {
-                if (client == null || isSpectatorMode)
+                if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 MoveMsg movemsg = new MoveMsg();
@@ -783,9 +809,9 @@ namespace Client.ViewModel
 
             MoveLeftDownCommand = new Command(() =>
             {
-                if (client == null || isSpectatorMode)
+                if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 MoveMsg movemsg = new MoveMsg();
@@ -799,9 +825,9 @@ namespace Client.ViewModel
 
             MoveRightDownCommand = new Command(() =>
             {
-                if (client == null || isSpectatorMode)
+                if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 MoveMsg movemsg = new MoveMsg();
@@ -815,23 +841,23 @@ namespace Client.ViewModel
 
             AttackCommand = new Command(() =>
             {
-                if (client == null || isSpectatorMode)
+                if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 AttackMsg attackMsg = new AttackMsg();
                 attackMsg.PlayerId = playerID;
                 attackMsg.TeamId = teamID;
-                attackMsg.Angle = 0;
+                attackMsg.Angle = lastMoveAngle;
                 client.Attack(attackMsg);
             });
 
             RecoverCommand = new Command(() =>
             {
-                if (client == null || isSpectatorMode)
+                if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 RecoverMsg recoverMsg = new RecoverMsg();
@@ -842,9 +868,9 @@ namespace Client.ViewModel
 
             ProduceCommand = new Command(() =>
             {
-                if (client == null || isSpectatorMode)
+                if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 IDMsg iDMsg = new IDMsg();
@@ -855,9 +881,9 @@ namespace Client.ViewModel
 
             ConstructCommand = new Command(() =>
             {
-                if (client == null || isSpectatorMode)
+                if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 ConstructMsg constructMsg = new ConstructMsg();
@@ -918,16 +944,48 @@ namespace Client.ViewModel
 
             // PureDrawMap(GameMap.GameMapArray);
             //ReactToCommandline();
-
-
+            //installer.Data.ConfigData d = new();
+            //ip = d.Commands.IP;
+            //port = d.Commands.Port;
+            //playerID = Convert. ToInt64(d.Commands.PlayerID);
+            //teamID = Convert.ToInt64(d.Commands.TeamID);
+            //shipTypeID = Convert.ToInt32(d.Commands.ShipType);
+            //playbackFile = d.Commands.PlaybackFile;
+            //playbackSpeed = d.Commands.PlaybackSpeed;
+            Playback("E:\\program\\Project\\THUAI7\\logic\\Client\\114514.thuai7.pb", 2.0);
+            //if (playbackFile == "")
+            //{
+            //    try
+            //    {
+            //        string[] comInfo = new string[5];
+            //        comInfo[0] = ip;
+            //        comInfo[1] = port;
+            //        comInfo[2] = Convert.ToString(playerID);
+            //        comInfo[3] = Convert.ToString(teamID);
+            //        comInfo[4] = Convert.ToString(shipTypeID);
+            //        ConnectToServer(comInfo);
+            //        OnReceive();
+            //    }
+            //    catch
+            //    {
+            //        OnReceive();
+            //    }
+            //}
+            //else
+            //{
+            //    Playback(playbackFile, playbackSpeed);
+            //}
             // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID 3-teamID 4-ShipType
-            ConnectToServer(new string[]{
-                "localhost",
-                "8888",
-                "0",
-                "0",
-                "1"
-            });
+
+            //ConnectToServer(new string[]{
+            //    "localhost",
+            //    "8888",
+            //    "1",
+            //    "0",
+            //    "1"
+            //});
+            //d.Commands.Launched = true;
+
 
             // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID (>2023则为观察者模式）
             //ConnectToServer(new string[]{
@@ -941,7 +999,7 @@ namespace Client.ViewModel
             timerViewModel.Tick += new EventHandler(Refresh);
             timerViewModel.Start();
 
-            OnReceive();
+            //OnReceive();
         }
     }
 }
