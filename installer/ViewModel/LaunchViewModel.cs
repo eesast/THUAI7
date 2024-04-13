@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using installer.Model;
 using installer.Data;
+using System.Diagnostics;
 
 namespace installer.ViewModel
 {
@@ -445,13 +446,22 @@ namespace installer.ViewModel
 
         private void Start()
         {
-            DebugAlert = IP + " "
-                       + Port + " "
-                       + TeamID + " "
-                       + PlayerID + " "
-                       + ShipType + " "
-                       + PlaybackFile + " "
-                       + PlaybackSpeed;
+            // DebugAlert = IP + " "
+            //            + Port + " "
+            //            + TeamID + " "
+            //            + PlayerID + " "
+            //            + ShipType + " "
+            //            + PlaybackFile + " "
+            //            + PlaybackSpeed;
+            Process.Start(new ProcessStartInfo()
+            {
+                FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Server", "Server.exe"),
+                Arguments = $"--ip {IP} --port {Port}"
+            });
+            Process.Start(new ProcessStartInfo()
+            {
+                FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
+            });
         }
 
         private string? debugAlert;
