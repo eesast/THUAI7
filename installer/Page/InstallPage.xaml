@@ -83,7 +83,13 @@
                 Text="{Binding DebugAlert1}"/>
 
             <ProgressBar
-                Progress=""/>
+                Progress="{Binding NumProgress}"
+                HeightRequest="10"
+                WidthRequest="580"/>
+            <ProgressBar
+                Progress="{Binding FileProgress}"
+                HeightRequest="10"
+                WidthRequest="580"/>
 
             <Frame
                 BorderColor="Gray"

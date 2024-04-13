@@ -71,6 +71,25 @@ namespace installer.ViewModel
             }
         }
 
+        public double NumProgress
+        {
+            get
+            {
+                if (Downloader.CloudReport.Count == 0)
+                    return 1;
+                return Downloader.CloudReport.ComCount / Downloader.CloudReport.Count;
+            }
+        }
+        public double FileProgress
+        {
+            get
+            {
+                if (!Downloader.CloudReport.BigFileTraceEnabled)
+                    return 1;
+                return Downloader.CloudReport.Completed / Downloader.CloudReport.Total;
+            }
+        }
+
         private bool browseEnabled = true;
         public bool BrowseEnabled
         {
