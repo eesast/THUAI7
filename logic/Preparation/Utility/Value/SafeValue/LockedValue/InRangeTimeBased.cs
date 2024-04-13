@@ -100,19 +100,33 @@ namespace Preparation.Utility
     public class TimeBasedProgressAtVariableSpeed
     {
         private readonly LongInVariableRangeWithStartTime progress;
-        public AtomicDouble speed;
+        private IDouble speed;
+        /// <summary>
+        /// 注意：set操作（即=）的真正意义是改变其引用，单纯改变值不应当使用该操作
+        /// </summary>
+        public IDouble Speed
+        {
+            get
+            {
+                return Interlocked.CompareExchange(ref speed!, null, null);
+            }
+            set
+            {
+                Interlocked.Exchange(ref speed, value);
+            }
+        }
 
         #region 构造 
         public TimeBasedProgressAtVariableSpeed(long needProgress, double speed = 1.0)
         {
             progress = new LongInVariableRangeWithStartTime(0, needProgress);
             if (needProgress <= 0) Debugger.Output("Bug:TimeBasedProgressAtVariableSpeed.needProgress (" + needProgress.ToString() + ") is less than 0.");
-            this.speed = new(speed);
+            this.speed = new AtomicDouble(speed);
         }
         public TimeBasedProgressAtVariableSpeed()
         {
             progress = new LongInVariableRangeWithStartTime(0, 0);
-            this.speed = new(1.0);
+            this.speed = new AtomicDouble(1.0);
         }
         #endregion
 
@@ -125,8 +139,8 @@ namespace Preparation.Utility
                         + " ; LastStartTime: " + lastStartTime.ToString() + "ms"
                         + " ; Speed: " + speed.ToString();
         }
-        public long GetProgressNow() => progress.AddStartTimeToMaxV((double)speed).Item1;
-        public (long, long, long) GetProgressNowAndNeedTimeAndLastStartTime() => progress.AddStartTimeToMaxV((double)speed);
+        public long GetProgressNow() => progress.AddStartTimeToMaxV(speed.ToDouble()).Item1;
+        public (long, long, long) GetProgressNowAndNeedTimeAndLastStartTime() => progress.AddStartTimeToMaxV(speed.ToDouble());
         public long GetProgressStored() => progress.GetValue();
         public (long, long) GetProgressStoredAndNeedTime() => progress.GetValueAndMaxV();
         public (long, long, long) GetProgressStoredAndNeedTimeAndLastStartTime() => progress.GetValueAndMaxVWithStartTime();
@@ -134,13 +148,13 @@ namespace Preparation.Utility
         public bool IsFinished()
         {
             long progressNow, needTime;
-            (progressNow, needTime, _) = progress.AddStartTimeToMaxV((double)speed);
+            (progressNow, needTime, _) = progress.AddStartTimeToMaxV(speed.ToDouble());
             return progressNow == needTime;
         }
         public bool IsProgressing()
         {
             long progressNow, needTime, startT;
-            (progressNow, needTime, startT) = progress.AddStartTimeToMaxV((double)speed);
+            (progressNow, needTime, startT) = progress.AddStartTimeToMaxV(speed.ToDouble());
             return (startT != long.MaxValue && progressNow != needTime);
         }
         #endregion
@@ -172,14 +186,14 @@ namespace Preparation.Utility
         /// </summary>
         public void TryStop()
         {
-            progress.Set0IfNotAddStartTimeToMaxV(speed);
+            progress.Set0IfNotAddStartTimeToMaxV(speed.ToDouble());
         }
         /// <summary>
         /// 使进度条暂停
         /// </summary>
         public bool Pause()
         {
-            return progress.AddStartTime((double)speed) != 0;
+            return progress.AddStartTime(speed.ToDouble()) != 0;
         }
         /// <summary>
         /// 使进度条进度为满
