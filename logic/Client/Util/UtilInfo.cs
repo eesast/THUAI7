@@ -10,9 +10,9 @@ namespace Client.Util
     public static class UtilInfo
     {
         public static Dictionary<ShipType, string> ShipTypeNameDict = new Dictionary<ShipType, string>{
-            { ShipType.NullShipType, "NullShipType" },
-            { ShipType.CivilianShip, "CivilianShip" },
-            { ShipType.MilitaryShip, "MilitaryShip" },
+            { ShipType.NullShipType, "Null" },
+            { ShipType.CivilianShip, "Civilian" },
+            { ShipType.MilitaryShip, "Military" },
             { ShipType.FlagShip, "FlagShip" }
         };
 
@@ -27,43 +27,48 @@ namespace Client.Util
             { ShipState.Swinging, "Swinging" },
             { ShipState.Stunned, "Stunned" },
             { ShipState.Moving, "Moving" }
+
         };
 
         public static Dictionary<ArmorType, string> ShipArmorTypeNameDict = new Dictionary<ArmorType, string>
         {
-            { ArmorType.NullArmorType, "NullArmorType" },
-            { ArmorType.Armor1, "Armor1" },
-            { ArmorType.Armor2, "Armor2" },
-            { ArmorType.Armor3, "Armor3" }
+            //{ ArmorType.NullArmorType, "Null" },
+            //{ ArmorType.Armor1, "Armor1" },
+            //{ ArmorType.Armor2, "Armor2" },
+            //{ ArmorType.Armor3, "Armor3" }
+            { ArmorType.NullArmorType, "Null" },
+            { ArmorType.Armor1, "🪖🔸" },
+            { ArmorType.Armor2, "🪖⭐" },
+            { ArmorType.Armor3, "🪖🌟" }
         };
 
         public static Dictionary<ShieldType, string> ShipShieldTypeNameDict = new Dictionary<ShieldType, string>
         {
-            { ShieldType.NullShieldType, "NullShieldType" },
-            { ShieldType.Shield1, "Shield1" },
-            { ShieldType.Shield2, "Shield2" },
-            { ShieldType.Shield3, "Shield3" }
+            { ShieldType.NullShieldType, "Null" },
+            { ShieldType.Shield1, "🛡️🔸" },
+            { ShieldType.Shield2, "🛡️⭐" },
+            { ShieldType.Shield3, "🛡️🌟" }
         };
 
         public static Dictionary<ConstructorType, string> ShipConstructorNameDict = new Dictionary<ConstructorType, string>
         {
-            { ConstructorType.NullConstructorType, "NullConstructorType" },
-            { ConstructorType.Constructor1, "Constructor1" },
-            { ConstructorType.Constructor2, "Constructor2" },
-            { ConstructorType.Constructor3, "Constructor3" }
+            { ConstructorType.NullConstructorType, "Null" },
+            { ConstructorType.Constructor1, "🔨🔸" },
+            { ConstructorType.Constructor2, "🔨⭐" },
+            { ConstructorType.Constructor3, "🔨🌟" }
         };
 
         public static Dictionary<ProducerType, string> ShipProducerTypeNameDict = new Dictionary<ProducerType, string>
         {
-            { ProducerType.NullProducerType, "NullProducerType" },
-            { ProducerType.Producer1, "Producer1" },
-            { ProducerType.Producer2, "Producer2" },
-            { ProducerType.Producer3, "Producer3" }
+            { ProducerType.NullProducerType, "Null" },
+            { ProducerType.Producer1, "⛏🔸" },
+            { ProducerType.Producer2, "⛏⭐" },
+            { ProducerType.Producer3, "⛏🌟" }
         };
 
         public static Dictionary<WeaponType, string> ShipWeaponTypeNameDict = new Dictionary<WeaponType, string>
         {
-            { WeaponType.NullWeaponType, "NullWeaponType" },
+            { WeaponType.NullWeaponType, "Null" },
             { WeaponType.Lasergun, "Lasergun" },
             { WeaponType.Arcgun, "Arcgun" },
             { WeaponType.Plasmagun, "Plasmagun" },

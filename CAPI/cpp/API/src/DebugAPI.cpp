@@ -432,8 +432,12 @@ std::future<bool> TeamDebugAPI::InstallModule(int32_t playerID, THUAI7::ModuleTy
 
 std::future<bool> TeamDebugAPI::Recycle(int32_t playerID)
 {
+    logger->info("Recycle: called at {}ms", Time::TimeSinceStart(startPoint));
     return std::async(std::launch::async, [=]()
-                      { return logic.Recycle(playerID); });
+                      { auto result = logic.Recycle(playerID);
+                      if(!result)
+                        logger->warn("Recycle: failed at {}ms",Time::TimeSinceStart(startPoint));
+                      return result; });
 }
 
 std::future<bool> TeamDebugAPI::BuildShip(THUAI7::ShipType ShipType, int32_t birthIndex)

@@ -79,7 +79,7 @@ private:
     std::atomic_bool AILoop = true;
 
     // buffer是否更新完毕
-    bool bufferUpdated = true;
+    bool bufferUpdated = false;
 
     // 是否应当启动AI
     bool AIStart = false;

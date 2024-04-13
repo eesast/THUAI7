@@ -73,24 +73,29 @@ namespace Client.ViewModel
         // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID 3-teamID 4-ShipType
         public void ConnectToServer(string[] comInfo)
         {
-            if (!isSpectatorMode && comInfo.Length != 5 || isSpectatorMode && comInfo.Length != 4)
+            if (Convert.ToInt64(comInfo[2]) > 2023)
+            {
+                isSpectatorMode = true;
+                System.Diagnostics.Debug.WriteLine("isSpectatorMode = true");
+            }
+
+            if (!isSpectatorMode && comInfo.Length != 5 || isSpectatorMode && comInfo.Length != 3)
             {
                 throw new Exception("Error Registration Information！");
             }
-            playerID = Convert.ToInt64(comInfo[2]);
-            teamID = Convert.ToInt64(comInfo[3]);
+
             string connect = new string(comInfo[0]);
             connect += ':';
             connect += comInfo[1];
             Channel channel = new Channel(connect, ChannelCredentials.Insecure);
             client = new AvailableService.AvailableServiceClient(channel);
             PlayerMsg playerMsg = new PlayerMsg();
+            playerID = Convert.ToInt64(comInfo[2]);
             playerMsg.PlayerId = playerID;
-            playerMsg.TeamId = teamID;
-            //playerMsg.X = 0;
-            //playerMsg.Y = 0;
             if (!isSpectatorMode)
             {
+                teamID = Convert.ToInt64(comInfo[3]);
+                playerMsg.TeamId = teamID;
                 ShipType = Convert.ToInt64(comInfo[4]) switch
                 {
                     0 => ShipType.NullShipType,
@@ -250,6 +255,10 @@ namespace Client.ViewModel
                                                 listOfHome.Add(obj.HomeMessage);
                                                 break;
 
+                                            case MessageOfObj.MessageOfObjOneofCase.WormholeMessage:
+                                                listOfWormhole.Add(obj.WormholeMessage);
+                                                break;
+
                                             case MessageOfObj.MessageOfObjOneofCase.MapMessage:
                                                 mapMassage = obj.MapMessage;
                                                 break;
@@ -287,6 +296,7 @@ namespace Client.ViewModel
                                                 break;
 
                                             case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
+                                                System.Diagnostics.Debug.WriteLine(String.Format("============= BulletOrd: {0},{1} ============", obj.BulletMessage.X, obj.BulletMessage.Y));
                                                 listOfBullet.Add(obj.BulletMessage);
                                                 break;
 
@@ -300,6 +310,10 @@ namespace Client.ViewModel
 
                                             case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
                                                 listOfHome.Add(obj.HomeMessage);
+                                                break;
+
+                                            case MessageOfObj.MessageOfObjOneofCase.WormholeMessage:
+                                                listOfWormhole.Add(obj.WormholeMessage);
                                                 break;
 
                                             case MessageOfObj.MessageOfObjOneofCase.MapMessage:
@@ -364,12 +378,26 @@ namespace Client.ViewModel
                                                 listOfHome.Add(obj.HomeMessage);
                                                 break;
 
+                                            case MessageOfObj.MessageOfObjOneofCase.WormholeMessage:
+                                                listOfWormhole.Add(obj.WormholeMessage);
+                                                break;
+
                                             case MessageOfObj.MessageOfObjOneofCase.MapMessage:
                                                 mapMassage = obj.MapMessage;
                                                 break;
                                         }
                                     }
                                     listOfAll.Add(content.AllMessage);
+                                    if (mapMessageExist)
+                                    {
+                                        countMap.Clear();
+                                        countMap.Add((int)MapPatchType.Resource, listOfResource.Count);
+                                        countMap.Add((int)MapPatchType.Factory, listOfFactory.Count);
+                                        countMap.Add((int)MapPatchType.Community, listOfCommunity.Count);
+                                        countMap.Add((int)MapPatchType.Fort, listOfFort.Count);
+                                        GetMap(mapMassage);
+                                        mapMessageExist = false;
+                                    }
                                     break;
                             }
                         }
@@ -453,6 +481,7 @@ namespace Client.ViewModel
                             {
                                 Ship ship = new Ship
                                 {
+                                    HP = data.Hp,
                                     Type = data.ShipType,
                                     State = data.ShipState,
                                     ArmorModule = data.ArmorType,
@@ -460,13 +489,6 @@ namespace Client.ViewModel
                                     WeaponModule = data.WeaponType,
                                     ProducerModule = data.ProducerType,
                                     ConstuctorModule = data.ConstructorType,
-                                    Type_s = UtilInfo.ShipTypeNameDict[data.ShipType],
-                                    State_s = UtilInfo.ShipStateNameDict[data.ShipState],
-                                    //ArmorModule_s = UtilInfo.ShipArmorTypeNameDict[data.ArmorType],
-                                    //ShieldModule_s = UtilInfo.ShipShieldTypeNameDict[data.ShieldType],
-                                    //WeaponModule_s = UtilInfo.ShipWeaponTypeNameDict[data.WeaponType],
-                                    //ConstuctorModule_s = UtilInfo.ShipConstructorNameDict[data.ConstructorType],
-                                    //ProducerModule_s = UtilInfo.ShipProducerTypeNameDict[data.ProducerType]
                                 };
                                 System.Diagnostics.Debug.WriteLine(String.Format("i:{0}, Redplayers.ships.count:{1}", i, RedPlayer.Ships.Count));
                                 if (i < RedPlayer.Ships.Count && UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[i]))
@@ -479,6 +501,7 @@ namespace Client.ViewModel
                             {
                                 Ship ship = new Ship
                                 {
+                                    HP = data.Hp,
                                     Type = data.ShipType,
                                     State = data.ShipState,
                                     ArmorModule = data.ArmorType,
@@ -486,13 +509,6 @@ namespace Client.ViewModel
                                     WeaponModule = data.WeaponType,
                                     ProducerModule = data.ProducerType,
                                     ConstuctorModule = data.ConstructorType,
-                                    //Type_s = UtilInfo.ShipTypeNameDict[data.ShipType],
-                                    //State_s = UtilInfo.ShipStateNameDict[data.ShipState],
-                                    //ArmorModule_s = UtilInfo.ShipArmorTypeNameDict[data.ArmorType],
-                                    //ShieldModule_s = UtilInfo.ShipShieldTypeNameDict[data.ShieldType],
-                                    //WeaponModule_s = UtilInfo.ShipWeaponTypeNameDict[data.WeaponType],
-                                    //ConstuctorModule_s = UtilInfo.ShipConstructorNameDict[data.ConstructorType],
-                                    //ProducerModule_s = UtilInfo.ShipProducerTypeNameDict[data.ProducerType]
                                 };
                                 System.Diagnostics.Debug.WriteLine(String.Format("i:{0}, Blueplayer.ships.count:{1}", i, BluePlayer.Ships.Count));
 
@@ -506,6 +522,7 @@ namespace Client.ViewModel
                             {
                                 Ship ship = new Ship
                                 {
+                                    HP = data.Hp,
                                     Type = data.ShipType,
                                     State = data.ShipState,
                                     ArmorModule = data.ArmorType,
@@ -545,6 +562,17 @@ namespace Client.ViewModel
                         {
                             DrawWormHole(data);
                         }
+                        listOfWormhole.Sort(
+                            delegate (MessageOfWormhole h1, MessageOfWormhole h2)
+                            {
+                                int re = h1.X.CompareTo(h2.X);
+                                if (0 == re)
+                                {
+                                    return h1.Y.CompareTo(h2.Y);
+                                }
+                                return re;
+                            }
+                        );
 
                         foreach (var data in listOfFort)
                         {
@@ -630,6 +658,8 @@ namespace Client.ViewModel
         public readonly float unitWidth = UtilInfo.unitWidth;
         public readonly float unitHeight = UtilInfo.unitHeight;
 
+        public readonly int ShipStatusAttributesFontSize = 13;
+
         public GeneralViewModel()
         {
             //ConfigData d = new();
@@ -645,6 +675,11 @@ namespace Client.ViewModel
             {
                 try
                 {
+                    if (client == null || isSpectatorMode)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                        return;
+                    }
                     MoveMsg movemsg = new MoveMsg();
                     movemsg.PlayerId = playerID;
                     movemsg.TeamId = teamID;
@@ -668,6 +703,11 @@ namespace Client.ViewModel
 
             MoveDownCommand = new Command(() =>
             {
+                if (client == null || isSpectatorMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    return;
+                }
                 MoveMsg movemsg = new MoveMsg();
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
@@ -679,6 +719,11 @@ namespace Client.ViewModel
 
             MoveLeftCommand = new Command(() =>
             {
+                if (client == null || isSpectatorMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    return;
+                }
                 MoveMsg movemsg = new MoveMsg();
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
@@ -690,6 +735,11 @@ namespace Client.ViewModel
 
             MoveRightCommand = new Command(() =>
             {
+                if (client == null || isSpectatorMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    return;
+                }
                 MoveMsg movemsg = new MoveMsg();
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
@@ -701,6 +751,11 @@ namespace Client.ViewModel
 
             MoveLeftUpCommand = new Command(() =>
             {
+                if (client == null || isSpectatorMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    return;
+                }
                 MoveMsg movemsg = new MoveMsg();
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
@@ -712,6 +767,11 @@ namespace Client.ViewModel
 
             MoveRightUpCommand = new Command(() =>
             {
+                if (client == null || isSpectatorMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    return;
+                }
                 MoveMsg movemsg = new MoveMsg();
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
@@ -723,6 +783,11 @@ namespace Client.ViewModel
 
             MoveLeftDownCommand = new Command(() =>
             {
+                if (client == null || isSpectatorMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    return;
+                }
                 MoveMsg movemsg = new MoveMsg();
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
@@ -734,6 +799,11 @@ namespace Client.ViewModel
 
             MoveRightDownCommand = new Command(() =>
             {
+                if (client == null || isSpectatorMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    return;
+                }
                 MoveMsg movemsg = new MoveMsg();
                 movemsg.PlayerId = playerID;
                 movemsg.TeamId = teamID;
@@ -745,11 +815,56 @@ namespace Client.ViewModel
 
             AttackCommand = new Command(() =>
             {
+                if (client == null || isSpectatorMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    return;
+                }
                 AttackMsg attackMsg = new AttackMsg();
                 attackMsg.PlayerId = playerID;
                 attackMsg.TeamId = teamID;
                 attackMsg.Angle = 0;
                 client.Attack(attackMsg);
+            });
+
+            RecoverCommand = new Command(() =>
+            {
+                if (client == null || isSpectatorMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    return;
+                }
+                RecoverMsg recoverMsg = new RecoverMsg();
+                recoverMsg.PlayerId = playerID;
+                recoverMsg.TeamId = teamID;
+                client.Recover(recoverMsg);
+            });
+
+            ProduceCommand = new Command(() =>
+            {
+                if (client == null || isSpectatorMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    return;
+                }
+                IDMsg iDMsg = new IDMsg();
+                iDMsg.PlayerId = playerID;
+                iDMsg.TeamId = teamID;
+                client.Produce(iDMsg);
+            });
+
+            ConstructCommand = new Command(() =>
+            {
+                if (client == null || isSpectatorMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    return;
+                }
+                ConstructMsg constructMsg = new ConstructMsg();
+                constructMsg.PlayerId = playerID;
+                constructMsg.TeamId = teamID;
+                constructMsg.ConstructionType = ConstructionType.Factory;
+                client.Construct(constructMsg);
             });
 
             //Links = [
@@ -801,7 +916,7 @@ namespace Client.ViewModel
             }
 
 
-            PureDrawMap(GameMap.GameMapArray);
+            // PureDrawMap(GameMap.GameMapArray);
             //ReactToCommandline();
 
 
@@ -809,10 +924,17 @@ namespace Client.ViewModel
             ConnectToServer(new string[]{
                 "localhost",
                 "8888",
-                "1",
+                "0",
                 "0",
                 "1"
             });
+
+            // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID (>2023则为观察者模式）
+            //ConnectToServer(new string[]{
+            //    "localhost",
+            //    "8888",
+            //    "2025"
+            //});
 
             timerViewModel = Dispatcher.CreateTimer();
             timerViewModel.Interval = TimeSpan.FromMilliseconds(50);
