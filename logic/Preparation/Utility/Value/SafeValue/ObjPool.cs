@@ -21,6 +21,9 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
 
     #region 属性
 
+    /// <summary>
+    /// 包含列表中为null的元素
+    /// </summary>
     public int Size
     {
         get
@@ -36,6 +39,9 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
             }
         }
     }
+    /// <summary>
+    /// 列表中有null的元素亦不认为空
+    /// </summary>
     public bool IsEmpty
     {
         get
@@ -163,9 +169,10 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
             {
                 var len = ls.Count;
                 for (int i = 0; i < len; i++)
-                {
-                    ret.Add(func(ls[i]));
-                }
+                    if (ls[i] != null)
+                    {
+                        ret.Add(func(ls[i]!));
+                    }
             }
         }
         return ret;
@@ -178,9 +185,7 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
             {
                 var len = ls.Count;
                 for (int i = 0; i < len; i++)
-                {
-                    func(ls[i]);
-                }
+                    if (ls[i] != null) func(ls[i]!);
             }
         }
     }
@@ -192,9 +197,10 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
         lock (dictLock)
         {
             for (int i = 0; i < len; i++)
-            {
-                ret.Add(func(ls[i]));
-            }
+                if (ls[i] != null)
+                {
+                    ret.Add(func(ls[i]!));
+                }
         }
         return ret;
     }
@@ -206,7 +212,7 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
         {
             for (int i = 0; i < len; i++)
             {
-                func(ls[i]);
+                if (ls[i] != null) func(ls[i]!);
             }
         }
     }
@@ -223,9 +229,10 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
             {
                 var len = ls.Count;
                 for (int i = 0; i < len; i++)
-                {
-                    if (cond(ls[i])) return ls[i];
-                }
+                    if (ls[i] != null)
+                    {
+                        if (cond(ls[i]!)) return ls[i];
+                    }
             }
         }
         return null;
@@ -237,9 +244,10 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
         lock (dictLock)
         {
             for (int i = 0; i < len; i++)
-            {
-                if (cond(ls[i])) return ls[i];
-            }
+                if (ls[i] != null)
+                {
+                    if (cond(ls[i]!)) return ls[i];
+                }
         }
         return null;
     }
@@ -259,15 +267,16 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
             {
                 var len = ls.Count;
                 for (int i = 0; i < len; i++)
-                {
-                    ret.Add(func(ls[i]));
-                    if (cond(ls[i]))
+                    if (ls[i] != null)
                     {
-                        retObj = ls[i];
-                        flag = true;
-                        break;
+                        ret.Add(func(ls[i]!));
+                        if (cond(ls[i]!))
+                        {
+                            retObj = ls[i];
+                            flag = true;
+                            break;
+                        }
                     }
-                }
                 if (flag) break;
             }
         }
@@ -281,10 +290,11 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
             {
                 var len = ls.Count;
                 for (int i = 0; i < len; i++)
-                {
-                    func(ls[i]);
-                    if (cond(ls[i])) return ls[i];
-                }
+                    if (ls[i] != null)
+                    {
+                        func(ls[i]!);
+                        if (cond(ls[i]!)) return ls[i];
+                    }
             }
         }
         return null;
@@ -298,14 +308,15 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
         lock (dictLock)
         {
             for (int i = 0; i < len; i++)
-            {
-                ret.Add(func(ls[i]));
-                if (cond(ls[i]))
+                if (ls[i] != null)
                 {
-                    retObj = ls[i];
-                    break;
+                    ret.Add(func(ls[i]!));
+                    if (cond(ls[i]!))
+                    {
+                        retObj = ls[i];
+                        break;
+                    }
                 }
-            }
         }
         return (ret, retObj);
     }
@@ -316,10 +327,11 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
         lock (dictLock)
         {
             for (int i = 0; i < len; i++)
-            {
-                func(ls[i]);
-                if (cond(ls[i])) return ls[i];
-            }
+                if (ls[i] != null)
+                {
+                    func(ls[i]!);
+                    if (cond(ls[i]!)) return ls[i];
+                }
         }
         return null;
     }
