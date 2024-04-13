@@ -245,8 +245,9 @@
                     <Label x:Name="WormHole3HpText" Text="{Binding WormHole3HP, StringFormat='❤️{0}'}"  Grid.Row="7" HorizontalOptions="Start" VerticalOptions="End"/>
                 </Grid>
 
-                <Grid x:Name="Button" Grid.Row="1" Grid.Column="4" HeightRequest="130" WidthRequest="130" Margin="0, 0, 15, 0" >
+                <Grid x:Name="Button" Grid.Row="1" Grid.Column="4" HeightRequest="170" WidthRequest="130" Margin="0, 0, 15, 0" >
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="5*"/>
                         <RowDefinition Height="5*"/>
                         <RowDefinition Height="5*"/>
                         <RowDefinition Height="5*"/>
@@ -267,6 +268,9 @@
                     <Button x:Name="MoveLeftDown" Text="↙" Grid.Column="0" Grid.Row="2" Command="{Binding MoveLeftDownCommand}"></Button>
                     <Button x:Name="MoveRightDown" Text="↘" Grid.Column="2" Grid.Row="2" Command="{Binding MoveRightDownCommand}"></Button>
                     <Button x:Name="Shoot" Text="⚡" Grid.Column="1" Grid.Row="1" Command="{Binding AttackCommand}"></Button>
+                    <Button x:Name="Produce" Text="⛏" Grid.Column="0" Grid.Row="3" Command="{Binding ProduceCommand}"></Button>
+                    <Button x:Name="Construct" Text="🔨" Grid.Column="1" Grid.Row="3" Command="{Binding ConstructCommand}"></Button>
+                    <Button x:Name="Recover" Text="❤️" Grid.Column="2" Grid.Row="3" FontSize="11" Command="{Binding RecoverCommand}"></Button>
                 </Grid>
 
 

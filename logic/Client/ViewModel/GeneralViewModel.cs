@@ -90,6 +90,7 @@ namespace Client.ViewModel
             Channel channel = new Channel(connect, ChannelCredentials.Insecure);
             client = new AvailableService.AvailableServiceClient(channel);
             PlayerMsg playerMsg = new PlayerMsg();
+            playerID = Convert.ToInt64(comInfo[2]);
             playerMsg.PlayerId = playerID;
             //playerMsg.X = 0;
             //playerMsg.Y = 0;
@@ -818,6 +819,46 @@ namespace Client.ViewModel
                 client.Attack(attackMsg);
             });
 
+            RecoverCommand = new Command(() =>
+            {
+                if (client == null || isSpectatorMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    return;
+                }
+                RecoverMsg recoverMsg = new RecoverMsg();
+                recoverMsg.PlayerId = playerID;
+                recoverMsg.TeamId = teamID;
+                client.Recover(recoverMsg);
+            });
+
+            ProduceCommand = new Command(() =>
+            {
+                if (client == null || isSpectatorMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    return;
+                }
+                IDMsg iDMsg = new IDMsg();
+                iDMsg.PlayerId = playerID;
+                iDMsg.TeamId = teamID;
+                client.Produce(iDMsg);
+            });
+
+            ConstructCommand = new Command(() =>
+            {
+                if (client == null || isSpectatorMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode");
+                    return;
+                }
+                ConstructMsg constructMsg = new ConstructMsg();
+                constructMsg.PlayerId = playerID;
+                constructMsg.TeamId = teamID;
+                constructMsg.ConstructionType = ConstructionType.Factory;
+                client.Construct(constructMsg);
+            });
+
             //Links = [
             //    new Link { Name = "天梯信息", Url = "" },
             //    new Link { Name = "获取更新", Url = "" },
@@ -875,7 +916,7 @@ namespace Client.ViewModel
             ConnectToServer(new string[]{
                 "localhost",
                 "8888",
-                "0",
+                "1",
                 "0",
                 "1"
             });

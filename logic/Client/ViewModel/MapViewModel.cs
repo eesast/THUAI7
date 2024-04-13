@@ -787,5 +787,9 @@ namespace Client.ViewModel
         public Command MoveRightUpCommand { get; }
         public Command MoveRightDownCommand { get; }
         public Command AttackCommand { get; }
+        public Command RecoverCommand { get; }
+        public Command ProduceCommand { get; }
+        public Command ConstructCommand { get; }
+        public Command RebuildCommand { get; }
     }
 }
