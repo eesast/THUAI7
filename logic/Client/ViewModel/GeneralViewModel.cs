@@ -482,11 +482,13 @@ namespace Client.ViewModel
                         foreach (var data in listOfHome)
                         {
                             DrawHome(data);
-                            if (data.TeamId == (long)PlayerTeam.Red)
+                            // if (data.TeamId == (long)PlayerTeam.Red)
+                            if (data.TeamId == 0)
                             {
                                 RedPlayer.Team = data.TeamId;
                             }
-                            else if (data.TeamId == (long)PlayerTeam.Blue)
+                            // else if (data.TeamId == (long)PlayerTeam.Blue)
+                            else if (data.TeamId == 1)
                             {
                                 BluePlayer.Team = data.TeamId;
                             }
@@ -499,7 +501,8 @@ namespace Client.ViewModel
                         for (int i = 0; i < listOfShip.Count; i++)
                         {
                             MessageOfShip data = listOfShip[i];
-                            if (data.TeamId == (long)PlayerTeam.Red)
+                            // if (data.TeamId == (long)PlayerTeam.Red)
+                            if (data.TeamId == 0)
                             {
                                 Ship ship = new Ship
                                 {
@@ -519,7 +522,8 @@ namespace Client.ViewModel
                                     RedPlayer.Ships[i] = ship;
                                 else RedPlayer.Ships.Add(ship);
                             }
-                            else if (data.TeamId == (long)PlayerTeam.Blue)
+                            // else if (data.TeamId == (long)PlayerTeam.Blue)
+                            else if (data.TeamId == 1)
                             {
                                 Ship ship = new Ship
                                 {
@@ -845,7 +849,7 @@ namespace Client.ViewModel
                 AttackMsg attackMsg = new AttackMsg();
                 attackMsg.PlayerId = playerID;
                 attackMsg.TeamId = teamID;
-                attackMsg.Angle = 0;
+                attackMsg.Angle = lastMoveAngle;
                 client.Attack(attackMsg);
             });
 
@@ -940,46 +944,48 @@ namespace Client.ViewModel
 
             // PureDrawMap(GameMap.GameMapArray);
             //ReactToCommandline();
-            installer.Data.ConfigData d = new();
-            ip = d.Commands.IP;
-            port = d.Commands.Port;
-            playerID = d.Commands.LaunchID;
-            teamID = Convert.ToInt64(d.Commands.TeamID);
-            shipTypeID = Convert.ToInt32(d.Commands.ShipType);
-            playbackFile = d.Commands.PlaybackFile;
-            playbackSpeed = d.Commands.PlaybackSpeed;
-
-            if (playbackFile == "")
-            {
-                try
-                {
-                    string[] comInfo = new string[5];
-                    comInfo[0] = ip;
-                    comInfo[1] = port;
-                    comInfo[2] = Convert.ToString(playerID);
-                    comInfo[3] = Convert.ToString(teamID);
-                    comInfo[4] = Convert.ToString(shipTypeID);
-                    ConnectToServer(comInfo);
-                    OnReceive();
-                }
-                catch
-                {
-                    OnReceive();
-                }
-            }
-            else
-            {
-                Playback(playbackFile, playbackSpeed);
-            }
+            //installer.Data.ConfigData d = new();
+            //ip = d.Commands.IP;
+            //port = d.Commands.Port;
+            //playerID = Convert. ToInt64(d.Commands.PlayerID);
+            //teamID = Convert.ToInt64(d.Commands.TeamID);
+            //shipTypeID = Convert.ToInt32(d.Commands.ShipType);
+            //playbackFile = d.Commands.PlaybackFile;
+            //playbackSpeed = d.Commands.PlaybackSpeed;
+            Playback("E:\\program\\Project\\THUAI7\\logic\\Client\\114514.thuai7.pb", 2.0);
+            //if (playbackFile == "")
+            //{
+            //    try
+            //    {
+            //        string[] comInfo = new string[5];
+            //        comInfo[0] = ip;
+            //        comInfo[1] = port;
+            //        comInfo[2] = Convert.ToString(playerID);
+            //        comInfo[3] = Convert.ToString(teamID);
+            //        comInfo[4] = Convert.ToString(shipTypeID);
+            //        ConnectToServer(comInfo);
+            //        OnReceive();
+            //    }
+            //    catch
+            //    {
+            //        OnReceive();
+            //    }
+            //}
+            //else
+            //{
+            //    Playback(playbackFile, playbackSpeed);
+            //}
             // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID 3-teamID 4-ShipType
-            ConnectToServer(new string[]{
-                "localhost",
-                "8888",
-                "1",
-                "0",
-                "1"
-            });
-            d.Commands.Launched = true;
+
+            //ConnectToServer(new string[]{
+            //    "localhost",
+            //    "8888",
+            //    "1",
+            //    "0",
+            //    "1"
+            //});
+            //d.Commands.Launched = true;
+
 
             // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID (>2023则为观察者模式）
             //ConnectToServer(new string[]{
@@ -993,7 +999,7 @@ namespace Client.ViewModel
             timerViewModel.Tick += new EventHandler(Refresh);
             timerViewModel.Start();
 
-            OnReceive();
+            //OnReceive();
         }
     }
 }
