@@ -944,38 +944,43 @@ namespace Client.ViewModel
 
             // PureDrawMap(GameMap.GameMapArray);
             //ReactToCommandline();
-            //installer.Data.ConfigData d = new();
-            //ip = d.Commands.IP;
-            //port = d.Commands.Port;
-            //playerID = Convert. ToInt64(d.Commands.PlayerID);
-            //teamID = Convert.ToInt64(d.Commands.TeamID);
-            //shipTypeID = Convert.ToInt32(d.Commands.ShipType);
-            //playbackFile = d.Commands.PlaybackFile;
-            //playbackSpeed = d.Commands.PlaybackSpeed;
-            Playback("E:\\program\\Project\\THUAI7\\logic\\Client\\114514.thuai7.pb", 2.0);
-            //if (playbackFile == "")
-            //{
-            //    try
-            //    {
-            //        string[] comInfo = new string[5];
-            //        comInfo[0] = ip;
-            //        comInfo[1] = port;
-            //        comInfo[2] = Convert.ToString(playerID);
-            //        comInfo[3] = Convert.ToString(teamID);
-            //        comInfo[4] = Convert.ToString(shipTypeID);
-            //        ConnectToServer(comInfo);
-            //        OnReceive();
-            //    }
-            //    catch
-            //    {
-            //        OnReceive();
-            //    }
-            //}
-            //else
-            //{
-            //    Playback(playbackFile, playbackSpeed);
-            //}
-            // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID 3-teamID 4-ShipType
+            installer.Data.ConfigData d = new();
+            ip = d.Commands.IP;
+            port = d.Commands.Port;
+            playerID = Convert.ToInt64(d.Commands.PlayerID);
+            teamID = Convert.ToInt64(d.Commands.TeamID);
+            shipTypeID = Convert.ToInt32(d.Commands.ShipType);
+            playbackFile = d.Commands.PlaybackFile;
+            playbackSpeed = d.Commands.PlaybackSpeed;
+            //Playback("E:\\program\\Project\\THUAI7\\logic\\Client\\114514.thuai7.pb", 2.0);
+            if (playbackFile == "")
+            {
+                try
+                {
+                    string[] comInfo = new string[5];
+                    comInfo[0] = ip;
+                    comInfo[1] = port;
+                    comInfo[2] = Convert.ToString(playerID);
+                    comInfo[3] = Convert.ToString(teamID);
+                    comInfo[4] = Convert.ToString(shipTypeID);
+                    System.Diagnostics.Debug.WriteLine($"cominfo[{0}]", comInfo[0]);
+                    System.Diagnostics.Debug.WriteLine($"cominfo[{1}]", comInfo[1]);
+                    System.Diagnostics.Debug.WriteLine($"cominfo[{2}]", comInfo[2]);
+                    System.Diagnostics.Debug.WriteLine($"cominfo[{3}]", comInfo[3]);
+                    System.Diagnostics.Debug.WriteLine($"cominfo[{4}]", comInfo[4]);
+                    ConnectToServer(comInfo);
+                    OnReceive();
+                }
+                catch
+                {
+                    OnReceive();
+                }
+            }
+            else
+            {
+                Playback(playbackFile, playbackSpeed);
+            }
+            //连接Server,comInfo[] 的格式：0 - ip 1 - port 2 - playerID 3 - teamID 4 - ShipType
 
             //ConnectToServer(new string[]{
             //    "localhost",
