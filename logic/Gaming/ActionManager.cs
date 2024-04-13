@@ -118,7 +118,11 @@ namespace Gaming
                             loopCondition: () => stateNum == ship.StateNum && gameMap.Timer.IsGaming,
                             loopToDo: () =>
                             {
-                                resource.Produce(ship.ProduceSpeed / GameData.NumOfStepPerSecond, ship))
+                                if (!resource.Produce(ship.ProduceSpeed / GameData.NumOfStepPerSecond, ship))
+                                {
+                                    ship.ResetShipState(stateNum);
+                                    return false;
+                                }
                                 if (resource.HP == 0)
                                 {
                                     ship.ResetShipState(stateNum);
@@ -171,7 +175,6 @@ namespace Gaming
                             {
                                 if (!construction.Construct(ship.ConstructSpeed / GameData.NumOfStepPerSecond, constructionType, ship))
                                 {
-                                    ship.ThreadNum.Release();
                                     ship.ResetShipState(stateNum);
                                     return false;
                                 }
@@ -272,7 +275,6 @@ namespace Gaming
                             {
                                 if (!wormhole.Repair(ship.ConstructSpeed / GameData.NumOfStepPerSecond, ship))
                                 {
-                                    ship.ThreadNum.Release();
                                     ship.ResetShipState(stateNum);
                                     return false;
                                 }
