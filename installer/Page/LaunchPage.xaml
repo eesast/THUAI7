@@ -8,12 +8,12 @@
     <Grid
         HorizontalOptions="Center"
         WidthRequest="600"
-        RowDefinitions="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*"
+        RowDefinitions="20,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*"
         ColumnDefinitions="*">
 
         <VerticalStackLayout
             Grid.Row="1"
-            Grid.RowSpan="16"
+            Grid.RowSpan="15"
             HorizontalOptions="Center">
 
             <HorizontalStackLayout>

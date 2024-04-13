@@ -19,13 +19,13 @@ namespace installer.Data
 
         public string Port { get; set; } = "8888";
 
-        public string TeamID { get; set; } = "0";
+        public int TeamID { get; set; } = 0;
 
-        public string PlayerID { get; set; } = "0";
+        public int PlayerID { get; set; } = 0;
 
-        public string ShipType { get; set; } = "0";
+        public int ShipType { get; set; } = 0;
 
-        public string PlaybackFile { get; set; } = "CLGG!@#$%^&*()_+";
+        public string? PlaybackFile { get; set; } = "CLGG!@#$%^&*()_+";
 
         public double PlaybackSpeed { get; set; } = 2.0;
 
@@ -94,7 +94,7 @@ namespace installer.Data
         }
 
 
-        public string TeamID
+        public int TeamID
         {
             get => file.TeamID;
             set
@@ -107,7 +107,7 @@ namespace installer.Data
         }
 
 
-        public string PlayerID
+        public int PlayerID
         {
             get => file.PlayerID;
             set
@@ -120,7 +120,7 @@ namespace installer.Data
         }
 
 
-        public string ShipType
+        public int ShipType
         {
             get => file.ShipType;
             set
@@ -133,7 +133,7 @@ namespace installer.Data
         }
 
 
-        public string PlaybackFile
+        public string? PlaybackFile
         {
             get => file.PlaybackFile;
             set
