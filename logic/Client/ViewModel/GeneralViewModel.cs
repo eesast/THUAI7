@@ -916,7 +916,7 @@ namespace Client.ViewModel
             }
 
 
-            PureDrawMap(GameMap.GameMapArray);
+            // PureDrawMap(GameMap.GameMapArray);
             //ReactToCommandline();
 
 
@@ -924,7 +924,7 @@ namespace Client.ViewModel
             ConnectToServer(new string[]{
                 "localhost",
                 "8888",
-                "1",
+                "0",
                 "0",
                 "1"
             });
