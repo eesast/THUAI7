@@ -10,10 +10,19 @@
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <Style x:Key="littleAttributes"
-       TargetType="Label">
+            <Style x:Key="littleAttributes" TargetType="Label">
                 <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="HorizontalOptions" Value="Start" />
+                <Setter Property="FontSize" Value="Micro" />
+            </Style>
+
+            <Style x:Key="shipStatusAttributes" TargetType="Label">
+                <Setter Property="FontSize" Value="13" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+            </Style>
+
+            <Style x:Key="shipStatusTagAttributes" TargetType="Label">
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
                 <Setter Property="FontSize" Value="Micro" />
             </Style>
 

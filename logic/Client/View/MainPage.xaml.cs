@@ -48,7 +48,10 @@ namespace Client
                         HorizontalOptions = LayoutOptions.Start,
                         VerticalOptions = LayoutOptions.Start,
                         Margin = new Thickness(unitWidth * (49 - j), unitHeight * (49 - i), 0, 0),
-                        FontSize = 5
+                        HorizontalTextAlignment = TextAlignment.Center,
+                        VerticalTextAlignment = TextAlignment.Center,
+                        Padding = 0,
+                        FontSize = 4
                     };
                     int index = i * 50 + j;
                     mapPatches_[i, j].SetBinding(Label.BackgroundColorProperty, new Binding($"MapPatchesList[{index}].PatchColor"));
@@ -82,15 +85,13 @@ namespace Client
             {
                 CircleLabel bulletinfo = new()
                 {
-                    CLDiameter = unitWidth * 0.4,
+                    CLDiameter = unitWidth * 1,
                     HorizontalOptions = LayoutOptions.Start,
                     VerticalOptions = LayoutOptions.Start,
                     CLBackgroundColor = Colors.Black,
                     CLText = "",
-                    Margin = new Thickness(i * unitWidth, i * unitHeight)
                 };
                 bulletCirc.Add(bulletinfo);
-                System.Diagnostics.Debug.WriteLine(String.Format("BulletCircList.Count:{0}", bulletCirc.Count));
                 bulletCirc[i].SetBinding(CircleLabel.CLBackgroundColorProperty, new Binding($"BulletCircList[{i}].Color"));
                 bulletCirc[i].SetBinding(CircleLabel.CLMarginProperty, new Binding($"BulletCircList[{i}].Thick"));
                 MapGrid.Children.Add(bulletCirc[i]);

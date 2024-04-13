@@ -334,13 +334,10 @@ void Logic::ProcessMessage()
                             throw std::runtime_error("Map not loaded!");
                         }
                         LoadBuffer(clientMsg);
-
                         AILoop = true;
                         UnBlockAI();
-
                         break;
                     case THUAI7::GameState::GameRunning:
-
                         LoadBuffer(clientMsg);
                         break;
                     default:
@@ -825,17 +822,16 @@ void Logic::LoadBuffer(const protobuf::MessageToClient& message)
         bufferState->enemyShips.clear();
         bufferState->bullets.clear();
         bufferState->guids.clear();
-
-        logger->debug("Buffer cleared!");
+        logger->info("Buffer cleared!");
         // 读取新的信息
         for (const auto& obj : message.obj_message())
             if (Proto2THUAI7::messageOfObjDict[obj.message_of_obj_case()] == THUAI7::MessageOfObj::ShipMessage)
                 bufferState->guids.push_back(obj.ship_message().guid());
-        // TODO
-        // else if (Proto2THUAI7::messageOfObjDict[obj.message_of_obj_case()] == THUAI7::MessageOfObj::HomeMessage)
-        //     bufferState->guids.push_back(obj.home_message().guid());
         bufferState->gameInfo = Proto2THUAI7::Protobuf2THUAI7GameInfo(message.all_message());
         LoadBufferSelf(message);
+        // 确保这是一个活着的船，否则会使用空指针
+        if (playerType == THUAI7::PlayerType::Ship && !bufferState->shipSelf)
+            return;
         for (const auto& item : message.obj_message())
             LoadBufferCase(item);
     }
@@ -850,7 +846,9 @@ void Logic::LoadBuffer(const protobuf::MessageToClient& message)
         freshed = true;
     }
     else
+    {
         bufferUpdated = true;
+    }
     counterBuffer++;
     // 唤醒其他线程
     cvBuffer.notify_one();
@@ -861,7 +859,6 @@ void Logic::Update() noexcept
     if (!asynchronous)
     {
         std::unique_lock<std::mutex> lock(mtxBuffer);
-
         // 缓冲区被更新之后才可以使用
         cvBuffer.wait(lock, [this]()
                       { return bufferUpdated; });
@@ -927,7 +924,7 @@ void Logic::Main(CreateAIFunc createAI, std::string IP, std::string port, bool f
     fileLogger->set_pattern(pattern);
     printLogger->set_pattern(pattern);
     if (file)
-        fileLogger->set_level(spdlog::level::debug);
+        fileLogger->set_level(spdlog::level::trace);
     else
         fileLogger->set_level(spdlog::level::off);
     if (print)
@@ -937,7 +934,9 @@ void Logic::Main(CreateAIFunc createAI, std::string IP, std::string port, bool f
     if (warnOnly)
         printLogger->set_level(spdlog::level::warn);
     logger = std::make_unique<spdlog::logger>("logicLogger", spdlog::sinks_init_list{fileLogger, printLogger});
-    logger->flush_on(spdlog::level::warn);
+    // TODO
+    // logger->flush_on(spdlog::level::warn);
+    logger->flush_on(spdlog::level::trace);
 
     // 打印当前的调试信息
     logger->info("*********Basic Info*********");

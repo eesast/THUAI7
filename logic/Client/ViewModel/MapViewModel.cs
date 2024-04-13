@@ -205,17 +205,18 @@ namespace Client.ViewModel
 
         private Dictionary<MapPatchType, Color> PatchColorDict = new Dictionary<MapPatchType, Color>
         {
-            {MapPatchType.RedHome, Colors.Red},
+            {MapPatchType.RedHome, Color.FromRgb(237, 49, 47)},
             {MapPatchType.BlueHome, Colors.Blue},
-            {MapPatchType.Ruin, Colors.Black},
-            {MapPatchType.Shadow, Colors.Gray},
-            {MapPatchType.Asteroid, Colors.Brown},
-            {MapPatchType.Resource, Colors.Yellow},
-            {MapPatchType.Factory, Colors.Orange},
-            {MapPatchType.Community, Colors.Chocolate},
-            {MapPatchType.Fort, Colors.Azure},
-            {MapPatchType.WormHole, Colors.Purple},
-            {MapPatchType.Null, Colors.White}
+            {MapPatchType.Ruin, Color.FromRgb(181, 122, 88)},
+            {MapPatchType.Shadow, Color.FromRgb(73, 177, 82)},
+            {MapPatchType.Asteroid, Color.FromRgb(164, 217, 235)},
+            {MapPatchType.Resource, Color.FromRgb(160, 75, 166)},
+            {MapPatchType.Factory, Color.FromRgb(231, 144, 74)},
+            {MapPatchType.Community, Color.FromRgb(231, 144, 74)},
+            {MapPatchType.Fort, Color.FromRgb(231, 144, 74)},
+            {MapPatchType.WormHole, Color.FromRgb(137, 17, 26)},
+            {MapPatchType.Space, Color.FromRgb(255, 255, 255)},
+            {MapPatchType.Null, Color.FromRgb(0,0,0)}
         };
 
         private void PureDrawMap(int[,] Map)
@@ -276,7 +277,6 @@ namespace Client.ViewModel
                 shipinfo.Y = point.Y;
                 System.Diagnostics.Debug.WriteLine(String.Format("shipinfo.X:{0}", shipinfo.X));
                 System.Diagnostics.Debug.WriteLine(String.Format("shipinfo.Y:{0}", shipinfo.Y));
-                shipinfo.Text = Convert.ToString(data.Hp);
                 long team_id = data.TeamId;
                 switch (team_id)
                 {
@@ -788,5 +788,9 @@ namespace Client.ViewModel
         public Command MoveRightUpCommand { get; }
         public Command MoveRightDownCommand { get; }
         public Command AttackCommand { get; }
+        public Command RecoverCommand { get; }
+        public Command ProduceCommand { get; }
+        public Command ConstructCommand { get; }
+        public Command RebuildCommand { get; }
     }
 }

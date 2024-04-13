@@ -61,15 +61,15 @@
 
                     <Grid x:Name="RedPlayerAttributesGrid" VerticalOptions="Center" >
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="25*"/>
-                            <ColumnDefinition Width="11*"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="10*"/>
                             <ColumnDefinition Width="10*"/>
                         </Grid.ColumnDefinitions>
 
                         <Grid x:Name="RedPlayerRoleInfoGrid" Grid.Row="0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*" />
-                                <ColumnDefinition Width="3*" />
                                 <ColumnDefinition Width="3*" />
                             </Grid.ColumnDefinitions>
 
@@ -79,11 +79,11 @@
                             </Grid.RowDefinitions>
                             <BoxView x:Name="RedColor" Color="Red" Grid.Row="0" Grid.Column="0" HeightRequest="15" WidthRequest="15" HorizontalOptions="Center" VerticalOptions="Center" />
                             <Label x:Name="RedName" Text="Red Player" Grid.Row="0" Grid.Column="1" FontSize="15" HorizontalOptions="Start" HorizontalTextAlignment="Start" WidthRequest="300" VerticalOptions="Center" />
-                            <Label x:Name="RedHpData" Text="{Binding RedPlayer.Hp, StringFormat='Hp: {0}/100  '}" Grid.Row="0" Grid.Column="2" FontSize="15" HorizontalOptions="Center" HorizontalTextAlignment="Start" VerticalOptions="Center" />
                             <!--<BoxView x:Name="RedHpSlide" Color="Red" Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="0" HorizontalOptions="StartAndExpand" WidthRequest="230"/>-->
                         </Grid>
-                        <Label x:Name="RedMoney" Grid.Row="0" Grid.Column="1" Text="{Binding RedPlayer.Money, StringFormat='💰总经济： {0}'}" Style="{StaticResource littleAttributes}" />
-                        <Label x:Name="RedScore" Grid.Row="0" Grid.Column="2" Text="{Binding RedPlayer.Score, StringFormat='Score: {0}'}" Style="{StaticResource littleAttributes}" />
+                        <Label x:Name="RedHpData" Text="{Binding RedPlayer.Hp, StringFormat='❤️: {0}  '}" Grid.Row="0" Grid.Column="1" FontSize="15" VerticalOptions="Center" />
+                        <Label x:Name="RedMoney" Grid.Row="0" Grid.Column="2" Text="{Binding RedPlayer.Money, StringFormat='💰: {0}'}" Style="{StaticResource littleAttributes}" />
+                        <Label x:Name="RedScore" Grid.Row="0" Grid.Column="3" Text="{Binding RedPlayer.Score, StringFormat='🚩: {0}'}" Style="{StaticResource littleAttributes}" />
                     </Grid>
 
                     <Grid x:Name="RedShipStatusAttributesGrid" Grid.Row="1">
@@ -95,15 +95,17 @@
                             <ColumnDefinition />
                             <ColumnDefinition />
                             <ColumnDefinition />
+                            <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
-                        <Label x:Name="RedShipItem" Grid.Row="1" Grid.Column="0" Text="单位👾" FontSize="Micro"/>
-                        <Label x:Name="RedShipMining" Grid.Row="1" Grid.Column="1" Text="采集模块" FontSize="Micro"/>
-                        <Label x:Name="RedShipBuild" Grid.Row="1" Grid.Column="2" Text="建造模块" FontSize="Micro"/>
-                        <Label x:Name="RedShipArmor" Grid.Row="1" Grid.Column="3" Text="装甲模块" FontSize="Micro"/>
-                        <Label x:Name="RedShipShield" Grid.Row="1" Grid.Column="4" Text="护盾模块" FontSize="Micro"/>
-                        <Label x:Name="RedShipAttack" Grid.Row="1" Grid.Column="5" Text="攻击模块" FontSize="Micro"/>
-                        <Label x:Name="RedShipState" Grid.Row="1" Grid.Column="6" Text="状态✨️" FontSize="Micro"/>
+                        <Label x:Name="RedShipItem" Grid.Row="1" Grid.Column="0" Text="单位👾" Style="{x:StaticResource shipStatusTagAttributes}"/>
+                        <Label x:Name="RedShipMining" Grid.Row="1" Grid.Column="1" Text="采集⛏" Style="{x:StaticResource shipStatusTagAttributes}"/>
+                        <Label x:Name="RedShipBuild" Grid.Row="1" Grid.Column="2" Text="建造🔨" Style="{x:StaticResource shipStatusTagAttributes}"/>
+                        <Label x:Name="RedShipArmor" Grid.Row="1" Grid.Column="3" Text="装甲🪖" Style="{x:StaticResource shipStatusTagAttributes}"/>
+                        <Label x:Name="RedShipShield" Grid.Row="1" Grid.Column="4" Text="护盾🛡️" Style="{x:StaticResource shipStatusTagAttributes}"/>
+                        <Label x:Name="RedShipAttack" Grid.Row="1" Grid.Column="5" Text="攻击⚔️" Style="{x:StaticResource shipStatusTagAttributes}"/>
+                        <Label x:Name="RedShipState" Grid.Row="1" Grid.Column="6" Text="状态✨️" Style="{x:StaticResource shipStatusTagAttributes}"/>
+                        <Label x:Name="RedShipHp" Grid.Row="1" Grid.Column="7" Text="血量❤️" Style="{x:StaticResource shipStatusTagAttributes}"/>
                     </Grid>
 
 
@@ -119,14 +121,17 @@
                                         <ColumnDefinition />
                                         <ColumnDefinition />
                                         <ColumnDefinition />
+                                        <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
-                                    <Label Grid.Column="0" Text="{Binding Type_s}"></Label>
-                                    <Label Grid.Column="1" Text="{Binding ProducerModule_s}"></Label>
-                                    <Label Grid.Column="2" Text="{Binding ConstuctorModule_s}"></Label>
-                                    <Label Grid.Column="3" Text="{Binding ArmorModule_s}"></Label>
-                                    <Label Grid.Column="4" Text="{Binding ShieldModule_s}"></Label>
-                                    <Label Grid.Column="5" Text="{Binding WeaponModule_s}"></Label>
-                                    <Label Grid.Column="6" Text="{Binding State_s}"></Label>
+                                    <Label Grid.Column="0" Style="{x:StaticResource shipStatusAttributes}" Text="{Binding Type_s}"></Label>
+                                    <Label Grid.Column="1" Style="{x:StaticResource shipStatusAttributes}" Text="{Binding ProducerModule_s}"></Label>
+                                    <Label Grid.Column="2" Style="{x:StaticResource shipStatusAttributes}" Text="{Binding ConstuctorModule_s}"></Label>
+                                    <Label Grid.Column="3" Style="{x:StaticResource shipStatusAttributes}" Text="{Binding ArmorModule_s}"></Label>
+                                    <Label Grid.Column="4" Style="{x:StaticResource shipStatusAttributes}" Text="{Binding ShieldModule_s}"></Label>
+                                    <Label Grid.Column="4" Style="{x:StaticResource shipStatusAttributes}" Text="{Binding ShieldModule_s}"></Label>
+                                    <Label Grid.Column="5" Style="{x:StaticResource shipStatusAttributes}" Text="{Binding WeaponModule_s}"></Label>
+                                    <Label Grid.Column="6" Style="{x:StaticResource shipStatusAttributes}" Text="{Binding State_s}"></Label>
+                                    <Label Grid.Column="7" Style="{x:StaticResource shipStatusAttributes}" Text="{Binding HP}"></Label>
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
@@ -143,15 +148,15 @@
 
                     <Grid x:Name="BluePlayerAttributesGrid" >
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="25*"/>
-                            <ColumnDefinition Width="11*"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="10*"/>
                             <ColumnDefinition Width="10*"/>
                         </Grid.ColumnDefinitions>
 
                         <Grid x:Name="BluePlayerRoleInfoGrid" Grid.Row="0" VerticalOptions="Center">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*" />
-                                <ColumnDefinition Width="3*" />
                                 <ColumnDefinition Width="3*" />
                             </Grid.ColumnDefinitions>
 
@@ -160,12 +165,11 @@
                                 <RowDefinition Height="1*" />
                             </Grid.RowDefinitions>
                             <BoxView x:Name="BlueColor" Color="Blue" Grid.Row="0" Grid.Column="0" HeightRequest="15" WidthRequest="15" HorizontalOptions="Center" VerticalOptions="Center" />
-                            <Label x:Name="BlueName" Text="Blue Player" Grid.Row="0" Grid.Column="1" FontSize="15" HorizontalOptions="Start" HorizontalTextAlignment="Start" WidthRequest="250" VerticalOptions="Center" />
-                            <Label x:Name="BlueHpData" Text="{Binding BluePlayer.Hp, StringFormat='Hp: {0}/100'}" Grid.Row="0" Grid.Column="2" FontSize="15" HorizontalOptions="Center" HorizontalTextAlignment="Start" VerticalOptions="Center" />
-                            <!--<BoxView x:Name="BlueHpSlide" Grid.Row="1" Color="Blue" Grid.ColumnSpan="3" Grid.Column="0" HorizontalOptions="Start" WidthRequest="230"/>-->
+                            <Label x:Name="BlueName" Text="Blue Player" Grid.Row="0" Grid.Column="1" FontSize="15" HorizontalOptions="Start" HorizontalTextAlignment="Start" WidthRequest="250" VerticalOptions="Start" />
                         </Grid>
-                        <Label x:Name="BlueMoney" Grid.Row="0" Grid.Column="1" Text="{Binding BluePlayer.Money, StringFormat='💰总经济： {0}'}" Style="{StaticResource littleAttributes}" VerticalOptions="Center" />
-                        <Label x:Name="BlueScore" Grid.Row="0" Grid.Column="2" Text="{Binding BluePlayer.Score, StringFormat='Score: {0}'}" Style="{StaticResource littleAttributes}" />
+                        <Label x:Name="BlueHpData" Text="{Binding BluePlayer.Hp, StringFormat='❤️: {0}'}" Grid.Row="0" Grid.Column="1" FontSize="15" VerticalOptions="Center" />
+                        <Label x:Name="BlueMoney" Grid.Row="0" Grid.Column="2" Text="{Binding BluePlayer.Money, StringFormat='💰: {0}'}" Style="{StaticResource littleAttributes}" VerticalOptions="Center" />
+                        <Label x:Name="BlueScore" Grid.Row="0" Grid.Column="3" Text="{Binding BluePlayer.Score, StringFormat='🚩: {0}'}" Style="{StaticResource littleAttributes}" />
                     </Grid>
 
                     <Grid x:Name="BlueShipStatusAttributesGrid" Grid.Row="1">
@@ -177,15 +181,17 @@
                             <ColumnDefinition />
                             <ColumnDefinition />
                             <ColumnDefinition />
+                            <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
-                        <Label x:Name="BlueShipItem" Grid.Row="1" Grid.Column="0" Text="单位👾" FontSize="Micro"/>
-                        <Label x:Name="BlueShipMining" Grid.Row="1" Grid.Column="1" Text="采集模块" FontSize="Micro"/>
-                        <Label x:Name="BlueShipBuild" Grid.Row="1" Grid.Column="2" Text="建造模块" FontSize="Micro"/>
-                        <Label x:Name="BlueShipArmor" Grid.Row="1" Grid.Column="3" Text="装甲模块" FontSize="Micro"/>
-                        <Label x:Name="BlueShipShield" Grid.Row="1" Grid.Column="4" Text="护盾模块" FontSize="Micro"/>
-                        <Label x:Name="BlueShipAttack" Grid.Row="1" Grid.Column="5" Text="攻击模块" FontSize="Micro"/>
-                        <Label x:Name="BlueShipState" Grid.Row="1" Grid.Column="6" Text="状态✨️" FontSize="Micro"/>
+                        <Label x:Name="BlueShipItem" Grid.Row="1" Grid.Column="0" Text="单位👾" Style="{x:StaticResource shipStatusTagAttributes}"/>
+                        <Label x:Name="BlueShipMining" Grid.Row="1" Grid.Column="1" Text="采集⛏" Style="{x:StaticResource shipStatusTagAttributes}"/>
+                        <Label x:Name="BlueShipBuild" Grid.Row="1" Grid.Column="2" Text="建造🔨" Style="{x:StaticResource shipStatusTagAttributes}"/>
+                        <Label x:Name="BlueShipArmor" Grid.Row="1" Grid.Column="3" Text="装甲🪖" Style="{x:StaticResource shipStatusTagAttributes}"/>
+                        <Label x:Name="BlueShipShield" Grid.Row="1" Grid.Column="4" Text="护盾🛡️" Style="{x:StaticResource shipStatusTagAttributes}"/>
+                        <Label x:Name="BlueShipAttack" Grid.Row="1" Grid.Column="5" Text="攻击⚔️" Style="{x:StaticResource shipStatusTagAttributes}"/>
+                        <Label x:Name="BlueShipState" Grid.Row="1" Grid.Column="6" Text="状态✨️" Style="{x:StaticResource shipStatusTagAttributes}"/>
+                        <Label x:Name="BlueShipHp" Grid.Row="1" Grid.Column="7" Text="血量❤️" Style="{x:StaticResource shipStatusTagAttributes}"/>
                     </Grid>
 
                     <CollectionView ItemsSource="{Binding BluePlayer.Ships}" Grid.Row="2">
@@ -200,14 +206,17 @@
                                         <ColumnDefinition />
                                         <ColumnDefinition />
                                         <ColumnDefinition />
+                                        <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
-                                    <Label Grid.Column="0" Text="{Binding Type_s}"></Label>
-                                    <Label Grid.Column="1" Text="{Binding ProducerModule_s}"></Label>
-                                    <Label Grid.Column="2" Text="{Binding ConstuctorModule_s}"></Label>
-                                    <Label Grid.Column="3" Text="{Binding ArmorModule_s}"></Label>
-                                    <Label Grid.Column="4" Text="{Binding ShieldModule_s}"></Label>
-                                    <Label Grid.Column="5" Text="{Binding WeaponModule_s}"></Label>
-                                    <Label Grid.Column="6" Text="{Binding State_s}"></Label>
+                                    <Label Grid.Column="0" Style="{x:StaticResource shipStatusAttributes}" Text="{Binding Type_s}"></Label>
+                                    <Label Grid.Column="1" Style="{x:StaticResource shipStatusAttributes}" Text="{Binding ProducerModule_s}"></Label>
+                                    <Label Grid.Column="2" Style="{x:StaticResource shipStatusAttributes}" Text="{Binding ConstuctorModule_s}"></Label>
+                                    <Label Grid.Column="3" Style="{x:StaticResource shipStatusAttributes}" Text="{Binding ArmorModule_s}"></Label>
+                                    <Label Grid.Column="4" Style="{x:StaticResource shipStatusAttributes}" Text="{Binding ShieldModule_s}"></Label>
+                                    <Label Grid.Column="4" Style="{x:StaticResource shipStatusAttributes}" Text="{Binding ShieldModule_s}"></Label>
+                                    <Label Grid.Column="5" Style="{x:StaticResource shipStatusAttributes}" Text="{Binding WeaponModule_s}"></Label>
+                                    <Label Grid.Column="6" Style="{x:StaticResource shipStatusAttributes}" Text="{Binding State_s}"></Label>
+                                    <Label Grid.Column="7" Style="{x:StaticResource shipStatusAttributes}" Text="{Binding HP}"></Label>
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
@@ -219,25 +228,26 @@
                         <RowDefinition Height="5*" />
                         <RowDefinition Height="10*"/>
                         <RowDefinition Height="10*"/>
-                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="10*"/>
                         <RowDefinition Height="20*"/>
-                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="10*"/>
                         <RowDefinition Height="20*"/>
-                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="10*"/>
                         <RowDefinition Height="50*" />
                     </Grid.RowDefinitions>
 
                     <Label x:Name="GameTime" Text="{Binding GameTime}" Grid.Row="1" HorizontalOptions="Start" VerticalOptions="Start"/>
-                    <Label x:Name="WormHole1HP" Text="虫洞1生命值" Grid.Row="2" HorizontalOptions="Start" VerticalOptions="End"/>
-                    <BoxView x:Name="WormHole1HpSlide" Color="Green" HeightRequest="3" WidthRequest="{Binding WormHole1Length}"  Grid.Row="3" HorizontalOptions="Start" VerticalOptions="End"/>
-                    <Label x:Name="WormHole2Hp"  Text="虫洞2生命值" Grid.Row="4" HorizontalOptions="Start" VerticalOptions="End"/>
-                    <BoxView x:Name="WormHole2HpSlide" Color="Green" HeightRequest="3" WidthRequest="{Binding WormHole2Length}"  Grid.Row="5" HorizontalOptions="Start" VerticalOptions="End"/>
-                    <Label x:Name="WormHole3Hp" Text="虫洞3生命值" Grid.Row="6" HorizontalOptions="Start" VerticalOptions="End"/>
-                    <BoxView x:Name="WormHole3HpSlide" Color="Green" HeightRequest="3" WidthRequest="{Binding WormHole3Length}"  Grid.Row="7" HorizontalOptions="Start" VerticalOptions="End"/>
+                    <Label x:Name="WormHole1HP" Text="🌀虫洞1" Grid.Row="2" HorizontalOptions="Start" VerticalOptions="End"/>
+                    <Label x:Name="WormHole1HpText" Text="{Binding WormHole1HP, StringFormat='❤️{0}'}" Grid.Row="3" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    <Label x:Name="WormHole2Hp"  Text="🌀虫洞2" Grid.Row="4" HorizontalOptions="Start" VerticalOptions="End"/>
+                    <Label x:Name="WormHole2HpText" Text="{Binding WormHole2HP, StringFormat='❤️{0}'}" Grid.Row="5" HorizontalOptions="Start" VerticalOptions="Start"/>
+                    <Label x:Name="WormHole3Hp" Text="🌀虫洞3" Grid.Row="6" HorizontalOptions="Start" VerticalOptions="End"/>
+                    <Label x:Name="WormHole3HpText" Text="{Binding WormHole3HP, StringFormat='❤️{0}'}"  Grid.Row="7" HorizontalOptions="Start" VerticalOptions="End"/>
                 </Grid>
 
-                <Grid x:Name="Button" Grid.Row="1" Grid.Column="4" HeightRequest="130" WidthRequest="130" Margin="0, 0, 15, 0" >
+                <Grid x:Name="Button" Grid.Row="1" Grid.Column="4" HeightRequest="170" WidthRequest="130" Margin="0, 0, 15, 0" >
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="5*"/>
                         <RowDefinition Height="5*"/>
                         <RowDefinition Height="5*"/>
                         <RowDefinition Height="5*"/>
@@ -258,6 +268,9 @@
                     <Button x:Name="MoveLeftDown" Text="↙" Grid.Column="0" Grid.Row="2" Command="{Binding MoveLeftDownCommand}"></Button>
                     <Button x:Name="MoveRightDown" Text="↘" Grid.Column="2" Grid.Row="2" Command="{Binding MoveRightDownCommand}"></Button>
                     <Button x:Name="Shoot" Text="⚡" Grid.Column="1" Grid.Row="1" Command="{Binding AttackCommand}"></Button>
+                    <Button x:Name="Produce" Text="⛏" Grid.Column="0" Grid.Row="3" Command="{Binding ProduceCommand}"></Button>
+                    <Button x:Name="Construct" Text="🔨" Grid.Column="1" Grid.Row="3" Command="{Binding ConstructCommand}"></Button>
+                    <Button x:Name="Recover" Text="❤️" Grid.Column="2" Grid.Row="3" FontSize="11" Command="{Binding RecoverCommand}"></Button>
                 </Grid>
 
 

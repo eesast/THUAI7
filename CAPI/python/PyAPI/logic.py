@@ -330,6 +330,8 @@ class Logic(ILogic):
             )
 
             self.__LoadBufferSelf(message)
+            if self.__playerType==THUAI7.Ship and isinstance(self.__bufferState.self,None):
+                return
             for item in message.obj_message:
                 self.__LoadBufferCase(item)
             if Setting.Asynchronous():
@@ -347,7 +349,7 @@ class Logic(ILogic):
             self.__cvBuffer.notify()
 
     def __LoadBufferSelf(self, message: Message2Clients.MessageToClient) -> None:
-        if self.__playerID != 0:
+        if self.__playerType == THUAI7.PlayerType.Ship:
             for item in message.obj_message:
                 if item.WhichOneof("message_of_obj") == "ship_message":
                     if item.ship_message.player_id == self.__playerID:
