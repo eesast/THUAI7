@@ -215,9 +215,6 @@ namespace Server
                     }
                 }
             } while (game.GameMap.Timer.IsGaming);
-#if DEBUG
-            Console.WriteLine("END Add Player");
-#endif
         }
 
         public override Task<MessageOfMap> GetMap(NullRequest request, ServerCallContext context)

@@ -654,10 +654,10 @@ namespace Client.ViewModel
 
         private void DrawWormHole(MessageOfWormhole data)
         {
-            int x = data.X;
-            int y = data.Y;
+            //int x = data.X;
+            //int y = data.Y;
             int hp = data.Hp;
-            int index = UtilFunctions.getGridIndex(x, y);
+            int index = data.Id;
             MapPatchesList[index].Text = Convert.ToString(hp);
             MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.WormHole];
             MapPatchesList[index].TextColor = Colors.White;

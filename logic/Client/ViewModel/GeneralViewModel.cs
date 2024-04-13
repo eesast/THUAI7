@@ -588,17 +588,17 @@ namespace Client.ViewModel
                         {
                             DrawWormHole(data);
                         }
-                        listOfWormhole.Sort(
-                            delegate (MessageOfWormhole h1, MessageOfWormhole h2)
-                            {
-                                int re = h1.X.CompareTo(h2.X);
-                                if (0 == re)
-                                {
-                                    return h1.Y.CompareTo(h2.Y);
-                                }
-                                return re;
-                            }
-                        );
+                        //listOfWormhole.Sort(
+                        //    delegate (MessageOfWormhole h1, MessageOfWormhole h2)
+                        //    {
+                        //        int re = h1.X.CompareTo(h2.X);
+                        //        if (0 == re)
+                        //        {
+                        //            return h1.Y.CompareTo(h2.Y);
+                        //        }
+                        //        return re;
+                        //    }
+                        //);
 
                         foreach (var data in listOfFort)
                         {
@@ -976,6 +976,7 @@ namespace Client.ViewModel
             //    Playback(playbackFile, playbackSpeed);
             //}
             // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID 3-teamID 4-ShipType
+
             //ConnectToServer(new string[]{
             //    "localhost",
             //    "8888",
@@ -984,6 +985,7 @@ namespace Client.ViewModel
             //    "1"
             //});
             //d.Commands.Launched = true;
+
 
             // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID (>2023则为观察者模式）
             //ConnectToServer(new string[]{
