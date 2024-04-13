@@ -482,11 +482,13 @@ namespace Client.ViewModel
                         foreach (var data in listOfHome)
                         {
                             DrawHome(data);
-                            if (data.TeamId == (long)PlayerTeam.Red)
+                            // if (data.TeamId == (long)PlayerTeam.Red)
+                            if (data.TeamId == 0)
                             {
                                 RedPlayer.Team = data.TeamId;
                             }
-                            else if (data.TeamId == (long)PlayerTeam.Blue)
+                            // else if (data.TeamId == (long)PlayerTeam.Blue)
+                            else if (data.TeamId == 1)
                             {
                                 BluePlayer.Team = data.TeamId;
                             }
@@ -499,7 +501,8 @@ namespace Client.ViewModel
                         for (int i = 0; i < listOfShip.Count; i++)
                         {
                             MessageOfShip data = listOfShip[i];
-                            if (data.TeamId == (long)PlayerTeam.Red)
+                            // if (data.TeamId == (long)PlayerTeam.Red)
+                            if (data.TeamId == 0)
                             {
                                 Ship ship = new Ship
                                 {
@@ -519,7 +522,8 @@ namespace Client.ViewModel
                                     RedPlayer.Ships[i] = ship;
                                 else RedPlayer.Ships.Add(ship);
                             }
-                            else if (data.TeamId == (long)PlayerTeam.Blue)
+                            // else if (data.TeamId == (long)PlayerTeam.Blue)
+                            else if (data.TeamId == 1)
                             {
                                 Ship ship = new Ship
                                 {
@@ -948,7 +952,7 @@ namespace Client.ViewModel
             //shipTypeID = Convert.ToInt32(d.Commands.ShipType);
             //playbackFile = d.Commands.PlaybackFile;
             //playbackSpeed = d.Commands.PlaybackSpeed;
-
+            Playback("E:\\program\\Project\\THUAI7\\logic\\Client\\114514.thuai7.pb", 2.0);
             //if (playbackFile == "")
             //{
             //    try
@@ -972,13 +976,13 @@ namespace Client.ViewModel
             //    Playback(playbackFile, playbackSpeed);
             //}
             // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID 3-teamID 4-ShipType
-            ConnectToServer(new string[]{
-                "localhost",
-                "8888",
-                "0",
-                "0",
-                "1"
-            });
+            //ConnectToServer(new string[]{
+            //    "localhost",
+            //    "8888",
+            //    "1",
+            //    "0",
+            //    "1"
+            //});
             //d.Commands.Launched = true;
 
             // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID (>2023则为观察者模式）
@@ -993,7 +997,7 @@ namespace Client.ViewModel
             timerViewModel.Tick += new EventHandler(Refresh);
             timerViewModel.Start();
 
-            OnReceive();
+            //OnReceive();
         }
     }
 }

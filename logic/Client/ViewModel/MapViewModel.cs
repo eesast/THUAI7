@@ -546,12 +546,14 @@ namespace Client.ViewModel
             MapPatchesList[index].Text = Convert.ToString(hp);
             switch (team_id)
             {
-                case (long)PlayerTeam.Red:
+                // case (long)PlayerTeam.Red:
+                case 0:
                     MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.RedHome];
                     MapPatchesList[index].TextColor = Colors.White;
                     break;
 
-                case (long)PlayerTeam.Blue:
+                // case (long)PlayerTeam.Blue:
+                case 1:
                     MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.BlueHome];
                     MapPatchesList[index].TextColor = Colors.White;
                     break;
@@ -573,12 +575,14 @@ namespace Client.ViewModel
             MapPatchesList[index].Text = Convert.ToString(hp);
             switch (team_id)
             {
-                case (long)PlayerTeam.Red:
+                // case (long)PlayerTeam.Red:
+                case 0:
                     MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Factory];
                     MapPatchesList[index].TextColor = Colors.Red;
                     break;
 
-                case (long)PlayerTeam.Blue:
+                // case (long)PlayerTeam.Blue:
+                case 1:
                     MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Factory];
                     MapPatchesList[index].TextColor = Colors.Blue;
                     break;
@@ -600,12 +604,14 @@ namespace Client.ViewModel
             MapPatchesList[index].Text = Convert.ToString(hp);
             switch (team_id)
             {
-                case (long)PlayerTeam.Red:
+                // case (long)PlayerTeam.Red:
+                case 0:
                     MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Community];
                     MapPatchesList[index].TextColor = Colors.Red;
                     break;
 
-                case (long)PlayerTeam.Blue:
+                // case (long)PlayerTeam.Blue:
+                case 1:
                     MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Community];
                     MapPatchesList[index].TextColor = Colors.Blue;
                     break;
@@ -627,13 +633,15 @@ namespace Client.ViewModel
             MapPatchesList[index].Text = Convert.ToString(hp);
             switch (team_id)
             {
-                case (long)PlayerTeam.Red:
+                // case (long)PlayerTeam.Red:
+                case 0:
                     MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Fort];
                     MapPatchesList[index].TextColor = Colors.Red;
                     break;
 
-                case (long)PlayerTeam.Blue:
-                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Fort];
+                // case (long)PlayerTeam.Blue:
+                case 1:
+                 MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Fort];
                     MapPatchesList[index].TextColor = Colors.Blue;
                     break;
 
