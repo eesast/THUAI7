@@ -41,39 +41,104 @@ public class Ship : Movable, IShip
     /// </summary>
     #region Modules
 
+    private readonly object lockOfModules = new();
+
     #region Producer
     private ProducerType producerType = ProducerType.Null;
-    public ProducerType ProducerModuleType => producerType;
+    public ProducerType ProducerModuleType
+    {
+        get 
+        {
+            lock (lockOfModules)
+                return producerType; 
+        }
+    }
     private IProducer producer;
-    public IProducer ProducerModule => producer;
+    public IProducer ProducerModule {
+        get
+        {
+            lock (lockOfModules)
+                return producer;
+        }
+    }
     #endregion
 
     #region Constructor
     private ConstructorType constructorType = ConstructorType.Null;
-    public ConstructorType ConstructorModuleType => constructorType;
+    public ConstructorType ConstructorModuleType
+    {
+        get
+        {
+            lock (lockOfModules)
+                return constructorType;
+        }
+    }
     private IConstructor constructor;
-    public IConstructor ConstructorModule => constructor;
+    public IConstructor ConstructorModule {
+        get
+        {
+            lock (lockOfModules)
+                return constructor;
+        }
+    }
     #endregion
 
     #region Armor
     private ArmorType armorType = ArmorType.Null;
-    public ArmorType ArmorModuleType => armorType;
+    public ArmorType ArmorModuleType {
+        get
+        {
+            lock (lockOfModules)
+                return armorType;
+        }
+    }
     private IArmor armor;
-    public IArmor ArmorModule => armor;
+    public IArmor ArmorModule {
+        get
+        {
+            lock (lockOfModules)
+                return armor;
+        }
+    }
     #endregion
 
     #region Shield
     private ShieldType shieldType = ShieldType.Null;
-    public ShieldType ShieldModuleType => shieldType;
+    public ShieldType ShieldModuleType {
+        get
+        {
+            lock (lockOfModules)
+                return shieldType;
+        }
+    }
     private IShield shield;
-    public IShield ShieldModule => shield;
+    public IShield ShieldModule {
+        get
+        {
+            lock (lockOfModules)
+                return shield;
+        }
+    }
     #endregion
 
     #region Weapon
     private WeaponType weaponType = WeaponType.Null;
-    public WeaponType WeaponModuleType => weaponType;
+    public WeaponType WeaponModuleType {
+        get
+        {
+            lock (lockOfModules)
+                return weaponType;
+        }
+    }
     private IWeapon weapon;
-    public IWeapon WeaponModule => weapon;
+    public IWeapon WeaponModule {
+        get
+        {
+            lock (lockOfModules)
+                return weapon;
+        }
+    }
+
     public Bullet? Attack(double angle)
     {
         lock (actionLock)
@@ -82,7 +147,7 @@ public class Ship : Movable, IShip
             if (BulletNum.TrySub(1) == 1)
             {
                 XY res = Position + new XY(angle, Radius + GameData.BulletRadius);
-                Bullet? bullet = BulletFactory.GetBullet(this, res, weaponType);
+                Bullet? bullet = BulletFactory.GetBullet(this, res, WeaponModuleType);
                 if (bullet == null) return null;
                 FacingDirection = new XY(angle, bullet.AttackDistance);
                 return bullet;
@@ -92,15 +157,15 @@ public class Ship : Movable, IShip
     }
     #endregion
 
-    public int ProduceSpeed => producer.ProduceSpeed;
-    public int ConstructSpeed => constructor.ConstructSpeed;
+    public int ProduceSpeed => ProducerModule.ProduceSpeed;
+    public int ConstructSpeed => ConstructorModule.ConstructSpeed;
     public bool InstallModule(ModuleType moduleType)
     {
-        lock (actionLock)
+        if (moduleType == ModuleType.Null) return false;
+        if (!Occupation.IsModuleValid(moduleType)) return false;
+        if (MoneyPool.Money < ModuleFactory.FindModuleCost(ShipType, moduleType)) return false;
+        lock (lockOfModules)
         {
-            if (moduleType == ModuleType.Null) return false;
-            if (!Occupation.IsModuleValid(moduleType)) return false;
-            if (MoneyPool.Money < ModuleFactory.FindModuleCost(ShipType, moduleType)) return false;
             switch (moduleType)
             {
                 case ModuleType.Producer1:
