@@ -641,7 +641,7 @@ namespace Client.ViewModel
 
                 // case (long)PlayerTeam.Blue:
                 case 1:
-                 MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Fort];
+                    MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.Fort];
                     MapPatchesList[index].TextColor = Colors.Blue;
                     break;
 
