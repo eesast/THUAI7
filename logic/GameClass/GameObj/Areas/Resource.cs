@@ -11,7 +11,7 @@ public class Resource(XY initPos)
     public AtomicInt ProduceNum { get; } = new AtomicInt(0);
     public bool Produce(int produceSpeed, Ship ship)
     {
-        return ship.MoneyPool.AddMoney(HP.SubRChange(produceSpeed)) > 0;
+        return ship.MoneyPool.AddMoney(-HP.SubRChange(produceSpeed)) > 0;
     }
     public void AddProduceNum(int add = 1)
     {
