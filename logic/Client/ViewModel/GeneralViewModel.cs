@@ -584,17 +584,17 @@ namespace Client.ViewModel
                         {
                             DrawWormHole(data);
                         }
-                        listOfWormhole.Sort(
-                            delegate (MessageOfWormhole h1, MessageOfWormhole h2)
-                            {
-                                int re = h1.X.CompareTo(h2.X);
-                                if (0 == re)
-                                {
-                                    return h1.Y.CompareTo(h2.Y);
-                                }
-                                return re;
-                            }
-                        );
+                        //listOfWormhole.Sort(
+                        //    delegate (MessageOfWormhole h1, MessageOfWormhole h2)
+                        //    {
+                        //        int re = h1.X.CompareTo(h2.X);
+                        //        if (0 == re)
+                        //        {
+                        //            return h1.Y.CompareTo(h2.Y);
+                        //        }
+                        //        return re;
+                        //    }
+                        //);
 
                         foreach (var data in listOfFort)
                         {
@@ -975,7 +975,7 @@ namespace Client.ViewModel
             ConnectToServer(new string[]{
                 "localhost",
                 "8888",
-                "0",
+                "1",
                 "0",
                 "1"
             });

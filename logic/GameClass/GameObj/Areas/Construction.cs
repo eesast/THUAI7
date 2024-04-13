@@ -55,7 +55,7 @@ public class Construction(XY initPos)
             }
         }
 
-        return HP.AddVUseOtherRChange<long>(constructSpeed, ship.MoneyPool.Money, 10) > 0;
+        return HP.AddVUseOtherRChange<long>(constructSpeed, ship.MoneyPool.Money, 1) > 0;
 
     }
     public bool BeAttacked(Bullet bullet)
