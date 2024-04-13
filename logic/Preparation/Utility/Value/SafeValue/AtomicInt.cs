@@ -176,7 +176,7 @@ namespace Preparation.Utility
         {
             get
             {
-                return Interlocked.CompareExchange(ref score, null, null);
+                return Interlocked.CompareExchange(ref score!, null, null);
             }
             set
             {
