@@ -36,7 +36,7 @@ namespace installer.Model
     public abstract class Logger : IDisposable
     {
         private int jobID = 0;
-        public Logger? Partner;
+        public List<Logger> Partner = new List<Logger>();
         public string PartnerInfo = string.Empty;
         public Dictionary<LogLevel, int> CountDict = new Dictionary<LogLevel, int>
         {
@@ -60,12 +60,12 @@ namespace installer.Model
         protected virtual void Log(LogLevel logLevel, int eventId, string message)
         {
             CountDict[logLevel] += 1;
-            Partner?.Log(logLevel, eventId, PartnerInfo + message);
+            Partner.ForEach(i => i.Log(logLevel, eventId, PartnerInfo + message));
         }
         protected virtual void Log(LogLevel logLevel, string message)
         {
             CountDict[logLevel] += 1;
-            Partner?.Log(logLevel, PartnerInfo + message);
+            Partner.ForEach(i => i.Log(logLevel, PartnerInfo + message));
         }
         public int StartNew() => (jobID++);
         public void LogDebug(int eventId, string message)
@@ -275,6 +275,7 @@ namespace installer.Model
                     break;
             }
             writer.Flush();
+            writer.Dispose();
             mutex.ReleaseMutex();
             base.Log(logLevel, eventId, message);
         }
@@ -316,6 +317,7 @@ namespace installer.Model
                     break;
             }
             writer.Flush();
+            writer.Dispose();
             mutex.ReleaseMutex();
             base.Log(logLevel, message);
         }
