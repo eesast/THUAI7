@@ -67,9 +67,10 @@ public class Construction(XY initPos)
         }
         if (HP == 0)
         {
-            constructionType = ConstructionType.Null;
+            lock(lockOfConstructionType)
+                constructionType = ConstructionType.Null;
         }
-        return HP < HP.GetMaxV() * 0.5;
+        return HP.IsBelowMaxTimes(0.5);
     }
     public void AddConstructNum(int add = 1)
     {
