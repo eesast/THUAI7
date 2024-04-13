@@ -85,7 +85,7 @@ namespace Client
             {
                 CircleLabel bulletinfo = new()
                 {
-                    CLDiameter = unitWidth * 1,
+                    CLDiameter = unitWidth * 0.4,
                     HorizontalOptions = LayoutOptions.Start,
                     VerticalOptions = LayoutOptions.Start,
                     CLBackgroundColor = Colors.Black,

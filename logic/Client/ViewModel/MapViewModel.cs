@@ -280,12 +280,12 @@ namespace Client.ViewModel
                 long team_id = data.TeamId;
                 switch (team_id)
                 {
-                    case (long)PlayerTeam.Red:
+                    case 0:
                         System.Diagnostics.Debug.WriteLine("shipinfo.color = red");
                         shipinfo.Color = Colors.DarkRed;
                         break;
 
-                    case (long)PlayerTeam.Blue:
+                    case 1:
                         System.Diagnostics.Debug.WriteLine("shipinfo.color = blue");
 
                         shipinfo.Color = Colors.DarkBlue;
@@ -318,7 +318,9 @@ namespace Client.ViewModel
         {
             for (int i = 0; i < BulletCircList.Count; i++)
             {
-                BulletCircList[i].Color = Colors.Transparent;
+                //BulletCircList[i].Color = Colors.Transparent;
+                BulletCircList[i].X = 51;
+                BulletCircList[i].Y = 51;
                 BulletCircList[i].Text = "";
             }
             System.Diagnostics.Debug.WriteLine(String.Format("listOfBullet.Count:{0}", listOfBullet.Count));
@@ -331,14 +333,17 @@ namespace Client.ViewModel
                 bulletinfo.X = point.X;
                 bulletinfo.Y = point.Y;
                 long team_id = data.TeamId;
+                System.Diagnostics.Debug.WriteLine(String.Format("bulletinfo.X:{0}", bulletinfo.X));
+                System.Diagnostics.Debug.WriteLine(String.Format("bulletinfo.Y:{0}", bulletinfo.Y));
+                //System.Diagnostics.Debug.WriteLine(String.Format("Bullet{0}.Teamid:{1}", i, data.TeamId));
                 switch (team_id)
                 {
-                    case (long)PlayerTeam.Red:
+                    case 0:
                         System.Diagnostics.Debug.WriteLine("bulletinfo.color = red");
                         bulletinfo.Color = Colors.DarkRed;
                         break;
 
-                    case (long)PlayerTeam.Blue:
+                    case 1:
                         System.Diagnostics.Debug.WriteLine("bulletinfo.color = blue");
                         bulletinfo.Color = Colors.DarkBlue;
                         break;
