@@ -66,7 +66,6 @@ namespace installer.Model
                     Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
                     , "THUAI7", "Data"));
                 Config.InstallPath = dir.FullName;
-                Config.MD5DataPath = Config.InstallPath;
                 MD5DataPath = Path.Combine(Config.InstallPath, "hash.json");
                 Config.MD5DataPath = $".{Path.DirectorySeparatorChar}hash.json";
                 CurrentVersion = FileHashData.Version;
@@ -137,7 +136,6 @@ namespace installer.Model
                     Path.Combine(Config.InstallPath, Config.MD5DataPath) :
                     Config.MD5DataPath;
                 SaveMD5Data();
-                Installed = true;
             }
             catch (Exception e)
             {
