@@ -104,22 +104,24 @@ namespace installer.Model
             {
                 if (Config.InstallPath != newPath)
                 {
+                    var oldPath = Config.InstallPath;
+                    Config.InstallPath = newPath;
                     if (!Directory.Exists(newPath))
                     {
                         Directory.CreateDirectory(newPath);
                     }
-                    Log.LogInfo($"Move work started: {Config.InstallPath} -> {newPath}");
+                    Log.LogInfo($"Move work started: {oldPath} -> {newPath}");
                     Action<DirectoryInfo> action = (dir) => { };
                     var moveTask = (DirectoryInfo dir) =>
                     {
                         foreach (var file in dir.EnumerateFiles())
                         {
-                            var newName = Path.Combine(newPath, FileService.ConvertAbsToRel(Config.InstallPath, file.FullName));
+                            var newName = Path.Combine(newPath, FileService.ConvertAbsToRel(oldPath, file.FullName));
                             file.MoveTo(newName);
                         }
                         foreach (var sub in dir.EnumerateDirectories())
                         {
-                            var newName = Path.Combine(newPath, FileService.ConvertAbsToRel(Config.InstallPath, sub.FullName));
+                            var newName = Path.Combine(newPath, FileService.ConvertAbsToRel(oldPath, sub.FullName));
                             if (!Directory.Exists(newName))
                             {
                                 Directory.CreateDirectory(newName);
@@ -128,9 +130,8 @@ namespace installer.Model
                         }
                     };
                     action = moveTask;
-                    moveTask(new DirectoryInfo(Config.InstallPath));
-                    Directory.Delete(Config.InstallPath, true);
-                    Config.InstallPath = newPath;
+                    moveTask(new DirectoryInfo(oldPath));
+                    Directory.Delete(oldPath, true);
                 }
                 MD5DataPath = Config.MD5DataPath.StartsWith('.') ?
                     Path.Combine(Config.InstallPath, Config.MD5DataPath) :
