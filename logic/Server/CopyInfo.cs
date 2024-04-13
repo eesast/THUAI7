@@ -35,7 +35,7 @@ namespace Server
                         return Fort(construction);
                     return null;
                 case GameObjType.Wormhole:
-                    return Wormhole(((WormholeCell)gameObj).Wormhole);
+                    return Wormhole((WormholeCell)gameObj);
                 default: return null;
             }
         }
@@ -207,14 +207,16 @@ namespace Server
             };
             return msg;
         }
-        private static MessageOfObj Wormhole(Wormhole wormhole)
+        private static MessageOfObj Wormhole(WormholeCell wormhole)
         {
             MessageOfObj msg = new()
             {
                 WormholeMessage = new()
                 {
-                    Hp = (int)wormhole.HP,
-                    Id = wormhole.ID,
+                    X = wormhole.Position.x,
+                    Y = wormhole.Position.y,
+                    Hp = (int)wormhole.Wormhole.HP,
+                    Id = wormhole.Wormhole.ID,
                 }
             };
             return msg;
