@@ -13,10 +13,10 @@ public class MoneyPool : IMoneyPool
     }
     public long AddMoney(long add)
     {
-        return Money.AddRNow(add);
+        return Money.AddRChange(add);
     }
     public long SubMoney(long sub)
     {
-        return Money.SubRNow(sub);
+        return Money.SubRChange(sub);
     }
 }
