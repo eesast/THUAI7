@@ -446,46 +446,33 @@ namespace installer.ViewModel
             });
         }
 
-        private async void Start()
+        private void Start()
         {
-            await Task.Run(() =>
+            Process.Start(new ProcessStartInfo()
             {
-                Process.Start(new ProcessStartInfo()
-                {
-                    FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Server", "Server.exe"),
-                    Arguments = $"--ip {IP} --port {Port}"
-                });
+                FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Server", "Server.exe"),
+                Arguments = $"--ip {IP} --port {Port}"
             });
-            await Task.Run(() =>
+            Process.Start(new ProcessStartInfo()
             {
-                Process.Start(new ProcessStartInfo()
-                {
-                    FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
-                });
+                FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
             });
-
             if (CppSelect && PlaybackFile == null)
             {
-                await Task.Run(() =>
+                Process.Start(new ProcessStartInfo()
                 {
-                    Process.Start(new ProcessStartInfo()
-                    {
-                        FileName = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "cpp", "x64", "Debug", "CAPI.exe"),
-                        Arguments = $"--I {IP} --P {Port} -t {TeamID} -p {PlayerID} -d"
-                    });
+                    FileName = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "cpp", "x64", "Debug", "CAPI.exe"),
+                    Arguments = $"--I {IP} --P {Port} -t {TeamID} -p {PlayerID} -d"
                 });
             }
             else if (PySelect && PlaybackFile == null)
             {
-                await Task.Run(() =>
+                Process.Start(new ProcessStartInfo()
                 {
-                    Process.Start(new ProcessStartInfo()
-                    {
-                        FileName = "cmd.exe",
-                        Arguments = "/c python"
-                                  + Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py")
-                                  + $"--I {IP} --P {Port} -t {TeamID} -p {PlayerID} -d"
-                    });
+                    FileName = "cmd.exe",
+                    Arguments = "/c python"
+                                + Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py")
+                                + $"--I {IP} --P {Port} -t {TeamID} -p {PlayerID} -d"
                 });
             }
         }
