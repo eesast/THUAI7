@@ -312,8 +312,7 @@ namespace installer.Data
         }
 
         public string InstallerPath
-        {
-            get => file.InstallerPath;
+        { [RequiresAssemblyFiles()] get => file.InstallerPath;
         }
 
         public string Token

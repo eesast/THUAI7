@@ -87,7 +87,7 @@ namespace installer.Model
         /// <param name="type">编程语言，格式为"cpp"或"python"</param>
         /// <param name="plr">第x位玩家，格式为"player_x"</param>
         /// <returns>-1:tokenFail;-2:FileNotExist;-3:CosFail;-4:loginTimeout;-5:Fail;-6:ReadFileFail;-7:networkError</returns>
-        public async Task<int> UploadFiles(HttpClient client, string userfile, string type, string plr)    //用来上传文件
+        public async Task<int> UploadFilesAsync(HttpClient client, string userfile, string type, string plr)    //用来上传文件
         {
             if (Status != LoginStatus.logined)
             {
@@ -179,7 +179,7 @@ namespace installer.Model
             }
         }
 
-        
+
         public async Task<string?> GetTeamId()
         {
             /*
@@ -203,7 +203,7 @@ namespace installer.Model
             */
             return "0";
         }
-        
+
 
         public async Task<string> GetUserId(string learnNumber)
         {

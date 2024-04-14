@@ -9,6 +9,7 @@ using COSXML.Common;
 using COSXML.Transfer;
 using System;
 using installer.Data;
+using System.Threading.Tasks;
 
 // 禁用对没有调用异步API的异步函数的警告
 #pragma warning disable CS1998
@@ -68,7 +69,7 @@ namespace installer.Model
             manager = new TransferManager(cosXml, transfer);
         }
 
-        public async Task<int> DownloadFileAsync(string savePath, string? remotePath = null, CancellationToken? token = null)
+        public int DownloadFile(string savePath, string? remotePath = null)
         {
             int thID = Log.StartNew();
             // download_dir标记根文件夹路径，key为相对根文件夹的路径（不带./）
@@ -87,7 +88,6 @@ namespace installer.Model
                     ?? throw new Exception("本地文件夹路径获取失败");
                 string localFileName = Path.GetFileName(savePath);    // 指定本地保存的文件名
                 remotePath = remotePath?.Replace('\\', '/')?.TrimStart('.', '/');
-                COSXMLDownloadTask task = new COSXMLDownloadTask(bucket, remotePath ?? localFileName, localDir, localFileName);
                 var head = cosXml.HeadObject(new HeadObjectRequest(bucket, remotePath ?? localFileName));
                 long c = 0;
                 if (head.size > (100 << 20))
@@ -100,6 +100,7 @@ namespace installer.Model
                         string.Format("{0:##.#}GB", ((double)head.size) / (1 << 30)) :
                         string.Format("{0:##.#}MB", ((double)head.size) / (1 << 20));
                     Log.LogWarning($"Big file({size}) detected! Please keep network steady!");
+                    COSXMLDownloadTask task = new COSXMLDownloadTask(bucket, remotePath ?? localFileName, localDir, localFileName);
                     task.progressCallback = (completed, total) =>
                     {
                         if (completed > 1 << 30 && completed - c > 100 << 20)
@@ -114,22 +115,29 @@ namespace installer.Model
                         }
                         (Report.Completed, Report.Total) = (completed, total);
                     };
+                    // 执行请求                
+                    var result = manager.DownloadAsync(task).Result;
+                    // 请求成功
+                    if (result is not null && result.httpCode != 200 && result.httpCode != 206)
+                        throw new Exception($"Download task: {{\"{remotePath}\"->\"{savePath}\"}} failed, message: {result.httpCode} {result.httpMessage}");
+                    Log.LogDebug(thID, $"Download task: {{\"{remotePath}\"->\"{savePath}\"}} finished.");
                 }
                 else
                 {
                     if (Report.Completed > 0 && Report.Total > 0 && Report.Completed == Report.Total)
                         Report.BigFileTraceEnabled = false;
+                    var request = new GetObjectRequest(bucket, remotePath ?? localFileName, localDir, localFileName);
+                    // 执行请求                
+                    var result = cosXml.GetObject(request);
+                    // 请求成功
+                    if (result.httpCode != 200 && result.httpCode != 206)
+                        throw new Exception($"Download task: {{\"{remotePath}\"->\"{savePath}\"}} failed, message: {result.httpCode} {result.httpMessage}");
+                    Log.LogDebug(thID, $"Download task: {{\"{remotePath}\"->\"{savePath}\"}} finished.");
+
                 }
 
                 if (Report.BigFileTraceEnabled)
                     Report.Completed = Report.Total;
-
-                // 执行请求                
-                var result = await manager.DownloadAsync(task);
-                // 请求成功
-                if (result.httpCode != 200)
-                    throw new Exception($"Download task: {{\"{remotePath}\"->\"{savePath}\"}} failed, message: {result.httpCode} {result.httpMessage}");
-                Log.LogDebug(thID, $"Download task: {{\"{remotePath}\"->\"{savePath}\"}} finished.");
             }
             catch (Exception ex)
             {
@@ -140,7 +148,7 @@ namespace installer.Model
             return thID;
         }
 
-        public async Task<int> DownloadQueueAsync(string basePath, IEnumerable<string> queue)
+        public int DownloadQueue(string basePath, IEnumerable<string> queue)
         {
             int thID = Log.StartNew();
             Log.LogDebug(thID, "Batch download task started.");
@@ -149,7 +157,7 @@ namespace installer.Model
             Report.ComCount = 0;
             if (Report.Count == 0)
                 return 0;
-            var partitionar = Partitioner.Create(0, Report.Count);
+            var partitionar = Partitioner.Create(0, Report.Count, Report.Count / 4);
             var c = 0;
             Parallel.ForEach(partitionar, (range, loopState) =>
             {
@@ -180,7 +188,7 @@ namespace installer.Model
             return thID;
         }
 
-        public async Task ArchieveUnzipAsync(string zipPath, string targetDir)
+        public void ArchieveUnzip(string zipPath, string targetDir)
         {
             Stream? inStream = null;
             Stream? gzipStream = null;
@@ -212,7 +220,7 @@ namespace installer.Model
             }
         }
 
-        public async Task UploadFileAsync(string localPath, string targetPath)
+        public void UploadFile(string localPath, string targetPath)
         {
             int thID = Log.StartNew();
             Log.LogInfo(thID, $"Upload task: {{\"{localPath}\"->\"{targetPath}\"}} started.");
@@ -228,11 +236,9 @@ namespace installer.Model
 
             uploadTask.SetSrcPath(localPath);
 
-            COSXMLUploadTask.UploadTaskResult result = await transferManager.UploadAsync(uploadTask);
-
             try
             {
-                COSXMLUploadTask.UploadTaskResult r = await transferManager.UploadAsync(uploadTask);
+                COSXMLUploadTask.UploadTaskResult r = transferManager.UploadAsync(uploadTask).Result;
                 if (r.httpCode != 200)
                     Log.LogError(thID, $"Upload task: {{\"{localPath}\"->\"{targetPath}\"}} failed, message: {r.httpMessage}");
                 string eTag = r.eTag;
@@ -244,5 +250,26 @@ namespace installer.Model
             }
             Log.LogInfo(thID, $"Upload task: {{\"{localPath}\"->\"{targetPath}\"}} finished.");
         }
+
+        #region 异步方法包装
+        public Task<int> DownloadFileAsync(string savePath, string? remotePath = null)
+        {
+            return Task.Run(() => DownloadFile(savePath, remotePath));
+        }
+
+        public Task<int> DownloadQueueAsync(string basePath, IEnumerable<string> queue)
+        {
+            return Task.Run(() => DownloadQueue(basePath, queue));
+        }
+        public Task ArchieveUnzipAsync(string zipPath, string targetDir)
+        {
+            return Task.Run(() => ArchieveUnzip(zipPath, targetDir));
+        }
+
+        public Task UploadFileAsync(string localPath, string targetPath)
+        {
+            return Task.Run(() => UploadFile(localPath, targetPath));
+        }
+        #endregion
     }
 }
