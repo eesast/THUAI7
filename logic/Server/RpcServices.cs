@@ -13,11 +13,13 @@ namespace Server
         protected bool isSpectatorJoin = false;
         protected bool IsSpectatorJoin
         {
-            get {
+            get
+            {
                 lock (spectatorLock) return isSpectatorJoin;
             }
 
-            set {
+            set
+            {
                 lock (spectatorLock)
                     isSpectatorJoin = value;
             }
@@ -44,7 +46,7 @@ namespace Server
             return Task.FromResult(onConnection);
         }
 
-#region 游戏开局调用一次的服务
+        #region 游戏开局调用一次的服务
 
         protected readonly object addPlayerLock = new();
         public override async Task AddPlayer(PlayerMsg request, IServerStreamWriter<MessageToClient> responseStream, ServerCallContext context)
@@ -229,11 +231,11 @@ namespace Server
             return Task.FromResult(MapMsg());
         }
 
-#endregion
+        #endregion
 
-#region 游戏过程中玩家执行操作的服务
+        #region 游戏过程中玩家执行操作的服务
 
-#region 船
+        #region 船
 
         /*public override Task<BoolRes> Activate(ActivateMsg request, ServerCallContext context)
         {
@@ -412,7 +414,8 @@ namespace Server
                             boolRes.ActSuccess = false;
                             return Task.FromResult(boolRes);
                         }
-                        MessageOfNews news = new() {
+                        MessageOfNews news = new()
+                        {
                             TextMessage = request.TextMessage,
                             FromId = request.PlayerId,
                             ToId = request.ToPlayerId
@@ -440,7 +443,8 @@ namespace Server
                             boolRes.ActSuccess = false;
                             return Task.FromResult(boolRes);
                         }
-                        MessageOfNews news = new() {
+                        MessageOfNews news = new()
+                        {
                             BinaryMessage = request.BinaryMessage,
                             FromId = request.PlayerId,
                             ToId = request.ToPlayerId
@@ -467,9 +471,9 @@ namespace Server
             }
         }
 
-#endregion
+        #endregion
 
-#region 大本营
+        #region 大本营
 
         public override Task<BoolRes> InstallModule(InstallMsg request, ServerCallContext context)
         {
@@ -514,7 +518,8 @@ namespace Server
 #if DEBUG
             Console.WriteLine($"TRY BuildShip: ShipType {request.ShipType} from Team {request.TeamId}");
 #endif
-            BoolRes boolRes = new() {
+            BoolRes boolRes = new()
+            {
                 ActSuccess =
                     game.ActivateShip(request.TeamId, Transformation.ShipTypeFromProto(request.ShipType), request.BirthpointIndex) != GameObj.invalidID
             };
@@ -530,7 +535,8 @@ namespace Server
             Console.WriteLine($"TRY BuildShipRID: ShipType {request.ShipType} from Team {request.TeamId}");
 #endif
             var playerId = game.ActivateShip(request.TeamId, Transformation.ShipTypeFromProto(request.ShipType), request.BirthpointIndex);
-            BuildShipRes buildShipRes = new() {
+            BuildShipRes buildShipRes = new()
+            {
                 ActSuccess = playerId != GameObj.invalidID,
                 PlayerId = playerId
             };
@@ -559,8 +565,8 @@ namespace Server
             return Task.FromResult(boolRes);
         }
 
-#endregion
+        #endregion
 
-#endregion
+        #endregion
     }
 }
