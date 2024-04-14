@@ -8,9 +8,8 @@
     <Grid
         HorizontalOptions="Center"
         WidthRequest="600"
-        RowDefinitions="*,*,*,*,*,*,*,*,*,*,*"
+        RowDefinitions="20,*,*,*,*,*,*,*,*,*,*"
         ColumnDefinitions="*">
-
 
         <VerticalStackLayout
             Grid.Row="1"
@@ -25,12 +24,12 @@
                     VerticalOptions="Center"
                     FontSize="16"/>
                 <Entry
-                    WidthRequest="400"
+                    WidthRequest="380"
                     Placeholder="请输入文件路径……"
                     Text="{Binding DownloadPath}"
                     FontSize="16"/>
                 <Button
-                    WidthRequest="100"
+                    WidthRequest="120"
                     Text="选择文件夹"
                     BorderWidth="2"
                     Command="{Binding BrowseBtnClickedCommand}"
@@ -69,8 +68,28 @@
                     TextColor="{Binding ConstTextColor}"/>
             </HorizontalStackLayout>
 
+            <HorizontalStackLayout>
+                <CheckBox
+                    IsChecked="{Binding Installed}"
+                    IsEnabled="False"/>
+                <Label
+                    WidthRequest="200"
+                    Text="是否已下载选手包"
+                    VerticalOptions="Center"
+                    FontSize="{Binding ConstFontSize}"/>
+            </HorizontalStackLayout>
+                
             <Label
-                Text="{Binding DebugAlert1}"/>
+                Text="{Binding DebugAlert}"/>
+
+            <ProgressBar
+                Progress="{Binding NumProgress}"
+                HeightRequest="10"
+                WidthRequest="580"/>
+            <ProgressBar
+                Progress="{Binding FileProgress}"
+                HeightRequest="10"
+                WidthRequest="580"/>
 
             <Frame
                 BorderColor="Gray"
@@ -86,17 +105,12 @@
                     VerticalScrollBarVisibility="Always">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid
-                                ColumnDefinitions="*,*,*,*,*,*,*,*,*,*,*,*"
-                                WidthRequest="570">
 
-                                <Label
-                                    Grid.Column="1"
-                                    Grid.ColumnSpan="10"
-                                    Text="{Binding Message}"
-                                    TextColor="{Binding Color}"/>
+                            <Label
+                                WidthRequest="570"
+                                Text="{Binding Message}"
+                                TextColor="{Binding Color}"/>
 
-                            </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

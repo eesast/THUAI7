@@ -39,7 +39,7 @@ namespace installer.Model
                     LogLevel.Trace => "Black",
                     LogLevel.Debug => "Black",
                     LogLevel.Information => "Black",
-                    LogLevel.Warning => "Yellow",
+                    LogLevel.Warning => "Tan",
                     LogLevel.Error => "Red",
                     LogLevel.Critical => "DarkRed",
                     _ => "White",

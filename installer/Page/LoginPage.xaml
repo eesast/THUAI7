@@ -41,6 +41,14 @@
                 Text="{Binding ID}"
                 FontSize="{Binding ConstFontSize}"/>
 
+            <Label
+                Text="{Binding LoginStatus}"
+                FontSize="{Binding ConstFontSize}"/>
+
+            <Label
+                Text="{Binding RemStatus}"
+                FontSize="{Binding ConstFontSize}"/>
+            
             <Button
                 Text="登录"
                 Command="{Binding LoginBtnClickedCommand}"

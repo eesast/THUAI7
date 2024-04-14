@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using installer.Model;
 using installer.Data;
+using System.Diagnostics;
 
 namespace installer.ViewModel
 {
@@ -65,9 +66,9 @@ namespace installer.ViewModel
 
         private string? ip;
         private string? port;
-        private string? teamID;
-        private string? playerID;
-        private string? shipType;
+        private int teamID;
+        private int playerID;
+        private int shipType;
         private string? playbackFile;
         private string? playbackSpeed;
         private bool cppSelect;
@@ -124,7 +125,7 @@ namespace installer.ViewModel
                 OnPropertyChanged();
             }
         }
-        public string? TeamID
+        public int TeamID
         {
             get => teamID;
             set
@@ -145,7 +146,7 @@ namespace installer.ViewModel
                 OnPropertyChanged();
             }
         }
-        public string? PlayerID
+        public int PlayerID
         {
             get => playerID;
             set
@@ -166,7 +167,7 @@ namespace installer.ViewModel
                 OnPropertyChanged();
             }
         }
-        public string? ShipType
+        public int ShipType
         {
             get => shipType;
             set
@@ -286,7 +287,6 @@ namespace installer.ViewModel
 
 
         private bool saveEnabled;
-        private bool startEnabled;
         public bool SaveEnabled
         {
             get => saveEnabled;
@@ -296,6 +296,7 @@ namespace installer.ViewModel
                 OnPropertyChanged();
             }
         }
+        private bool startEnabled;
         public bool StartEnabled
         {
 
@@ -326,7 +327,9 @@ namespace installer.ViewModel
         }
         private async Task StartBtnClicked()
         {
+            DebugAlert = "Start";
             await Task.Run(() => Start());
+            DebugAlert = "";
         }
 
         private void Save()
@@ -363,8 +366,6 @@ namespace installer.ViewModel
             {
                 try
                 {
-                    if (TeamID == null)
-                        throw new Exception("empty");
                     Downloader.Data.Config.Commands.TeamID = TeamID;
                     teamIDChanged = false;
                 }
@@ -377,8 +378,6 @@ namespace installer.ViewModel
             {
                 try
                 {
-                    if (PlayerID == null)
-                        throw new Exception("empty");
                     Downloader.Data.Config.Commands.PlayerID = PlayerID;
                     playerIDChanged = false;
                 }
@@ -391,9 +390,7 @@ namespace installer.ViewModel
             {
                 try
                 {
-                    if (ShipType == null)
-                        throw new Exception("empty");
-                    Downloader.Data.Config.Commands.ShipType = ShipType;
+                    Downloader.Data.Config.Commands.ShipType = PlayerID;
                     shipTypeChanged = false;
                 }
                 catch (Exception e)
@@ -405,8 +402,6 @@ namespace installer.ViewModel
             {
                 try
                 {
-                    if (PlaybackFile == null)
-                        throw new Exception("empty");
                     Downloader.Data.Config.Commands.PlaybackFile = PlaybackFile;
                     playbackFileChanged = false;
                 }
@@ -453,15 +448,34 @@ namespace installer.ViewModel
 
         private void Start()
         {
-            DebugAlert = IP + " "
-                       + Port + " "
-                       + TeamID + " "
-                       + PlayerID + " "
-                       + ShipType + " "
-                       + PlaybackFile + " "
-                       + PlaybackSpeed;
+            Process.Start(new ProcessStartInfo()
+            {
+                FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Server", "Server.exe"),
+                Arguments = $"--ip {IP} --port {Port}"
+            });
+            Process.Start(new ProcessStartInfo()
+            {
+                FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
+            });
+            if (CppSelect && PlaybackFile == null)
+            {
+                Process.Start(new ProcessStartInfo()
+                {
+                    FileName = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "cpp", "x64", "Debug", "CAPI.exe"),
+                    Arguments = $"--I {IP} --P {Port} -t {TeamID} -p {PlayerID} -d"
+                });
+            }
+            else if (PySelect && PlaybackFile == null)
+            {
+                Process.Start(new ProcessStartInfo()
+                {
+                    FileName = "cmd.exe",
+                    Arguments = "/c python"
+                                + Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py")
+                                + $"--I {IP} --P {Port} -t {TeamID} -p {PlayerID} -d"
+                });
+            }
         }
-
 
         private string? debugAlert;
         public string? DebugAlert
