@@ -243,7 +243,13 @@ namespace installer.Model
                 {
                     Directory.Delete(Path.Combine(newPath, "Logs"), true);
                 }
-                Directory.Move(Path.Combine(installPath, "Logs"), Path.Combine(newPath, "Logs"));
+                Directory.CreateDirectory(Path.Combine(newPath, "Logs"));
+                foreach (var f1 in Directory.EnumerateFiles(Path.Combine(installPath, "Logs")))
+                {
+                    var m = FileService.ConvertAbsToRel(installPath, f1);
+                    var n = Path.Combine(newPath, m);
+                    File.Move(f1, n);
+                }
                 if (Cloud.Log is FileLogger) ((FileLogger)Cloud.Log).Path = Path.Combine(newPath, "Logs", "TencentCos.log");
                 if (Web.Log is FileLogger) ((FileLogger)Web.Log).Path = Path.Combine(newPath, "Logs", "EESAST.log");
                 if (Data.Log is FileLogger) ((FileLogger)Data.Log).Path = Path.Combine(newPath, "Logs", "Local_Data.log");
