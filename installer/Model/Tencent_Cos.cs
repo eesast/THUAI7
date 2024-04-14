@@ -24,6 +24,9 @@ namespace installer.Model
 
         protected CosXmlConfig config;
         protected CosXmlServer cosXml;
+        protected TransferConfig transfer;
+        protected TransferManager manager;
+
         public DownloadReport Report;
 
         public Tencent_Cos(string appid, string region, string bucketName, Logger? _log = null)
@@ -41,12 +44,19 @@ namespace installer.Model
                         .Build();           // 创建 CosXmlConfig 对象
             QCloudCredentialProvider cosCredentialProvider = new DefaultQCloudCredentialProvider("***", "***", 1000);
             cosXml = new CosXmlServer(config, cosCredentialProvider);
+            transfer = new TransferConfig()
+            {
+                DivisionForDownload = 20 << 20,     // 下载分块阈值为20MB
+                SliceSizeForDownload = 10 << 20,    // 下载分块大小为10MB
+            };
+            manager = new TransferManager(cosXml, transfer);
         }
 
         public void UpdateSecret(string secretId, string secretKey, long durationSecond = 1000)
         {
             QCloudCredentialProvider cosCredentialProvider = new DefaultQCloudCredentialProvider(secretId, secretKey, durationSecond);
             cosXml = new CosXmlServer(config, cosCredentialProvider);
+            manager = new TransferManager(cosXml, transfer);
         }
 
         public void UpdateSecret(string secretId, string secretKey, long durationSecond, string token)
@@ -55,9 +65,10 @@ namespace installer.Model
                 secretId, secretKey, durationSecond, token
             );
             cosXml = new CosXmlServer(config, cosCredentialProvider);
+            manager = new TransferManager(cosXml, transfer);
         }
 
-        public async Task<int> DownloadFileAsync(string savePath, string? remotePath = null)
+        public async Task<int> DownloadFileAsync(string savePath, string? remotePath = null, CancellationToken? token = null)
         {
             int thID = Log.StartNew();
             // download_dir标记根文件夹路径，key为相对根文件夹的路径（不带./）
@@ -76,8 +87,8 @@ namespace installer.Model
                     ?? throw new Exception("本地文件夹路径获取失败");
                 string localFileName = Path.GetFileName(savePath);    // 指定本地保存的文件名
                 remotePath = remotePath?.Replace('\\', '/')?.TrimStart('.', '/');
+                COSXMLDownloadTask task = new COSXMLDownloadTask(bucket, remotePath ?? localFileName, localDir, localFileName);
                 var head = cosXml.HeadObject(new HeadObjectRequest(bucket, remotePath ?? localFileName));
-                GetObjectRequest request = new GetObjectRequest(bucket, remotePath ?? localFileName, localDir, localFileName);
                 long c = 0;
                 if (head.size > (100 << 20))
                 {
@@ -89,7 +100,7 @@ namespace installer.Model
                         string.Format("{0:##.#}GB", ((double)head.size) / (1 << 30)) :
                         string.Format("{0:##.#}MB", ((double)head.size) / (1 << 20));
                     Log.LogWarning($"Big file({size}) detected! Please keep network steady!");
-                    request.SetCosProgressCallback((completed, total) =>
+                    task.progressCallback = (completed, total) =>
                     {
                         if (completed > 1 << 30 && completed - c > 100 << 20)
                         {
@@ -102,7 +113,7 @@ namespace installer.Model
                             c = completed;
                         }
                         (Report.Completed, Report.Total) = (completed, total);
-                    });
+                    };
                 }
                 else
                 {
@@ -110,10 +121,11 @@ namespace installer.Model
                         Report.BigFileTraceEnabled = false;
                 }
 
-                // 执行请求
-                GetObjectResult result = cosXml.GetObject(request);
                 if (Report.BigFileTraceEnabled)
                     Report.Completed = Report.Total;
+
+                // 执行请求                
+                var result = await manager.DownloadAsync(task);
                 // 请求成功
                 if (result.httpCode != 200)
                     throw new Exception($"Download task: {{\"{remotePath}\"->\"{savePath}\"}} failed, message: {result.httpCode} {result.httpMessage}");
@@ -168,7 +180,7 @@ namespace installer.Model
             return thID;
         }
 
-        public void ArchieveUnzip(string zipPath, string targetDir)
+        public async Task ArchieveUnzipAsync(string zipPath, string targetDir)
         {
             Stream? inStream = null;
             Stream? gzipStream = null;
@@ -215,12 +227,6 @@ namespace installer.Model
             COSXMLUploadTask uploadTask = new COSXMLUploadTask(bucket, targetPath);
 
             uploadTask.SetSrcPath(localPath);
-
-            uploadTask.progressCallback = delegate (long completed, long total)
-            {
-                if (completed == 1.0)
-                    Log.LogInfo(thID, $"[Upload: {targetPath}] progress = {completed * 100.0 / total:##.##}%");
-            };
 
             COSXMLUploadTask.UploadTaskResult result = await transferManager.UploadAsync(uploadTask);
 

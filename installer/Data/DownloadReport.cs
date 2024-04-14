@@ -15,8 +15,10 @@ namespace installer.Data
         {
             get => bFTE; set
             {
+                mutex.WaitOne();
                 bFTE = value;
                 OnPropertyChanged();
+                mutex.ReleaseMutex();
             }
         }
 
@@ -25,8 +27,10 @@ namespace installer.Data
         {
             get => cot; set
             {
+                mutex.WaitOne();
                 cot = value;
                 OnPropertyChanged();
+                mutex.ReleaseMutex();
             }
         }
 
@@ -35,8 +39,10 @@ namespace installer.Data
         {
             get => com; set
             {
+                mutex.WaitOne();
                 com = value;
                 OnPropertyChanged();
+                mutex.ReleaseMutex();
             }
         }
 
@@ -45,8 +51,10 @@ namespace installer.Data
         {
             get => tot; set
             {
+                mutex.WaitOne();
                 tot = value;
                 OnPropertyChanged();
+                mutex.ReleaseMutex();
             }
         }
 
@@ -55,8 +63,10 @@ namespace installer.Data
         {
             get => cop; set
             {
+                mutex.WaitOne();
                 cop = value;
                 OnPropertyChanged();
+                mutex.ReleaseMutex();
             }
         }
 
@@ -73,5 +83,6 @@ namespace installer.Data
         private long com;
         private long tot;
         private long cop;
+        private Mutex mutex = new Mutex();
     }
 }

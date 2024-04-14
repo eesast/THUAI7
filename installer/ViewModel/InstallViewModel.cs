@@ -74,7 +74,7 @@ namespace installer.ViewModel
             }
         }
 
-        private string numReport;
+        private string numReport = string.Empty;
         public string NumReport
         {
             get => numReport; set
@@ -94,7 +94,7 @@ namespace installer.ViewModel
             }
         }
 
-        private string fileReport;
+        private string fileReport = string.Empty;
         public string FileReport
         {
             get => fileReport; set
@@ -205,7 +205,7 @@ namespace installer.ViewModel
             CheckEnabled = false;
             DownloadEnabled = false;
             UpdateEnabled = false;
-            bool updated = await Task.Run(() => Downloader.CheckUpdate());
+            bool updated = await Downloader.CheckUpdateAsync();
             if (updated)
             {
                 DebugAlert = "Need to update.";
@@ -229,11 +229,11 @@ namespace installer.ViewModel
             UpdateEnabled = false;
             if (Downloader.Data.Installed)
             {
-                await Task.Run(() => Downloader.ResetInstallPath(DownloadPath));
+                await Downloader.ResetInstallPathAsync(DownloadPath);
             }
             else
             {
-                await Task.Run(() => Downloader.Install(DownloadPath));
+                await Downloader.InstallAsync(DownloadPath);
             }
             Installed = Downloader.Data.Installed;
             CheckEnabled = true;
@@ -247,7 +247,7 @@ namespace installer.ViewModel
             CheckEnabled = false;
             DownloadEnabled = false;
             UpdateEnabled = false;
-            await Task.Run(() => Downloader.Update());
+            await Downloader.UpdateAsync();
             CheckEnabled = true;
             BrowseEnabled = true;
         }

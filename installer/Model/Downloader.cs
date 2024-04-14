@@ -47,8 +47,6 @@ namespace installer.Model
         public string Route { get; set; }
         public string Username { get => Web.Username; set { Web.Username = value; } }
         public string Password { get => Web.Password; set { Web.Password = value; } }
-        public string UserId { get => Web.ID; }
-        public string UserEmail { get => Web.Email; }
         public Data.Command Commands
         {
             get => Data.Config.Commands;
@@ -120,7 +118,7 @@ namespace installer.Model
             Cloud.UpdateSecret(MauiProgram.SecretID, MauiProgram.SecretKey);
         }
 
-        public void UpdateMD5()
+        public async Task UpdateMD5Async()
         {
             if (File.Exists(Data.MD5DataPath))
                 File.Delete(Data.MD5DataPath);
@@ -128,7 +126,7 @@ namespace installer.Model
             Status = UpdateStatus.downloading;
             Log.CountDict[LogLevel.Error] = 0;
             (CloudReport.ComCount, CloudReport.Count) = (0, 1);
-            Cloud.DownloadFileAsync(Data.MD5DataPath, "hash.json").Wait();
+            await Cloud.DownloadFileAsync(Data.MD5DataPath, "hash.json");
             if (Log.CountDict[LogLevel.Error] > 0)
             {
                 Status = UpdateStatus.error;
@@ -142,11 +140,11 @@ namespace installer.Model
         /// <summary>
         /// 全新安装
         /// </summary>
-        public void Install(string? path = null)
+        public async Task InstallAsync(string? path = null)
         {
             Data.Installed = false;
             Data.Config.InstallPath = path ?? Data.Config.InstallPath;
-            UpdateMD5();
+            await UpdateMD5Async();
             if (Status == UpdateStatus.error)
             {
                 Log.LogError($"校验文件下载失败，退出安装。");
@@ -169,31 +167,45 @@ namespace installer.Model
             };
             action = deleteTask;
             Log.LogWarning($"全新安装开始，所有位于{Data.Config.InstallPath}的文件都将被删除。");
-            deleteTask(new DirectoryInfo(Data.Config.InstallPath));
-
+            if (Directory.Exists(Data.Config.InstallPath))
+                deleteTask(new DirectoryInfo(Data.Config.InstallPath));
+            else
+                Directory.CreateDirectory(Data.Config.InstallPath);
+            if (Directory.Exists(Path.Combine(Data.Config.InstallPath, "Logs")))
+            {
+                Directory.Delete(Path.Combine(Data.Config.InstallPath, "Logs"), true);
+            }
+            Directory.CreateDirectory(Path.Combine(Data.Config.InstallPath, "Logs"));
+            if (Cloud.Log is FileLogger) ((FileLogger)Cloud.Log).Path = Path.Combine(Data.Config.InstallPath, "Logs", "TencentCos.log");
+            if (Web.Log is FileLogger) ((FileLogger)Web.Log).Path = Path.Combine(Data.Config.InstallPath, "Logs", "EESAST.log");
+            if (Data.Log is FileLogger) ((FileLogger)Data.Log).Path = Path.Combine(Data.Config.InstallPath, "Logs", "Local_Data.log");
+            if (Log is FileLogger) ((FileLogger)Log).Path = Path.Combine(Data.Config.InstallPath, "Logs", "Main.log");
             Data.ResetInstallPath(Data.Config.InstallPath);
+
 
             string zp = Path.Combine(Data.Config.InstallPath, "THUAI7.tar.gz");
             Status = UpdateStatus.downloading;
-            (CloudReport.Count, CloudReport.ComCount) = (0, 1);
+            (CloudReport.ComCount, CloudReport.Count) = (0, 1);
             Log.LogInfo($"正在下载安装包……");
-            Cloud.DownloadFileAsync(zp, "THUAI7.tar.gz").Wait();
-            CloudReport.Count = 1;
+            await Cloud.DownloadFileAsync(zp, "THUAI7.tar.gz");
+            CloudReport.ComCount = 1;
             Status = UpdateStatus.unarchieving;
             Log.LogInfo($"安装包下载完毕，正在解压……");
-            Cloud.ArchieveUnzip(zp, Data.Config.InstallPath);
+            await Cloud.ArchieveUnzipAsync(zp, Data.Config.InstallPath);
             Log.LogInfo($"解压完成");
             File.Delete(zp);
 
             CurrentVersion = Data.FileHashData.Version;
             Log.LogInfo("正在下载选手代码……");
             Status = UpdateStatus.downloading;
+            CloudReport.Count = 3;
             var c = $"{CurrentVersion.Major}_{CurrentVersion.Minor}";
             var tocpp = Cloud.DownloadFileAsync(Path.Combine(Data.Config.InstallPath, "CAPI", "cpp", "API", "src", "AI.cpp"),
-                $"./Templates/t.{c}.cpp").Result;
+                $"./Templates/t.{c}.cpp").ContinueWith(_ => CloudReport.ComCount++);
             var topy = Cloud.DownloadFileAsync(Path.Combine(Data.Config.InstallPath, "CAPI", "python", "PyAPI", "AI.py"),
-                $"./Templates/t.{c}.py").Result;
-            if (tocpp >= 0 && topy >= 0)
+                $"./Templates/t.{c}.py").ContinueWith(_ => CloudReport.ComCount++);
+            Task.WaitAll(tocpp, topy);
+            if (CloudReport.ComCount == CloudReport.Count)
             {
                 Log.LogInfo("选手代码下载成功！");
             }
@@ -210,7 +222,7 @@ namespace installer.Model
             {
                 Status = UpdateStatus.error;
                 Log.LogInfo($"校验失败，试图进行升级以修复……");
-                Update();
+                await UpdateAsync();
             }
             else
             {
@@ -232,7 +244,7 @@ namespace installer.Model
         /// 已有安装目录时移动安装目录到其他位置
         /// </summary>
         /// <param name="newPath">新的THUAI7根目录</param>
-        public void ResetInstallPath(string newPath)
+        public async Task ResetInstallPathAsync(string newPath)
         {
             newPath = newPath.EndsWith(Path.DirectorySeparatorChar) ? newPath[0..-1] : newPath;
             var installPath = Data.Config.InstallPath.EndsWith(Path.DirectorySeparatorChar) ? Data.Config.InstallPath[0..-1] : Data.Config.InstallPath;
@@ -259,7 +271,7 @@ namespace installer.Model
                 if (Log is FileLogger) ((FileLogger)Log).Path = Path.Combine(newPath, "Logs", "Main.log");
                 Data.ResetInstallPath(newPath);
             }
-            Update();
+            await UpdateAsync();
         }
 
         /// <summary>
@@ -267,9 +279,9 @@ namespace installer.Model
         /// 返回真时则表明需要更新
         /// </summary>
         /// <returns></returns>
-        public bool CheckUpdate()
+        public async Task<bool> CheckUpdateAsync()
         {
-            UpdateMD5();
+            await UpdateMD5Async();
             Data.MD5Update.Clear();
             Log.LogInfo("校验文件中……");
             Status = UpdateStatus.hash_computing;
@@ -290,10 +302,10 @@ namespace installer.Model
         /// <summary>
         /// 更新文件
         /// </summary>
-        public int Update()
+        public async Task<int> UpdateAsync()
         {
             int result = 0;
-            if (CheckUpdate())
+            if (await CheckUpdateAsync())
             {
                 // 如果Major版本号不一致，说明启动器本身需要更新，返回结果为16
                 if (CurrentVersion.Major < Data.FileHashData.Version.Major)
@@ -315,7 +327,7 @@ namespace installer.Model
                                 FileName = "explorer.exe"
                             });
                         }
-                        Task.Run(() =>
+                        await Task.Run(() =>
                         {
                             var t = DateTime.Now;
                             while ((DateTime.Now - t).TotalSeconds < 10) ;
@@ -425,7 +437,7 @@ namespace installer.Model
                     CurrentVersion = Data.FileHashData.Version;
                     Status = UpdateStatus.hash_computing;
                     Log.LogInfo("正在校验……");
-                    if (!CheckUpdate())
+                    if (!await CheckUpdateAsync())
                     {
                         Log.LogInfo("更新成功！");
                         Status = UpdateStatus.success;
@@ -453,7 +465,7 @@ namespace installer.Model
         /// <param name="username">用户名</param>
         /// <param name="password">密码</param>
         /// <returns></returns>
-        public async Task Login(string username = "", string password = "")
+        public async Task LoginAsync(string username = "", string password = "")
         {
             Username = string.IsNullOrEmpty(username) ? Username : username;
             Password = string.IsNullOrEmpty(password) ? Password : password;
@@ -488,7 +500,7 @@ namespace installer.Model
         /// 上传选手代码
         /// </summary>
         /// <param name="player_id">对应玩家id</param>
-        public void UploadFiles(int player_id)
+        public async Task UploadCodeAsync(int player_id)
         {
             string lang;
             switch (Commands.Language)
@@ -503,7 +515,7 @@ namespace installer.Model
                     lang = "unknown";
                     break;
             }
-            Web.UploadFiles(Client, Data.LangEnabled[Commands.Language].Item2, lang, $"player_{player_id}").Wait();
+            await Web.UploadFiles(Client, Data.LangEnabled[Commands.Language].Item2, lang, $"player_{player_id}");
         }
         #endregion
     }

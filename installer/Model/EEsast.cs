@@ -9,14 +9,6 @@ using System.Threading.Tasks;
 
 namespace installer.Model
 {
-    [Serializable]
-    record LoginResponse
-    {
-        // Map `Token` to `token` when serializing
-
-        public string Token { get; set; } = "";
-    }
-
     public enum LoginStatus
     {
         offline, logined
@@ -39,8 +31,6 @@ namespace installer.Model
         public event EventHandler? Token_Changed;
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public string ID { get; protected set; } = string.Empty;
-        public string Email { get; protected set; } = string.Empty;
 
         public Logger Log;
 
@@ -189,8 +179,10 @@ namespace installer.Model
             }
         }
 
-        async public Task<string?> GetTeamId()
+        
+        public async Task<string?> GetTeamId()
         {
+            /*
             var client = new HttpClient();
             var request = new HttpRequestMessage(HttpMethod.Post, "https://api.eesast.com/dev/v1/graphql");
             request.Headers.Add("x-hasura-admin-secret", "hasuraDevAdminSecret");
@@ -208,7 +200,10 @@ namespace installer.Model
             var s2 = (s1 is null) ? null : JsonSerializer.Deserialize<Dictionary<string, List<string>>>(s1 ?? "")["contest_team_member"];
             var sres = (s2 is null) ? null : JsonSerializer.Deserialize<Dictionary<string, string>>(s2[0] ?? "")["team_id"];
             return sres;
+            */
+            return "0";
         }
+        
 
         public async Task<string> GetUserId(string learnNumber)
         {
