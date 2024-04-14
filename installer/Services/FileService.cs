@@ -185,5 +185,13 @@ namespace installer.Services
 
             return builder.ToString();
         }
+
+        public static string GetFileSizeReport(long size)
+        {
+            return size < 1 << 10 ? $"{size}B" :
+                size < 1 << 20 ? $"{(double)size / (1 << 10):##.#}KB" :
+                size < 1 << 30 ? $"{(double)size / (1 << 20):##.#}MB" :
+                $"{(double)size / (1 << 30):##.#}GB";
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -44,6 +45,8 @@ namespace installer.Data
             Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             "THUAI7", "Data"
         );
+        [RequiresAssemblyFiles()]
+        public string InstallerPath { get; set; } = typeof(ConfigDataFile).Assembly.Location;
         public string Token { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
@@ -254,10 +257,6 @@ namespace installer.Data
             com.OnMemoryChanged += (_, _) => OnMemoryChanged?.Invoke(this, new EventArgs());
         }
 
-        public void ReadFileOnWindows()
-        {
-        }
-
         public void SaveFile()
         {
             file.Commands = com.file;
@@ -310,6 +309,11 @@ namespace installer.Data
                 if (temp != value)
                     OnMemoryChanged?.Invoke(this, new EventArgs());
             }
+        }
+
+        public string InstallerPath
+        {
+            get => file.InstallerPath;
         }
 
         public string Token
