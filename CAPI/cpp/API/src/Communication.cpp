@@ -32,7 +32,9 @@ bool Communication::Move(int32_t playerID, int32_t teamID, int64_t time, double 
     auto request = THUAI72Proto::THUAI72ProtobufMoveMsg(playerID, teamID, time, angle);
     auto status = THUAI7Stub->Move(&context, request, &moveResult);
     if (status.ok())
+    {
         return moveResult.act_success();
+    }
     else
         return false;
 }
