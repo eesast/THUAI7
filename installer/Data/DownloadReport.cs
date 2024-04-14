@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,8 +15,8 @@ namespace installer.Data
         {
             get => bFTE; set
             {
-                if (bFTE != value) OnPropertyChanged();
                 bFTE = value;
+                OnPropertyChanged();
             }
         }
 
@@ -24,8 +25,8 @@ namespace installer.Data
         {
             get => cot; set
             {
-                if (cot != value) OnPropertyChanged();
                 cot = value;
+                OnPropertyChanged();
             }
         }
 
@@ -34,8 +35,8 @@ namespace installer.Data
         {
             get => com; set
             {
-                if (com != value) OnPropertyChanged();
                 com = value;
+                OnPropertyChanged();
             }
         }
 
@@ -44,8 +45,8 @@ namespace installer.Data
         {
             get => tot; set
             {
-                if (tot != value) OnPropertyChanged();
                 tot = value;
+                OnPropertyChanged();
             }
         }
 
@@ -54,9 +55,17 @@ namespace installer.Data
         {
             get => cop; set
             {
-                if (cop != value) OnPropertyChanged();
                 cop = value;
+                OnPropertyChanged();
             }
+        }
+
+        public event PropertyChangingEventHandler? OnReport;
+
+        public override void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            OnReport?.Invoke(this, null);
+            base.OnPropertyChanged(propertyName);
         }
 
         private bool bFTE;

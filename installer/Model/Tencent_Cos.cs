@@ -164,6 +164,7 @@ namespace installer.Model
                 }
             });
             Log.LogInfo(thID, "Batch download task finished.");
+            Report.ComCount = Report.Count;
             return thID;
         }
 

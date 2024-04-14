@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Maui.Storage;
 using installer.Model;
+using installer.Services;
 
 namespace installer.ViewModel
 {
@@ -30,6 +31,8 @@ namespace installer.ViewModel
             CheckUpdBtnClickedCommand = new RelayCommand(CheckUpdBtnClicked);
             DownloadBtnClickedCommand = new AsyncRelayCommand(DownloadBtnClicked);
             UpdateBtnClickedCommand = new AsyncRelayCommand(UpdateBtnClicked);
+
+            Downloader.CloudReport.PropertyChanged += ProgressReport;
         }
 
         private string? debugAlert;
@@ -60,6 +63,68 @@ namespace installer.ViewModel
             }
         }
 
+        #region 进度报告区
+        private double numPro = 0;
+        public double NumPro
+        {
+            get => numPro; set
+            {
+                numPro = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string numReport;
+        public string NumReport
+        {
+            get => numReport; set
+            {
+                numReport = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double filePro = 0;
+        public double FilePro
+        {
+            get => filePro; set
+            {
+                filePro = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string fileReport;
+        public string FileReport
+        {
+            get => fileReport; set
+            {
+                fileReport = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool bigFileProEnabled = false;
+        public bool BigFileProEnabled
+        {
+            get => bigFileProEnabled; set
+            {
+                bigFileProEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private void ProgressReport(object? sender, EventArgs e)
+        {
+            var r = Downloader.CloudReport;
+            NumPro = r.Count == 0 ? 1 : (double)r.ComCount / r.Count;
+            NumReport = $"{r.ComCount} / {r.Count}";
+            FilePro = r.Total == 0 ? 1 : (double)r.Completed / r.Total;
+            FileReport = $"{FileService.GetFileSizeReport(r.Completed)} / {FileService.GetFileSizeReport(r.Total)}";
+            BigFileProEnabled = r.BigFileTraceEnabled;
+        }
+        #endregion
+
         private bool installed;
         public bool Installed
         {
@@ -68,25 +133,6 @@ namespace installer.ViewModel
             {
                 installed = value;
                 OnPropertyChanged();
-            }
-        }
-
-        public double NumProgress
-        {
-            get
-            {
-                if (Downloader.CloudReport.Count == 0)
-                    return 1;
-                return Downloader.CloudReport.ComCount / Downloader.CloudReport.Count;
-            }
-        }
-        public double FileProgress
-        {
-            get
-            {
-                if (!Downloader.CloudReport.BigFileTraceEnabled)
-                    return 1;
-                return Downloader.CloudReport.Completed / Downloader.CloudReport.Total;
             }
         }
 
