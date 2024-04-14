@@ -89,6 +89,7 @@
                     FontSize="{Binding ConstFontSize}"/>
                 <ProgressBar
                     Progress="{Binding NumPro}"
+                    HeightRequest="10"
                     WidthRequest="580"/>
             </VerticalStackLayout>
 
@@ -98,7 +99,6 @@
                     Text="{Binding FileReport}"
                     HorizontalOptions="End"
                     FontSize="{Binding ConstFontSize}"/>
-
                 <ProgressBar
                     Progress="{Binding FilePro}"
                     HeightRequest="10"
