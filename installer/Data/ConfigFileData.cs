@@ -20,13 +20,7 @@ namespace installer.Data
 
         public string Port { get; set; } = "8888";
 
-        public int TeamID { get; set; } = 0;
-
-        public int PlayerID { get; set; } = 0;
-
-        public int ShipType { get; set; } = 0;
-
-        public string? PlaybackFile { get; set; } = "CLGG!@#$%^&*()_+";
+        public string? PlaybackFile { get; set; } = "";
 
         public double PlaybackSpeed { get; set; } = 2.0;
 
@@ -35,6 +29,8 @@ namespace installer.Data
         public int LaunchID { get; set; } = 0;
 
         public bool Launched { get; set; } = false;
+
+        public int PlayerID { get; set; } = 2024;
     }
 
     public record ConfigDataFile
@@ -84,6 +80,7 @@ namespace installer.Data
             }
         }
 
+
         public string Port
         {
             get => file.Port;
@@ -91,45 +88,6 @@ namespace installer.Data
             {
                 var temp = file.Port;
                 file.Port = value;
-                if (temp != value)
-                    OnMemoryChanged?.Invoke(this, new EventArgs());
-            }
-        }
-
-
-        public int TeamID
-        {
-            get => file.TeamID;
-            set
-            {
-                var temp = file.TeamID;
-                file.TeamID = value;
-                if (temp != value)
-                    OnMemoryChanged?.Invoke(this, new EventArgs());
-            }
-        }
-
-
-        public int PlayerID
-        {
-            get => file.PlayerID;
-            set
-            {
-                var temp = file.PlayerID;
-                file.PlayerID = value;
-                if (temp != value)
-                    OnMemoryChanged?.Invoke(this, new EventArgs());
-            }
-        }
-
-
-        public int ShipType
-        {
-            get => file.ShipType;
-            set
-            {
-                var temp = file.ShipType;
-                file.ShipType = value;
                 if (temp != value)
                     OnMemoryChanged?.Invoke(this, new EventArgs());
             }
@@ -174,6 +132,7 @@ namespace installer.Data
             }
         }
 
+
         public int LaunchID
         {
             get => file.LaunchID;
@@ -199,6 +158,18 @@ namespace installer.Data
             }
         }
 
+
+        public int PlayerID
+        {
+            get => file.PlayerID;
+            set
+            {
+                var temp = file.PlayerID;
+                file.PlayerID = value;
+                if (temp != value)
+                    OnMemoryChanged?.Invoke(this, new EventArgs());
+            }
+        }
     }
 
     public class ConfigData
