@@ -327,7 +327,9 @@ namespace installer.ViewModel
         }
         private async Task StartBtnClicked()
         {
+            DebugAlert = "Start";
             await Task.Run(() => Start());
+            DebugAlert = "";
         }
 
         private void Save()
@@ -446,13 +448,6 @@ namespace installer.ViewModel
 
         private void Start()
         {
-            // DebugAlert = IP + " "
-            //            + Port + " "
-            //            + TeamID + " "
-            //            + PlayerID + " "
-            //            + ShipType + " "
-            //            + PlaybackFile + " "
-            //            + PlaybackSpeed;
             Process.Start(new ProcessStartInfo()
             {
                 FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Server", "Server.exe"),
@@ -462,6 +457,24 @@ namespace installer.ViewModel
             {
                 FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
             });
+            if (CppSelect && PlaybackFile == null)
+            {
+                Process.Start(new ProcessStartInfo()
+                {
+                    FileName = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "cpp", "x64", "Debug", "CAPI.exe"),
+                    Arguments = $"--I {IP} --P {Port} -t {TeamID} -p {PlayerID} -d"
+                });
+            }
+            else if (PySelect && PlaybackFile == null)
+            {
+                Process.Start(new ProcessStartInfo()
+                {
+                    FileName = "cmd.exe",
+                    Arguments = "/c python"
+                                + Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py")
+                                + $"--I {IP} --P {Port} -t {TeamID} -p {PlayerID} -d"
+                });
+            }
         }
 
         private string? debugAlert;
