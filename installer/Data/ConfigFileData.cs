@@ -29,6 +29,8 @@ namespace installer.Data
         public int LaunchID { get; set; } = 0;
 
         public bool Launched { get; set; } = false;
+
+        public int PlayerID { get; set; } = 2024;
     }
 
     public record ConfigDataFile
@@ -156,6 +158,18 @@ namespace installer.Data
             }
         }
 
+
+        public int PlayerID
+        {
+            get => file.PlayerID;
+            set
+            {
+                var temp = file.PlayerID;
+                file.PlayerID = value;
+                if (temp != value)
+                    OnMemoryChanged?.Invoke(this, new EventArgs());
+            }
+        }
     }
 
     public class ConfigData

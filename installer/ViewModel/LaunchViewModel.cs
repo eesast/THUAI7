@@ -325,7 +325,7 @@ namespace installer.ViewModel
             {
                 FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
             });
-            
+
             if (CppSelect && string.IsNullOrEmpty(PlaybackFile))
             {
                 for (int teamID = 0; teamID <= 1; teamID++)
