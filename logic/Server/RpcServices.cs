@@ -178,20 +178,29 @@ namespace Server
                 }
             }
             bool exitFlag = false;
+            bool firstTime = true;
             do
             {
-                Ship? ship = game.GameMap.GameObjDict[GameObjType.Ship].Cast<Ship>()?.Find(
-                    ship => ship.PlayerID == request.PlayerId);
                 if (request.TeamId == 0)
                     semaDict0[request.PlayerId].Item1.Wait();
                 else if (request.TeamId == 1)
                     semaDict1[request.PlayerId].Item1.Wait();
-                if (request.PlayerId > 0 && (ship == null || ship.IsRemoved == true))
+                Ship? ship = game.GameMap.FindShipInPlayerID(request.TeamId, request.PlayerId);
+                if(ship!=null)
+                {
+                    Console.WriteLine($"Ship {request.PlayerId} exist! IsRemoved {ship.IsRemoved}");
+                }
+                else{
+                    Console.WriteLine($"Ship {request.PlayerId} null");
+                }
+                if (!firstTime && request.PlayerId > 0 && (ship == null || ship.IsRemoved == true))
                 {
                     Console.WriteLine($"Cannot find ship {request.PlayerId}!");
                 }
                 else
                 {
+                    if(firstTime) 
+                        firstTime = false;
                     try
                     {
                         if (currentGameInfo != null && !exitFlag)
@@ -208,6 +217,7 @@ namespace Server
                             exitFlag = true;
                         }
                     }
+                    
                 }
                 if (request.TeamId == 0)
                     semaDict0[request.PlayerId].Item2.Release();
