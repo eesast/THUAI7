@@ -178,6 +178,7 @@ namespace Server
                 }
             }
             bool exitFlag = false;
+            int nullCount = 0;
             do
             {
                 Ship? ship = game.GameMap.GameObjDict[GameObjType.Ship].Cast<Ship>()?.Find(
@@ -186,18 +187,21 @@ namespace Server
                     semaDict0[request.PlayerId].Item1.Wait();
                 else if (request.TeamId == 1)
                     semaDict1[request.PlayerId].Item1.Wait();
-                if (request.PlayerId > 0 && (ship == null || ship.IsRemoved == true))
+                if (request.PlayerId > 0 && nullCount < 10 && (ship == null || ship.IsRemoved == true))
                 {
-                    Console.WriteLine($"Cannot find ship {request.PlayerId}!");
+                    Console.WriteLine($"Cannot Find Ship Or Is Removed");
+                    Console.WriteLine($"Trying Reconnect:{nullCount} times");
+                    nullCount++;
                 }
                 else
                 {
+                    nullCount = 0;
                     try
                     {
                         if (currentGameInfo != null && !exitFlag)
                         {
                             await responseStream.WriteAsync(currentGameInfo);
-                            Console.WriteLine($"Send to Team {request.TeamId} Player{request.PlayerId}!");
+                            Console.WriteLine("Send!");
                         }
                     }
                     catch
