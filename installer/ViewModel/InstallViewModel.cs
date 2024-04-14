@@ -25,7 +25,8 @@ namespace installer.ViewModel
             Downloader = downloader;
             FolderPicker = folderPicker;
 
-            downloadPath = Downloader.Data.Config.InstallPath;
+            DownloadPath = Downloader.Data.Config.InstallPath;
+            Installed = Downloader.Data.Installed;
 
             BrowseBtnClickedCommand = new AsyncRelayCommand(BrowseBtnClicked);
             CheckUpdBtnClickedCommand = new RelayCommand(CheckUpdBtnClicked);
@@ -63,11 +64,24 @@ namespace installer.ViewModel
             }
         }
 
+        private bool installed;
+        public bool Installed
+        {
+            get => installed;
+            set
+            {
+                installed = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         #region 进度报告区
         private double numPro = 0;
         public double NumPro
         {
-            get => numPro; set
+            get => numPro;
+            set
             {
                 numPro = value;
                 OnPropertyChanged();
@@ -77,7 +91,8 @@ namespace installer.ViewModel
         private string numReport;
         public string NumReport
         {
-            get => numReport; set
+            get => numReport;
+            set
             {
                 numReport = value;
                 OnPropertyChanged();
@@ -87,7 +102,8 @@ namespace installer.ViewModel
         private double filePro = 0;
         public double FilePro
         {
-            get => filePro; set
+            get => filePro;
+            set
             {
                 filePro = value;
                 OnPropertyChanged();
@@ -97,7 +113,8 @@ namespace installer.ViewModel
         private string fileReport;
         public string FileReport
         {
-            get => fileReport; set
+            get => fileReport;
+            set
             {
                 fileReport = value;
                 OnPropertyChanged();
@@ -107,7 +124,8 @@ namespace installer.ViewModel
         private bool bigFileProEnabled = false;
         public bool BigFileProEnabled
         {
-            get => bigFileProEnabled; set
+            get => bigFileProEnabled;
+            set
             {
                 bigFileProEnabled = value;
                 OnPropertyChanged();
@@ -125,17 +143,8 @@ namespace installer.ViewModel
         }
         #endregion
 
-        private bool installed;
-        public bool Installed
-        {
-            get => installed;
-            set
-            {
-                installed = value;
-                OnPropertyChanged();
-            }
-        }
 
+        #region 按钮
         private bool browseEnabled = true;
         public bool BrowseEnabled
         {
@@ -152,7 +161,7 @@ namespace installer.ViewModel
             get => checkEnabled;
             set
             {
-                checkEnabled = value;
+                checkEnabled = value && Installed;
                 OnPropertyChanged();
             }
         }
@@ -166,7 +175,6 @@ namespace installer.ViewModel
                 OnPropertyChanged();
             }
         }
-
         private bool updateEnabled = false;
         public bool UpdateEnabled
         {
@@ -236,8 +244,8 @@ namespace installer.ViewModel
                 await Task.Run(() => Downloader.Install(DownloadPath));
             }
             Installed = Downloader.Data.Installed;
-            CheckEnabled = true;
             BrowseEnabled = true;
+            CheckEnabled = true;
         }
         public ICommand UpdateBtnClickedCommand { get; }
         private async Task UpdateBtnClicked()
@@ -248,8 +256,9 @@ namespace installer.ViewModel
             DownloadEnabled = false;
             UpdateEnabled = false;
             await Task.Run(() => Downloader.Update());
-            CheckEnabled = true;
             BrowseEnabled = true;
+            CheckEnabled = true;
         }
+        #endregion
     }
 }
