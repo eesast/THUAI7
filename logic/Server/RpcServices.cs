@@ -180,15 +180,11 @@ namespace Server
             bool exitFlag = false;
             do
             {
-                Ship? ship = game.GameMap.GameObjDict[GameObjType.Ship].Cast<Ship>()?.Find(
-                    ship => ship.PlayerID == request.PlayerId);
-                if (request.TeamId == 0)
-                    semaDict0[request.PlayerId].Item1.Wait();
-                else if (request.TeamId == 1)
-                    semaDict1[request.PlayerId].Item1.Wait();
+                Ship? ship = game.GameMap.FindShipInPlayerID(request.TeamId, request.PlayerId);
+                (request.TeamId == 0 ? semaDict0 : semaDict1)[request.PlayerId].Item1.Wait();
                 if (request.PlayerId > 0 && (ship == null || ship.IsRemoved == true))
                 {
-                    // Console.WriteLine($"Cannot find ship {request.PlayerId}!");
+                    // Console.WriteLine($"Cannot find ship {request.PlayerId} from Team {request.TeamId}!");
                 }
                 else
                 {
@@ -197,7 +193,7 @@ namespace Server
                         if (currentGameInfo != null && !exitFlag)
                         {
                             await responseStream.WriteAsync(currentGameInfo);
-                            Console.WriteLine($"Send to Team {request.TeamId} Player{request.PlayerId}!");
+                            Console.WriteLine($"Send to Player{request.PlayerId} from Team {request.TeamId}!");
                         }
                     }
                     catch
@@ -209,10 +205,7 @@ namespace Server
                         }
                     }
                 }
-                if (request.TeamId == 0)
-                    semaDict0[request.PlayerId].Item2.Release();
-                else if (request.TeamId == 1)
-                    semaDict1[request.PlayerId].Item2.Release();
+                (request.TeamId == 0 ? semaDict0 : semaDict1)[request.PlayerId].Item2.Release();
             } while (game.GameMap.Timer.IsGaming);
         }
 
