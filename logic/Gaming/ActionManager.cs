@@ -2,6 +2,7 @@
 using GameClass.GameObj.Areas;
 using GameEngine;
 using Preparation.Utility;
+using System;
 using System.Threading;
 using Timothy.FrameRateTask;
 
@@ -10,27 +11,29 @@ namespace Gaming
     public partial class Game
     {
         private readonly ActionManager actionManager;
-        private class ActionManager(Map gameMap, ShipManager shipManager)
+        private class ActionManager(Game game, Map gameMap, ShipManager shipManager)
         {
+            private readonly Game game = game;
             private readonly Map gameMap = gameMap;
             private readonly ShipManager shipManager = shipManager;
+            private readonly Random random = new();
             public readonly MoveEngine moveEngine = new(
                     gameMap: gameMap,
                     OnCollision: (obj, collisionObj, moveVec) =>
                     {
-                        //Ship ship = (Ship)obj;
-                        //switch (collisionObj.Type)
-                        //{
-                        //    case GameObjType.Bullet:
-                        //        if (((Bullet)collisionObj).Parent != ship)
-                        //        {
-                        //            // TODO
-                        //            gameMap.Remove((GameObj)collisionObj);
-                        //        }
-                        //        break;
-                        //    default:
-                        //        break;
-                        //}
+                        Ship ship = (Ship)obj;
+                        switch (collisionObj.Type)
+                        {
+                            case GameObjType.Bullet:
+                                if (((Bullet)collisionObj).Parent != ship)
+                                {
+                                    ShipManager.BeStunned(ship, 1000);
+                                    gameMap.Remove((GameObj)collisionObj);
+                                }
+                                break;
+                            default:
+                                break;
+                        }
                         return MoveEngine.AfterCollision.MoveMax;
                     },
                     EndMove: obj =>
@@ -43,11 +46,13 @@ namespace Gaming
             {
                 if (moveTimeInMilliseconds < 5)
                 {
+                    Debugger.Output("Move time is too short.");
                     return false;
                 }
                 long stateNum = shipToMove.SetShipState(RunningStateType.Waiting, ShipStateType.Moving);
                 if (stateNum == -1)
                 {
+                    Debugger.Output("Ship is not commandable.");
                     return false;
                 }
                 new Thread
@@ -101,12 +106,6 @@ namespace Gaming
                     () =>
                     {
                         ship.ThreadNum.WaitOne();
-                        if (!resource.Produce(ship.ProduceSpeed, ship))
-                        {
-                            ship.ThreadNum.Release();
-                            ship.ResetShipState(stateNum);
-                            return;
-                        }
                         if (!ship.StartThread(stateNum, RunningStateType.RunningActively))
                         {
                             ship.ThreadNum.Release();
@@ -119,6 +118,11 @@ namespace Gaming
                             loopCondition: () => stateNum == ship.StateNum && gameMap.Timer.IsGaming,
                             loopToDo: () =>
                             {
+                                if (!resource.Produce(ship.ProduceSpeed / GameData.NumOfStepPerSecond, ship))
+                                {
+                                    ship.ResetShipState(stateNum);
+                                    return false;
+                                }
                                 if (resource.HP == 0)
                                 {
                                     ship.ResetShipState(stateNum);
@@ -157,12 +161,6 @@ namespace Gaming
                     () =>
                     {
                         ship.ThreadNum.WaitOne();
-                        if (!construction.Construct(ship.ConstructSpeed, constructionType, ship))
-                        {
-                            ship.ThreadNum.Release();
-                            ship.ResetShipState(stateNum);
-                            return;
-                        }
                         if (!ship.StartThread(stateNum, RunningStateType.RunningActively))
                         {
                             ship.ThreadNum.Release();
@@ -175,9 +173,59 @@ namespace Gaming
                             loopCondition: () => stateNum == ship.StateNum && gameMap.Timer.IsGaming,
                             loopToDo: () =>
                             {
+                                if (!construction.Construct(ship.ConstructSpeed / GameData.NumOfStepPerSecond, constructionType, ship))
+                                {
+                                    ship.ResetShipState(stateNum);
+                                    return false;
+                                }
                                 if (construction.HP == construction.HP.GetMaxV())
                                 {
                                     ship.ResetShipState(stateNum);
+                                    if (!construction.IsActivated)
+                                    {
+                                        switch (construction.ConstructionType)
+                                        {
+                                            case ConstructionType.Factory:
+                                                game.AddFactory(construction.TeamID);
+                                                break;
+                                            case ConstructionType.Community:
+                                                game.AddBirthPoint(construction.TeamID, construction.Position);
+                                                break;
+                                            case ConstructionType.Fort:
+                                                new Thread
+                                                (
+                                                    () =>
+                                                    {
+                                                        Thread.Sleep(GameData.CheckInterval);
+                                                        new FrameRateTaskExecutor<int>
+                                                        (
+                                                            loopCondition: () =>
+                                                                gameMap.Timer.IsGaming && construction.HP >
+                                                                construction.HP.GetMaxV() * 0.5,
+                                                            loopToDo: () =>
+                                                            {
+                                                                var ships = gameMap.ShipInTheRange(
+                                                                    construction.Position, GameData.FortRange);
+                                                                if (ships == null || ships.Count == 0)
+                                                                {
+                                                                    return true;
+                                                                }
+                                                                var ship = ships[random.Next(ships.Count)];
+                                                                shipManager.BeAttacked(ship,
+                                                                    GameData.FortDamage / GameData.NumOfStepPerSecond,
+                                                                    construction.TeamID);
+                                                                return true;
+                                                            },
+                                                            timeInterval: GameData.CheckInterval,
+                                                            finallyReturn: () => 0
+                                                        ).Start();
+                                                    }
+                                                )
+                                                { IsBackground = true }.Start();
+                                                break;
+                                        }
+                                        construction.IsActivated.Set(true);
+                                    }
                                     return false;
                                 }
                                 return true;
@@ -194,7 +242,7 @@ namespace Gaming
             }
             public bool Repair(Ship ship)
             {
-                Wormhole? wormhole = (Wormhole?)gameMap.OneForInteract(ship.Position, GameObjType.Wormhole);
+                Wormhole? wormhole = ((WormholeCell?)gameMap.OneForInteract(ship.Position, GameObjType.Wormhole))?.Wormhole;
                 if (wormhole == null)
                 {
                     return false;
@@ -213,12 +261,6 @@ namespace Gaming
                     () =>
                     {
                         ship.ThreadNum.WaitOne();
-                        if (!wormhole.Repair(ship.ConstructSpeed, ship))
-                        {
-                            ship.ThreadNum.Release();
-                            ship.ResetShipState(stateNum);
-                            return;
-                        }
                         if (!ship.StartThread(stateNum, RunningStateType.RunningActively))
                         {
                             ship.ThreadNum.Release();
@@ -231,6 +273,11 @@ namespace Gaming
                             loopCondition: () => stateNum == ship.StateNum && gameMap.Timer.IsGaming,
                             loopToDo: () =>
                             {
+                                if (!wormhole.Repair(ship.ConstructSpeed / GameData.NumOfStepPerSecond, ship))
+                                {
+                                    ship.ResetShipState(stateNum);
+                                    return false;
+                                }
                                 if (wormhole.HP == wormhole.HP.GetMaxV())
                                 {
                                     ship.ResetShipState(stateNum);
@@ -243,6 +290,29 @@ namespace Gaming
                         ).Start();
                         ship.ThreadNum.Release();
                         wormhole.SubRepairNum();
+                    }
+                )
+                { IsBackground = true }.Start();
+                return false;
+            }
+            public bool AddMoneyNaturally(Base team)
+            {
+                new Thread
+                (
+                    () =>
+                    {
+                        Thread.Sleep(GameData.CheckInterval);
+                        new FrameRateTaskExecutor<int>
+                        (
+                            loopCondition: () => gameMap.Timer.IsGaming,
+                            loopToDo: () =>
+                            {
+                                team.AddMoney(team.MoneyAddPerSecond / GameData.NumOfStepPerSecond);
+                                return true;
+                            },
+                            timeInterval: GameData.CheckInterval,
+                            finallyReturn: () => 0
+                        ).Start();
                     }
                 )
                 { IsBackground = true }.Start();

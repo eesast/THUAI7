@@ -1,18 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [System.Serializable]
 public struct MessageOfShip
 {
-    // public int x;
-    // public int y;
-    // public int speed;
+    public float x;
+    public float y;
+    public float speed;
     public int hp;
     public int armor;
     public int shield;
     public PlayerTeam playerTeam;
     // public int playerId;
-    // public ShipState shipState;
+    public ShipState shipState;
     public ShipType shipType;
     public int viewRange;
     public ProducerType producerType;
@@ -37,29 +38,15 @@ public struct MessageOfBullet
     // public double bombRange;
     // public int speed;
 }
-
-public struct MessageOfFactory
+[Serializable]
+public struct MessageOfConstruction
 {
-    int x;
-    int y;
-    int hp; // 剩余的血量
-    int team_id;
-}
-
-public struct MessageOfCommunity
-{
-    int x;
-    int y;
-    int hp; // 剩余的血量
-    int team_id;
-}
-
-public struct MessageOfFort
-{
-    int x;
-    int y;
-    int hp; // 剩余的血量
-    int team_id;
+    public int x;
+    public int y;
+    public int hp; // 剩余的血量
+    public ConstructionType constructionType;
+    public PlayerTeam playerTeam;
+    public bool constructed;
 }
 
 public struct MessageOfWormhole
@@ -82,7 +69,10 @@ public struct MessageOfBase
     public int y;
     public int hp;
     public int economy;
+    public int scoreminus;
     public PlayerTeam playerTeam;
+    public ShipDic shipNum;
+    public int shipTotalNum;
 }
 
 public struct MessageOfMap

@@ -2,11 +2,15 @@
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Maui.Storage;
 using installer.ViewModel;
 using installer.Model;
+using System.Text;
+using System.Diagnostics;
+using Microsoft.Maui.LifecycleEvents;
 
 namespace installer
 {
@@ -19,14 +23,34 @@ namespace installer
         public static string SecretKey = "***";
         public static MauiApp CreateMauiApp()
         {
-
             // read SecretID & SecretKey from filePath for debug
-            var filePath = @"D:\SecretKey.csv";
+            var filePath = Debugger.IsAttached ? "D:\\Secret.csv" : Path.Combine(AppContext.BaseDirectory, "Secret.csv");
             var lines = File.ReadAllLines(filePath);
-            if (lines.Length > 0)
+            if (lines.Length >= 4)
             {
-                SecretID = lines[1];
-                SecretKey = lines[2];
+                lines = lines.Select(s => s.Trim().Trim('\r', '\n')).ToArray();
+                using (Aes aes = Aes.Create())
+                {
+                    aes.Key = Convert.FromBase64String(lines[0]);
+                    aes.IV = Convert.FromBase64String(lines[1]);
+                    var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+                    using (MemoryStream memory = new MemoryStream(Convert.FromBase64String(lines[2])))
+                    {
+                        using (CryptoStream crypto = new CryptoStream(memory, decryptor, CryptoStreamMode.Read))
+                        {
+                            using (StreamReader reader = new StreamReader(crypto, Encoding.ASCII))
+                                SecretID = reader.ReadToEnd();
+                        }
+                    }
+                    using (MemoryStream memory = new MemoryStream(Convert.FromBase64String(lines[3])))
+                    {
+                        using (CryptoStream crypto = new CryptoStream(memory, decryptor, CryptoStreamMode.Read))
+                        {
+                            using (StreamReader reader = new StreamReader(crypto, Encoding.ASCII))
+                                SecretKey = reader.ReadToEnd();
+                        }
+                    }
+                }
             }
 
             var builder = MauiApp.CreateBuilder();

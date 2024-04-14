@@ -20,15 +20,17 @@ namespace Preparation.Utility
         public virtual T? CompareExROri(T? newV, T? compareTo) => Interlocked.CompareExchange(ref v, newV, compareTo);
     }
 
-    public class AtomicDouble(double x) : Atomic
+    public class AtomicDouble(double x) : Atomic, IDouble
     {
         private double v = x;
 
         public override string ToString() => Interlocked.CompareExchange(ref v, -2.0, -2.0).ToString();
         public double Get() => Interlocked.CompareExchange(ref v, -2.0, -2.0);
+        public double ToDouble() => Get();
         public static implicit operator double(AtomicDouble adouble) => Interlocked.CompareExchange(ref adouble.v, -2.0, -2.0);
         /// <returns>返回操作前的值</returns>
         public double SetROri(double value) => Interlocked.Exchange(ref v, value);
+        public void Set(double value) => Interlocked.Exchange(ref v, value);
         /// <returns>返回操作前的值</returns>
         public double CompareExROri(double newV, double compareTo) => Interlocked.CompareExchange(ref v, newV, compareTo);
     }

@@ -18,26 +18,58 @@ namespace Gaming
             public long playerID = playerID;
             public ShipType shipType = shipType;
         }
-        private readonly List<Team> teamList;
-        public List<Team> TeamList => teamList;
+        private readonly List<Base> teamList;
+        public List<Base> TeamList => teamList;
         private readonly Map gameMap;
         public Map GameMap => gameMap;
+        private readonly Random random = new();
         public long AddPlayer(PlayerInitInfo playerInitInfo)
         {
             if (!gameMap.TeamExists(playerInitInfo.teamID))
             {
                 return GameObj.invalidID;
             }
-            if (playerInitInfo.shipType != ShipType.Null)
+            if (playerInitInfo.playerID != 0)
             {
                 // Add a ship
-                Ship? newShip = shipManager.AddShip(playerInitInfo.teamID, playerInitInfo.playerID,
-                    playerInitInfo.shipType, teamList[(int)playerInitInfo.teamID].MoneyPool);
+                var shipType = playerInitInfo.shipType;
+                switch (shipType)
+                {
+                    case ShipType.Null:
+                        return GameObj.invalidID;
+                    case ShipType.CivilShip:
+                        if (teamList[(int)playerInitInfo.teamID].ShipPool.GetNum(ShipType.CivilShip)
+                            >= GameData.MaxCivilShipNum)
+                        {
+                            return GameObj.invalidID;
+                        }
+                        break;
+                    case ShipType.WarShip:
+                        if (teamList[(int)playerInitInfo.teamID].ShipPool.GetNum(ShipType.WarShip)
+                            >= GameData.MaxWarShipNum)
+                        {
+                            return GameObj.invalidID;
+                        }
+                        break;
+                    case ShipType.FlagShip:
+                        if (teamList[(int)playerInitInfo.teamID].ShipPool.GetNum(ShipType.FlagShip)
+                            >= GameData.MaxFlagShipNum)
+                        {
+                            return GameObj.invalidID;
+                        }
+                        break;
+                    default:
+                        return GameObj.invalidID;
+                }
+                Ship? newShip = shipManager.AddShip(playerInitInfo.teamID,
+                                                    playerInitInfo.playerID,
+                                                    playerInitInfo.shipType,
+                                                    teamList[(int)playerInitInfo.teamID].MoneyPool);
                 if (newShip == null)
                 {
                     return GameObj.invalidID;
                 }
-                //teamList[(int)playerInitInfo.teamID].AddShip(newShip);
+                teamList[(int)playerInitInfo.teamID].ShipPool.Append(newShip);
                 return newShip.PlayerID;
             }
             else
@@ -46,27 +78,39 @@ namespace Gaming
                 return playerInitInfo.playerID;
             }
         }
-        public bool ActivateShip(long teamID, long playerID, ShipType shipType, int birthPointIndex = 0)
+        public long ActivateShip(long teamID, ShipType shipType, int birthPointIndex = 0)
         {
+            Debugger.Output("Trying to activate: " + teamID + " " + shipType + " at " + birthPointIndex);
             Ship? ship = teamList[(int)teamID].ShipPool.GetObj(shipType);
             if (ship == null)
-                return false;
-            else if (ship.IsRemoved == false)
-                return false;
+            {
+                Debugger.Output("Failed to activate: " + teamID + " " + shipType + ", no ship available");
+                return GameObj.invalidID;
+            }
             if (birthPointIndex < 0)
                 birthPointIndex = 0;
             if (birthPointIndex >= teamList[(int)teamID].BirthPointList.Count)
                 birthPointIndex = teamList[(int)teamID].BirthPointList.Count - 1;
             XY pos = teamList[(int)teamID].BirthPointList[birthPointIndex];
-            Random random = new();
             pos += new XY(((random.Next() & 2) - 1) * 1000, ((random.Next() & 2) - 1) * 1000);
-            return shipManager.ActivateShip(ship, pos);
+            if (shipManager.ActivateShip(ship, pos))
+            {
+                Debugger.Output("Successfully activated: " + teamID + " " + shipType + " at " + pos);
+                return ship.PlayerID;
+            }
+            Debugger.Output("Failed to activate: " + teamID + " " + shipType + " at " + pos + ", rule not permitted");
+            return GameObj.invalidID;
         }
         public bool StartGame(int milliSeconds)
         {
             if (gameMap.Timer.IsGaming)
                 return false;
             // 开始游戏
+            foreach (var team in TeamList)
+            {
+                actionManager.AddMoneyNaturally(team);
+                ActivateShip(team.TeamID, ShipType.CivilShip);
+            }
             new Thread
             (
                 () =>
@@ -87,12 +131,14 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
             {
+                Debugger.Output("Trying to move: " + teamID + " " + shipID + " " + moveTimeInMilliseconds + " " + angle);
                 return actionManager.MoveShip(ship, moveTimeInMilliseconds, angle);
             }
             else
             {
+                Debugger.Output("Failed to move: " + teamID + " " + shipID + ", no ship found");
                 return false;
             }
         }
@@ -101,7 +147,7 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
                 return actionManager.Produce(ship);
             return false;
         }
@@ -110,14 +156,9 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
             {
-                var flag = actionManager.Construct(ship, constructionType);
-                if (constructionType == ConstructionType.Community && flag)
-                {
-                    UpdateBirthPoint();
-                }
-                return flag;
+                return actionManager.Construct(ship, constructionType);
             }
             return false;
         }
@@ -126,7 +167,7 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
                 return moduleManager.InstallModule(ship, moduleType);
             return false;
         }
@@ -135,7 +176,7 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
             {
                 bool validRecoverPoint = false;
                 foreach (XY recoverPoint in teamList[(int)ship.TeamID].BirthPointList)
@@ -158,8 +199,22 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
-                return shipManager.Recycle(ship);
+            if (ship != null && ship.IsRemoved == false)
+            {
+                bool validRecyclePoint = false;
+                foreach (XY recyclePoint in teamList[(int)ship.TeamID].BirthPointList)
+                {
+                    if (GameData.ApproachToInteract(ship.Position, recyclePoint) && ship.Position != recyclePoint)
+                    {
+                        validRecyclePoint = true;
+                        break;
+                    }
+                }
+                if (validRecyclePoint)
+                {
+                    return shipManager.Recycle(ship);
+                }
+            }
             return false;
         }
         public bool Repair(long teamID, long shipID)
@@ -185,7 +240,7 @@ namespace Gaming
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
+            if (ship != null && ship.IsRemoved == false)
                 return attackManager.Attack(ship, angle);
             return false;
         }
@@ -228,72 +283,53 @@ namespace Gaming
             }
             return gameObjList;
         }
-        public void UpdateBirthPoint()
+        public void AddBirthPoint(long teamID, XY pos)
         {
-            gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>()?.ForEach(
-                delegate (Construction construction)
-                {
-                    if (construction.ConstructionType == ConstructionType.Community)
-                    {
-                        bool exist = false;
-                        foreach (XY birthPoint in teamList[(int)construction.TeamID].BirthPointList)
-                        {
-                            if (construction.Position == birthPoint)
-                            {
-                                exist = true;
-                                break;
-                            }
-                        }
-                        if (!exist)
-                        {
-                            teamList[(int)construction.TeamID].BirthPointList.Add(construction.Position);
-                        }
-                    }
-                }
-            );
-            foreach (Team team in teamList)
-            {
-                foreach (XY birthPoint in team.BirthPointList)
-                {
-                    gameMap.GameObjDict[GameObjType.Construction].Cast<Construction>()?.ForEach(
-                        delegate (Construction construction)
-                    {
-                        if (construction.Position == birthPoint)
-                        {
-                            if (construction.ConstructionType != ConstructionType.Community || construction.TeamID != team.TeamID)
-                            {
-                                team.BirthPointList.Remove(birthPoint);
-                            }
-                        }
-                    }
-                    );
-                }
-            }
+            if (!gameMap.TeamExists(teamID))
+                return;
+            if (teamList[(int)teamID].BirthPointList.Contains(pos))
+                return;
+            teamList[(int)teamID].BirthPointList.Add(pos);
+        }
+        public void RemoveBirthPoint(long teamID, XY pos)
+        {
+            if (!gameMap.TeamExists(teamID))
+                return;
+            if (!teamList[(int)teamID].BirthPointList.Contains(pos))
+                return;
+            teamList[(int)teamID].BirthPointList.Remove(pos);
+        }
+        public void AddFactory(long teamID)
+        {
+            if (!gameMap.TeamExists(teamID))
+                return;
+            teamList[(int)teamID].FactoryNum.Add(1);
+        }
+        public void RemoveFactory(long teamID)
+        {
+            if (!gameMap.TeamExists(teamID))
+                return;
+            teamList[(int)teamID].FactoryNum.Sub(1);
         }
         public Game(MapStruct mapResource, int numOfTeam)
         {
             gameMap = new(mapResource);
-            shipManager = new(gameMap);
+            shipManager = new(this, gameMap);
             moduleManager = new();
-            actionManager = new(gameMap, shipManager);
-            attackManager = new(gameMap, shipManager);
+            actionManager = new(this, gameMap, shipManager);
+            attackManager = new(this, gameMap, shipManager);
             teamList = [];
             gameMap.GameObjDict[GameObjType.Home].Cast<GameObj>()?.ForEach(
                 delegate (GameObj gameObj)
                 {
                     if (gameObj.Type == GameObjType.Home)
                     {
-                        teamList.Add(new Team((Home)gameObj));
+                        teamList.Add(new Base((Home)gameObj));
                         teamList.Last().BirthPointList.Add(gameObj.Position);
                         teamList.Last().AddMoney(GameData.InitialMoney);
                     }
-                    /*         if (teamList.Count == numOfTeam)
-                             {
-                                 break;
-                             }*/
                 }
-                );
-
+            );
         }
     }
 }

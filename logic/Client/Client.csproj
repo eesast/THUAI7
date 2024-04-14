@@ -33,6 +33,10 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(RuntimeIdentifierOverride)' != ''">
+		<RuntimeIdentifier>$(RuntimeIdentifierOverride)</RuntimeIdentifier>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
@@ -60,7 +64,8 @@
 	<ItemGroup>
 		<PackageReference Include="CommandLineParser" Version="2.9.1" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-		<PackageReference Include="Google.Protobuf" Version="3.26.0" />
+		<PackageReference Include="FrameRateTask" Version="1.2.0" />
+		<PackageReference Include="Google.Protobuf" Version="3.26.1" />
 		<PackageReference Include="Grpc" Version="2.46.6" />
 		<PackageReference Include="Grpc.Tools" Version="2.62.0">
 			<PrivateAssets>all</PrivateAssets>
@@ -68,10 +73,15 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 
-		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.10" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.20" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="SkiaSharp" Version="2.88.7" />
 
 		<PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
+		
+		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.7" />
+		<PackageReference Include="SkiaSharp.Views.Maui.Core" Version="2.88.7" />
+		
 	</ItemGroup>
 
 
@@ -85,6 +95,9 @@
 		<Compile Update="Old\PlayerStatusBar.xaml.cs">
 			<DependentUpon>PlayerStatusBar.xaml</DependentUpon>
 		</Compile>
+		<Compile Update="View\CircleLabel.xaml.cs">
+		  <DependentUpon>CircleLabel.xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 
@@ -95,10 +108,14 @@
 		<MauiXaml Update="Old\PlayerStatusBar.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="View\CircleLabel.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\dependency\proto\Protos.csproj" />
+		<ProjectReference Include="..\..\playback\Playback\Playback.csproj" />
 	</ItemGroup>
 
 </Project>

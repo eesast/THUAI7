@@ -17,13 +17,12 @@ namespace installer.ViewModel
     {
         private readonly Downloader Downloader;
         private readonly IFolderPicker FolderPicker;
-        public ObservableCollection<Exception> Exceptions { get; private set; }
+        public ObservableCollection<LogRecord> LogCollection { get => Downloader.LogList.List; }
 
         public InstallViewModel(IFolderPicker folderPicker, Downloader downloader)
         {
             Downloader = downloader;
             FolderPicker = folderPicker;
-            Exceptions = new ObservableCollection<Exception>();
 
             downloadPath = Downloader.Data.Config.InstallPath;
 
@@ -33,43 +32,13 @@ namespace installer.ViewModel
             UpdateBtnClickedCommand = new AsyncRelayCommand(UpdateBtnClicked);
         }
 
-        private string? debugAlert1;
-        public string? DebugAlert1
+        private string? debugAlert;
+        public string? DebugAlert
         {
-            get => debugAlert1;
+            get => debugAlert;
             set
             {
-                debugAlert1 = value;
-                OnPropertyChanged();
-            }
-        }
-        private string? debugAlert2;
-        public string? DebugAlert2
-        {
-            get => debugAlert2;
-            set
-            {
-                debugAlert2 = value;
-                OnPropertyChanged();
-            }
-        }
-        private string? debugAlert3;
-        public string? DebugAlert3
-        {
-            get => debugAlert3;
-            set
-            {
-                debugAlert3 = value;
-                OnPropertyChanged();
-            }
-        }
-        private string? debugAlert4;
-        public string? DebugAlert4
-        {
-            get => debugAlert4;
-            set
-            {
-                debugAlert4 = value;
+                debugAlert = value;
                 OnPropertyChanged();
             }
         }
@@ -90,6 +59,37 @@ namespace installer.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        private bool installed;
+        public bool Installed
+        {
+            get => installed;
+            set
+            {
+                installed = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double NumProgress
+        {
+            get
+            {
+                if (Downloader.CloudReport.Count == 0)
+                    return 1;
+                return Downloader.CloudReport.ComCount / Downloader.CloudReport.Count;
+            }
+        }
+        public double FileProgress
+        {
+            get
+            {
+                if (!Downloader.CloudReport.BigFileTraceEnabled)
+                    return 1;
+                return Downloader.CloudReport.Completed / Downloader.CloudReport.Total;
+            }
+        }
+
         private bool browseEnabled = true;
         public bool BrowseEnabled
         {
@@ -132,22 +132,10 @@ namespace installer.ViewModel
             }
         }
 
-        public void UpdateExceptions()
-        {
-            while (Downloader.Exceptions.Count > 0)
-            {
-                var exception = Downloader.Exceptions.Pop();
-                if (exception != null)
-                {
-                    Exceptions.Add(exception);
-                }
-            }
-        }
-
         public ICommand BrowseBtnClickedCommand { get; }
         private async Task BrowseBtnClicked()
         {
-            DebugAlert1 = "Browse Button Clicked";
+            // DebugAlert = "Browse Button Clicked";
             BrowseEnabled = false;
             CheckEnabled = false;
             DownloadEnabled = false;
@@ -162,12 +150,11 @@ namespace installer.ViewModel
                 DownloadPath = DownloadPath;
             }
             BrowseEnabled = true;
-            UpdateExceptions();
         }
         public ICommand CheckUpdBtnClickedCommand { get; }
         private async void CheckUpdBtnClicked()
         {
-            DebugAlert1 = "Check Button Clicked";
+            // DebugAlert = "Check Button Clicked";
             BrowseEnabled = false;
             CheckEnabled = false;
             DownloadEnabled = false;
@@ -175,22 +162,21 @@ namespace installer.ViewModel
             bool updated = await Task.Run(() => Downloader.CheckUpdate());
             if (updated)
             {
-                DebugAlert1 = "Need to update.";
+                DebugAlert = "Need to update.";
                 UpdateEnabled = true;
             }
             else
             {
-                DebugAlert1 = "Nothing to update.";
+                DebugAlert = "Nothing to update.";
                 UpdateEnabled = false;
             }
             BrowseEnabled = true;
             CheckEnabled = true;
-            UpdateExceptions();
         }
         public ICommand DownloadBtnClickedCommand { get; }
         private async Task DownloadBtnClicked()
         {
-            DebugAlert1 = "Download Button Clicked";
+            // DebugAlert = "Download Button Clicked";
             BrowseEnabled = false;
             CheckEnabled = false;
             DownloadEnabled = false;
@@ -203,15 +189,14 @@ namespace installer.ViewModel
             {
                 await Task.Run(() => Downloader.Install(DownloadPath));
             }
+            Installed = Downloader.Data.Installed;
             CheckEnabled = true;
             BrowseEnabled = true;
-            UpdateExceptions();
-            // DebugAlert2 = "Installed" + Downloader.Data.Installed.ToString();
         }
         public ICommand UpdateBtnClickedCommand { get; }
         private async Task UpdateBtnClicked()
         {
-            DebugAlert1 = "Update Button Clicked";
+            // DebugAlert = "Update Button Clicked";
             BrowseEnabled = false;
             CheckEnabled = false;
             DownloadEnabled = false;
@@ -219,7 +204,6 @@ namespace installer.ViewModel
             await Task.Run(() => Downloader.Update());
             CheckEnabled = true;
             BrowseEnabled = true;
-            UpdateExceptions();
         }
     }
 }

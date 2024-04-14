@@ -9,18 +9,19 @@ namespace Client.Model
 {
     public enum MapPatchType
     {
-        Ground = 0,
+        Space = 0,
         RedHome = 1,
         BlueHome = 2,
         Ruin = 3,
-        Grass = 4,
-        River = 5,
-        Garbage = 6,
-        RecycleBank = 7,
-        ChargeStation = 8,
-        SignalTower = 9,
+        Shadow = 4,
+        Asteroid = 5,
+        Resource = 6,
+        Factory = 7,
+        Community = 8,
+        Fort = 9,
         WormHole = 10,
-        Null = 11
+        Null = 11,
+        Construction = 12
     };
 
     public class MapPatch : BindableObject

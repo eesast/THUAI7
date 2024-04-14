@@ -19,6 +19,9 @@
         <ShellContent
             Title="Login"
             ContentTemplate="{DataTemplate local:LoginPage}"/>
+        <ShellContent
+            Title="Help"
+            ContentTemplate="{DataTemplate local:HelpPage}"/>
 
     </FlyoutItem>
     

@@ -4,7 +4,7 @@ package protobuf;
 
 import "MessageType.proto";
 
-message MessageOfSweeper
+message MessageOfShip
 {
     int32 x = 1;
     int32 y = 2;
@@ -15,8 +15,8 @@ message MessageOfSweeper
     int64 team_id = 7;
     int64 player_id = 8;
     int64 guid = 9;
-    SweeperState sweeper_state = 10;
-    SweeperType sweeper_type = 11;
+    ShipState ship_state = 10;
+    ShipType ship_type = 11;
     int32 view_range = 12; 
     ProducerType producer_type = 13;
     ConstructorType constructor_type = 14;
@@ -50,7 +50,7 @@ message MessageOfBombedBullet  //for Unity，直接继承自THUAI5
     double bomb_range = 6; 
 }
 
-message MessageOfRecycleBank
+message MessageOfFactory
 {
     int32 x = 1;
     int32 y = 2;
@@ -58,7 +58,7 @@ message MessageOfRecycleBank
     int64 team_id = 4;
 }
 
-message MessageOfChargeStation
+message MessageOfCommunity
 {
     int32 x = 1;
     int32 y = 2;
@@ -66,7 +66,7 @@ message MessageOfChargeStation
     int64 team_id = 4;
 }
 
-message MessageOfSignalTower
+message MessageOfFort
 {
     int32 x = 1;
     int32 y = 2;
@@ -74,14 +74,15 @@ message MessageOfSignalTower
     int64 team_id = 4;
 }
 
-message MessageOfBridge
+message MessageOfWormhole
 {
     int32 x = 1;
     int32 y = 2;
     int32 hp = 3; // 剩余的血量
+    int32 id = 4;
 }
 
-message MessageOfGarbage
+message MessageOfResource
 {
     int32 x = 1;
     int32 y = 2;
@@ -120,14 +121,14 @@ message MessageOfObj
 {
     oneof message_of_obj
     {
-        MessageOfSweeper sweeper_message = 1;
+        MessageOfShip ship_message = 1;
         MessageOfBullet bullet_message = 2;
-        MessageOfRecycleBank recyclebank_message = 3;
-        MessageOfChargeStation chargestation_message = 4;
-        MessageOfSignalTower signaltower_message = 5;
-        MessageOfBridge bridge_message = 6;
+        MessageOfFactory factory_message = 3;
+        MessageOfCommunity community_message = 4;
+        MessageOfFort fort_message = 5;
+        MessageOfWormhole wormhole_message = 6;
         MessageOfHome home_message = 7;
-        MessageOfGarbage garbage_message = 8;
+        MessageOfResource resource_message = 8;
         MessageOfMap map_message = 9;
         MessageOfNews news_message = 10;
         MessageOfBombedBullet bombed_bullet_message = 11;
@@ -160,14 +161,20 @@ message MoveRes // 如果打算设计撞墙保留平行速度分量，且需要�
     bool act_success = 3;
 }
 
+message BuildShipRes
+{
+    bool act_success = 1;
+    int64 player_id = 2;
+}
+
 message BoolRes
 {
     bool act_success = 1;
 }
 
-message SweeperInfoRes
+message ShipInfoRes
 {
-    repeated MessageOfSweeper sweeper_info = 1;
+    repeated MessageOfShip ship_info = 1;
 }
 
 message EcoRes

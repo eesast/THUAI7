@@ -30,13 +30,13 @@ namespace THUAI7
     {
         NullPlaceType = 0,
         Home = 1,
-        Ground = 2,
-        Wall = 3,
-        Grass = 4,
-        River = 5,
-        Garbage = 6,
+        Space = 2,
+        Ruin = 3,
+        Shadow = 4,
+        Asteroid = 5,
+        Resource = 6,
         Construction = 7,
-        Bridge = 8,
+        Wormhole = 8,
     };
 
     // 形状标志
@@ -49,24 +49,24 @@ namespace THUAI7
 
     enum class PlayerTeam : unsigned char
     {
-        NullTeam = 0,
-        Red = 1,
-        Blue = 2,
+        Red = 0,
+        Blue = 1,
+        NullTeam = 2,
     };
 
     enum class PlayerType : unsigned char
     {
         NullPlayerType = 0,
-        Sweeper = 1,
+        Ship = 1,
         Team = 2,
     };
 
-    enum class SweeperType : unsigned char
+    enum class ShipType : unsigned char
     {
-        NullSweeperType = 0,
-        CivilianSweeper = 1,
-        MilitarySweeper = 2,
-        FlagSweeper = 3,
+        NullShipType = 0,
+        CivilianShip = 1,
+        MilitaryShip = 2,
+        FlagShip = 3,
     };
 
     enum class WeaponType : unsigned char
@@ -133,7 +133,7 @@ namespace THUAI7
         ModuleArcGun = 17,
     };
 
-    enum class SweeperState : unsigned char
+    enum class ShipState : unsigned char
     {
         NullStatus = 0,
         Idle = 1,
@@ -160,22 +160,22 @@ namespace THUAI7
     enum class ConstructionType : unsigned char
     {
         NullConstructionType = 0,
-        RecycleBank = 1,
-        ChargeStation = 2,
-        SignalTower = 3,
+        Factory = 1,
+        Community = 2,
+        Fort = 3,
     };
 
     enum class MessageOfObj : unsigned char
     {
         NullMessageOfObj = 0,
-        SweeperMessage = 1,
+        ShipMessage = 1,
         BulletMessage = 2,
-        RecycleBankMessage = 3,
-        ChargeStationMessage = 4,
-        SignalTowerMessage = 5,
-        BridgeMessage = 6,
+        FactoryMessage = 3,
+        CommunityMessage = 4,
+        FortMessage = 5,
+        WormholeMessage = 6,
         HomeMessage = 7,
-        GarbageMessage = 8,
+        ResourceMessage = 8,
         MapMessage = 9,
         NewsMessage = 10,
         BombedBulletMessage = 11,
@@ -189,7 +189,7 @@ namespace THUAI7
         BinaryMessage = 2,
     };
 
-    struct Sweeper
+    struct Ship
     {
         int32_t x;         // x坐标
         int32_t y;         // y坐标
@@ -197,11 +197,11 @@ namespace THUAI7
         int32_t hp;        // 血量
         int32_t armor;     // 装甲
         int32_t shield;    // 护盾
-        int64_t playerID;  // 船的id
-        int64_t teamID;
-        int64_t guid;               // 全局唯一ID
-        SweeperState sweeperState;  // 船所处状态
-        SweeperType sweeperType;
+        int32_t playerID;  // 船的id
+        int32_t teamID;
+        int64_t guid;         // 全局唯一ID
+        ShipState shipState;  // 船所处状态
+        ShipType shipType;
         int32_t viewRange;
         ProducerType producerType;
         ConstructorType constructorType;
@@ -213,8 +213,8 @@ namespace THUAI7
 
     struct Team
     {
-        int64_t playerID;
-        int64_t teamID;
+        int32_t playerID;
+        int32_t teamID;
         int32_t score;
         int32_t energy;
     };
@@ -224,7 +224,7 @@ namespace THUAI7
         int32_t x;
         int32_t y;
         int32_t hp;
-        int64_t teamID;
+        int32_t teamID;
         int64_t guid;
     };
 
@@ -234,7 +234,7 @@ namespace THUAI7
         int32_t y;               // y坐标
         double facingDirection;  // 朝向
         int64_t guid;            //
-        int64_t teamID;          // 子弹所属队伍
+        int32_t teamID;          // 子弹所属队伍
         BulletType bulletType;   // 子弹类型
         int32_t damage;          // 伤害值
         int32_t attackRange;
@@ -256,12 +256,12 @@ namespace THUAI7
     struct GameMap
     {
         // x,y,id,hp
-        std::map<std::pair<int32_t, int32_t>, std::pair<int64_t, int32_t>> recycleBankState;
-        std::map<std::pair<int32_t, int32_t>, std::pair<int64_t, int32_t>> chargeStationState;
-        std::map<std::pair<int32_t, int32_t>, std::pair<int64_t, int32_t>> signalTowerState;
-        std::map<std::pair<int32_t, int32_t>, std::pair<int64_t, int32_t>> homeState;
-        std::map<std::pair<int32_t, int32_t>, int32_t> bridgeState;
-        std::map<std::pair<int32_t, int32_t>, int32_t> garbageState;
+        std::map<std::pair<int32_t, int32_t>, std::pair<int32_t, int32_t>> factoryState;
+        std::map<std::pair<int32_t, int32_t>, std::pair<int32_t, int32_t>> communityState;
+        std::map<std::pair<int32_t, int32_t>, std::pair<int32_t, int32_t>> fortState;
+        std::map<std::pair<int32_t, int32_t>, std::pair<int32_t, int32_t>> homeState;
+        std::map<std::pair<int32_t, int32_t>, int32_t> wormholeState;
+        std::map<std::pair<int32_t, int32_t>, int32_t> resourceState;
     };
 
     struct GameInfo
@@ -285,23 +285,23 @@ namespace THUAI7
         {GameState::GameEnd, "GameEnd"},
     };
 
-    inline std::map<SweeperType, std::string> sweeperTypeDict{
-        {SweeperType::NullSweeperType, "NullSweeperType"},
-        {SweeperType::CivilianSweeper, "CivilianSweeper"},
-        {SweeperType::MilitarySweeper, "MilitarySweeper"},
-        {SweeperType::FlagSweeper, "FlagSweeper"},
+    inline std::map<ShipType, std::string> shipTypeDict{
+        {ShipType::NullShipType, "NullShipType"},
+        {ShipType::CivilianShip, "CivilianShip"},
+        {ShipType::MilitaryShip, "MilitaryShip"},
+        {ShipType::FlagShip, "FlagShip"},
     };
 
-    inline std::map<SweeperState, std::string> sweeperStateDict{
-        {SweeperState::NullStatus, "NullState"},
-        {SweeperState::Idle, "Idle"},
-        {SweeperState::Producing, "Producing"},
-        {SweeperState::Constructing, "Constructing"},
-        {SweeperState::Recovering, "Recoverying"},
-        {SweeperState::Recycling, "Recycling"},
-        {SweeperState::Attacking, "Attacking"},
-        {SweeperState::Swinging, "Swinging"},
-        {SweeperState::Stunned, "Stunned"},
+    inline std::map<ShipState, std::string> shipStateDict{
+        {ShipState::NullStatus, "NullState"},
+        {ShipState::Idle, "Idle"},
+        {ShipState::Producing, "Producing"},
+        {ShipState::Constructing, "Constructing"},
+        {ShipState::Recovering, "Recoverying"},
+        {ShipState::Recycling, "Recycling"},
+        {ShipState::Attacking, "Attacking"},
+        {ShipState::Swinging, "Swinging"},
+        {ShipState::Stunned, "Stunned"},
     };
 
     inline std::map<PlayerTeam, std::string> playerTeamDict{
@@ -313,11 +313,11 @@ namespace THUAI7
     inline std::map<PlaceType, std::string> placeTypeDict{
         {PlaceType::NullPlaceType, "NullPlaceType"},
         {PlaceType::Home, "Home"},
-        {PlaceType::Ground, "Ground"},
-        {PlaceType::Wall, "Wall"},
-        {PlaceType::Grass, "Grass"},
-        {PlaceType::River, "River"},
-        {PlaceType::Garbage, "Garbage"},
+        {PlaceType::Space, "Space"},
+        {PlaceType::Ruin, "Ruin"},
+        {PlaceType::Shadow, "Shadow"},
+        {PlaceType::Asteroid, "Asteroid"},
+        {PlaceType::Resource, "Resource"},
         {PlaceType::Construction, "Construction"},
     };
 
@@ -332,14 +332,14 @@ namespace THUAI7
 
     inline std::map<MessageOfObj, std::string> messageOfObjDict{
         {MessageOfObj::NullMessageOfObj, "NullMessageOfObj"},
-        {MessageOfObj::SweeperMessage, "SweeperMessage"},
+        {MessageOfObj::ShipMessage, "ShipMessage"},
         {MessageOfObj::BulletMessage, "BulletMessage"},
-        {MessageOfObj::RecycleBankMessage, "RecycleBankMessage"},
-        {MessageOfObj::ChargeStationMessage, "ChargeStationMessage"},
-        {MessageOfObj::SignalTowerMessage, "SignalTowerMessage"},
-        {MessageOfObj::BridgeMessage, "BridgeMessage"},
+        {MessageOfObj::FactoryMessage, "FactoryMessage"},
+        {MessageOfObj::CommunityMessage, "CommunityMessage"},
+        {MessageOfObj::FortMessage, "FortMessage"},
+        {MessageOfObj::WormholeMessage, "WormholeMessage"},
         {MessageOfObj::HomeMessage, "HomeMessage"},
-        {MessageOfObj::GarbageMessage, "GarbageMessage"},
+        {MessageOfObj::ResourceMessage, "ResourceMessage"},
         {MessageOfObj::MapMessage, "MapMessage"},
         {MessageOfObj::NewsMessage, "NewsMessage"},
         {MessageOfObj::BombedBulletMessage, "BombedBulletMessage"},

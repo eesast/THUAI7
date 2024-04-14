@@ -133,19 +133,21 @@ namespace Server
 #endif
             lock (addPlayerLock)
             {
-                Game.PlayerInitInfo playerInitInfo = new(request.TeamId, request.PlayerId, Transformation.ShipTypeFromProto(request.SweeperType));
+                Game.PlayerInitInfo playerInitInfo = new(request.TeamId,
+                                                         request.PlayerId,
+                                                         Transformation.ShipTypeFromProto(request.ShipType));
                 long newPlayerID = game.AddPlayer(playerInitInfo);
                 if (newPlayerID == GameObj.invalidID)
                 {
 #if DEBUG
-                    Console.WriteLine("Fail Add Ship");
+                    Console.WriteLine("FAIL AddPlayer");
 #endif
                     return;
                 }
                 communicationToGameID[request.TeamId][request.PlayerId] = newPlayerID;
                 var temp = (new SemaphoreSlim(0, 1), new SemaphoreSlim(0, 1));
                 bool start = false;
-                Console.WriteLine($"Id: {request.PlayerId} joins.");
+                Console.WriteLine($"Player {request.PlayerId} from Team {request.TeamId} joins.");
                 lock (spectatorJoinLock)  // 为了保证绝对安全，还是加上这个锁吧
                 {
                     if (request.TeamId == 0)
@@ -154,7 +156,7 @@ namespace Server
                         {
                             start = Interlocked.Increment(ref playerCountNow) == (playerNum * TeamCount);
                             Console.WriteLine($"PlayerCountNow: {playerCountNow}");
-                            Console.WriteLine($"PlayerNum: {playerNum * TeamCount}");
+                            Console.WriteLine($"PlayerTotalNum: {playerNum * TeamCount}");
                         }
                     }
                     else if (request.TeamId == 1)
@@ -175,41 +177,43 @@ namespace Server
                     StartGame();
                 }
             }
-
             bool exitFlag = false;
             do
             {
+                Ship? ship = game.GameMap.GameObjDict[GameObjType.Ship].Cast<Ship>()?.Find(
+                    ship => ship.PlayerID == request.PlayerId);
                 if (request.TeamId == 0)
                     semaDict0[request.PlayerId].Item1.Wait();
                 else if (request.TeamId == 1)
                     semaDict1[request.PlayerId].Item1.Wait();
-                try
+                if (request.PlayerId > 0 && (ship == null || ship.IsRemoved == true))
                 {
-                    if (currentGameInfo != null && !exitFlag)
+                    Console.WriteLine($"Cannot find ship {request.PlayerId}!");
+                }
+                else
+                {
+                    try
                     {
-                        await responseStream.WriteAsync(currentGameInfo);
-                        Console.WriteLine("Send!");
+                        if (currentGameInfo != null && !exitFlag)
+                        {
+                            await responseStream.WriteAsync(currentGameInfo);
+                            Console.WriteLine($"Send to Team {request.TeamId} Player{request.PlayerId}!");
+                        }
+                    }
+                    catch
+                    {
+                        if (!exitFlag)
+                        {
+                            Console.WriteLine($"The client {request.PlayerId} exited");
+                            exitFlag = true;
+                        }
                     }
                 }
-                catch
-                {
-                    if (!exitFlag)
-                    {
-                        Console.WriteLine($"The client {request.PlayerId} exited");
-                        exitFlag = true;
-                    }
-                }
-                finally
-                {
-                    if (request.TeamId == 0)
-                        semaDict0[request.PlayerId].Item2.Release();
-                    else if (request.TeamId == 1)
-                        semaDict1[request.PlayerId].Item2.Release();
-                }
+                if (request.TeamId == 0)
+                    semaDict0[request.PlayerId].Item2.Release();
+                else if (request.TeamId == 1)
+                    semaDict1[request.PlayerId].Item2.Release();
             } while (game.GameMap.Timer.IsGaming);
-#if DEBUG
-            Console.WriteLine("END Add Player");
-#endif
         }
 
         public override Task<MessageOfMap> GetMap(NullRequest request, ServerCallContext context)
@@ -238,7 +242,7 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             // var gameID = communicationToGameID[request.TeamId][request.PlayerId];
-            boolRes.ActSuccess = game.ActivateShip(request.TeamId, Transformation.ShipTypeFromProto(request.SweeperType));
+            boolRes.ActSuccess = game.ActivateShip(request.TeamId, Transformation.ShipTypeFromProto(request.ShipType));
             if (!game.GameMap.Timer.IsGaming) boolRes.ActSuccess = false;
 #if DEBUG
             Console.WriteLine($"END Activate: {boolRes.ActSuccess}");
@@ -501,29 +505,42 @@ namespace Server
             return Task.FromResult(boolRes);
         }
 
-        public override Task<BoolRes> BuildSweeper(BuildSweeperMsg request, ServerCallContext context)
+        public override Task<BoolRes> BuildShip(BuildShipMsg request, ServerCallContext context)
         {
 #if DEBUG
-            Console.WriteLine($"TRY BuildSweeper: SweeperType {request.SweeperType} from Team {request.TeamId}");
+            Console.WriteLine($"TRY BuildShip: ShipType {request.ShipType} from Team {request.TeamId}");
 #endif
-            BoolRes boolRes = new();
-            var ship = game.TeamList[(int)request.TeamId].ShipPool.Find(
-                (ship) => ship.PlayerID == request.PlayerId);
-            if (ship == null)
+            BoolRes boolRes = new()
             {
-                boolRes.ActSuccess = false;
-                return Task.FromResult(boolRes);
-            }
-            else if (ship.IsRemoved == false)
-            {
-                boolRes.ActSuccess = false;
-                return Task.FromResult(boolRes);
-            }
-            boolRes.ActSuccess = game.ActivateShip(request.TeamId, request.PlayerId, Transformation.ShipTypeFromProto(request.SweeperType), request.BirthpointIndex);
+                ActSuccess =
+                    game.ActivateShip(request.TeamId,
+                                      Transformation.ShipTypeFromProto(request.ShipType),
+                                      request.BirthpointIndex)
+                    != GameObj.invalidID
+            };
 #if DEBUG
-            Console.WriteLine("END BuildSweeper");
+            Console.WriteLine("END BuildShip");
 #endif
             return Task.FromResult(boolRes);
+        }
+
+        public override Task<BuildShipRes> BuildShipRID(BuildShipMsg request, ServerCallContext context)
+        {
+#if DEBUG
+            Console.WriteLine($"TRY BuildShipRID: ShipType {request.ShipType} from Team {request.TeamId}");
+#endif
+            var playerId = game.ActivateShip(request.TeamId,
+                                             Transformation.ShipTypeFromProto(request.ShipType),
+                                             request.BirthpointIndex);
+            BuildShipRes buildShipRes = new()
+            {
+                ActSuccess = playerId != GameObj.invalidID,
+                PlayerId = playerId
+            };
+#if DEBUG
+            Console.WriteLine("END BuildShipRID");
+#endif
+            return Task.FromResult(buildShipRes);
         }
 
         public override Task<BoolRes> EndAllAction(IDMsg request, ServerCallContext context)

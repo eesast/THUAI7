@@ -11,6 +11,8 @@ namespace Server
     {
         public static MessageOfObj? Auto(GameObj gameObj, long time)
         {
+            if (gameObj.IsRemoved == true)
+                return null;
             switch (gameObj.Type)
             {
                 case GameObjType.Ship:
@@ -33,14 +35,14 @@ namespace Server
                         return Fort(construction);
                     return null;
                 case GameObjType.Wormhole:
-                    return Wormhole((Wormhole)gameObj);
+                    return Wormhole((WormholeCell)gameObj);
                 default: return null;
             }
         }
 
-        public static MessageOfObj? Auto(Team team, long time)
+        public static MessageOfObj? Auto(Base @base, long time)
         {
-            return Team(team, time);
+            return Base(@base, time);
         }
         public static MessageOfObj? Auto(MessageOfNews news)
         {
@@ -55,7 +57,7 @@ namespace Server
         {
             MessageOfObj msg = new()
             {
-                SweeperMessage = new()
+                ShipMessage = new()
                 {
                     X = player.Position.x,
                     Y = player.Position.y,
@@ -66,9 +68,10 @@ namespace Server
                     TeamId = player.TeamID,
                     PlayerId = player.PlayerID,
                     Guid = player.ID,
-                    SweeperState = Transformation.ShipStateToProto(player.ShipState),
-                    SweeperType = Transformation.ShipTypeToProto(player.ShipType),
+                    ShipState = Transformation.ShipStateToProto(player.ShipState),
+                    ShipType = Transformation.ShipTypeToProto(player.ShipType),
                     ViewRange = player.ViewRange,
+                    ProducerType = Transformation.ProducerToProto(player.ProducerModuleType),
                     ConstructorType = Transformation.ConstructorToProto(player.ConstructorModuleType),
                     ArmorType = Transformation.ArmorToProto(player.ArmorModuleType),
                     ShieldType = Transformation.ShieldToProto(player.ShieldModuleType),
@@ -94,7 +97,7 @@ namespace Server
             return msg;
         }
 
-        private static MessageOfObj? Team(Team player, long time)
+        private static MessageOfObj? Base(Base player, long time)
         {
             MessageOfObj msg = new()
             {
@@ -151,7 +154,7 @@ namespace Server
         {
             MessageOfObj msg = new()
             {
-                GarbageMessage = new()
+                ResourceMessage = new()
                 {
                     X = resource.Position.x,
                     Y = resource.Position.y,
@@ -164,7 +167,7 @@ namespace Server
         {
             MessageOfObj msg = new()
             {
-                RecyclebankMessage = new()
+                FactoryMessage = new()
                 {
                     X = construction.Position.x,
                     Y = construction.Position.y,
@@ -179,7 +182,7 @@ namespace Server
         {
             MessageOfObj msg = new()
             {
-                ChargestationMessage = new()
+                CommunityMessage = new()
                 {
                     X = construction.Position.x,
                     Y = construction.Position.y,
@@ -194,7 +197,7 @@ namespace Server
         {
             MessageOfObj msg = new()
             {
-                SignaltowerMessage = new()
+                FortMessage = new()
                 {
                     X = construction.Position.x,
                     Y = construction.Position.y,
@@ -204,15 +207,16 @@ namespace Server
             };
             return msg;
         }
-        private static MessageOfObj Wormhole(Wormhole wormhole)
+        private static MessageOfObj Wormhole(WormholeCell wormhole)
         {
             MessageOfObj msg = new()
             {
-                BridgeMessage = new()
+                WormholeMessage = new()
                 {
                     X = wormhole.Position.x,
                     Y = wormhole.Position.y,
-                    Hp = (int)wormhole.HP,
+                    Hp = (int)wormhole.Wormhole.HP,
+                    Id = wormhole.Wormhole.ID,
                 }
             };
             return msg;

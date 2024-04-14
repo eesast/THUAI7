@@ -11,6 +11,7 @@ namespace GameClass.GameObj
     {
         private readonly Dictionary<GameObjType, LockedClassList<IGameObj>> gameObjDict;
         public Dictionary<GameObjType, LockedClassList<IGameObj>> GameObjDict => gameObjDict;
+        private readonly List<Wormhole> wormholes = new();
         private readonly uint height;
         public uint Height => height;
         private readonly uint width;
@@ -77,9 +78,9 @@ namespace GameClass.GameObj
 
         public static bool WormholeInteract(Wormhole gameObj, XY Pos)
         {
-            foreach (XY xy in gameObj.Grids)
+            foreach (WormholeCell cell in gameObj.Cells)
             {
-                if (GameData.ApproachToInteract(xy, Pos))
+                if (GameData.ApproachToInteract(cell.Position, Pos))
                     return true;
             }
             return false;
@@ -91,7 +92,6 @@ namespace GameClass.GameObj
                 (gameObjType == GameObjType.Wormhole && WormholeInteract((Wormhole)gameObj, Pos)))
                 );
         }
-
         public GameObj? OneInTheSameCell(XY Pos, GameObjType gameObjType)
         {
             return (GameObj?)GameObjDict[gameObjType].Find(gameObj => (GameData.IsInTheSameCell(gameObj.Position, Pos)));
@@ -104,6 +104,33 @@ namespace GameClass.GameObj
         {
             return (GameObj?)GameObjDict[gameObjType].Find(gameObj =>
                 GameData.ApproachToInteractInACross(gameObj.Position, Pos));
+        }
+        public GameObj? OneInTheRange(XY Pos, int range, GameObjType gameObjType)
+        {
+            return (GameObj?)GameObjDict[gameObjType].Find(gameObj =>
+                GameData.IsInTheRange(gameObj.Position, Pos, range));
+        }
+        public List<Ship>? ShipInTheRange(XY Pos, int range)
+        {
+            return GameObjDict[GameObjType.Ship].Cast<Ship>()?.FindAll(ship =>
+                GameData.IsInTheRange(ship.Position, Pos, range));
+        }
+        public List<Ship>? ShipInTheList(List<CellXY> PosList)
+        {
+            return GameObjDict[GameObjType.Ship].Cast<Ship>()?.FindAll(ship =>
+                PosList.Contains(GameData.PosGridToCellXY(ship.Position)));
+        }
+        public List<Ship>? ShipInTheList(List<WormholeCell> ObjList)
+        {
+            return GameObjDict[GameObjType.Ship].Cast<Ship>()?.FindAll(ship =>
+            {
+                foreach (var obj in ObjList)
+                {
+                    if (GameData.IsInTheSameCell(ship.Position, obj.Position))
+                        return true;
+                }
+                return false;
+            });
         }
         public bool CanSee(Ship ship, GameObj gameObj)
         {
@@ -178,6 +205,7 @@ namespace GameClass.GameObj
         public void Add(IGameObj gameObj)
         {
             GameObjDict[gameObj.Type].Add(gameObj);
+            Debugger.Output($"Found a {gameObj.Type} at {gameObj.Position}");
         }
         public Map(MapStruct mapResource)
         {
@@ -196,6 +224,15 @@ namespace GameClass.GameObj
                 {
                     switch (mapResource.map[i, j])
                     {
+                        case PlaceType.Ruin:
+                            Add(new Ruin(GameData.GetCellCenterPos(i, j)));
+                            break;
+                        case PlaceType.Shadow:
+                            Add(new Shadow(GameData.GetCellCenterPos(i, j)));
+                            break;
+                        case PlaceType.Asteroid:
+                            Add(new Asteroid(GameData.GetCellCenterPos(i, j)));
+                            break;
                         case PlaceType.Resource:
                             Add(new Resource(GameData.GetCellCenterPos(i, j)));
                             break;
@@ -203,25 +240,31 @@ namespace GameClass.GameObj
                             Add(new Construction(GameData.GetCellCenterPos(i, j)));
                             break;
                         case PlaceType.Wormhole:
-                            Func<Wormhole, bool> HasWormhole = (Wormhole wormhole) =>
+                            Func<Wormhole, bool> WormholeHasCell = (Wormhole wormhole) =>
                             {
-                                if (wormhole.Grids.Contains(new XY(i, j)))
+                                if (wormhole.Cells.Find(cell => GameData.PosGridToCellXY(cell.Position) == new CellXY(i, j)) != null)
                                     return true;
-                                foreach (XY xy in wormhole.Grids)
+                                foreach (WormholeCell cell in wormhole.Cells)
                                 {
+                                    var xy = GameData.PosGridToCellXY(cell.Position);
                                     if (Math.Abs(xy.x - i) <= 1 && Math.Abs(xy.y - j) <= 1)
                                     {
-                                        wormhole.Grids.Add(new XY(i, j));
+                                        var newCell = new WormholeCell(GameData.GetCellCenterPos(i, j), wormhole);
+                                        Add(newCell);
+                                        wormhole.Cells.Add(newCell);
                                         return true;
                                     }
                                 }
                                 return false;
                             };
 
-                            if (GameObjDict[GameObjType.Wormhole].Cast<Wormhole>()?.Find(wormhole => HasWormhole(wormhole)) == null)
+                            if (wormholes.Find(wormhole => WormholeHasCell(wormhole)) == null)
                             {
-                                List<XY> grids = [new XY(i, j)];
-                                Add(new Wormhole(GameData.GetCellCenterPos(i, j), grids));
+                                var newWormhole = new Wormhole([], wormholes.Count);
+                                var newCell = new WormholeCell(GameData.GetCellCenterPos(i, j), newWormhole);
+                                Add(newCell);
+                                newWormhole.Cells.Add(newCell);
+                                wormholes.Add(newWormhole);
                             }
                             break;
                         case PlaceType.Home:
@@ -232,6 +275,13 @@ namespace GameClass.GameObj
                 }
             }
             Homes = GameObjDict[GameObjType.Home].Cast<Home>()?.ToNewList()!;
+            for (var i = 0; i < wormholes.Count; i++)
+            {
+                if (i != wormholes.Count / 2)
+                {
+                    wormholes[i].HP.SetRNow(0);
+                }
+            }
         }
     }
 }

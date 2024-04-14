@@ -18,7 +18,7 @@ Communication::Communication(std::string sIP, std::string sPort)
     THUAI7Stub = protobuf::AvailableService::NewStub(channel);
 }
 
-bool Communication::Move(int64_t playerID, int64_t teamID, int64_t time, double angle)
+bool Communication::Move(int32_t playerID, int32_t teamID, int64_t time, double angle)
 {
     {
         std::lock_guard<std::mutex> lock(mtxLimit);
@@ -37,7 +37,7 @@ bool Communication::Move(int64_t playerID, int64_t teamID, int64_t time, double 
         return false;
 }
 
-bool Communication::Send(int64_t playerID, int64_t toPlayerID, int64_t teamID, std::string message, bool binary)
+bool Communication::Send(int32_t playerID, int32_t toPlayerID, int32_t teamID, std::string message, bool binary)
 {
     {
         std::lock_guard<std::mutex> lock(mtxLimit);
@@ -55,7 +55,7 @@ bool Communication::Send(int64_t playerID, int64_t toPlayerID, int64_t teamID, s
         return false;
 }
 
-bool Communication::EndAllAction(int64_t playerID, int64_t teamID)
+bool Communication::EndAllAction(int32_t playerID, int32_t teamID)
 {
     {
         std::lock_guard<std::mutex> lock(mtxLimit);
@@ -74,7 +74,7 @@ bool Communication::EndAllAction(int64_t playerID, int64_t teamID)
         return false;
 }
 
-bool Communication::Recover(int64_t playerID, int64_t recover, int64_t teamID)
+bool Communication::Recover(int32_t playerID, int64_t recover, int32_t teamID)
 {
     {
         std::lock_guard<std::mutex> lock(mtxLimit);
@@ -93,7 +93,7 @@ bool Communication::Recover(int64_t playerID, int64_t recover, int64_t teamID)
         return false;
 }
 
-bool Communication::Produce(int64_t playerID, int64_t teamID)
+bool Communication::Produce(int32_t playerID, int32_t teamID)
 {
     {
         std::lock_guard<std::mutex> lock(mtxLimit);
@@ -112,7 +112,7 @@ bool Communication::Produce(int64_t playerID, int64_t teamID)
         return false;
 }
 
-bool Communication::Rebuild(int64_t playerID, int64_t teamID, THUAI7::ConstructionType constructionType)
+bool Communication::Rebuild(int32_t playerID, int32_t teamID, THUAI7::ConstructionType constructionType)
 {
     {
         std::lock_guard<std::mutex> lock(mtxLimit);
@@ -131,7 +131,7 @@ bool Communication::Rebuild(int64_t playerID, int64_t teamID, THUAI7::Constructi
         return false;
 }
 
-bool Communication::Construct(int64_t playerID, int64_t teamID, THUAI7::ConstructionType constructionType)
+bool Communication::Construct(int32_t playerID, int32_t teamID, THUAI7::ConstructionType constructionType)
 {
     {
         std::lock_guard<std::mutex> lock(mtxLimit);
@@ -150,7 +150,7 @@ bool Communication::Construct(int64_t playerID, int64_t teamID, THUAI7::Construc
         return false;
 }
 
-bool Communication::InstallModule(int64_t playerID, int64_t teamID, THUAI7::ModuleType moduleType)
+bool Communication::InstallModule(int32_t playerID, int32_t teamID, THUAI7::ModuleType moduleType)
 {
     {
         std::lock_guard<std::mutex> lock(mtxLimit);
@@ -169,7 +169,7 @@ bool Communication::InstallModule(int64_t playerID, int64_t teamID, THUAI7::Modu
         return false;
 }
 
-bool Communication::Attack(int64_t playerID, int64_t teamID, double angle)
+bool Communication::Attack(int32_t playerID, int32_t teamID, double angle)
 {
     {
         std::lock_guard<std::mutex> lock(mtxLimit);
@@ -187,20 +187,32 @@ bool Communication::Attack(int64_t playerID, int64_t teamID, double angle)
         return false;
 }
 
-bool Communication::BuildSweeper(int64_t teamID, THUAI7::SweeperType SweeperType)
+bool Communication::BuildShip(int32_t teamID, THUAI7::ShipType ShipType, int32_t birthIndex)
 {
+    {
+        std::lock_guard<std::mutex> lock(mtxLimit);
+        if (counter >= limit)
+            return false;
+        counter++;
+    }
     protobuf::BoolRes reply;
     ClientContext context;
-    auto request = THUAI72Proto::THUAI72ProtobufBuildSweeperMsg(teamID, SweeperType);
-    auto status = THUAI7Stub->BuildSweeper(&context, request, &reply);
+    auto request = THUAI72Proto::THUAI72ProtobufBuildShipMsg(teamID, ShipType, birthIndex);
+    auto status = THUAI7Stub->BuildShip(&context, request, &reply);
     if (status.ok())
         return true;
     else
         return false;
 }
 
-bool Communication::Recycle(int64_t playerID, int64_t teamID)
+bool Communication::Recycle(int32_t playerID, int32_t teamID)
 {
+    {
+        std::lock_guard<std::mutex> lock(mtxLimit);
+        if (counter >= limit)
+            return false;
+        counter++;
+    }
     protobuf::BoolRes reply;
     ClientContext context;
     auto request = THUAI72Proto::THUAI72ProtobufIDMsg(playerID, teamID);
@@ -211,7 +223,7 @@ bool Communication::Recycle(int64_t playerID, int64_t teamID)
         return false;
 }
 
-bool Communication::TryConnection(int64_t playerID, int64_t teamID)
+bool Communication::TryConnection(int32_t playerID, int32_t teamID)
 {
     protobuf::BoolRes reply;
     ClientContext context;
@@ -223,11 +235,11 @@ bool Communication::TryConnection(int64_t playerID, int64_t teamID)
         return false;
 }
 
-void Communication::AddPlayer(int64_t playerID, int64_t teamID, THUAI7::SweeperType SweeperType)
+void Communication::AddPlayer(int32_t playerID, int32_t teamID, THUAI7::ShipType ShipType)
 {
     auto tMessage = [=]()
     {
-        protobuf::PlayerMsg playerMsg = THUAI72Proto::THUAI72ProtobufPlayerMsg(playerID, teamID, SweeperType);
+        protobuf::PlayerMsg playerMsg = THUAI72Proto::THUAI72ProtobufPlayerMsg(playerID, teamID, ShipType);
         grpc::ClientContext context;
         auto MessageReader = THUAI7Stub->AddPlayer(&context, playerMsg);
 

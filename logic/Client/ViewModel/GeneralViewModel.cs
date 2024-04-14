@@ -13,6 +13,8 @@ using Client.Interact;
 using CommandLine;
 using Newtonsoft;
 using System.Globalization;
+using System.Collections.ObjectModel;
+using installer;
 
 namespace Client.ViewModel
 {
@@ -64,48 +66,74 @@ namespace Client.ViewModel
         }
 
         private long playerID;
-        private SweeperType SweeperType;
+        private string ip;
+        private string port;
+        private int shipTypeID;
         private long teamID;
+        ShipType shipType;
         AvailableService.AvailableServiceClient? client;
         AsyncServerStreamingCall<MessageToClient>? responseStream;
         bool isSpectatorMode = false;
-        // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID 3-teamID 4-SweeperType
+        bool isPlaybackMode = false;
+        // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID 3-teamID 4-ShipType
         public void ConnectToServer(string[] comInfo)
         {
-            if (!isSpectatorMode && comInfo.Length != 5 || isSpectatorMode && comInfo.Length != 4)
+            if (isPlaybackMode) return;
+            if (Convert.ToInt64(comInfo[2]) > 2023)
+            {
+                isSpectatorMode = true;
+                System.Diagnostics.Debug.WriteLine("isSpectatorMode = true");
+            }
+
+            if (!isSpectatorMode && comInfo.Length != 5 || isSpectatorMode && comInfo.Length != 3)
             {
                 throw new Exception("Error Registration Information！");
             }
-            playerID = Convert.ToInt64(comInfo[2]);
-            teamID = Convert.ToInt64(comInfo[3]);
+
             string connect = new string(comInfo[0]);
             connect += ':';
             connect += comInfo[1];
             Channel channel = new Channel(connect, ChannelCredentials.Insecure);
             client = new AvailableService.AvailableServiceClient(channel);
             PlayerMsg playerMsg = new PlayerMsg();
+            playerID = Convert.ToInt64(comInfo[2]);
             playerMsg.PlayerId = playerID;
-            playerMsg.TeamId = teamID;
-            //playerMsg.X = 0;
-            //playerMsg.Y = 0;
             if (!isSpectatorMode)
             {
-                SweeperType = Convert.ToInt64(comInfo[4]) switch
+                teamID = Convert.ToInt64(comInfo[3]);
+                playerMsg.TeamId = teamID;
+                shipType = Convert.ToInt64(comInfo[4]) switch
                 {
-                    0 => SweeperType.NullSweeperType,
-                    1 => SweeperType.CivilianSweeper,
-                    2 => SweeperType.MilitarySweeper,
-                    3 => SweeperType.FlagSweeper,
-                    _ => SweeperType.NullSweeperType
+                    0 => ShipType.NullShipType,
+                    1 => ShipType.CivilianShip,
+                    2 => ShipType.MilitaryShip,
+                    3 => ShipType.FlagShip,
+                    _ => ShipType.NullShipType
                 };
-                playerMsg.SweeperType = SweeperType;
+                playerMsg.ShipType = shipType;
             }
             responseStream = client.AddPlayer(playerMsg);
             isClientStocked = false;
         }
 
+        string playbackFile;
+        double playbackSpeed;
         private void Playback(string fileName, double pbSpeed = 2.0)
         {
+            var pbClient = new PlaybackClient(fileName, pbSpeed);
+            int[,]? map;
+            if ((map = pbClient.ReadDataFromFile(listOfAll, listOfShip, listOfBullet, listOfBombedBullet, listOfFactory, listOfCommunity, listOfFort, listOfResource, listOfHome, listOfWormhole, drawPicLock)) != null)
+            {
+                isClientStocked = false;
+                isPlaybackMode = true;
+                defaultMap = map;
+                getMapFlag = true;
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Playback failed");
+                isClientStocked = true;
+            }
         }
 
         string[] comInfo = new string[10];
@@ -165,203 +193,242 @@ namespace Client.ViewModel
         int testcounter = 0;
 
 
-
         private async void OnReceive()
         {
             try
             {
                 System.Diagnostics.Debug.WriteLine("============= OnReceiving Server Stream ================");
-                if (responseStream != null)
-                    System.Diagnostics.Debug.WriteLine("============= responseStream != null ================");
+                //if (responseStream != null)
+                //    System.Diagnostics.Debug.WriteLine("============= responseStream != null ================");
 
-                if (await responseStream.ResponseStream.MoveNext())
-                    System.Diagnostics.Debug.WriteLine("============= responseStream.ResponseStream.MoveNext() ================");
-
-                while (responseStream != null && await responseStream.ResponseStream.MoveNext())
+                //if (await responseStream.ResponseStream.MoveNext())
+                //    System.Diagnostics.Debug.WriteLine("============= responseStream.ResponseStream.MoveNext() ================");
+                //await MainThread.InvokeOnMainThreadAsync(async () =>
                 {
-                    System.Diagnostics.Debug.WriteLine("============= Receiving Server Stream ================");
-                    //lock (drawPicLock)
+                    while (responseStream != null && await responseStream.ResponseStream.MoveNext())
                     {
-                        ballX += 20;
-                        ballY += 20;
-
-                        listOfAll.Clear();
-                        listOfSweeper.Clear();
-                        listOfBullet.Clear();
-                        listOfBombedBullet.Clear();
-                        listOfRecycleBank.Clear();
-                        listOfChargeStation.Clear();
-                        listOfSignalTower.Clear();
-                        listOfGarbage.Clear();
-                        listOfHome.Clear();
-                        listOfBridge.Clear();
-                        MessageToClient content = responseStream.ResponseStream.Current;
-                        MessageOfMap mapMassage = new();
-                        bool mapMessageExist = false;
-                        switch (content.GameState)
+                        System.Diagnostics.Debug.WriteLine("============= Receiving Server Stream ================");
+                        lock (drawPicLock)
                         {
-                            case GameState.GameStart:
-                                foreach (var obj in content.ObjMessage)
-                                {
-                                    switch (obj.MessageOfObjCase)
+                            //if (ballx_receive >= 500)
+                            //{
+                            //    dx = -5;
+                            //}
+                            //else if (ballx_receive <= 0)
+                            //{
+                            //    dx = 5;
+                            //}
+                            //ballx_receive += dx;
+                            //bally_receive += dx;
+                            //System.Diagnostics.Debug.WriteLine(String.Format("============= Onreceive: ballx_receive:{0}, bally_receive:{1} ================", ballx_receive, bally_receive));
+                            //System.Diagnostics.Debug.WriteLine(String.Format("OnReceive--cou:{0}, coud{1}", cou, Countdow));
+
+                            listOfAll.Clear();
+                            listOfShip.Clear();
+                            listOfBullet.Clear();
+                            listOfBombedBullet.Clear();
+                            listOfFactory.Clear();
+                            listOfCommunity.Clear();
+                            listOfFort.Clear();
+                            listOfResource.Clear();
+                            listOfHome.Clear();
+                            listOfWormhole.Clear();
+
+                            MessageToClient content = responseStream.ResponseStream.Current;
+                            MessageOfMap mapMassage = new();
+                            bool mapMessageExist = false;
+                            switch (content.GameState)
+                            {
+                                case GameState.GameStart:
+                                    System.Diagnostics.Debug.WriteLine("============= GameState: Game Start ================");
+                                    foreach (var obj in content.ObjMessage)
                                     {
-                                        case MessageOfObj.MessageOfObjOneofCase.SweeperMessage:
-                                            listOfSweeper.Add(obj.SweeperMessage);
-                                            break;
+                                        switch (obj.MessageOfObjCase)
+                                        {
+                                            case MessageOfObj.MessageOfObjOneofCase.ShipMessage:
+                                                listOfShip.Add(obj.ShipMessage);
+                                                break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
-                                            listOfBullet.Add(obj.BulletMessage);
-                                            break;
+                                            case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
+                                                listOfBullet.Add(obj.BulletMessage);
+                                                break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.BombedBulletMessage:
-                                            listOfBombedBullet.Add(obj.BombedBulletMessage);
-                                            break;
+                                            case MessageOfObj.MessageOfObjOneofCase.BombedBulletMessage:
+                                                listOfBombedBullet.Add(obj.BombedBulletMessage);
+                                                break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
-                                            listOfRecycleBank.Add(obj.RecyclebankMessage);
-                                            break;
+                                            case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
+                                                listOfFactory.Add(obj.FactoryMessage);
+                                                break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
-                                            listOfChargeStation.Add(obj.ChargestationMessage);
-                                            break;
+                                            case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
+                                                listOfCommunity.Add(obj.CommunityMessage);
+                                                break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
-                                            listOfSignalTower.Add(obj.SignaltowerMessage);
-                                            break;
+                                            case MessageOfObj.MessageOfObjOneofCase.FortMessage:
+                                                listOfFort.Add(obj.FortMessage);
+                                                break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
-                                            listOfGarbage.Add(obj.GarbageMessage);
-                                            break;
+                                            case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
+                                                listOfResource.Add(obj.ResourceMessage);
+                                                break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
-                                            listOfHome.Add(obj.HomeMessage);
-                                            break;
+                                            case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
+                                                listOfHome.Add(obj.HomeMessage);
+                                                break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.MapMessage:
-                                            mapMassage = obj.MapMessage;
-                                            break;
+                                            case MessageOfObj.MessageOfObjOneofCase.WormholeMessage:
+                                                listOfWormhole.Add(obj.WormholeMessage);
+                                                break;
+
+                                            case MessageOfObj.MessageOfObjOneofCase.MapMessage:
+                                                mapMassage = obj.MapMessage;
+                                                break;
+                                        }
                                     }
-                                }
-                                listOfAll.Add(content.AllMessage);
-                                countMap.Clear();
-                                countMap.Add((int)MapPatchType.Garbage, listOfGarbage.Count);
-                                countMap.Add((int)MapPatchType.RecycleBank, listOfRecycleBank.Count);
-                                countMap.Add((int)MapPatchType.ChargeStation, listOfChargeStation.Count);
-                                countMap.Add((int)MapPatchType.SignalTower, listOfSignalTower.Count);
-                                GetMap(mapMassage);
-                                break;
-                            case GameState.GameRunning:
-                                foreach (var obj in content.ObjMessage)
-                                {
-                                    switch (obj.MessageOfObjCase)
-                                    {
-                                        case MessageOfObj.MessageOfObjOneofCase.SweeperMessage:
-                                            listOfSweeper.Add(obj.SweeperMessage);
-                                            break;
-
-                                        case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
-                                            listOfRecycleBank.Add(obj.RecyclebankMessage);
-                                            break;
-
-                                        case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
-                                            listOfChargeStation.Add(obj.ChargestationMessage);
-                                            break;
-
-                                        case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
-                                            listOfSignalTower.Add(obj.SignaltowerMessage);
-                                            break;
-
-                                        case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
-                                            listOfBullet.Add(obj.BulletMessage);
-                                            break;
-
-                                        case MessageOfObj.MessageOfObjOneofCase.BombedBulletMessage:
-                                            listOfBombedBullet.Add(obj.BombedBulletMessage);
-                                            break;
-
-                                        case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
-                                            listOfGarbage.Add(obj.GarbageMessage);
-                                            break;
-
-                                        case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
-                                            listOfHome.Add(obj.HomeMessage);
-                                            break;
-
-                                        case MessageOfObj.MessageOfObjOneofCase.MapMessage:
-                                            mapMassage = obj.MapMessage;
-                                            mapMessageExist = true;
-                                            break;
-                                    }
-                                }
-                                listOfAll.Add(content.AllMessage);
-                                if (mapMessageExist)
-                                {
+                                    listOfAll.Add(content.AllMessage);
                                     countMap.Clear();
-                                    countMap.Add((int)MapPatchType.Garbage, listOfGarbage.Count);
-                                    countMap.Add((int)MapPatchType.RecycleBank, listOfRecycleBank.Count);
-                                    countMap.Add((int)MapPatchType.ChargeStation, listOfChargeStation.Count);
-                                    countMap.Add((int)MapPatchType.SignalTower, listOfSignalTower.Count);
+                                    countMap.Add((int)MapPatchType.Resource, listOfResource.Count);
+                                    countMap.Add((int)MapPatchType.Factory, listOfFactory.Count);
+                                    countMap.Add((int)MapPatchType.Community, listOfCommunity.Count);
+                                    countMap.Add((int)MapPatchType.Fort, listOfFort.Count);
                                     GetMap(mapMassage);
-                                    mapMessageExist = false;
-                                }
-                                break;
-
-                            case GameState.GameEnd:
-                                //DisplayAlert("Info", "Game End", "OK");
-                                foreach (var obj in content.ObjMessage)
-                                {
-                                    switch (obj.MessageOfObjCase)
+                                    break;
+                                case GameState.GameRunning:
+                                    System.Diagnostics.Debug.WriteLine("============= GameState: Game Running ================");
+                                    foreach (var obj in content.ObjMessage)
                                     {
-                                        case MessageOfObj.MessageOfObjOneofCase.SweeperMessage:
-                                            listOfSweeper.Add(obj.SweeperMessage);
-                                            break;
+                                        switch (obj.MessageOfObjCase)
+                                        {
+                                            case MessageOfObj.MessageOfObjOneofCase.ShipMessage:
+                                                System.Diagnostics.Debug.WriteLine(String.Format("============= ShipOrd: {0},{1} ============", obj.ShipMessage.X, obj.ShipMessage.Y));
+                                                listOfShip.Add(obj.ShipMessage);
+                                                break;
 
-                                        //case MessageOfObj.MessageOfObjOneofCase.BuildingMessage:
-                                        //    listOfBuilding.Add(obj.BuildingMessage);
-                                        //    break;
+                                            case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
+                                                listOfFactory.Add(obj.FactoryMessage);
+                                                break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.RecyclebankMessage:
-                                            listOfRecycleBank.Add(obj.RecyclebankMessage);
-                                            break;
+                                            case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
+                                                listOfCommunity.Add(obj.CommunityMessage);
+                                                break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.ChargestationMessage:
-                                            listOfChargeStation.Add(obj.ChargestationMessage);
-                                            break;
+                                            case MessageOfObj.MessageOfObjOneofCase.FortMessage:
+                                                listOfFort.Add(obj.FortMessage);
+                                                break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.SignaltowerMessage:
-                                            listOfSignalTower.Add(obj.SignaltowerMessage);
-                                            break;
+                                            case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
+                                                System.Diagnostics.Debug.WriteLine(String.Format("============= BulletOrd: {0},{1} ============", obj.BulletMessage.X, obj.BulletMessage.Y));
+                                                listOfBullet.Add(obj.BulletMessage);
+                                                break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
-                                            listOfBullet.Add(obj.BulletMessage);
-                                            break;
+                                            case MessageOfObj.MessageOfObjOneofCase.BombedBulletMessage:
+                                                listOfBombedBullet.Add(obj.BombedBulletMessage);
+                                                break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.BombedBulletMessage:
-                                            listOfBombedBullet.Add(obj.BombedBulletMessage);
-                                            break;
+                                            case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
+                                                listOfResource.Add(obj.ResourceMessage);
+                                                break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.GarbageMessage:
-                                            listOfGarbage.Add(obj.GarbageMessage);
-                                            break;
+                                            case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
+                                                listOfHome.Add(obj.HomeMessage);
+                                                break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
-                                            listOfHome.Add(obj.HomeMessage);
-                                            break;
+                                            case MessageOfObj.MessageOfObjOneofCase.WormholeMessage:
+                                                listOfWormhole.Add(obj.WormholeMessage);
+                                                break;
 
-                                        case MessageOfObj.MessageOfObjOneofCase.MapMessage:
-                                            mapMassage = obj.MapMessage;
-                                            break;
+                                            case MessageOfObj.MessageOfObjOneofCase.MapMessage:
+                                                mapMassage = obj.MapMessage;
+                                                mapMessageExist = true;
+                                                break;
+                                        }
                                     }
-                                }
-                                listOfAll.Add(content.AllMessage);
-                                break;
+                                    listOfAll.Add(content.AllMessage);
+                                    if (mapMessageExist)
+                                    {
+                                        countMap.Clear();
+                                        countMap.Add((int)MapPatchType.Resource, listOfResource.Count);
+                                        countMap.Add((int)MapPatchType.Factory, listOfFactory.Count);
+                                        countMap.Add((int)MapPatchType.Community, listOfCommunity.Count);
+                                        countMap.Add((int)MapPatchType.Fort, listOfFort.Count);
+                                        GetMap(mapMassage);
+                                        mapMessageExist = false;
+                                    }
+                                    break;
+
+                                case GameState.GameEnd:
+                                    System.Diagnostics.Debug.WriteLine("============= GameState: Game End ================");
+                                    //DisplayAlert("Info", "Game End", "OK");
+                                    foreach (var obj in content.ObjMessage)
+                                    {
+                                        switch (obj.MessageOfObjCase)
+                                        {
+                                            case MessageOfObj.MessageOfObjOneofCase.ShipMessage:
+                                                listOfShip.Add(obj.ShipMessage);
+                                                break;
+
+                                            //case MessageOfObj.MessageOfObjOneofCase.BuildingMessage:
+                                            //    listOfBuilding.Add(obj.BuildingMessage);
+                                            //    break;
+
+                                            case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
+                                                listOfFactory.Add(obj.FactoryMessage);
+                                                break;
+
+                                            case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
+                                                listOfCommunity.Add(obj.CommunityMessage);
+                                                break;
+
+                                            case MessageOfObj.MessageOfObjOneofCase.FortMessage:
+                                                listOfFort.Add(obj.FortMessage);
+                                                break;
+
+                                            case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
+                                                listOfBullet.Add(obj.BulletMessage);
+                                                break;
+
+                                            case MessageOfObj.MessageOfObjOneofCase.BombedBulletMessage:
+                                                listOfBombedBullet.Add(obj.BombedBulletMessage);
+                                                break;
+
+                                            case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
+                                                listOfResource.Add(obj.ResourceMessage);
+                                                break;
+
+                                            case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
+                                                listOfHome.Add(obj.HomeMessage);
+                                                break;
+
+                                            case MessageOfObj.MessageOfObjOneofCase.WormholeMessage:
+                                                listOfWormhole.Add(obj.WormholeMessage);
+                                                break;
+
+                                            case MessageOfObj.MessageOfObjOneofCase.MapMessage:
+                                                mapMassage = obj.MapMessage;
+                                                break;
+                                        }
+                                    }
+                                    listOfAll.Add(content.AllMessage);
+                                    if (mapMessageExist)
+                                    {
+                                        countMap.Clear();
+                                        countMap.Add((int)MapPatchType.Resource, listOfResource.Count);
+                                        countMap.Add((int)MapPatchType.Factory, listOfFactory.Count);
+                                        countMap.Add((int)MapPatchType.Community, listOfCommunity.Count);
+                                        countMap.Add((int)MapPatchType.Fort, listOfFort.Count);
+                                        GetMap(mapMassage);
+                                        mapMessageExist = false;
+                                    }
+                                    break;
+                            }
+                        }
+                        if (responseStream == null)
+                        {
+                            throw new Exception("Unconnected");
                         }
                     }
-                    if (responseStream == null)
-                    {
-                        throw new Exception("Unconnected");
-                    }
-                }
+                };
             }
             catch (Exception ex)
             {
@@ -390,12 +457,19 @@ namespace Client.ViewModel
                     {
                         if (!hasDrawn && getMapFlag)
                         {
-                            //PureDrawMap(defaultMap);
+                            PureDrawMap(defaultMap);
                             hasDrawn = true;
                         }
-
+                        DrawShip();
+                        DrawBullet();
+                        //ShipCircList[5].Text = "111";
+                        //ShipCircList[5].Color = Colors.Blue;
+                        //ShipCircList[5].X += 4;
+                        //ShipCircList[5].Y += 4;
                         foreach (var data in listOfAll)
                         {
+                            System.Diagnostics.Debug.WriteLine(String.Format("Red team Energy: {0}", Convert.ToString(data.RedTeamEnergy)));
+                            System.Diagnostics.Debug.WriteLine(String.Format("Blue team Energy: {0}", Convert.ToString(data.BlueTeamEnergy)));
                             RedPlayer.Money = data.RedTeamEnergy;
                             RedPlayer.Hp = data.RedHomeHp;
                             RedPlayer.Score = data.RedTeamScore;
@@ -404,86 +478,134 @@ namespace Client.ViewModel
                             BluePlayer.Score = data.BlueTeamScore;
                         }
 
+                        System.Diagnostics.Debug.WriteLine("============= Read data of ALL ================");
                         foreach (var data in listOfHome)
                         {
                             DrawHome(data);
-                            if (data.TeamId == (long)PlayerTeam.Red)
+                            // if (data.TeamId == (long)PlayerTeam.Red)
+                            if (data.TeamId == 0)
                             {
                                 RedPlayer.Team = data.TeamId;
                             }
-                            else if (data.TeamId == (long)PlayerTeam.Blue)
+                            // else if (data.TeamId == (long)PlayerTeam.Blue)
+                            else if (data.TeamId == 1)
                             {
                                 BluePlayer.Team = data.TeamId;
                             }
                         }
+                        System.Diagnostics.Debug.WriteLine("============= Draw Home ================");
 
-                        foreach (var data in listOfSweeper)
+
+                        //RedPlayer.Ships.Clear();
+                        //BluePlayer.Ships.Clear();
+                        for (int i = 0; i < listOfShip.Count; i++)
                         {
-                            if (data.TeamId == (long)PlayerTeam.Red)
+                            MessageOfShip data = listOfShip[i];
+                            // if (data.TeamId == (long)PlayerTeam.Red)
+                            if (data.TeamId == 0)
                             {
-                                Sweeper ship = new Sweeper
+                                Ship ship = new Ship
                                 {
-                                    Type = data.SweeperType,
-                                    State = data.SweeperState,
+                                    HP = data.Hp,
+                                    Type = data.ShipType,
+                                    State = data.ShipState,
                                     ArmorModule = data.ArmorType,
                                     ShieldModule = data.ShieldType,
                                     WeaponModule = data.WeaponType,
                                     ProducerModule = data.ProducerType,
                                     ConstuctorModule = data.ConstructorType,
-                                    Type_s = UtilInfo.SweeperTypeNameDict[data.SweeperType],
-                                    State_s = UtilInfo.SweeperStateNameDict[data.SweeperState],
-                                    ArmorModule_s = UtilInfo.SweeperArmorTypeNameDict[data.ArmorType],
-                                    ShieldModule_s = UtilInfo.SweeperShieldTypeNameDict[data.ShieldType],
-                                    WeaponModule_s = UtilInfo.SweeperWeaponTypeNameDict[data.WeaponType],
-                                    ConstuctorModule_s = UtilInfo.SweeperConstructorNameDict[data.ConstructorType],
-                                    ProducerModule_s = UtilInfo.SweeperProducerTypeNameDict[data.ProducerType]
                                 };
-                                RedPlayer.Sweepers.Add(ship);
+                                System.Diagnostics.Debug.WriteLine(String.Format("i:{0}, Redplayers.ships.count:{1}", i, RedPlayer.Ships.Count));
+                                if (i < RedPlayer.Ships.Count && UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[i]))
+                                    continue;
+                                else if (i < RedPlayer.Ships.Count && !UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[i]))
+                                    RedPlayer.Ships[i] = ship;
+                                else RedPlayer.Ships.Add(ship);
                             }
-                            else if (data.TeamId == (long)PlayerTeam.Blue)
+                            // else if (data.TeamId == (long)PlayerTeam.Blue)
+                            else if (data.TeamId == 1)
                             {
-                                Sweeper ship = new Sweeper
+                                Ship ship = new Ship
                                 {
-                                    Type = data.SweeperType,
-                                    State = data.SweeperState,
+                                    HP = data.Hp,
+                                    Type = data.ShipType,
+                                    State = data.ShipState,
                                     ArmorModule = data.ArmorType,
                                     ShieldModule = data.ShieldType,
                                     WeaponModule = data.WeaponType,
                                     ProducerModule = data.ProducerType,
                                     ConstuctorModule = data.ConstructorType,
-                                    Type_s = UtilInfo.SweeperTypeNameDict[data.SweeperType],
-                                    State_s = UtilInfo.SweeperStateNameDict[data.SweeperState],
-                                    ArmorModule_s = UtilInfo.SweeperArmorTypeNameDict[data.ArmorType],
-                                    ShieldModule_s = UtilInfo.SweeperShieldTypeNameDict[data.ShieldType],
-                                    WeaponModule_s = UtilInfo.SweeperWeaponTypeNameDict[data.WeaponType],
-                                    ConstuctorModule_s = UtilInfo.SweeperConstructorNameDict[data.ConstructorType],
-                                    ProducerModule_s = UtilInfo.SweeperProducerTypeNameDict[data.ProducerType]
                                 };
-                                BluePlayer.Sweepers.Add(ship);
+                                System.Diagnostics.Debug.WriteLine(String.Format("i:{0}, Blueplayer.ships.count:{1}", i, BluePlayer.Ships.Count));
+
+                                if (i < BluePlayer.Ships.Count && UtilFunctions.IsShipEqual(ship, BluePlayer.Ships[i]))
+                                    continue;
+                                else if (i < BluePlayer.Ships.Count && !UtilFunctions.IsShipEqual(ship, BluePlayer.Ships[i]))
+                                    BluePlayer.Ships[i] = ship;
+                                else BluePlayer.Ships.Add(ship);
                             }
+                            else
+                            {
+                                Ship ship = new Ship
+                                {
+                                    HP = data.Hp,
+                                    Type = data.ShipType,
+                                    State = data.ShipState,
+                                    ArmorModule = data.ArmorType,
+                                    ShieldModule = data.ShieldType,
+                                    WeaponModule = data.WeaponType,
+                                    ProducerModule = data.ProducerType,
+                                    ConstuctorModule = data.ConstructorType,
+                                    //Type_s = UtilInfo.ShipTypeNameDict[data.ShipType],
+                                    //State_s = UtilInfo.ShipStateNameDict[data.ShipState],
+                                    //ArmorModule_s = UtilInfo.ShipArmorTypeNameDict[data.ArmorType],
+                                    //ShieldModule_s = UtilInfo.ShipShieldTypeNameDict[data.ShieldType],
+                                    //WeaponModule_s = UtilInfo.ShipWeaponTypeNameDict[data.WeaponType],
+                                    //ConstuctorModule_s = UtilInfo.ShipConstructorNameDict[data.ConstructorType],
+                                    //ProducerModule_s = UtilInfo.ShipProducerTypeNameDict[data.ProducerType]
+                                };
+                                System.Diagnostics.Debug.WriteLine(String.Format("i:{0}, Redplayers.ships.count:{1}", i, RedPlayer.Ships.Count));
+                                if (i < RedPlayer.Ships.Count && UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[i]))
+                                    continue;
+                                else if (i < RedPlayer.Ships.Count && !UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[i]))
+                                    RedPlayer.Ships[i] = ship;
+                                else RedPlayer.Ships.Add(ship);
+                            }
+                            System.Diagnostics.Debug.WriteLine("============= Draw Ship list ================");
                         }
 
-                        foreach (var data in listOfChargeStation)
+                        foreach (var data in listOfCommunity)
                         {
-                            DrawChargeStation(data);
+                            DrawCommunity(data);
                         }
 
-                        foreach (var data in listOfRecycleBank)
+                        foreach (var data in listOfFactory)
                         {
-                            DrawRecycleBank(data);
+                            DrawFactory(data);
                         }
 
-                        foreach (var data in listOfBridge)
+                        foreach (var data in listOfWormhole)
                         {
                             DrawWormHole(data);
                         }
+                        //listOfWormhole.Sort(
+                        //    delegate (MessageOfWormhole h1, MessageOfWormhole h2)
+                        //    {
+                        //        int re = h1.X.CompareTo(h2.X);
+                        //        if (0 == re)
+                        //        {
+                        //            return h1.Y.CompareTo(h2.Y);
+                        //        }
+                        //        return re;
+                        //    }
+                        //);
 
-                        foreach (var data in listOfSignalTower)
+                        foreach (var data in listOfFort)
                         {
-                            DrawSignalTower(data);
+                            DrawFort(data);
                         }
 
-                        foreach (var data in listOfGarbage)
+                        foreach (var data in listOfResource)
                         {
                             DrawResource(data);
                         }
@@ -496,81 +618,294 @@ namespace Client.ViewModel
             }
             //counter++;
         }
+
         private void UpdateTest(object sender, EventArgs e)
         {
-            counterViewModelTest++;
-            if (!hasDrawn && getMapFlag)
+            lock (drawPicLock)
             {
-                PureDrawMap(defaultMap);
-                hasDrawn = true;
-            }
-            if (testcounter < 30)
-            {
-                testcounter++;
-                if (testcounter % 3 == 0)
+                counterViewModelTest++;
+                if (!hasDrawn && getMapFlag)
                 {
-                    Sweeper ship = new Sweeper
-                    {
-                        Type = SweeperType.MilitarySweeper,
-                        State = SweeperState.Stunned,
-                        //Type_s = UtilInfo.SweeperTypeNameDict[SweeperType.MilitarySweeper],
-                        //State_s = UtilInfo.SweeperStateNameDict[SweeperState.Stunned]
-                    };
-                    RedPlayer.Sweepers.Add(ship);
-                    BluePlayer.Sweepers.Add(ship);
+                    PureDrawMap(defaultMap);
+                    hasDrawn = true;
                 }
+                DrawShip();
+                DrawBullet();
+                //if (testcounter < 30)
+                //{
+                //    testcounter++;
+                //    if (testcounter % 3 == 0)
+                //    {
+                //        Ship ship = new Ship
+                //        {
+                //            Type = ShipType.MilitaryShip,
+                //            State = ShipState.Stunned,
+                //            Type_s = UtilInfo.ShipTypeNameDict[ShipType.MilitaryShip],
+                //            State_s = UtilInfo.ShipStateNameDict[ShipState.Stunned]
+                //        };
+                //        RedPlayer.Ships.Add(ship);
+                //        BluePlayer.Ships.Add(ship);
+                //    }
+                //}
+                //DrawHome(new MessageOfHome
+                //{
+                //    X = 10,
+                //    Y = 10,
+                //    Hp = 100,
+                //    TeamId = 1
+                //});
+
+                //DrawRecycleBank(new MessageOfRecycleBank
+                //{
+                //    X = 11,
+                //    Y = 11,
+                //    Hp = 100,
+                //    TeamId = 2
+                //});
+
+                //DrawWormHole(new MessageOfBridge
+                //{
+                //    X = 12,
+                //    Y = 12,
+                //    Hp = 100
+                //});
+                //ballX += 1;
+                //ballY += 1;
             }
-            DrawHome(new MessageOfHome
-            {
-                X = 10,
-                Y = 10,
-                Hp = 100,
-                TeamId = 1
-            });
-
-            //DrawRecycleBank(new MessageOfRecycleBank
-            //{
-            //    X = 11,
-            //    Y = 11,
-            //    Hp = 100,
-            //    TeamId = 2
-            //});
-
-            DrawWormHole(new MessageOfBridge
-            {
-                X = 12,
-                Y = 12,
-                Hp = 100
-            });
-
-            //ballX += 1;
-            //ballY += 1;
         }
+
+
+
+        public readonly int numOfShips = 16;
+        public readonly int numOfBullets = 40;
+
+        public double lastMoveAngle;
+
+        public readonly float unitWidth = UtilInfo.unitWidth;
+        public readonly float unitHeight = UtilInfo.unitHeight;
+
+        public readonly int ShipStatusAttributesFontSize = 13;
 
         public GeneralViewModel()
         {
+            //ConfigData d = new();
+            //d.Commands.Launched = true;
+            //System.Diagnostics.Debug.WriteLine(String.Format("========={0}============", d.Commands.LaunchID));
+            //d.Commands.LaunchID = d.Commands.LaunchID + 1;
+            //System.Diagnostics.Debug.WriteLine(String.Format("========={0}============", d.Commands.LaunchID));
+            //d.Commands.PlayerID = Convert.ToString(d.Commands.LaunchID);
+            //System.Diagnostics.Debug.WriteLine(String.Format("========={0}============", d.Commands.PlayerID));
             InitiateObjects();
             Title = "THUAI7";
+            MoveUpCommand = new Command(() =>
+            {
+                try
+                {
+                    if (client == null || isSpectatorMode || isPlaybackMode)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                        return;
+                    }
+                    MoveMsg movemsg = new MoveMsg();
+                    movemsg.PlayerId = playerID;
+                    movemsg.TeamId = teamID;
+                    movemsg.Angle = double.Pi;
+                    lastMoveAngle = movemsg.Angle;
+                    movemsg.TimeInMilliseconds = 50;
+                    client.Move(movemsg);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("-------- Move Exception -------");
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    /* 
+                        #TODO
+                        Show the error message
+                    */
+                }
+            });
+
+            int moveTime = 100;
+
+            MoveDownCommand = new Command(() =>
+            {
+                if (client == null || isSpectatorMode || isPlaybackMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    return;
+                }
+                MoveMsg movemsg = new MoveMsg();
+                movemsg.PlayerId = playerID;
+                movemsg.TeamId = teamID;
+                movemsg.Angle = double.NegativeZero;
+                lastMoveAngle = movemsg.Angle;
+                movemsg.TimeInMilliseconds = moveTime;
+                client.Move(movemsg);
+            });
+
+            MoveLeftCommand = new Command(() =>
+            {
+                if (client == null || isSpectatorMode || isPlaybackMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    return;
+                }
+                MoveMsg movemsg = new MoveMsg();
+                movemsg.PlayerId = playerID;
+                movemsg.TeamId = teamID;
+                movemsg.Angle = double.Pi * 3 / 2;
+                lastMoveAngle = movemsg.Angle;
+                movemsg.TimeInMilliseconds = moveTime;
+                client.Move(movemsg);
+            });
+
+            MoveRightCommand = new Command(() =>
+            {
+                if (client == null || isSpectatorMode || isPlaybackMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    return;
+                }
+                MoveMsg movemsg = new MoveMsg();
+                movemsg.PlayerId = playerID;
+                movemsg.TeamId = teamID;
+                movemsg.Angle = double.Pi / 2;
+                lastMoveAngle = movemsg.Angle;
+                movemsg.TimeInMilliseconds = moveTime;
+                client.Move(movemsg);
+            });
+
+            MoveLeftUpCommand = new Command(() =>
+            {
+                if (client == null || isSpectatorMode || isPlaybackMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    return;
+                }
+                MoveMsg movemsg = new MoveMsg();
+                movemsg.PlayerId = playerID;
+                movemsg.TeamId = teamID;
+                movemsg.Angle = double.Pi * 5 / 4;
+                lastMoveAngle = movemsg.Angle;
+                movemsg.TimeInMilliseconds = moveTime;
+                client.Move(movemsg);
+            });
+
+            MoveRightUpCommand = new Command(() =>
+            {
+                if (client == null || isSpectatorMode || isPlaybackMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    return;
+                }
+                MoveMsg movemsg = new MoveMsg();
+                movemsg.PlayerId = playerID;
+                movemsg.TeamId = teamID;
+                movemsg.Angle = double.Pi * 3 / 4;
+                lastMoveAngle = movemsg.Angle;
+                movemsg.TimeInMilliseconds = moveTime;
+                client.Move(movemsg);
+            });
+
+            MoveLeftDownCommand = new Command(() =>
+            {
+                if (client == null || isSpectatorMode || isPlaybackMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    return;
+                }
+                MoveMsg movemsg = new MoveMsg();
+                movemsg.PlayerId = playerID;
+                movemsg.TeamId = teamID;
+                movemsg.Angle = double.Pi * 7 / 4;
+                lastMoveAngle = movemsg.Angle;
+                movemsg.TimeInMilliseconds = moveTime;
+                client.Move(movemsg);
+            });
+
+            MoveRightDownCommand = new Command(() =>
+            {
+                if (client == null || isSpectatorMode || isPlaybackMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    return;
+                }
+                MoveMsg movemsg = new MoveMsg();
+                movemsg.PlayerId = playerID;
+                movemsg.TeamId = teamID;
+                movemsg.Angle = double.Pi / 4;
+                lastMoveAngle = movemsg.Angle;
+                movemsg.TimeInMilliseconds = moveTime;
+                client.Move(movemsg);
+            });
+
+            AttackCommand = new Command(() =>
+            {
+                if (client == null || isSpectatorMode || isPlaybackMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    return;
+                }
+                AttackMsg attackMsg = new AttackMsg();
+                attackMsg.PlayerId = playerID;
+                attackMsg.TeamId = teamID;
+                attackMsg.Angle = lastMoveAngle;
+                client.Attack(attackMsg);
+            });
+
+            RecoverCommand = new Command(() =>
+            {
+                if (client == null || isSpectatorMode || isPlaybackMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    return;
+                }
+                RecoverMsg recoverMsg = new RecoverMsg();
+                recoverMsg.PlayerId = playerID;
+                recoverMsg.TeamId = teamID;
+                client.Recover(recoverMsg);
+            });
+
+            ProduceCommand = new Command(() =>
+            {
+                if (client == null || isSpectatorMode || isPlaybackMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    return;
+                }
+                IDMsg iDMsg = new IDMsg();
+                iDMsg.PlayerId = playerID;
+                iDMsg.TeamId = teamID;
+                client.Produce(iDMsg);
+            });
+
+            ConstructCommand = new Command(() =>
+            {
+                if (client == null || isSpectatorMode || isPlaybackMode)
+                {
+                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    return;
+                }
+                ConstructMsg constructMsg = new ConstructMsg();
+                constructMsg.PlayerId = playerID;
+                constructMsg.TeamId = teamID;
+                constructMsg.ConstructionType = ConstructionType.Factory;
+                client.Construct(constructMsg);
+            });
+
             //Links = [
             //    new Link { Name = "天梯信息", Url = "" },
             //    new Link { Name = "获取更新", Url = "" },
             //    new Link { Name = "我的AI", Url = "" },
             //    new Link { Name = "配置链接", Url = "" }
             //];
-            RedPlayer.Hp = 100;
-            RedPlayer.Money = 1000;
-
-            Sweeper ship = new Sweeper
-            {
-                Type_s = "CivilSweeper",
-                State_s = "Idle",
-                ArmorModule_s = "LightArmor"
-            };
-            RedPlayer.Sweepers.Add(ship);
+            //RedPlayer.Hp = 100;
+            //RedPlayer.Money = 1000;
 
             WormHole1HP = 100;
             WormHole2HP = 100;
             WormHole3HP = 100;
+
 
             for (int i = 0; i < 50; i++)
             {
@@ -582,25 +917,94 @@ namespace Client.ViewModel
                     });
                 }
             }
-            PureDrawMap(GameMap.GameMapArray);
+
+            shipCircList = new ObservableCollection<DrawCircLabel>();
+            for (int i = 0; i < numOfShips; i++)
+            {
+                shipCircList.Add(new DrawCircLabel
+                {
+                    X = 0,
+                    Y = 0,
+                    Color = Colors.Transparent,
+                    Text = ""
+                });
+            }
+
+            bulletCircList = new ObservableCollection<DrawCircLabel>();
+            for (int i = 0; i < numOfBullets; i++)
+            {
+                bulletCircList.Add(new DrawCircLabel
+                {
+                    X = 0,
+                    Y = 0,
+                    Color = Colors.Transparent
+                });
+            }
+
+
+            // PureDrawMap(GameMap.GameMapArray);
             //ReactToCommandline();
+            installer.Data.ConfigData d = new();
+            ip = d.Commands.IP;
+            port = d.Commands.Port;
+            playerID = Convert.ToInt64(d.Commands.PlayerID);
+            teamID = Convert.ToInt64(d.Commands.TeamID);
+            shipTypeID = Convert.ToInt32(d.Commands.ShipType);
+            playbackFile = d.Commands.PlaybackFile;
+            playbackSpeed = d.Commands.PlaybackSpeed;
+            //Playback("E:\\program\\Project\\THUAI7\\logic\\Client\\114514.thuai7.pb", 2.0);
+            if (playbackFile == "")
+            {
+                try
+                {
+                    string[] comInfo = new string[5];
+                    comInfo[0] = ip;
+                    comInfo[1] = port;
+                    comInfo[2] = Convert.ToString(playerID);
+                    comInfo[3] = Convert.ToString(teamID);
+                    comInfo[4] = Convert.ToString(shipTypeID);
+                    System.Diagnostics.Debug.WriteLine($"cominfo[{0}]", comInfo[0]);
+                    System.Diagnostics.Debug.WriteLine($"cominfo[{1}]", comInfo[1]);
+                    System.Diagnostics.Debug.WriteLine($"cominfo[{2}]", comInfo[2]);
+                    System.Diagnostics.Debug.WriteLine($"cominfo[{3}]", comInfo[3]);
+                    System.Diagnostics.Debug.WriteLine($"cominfo[{4}]", comInfo[4]);
+                    ConnectToServer(comInfo);
+                    OnReceive();
+                }
+                catch
+                {
+                    OnReceive();
+                }
+            }
+            else
+            {
+                Playback(playbackFile, playbackSpeed);
+            }
+            //连接Server,comInfo[] 的格式：0 - ip 1 - port 2 - playerID 3 - teamID 4 - ShipType
+
+            //ConnectToServer(new string[]{
+            //    "localhost",
+            //    "8888",
+            //    "1",
+            //    "0",
+            //    "1"
+            //});
+            //d.Commands.Launched = true;
 
 
-
-            ConnectToServer(new string[]{
-                "127.0.0.1",
-                "8888",
-                "0",
-                "1",
-                "1"
-            });
+            // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID (>2023则为观察者模式）
+            //ConnectToServer(new string[]{
+            //    "localhost",
+            //    "8888",
+            //    "2025"
+            //});
 
             timerViewModel = Dispatcher.CreateTimer();
-            timerViewModel.Interval = TimeSpan.FromMilliseconds(5);
-            timerViewModel.Tick += new EventHandler(UpdateTest);
+            timerViewModel.Interval = TimeSpan.FromMilliseconds(50);
+            timerViewModel.Tick += new EventHandler(Refresh);
             timerViewModel.Start();
 
-            OnReceive();
+            //OnReceive();
         }
     }
 }

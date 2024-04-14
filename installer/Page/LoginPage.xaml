@@ -5,37 +5,59 @@
              x:Class="installer.Page.LoginPage"
              Title="Login">
 
-    <VerticalStackLayout
+    <Grid
         HorizontalOptions="Center"
-        WidthRequest="600">
-        <Editor
-            Placeholder="请输入EESAST账户名……"
-            Text="{Binding Username}"
-            FontSize="20"/>
-        <Entry
-            Placeholder="请输入EESAST账户密码……"
-            IsPassword="True"
-            Text="{Binding Password}"
-            ReturnCommand="{Binding LoginBtnClickedCommand}"
-            FontSize="20"/>
-        <HorizontalStackLayout>
-            <CheckBox
-                IsChecked="{Binding Remember}"
-                VerticalOptions="Center"/>
-            <Label
-                Text="记住我"
-                FontSize="18"
-                VerticalOptions="Center"/>
-        </HorizontalStackLayout>
-        <Label
-            Text="{Binding ID}"
-            FontSize="{Binding ConstFontSize}"/>
-        <Button
-            Text="登录"
-            Command="{Binding LoginBtnClickedCommand}"
-            BackgroundColor="{Binding ConstBackgroundColor}"
-            FontSize="{Binding ConstFontSize}"
-            TextColor="{Binding ConstTextColor}"/>
-    </VerticalStackLayout>
+        WidthRequest="500"
+        RowDefinitions="*,*,*,*,*">
 
+        <VerticalStackLayout
+            Grid.Row="1"
+            Grid.RowSpan="4"
+            HorizontalOptions="Center"
+            WidthRequest="500">
+
+            <Editor
+                Placeholder="请输入EESAST账户名……"
+                Text="{Binding Username}"
+                FontSize="20"/>
+            <Entry
+                Placeholder="请输入EESAST账户密码……"
+                IsPassword="True"
+                Text="{Binding Password}"
+                ReturnCommand="{Binding LoginBtnClickedCommand}"
+                FontSize="20"/>
+
+            <HorizontalStackLayout>
+                <CheckBox
+                    IsChecked="{Binding Remember}"
+                    VerticalOptions="Center"/>
+                <Label
+                    Text="记住我"
+                    FontSize="18"
+                    VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <Label
+                Text="{Binding ID}"
+                FontSize="{Binding ConstFontSize}"/>
+
+            <Label
+                Text="{Binding LoginStatus}"
+                FontSize="{Binding ConstFontSize}"/>
+
+            <Label
+                Text="{Binding RemStatus}"
+                FontSize="{Binding ConstFontSize}"/>
+            
+            <Button
+                Text="登录"
+                Command="{Binding LoginBtnClickedCommand}"
+                BackgroundColor="{Binding ConstBackgroundColor}"
+                FontSize="{Binding ConstFontSize}"
+                TextColor="{Binding ConstTextColor}"/>
+
+        </VerticalStackLayout>
+
+    </Grid>
+    
 </ContentPage>

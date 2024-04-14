@@ -14,7 +14,7 @@ message PlayerMsg
 {
     int64 player_id = 1;
     int64 team_id = 2;
-    SweeperType sweeper_type = 3;
+    ShipType ship_type = 3;
 }
 
 
@@ -66,10 +66,9 @@ message InstallMsg
     int64 player_id = 2;
     int64 team_id = 3;
 }
-message BuildSweeperMsg
+message BuildShipMsg
 {
-    SweeperType sweeper_type = 1;
+    ShipType ship_type = 1;
     int64 team_id = 2;
-    int64 player_id = 3;
-    int32 birthpoint_index = 4;
+    int32 birthpoint_index = 3;
 }

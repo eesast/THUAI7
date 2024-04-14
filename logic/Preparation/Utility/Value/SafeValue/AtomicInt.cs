@@ -5,7 +5,7 @@ namespace Preparation.Utility
 {
     //其对应属性不应当有set访问器，避免不安全的=赋值
 
-    public class AtomicInt(int x) : Atomic, IAddable<int>
+    public class AtomicInt(int x) : Atomic, IIntAddable
     {
         protected int v = x;
 
@@ -43,32 +43,49 @@ namespace Preparation.Utility
 
     /// <summary>
     /// 参数要求倍率speed（默认1）
-    /// 可以设定ISafeConvertible<int>类的Score，默认初始为0的AtomicInt
+    /// 可以设定IIntAddable类的Score，默认初始为0的AtomicInt
     /// 在发生正向的变化时，自动给Score加上正向变化的差乘以speed（取整）。
     /// 注意：AtomicIntOnlyAddScore本身为AtomicInt，提供的Score可能构成环而死锁。
     /// </summary>
     public class AtomicIntOnlyAddScore(int x, double speed = 1.0) : AtomicInt(x)
     {
-        public IAddable<int> score = new AtomicInt(0);
-        public IAddable<int> Score
+        private IIntAddable score = new AtomicInt(0);
+        /// <summary>
+        /// 注意：Score的set操作（即=）的真正意义是改变其引用，单纯改变值不应当使用该操作
+        /// </summary>
+        public IIntAddable Score
         {
             get
             {
-                return Interlocked.CompareExchange(ref score, null, null);
+                return Interlocked.CompareExchange(ref score!, null, null);
             }
             set
             {
                 Interlocked.Exchange(ref score, value);
             }
         }
-        public AtomicDouble speed = new(speed);
+        private IDouble speed = new AtomicDouble(speed);
+        /// <summary>
+        /// 注意：set操作（即=）的真正意义是改变其引用，单纯改变值不应当使用该操作
+        /// </summary>
+        public IDouble Speed
+        {
+            get
+            {
+                return Interlocked.CompareExchange(ref speed!, null, null);
+            }
+            set
+            {
+                Interlocked.Exchange(ref speed, value);
+            }
+        }
 
         /// <returns>返回操作前的值</returns>
         public override int SetROri(int value)
         {
             int previousV = Interlocked.Exchange(ref v, value);
             if (value - previousV > 0)
-                Score.Add(Convert.ToInt32((value - previousV) * speed));
+                Score.Add(Convert.ToInt32((value - previousV) * speed.ToDouble()));
             return previousV;
         }
         /// <returns>返回操作前的值</returns>
@@ -78,12 +95,12 @@ namespace Preparation.Utility
         }
         public override void Add(int x)
         {
-            if (x > 0) Score.Add(Convert.ToInt32(x * speed));
+            if (x > 0) Score.Add(Convert.ToInt32(x * speed.ToDouble()));
             Interlocked.Add(ref v, x);
         }
         public override int AddRNow(int x)
         {
-            if (x > 0) Score.Add(Convert.ToInt32(x * speed));
+            if (x > 0) Score.Add(Convert.ToInt32(x * speed.ToDouble()));
             return Interlocked.Add(ref v, x);
         }
         public void AddNotAddScore(int x) => Interlocked.Add(ref v, x);
@@ -92,7 +109,7 @@ namespace Preparation.Utility
         /// </summary>
         public override void AddPositive(int x)
         {
-            Score.Add(Convert.ToInt32(x * speed));
+            Score.Add(Convert.ToInt32(x * speed.ToDouble()));
             Interlocked.Add(ref v, x);
         }
         /// <summary>
@@ -100,18 +117,18 @@ namespace Preparation.Utility
         /// </summary>
         public override int AddPositiveRNow(int x)
         {
-            Score.Add(Convert.ToInt32(x * speed));
+            Score.Add(Convert.ToInt32(x * speed.ToDouble()));
             return Interlocked.Add(ref v, x);
         }
 
         public override int SubRNow(int x)
         {
-            if (x < 0) Score.Add(Convert.ToInt32((-x) * speed));
+            if (x < 0) Score.Add(Convert.ToInt32((-x) * speed.ToDouble()));
             return Interlocked.Add(ref v, -x);
         }
         public override void Sub(int x)
         {
-            if (x < 0) Score.Add(Convert.ToInt32((-x) * speed));
+            if (x < 0) Score.Add(Convert.ToInt32((-x) * speed.ToDouble()));
             Interlocked.Add(ref v, -x);
         }
         public int SubRNowNotAddScore(int x)
@@ -136,7 +153,7 @@ namespace Preparation.Utility
         {
             int previousV = Interlocked.CompareExchange(ref v, newV, compareTo);
             if (newV - previousV > 0)
-                Score.Add(Convert.ToInt32((newV - previousV) * speed));
+                Score.Add(Convert.ToInt32((newV - previousV) * speed.ToDouble()));
             return previousV;
         }
         /// <returns>返回操作前的值</returns>
@@ -154,12 +171,12 @@ namespace Preparation.Utility
     /// </summary>
     public class AtomicIntChangeAffectScore(int x, double speed = 1.0) : AtomicInt(x)
     {
-        public IAddable<int> score = new AtomicInt(0);
-        public IAddable<int> Score
+        public IIntAddable score = new AtomicInt(0);
+        public IIntAddable Score
         {
             get
             {
-                return Interlocked.CompareExchange(ref score, null, null);
+                return Interlocked.CompareExchange(ref score!, null, null);
             }
             set
             {
@@ -260,7 +277,7 @@ namespace Preparation.Utility
         }
     }
 
-    public class AtomicLong(long x) : Atomic, IAddable<int>, IAddable<long>
+    public class AtomicLong(long x) : Atomic, IIntAddable, IAddable<long>
     {
         protected long v = x;
 
@@ -296,7 +313,7 @@ namespace Preparation.Utility
         {
             get
             {
-                return Interlocked.CompareExchange(ref score, null, null);
+                return Interlocked.CompareExchange(ref score!, null, null)!;
             }
             set
             {

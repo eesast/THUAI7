@@ -13,25 +13,25 @@ class IAI
 public:
     virtual ~IAI() = default;
     IAI() = default;
-    virtual void play(ISweeperAPI& api) = 0;
+    virtual void play(IShipAPI& api) = 0;
     virtual void play(ITeamAPI& api) = 0;
 };
 
-using CreateAIFunc = std::unique_ptr<IAI> (*)(int64_t playerID);
+using CreateAIFunc = std::unique_ptr<IAI> (*)(int32_t playerID);
 
 class AI : public IAI
 {
 public:
-    AI(int64_t pID) :
+    AI(int32_t pID) :
         IAI(),
         playerID(pID)
     {
     }
-    void play(ISweeperAPI& api) override;
+    void play(IShipAPI& api) override;
     void play(ITeamAPI& api) override;
 
 private:
-    int64_t playerID;
+    int32_t playerID;
 };
 
 #endif

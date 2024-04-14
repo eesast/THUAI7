@@ -9,67 +9,78 @@ namespace Client.Util
 {
     public static class UtilInfo
     {
-        public static Dictionary<SweeperType, string> SweeperTypeNameDict = new Dictionary<SweeperType, string>{
-            { SweeperType.NullSweeperType, "NullSweeperType" },
-            { SweeperType.CivilianSweeper, "CivilianSweeper" },
-            { SweeperType.MilitarySweeper, "MilitarySweeper" },
-            { SweeperType.FlagSweeper, "FlagSweeper" }
+        public static Dictionary<ShipType, string> ShipTypeNameDict = new Dictionary<ShipType, string>{
+            { ShipType.NullShipType, "Null" },
+            { ShipType.CivilianShip, "Civilian" },
+            { ShipType.MilitaryShip, "Military" },
+            { ShipType.FlagShip, "FlagShip" }
         };
 
-        public static Dictionary<SweeperState, string> SweeperStateNameDict = new Dictionary<SweeperState, string>
+        public static Dictionary<ShipState, string> ShipStateNameDict = new Dictionary<ShipState, string>
         {
-            { SweeperState.Idle, "Idle" },
-            { SweeperState.Producing, "Producing" },
-            { SweeperState.Constructing, "Constructing" },
-            { SweeperState.Recovering, "Recovering" },
-            { SweeperState.Recycling, "Recycling" },
-            { SweeperState.Attacking, "Attacking" },
-            { SweeperState.Swinging, "Swinging" },
-            { SweeperState.Stunned, "Stunned" },
-            { SweeperState.Moving, "Moving" }
+            { ShipState.Idle, "Idle" },
+            { ShipState.Producing, "Producing" },
+            { ShipState.Constructing, "Constructing" },
+            { ShipState.Recovering, "Recovering" },
+            { ShipState.Recycling, "Recycling" },
+            { ShipState.Attacking, "Attacking" },
+            { ShipState.Swinging, "Swinging" },
+            { ShipState.Stunned, "Stunned" },
+            { ShipState.Moving, "Moving" }
+
         };
 
-        public static Dictionary<ArmorType, string> SweeperArmorTypeNameDict = new Dictionary<ArmorType, string>
+        public static Dictionary<ArmorType, string> ShipArmorTypeNameDict = new Dictionary<ArmorType, string>
         {
-            { ArmorType.NullArmorType, "NullArmorType" },
-            { ArmorType.Armor1, "Armor1" },
-            { ArmorType.Armor2, "Armor2" },
-            { ArmorType.Armor3, "Armor3" }
+            //{ ArmorType.NullArmorType, "Null" },
+            //{ ArmorType.Armor1, "Armor1" },
+            //{ ArmorType.Armor2, "Armor2" },
+            //{ ArmorType.Armor3, "Armor3" }
+            { ArmorType.NullArmorType, "Null" },
+            { ArmorType.Armor1, "🪖🔸" },
+            { ArmorType.Armor2, "🪖⭐" },
+            { ArmorType.Armor3, "🪖🌟" }
         };
 
-        public static Dictionary<ShieldType, string> SweeperShieldTypeNameDict = new Dictionary<ShieldType, string>
+        public static Dictionary<ShieldType, string> ShipShieldTypeNameDict = new Dictionary<ShieldType, string>
         {
-            { ShieldType.NullShieldType, "NullShieldType" },
-            { ShieldType.Shield1, "Shield1" },
-            { ShieldType.Shield2, "Shield2" },
-            { ShieldType.Shield3, "Shield3" }
+            { ShieldType.NullShieldType, "Null" },
+            { ShieldType.Shield1, "🛡️🔸" },
+            { ShieldType.Shield2, "🛡️⭐" },
+            { ShieldType.Shield3, "🛡️🌟" }
         };
 
-        public static Dictionary<ConstructorType, string> SweeperConstructorNameDict = new Dictionary<ConstructorType, string>
+        public static Dictionary<ConstructorType, string> ShipConstructorNameDict = new Dictionary<ConstructorType, string>
         {
-            { ConstructorType.NullConstructorType, "NullConstructorType" },
-            { ConstructorType.Constructor1, "Constructor1" },
-            { ConstructorType.Constructor2, "Constructor2" },
-            { ConstructorType.Constructor3, "Constructor3" }
+            { ConstructorType.NullConstructorType, "Null" },
+            { ConstructorType.Constructor1, "🔨🔸" },
+            { ConstructorType.Constructor2, "🔨⭐" },
+            { ConstructorType.Constructor3, "🔨🌟" }
         };
 
-        public static Dictionary<ProducerType, string> SweeperProducerTypeNameDict = new Dictionary<ProducerType, string>
+        public static Dictionary<ProducerType, string> ShipProducerTypeNameDict = new Dictionary<ProducerType, string>
         {
-            { ProducerType.NullProducerType, "NullProducerType" },
-            { ProducerType.Producer1, "Producer1" },
-            { ProducerType.Producer2, "Producer2" },
-            { ProducerType.Producer3, "Producer3" }
+            { ProducerType.NullProducerType, "Null" },
+            { ProducerType.Producer1, "⛏🔸" },
+            { ProducerType.Producer2, "⛏⭐" },
+            { ProducerType.Producer3, "⛏🌟" }
         };
 
-        public static Dictionary<WeaponType, string> SweeperWeaponTypeNameDict = new Dictionary<WeaponType, string>
+        public static Dictionary<WeaponType, string> ShipWeaponTypeNameDict = new Dictionary<WeaponType, string>
         {
-            { WeaponType.NullWeaponType, "NullWeaponType" },
+            { WeaponType.NullWeaponType, "Null" },
             { WeaponType.Lasergun, "Lasergun" },
             { WeaponType.Arcgun, "Arcgun" },
             { WeaponType.Plasmagun, "Plasmagun" },
             { WeaponType.Missilegun, "Missilegun" },
             { WeaponType.Shellgun, "Shellgun" }
         };
+
+        public static bool isRedPlayerShipsEmpty = true;
+        public static bool isBluePlayerShipsEmpty = false;
+
+        public static int unitWidth = 10;
+        public static int unitHeight = 10;
     }
 
 
