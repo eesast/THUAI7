@@ -17,6 +17,11 @@ namespace installer.Model
         public string Token { get; set; } = "";
     }
 
+    public enum LoginStatus
+    {
+        offline, logined
+    }
+
     public class EEsast
     {
         public enum LangUsed { cpp, py };
@@ -38,11 +43,8 @@ namespace installer.Model
         public string Email { get; protected set; } = string.Empty;
 
         public Logger Log;
-        public enum WebStatus
-        {
-            disconnected, offline, logined
-        }
-        public WebStatus Status = WebStatus.disconnected;
+
+        public LoginStatus Status = LoginStatus.offline;
         public Tencent_Cos EEsast_Cos { get; protected set; } = new Tencent_Cos("1255334966", "ap-beijing", "eesast");
         public EEsast(Logger? _log = null)
         {
@@ -53,9 +55,9 @@ namespace installer.Model
         {
             try
             {
-                using (var response = await client.PostAsync("https://api.eesast.com/users/login", JsonContent.Create(new
+                using (var response = await client.PostAsync("https://api.eesast.com/user/login", JsonContent.Create(new
                 {
-                    email = string.IsNullOrEmpty(useremail) ? Username : useremail,
+                    user = string.IsNullOrEmpty(useremail) ? Username : useremail,
                     password = string.IsNullOrEmpty(userpassword) ? Password : userpassword,
                 })))
                 {
@@ -63,11 +65,9 @@ namespace installer.Model
                     {
                         case System.Net.HttpStatusCode.OK:
                             var info = JsonSerializer.Deserialize<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
-                            ID = info.Keys.Contains("_id") ? info["_id"] : string.Empty;
-                            Email = info.Keys.Contains("email") ? info["email"] : string.Empty;
                             Token = info.Keys.Contains("token") ? info["token"] : string.Empty;
                             Log.LogInfo($"{Username} logined successfully.");
-                            Status = WebStatus.logined;
+                            Status = LoginStatus.logined;
                             break;
                         default:
                             int code = ((int)response.StatusCode);
@@ -99,7 +99,7 @@ namespace installer.Model
         /// <returns>-1:tokenFail;-2:FileNotExist;-3:CosFail;-4:loginTimeout;-5:Fail;-6:ReadFileFail;-7:networkError</returns>
         public async Task<int> UploadFiles(HttpClient client, string userfile, string type, string plr)    //用来上传文件
         {
-            if (Status != WebStatus.logined)
+            if (Status != LoginStatus.logined)
             {
                 Log.LogError("用户未登录。");
                 return -1;
@@ -157,7 +157,7 @@ namespace installer.Model
 
         async public Task UserDetails(HttpClient client)  // 用来测试访问网站
         {
-            if (Status != WebStatus.logined)  // 读取token失败
+            if (Status != LoginStatus.logined)  // 读取token失败
             {
                 Log.LogError("用户未登录。");
                 return;
