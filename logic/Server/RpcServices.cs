@@ -196,7 +196,7 @@ namespace Server
                 // }
                 if (!firstTime && request.PlayerId > 0 && (ship == null || ship.IsRemoved == true))
                 {
-                    Console.WriteLine($"Cannot find ship {request.PlayerId} from Team {request.TeamId}!");
+                    // Console.WriteLine($"Cannot find ship {request.PlayerId} from Team {request.TeamId}!");
                 }
                 else
                 {
