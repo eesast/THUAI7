@@ -25,7 +25,8 @@ namespace installer.ViewModel
             Downloader = downloader;
             FolderPicker = folderPicker;
 
-            downloadPath = Downloader.Data.Config.InstallPath;
+            DownloadPath = Downloader.Data.Config.InstallPath;
+            Installed = Downloader.Data.Installed;
 
             BrowseBtnClickedCommand = new AsyncRelayCommand(BrowseBtnClicked);
             CheckUpdBtnClickedCommand = new RelayCommand(CheckUpdBtnClicked);
