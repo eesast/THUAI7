@@ -39,7 +39,7 @@
             </HorizontalStackLayout>
 
             <Button
-                Text="下载"
+                Text="{Binding DownloadBtnText}"
                 BorderWidth="2"
                 Command="{Binding DownloadBtnClickedCommand}"
                 IsEnabled="{Binding DownloadEnabled}"

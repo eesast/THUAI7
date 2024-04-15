@@ -53,7 +53,10 @@ namespace installer.ViewModel
                 {
                     Title = "Python proto构建",
                     Content = "> 首先请确保电脑已经安装了python3和pip，然后执行位于CAPI/python下的generate_proto.cmd(Windows)/generate_proto.sh(Mac/Linux)，等待protos文件夹生成完毕即可。"
-                }
+                },
+                new HelpMessage 
+                { Title = "Launcher", Content = "> Playback File非空时为回放模式" },
+                new HelpMessage { Title = "Launcher", Content = "> 启动操作可能需要管理员权限" }
                 });
 
 
