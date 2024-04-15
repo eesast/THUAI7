@@ -20,6 +20,8 @@ namespace installer.ViewModel
         {
             Downloader = downloader;
 
+            Mode = "Debug";
+
             IP = Downloader.Data.Config.Commands.IP;
             Port = Downloader.Data.Config.Commands.Port;
             PlaybackFile = Downloader.Data.Config.Commands.PlaybackFile;
@@ -57,6 +59,63 @@ namespace installer.ViewModel
             StartBtnClickedCommand = new AsyncRelayCommand(StartBtnClicked);
         }
 
+        public bool Installed { get => Downloader.Data.Config.Installed; }
+
+        #region 参数
+        private string? mode;
+        public string? Mode
+        {
+            get => mode;
+            set
+            {
+                mode = value;
+                OnPropertyChanged();
+                if (mode == "Playback")
+                {
+                    playbackFileChanged = true;
+                    SaveEnabled = true;
+                    StartEnabled = false;
+                    PlaybackVisible = true;
+                    DebugVisible = false;
+                }
+                else if (mode == "Debug")
+                {
+                    PlaybackFile = "";
+                    SaveEnabled = true;
+                    StartEnabled = false;
+                    PlaybackVisible = false;
+                    DebugVisible = true;
+                }
+                else
+                {
+                    SaveEnabled = false;
+                    StartEnabled = false;
+                    PlaybackVisible = false;
+                    DebugVisible = false;
+                }
+            }
+        }
+
+        private bool playbackVisible;
+        private bool debugVisible;
+        public bool PlaybackVisible
+        {
+            get => playbackVisible;
+            set
+            {
+                playbackVisible = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool DebugVisible
+        {
+            get => debugVisible;
+            set
+            {
+                debugVisible = value;
+                OnPropertyChanged();
+            }
+        }
 
         private string? ip;
         private string? port;
@@ -81,11 +140,7 @@ namespace installer.ViewModel
                     ipChanged = false;
                 else
                     ipChanged = true;
-                StartEnabled = !ipChanged
-                            && !portChanged
-                            && !playbackFileChanged
-                            && !playbackSpeedChanged
-                            && !languageChanged;
+                StartEnabled = true;
                 OnPropertyChanged();
             }
         }
@@ -99,14 +154,11 @@ namespace installer.ViewModel
                     portChanged = false;
                 else
                     portChanged = true;
-                startEnabled = !ipChanged
-                            && !portChanged
-                            && !playbackFileChanged
-                            && !playbackSpeedChanged
-                            && !languageChanged;
+                StartEnabled = true;
                 OnPropertyChanged();
             }
         }
+
         public string? PlaybackFile
         {
             get => playbackFile;
@@ -117,11 +169,7 @@ namespace installer.ViewModel
                     playbackFileChanged = false;
                 else
                     playbackFileChanged = true;
-                StartEnabled = !ipChanged
-                            && !portChanged
-                            && !playbackFileChanged
-                            && !playbackSpeedChanged
-                            && !languageChanged;
+                StartEnabled = true;
                 OnPropertyChanged();
             }
         }
@@ -135,11 +183,7 @@ namespace installer.ViewModel
                     playbackSpeedChanged = false;
                 else
                     playbackSpeedChanged = true;
-                StartEnabled = !ipChanged
-                            && !portChanged
-                            && !playbackFileChanged
-                            && !playbackSpeedChanged
-                            && !languageChanged;
+                StartEnabled = true;
                 OnPropertyChanged();
             }
         }
@@ -159,11 +203,7 @@ namespace installer.ViewModel
                 }
                 if (!cppSelect && !PySelect)
                     languageChanged = true;
-                StartEnabled = !ipChanged
-                            && !portChanged
-                            && !playbackFileChanged
-                            && !playbackSpeedChanged
-                            && !languageChanged;
+                StartEnabled = true;
                 OnPropertyChanged();
             }
         }
@@ -183,15 +223,34 @@ namespace installer.ViewModel
                 }
                 if (!cppSelect && !PySelect)
                     languageChanged = true;
-                StartEnabled = !ipChanged
-                            && !portChanged
-                            && !playbackFileChanged
-                            && !playbackSpeedChanged
-                            && !languageChanged;
+                StartEnabled = true;
                 OnPropertyChanged();
             }
         }
 
+        private int teamCount = 2;
+        private int shipCount = 4;
+
+        public int TeamCount
+        {
+            get => teamCount;
+            set
+            {
+                teamCount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int ShipCount
+        {
+            get => shipCount;
+            set
+            {
+                shipCount = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
 
         private bool saveEnabled;
         public bool SaveEnabled
@@ -210,7 +269,13 @@ namespace installer.ViewModel
             get => startEnabled;
             set
             {
-                startEnabled = value;
+                startEnabled = value
+                            && Installed
+                            && !ipChanged
+                            && !portChanged
+                            && !playbackFileChanged
+                            && !playbackSpeedChanged
+                            && !languageChanged;
                 OnPropertyChanged();
             }
         }
@@ -223,11 +288,7 @@ namespace installer.ViewModel
         {
             DebugAlert = "Save";
             await Task.Run(() => Save());
-            StartEnabled = !ipChanged
-                        && !portChanged
-                        && !playbackFileChanged
-                        && !playbackSpeedChanged
-                        && !languageChanged;
+            StartEnabled = true;
         }
         private async Task StartBtnClicked()
         {
@@ -270,6 +331,8 @@ namespace installer.ViewModel
             {
                 try
                 {
+                    if (Mode == "Playback" && string.IsNullOrEmpty(PlaybackFile))
+                        throw new Exception("empty");
                     Downloader.Data.Config.Commands.PlaybackFile = PlaybackFile;
                     playbackFileChanged = false;
                 }
@@ -316,37 +379,48 @@ namespace installer.ViewModel
 
         private void Start()
         {
-            Process.Start(new ProcessStartInfo()
+            if (Mode == "Playback")
             {
-                FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Server", "Server.exe"),
-                Arguments = $"--ip {IP} --port {Port}"
-            });
-            Process.Start(new ProcessStartInfo()
-            {
-                FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
-            });
-
-            if (CppSelect && string.IsNullOrEmpty(PlaybackFile))
-            {
-                for (int teamID = 0; teamID <= 1; teamID++)
-                    for (int playerID = 0; playerID <= 4; playerID++)
-                        Process.Start(new ProcessStartInfo()
-                        {
-                            FileName = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "cpp", "x64", "Debug", "API.exe"),
-                            Arguments = $"-I {IP} -P {Port} -t {teamID} -p {playerID} -d"
-                        });
+                Process.Start(new ProcessStartInfo()
+                {
+                    FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
+                });
             }
-            else if (PySelect && string.IsNullOrEmpty(PlaybackFile))
+            else if (Mode == "Debug")
             {
-                for (int teamID = 0; teamID <= 1; teamID++)
-                    for (int playerID = 0; playerID <= 4; playerID++)
-                        Process.Start(new ProcessStartInfo()
-                        {
-                            FileName = "cmd.exe",
-                            Arguments = "/c python"
-                                + Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py")
-                                + $"-I {IP} -P {Port} -t {teamID} -p {playerID} -d"
-                        });
+                Process.Start(new ProcessStartInfo()
+                {
+                    FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Server", "Server.exe"),
+                    Arguments = $"--ip {IP} --port {Port} --teamCount {TeamCount} --shipNum {ShipCount}"
+                });
+
+                if (CppSelect && string.IsNullOrEmpty(PlaybackFile))
+                {
+                    for (int teamID = 0; teamID < TeamCount; teamID++)
+                        for (int playerID = 0; playerID < ShipCount + 1; playerID++)
+                            Process.Start(new ProcessStartInfo()
+                            {
+                                FileName = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "cpp", "x64", "Debug", "API.exe"),
+                                Arguments = $"-I {IP} -P {Port} -t {teamID} -p {playerID} -o"
+                            });
+                }
+                else if (PySelect && string.IsNullOrEmpty(PlaybackFile))
+                {
+                    for (int teamID = 0; teamID < teamCount; teamID++)
+                        for (int playerID = 0; playerID < ShipCount + 1; playerID++)
+                            Process.Start(new ProcessStartInfo()
+                            {
+                                FileName = "cmd.exe",
+                                Arguments = "/c python "
+                                    + Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py")
+                                    + $" -I {IP} -P {Port} -t {teamID} -p {playerID} -o"
+                            });
+                }
+                
+                Process.Start(new ProcessStartInfo()
+                {
+                    FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
+                });
             }
         }
 
