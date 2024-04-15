@@ -140,24 +140,40 @@ std::future<bool> ShipDebugAPI::Attack(double angleInRadian)
 
 std::future<bool> ShipDebugAPI::Recover(int64_t recover)
 {
+    logger->info("Recover: recover={}, called at {}ms", recover, Time::TimeSinceStart(startPoint));
     return std::async(std::launch::async, [=]()
-                      { return logic.Recover(recover); });
+                      { auto result= logic.Recover(recover);
+                       if(!result)
+                        logger->warn("Recover: failed at {}ms",Time::TimeSinceStart(startPoint));
+                        return result; });
 }
 std::future<bool> ShipDebugAPI::Produce()
 {
+    logger->info("Produce: called at {}ms", Time::TimeSinceStart(startPoint));
     return std::async(std::launch::async, [=]()
-                      { return logic.Produce(); });
+                      { auto result= logic.Produce();
+                        if(!result)
+                        logger->warn("Produce: failed at {}ms",Time::TimeSinceStart(startPoint));
+                        return result; });
 }
 std::future<bool> ShipDebugAPI::Rebuild(THUAI7::ConstructionType constructionType)
 {
+    logger->info("Rebuild: rebuilding {}, called at {}ms", THUAI7::constructionDict[constructionType], Time::TimeSinceStart(startPoint));
     return std::async(std::launch::async, [=]()
-                      { return logic.Rebuild(constructionType); });
+                      { auto result= logic.Rebuild(constructionType);
+        if(!result)
+        logger->warn("Rebuild: failed at {}ms",Time::TimeSinceStart(startPoint));
+        return result; });
 }
 
 std::future<bool> ShipDebugAPI::Construct(THUAI7::ConstructionType constructionType)
 {
+    logger->info("Construct: constructing {}, called at {}ms", THUAI7::constructionDict[constructionType], Time::TimeSinceStart(startPoint));
     return std::async(std::launch::async, [=]()
-                      { return logic.Construct(constructionType); });
+                      { auto result= logic.Construct(constructionType); 
+        if(!result)
+        logger->warn("Construct: failed at {}ms",Time::TimeSinceStart(startPoint));
+            return result; });
 }
 
 std::vector<std::shared_ptr<const THUAI7::Ship>> ShipDebugAPI::GetShips() const
@@ -426,8 +442,12 @@ int32_t TeamDebugAPI::GetScore() const
 
 std::future<bool> TeamDebugAPI::InstallModule(int32_t playerID, THUAI7::ModuleType moduleType)
 {
+    logger->info("InstallModule: install {} for ship {}, called at {}ms", THUAI7::moduleTypeDict[moduleType], playerID, Time::TimeSinceStart(startPoint));
     return std::async(std::launch::async, [=]()
-                      { return logic.InstallModule(playerID, moduleType); });
+                      { auto result= logic.InstallModule(playerID, moduleType);
+        if(!result)
+            logger->info("InstallModule: failed at {}ms",Time::TimeSinceStart(startPoint));
+        return result; });
 }
 
 std::future<bool> TeamDebugAPI::Recycle(int32_t playerID)
@@ -442,8 +462,12 @@ std::future<bool> TeamDebugAPI::Recycle(int32_t playerID)
 
 std::future<bool> TeamDebugAPI::BuildShip(THUAI7::ShipType ShipType, int32_t birthIndex)
 {
+    logger->info("BuildShip: build {} at birthIndex {}, called at {}ms", THUAI7::shipTypeDict[ShipType], birthIndex, Time::TimeSinceStart(startPoint));
     return std::async(std::launch::async, [=]()
-                      { return logic.BuildShip(ShipType, birthIndex); });
+                      { auto result=logic.BuildShip(ShipType, birthIndex);
+        if(!result)
+        logger->warn("BuildShip: failed at {}ms",Time::TimeSinceStart(startPoint));
+        return result; });
 }
 
 void TeamDebugAPI::PrintSelfInfo() const
