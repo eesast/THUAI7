@@ -98,9 +98,12 @@ namespace Gaming
                 Debugger.Output($"Successfully activated: {teamID} {shipType} at {pos}");
                 return ship.PlayerID;
             }
-            teamList[(int)teamID].ShipPool.ReturnObj(ship);
-            Debugger.Output($"Failed to activate: {teamID} {shipType} at {pos}, rule not permitted");
-            return GameObj.invalidID;
+            else
+            {
+                teamList[(int)teamID].ShipPool.ReturnObj(ship);
+                Debugger.Output($"Failed to activate: {teamID} {shipType} at {pos}, rule not permitted");
+                return GameObj.invalidID;
+            }
         }
         public bool StartGame(int milliSeconds)
         {
