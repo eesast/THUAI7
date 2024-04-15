@@ -10,8 +10,8 @@ extern const bool asynchronous = false;
 
 // 选手需要依次将player1到player4的船类型在这里定义
 extern const std::array<THUAI7::ShipType, 4> ShipTypeDict = {
-    THUAI7::ShipType::CivilianShip,
     THUAI7::ShipType::MilitaryShip,
+    THUAI7::ShipType::CivilianShip,
     THUAI7::ShipType::MilitaryShip,
     THUAI7::ShipType::FlagShip,
 };
@@ -22,31 +22,32 @@ void AI::play(IShipAPI& api)
 {
     if (this->playerID == 1)
     {
-        api.Move(10, 2.1);
-        api.PrintSelfInfo();
-        api.Attack(1.1);
     }
     else if (this->playerID == 2)
     {
-        api.Move(10, 2.1);
+        api.MoveDown(100);
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        api.MoveLeft(100);
         api.PrintSelfInfo();
+        api.PrintShip();
+        api.Recover(10);
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        api.Attack(1.5);
     }
 
     else if (this->playerID == 3)
     {
-        api.Move(10, 2.1);
-        api.PrintSelfInfo();
     }
     else if (this->playerID == 4)
     {
-        api.Move(10, 2.1);
-        api.PrintSelfInfo();
+        api.MoveDown(100);
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        api.MoveLeft(100);
     }
 }
 
 void AI::play(ITeamAPI& api)  // 默认team playerID 为0
 {
     api.PrintSelfInfo();
-    api.InstallModule(1, THUAI7::ModuleType::ModuleArcGun);
-    api.Recycle(1);
+    api.InstallModule(2, THUAI7::ModuleType::ModuleLaserGun);
 }

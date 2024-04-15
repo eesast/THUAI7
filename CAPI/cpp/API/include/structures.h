@@ -330,6 +330,33 @@ namespace THUAI7
         {BulletType::Arc, "Arc"},
     };
 
+    inline std::map<ConstructionType, std::string> constructionDict{
+        {ConstructionType::NullConstructionType, "NullConstructionType"},
+        {ConstructionType::Community, "Community"},
+        {ConstructionType::Fort, "Fort"},
+        {ConstructionType::Factory, "Factory"},
+    };
+
+    inline std::map<ModuleType, std::string> moduleTypeDict{
+        {ModuleType::NullModuleType, "NullModuleType"},
+        {ModuleType::ModuleProducer1, "ModuleProducer1"},
+        {ModuleType::ModuleProducer2, "ModuleProducer2"},
+        {ModuleType::ModuleProducer3, "ModuleProducer3"},
+        {ModuleType::ModuleConstructor1, "ModuleConstructor1"},
+        {ModuleType::ModuleConstructor2, "ModuleConstructor2"},
+        {ModuleType::ModuleConstructor3, "ModuleConstructor3"},
+        {ModuleType::ModuleArmor1, "ModuleArmor1"},
+        {ModuleType::ModuleArmor2, "ModuleArmor2"},
+        {ModuleType::ModuleArmor3, "ModuleArmor3"},
+        {ModuleType::ModuleShield1, "ModuleShield1"},
+        {ModuleType::ModuleShield2, "ModuleShield2"},
+        {ModuleType::ModuleShield3, "ModuleShield3"},
+        {ModuleType::ModuleLaserGun, "ModuleLaserGun"},
+        {ModuleType::ModulePlasmaGun, "ModulePlasmaGun"},
+        {ModuleType::ModuleShellGun, "ModuleShellGun"},
+        {ModuleType::ModuleMissileGun, "ModuleMissileGun"},
+        {ModuleType::ModuleArcGun, "ModuleArcGun"}};
+
     inline std::map<MessageOfObj, std::string> messageOfObjDict{
         {MessageOfObj::NullMessageOfObj, "NullMessageOfObj"},
         {MessageOfObj::ShipMessage, "ShipMessage"},
