@@ -34,15 +34,38 @@ class AI(IAI):
         # 公共操作
         if self.__playerID == 1:
             api.PrintSelfInfo()
-            api.Move(100, 1.1)
-            api.Attack(10.0)
+            api.MoveLeft(100)
+            time.sleep(1)
+            api.MoveRight(100)
+            time.sleep(1)
+            api.MoveDown(100)
+            time.sleep(1)
+            api.MoveUp(100)
             time.sleep(1)
             # player1的操作
             return
         elif self.__playerID == 2:
+            api.PrintSelfInfo()
+            api.MoveLeft(100)
+            time.sleep(1)
+            api.MoveRight(100)
+            time.sleep(1)
+            api.MoveDown(100)
+            time.sleep(1)
+            api.MoveUp(100)
+            time.sleep(1)
             # player2的操作
             return
         elif self.__playerID == 3:
+            api.PrintSelfInfo()
+            api.MoveLeft(100)
+            time.sleep(1)
+            api.MoveRight(100)
+            time.sleep(1)
+            api.MoveDown(100)
+            time.sleep(1)
+            api.MoveUp(100)
+            time.sleep(1)
             # player3的操作
             return
         elif self.__playerID == 4:
@@ -52,6 +75,7 @@ class AI(IAI):
 
     def TeamPlay(self, api: ITeamAPI) -> None:
         assert self.__playerID == 0, "Team's playerID must be 0"
-        # api.BuildShip(shipType=THUAI7.ShipType.CivilianShip)
+        api.BuildShip(shipType=THUAI7.ShipType.MilitaryShip,birthIndex=0)
+        time.sleep(2)
         # 操作
         return

@@ -28,7 +28,7 @@ Logic::Logic(int32_t pID, int32_t tID, THUAI7::PlayerType pType, THUAI7::ShipTyp
     bufferState->mapInfo = std::make_shared<THUAI7::GameMap>();
     if (teamID == 0)
         playerTeam = THUAI7::PlayerTeam::Red;
-    if (teamID == 1)
+    else if (teamID == 1)
         playerTeam = THUAI7::PlayerTeam::Blue;
     else
         playerTeam = THUAI7::PlayerTeam::NullTeam;
@@ -303,7 +303,6 @@ void Logic::ProcessMessage()
                 {
                     case THUAI7::GameState::GameStart:
                         logger->info("Game Start!");
-
                         // 读取地图
                         for (const auto& item : clientMsg.obj_message())
                         {
@@ -831,7 +830,10 @@ void Logic::LoadBuffer(const protobuf::MessageToClient& message)
         LoadBufferSelf(message);
         // 确保这是一个活着的船，否则会使用空指针
         if (playerType == THUAI7::PlayerType::Ship && !bufferState->shipSelf)
+        {
+            logger->info("exit for nullSelf");
             return;
+        }
         for (const auto& item : message.obj_message())
             LoadBufferCase(item);
     }

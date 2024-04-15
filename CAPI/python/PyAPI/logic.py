@@ -609,8 +609,8 @@ class Logic(ILogic):
             #         self.__bufferState.bombedBullets.append(Proto2THUAI7.Protobuf2THUAI7BombedBullet(item.bombed_bullet_message))
             #         self.__logger.debug('Add Bombed Bullet!')
 
-            else:
-                self.__logger.error("Unknown message!")
+            # else:
+            #     self.__logger.error("Unknown message!")
         elif self.__playerType == THUAI7.PlayerType.Team:
 
             def HaveOverView(targetX: int, targetY: int):
@@ -788,8 +788,8 @@ class Logic(ILogic):
             #         self.__bufferState.bombedBullets.append(Proto2THUAI7.Protobuf2THUAI7BombedBullet(item.bombed_bullet_message))
             #         self.__logger.debug('Add Bombed Bullet!')
 
-            else:
-                self.__logger.error("Unknown message!")
+            # else:
+            #     self.__logger.error("Unknown message!")
 
     def __UnBlockAI(self) -> None:
         with self.__cvAI:
