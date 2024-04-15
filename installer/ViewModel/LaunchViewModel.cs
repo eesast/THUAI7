@@ -382,6 +382,7 @@ namespace installer.ViewModel
 
         private bool serverStarted;
         private List<Process> children = new List<Process>();
+        private Process? server;
         private void Start()
         {
             if (Mode == "Playback")
@@ -395,18 +396,18 @@ namespace installer.ViewModel
             {
                 serverStarted = false;
                 Log.LogInfo("Server Start!");
-                var server = Process.Start(new ProcessStartInfo()
+                server = Process.Start(new ProcessStartInfo()
                 {
                     FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Server", "Server.exe"),
                     Arguments = $"--ip {IP} --port {Port} --teamCount {TeamCount} --shipNum {ShipCount}",
-                    RedirectStandardOutput = true,
-                    CreateNoWindow = true
+                    RedirectStandardOutput = true
                 });
                 if (server is null)
                 {
                     Log.LogError("未能启动Server!");
                     return;
                 }
+                server.EnableRaisingEvents = true;
                 server.OutputDataReceived += (_, args) =>
                 {
                     if (!string.IsNullOrEmpty(args.Data))
@@ -416,7 +417,14 @@ namespace installer.ViewModel
                             serverStarted = true;
                     }
                 };
-                server.Exited += (_, _) => children.ForEach(i => i.Close());
+                server.Exited += (_, _) => { 
+                    while (children.Count > 0)
+                    {
+                        children[0].Kill(true);
+                        children.RemoveAt(0);
+                    }
+                    Log.LogWarning("Server已退出!");
+                };
                 server.BeginOutputReadLine();
                 DateTime t = DateTime.Now;
                 while (!serverStarted && (DateTime.Now - t).TotalSeconds < 20) ;

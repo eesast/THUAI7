@@ -185,7 +185,7 @@
                 Padding="3"
                 Margin="5"
                 WidthRequest="600"
-                HeightRequest="250">
+                HeightRequest="200">
 
                 <CollectionView
                     BackgroundColor="LightGray"

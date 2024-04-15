@@ -61,11 +61,6 @@ namespace installer.ViewModel
                 },
                 new HelpMessage
                 {
-                    Title = "回访模式",
-                    Content = "> Playback File非空时为回放模式"
-                },
-                new HelpMessage
-                {
                     Title = "特殊权限",
                     Content = "> 启动操作可能需要管理员权限"
                 }
