@@ -110,6 +110,32 @@
                 FontSize="{Binding ConstFontSize}"
                 TextColor="{Binding ConstTextColor}"/>
 
+            <Frame
+                BorderColor="Gray"
+                Padding="3"
+                Margin="5"
+                WidthRequest="600"
+                HeightRequest="250">
+
+                <CollectionView
+                    BackgroundColor="LightGray"
+                    ItemsSource="{Binding LogList}"
+                    ItemsUpdatingScrollMode="KeepLastItemInView"
+                    VerticalScrollBarVisibility="Always">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+
+                            <Label
+                                WidthRequest="570"
+                                Text="{Binding Message}"
+                                TextColor="{Binding Color}"/>
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </Frame>
+
         </VerticalStackLayout>
 
     </Grid>

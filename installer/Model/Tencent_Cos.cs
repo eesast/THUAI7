@@ -157,7 +157,7 @@ namespace installer.Model
             Report.ComCount = 0;
             if (Report.Count == 0)
                 return 0;
-            var partitionar = Partitioner.Create(0, Report.Count, Report.Count / 4);
+            var partitionar = Partitioner.Create(0, Report.Count, Report.Count / 4 > 0 ? Report.Count / 4 : Report.Count);
             var c = 0;
             Parallel.ForEach(partitionar, (range, loopState) =>
             {

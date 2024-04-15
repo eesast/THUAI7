@@ -10,12 +10,15 @@ using System.Windows.Input;
 using installer.Model;
 using installer.Data;
 using System.Diagnostics;
+using System.Collections.ObjectModel;
 
 namespace installer.ViewModel
 {
     public class LaunchViewModel : BaseViewModel
     {
         private readonly Downloader Downloader;
+        protected ListLogger Log = new ListLogger();
+        public ObservableCollection<LogRecord> LogList { get => Log.List; }
         public LaunchViewModel(Downloader downloader)
         {
             Downloader = downloader;
@@ -314,18 +317,48 @@ namespace installer.ViewModel
             });
         }
 
+        private bool serverStarted;
+        private List<Process> children = new List<Process>();
         private void Start()
         {
-            Process.Start(new ProcessStartInfo()
+            serverStarted = false;
+            Log.LogInfo("Server Start!");
+            var server = Process.Start(new ProcessStartInfo()
             {
                 FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Server", "Server.exe"),
-                Arguments = $"--ip {IP} --port {Port}"
+                Arguments = $"--ip {IP} --port {Port}",
+                RedirectStandardOutput = true,
+                CreateNoWindow = true
             });
-            Process.Start(new ProcessStartInfo()
+            if (server is null)
+            {
+                Log.LogError("未能启动Server!");
+                return;
+            }
+            server.OutputDataReceived += (_, args) =>
+            {
+                if (!string.IsNullOrEmpty(args.Data))
+                {
+                    Log.LogInfo(args.Data);
+                    if (args.Data.Contains("Server begins to listen"))
+                        serverStarted = true;
+                }
+            };
+            server.Exited += (_, _) => children.ForEach(i => i.Close());
+            server.BeginOutputReadLine();
+            DateTime t = DateTime.Now;
+            while (!serverStarted && (DateTime.Now - t).TotalSeconds < 20) ;
+            Log.LogWarning("Server成功启动，请保持网络稳定");
+            var client = Process.Start(new ProcessStartInfo()
             {
                 FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
             });
-
+            if (client is null)
+            {
+                Log.LogError("未能启动Client!");
+                return;
+            }
+            children.Add(client);
             if (CppSelect && string.IsNullOrEmpty(PlaybackFile))
             {
                 var exe = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "cpp", "x64", "Debug", "API.exe");
@@ -333,11 +366,19 @@ namespace installer.ViewModel
                 {
                     for (int teamID = 0; teamID <= 1; teamID++)
                         for (int playerID = 0; playerID <= 4; playerID++)
-                            Process.Start(new ProcessStartInfo()
+                        {
+                            var cpp = Process.Start(new ProcessStartInfo()
                             {
                                 FileName = exe,
                                 Arguments = $"-I {IP} -P {Port} -t {teamID} -p {playerID} -d"
                             });
+                            if (cpp is null)
+                            {
+                                Log.LogError($"未能启动API.exe, team:{teamID}, player: {playerID}!");
+                                return;
+                            }
+                            children.Add(cpp);
+                        }
                 }
                 else
                 {
@@ -356,13 +397,21 @@ namespace installer.ViewModel
                 {
                     for (int teamID = 0; teamID <= 1; teamID++)
                         for (int playerID = 0; playerID <= 4; playerID++)
-                            Process.Start(new ProcessStartInfo()
+                        {
+                            var py = Process.Start(new ProcessStartInfo()
                             {
                                 FileName = "cmd.exe",
                                 Arguments = "/c python"
                                     + Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py")
                                     + $" -I {IP} -P {Port} -t {teamID} -p {playerID} -d"
                             });
+                            if (py is null)
+                            {
+                                Log.LogError($"未能启动main.py, team:{teamID}, player: {playerID}!");
+                                return;
+                            }
+                            children.Add(py);
+                        }
                 }
                 else
                 {

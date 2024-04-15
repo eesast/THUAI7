@@ -46,8 +46,6 @@ namespace installer.Data
             Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             "THUAI7", "Data"
         );
-        [RequiresAssemblyFiles()]
-        public string InstallerPath { get; set; } = typeof(ConfigDataFile).Assembly.Location;
         public string Token { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
