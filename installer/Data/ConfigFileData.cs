@@ -30,7 +30,11 @@ namespace installer.Data
 
         public bool Launched { get; set; } = false;
 
+        public int TeamID { get; set; } = 0;
+
         public int PlayerID { get; set; } = 2024;
+
+        public int ShipType { get; set; } = 0;
     }
 
     public record ConfigDataFile
@@ -160,6 +164,19 @@ namespace installer.Data
         }
 
 
+        public int TeamID
+        {
+            get => file.TeamID;
+            set
+            {
+                var temp = file.TeamID;
+                file.TeamID = value;
+                if (temp != value)
+                    OnMemoryChanged?.Invoke(this, new EventArgs());
+            }
+        }
+
+
         public int PlayerID
         {
             get => file.PlayerID;
@@ -167,6 +184,19 @@ namespace installer.Data
             {
                 var temp = file.PlayerID;
                 file.PlayerID = value;
+                if (temp != value)
+                    OnMemoryChanged?.Invoke(this, new EventArgs());
+            }
+        }
+
+
+        public int ShipType
+        {
+            get => file.ShipType;
+            set
+            {
+                var temp = file.ShipType;
+                file.ShipType = value;
                 if (temp != value)
                     OnMemoryChanged?.Invoke(this, new EventArgs());
             }
