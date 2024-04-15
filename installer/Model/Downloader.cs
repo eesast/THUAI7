@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using System.IO.Compression;
 using System.Formats.Tar;
@@ -302,6 +303,8 @@ namespace installer.Model
         /// <summary>
         /// 更新文件
         /// </summary>
+        [RequiresAssemblyFiles()]
+        [RequiresAssemblyFiles()]
         public int Update()
         {
             int result = 0;

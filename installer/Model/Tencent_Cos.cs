@@ -169,7 +169,7 @@ namespace installer.Model
                     int subID = -1;
                     try
                     {
-                        subID = DownloadFileAsync(local, array[i]).Result;
+                        subID = DownloadFile(local, array[i]);
                     }
                     catch (Exception ex)
                     {
