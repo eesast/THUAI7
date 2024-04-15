@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -19,13 +20,7 @@ namespace installer.Data
 
         public string Port { get; set; } = "8888";
 
-        public string TeamID { get; set; } = "0";
-
-        public string PlayerID { get; set; } = "0";
-
-        public string ShipType { get; set; } = "0";
-
-        public string PlaybackFile { get; set; } = "CLGG!@#$%^&*()_+";
+        public string? PlaybackFile { get; set; } = "";
 
         public double PlaybackSpeed { get; set; } = 2.0;
 
@@ -34,6 +29,8 @@ namespace installer.Data
         public int LaunchID { get; set; } = 0;
 
         public bool Launched { get; set; } = false;
+
+        public int PlayerID { get; set; } = 2024;
     }
 
     public record ConfigDataFile
@@ -44,6 +41,8 @@ namespace installer.Data
             Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             "THUAI7", "Data"
         );
+        [RequiresAssemblyFiles()]
+        public string InstallerPath { get; set; } = typeof(ConfigDataFile).Assembly.Location;
         public string Token { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
@@ -81,6 +80,7 @@ namespace installer.Data
             }
         }
 
+
         public string Port
         {
             get => file.Port;
@@ -94,46 +94,7 @@ namespace installer.Data
         }
 
 
-        public string TeamID
-        {
-            get => file.TeamID;
-            set
-            {
-                var temp = file.TeamID;
-                file.TeamID = value;
-                if (temp != value)
-                    OnMemoryChanged?.Invoke(this, new EventArgs());
-            }
-        }
-
-
-        public string PlayerID
-        {
-            get => file.PlayerID;
-            set
-            {
-                var temp = file.PlayerID;
-                file.PlayerID = value;
-                if (temp != value)
-                    OnMemoryChanged?.Invoke(this, new EventArgs());
-            }
-        }
-
-
-        public string ShipType
-        {
-            get => file.ShipType;
-            set
-            {
-                var temp = file.ShipType;
-                file.ShipType = value;
-                if (temp != value)
-                    OnMemoryChanged?.Invoke(this, new EventArgs());
-            }
-        }
-
-
-        public string PlaybackFile
+        public string? PlaybackFile
         {
             get => file.PlaybackFile;
             set
@@ -171,6 +132,7 @@ namespace installer.Data
             }
         }
 
+
         public int LaunchID
         {
             get => file.LaunchID;
@@ -196,6 +158,18 @@ namespace installer.Data
             }
         }
 
+
+        public int PlayerID
+        {
+            get => file.PlayerID;
+            set
+            {
+                var temp = file.PlayerID;
+                file.PlayerID = value;
+                if (temp != value)
+                    OnMemoryChanged?.Invoke(this, new EventArgs());
+            }
+        }
     }
 
     public class ConfigData
@@ -254,10 +228,6 @@ namespace installer.Data
             com.OnMemoryChanged += (_, _) => OnMemoryChanged?.Invoke(this, new EventArgs());
         }
 
-        public void ReadFileOnWindows()
-        {
-        }
-
         public void SaveFile()
         {
             file.Commands = com.file;
@@ -310,6 +280,11 @@ namespace installer.Data
                 if (temp != value)
                     OnMemoryChanged?.Invoke(this, new EventArgs());
             }
+        }
+
+        public string InstallerPath
+        {
+            get => file.InstallerPath;
         }
 
         public string Token

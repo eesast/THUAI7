@@ -58,6 +58,28 @@ namespace installer.ViewModel
             }
         }
 
+        string loginStatus = "offline";
+        public string LoginStatus
+        {
+            get => loginStatus;
+            set
+            {
+                loginStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
+        string remStatus = "false";
+        public string RemStatus
+        {
+            get => remStatus;
+            set
+            {
+                remStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand LoginBtnClickedCommand { get; }
         private void LoginBtnClicked()
         {
@@ -69,6 +91,8 @@ namespace installer.ViewModel
                     Downloader.RememberUser();
                 else
                     Downloader.ForgetUser();
+                LoginStatus = Downloader.Web.Status.ToString();
+                RemStatus = Remember.ToString();
             });
         }
     }
