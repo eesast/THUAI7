@@ -80,11 +80,11 @@ namespace Gaming
         }
         public long ActivateShip(long teamID, ShipType shipType, int birthPointIndex = 0)
         {
-            Debugger.Output("Trying to activate: " + teamID + " " + shipType + " at " + birthPointIndex);
+            Debugger.Output($"Trying to activate: {teamID} {shipType} at {birthPointIndex}");
             Ship? ship = teamList[(int)teamID].ShipPool.GetObj(shipType);
             if (ship == null)
             {
-                Debugger.Output("Failed to activate: " + teamID + " " + shipType + ", no ship available");
+                Debugger.Output($"Failed to activate: {teamID} {shipType}, no ship available");
                 return GameObj.invalidID;
             }
             if (birthPointIndex < 0)
@@ -95,11 +95,15 @@ namespace Gaming
             pos += new XY(((random.Next() & 2) - 1) * 1000, ((random.Next() & 2) - 1) * 1000);
             if (shipManager.ActivateShip(ship, pos))
             {
-                Debugger.Output("Successfully activated: " + teamID + " " + shipType + " at " + pos);
+                Debugger.Output($"Successfully activated: {teamID} {shipType} at {pos}");
                 return ship.PlayerID;
             }
-            Debugger.Output("Failed to activate: " + teamID + " " + shipType + " at " + pos + ", rule not permitted");
-            return GameObj.invalidID;
+            else
+            {
+                teamList[(int)teamID].ShipPool.ReturnObj(ship);
+                Debugger.Output($"Failed to activate: {teamID} {shipType} at {pos}, rule not permitted");
+                return GameObj.invalidID;
+            }
         }
         public bool StartGame(int milliSeconds)
         {

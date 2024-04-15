@@ -282,11 +282,6 @@ namespace installer.Data
             }
         }
 
-        public string InstallerPath
-        {
-            get => file.InstallerPath;
-        }
-
         public string Token
         {
             get => file.Token;

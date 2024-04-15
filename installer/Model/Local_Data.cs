@@ -279,15 +279,15 @@ namespace installer.Model
 
         public static bool IsUserFile(string filename)
         {
-            if (filename.Contains("git") || filename.Contains("bin") || filename.Contains("obj"))
+            if (filename.Contains("git\\") || filename.Contains("bin\\") || filename.Contains("obj\\") || filename.Contains("x64\\"))
                 return true;
             if (filename.EndsWith("sh") || filename.EndsWith("cmd"))
                 return true;
             if (filename.EndsWith("gz"))
                 return true;
-            if (filename.Contains("AI.cpp") || filename.Contains("AI.py"))
+            if (filename.EndsWith("AI.cpp") || filename.EndsWith("AI.py"))
                 return true;
-            if (filename.Contains("hash.json"))
+            if (filename.EndsWith("hash.json"))
                 return true;
             if (filename.EndsWith("log"))
                 return true;
