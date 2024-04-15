@@ -185,7 +185,7 @@ namespace Server
                 (request.TeamId == 0 ? semaDict0 : semaDict1)[request.PlayerId].Item1.Wait();
                 if (request.PlayerId > 0 && (ship == null || ship.IsRemoved == true))
                 {
-                    Console.WriteLine($"Cannot find ship {request.PlayerId} from Team {request.TeamId}!");
+                    // Console.WriteLine($"Cannot find ship {request.PlayerId} from Team {request.TeamId}!");
                 }
                 else
                 {
