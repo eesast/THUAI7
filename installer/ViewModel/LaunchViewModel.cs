@@ -377,7 +377,7 @@ namespace installer.ViewModel
             });
         }
 
-        private void Start()
+        private async void Start()
         {
             if (Mode == "Playback")
             {
@@ -416,7 +416,6 @@ namespace installer.ViewModel
                                     + $" -I {IP} -P {Port} -t {teamID} -p {playerID} -o"
                             });
                 }
-                
                 Process.Start(new ProcessStartInfo()
                 {
                     FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
