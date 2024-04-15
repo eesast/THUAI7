@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using System.IO.Compression;
 using System.Formats.Tar;
@@ -303,8 +302,6 @@ namespace installer.Model
         /// <summary>
         /// 更新文件
         /// </summary>
-        [RequiresAssemblyFiles()]
-        [RequiresAssemblyFiles()]
         public int Update()
         {
             int result = 0;
@@ -313,7 +310,7 @@ namespace installer.Model
                 // 如果Major版本号不一致，说明启动器本身需要更新，返回结果为16
                 if (CurrentVersion.Major < Data.FileHashData.Version.Major)
                 {
-                    var local = Path.Combine(Data.Config.InstallerPath, "Cache", $"Setup/Installer_v{Data.FileHashData.Version.Major}.zip");
+                    var local = Path.Combine(Environment.CurrentDirectory, "Cache", $"Setup/Installer_v{Data.FileHashData.Version.Major}.zip");
                     Log.LogWarning("启动器即将升级，正在下载压缩包……");
                     Status = UpdateStatus.downloading;
                     Log.CountDict[LogLevel.Error] = 0;
