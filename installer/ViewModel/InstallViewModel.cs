@@ -151,7 +151,7 @@ namespace installer.ViewModel
             get => browseEnabled;
             set
             {
-                browseEnabled = Downloader.Data.Installed && value;
+                browseEnabled = value;
                 OnPropertyChanged();
             }
         }
@@ -161,7 +161,9 @@ namespace installer.ViewModel
             get => checkEnabled;
             set
             {
-                checkEnabled = value && Installed;
+                checkEnabled = value && Installed
+                    && !DownloadPath.EndsWith(':') && !DownloadPath.EndsWith('\\')
+                    && Directory.Exists(DownloadPath) && Local_Data.CountFile(DownloadPath) > 0; ;
                 OnPropertyChanged();
             }
         }
@@ -171,7 +173,9 @@ namespace installer.ViewModel
             get => downloadEnabled;
             set
             {
-                downloadEnabled = value;
+                downloadEnabled = value
+                    && !DownloadPath.EndsWith(':') && !DownloadPath.EndsWith('\\')
+                    && Directory.Exists(DownloadPath) && Local_Data.CountFile(DownloadPath) == 0;
                 OnPropertyChanged();
             }
         }
@@ -181,7 +185,7 @@ namespace installer.ViewModel
             get => updateEnabled;
             set
             {
-                updateEnabled = value;
+                updateEnabled = value ;
                 OnPropertyChanged();
             }
         }
@@ -201,7 +205,7 @@ namespace installer.ViewModel
             }
             else
             {
-                DownloadPath = DownloadPath;
+                DownloadEnabled = true;
             }
             BrowseEnabled = true;
         }
@@ -235,7 +239,7 @@ namespace installer.ViewModel
             CheckEnabled = false;
             DownloadEnabled = false;
             UpdateEnabled = false;
-            if (Downloader.Data.Installed)
+            if (Installed)
             {
                 await Task.Run(() => Downloader.ResetInstallPath(DownloadPath));
             }
