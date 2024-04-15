@@ -30,10 +30,10 @@ namespace installer.ViewModel
             timer = new Timer((_) =>
             {
                 ProgressReport(null, new EventArgs());
-                Installed = Downloader.Data.Installed;
-                DownloadPath = Downloader.Data.Config.InstallPath;
             }, null, 0, 500);
 
+            Installed = Downloader.Data.Installed;
+            DownloadPath = Downloader.Data.Config.InstallPath;
             BrowseBtnClickedCommand = new RelayCommand(BrowseBtnClicked);
             CheckUpdBtnClickedCommand = new RelayCommand(CheckUpdBtnClicked);
             DownloadBtnClickedCommand = new RelayCommand(DownloadBtnClicked);
