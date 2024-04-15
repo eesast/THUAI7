@@ -235,6 +235,10 @@ namespace installer.Model
                 {
                     MD5Update.Add((DataRowState.Deleted, _file));
                 }
+                if (IsUserFile(_file) && MD5Data.TryRemove(_file, out _))
+                {
+                    MD5Update.Add((DataRowState.Deleted, _file));
+                }
             }
             // 层序遍历文件树
             Stack<string> stack = new Stack<string>();
@@ -283,17 +287,19 @@ namespace installer.Model
 
         public static bool IsUserFile(string filename)
         {
-            if (filename.Contains("git\\") || filename.Contains("bin\\") || filename.Contains("obj\\") || filename.Contains("x64\\"))
+            filename = filename.Replace(Path.DirectorySeparatorChar, '/');
+            if (filename.Contains("/git/") || filename.Contains("bin/") || filename.Contains("/obj/") || filename.Contains("/x64/")
+                || filename.Contains("__pycache__"))
                 return true;
-            if (filename.EndsWith("sh") || filename.EndsWith("cmd"))
+            if (filename.Contains("/vs/") || filename.Contains("/.vs/") || filename.Contains("/.vscode/"))
                 return true;
-            if (filename.EndsWith("gz"))
+            if (filename.EndsWith("gz") || filename.EndsWith("log") || filename.EndsWith("csv"))
+                return true;
+            if (filename.EndsWith(".gitignore") || filename.EndsWith(".gitattributes"))
                 return true;
             if (filename.EndsWith("AI.cpp") || filename.EndsWith("AI.py"))
                 return true;
             if (filename.EndsWith("hash.json"))
-                return true;
-            if (filename.EndsWith("log"))
                 return true;
             return false;
         }
