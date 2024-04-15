@@ -21,17 +21,18 @@ namespace installer.ViewModel
         public ObservableCollection<LogRecord> LogCollection { get => Downloader.LogList.List; }
 
         private Timer timer;
+
         public InstallViewModel(IFolderPicker folderPicker, Downloader downloader)
         {
             Downloader = downloader;
             FolderPicker = folderPicker;
 
-            downloadPath = Downloader.Data.Config.InstallPath;
+            DownloadPath = Downloader.Data.Config.InstallPath;
+            Installed = Downloader.Data.Installed;
+
             timer = new Timer((_) =>
             {
                 ProgressReport(null, new EventArgs());
-                Installed = Downloader.Data.Installed;
-                DownloadPath = Downloader.Data.Config.InstallPath;
             }, null, 0, 500);
 
             BrowseBtnClickedCommand = new RelayCommand(BrowseBtnClicked);
@@ -77,6 +78,7 @@ namespace installer.ViewModel
             set
             {
                 installed = value;
+                DownloadBtnText = value ? "移动" : "下载";
                 OnPropertyChanged();
             }
         }
@@ -155,6 +157,17 @@ namespace installer.ViewModel
 
 
         #region 按钮
+        private string downloadBtnText;
+        public string DownloadBtnText
+        {
+            get => downloadBtnText;
+            set
+            {
+                downloadBtnText = value;
+                OnPropertyChanged();
+            }
+        }
+
         private bool browseEnabled = true;
         public bool BrowseEnabled
         {
@@ -263,7 +276,6 @@ namespace installer.ViewModel
             {
                 t = Downloader.InstallAsync(DownloadPath);
             }
-
             t.ContinueWith(_ =>
             {
                 Installed = Downloader.Data.Installed;

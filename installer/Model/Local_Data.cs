@@ -30,7 +30,11 @@ namespace installer.Model
         {
             get; set;
         }                               // 路径为绝对路径
-        public bool Installed = false;  // 项目是否安装
+        public bool Installed
+        {
+            get => Config.Installed;
+            set => Config.Installed = value;
+        }  // 项目是否安装
         public bool RememberMe = false; // 是否记录账号密码
         public Logger Log;
         public Local_Data()
@@ -49,7 +53,6 @@ namespace installer.Model
                     ReadMD5Data();
                     CurrentVersion = FileHashData.Version;
                     MD5Update.Clear();
-                    Installed = true;
                 }
                 else
                 {
@@ -70,6 +73,7 @@ namespace installer.Model
                 Config.MD5DataPath = $".{Path.DirectorySeparatorChar}hash.json";
                 CurrentVersion = FileHashData.Version;
                 SaveMD5Data();
+                Config.SaveFile();
             }
             if (!Directory.Exists(LogPath))
                 Directory.CreateDirectory(LogPath);
