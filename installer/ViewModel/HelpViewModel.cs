@@ -33,6 +33,7 @@ namespace installer.ViewModel
     {
         public string? Title { get; set; }
         public string? Content { get; set; }
-        public string FontSize { get; } = "18";
+        public string TitleSize { get; } = "20";
+        public string ContentSize { get; } = "16";
     }
 }

@@ -328,25 +328,51 @@ namespace installer.ViewModel
 
             if (CppSelect && string.IsNullOrEmpty(PlaybackFile))
             {
-                for (int teamID = 0; teamID <= 1; teamID++)
-                    for (int playerID = 0; playerID <= 4; playerID++)
-                        Process.Start(new ProcessStartInfo()
-                        {
-                            FileName = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "cpp", "x64", "Debug", "API.exe"),
-                            Arguments = $"-I {IP} -P {Port} -t {teamID} -p {playerID} -d"
-                        });
+                var exe = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "cpp", "x64", "Debug", "API.exe");
+                if (File.Exists(exe))
+                {
+                    for (int teamID = 0; teamID <= 1; teamID++)
+                        for (int playerID = 0; playerID <= 4; playerID++)
+                            Process.Start(new ProcessStartInfo()
+                            {
+                                FileName = exe,
+                                Arguments = $"-I {IP} -P {Port} -t {teamID} -p {playerID} -d"
+                            });
+                }
+                else
+                {
+                    DebugAlert = "请先生成cpp对应可执行文件后再启动，参见“Help-Launch-CPP可执行文件构建”";
+                    Process.Start(new ProcessStartInfo()
+                    {
+                        FileName = "explorer.exe",
+                        Arguments = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "cpp")
+                    });
+                }
             }
             else if (PySelect && string.IsNullOrEmpty(PlaybackFile))
             {
-                for (int teamID = 0; teamID <= 1; teamID++)
-                    for (int playerID = 0; playerID <= 4; playerID++)
-                        Process.Start(new ProcessStartInfo()
-                        {
-                            FileName = "cmd.exe",
-                            Arguments = "/c python"
-                                + Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py")
-                                + $"-I {IP} -P {Port} -t {teamID} -p {playerID} -d"
-                        });
+                var p = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python");
+                if (Directory.Exists(Path.Combine(p, "proto")))
+                {
+                    for (int teamID = 0; teamID <= 1; teamID++)
+                        for (int playerID = 0; playerID <= 4; playerID++)
+                            Process.Start(new ProcessStartInfo()
+                            {
+                                FileName = "cmd.exe",
+                                Arguments = "/c python"
+                                    + Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py")
+                                    + $" -I {IP} -P {Port} -t {teamID} -p {playerID} -d"
+                            });
+                }
+                else
+                {
+                    DebugAlert = "请构建proto后安装，参见“Help-Launch-Python proto构建”";
+                    Process.Start(new ProcessStartInfo()
+                    {
+                        FileName = "explorer.exe",
+                        Arguments = p
+                    });
+                }
             }
         }
 
