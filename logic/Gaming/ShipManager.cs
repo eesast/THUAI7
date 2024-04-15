@@ -37,6 +37,8 @@ namespace Gaming
                 long stateNum = ship.SetShipState(RunningStateType.RunningActively, ShipStateType.Null);
                 ship.ResetShipState(stateNum);
                 ship.CanMove.SetROri(true);
+                ship.IsRemoved.SetROri(false);
+                ship.MoneyPool.SubMoney(activateCost);
                 Debugger.Output(ship, " is activated!");
                 return true;
             }

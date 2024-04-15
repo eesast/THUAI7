@@ -16,8 +16,7 @@ namespace Server
         {
             get
             {
-                lock (spectatorLock)
-                    return isSpectatorJoin;
+                lock (spectatorLock) return isSpectatorJoin;
             }
 
             set
@@ -30,7 +29,7 @@ namespace Server
         {
 #if DEBUG
             Console.WriteLine($"TRY TryConnection: Player {request.PlayerId} from Team {request.TeamId}");
-#endif 
+#endif
             var onConnection = new BoolRes();
             lock (gameLock)
             {
@@ -44,7 +43,7 @@ namespace Server
             onConnection.ActSuccess = false;
 #if DEBUG
             Console.WriteLine("END TryConnection");
-#endif 
+#endif
             return Task.FromResult(onConnection);
         }
 
@@ -62,7 +61,7 @@ namespace Server
                 Console.WriteLine($"TRY Add Spectator: Player {request.PlayerId}");
 #endif
                 // 观战模式
-                lock (spectatorJoinLock) // 具体原因见另一个上锁的地方
+                lock (spectatorJoinLock)  // 具体原因见另一个上锁的地方
                 {
                     if (semaDict0.TryAdd(request.PlayerId, (new SemaphoreSlim(0, 1), new SemaphoreSlim(0, 1))))
                     {
@@ -95,7 +94,9 @@ namespace Server
                                 semas.Item1.Release();
                                 semas.Item2.Release();
                             }
-                            catch { }
+                            catch
+                            {
+                            }
                             Console.WriteLine($"The spectator {request.PlayerId} exited");
                             return;
                         }
@@ -110,7 +111,9 @@ namespace Server
                         {
                             semaDict0[request.PlayerId].Item2.Release();
                         }
-                        catch { }
+                        catch
+                        {
+                        }
                     }
                 } while (game.GameMap.Timer.IsGaming);
 #if DEBUG
@@ -134,9 +137,7 @@ namespace Server
 #endif
             lock (addPlayerLock)
             {
-                Game.PlayerInitInfo playerInitInfo = new(request.TeamId,
-                                                         request.PlayerId,
-                                                         Transformation.ShipTypeFromProto(request.ShipType));
+                Game.PlayerInitInfo playerInitInfo = new(request.TeamId, request.PlayerId, Transformation.ShipTypeFromProto(request.ShipType));
                 long newPlayerID = game.AddPlayer(playerInitInfo);
                 if (newPlayerID == GameObj.invalidID)
                 {
@@ -179,16 +180,29 @@ namespace Server
                 }
             }
             bool exitFlag = false;
+            bool firstTime = true;
             do
             {
+                if (request.TeamId == 0)
+                    semaDict0[request.PlayerId].Item1.Wait();
+                else if (request.TeamId == 1)
+                    semaDict1[request.PlayerId].Item1.Wait();
                 Ship? ship = game.GameMap.FindShipInPlayerID(request.TeamId, request.PlayerId);
-                (request.TeamId == 0 ? semaDict0 : semaDict1)[request.PlayerId].Item1.Wait();
-                if (request.PlayerId > 0 && (ship == null || ship.IsRemoved == true))
+                // if(ship!=null)
+                // {
+                //     Console.WriteLine($"Ship {request.PlayerId} exist! IsRemoved {ship.IsRemoved}");
+                // }
+                // else{
+                //     Console.WriteLine($"Ship {request.PlayerId} null");
+                // }
+                if (!firstTime && request.PlayerId > 0 && (ship == null || ship.IsRemoved == true))
                 {
                     // Console.WriteLine($"Cannot find ship {request.PlayerId} from Team {request.TeamId}!");
                 }
                 else
                 {
+                    if (firstTime)
+                        firstTime = false;
                     try
                     {
                         if (currentGameInfo != null && !exitFlag)
@@ -262,7 +276,8 @@ namespace Server
             }
             // var gameID = communicationToGameID[request.TeamId][request.PlayerId];
             moveRes.ActSuccess = game.MoveShip(request.TeamId, request.PlayerId, (int)request.TimeInMilliseconds, request.Angle);
-            if (!game.GameMap.Timer.IsGaming) moveRes.ActSuccess = false;
+            if (!game.GameMap.Timer.IsGaming)
+                moveRes.ActSuccess = false;
 #if DEBUG
             Console.WriteLine($"END Move: {moveRes.ActSuccess}");
 #endif
@@ -519,10 +534,7 @@ namespace Server
             BoolRes boolRes = new()
             {
                 ActSuccess =
-                    game.ActivateShip(request.TeamId,
-                                      Transformation.ShipTypeFromProto(request.ShipType),
-                                      request.BirthpointIndex)
-                    != GameObj.invalidID
+                    game.ActivateShip(request.TeamId, Transformation.ShipTypeFromProto(request.ShipType), request.BirthpointIndex) != GameObj.invalidID
             };
             if (boolRes.ActSuccess) teamMoneyPool.SubMoney(activateCost);
 #if DEBUG
@@ -536,6 +548,7 @@ namespace Server
 #if DEBUG
             Console.WriteLine($"TRY BuildShipRID: ShipType {request.ShipType} from Team {request.TeamId}");
 #endif
+
             var activateCost = Transformation.ShipTypeFromProto(request.ShipType) switch
             {
                 Utility.ShipType.CivilShip => GameData.CivilShipCost,
@@ -551,6 +564,7 @@ namespace Server
             var playerId = game.ActivateShip(request.TeamId,
                                       Transformation.ShipTypeFromProto(request.ShipType),
                                       request.BirthpointIndex);
+
             BuildShipRes buildShipRes = new()
             {
                 ActSuccess = playerId != GameObj.invalidID,
