@@ -208,7 +208,7 @@ namespace installer.ViewModel
             get => updateEnabled;
             set
             {
-                updateEnabled = value ;
+                updateEnabled = value;
                 OnPropertyChanged();
             }
         }
