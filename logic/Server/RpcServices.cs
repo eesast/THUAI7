@@ -177,41 +177,36 @@ namespace Server
                     StartGame();
                 }
             }
-
             bool exitFlag = false;
             do
             {
-                if (request.TeamId == 0)
-                    semaDict0[request.PlayerId].Item1.Wait();
-                else if (request.TeamId == 1)
-                    semaDict1[request.PlayerId].Item1.Wait();
-                try
+                Ship? ship = game.GameMap.FindShipInPlayerID(request.TeamId, request.PlayerId);
+                (request.TeamId == 0 ? semaDict0 : semaDict1)[request.PlayerId].Item1.Wait();
+                if (request.PlayerId > 0 && (ship == null || ship.IsRemoved == true))
                 {
-                    if (currentGameInfo != null && !exitFlag)
+                    // Console.WriteLine($"Cannot find ship {request.PlayerId} from Team {request.TeamId}!");
+                }
+                else
+                {
+                    try
                     {
-                        await responseStream.WriteAsync(currentGameInfo);
-                        Console.WriteLine("Send!");
+                        if (currentGameInfo != null && !exitFlag)
+                        {
+                            await responseStream.WriteAsync(currentGameInfo);
+                            Console.WriteLine($"Send to Player{request.PlayerId} from Team {request.TeamId}!");
+                        }
+                    }
+                    catch
+                    {
+                        if (!exitFlag)
+                        {
+                            Console.WriteLine($"The client {request.PlayerId} exited");
+                            exitFlag = true;
+                        }
                     }
                 }
-                catch
-                {
-                    if (!exitFlag)
-                    {
-                        Console.WriteLine($"The client {request.PlayerId} exited");
-                        exitFlag = true;
-                    }
-                }
-                finally
-                {
-                    if (request.TeamId == 0)
-                        semaDict0[request.PlayerId].Item2.Release();
-                    else if (request.TeamId == 1)
-                        semaDict1[request.PlayerId].Item2.Release();
-                }
+                (request.TeamId == 0 ? semaDict0 : semaDict1)[request.PlayerId].Item2.Release();
             } while (game.GameMap.Timer.IsGaming);
-#if DEBUG
-            Console.WriteLine("END Add Player");
-#endif
         }
 
         public override Task<MessageOfMap> GetMap(NullRequest request, ServerCallContext context)

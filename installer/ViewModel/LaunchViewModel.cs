@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using installer.Model;
 using installer.Data;
+using System.Diagnostics;
 
 namespace installer.ViewModel
 {
@@ -21,17 +22,11 @@ namespace installer.ViewModel
 
             IP = Downloader.Data.Config.Commands.IP;
             Port = Downloader.Data.Config.Commands.Port;
-            TeamID = Downloader.Data.Config.Commands.TeamID;
-            PlayerID = Downloader.Data.Config.Commands.PlayerID;
-            ShipType = Downloader.Data.Config.Commands.ShipType;
             PlaybackFile = Downloader.Data.Config.Commands.PlaybackFile;
             PlaybackSpeed = Downloader.Data.Config.Commands.PlaybackSpeed.ToString();
 
             ipChanged = false;
             portChanged = false;
-            teamIDChanged = false;
-            playerIDChanged = false;
-            shipTypeChanged = false;
             playbackFileChanged = false;
             playbackSpeedChanged = false;
 
@@ -65,9 +60,6 @@ namespace installer.ViewModel
 
         private string? ip;
         private string? port;
-        private string? teamID;
-        private string? playerID;
-        private string? shipType;
         private string? playbackFile;
         private string? playbackSpeed;
         private bool cppSelect;
@@ -75,9 +67,6 @@ namespace installer.ViewModel
 
         private bool ipChanged;
         private bool portChanged;
-        private bool teamIDChanged;
-        private bool playerIDChanged;
-        private bool shipTypeChanged;
         private bool playbackFileChanged;
         private bool playbackSpeedChanged;
         private bool languageChanged;
@@ -94,9 +83,6 @@ namespace installer.ViewModel
                     ipChanged = true;
                 StartEnabled = !ipChanged
                             && !portChanged
-                            && !teamIDChanged
-                            && !playerIDChanged
-                            && !shipTypeChanged
                             && !playbackFileChanged
                             && !playbackSpeedChanged
                             && !languageChanged;
@@ -115,72 +101,6 @@ namespace installer.ViewModel
                     portChanged = true;
                 startEnabled = !ipChanged
                             && !portChanged
-                            && !teamIDChanged
-                            && !playerIDChanged
-                            && !shipTypeChanged
-                            && !playbackFileChanged
-                            && !playbackSpeedChanged
-                            && !languageChanged;
-                OnPropertyChanged();
-            }
-        }
-        public string? TeamID
-        {
-            get => teamID;
-            set
-            {
-                teamID = value;
-                if (teamID == Downloader.Data.Config.Commands.TeamID)
-                    teamIDChanged = false;
-                else
-                    teamIDChanged = true;
-                StartEnabled = !ipChanged
-                            && !portChanged
-                            && !teamIDChanged
-                            && !playerIDChanged
-                            && !shipTypeChanged
-                            && !playbackFileChanged
-                            && !playbackSpeedChanged
-                            && !languageChanged;
-                OnPropertyChanged();
-            }
-        }
-        public string? PlayerID
-        {
-            get => playerID;
-            set
-            {
-                playerID = value;
-                if (playerID == Downloader.Data.Config.Commands.PlayerID)
-                    playerIDChanged = false;
-                else
-                    playerIDChanged = true;
-                StartEnabled = !ipChanged
-                            && !portChanged
-                            && !teamIDChanged
-                            && !playerIDChanged
-                            && !shipTypeChanged
-                            && !playbackFileChanged
-                            && !playbackSpeedChanged
-                            && !languageChanged;
-                OnPropertyChanged();
-            }
-        }
-        public string? ShipType
-        {
-            get => shipType;
-            set
-            {
-                shipType = value;
-                if (shipType == Downloader.Data.Config.Commands.ShipType)
-                    shipTypeChanged = false;
-                else
-                    shipTypeChanged = true;
-                StartEnabled = !ipChanged
-                            && !portChanged
-                            && !teamIDChanged
-                            && !playerIDChanged
-                            && !shipTypeChanged
                             && !playbackFileChanged
                             && !playbackSpeedChanged
                             && !languageChanged;
@@ -199,9 +119,6 @@ namespace installer.ViewModel
                     playbackFileChanged = true;
                 StartEnabled = !ipChanged
                             && !portChanged
-                            && !teamIDChanged
-                            && !playerIDChanged
-                            && !shipTypeChanged
                             && !playbackFileChanged
                             && !playbackSpeedChanged
                             && !languageChanged;
@@ -220,9 +137,6 @@ namespace installer.ViewModel
                     playbackSpeedChanged = true;
                 StartEnabled = !ipChanged
                             && !portChanged
-                            && !teamIDChanged
-                            && !playerIDChanged
-                            && !shipTypeChanged
                             && !playbackFileChanged
                             && !playbackSpeedChanged
                             && !languageChanged;
@@ -247,9 +161,6 @@ namespace installer.ViewModel
                     languageChanged = true;
                 StartEnabled = !ipChanged
                             && !portChanged
-                            && !teamIDChanged
-                            && !playerIDChanged
-                            && !shipTypeChanged
                             && !playbackFileChanged
                             && !playbackSpeedChanged
                             && !languageChanged;
@@ -274,9 +185,6 @@ namespace installer.ViewModel
                     languageChanged = true;
                 StartEnabled = !ipChanged
                             && !portChanged
-                            && !teamIDChanged
-                            && !playerIDChanged
-                            && !shipTypeChanged
                             && !playbackFileChanged
                             && !playbackSpeedChanged
                             && !languageChanged;
@@ -286,7 +194,6 @@ namespace installer.ViewModel
 
 
         private bool saveEnabled;
-        private bool startEnabled;
         public bool SaveEnabled
         {
             get => saveEnabled;
@@ -296,6 +203,7 @@ namespace installer.ViewModel
                 OnPropertyChanged();
             }
         }
+        private bool startEnabled;
         public bool StartEnabled
         {
 
@@ -317,16 +225,15 @@ namespace installer.ViewModel
             await Task.Run(() => Save());
             StartEnabled = !ipChanged
                         && !portChanged
-                        && !teamIDChanged
-                        && !playerIDChanged
-                        && !shipTypeChanged
                         && !playbackFileChanged
                         && !playbackSpeedChanged
                         && !languageChanged;
         }
         private async Task StartBtnClicked()
         {
+            DebugAlert = "Start";
             await Task.Run(() => Start());
+            DebugAlert = "";
         }
 
         private void Save()
@@ -363,50 +270,6 @@ namespace installer.ViewModel
             {
                 try
                 {
-                    if (TeamID == null)
-                        throw new Exception("empty");
-                    Downloader.Data.Config.Commands.TeamID = TeamID;
-                    teamIDChanged = false;
-                }
-                catch (Exception e)
-                {
-                    DebugAlert = "Team ID: " + e.Message;
-                }
-            });
-            Task.Run(() =>
-            {
-                try
-                {
-                    if (PlayerID == null)
-                        throw new Exception("empty");
-                    Downloader.Data.Config.Commands.PlayerID = PlayerID;
-                    playerIDChanged = false;
-                }
-                catch (Exception e)
-                {
-                    DebugAlert = "Player ID: " + e.Message;
-                }
-            });
-            Task.Run(() =>
-            {
-                try
-                {
-                    if (ShipType == null)
-                        throw new Exception("empty");
-                    Downloader.Data.Config.Commands.ShipType = ShipType;
-                    shipTypeChanged = false;
-                }
-                catch (Exception e)
-                {
-                    DebugAlert = "Ship Type: " + e.Message;
-                }
-            });
-            Task.Run(() =>
-            {
-                try
-                {
-                    if (PlaybackFile == null)
-                        throw new Exception("empty");
                     Downloader.Data.Config.Commands.PlaybackFile = PlaybackFile;
                     playbackFileChanged = false;
                 }
@@ -453,15 +316,39 @@ namespace installer.ViewModel
 
         private void Start()
         {
-            DebugAlert = IP + " "
-                       + Port + " "
-                       + TeamID + " "
-                       + PlayerID + " "
-                       + ShipType + " "
-                       + PlaybackFile + " "
-                       + PlaybackSpeed;
-        }
+            Process.Start(new ProcessStartInfo()
+            {
+                FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Server", "Server.exe"),
+                Arguments = $"--ip {IP} --port {Port}"
+            });
+            Process.Start(new ProcessStartInfo()
+            {
+                FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
+            });
 
+            if (CppSelect && string.IsNullOrEmpty(PlaybackFile))
+            {
+                for (int teamID = 0; teamID <= 1; teamID++)
+                    for (int playerID = 0; playerID <= 4; playerID++)
+                        Process.Start(new ProcessStartInfo()
+                        {
+                            FileName = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "cpp", "x64", "Debug", "API.exe"),
+                            Arguments = $"-I {IP} -P {Port} -t {teamID} -p {playerID} -d"
+                        });
+            }
+            else if (PySelect && string.IsNullOrEmpty(PlaybackFile))
+            {
+                for (int teamID = 0; teamID <= 1; teamID++)
+                    for (int playerID = 0; playerID <= 4; playerID++)
+                        Process.Start(new ProcessStartInfo()
+                        {
+                            FileName = "cmd.exe",
+                            Arguments = "/c python"
+                                + Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py")
+                                + $"-I {IP} -P {Port} -t {teamID} -p {playerID} -d"
+                        });
+            }
+        }
 
         private string? debugAlert;
         public string? DebugAlert

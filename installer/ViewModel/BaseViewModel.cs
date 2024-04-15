@@ -19,7 +19,7 @@ namespace installer.ViewModel
         ///announce notification
         ///</summary>
         ///<param name="propertyName">property name</param>
-        public void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

@@ -8,6 +8,7 @@ using System.Formats.Tar;
 using COSXML.Common;
 using COSXML.Transfer;
 using System;
+using installer.Data;
 
 // 禁用对没有调用异步API的异步函数的警告
 #pragma warning disable CS1998
@@ -23,12 +24,14 @@ namespace installer.Model
 
         protected CosXmlConfig config;
         protected CosXmlServer cosXml;
+        public DownloadReport Report;
 
         public Tencent_Cos(string appid, string region, string bucketName, Logger? _log = null)
         {
             Appid = appid; Region = region; BucketName = bucketName;
             Log = _log ?? LoggerProvider.FromConsole();
             Log.PartnerInfo = "[COS]";
+            Report = new DownloadReport();
             // 初始化CosXmlConfig（提供配置SDK接口）
             config = new CosXmlConfig.Builder()
                         .IsHttps(true)      // 设置默认 HTTPS 请求
@@ -79,6 +82,9 @@ namespace installer.Model
                 if (head.size > (100 << 20))
                 {
                     // 文件大小大于100MB则设置回调函数
+                    Report.Total = head.size;
+                    Report.Completed = 0;
+                    Report.BigFileTraceEnabled = true;
                     var size = (head.size > 1 << 30) ?
                         string.Format("{0:##.#}GB", ((double)head.size) / (1 << 30)) :
                         string.Format("{0:##.#}MB", ((double)head.size) / (1 << 20));
@@ -87,28 +93,36 @@ namespace installer.Model
                     {
                         if (completed > 1 << 30 && completed - c > 100 << 20)
                         {
-                            Log.LogInfo(string.Format("downloaded = {0:##.#}GB, progress = {1:##.##}%", ((double)completed) / (1 << 30), completed * 100.0 / total));
+                            Log.LogDebug(string.Format("downloaded = {0:##.#}GB, progress = {1:##.##}%", ((double)completed) / (1 << 30), completed * 100.0 / total));
                             c = completed;
                         }
                         if (completed < 1 << 30 && completed - c > 10 << 20)
                         {
-                            Log.LogInfo(string.Format("downloaded = {0:##.#}MB, progress = {1:##.##}%", ((double)completed) / (1 << 20), completed * 100.0 / total));
+                            Log.LogDebug(string.Format("downloaded = {0:##.#}MB, progress = {1:##.##}%", ((double)completed) / (1 << 20), completed * 100.0 / total));
                             c = completed;
                         }
+                        (Report.Completed, Report.Total) = (completed, total);
                     });
+                }
+                else
+                {
+                    if (Report.Completed > 0 && Report.Total > 0 && Report.Completed == Report.Total)
+                        Report.BigFileTraceEnabled = false;
                 }
 
                 // 执行请求
                 GetObjectResult result = cosXml.GetObject(request);
+                if (Report.BigFileTraceEnabled)
+                    Report.Completed = Report.Total;
                 // 请求成功
                 if (result.httpCode != 200)
                     throw new Exception($"Download task: {{\"{remotePath}\"->\"{savePath}\"}} failed, message: {result.httpCode} {result.httpMessage}");
-                Log.LogInfo(thID, $"Download task: {{\"{remotePath}\"->\"{savePath}\"}} finished.");
+                Log.LogDebug(thID, $"Download task: {{\"{remotePath}\"->\"{savePath}\"}} finished.");
             }
             catch (Exception ex)
             {
                 Log.LogError(thID, ex.Message);
-                Log.LogInfo(thID, $"Download task: {{\"{remotePath}\"->\"{savePath}\"}} ended unexpectedly.");
+                Log.LogDebug(thID, $"Download task: {{\"{remotePath}\"->\"{savePath}\"}} ended unexpectedly.");
                 thID = -1;
             }
             return thID;
@@ -117,16 +131,17 @@ namespace installer.Model
         public async Task<int> DownloadQueueAsync(string basePath, IEnumerable<string> queue)
         {
             int thID = Log.StartNew();
-            Log.LogInfo(thID, "Batch download task started.");
+            Log.LogDebug(thID, "Batch download task started.");
             var array = queue.ToArray();
-            int count = array.Count();
-            int finished = 0;
-            if (count == 0)
+            Report.Count = array.Count();
+            Report.ComCount = 0;
+            if (Report.Count == 0)
                 return 0;
-            var partitionar = Partitioner.Create(0, count);
+            var partitionar = Partitioner.Create(0, Report.Count);
+            var c = 0;
             Parallel.ForEach(partitionar, (range, loopState) =>
             {
-                for (int i = range.Item1; i < range.Item2; i++)
+                for (long i = range.Item1; i < range.Item2; i++)
                 {
                     if (loopState.IsStopped)
                         break;
@@ -142,12 +157,14 @@ namespace installer.Model
                     }
                     finally
                     {
-                        Interlocked.Increment(ref finished);
+                        Interlocked.Increment(ref c);
+                        Report.ComCount = c;
                         Log.LogInfo(thID, $"Child process: {subID} finished.");
                     }
                 }
             });
             Log.LogInfo(thID, "Batch download task finished.");
+            Report.ComCount = Report.Count;
             return thID;
         }
 
