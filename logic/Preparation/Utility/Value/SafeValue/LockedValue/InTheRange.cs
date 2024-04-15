@@ -67,7 +67,7 @@ namespace Preparation.Utility
         {
             return ReadNeed(() => v == maxV);
         }
-        public bool IsBelowMaxTimes(double a) => ReadNeed(() => v.ToDouble(null) < maxV.ToDouble(null)*a);
+        public bool IsBelowMaxTimes(double a) => ReadNeed(() => v.ToDouble(null) < maxV.ToDouble(null) * a);
         #endregion
 
         #region 内嵌读取（在锁的情况下读取内容同时读取其他更基本的外部数据）
