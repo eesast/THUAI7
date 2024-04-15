@@ -169,7 +169,9 @@ namespace Gaming
             }
             public bool Recycle(Ship ship)
             {
-                long shipValue = 0;
+                long shipValue =
+                    ship.ProducerModule.Get().Cost + ship.ConstructorModule.Get().Cost +
+                    ship.ArmorModule.Get().Cost + ship.ShieldModule.Get().Cost + ship.WeaponModule.Get().Cost;
                 switch (ship.ShipType)
                 {
                     case ShipType.CivilShip:
@@ -184,11 +186,6 @@ namespace Gaming
                     default:
                         return false;
                 }
-                shipValue += ship.ProducerModule.Cost;
-                shipValue += ship.ConstructorModule.Cost;
-                shipValue += ship.ArmorModule.Cost;
-                shipValue += ship.ShieldModule.Cost;
-                shipValue += ship.WeaponModule.Cost;
                 Debugger.Output(ship, " 's value is " + shipValue.ToString());
                 ship.AddMoney((long)(shipValue * 0.5 * ship.HP / ship.HP.GetMaxV()));
                 Debugger.Output(ship, " is recycled!");

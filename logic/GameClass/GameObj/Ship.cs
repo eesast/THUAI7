@@ -3,6 +3,7 @@ using GameClass.GameObj.Modules;
 using GameClass.GameObj.Occupations;
 using Preparation.Interface;
 using Preparation.Utility;
+using System.Threading;
 
 namespace GameClass.GameObj;
 
@@ -41,109 +42,26 @@ public class Ship : Movable, IShip
     /// </summary>
     #region Modules
 
-    private readonly object lockOfModules = new();
+    public AtomicTNotNull<IProducer> ProducerModule { get; } = new(NullProducer.Instance);
+    public ProducerType ProducerModuleType => ProducerModule.Get().ProducerModuleType;
 
-    #region Producer
-    private ProducerType producerType = ProducerType.Null;
-    public ProducerType ProducerModuleType
-    {
-        get 
-        {
-            lock (lockOfModules)
-                return producerType; 
-        }
-    }
-    private IProducer producer;
-    public IProducer ProducerModule {
-        get
-        {
-            lock (lockOfModules)
-                return producer;
-        }
-    }
-    #endregion
+    public AtomicTNotNull<IConstructor> ConstructorModule { get; } = new(NullConstructor.Instance);
+    public ConstructorType ConstructorModuleType => ConstructorModule.Get().ConstructorModuleType;
 
-    #region Constructor
-    private ConstructorType constructorType = ConstructorType.Null;
-    public ConstructorType ConstructorModuleType
-    {
-        get
-        {
-            lock (lockOfModules)
-                return constructorType;
-        }
-    }
-    private IConstructor constructor;
-    public IConstructor ConstructorModule {
-        get
-        {
-            lock (lockOfModules)
-                return constructor;
-        }
-    }
-    #endregion
+    public AtomicTNotNull<IArmor> ArmorModule { get; } = new(NullArmor.Instance);
+    public ArmorType ArmorModuleType => ArmorModule.Get().ArmorModuleType;
 
-    #region Armor
-    private ArmorType armorType = ArmorType.Null;
-    public ArmorType ArmorModuleType {
-        get
-        {
-            lock (lockOfModules)
-                return armorType;
-        }
-    }
-    private IArmor armor;
-    public IArmor ArmorModule {
-        get
-        {
-            lock (lockOfModules)
-                return armor;
-        }
-    }
-    #endregion
+    public AtomicTNotNull<IShield> ShieldModule { get; } = new(NullShield.Instance);
+    public ShieldType ShieldModuleType => ShieldModule.Get().ShieldModuleType;
 
-    #region Shield
-    private ShieldType shieldType = ShieldType.Null;
-    public ShieldType ShieldModuleType {
-        get
-        {
-            lock (lockOfModules)
-                return shieldType;
-        }
-    }
-    private IShield shield;
-    public IShield ShieldModule {
-        get
-        {
-            lock (lockOfModules)
-                return shield;
-        }
-    }
-    #endregion
-
-    #region Weapon
-    private WeaponType weaponType = WeaponType.Null;
-    public WeaponType WeaponModuleType {
-        get
-        {
-            lock (lockOfModules)
-                return weaponType;
-        }
-    }
-    private IWeapon weapon;
-    public IWeapon WeaponModule {
-        get
-        {
-            lock (lockOfModules)
-                return weapon;
-        }
-    }
+    public AtomicTNotNull<IWeapon> WeaponModule { get; } = new(NullWeapon.Instance);
+    public WeaponType WeaponModuleType => WeaponModule.Get().WeaponModuleType;
 
     public Bullet? Attack(double angle)
     {
         lock (actionLock)
         {
-            if (weaponType == WeaponType.Null) return null;
+            if (WeaponModuleType == WeaponType.Null) return null;
             if (BulletNum.TrySub(1) == 1)
             {
                 XY res = Position + new XY(angle, Radius + GameData.BulletRadius);
@@ -155,159 +73,164 @@ public class Ship : Movable, IShip
             return null;
         }
     }
-    #endregion
 
-    public int ProduceSpeed => ProducerModule.ProduceSpeed;
-    public int ConstructSpeed => ConstructorModule.ConstructSpeed;
+    public int ProduceSpeed => ProducerModule.Get().ProduceSpeed;
+    public int ConstructSpeed => ConstructorModule.Get().ConstructSpeed;
     public bool InstallModule(ModuleType moduleType)
     {
         if (moduleType == ModuleType.Null) return false;
         if (!Occupation.IsModuleValid(moduleType)) return false;
         if (MoneyPool.Money < ModuleFactory.FindModuleCost(ShipType, moduleType)) return false;
-        lock (lockOfModules)
+
+        switch (moduleType)
         {
-            switch (moduleType)
-            {
-                case ModuleType.Producer1:
-                    if (producerType != ProducerType.Producer1)
-                    {
-                        producerType = ProducerType.Producer1;
-                        producer = ModuleFactory.FindIProducer(ShipType, producerType);
-                        SubMoney(producer.Cost);
-                        return true;
-                    }
-                    break;
-                case ModuleType.Producer2:
-                    if (producerType != ProducerType.Producer2)
-                    {
-                        producerType = ProducerType.Producer2;
-                        producer = ModuleFactory.FindIProducer(ShipType, producerType);
-                        SubMoney(producer.Cost);
-                        return true;
-                    }
-                    break;
-                case ModuleType.Producer3:
-                    if (producerType != ProducerType.Producer3)
-                    {
-                        producerType = ProducerType.Producer3;
-                        producer = ModuleFactory.FindIProducer(ShipType, producerType);
-                        SubMoney(producer.Cost);
-                        return true;
-                    }
-                    break;
-                case ModuleType.Constructor1:
-                    if (constructorType != ConstructorType.Constructor1)
-                    {
-                        constructorType = ConstructorType.Constructor1;
-                        constructor = ModuleFactory.FindIConstructor(ShipType, constructorType);
-                        SubMoney(constructor.Cost);
-                        return true;
-                    }
-                    break;
-                case ModuleType.Constructor2:
-                    if (constructorType != ConstructorType.Constructor2)
-                    {
-                        constructorType = ConstructorType.Constructor2;
-                        constructor = ModuleFactory.FindIConstructor(ShipType, constructorType);
-                        SubMoney(constructor.Cost);
-                        return true;
-                    }
-                    break;
-                case ModuleType.Constructor3:
-                    if (constructorType != ConstructorType.Constructor3)
-                    {
-                        constructorType = ConstructorType.Constructor3;
-                        constructor = ModuleFactory.FindIConstructor(ShipType, constructorType);
-                        SubMoney(constructor.Cost);
-                        return true;
-                    }
-                    break;
-                case ModuleType.Armor1:
-                    armorType = ArmorType.Armor1;
-                    armor = ModuleFactory.FindIArmor(ShipType, armorType);
+            case ModuleType.Producer1:
+                if (ProducerModuleType != ProducerType.Producer1)
+                {
+                    SubMoney(
+                        ProducerModule.SetROri(
+                            ModuleFactory.FindIProducer(ShipType, ProducerType.Producer1)
+                            ).Cost);
+                    return true;
+                }
+                break;
+            case ModuleType.Producer2:
+                if (ProducerModuleType != ProducerType.Producer2)
+                {
+                    SubMoney(ProducerModule.SetROri(ModuleFactory.FindIProducer(ShipType, ProducerType.Producer2)).Cost);
+                    return true;
+                }
+                break;
+            case ModuleType.Producer3:
+                if (ProducerModuleType != ProducerType.Producer3)
+                {
+                    SubMoney(ProducerModule.SetROri(ModuleFactory.FindIProducer(ShipType, ProducerType.Producer3)).Cost);
+                    return true;
+                }
+                break;
+            case ModuleType.Constructor1:
+                if (ConstructorModuleType != ConstructorType.Constructor1)
+                {
+                    SubMoney(ConstructorModule.SetROri(ModuleFactory.FindIConstructor(ShipType, ConstructorType.Constructor1)).Cost);
+                    return true;
+                }
+                break;
+            case ModuleType.Constructor2:
+                if (ConstructorModuleType != ConstructorType.Constructor2)
+                {
+                    SubMoney(ConstructorModule.SetROri(ModuleFactory.FindIConstructor(ShipType, ConstructorType.Constructor2)).Cost);
+                    return true;
+                }
+                break;
+            case ModuleType.Constructor3:
+                if (ConstructorModuleType != ConstructorType.Constructor3)
+                {
+                    SubMoney(ConstructorModule.SetROri(ModuleFactory.FindIConstructor(ShipType, ConstructorType.Constructor3)).Cost);
+                    return true;
+                }
+                break;
+            case ModuleType.Armor1:
+                IArmor armor;
+                lock (Armor.VLock)
+                {
+                    armor = ArmorModule.SetROri(ModuleFactory.FindIArmor(ShipType, ArmorType.Armor1));
                     Armor.SetRNow(armor.ArmorHP);
-                    SubMoney(armor.Cost);
+                }
+                SubMoney(armor.Cost);
+                return true;
+            case ModuleType.Armor2:
+                IArmor armor2;
+                lock (Armor.VLock)
+                {
+                    armor2 = ArmorModule.SetROri(ModuleFactory.FindIArmor(ShipType, ArmorType.Armor2));
+                    Armor.SetRNow(armor2.ArmorHP);
+                }
+                SubMoney(armor2.Cost);
+                return true;
+
+            case ModuleType.Armor3:
+                IArmor armor3;
+                lock (Armor.VLock)
+                {
+                    armor3 = ArmorModule.SetROri(ModuleFactory.FindIArmor(ShipType, ArmorType.Armor3));
+                    Armor.SetRNow(armor3.ArmorHP);
+                }
+                SubMoney(armor3.Cost);
+                return true;
+
+            case ModuleType.Shield1:
+                IShield shield1;
+                lock (Shield.VLock)
+                {
+                    shield1 = ShieldModule.SetROri(ModuleFactory.FindIShield(ShipType, ShieldType.Shield1));
+                    Shield.SetRNow(shield1.ShieldHP);
+                }
+                SubMoney(shield1.Cost);
+                return true;
+
+            case ModuleType.Shield2:
+                IShield shield2;
+                lock (Shield.VLock)
+                {
+                    shield2 = ShieldModule.SetROri(ModuleFactory.FindIShield(ShipType, ShieldType.Shield2));
+                    Shield.SetRNow(shield2.ShieldHP);
+                }
+                SubMoney(shield2.Cost);
+                return true;
+
+            case ModuleType.Shield3:
+                IShield shield3;
+                lock (Shield.VLock)
+                {
+                    shield3 = ShieldModule.SetROri(ModuleFactory.FindIShield(ShipType, ShieldType.Shield3));
+                    Shield.SetRNow(shield3.ShieldHP);
+                }
+                SubMoney(shield3.Cost);
+                return true;
+
+            case ModuleType.LaserGun:
+                if (WeaponModuleType != WeaponType.LaserGun)
+                {
+                    SubMoney(WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.LaserGun)).Cost);
                     return true;
-                case ModuleType.Armor2:
-                    armorType = ArmorType.Armor2;
-                    armor = ModuleFactory.FindIArmor(ShipType, armorType);
-                    Armor.SetRNow(armor.ArmorHP);
-                    SubMoney(armor.Cost);
+                }
+                break;
+            case ModuleType.PlasmaGun:
+                if (WeaponModuleType != WeaponType.PlasmaGun)
+                {
+                    SubMoney(WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.PlasmaGun)).Cost);
                     return true;
-                case ModuleType.Armor3:
-                    armorType = ArmorType.Armor3;
-                    armor = ModuleFactory.FindIArmor(ShipType, armorType);
-                    Armor.SetRNow(armor.ArmorHP);
-                    SubMoney(armor.Cost);
+                }
+                break;
+
+            case ModuleType.ShellGun:
+                if (WeaponModuleType != WeaponType.ShellGun)
+                {
+                    SubMoney(WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.ShellGun)).Cost);
                     return true;
-                case ModuleType.Shield1:
-                    shieldType = ShieldType.Shield1;
-                    shield = ModuleFactory.FindIShield(ShipType, shieldType);
-                    Shield.SetRNow(shield.ShieldHP);
-                    SubMoney(shield.Cost);
+                }
+                break;
+
+            case ModuleType.MissileGun:
+                if (WeaponModuleType != WeaponType.MissileGun)
+                {
+                    SubMoney(WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.MissileGun)).Cost);
                     return true;
-                case ModuleType.Shield2:
-                    shieldType = ShieldType.Shield2;
-                    shield = ModuleFactory.FindIShield(ShipType, shieldType);
-                    Shield.SetRNow(shield.ShieldHP);
-                    SubMoney(shield.Cost);
+                }
+                break;
+
+            case ModuleType.ArcGun:
+                if (WeaponModuleType != WeaponType.ArcGun)
+                {
+                    SubMoney(WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.ArcGun)).Cost);
                     return true;
-                case ModuleType.Shield3:
-                    shieldType = ShieldType.Shield3;
-                    shield = ModuleFactory.FindIShield(ShipType, shieldType);
-                    Shield.SetRNow(shield.ShieldHP);
-                    SubMoney(shield.Cost);
-                    return true;
-                case ModuleType.LaserGun:
-                    if (weaponType != WeaponType.LaserGun)
-                    {
-                        weaponType = WeaponType.LaserGun;
-                        weapon = ModuleFactory.FindIWeapon(ShipType, weaponType);
-                        SubMoney(weapon.Cost);
-                        return true;
-                    }
-                    break;
-                case ModuleType.PlasmaGun:
-                    if (weaponType != WeaponType.PlasmaGun)
-                    {
-                        weaponType = WeaponType.PlasmaGun;
-                        weapon = ModuleFactory.FindIWeapon(ShipType, weaponType);
-                        SubMoney(weapon.Cost);
-                        return true;
-                    }
-                    break;
-                case ModuleType.ShellGun:
-                    if (weaponType != WeaponType.ShellGun)
-                    {
-                        weaponType = WeaponType.ShellGun;
-                        weapon = ModuleFactory.FindIWeapon(ShipType, weaponType);
-                        SubMoney(weapon.Cost);
-                        return true;
-                    }
-                    break;
-                case ModuleType.MissileGun:
-                    if (weaponType != WeaponType.MissileGun)
-                    {
-                        weaponType = WeaponType.MissileGun;
-                        weapon = ModuleFactory.FindIWeapon(ShipType, weaponType);
-                        SubMoney(weapon.Cost);
-                        return true;
-                    }
-                    break;
-                case ModuleType.ArcGun:
-                    if (weaponType != WeaponType.ArcGun)
-                    {
-                        weaponType = WeaponType.ArcGun;
-                        weapon = ModuleFactory.FindIWeapon(ShipType, weaponType);
-                        SubMoney(weapon.Cost);
-                        return true;
-                    }
-                    break;
-                default:
-                    break;
-            }
-            return false;
+                }
+                break;
+
+            default:
+                break;
         }
+        return false;
     }
 
     #endregion
@@ -348,11 +271,11 @@ public class Ship : Movable, IShip
             default:
                 return 0;
         }
-        cost += producer.Cost;
-        cost += constructor.Cost;
-        cost += armor.Cost;
-        cost += shield.Cost;
-        cost += weapon.Cost;
+        cost += ProducerModule.Get().Cost;
+        cost += ConstructorModule.Get().Cost;
+        cost += ArmorModule.Get().Cost;
+        cost += ShieldModule.Get().Cost;
+        cost += WeaponModule.Get().Cost;
         return cost;
     }
     private long ChangeShipState(RunningStateType running, ShipStateType value = ShipStateType.Null, GameObj? gameObj = null)
@@ -495,38 +418,34 @@ public class Ship : Movable, IShip
         Shield = new(Occupation.BaseShield);
         MoveSpeed.SetROri(orgMoveSpeed = Occupation.MoveSpeed);
         MoneyPool = moneyPool;
-        (producerType, constructorType, armorType, shieldType, weaponType) = ShipType switch
+
+        ProducerType producerType;
+        ConstructorType constructorType;
+        WeaponType weaponType;
+        (producerType, constructorType, weaponType) = ShipType switch
         {
             ShipType.CivilShip => (
                 ProducerType.Producer1,
                 ConstructorType.Constructor1,
-                ArmorType.Null,
-                ShieldType.Null,
                 WeaponType.Null
             ),
             ShipType.WarShip => (
                 ProducerType.Null,
                 ConstructorType.Null,
-                ArmorType.Null,
-                ShieldType.Null,
                 WeaponType.LaserGun
             ),
             ShipType.FlagShip => (
                 ProducerType.Null,
                 ConstructorType.Null,
-                ArmorType.Null,
-                ShieldType.Null,
                 WeaponType.LaserGun
             ),
-            _ => (ProducerType.Null, ConstructorType.Null, ArmorType.Null, ShieldType.Null, WeaponType.Null)
+            _ => (ProducerType.Null, ConstructorType.Null, WeaponType.Null)
         };
-        (producer, constructor, armor, shield, weapon) = (
-            ModuleFactory.FindIProducer(ShipType, producerType),
-            ModuleFactory.FindIConstructor(ShipType, constructorType),
-            ModuleFactory.FindIArmor(ShipType, armorType),
-            ModuleFactory.FindIShield(ShipType, shieldType),
-            ModuleFactory.FindIWeapon(ShipType, weaponType)
-        );
+        ProducerModule.SetROri(ModuleFactory.FindIProducer(ShipType, producerType));
+        ConstructorModule.SetROri(ModuleFactory.FindIConstructor(ShipType, constructorType));
+        ArmorModule.SetROri(ModuleFactory.FindIArmor(ShipType, ArmorType.Null));
+        ShieldModule.SetROri(ModuleFactory.FindIShield(ShipType, ShieldType.Null));
+        WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, weaponType));
         Debugger.Output(this, "Ship created");
     }
 }
