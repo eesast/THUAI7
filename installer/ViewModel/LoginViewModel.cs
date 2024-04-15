@@ -17,7 +17,7 @@ namespace installer.ViewModel
         {
             Downloader = downloader;
 
-            LoginBtnClickedCommand = new RelayCommand(LoginBtnClicked);
+            LoginBtnClickedCommand = new AsyncRelayCommand(LoginBtnClicked);
         }
 
         public string Username
@@ -81,19 +81,19 @@ namespace installer.ViewModel
         }
 
         public ICommand LoginBtnClickedCommand { get; }
-        private void LoginBtnClicked()
+        private async Task LoginBtnClicked()
         {
-            var task = Downloader.Login();
-            task.ContinueWith(t =>
-            {
-                ID = Downloader.UserId;
-                if (Remember)
-                    Downloader.RememberUser();
-                else
-                    Downloader.ForgetUser();
-                LoginStatus = Downloader.Web.Status.ToString();
-                RemStatus = Remember.ToString();
-            });
+            await Downloader.LoginAsync()
+                .ContinueWith(t =>
+                {
+                    ID = Downloader.Username;
+                    if (Remember)
+                        Downloader.RememberUser();
+                    else
+                        Downloader.ForgetUser();
+                    LoginStatus = Downloader.Web.Status.ToString();
+                    RemStatus = Remember.ToString();
+                });
         }
     }
 }

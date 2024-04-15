@@ -85,7 +85,8 @@ namespace Client.ViewModel
                 System.Diagnostics.Debug.WriteLine("isSpectatorMode = true");
             }
 
-            if (!isSpectatorMode && comInfo.Length != 5 || isSpectatorMode && comInfo.Length != 3)
+            //if (!isSpectatorMode && comInfo.Length != 5 || isSpectatorMode && comInfo.Length != 3)
+            if (comInfo.Length != 5)
             {
                 throw new Exception("Error Registration Information！");
             }
@@ -952,8 +953,10 @@ namespace Client.ViewModel
             shipTypeID = Convert.ToInt32(d.Commands.ShipType);
             playbackFile = d.Commands.PlaybackFile;
             playbackSpeed = d.Commands.PlaybackSpeed;
+            System.Diagnostics.Debug.WriteLine($"playbackfile[{0}]", playbackFile);
+
             //Playback("E:\\program\\Project\\THUAI7\\logic\\Client\\114514.thuai7.pb", 2.0);
-            if (playbackFile == "")
+            if (playbackFile.Length == 0)
             {
                 try
                 {
@@ -985,7 +988,7 @@ namespace Client.ViewModel
             //ConnectToServer(new string[]{
             //    "localhost",
             //    "8888",
-            //    "1",
+            //    "0",
             //    "0",
             //    "1"
             //});
@@ -996,7 +999,9 @@ namespace Client.ViewModel
             //ConnectToServer(new string[]{
             //    "localhost",
             //    "8888",
-            //    "2025"
+            //    "2025",
+            //    "0",
+            //    "1"
             //});
 
             timerViewModel = Dispatcher.CreateTimer();
