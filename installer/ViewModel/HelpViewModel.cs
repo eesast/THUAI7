@@ -35,6 +35,11 @@ namespace installer.ViewModel
                 { 
                     Title = "更新", 
                     Content = "> 更新前请先进行检查更新操作。"
+                },
+                new HelpMessage
+                {
+                    Title = "按钮全部不可用",
+                    Content = "> 如果选择的文件夹之前曾经下载过THUAI7，那么请在“文档-THUAI7-config.json”中添加项“\"Installed\": true”"
                 }
                 });
 
@@ -55,8 +60,15 @@ namespace installer.ViewModel
                     Content = "> 首先请确保电脑已经安装了python3和pip，然后执行位于CAPI/python下的generate_proto.cmd(Windows)/generate_proto.sh(Mac/Linux)，等待protos文件夹生成完毕即可。"
                 },
                 new HelpMessage 
-                { Title = "Launcher", Content = "> Playback File非空时为回放模式" },
-                new HelpMessage { Title = "Launcher", Content = "> 启动操作可能需要管理员权限" }
+                { 
+                    Title = "回访模式", 
+                    Content = "> Playback File非空时为回放模式" 
+                },
+                new HelpMessage 
+                { 
+                    Title = "特殊权限", 
+                    Content = "> 启动操作可能需要管理员权限" 
+                }
                 });
 
 

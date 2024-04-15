@@ -18,9 +18,10 @@ namespace installer.ViewModel
     {
         private readonly Downloader Downloader;
         private readonly IFolderPicker FolderPicker;
-        public ObservableCollection<LogRecord> LogCollection { get => Downloader.LogList.List; }
+        public ObservableCollection<LogRecord> LogCollection { get => Log.List; }
 
         private Timer timer;
+        protected ListLogger Log = new ListLogger();
 
         public InstallViewModel(IFolderPicker folderPicker, Downloader downloader)
         {
@@ -34,6 +35,9 @@ namespace installer.ViewModel
             {
                 ProgressReport(null, new EventArgs());
             }, null, 0, 500);
+
+            Downloader.Cloud.Log.Partner.Add(Log);
+            Downloader.Data.Log.Partner.Add(Log);
 
             Installed = Downloader.Data.Installed;
             DownloadPath = Downloader.Data.Config.InstallPath;
