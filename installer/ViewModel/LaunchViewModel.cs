@@ -417,7 +417,8 @@ namespace installer.ViewModel
                             serverStarted = true;
                     }
                 };
-                server.Exited += (_, _) => { 
+                server.Exited += (_, _) =>
+                {
                     while (children.Count > 0)
                     {
                         children[0].Kill(true);
