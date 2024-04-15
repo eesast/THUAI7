@@ -37,6 +37,7 @@ namespace installer.Data
     {
         public string Description { get; set; } = "THUAI7-2024";
         public string MD5DataPath { get; set; } = ".\\hash.json";
+        public bool Installed { get; set; } = false;
         public string InstallPath { get; set; } = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             "THUAI7", "Data"
@@ -265,6 +266,18 @@ namespace installer.Data
             {
                 var temp = file.MD5DataPath;
                 file.MD5DataPath = value;
+                if (temp != value)
+                    OnMemoryChanged?.Invoke(this, new EventArgs());
+            }
+        }
+
+        public bool Installed
+        {
+            get => file.Installed;
+            set
+            {
+                var temp = file.Installed;
+                file.Installed = value;
                 if (temp != value)
                     OnMemoryChanged?.Invoke(this, new EventArgs());
             }
