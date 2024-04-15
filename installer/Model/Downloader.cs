@@ -47,8 +47,6 @@ namespace installer.Model
         public string Route { get; set; }
         public string Username { get => Web.Username; set { Web.Username = value; } }
         public string Password { get => Web.Password; set { Web.Password = value; } }
-        public string UserId { get => Web.ID; }
-        public string UserEmail { get => Web.Email; }
         public Data.Command Commands
         {
             get => Data.Config.Commands;
@@ -128,7 +126,7 @@ namespace installer.Model
             Status = UpdateStatus.downloading;
             Log.CountDict[LogLevel.Error] = 0;
             (CloudReport.ComCount, CloudReport.Count) = (0, 1);
-            Cloud.DownloadFileAsync(Data.MD5DataPath, "hash.json").Wait();
+            Cloud.DownloadFile(Data.MD5DataPath, "hash.json");
             if (Log.CountDict[LogLevel.Error] > 0)
             {
                 Status = UpdateStatus.error;
@@ -169,16 +167,28 @@ namespace installer.Model
             };
             action = deleteTask;
             Log.LogWarning($"全新安装开始，所有位于{Data.Config.InstallPath}的文件都将被删除。");
-            deleteTask(new DirectoryInfo(Data.Config.InstallPath));
-
+            if (Directory.Exists(Data.Config.InstallPath))
+                deleteTask(new DirectoryInfo(Data.Config.InstallPath));
+            else
+                Directory.CreateDirectory(Data.Config.InstallPath);
+            if (Directory.Exists(Path.Combine(Data.Config.InstallPath, "Logs")))
+            {
+                Directory.Delete(Path.Combine(Data.Config.InstallPath, "Logs"), true);
+            }
+            Directory.CreateDirectory(Path.Combine(Data.Config.InstallPath, "Logs"));
+            if (Cloud.Log is FileLogger) ((FileLogger)Cloud.Log).Path = Path.Combine(Data.Config.InstallPath, "Logs", "TencentCos.log");
+            if (Web.Log is FileLogger) ((FileLogger)Web.Log).Path = Path.Combine(Data.Config.InstallPath, "Logs", "EESAST.log");
+            if (Data.Log is FileLogger) ((FileLogger)Data.Log).Path = Path.Combine(Data.Config.InstallPath, "Logs", "Local_Data.log");
+            if (Log is FileLogger) ((FileLogger)Log).Path = Path.Combine(Data.Config.InstallPath, "Logs", "Main.log");
             Data.ResetInstallPath(Data.Config.InstallPath);
+
 
             string zp = Path.Combine(Data.Config.InstallPath, "THUAI7.tar.gz");
             Status = UpdateStatus.downloading;
-            (CloudReport.Count, CloudReport.ComCount) = (0, 1);
+            (CloudReport.ComCount, CloudReport.Count) = (0, 1);
             Log.LogInfo($"正在下载安装包……");
             Cloud.DownloadFileAsync(zp, "THUAI7.tar.gz").Wait();
-            CloudReport.Count = 1;
+            CloudReport.ComCount = 1;
             Status = UpdateStatus.unarchieving;
             Log.LogInfo($"安装包下载完毕，正在解压……");
             Cloud.ArchieveUnzip(zp, Data.Config.InstallPath);
@@ -188,12 +198,14 @@ namespace installer.Model
             CurrentVersion = Data.FileHashData.Version;
             Log.LogInfo("正在下载选手代码……");
             Status = UpdateStatus.downloading;
+            CloudReport.Count = 3;
             var c = $"{CurrentVersion.Major}_{CurrentVersion.Minor}";
             var tocpp = Cloud.DownloadFileAsync(Path.Combine(Data.Config.InstallPath, "CAPI", "cpp", "API", "src", "AI.cpp"),
-                $"./Templates/t.{c}.cpp").Result;
+                $"./Templates/t.{c}.cpp").ContinueWith(_ => CloudReport.ComCount++);
             var topy = Cloud.DownloadFileAsync(Path.Combine(Data.Config.InstallPath, "CAPI", "python", "PyAPI", "AI.py"),
-                $"./Templates/t.{c}.py").Result;
-            if (tocpp >= 0 && topy >= 0)
+                $"./Templates/t.{c}.py").ContinueWith(_ => CloudReport.ComCount++);
+            Task.WaitAll(tocpp, topy);
+            if (CloudReport.ComCount == CloudReport.Count)
             {
                 Log.LogInfo("选手代码下载成功！");
             }
@@ -298,7 +310,7 @@ namespace installer.Model
                 // 如果Major版本号不一致，说明启动器本身需要更新，返回结果为16
                 if (CurrentVersion.Major < Data.FileHashData.Version.Major)
                 {
-                    var local = Path.Combine(Data.Config.InstallerPath, "Cache", $"Setup/Installer_v{Data.FileHashData.Version.Major}.zip");
+                    var local = Path.Combine(Environment.CurrentDirectory, "Cache", $"Setup/Installer_v{Data.FileHashData.Version.Major}.zip");
                     Log.LogWarning("启动器即将升级，正在下载压缩包……");
                     Status = UpdateStatus.downloading;
                     Log.CountDict[LogLevel.Error] = 0;
@@ -453,11 +465,11 @@ namespace installer.Model
         /// <param name="username">用户名</param>
         /// <param name="password">密码</param>
         /// <returns></returns>
-        public async Task Login(string username = "", string password = "")
+        public void Login(string username = "", string password = "")
         {
             Username = string.IsNullOrEmpty(username) ? Username : username;
             Password = string.IsNullOrEmpty(password) ? Password : password;
-            await Web.LoginToEEsast(Client, Username, Password);
+            Web.LoginToEEsast(Client, Username, Password).Wait();
         }
 
         /// <summary>
@@ -488,7 +500,7 @@ namespace installer.Model
         /// 上传选手代码
         /// </summary>
         /// <param name="player_id">对应玩家id</param>
-        public void UploadFiles(int player_id)
+        public void UploadCode(int player_id)
         {
             string lang;
             switch (Commands.Language)
@@ -503,7 +515,39 @@ namespace installer.Model
                     lang = "unknown";
                     break;
             }
-            Web.UploadFiles(Client, Data.LangEnabled[Commands.Language].Item2, lang, $"player_{player_id}").Wait();
+            Web.UploadFilesAsync(Client, Data.LangEnabled[Commands.Language].Item2, lang, $"player_{player_id}").Wait();
+        }
+        #endregion
+
+        #region 异步类包装区
+        public Task InstallAsync(string? path = null)
+        {
+            return Task.Run(() => Install(path));
+        }
+
+        public Task ResetInstallPathAsync(string newPath)
+        {
+            return Task.Run(() => ResetInstallPath(newPath));
+        }
+
+        public Task<bool> CheckUpdateAsync()
+        {
+            return Task.Run(() => CheckUpdate());
+        }
+
+        public Task<int> UpdateAsync()
+        {
+            return Task.Run(() => Update());
+        }
+
+        public Task LoginAsync(string username = "", string password = "")
+        {
+            return Task.Run(() => Login(username, password));
+        }
+
+        public Task UploadCodeAsync(int player_id)
+        {
+            return Task.Run(() => UploadCode(player_id));
         }
         #endregion
     }
