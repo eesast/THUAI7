@@ -391,7 +391,7 @@ namespace installer.ViewModel
                 {
                     FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
                 });
-            }
+            }   
             else if (Mode == "Debug")
             {
                 serverStarted = false;
@@ -483,7 +483,7 @@ namespace installer.ViewModel
                                 var py = Process.Start(new ProcessStartInfo()
                                 {
                                     FileName = "cmd.exe",
-                                    Arguments = "/c python"
+                                    Arguments = "/c python "
                                         + Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py")
                                         + $" -I {IP} -P {Port} -t {teamID} -p {playerID} -o"
                                 });

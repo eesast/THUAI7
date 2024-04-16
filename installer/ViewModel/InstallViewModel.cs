@@ -236,6 +236,7 @@ namespace installer.ViewModel
                 else
                 {
                     DownloadEnabled = true;
+                    CheckEnabled = true;
                 }
                 BrowseEnabled = true;
             });
