@@ -330,7 +330,11 @@ class Logic(ILogic):
             )
 
             self.__LoadBufferSelf(message)
-            if self.__playerType==THUAI7.Ship and isinstance(self.__bufferState.self,None):
+            if (
+                self.__playerType == THUAI7.PlayerType.Ship
+                and self.__bufferState.self is None
+            ):
+                self.__logger.debug("exit for null self")
                 return
             for item in message.obj_message:
                 self.__LoadBufferCase(item)
@@ -616,7 +620,12 @@ class Logic(ILogic):
             def HaveOverView(targetX: int, targetY: int):
                 for ship in self.__bufferState.ships:
                     if AssistFunction.HaveView(
-                        ship.viewRange, ship.x, ship.y, targetX, targetY, self.__bufferState.gameMap
+                        ship.viewRange,
+                        ship.x,
+                        ship.y,
+                        targetX,
+                        targetY,
+                        self.__bufferState.gameMap,
                     ):
                         return True
                 return False

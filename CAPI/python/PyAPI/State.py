@@ -5,7 +5,7 @@ import PyAPI.structures as THUAI7
 class State:
     def __init__(self) -> None:
         self.teamScore = 0
-        self.self = THUAI7.Ship()
+        self.self = None
         self.ships = []
         self.enemyShips = []
         self.gameMap = []
