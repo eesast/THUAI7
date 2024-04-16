@@ -87,7 +87,7 @@ namespace installer.Model
                 string localDir = Path.GetDirectoryName(savePath)     // 本地文件夹
                     ?? throw new Exception("本地文件夹路径获取失败");
                 string localFileName = Path.GetFileName(savePath);    // 指定本地保存的文件名
-                remotePath = remotePath?.Replace('\\', '/')?.TrimStart('.', '/');
+                remotePath = remotePath?.Replace('\\', '/')?.TrimStart('.').TrimStart('/');
                 var head = cosXml.HeadObject(new HeadObjectRequest(bucket, remotePath ?? localFileName));
                 long c = 0;
                 if (head.size > (100 << 20))
@@ -157,7 +157,7 @@ namespace installer.Model
             Report.ComCount = 0;
             if (Report.Count == 0)
                 return 0;
-            var partitionar = Partitioner.Create(0, Report.Count, Report.Count / 4);
+            var partitionar = Partitioner.Create(0, Report.Count, Report.Count / 4 > 0 ? Report.Count / 4 : Report.Count);
             var c = 0;
             Parallel.ForEach(partitionar, (range, loopState) =>
             {
@@ -224,31 +224,80 @@ namespace installer.Model
         {
             int thID = Log.StartNew();
             Log.LogInfo(thID, $"Upload task: {{\"{localPath}\"->\"{targetPath}\"}} started.");
-            // 初始化 TransferConfig
-            TransferConfig transferConfig = new TransferConfig();
-
-            // 初始化 TransferManager
-            TransferManager transferManager = new TransferManager(cosXml, transferConfig);
 
             string bucket = $"{BucketName}-{Appid}";
 
             COSXMLUploadTask uploadTask = new COSXMLUploadTask(bucket, targetPath);
 
+            targetPath = targetPath.TrimStart('.').TrimStart('/');
+
             uploadTask.SetSrcPath(localPath);
 
             try
             {
-                COSXMLUploadTask.UploadTaskResult r = transferManager.UploadAsync(uploadTask).Result;
+                COSXMLUploadTask.UploadTaskResult r = manager.UploadAsync(uploadTask).Result;
                 if (r.httpCode != 200)
                     Log.LogError(thID, $"Upload task: {{\"{localPath}\"->\"{targetPath}\"}} failed, message: {r.httpMessage}");
                 string eTag = r.eTag;
                 //到这里应该是成功了，但是因为我没有试过，也不知道具体情况，可能还要根据result的内容判断
+                Log.LogInfo(thID, $"Upload task: {{\"{localPath}\"->\"{targetPath}\"}} finished.");
             }
             catch (Exception ex)
             {
                 Log.LogError(ex.Message);
             }
-            Log.LogInfo(thID, $"Upload task: {{\"{localPath}\"->\"{targetPath}\"}} finished.");
+        }
+
+        public bool DetectFile(string remotePath)
+        {
+            string bucket = $"{BucketName}-{Appid}";
+            remotePath = remotePath.TrimStart('.').TrimStart('/');
+            //执行请求
+            try
+            {
+                DoesObjectExistRequest requestd = new DoesObjectExistRequest(bucket, remotePath);
+                return cosXml.DoesObjectExist(requestd);
+            }
+            catch (CosClientException clientEx)
+            {
+                Log.LogError("CosClientException: " + clientEx);
+                return false;
+            }
+            catch (CosServerException serverEx)
+            {
+                Log.LogError("CosServerException: " + serverEx.GetInfo());
+                return false;
+            }
+        }
+
+        public void DeleteFile(string remotePath)
+        {
+            int thID = Log.StartNew();
+            Log.LogInfo(thID, $"Delete task: \"{remotePath}\" started.");
+            string bucket = $"{BucketName}-{Appid}";
+            remotePath = remotePath.TrimStart('.').TrimStart('/');
+            //执行请求
+            try
+            {
+                if (!DetectFile(remotePath))
+                {
+                    Log.LogWarning($"{remotePath} doesn't exist!");
+                    return;
+                }
+                DeleteObjectRequest request = new DeleteObjectRequest(bucket, remotePath);
+                DeleteObjectResult result = cosXml.DeleteObject(request);
+                Log.LogInfo(thID, $"Delete task: \"{remotePath}\" finished.");
+            }
+            catch (CosClientException clientEx)
+            {
+                //请求失败
+                Log.LogError("CosClientException: " + clientEx);
+            }
+            catch (CosServerException serverEx)
+            {
+                //请求失败
+                Log.LogError("CosServerException: " + serverEx.GetInfo());
+            }
         }
 
         #region 异步方法包装
@@ -270,6 +319,12 @@ namespace installer.Model
         {
             return Task.Run(() => UploadFile(localPath, targetPath));
         }
+
+        public Task DeleteFileAsync(string remotePath)
+        {
+            return Task.Run(() => DeleteFile(remotePath));
+        }
+
         #endregion
     }
 }

@@ -654,13 +654,26 @@ namespace Client.ViewModel
 
         private void DrawWormHole(MessageOfWormhole data)
         {
-            //int x = data.X;
-            //int y = data.Y;
+            int x = data.X;
+            int y = data.Y;
             int hp = data.Hp;
-            int index = data.Id;
+            int index = UtilFunctions.getGridIndex(x, y);
             MapPatchesList[index].Text = Convert.ToString(hp);
             MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.WormHole];
             MapPatchesList[index].TextColor = Colors.White;
+            int id = data.Id;
+            switch (id)
+            {
+                case 0:
+                    WormHole1HP = hp;
+                    break;
+                case 1:
+                    WormHole2HP = hp;
+                    break;
+                case 2:
+                    WormHole3HP = hp;
+                    break;
+            }
         }
 
         private void DrawResource(MessageOfResource data)

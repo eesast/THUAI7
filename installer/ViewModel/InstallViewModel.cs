@@ -18,22 +18,29 @@ namespace installer.ViewModel
     {
         private readonly Downloader Downloader;
         private readonly IFolderPicker FolderPicker;
-        public ObservableCollection<LogRecord> LogCollection { get => Downloader.LogList.List; }
+        public ObservableCollection<LogRecord> LogCollection { get => Log.List; }
 
         private Timer timer;
+        protected ListLogger Log = new ListLogger();
+
         public InstallViewModel(IFolderPicker folderPicker, Downloader downloader)
         {
             Downloader = downloader;
             FolderPicker = folderPicker;
 
-            downloadPath = Downloader.Data.Config.InstallPath;
+            DownloadPath = Downloader.Data.Config.InstallPath;
+            Installed = Downloader.Data.Installed;
+
             timer = new Timer((_) =>
             {
                 ProgressReport(null, new EventArgs());
-                Installed = Downloader.Data.Installed;
-                DownloadPath = Downloader.Data.Config.InstallPath;
             }, null, 0, 500);
 
+            Downloader.Cloud.Log.Partner.Add(Log);
+            Downloader.Data.Log.Partner.Add(Log);
+
+            Installed = Downloader.Data.Installed;
+            DownloadPath = Downloader.Data.Config.InstallPath;
             BrowseBtnClickedCommand = new RelayCommand(BrowseBtnClicked);
             CheckUpdBtnClickedCommand = new RelayCommand(CheckUpdBtnClicked);
             DownloadBtnClickedCommand = new RelayCommand(DownloadBtnClicked);
@@ -77,6 +84,7 @@ namespace installer.ViewModel
             set
             {
                 installed = value;
+                DownloadBtnText = value ? "移动" : "下载";
                 OnPropertyChanged();
             }
         }
@@ -155,13 +163,24 @@ namespace installer.ViewModel
 
 
         #region 按钮
+        private string downloadBtnText;
+        public string DownloadBtnText
+        {
+            get => downloadBtnText;
+            set
+            {
+                downloadBtnText = value;
+                OnPropertyChanged();
+            }
+        }
+
         private bool browseEnabled = true;
         public bool BrowseEnabled
         {
             get => browseEnabled;
             set
             {
-                browseEnabled = Downloader.Data.Installed && value;
+                browseEnabled = value;
                 OnPropertyChanged();
             }
         }
@@ -171,7 +190,9 @@ namespace installer.ViewModel
             get => checkEnabled;
             set
             {
-                checkEnabled = value && Installed;
+                checkEnabled = value && Installed
+                    && !DownloadPath.EndsWith(':') && !DownloadPath.EndsWith('\\')
+                    && Directory.Exists(DownloadPath) && Local_Data.CountFile(DownloadPath) > 0; ;
                 OnPropertyChanged();
             }
         }
@@ -181,7 +202,9 @@ namespace installer.ViewModel
             get => downloadEnabled;
             set
             {
-                downloadEnabled = value;
+                downloadEnabled = value
+                    && !DownloadPath.EndsWith(':') && !DownloadPath.EndsWith('\\')
+                    && Directory.Exists(DownloadPath) && Local_Data.CountFile(DownloadPath) == 0;
                 OnPropertyChanged();
             }
         }
@@ -212,7 +235,7 @@ namespace installer.ViewModel
                 }
                 else
                 {
-                    DownloadPath = DownloadPath;
+                    DownloadEnabled = true;
                 }
                 BrowseEnabled = true;
             });
@@ -251,7 +274,7 @@ namespace installer.ViewModel
             DownloadEnabled = false;
             UpdateEnabled = false;
             Task t;
-            if (Downloader.Data.Installed)
+            if (Installed)
             {
                 t = Downloader.ResetInstallPathAsync(DownloadPath);
             }
@@ -259,7 +282,6 @@ namespace installer.ViewModel
             {
                 t = Downloader.InstallAsync(DownloadPath);
             }
-
             t.ContinueWith(_ =>
             {
                 Installed = Downloader.Data.Installed;
