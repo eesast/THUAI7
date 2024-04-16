@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IUpdateManager
 {
-    void UpdateMessageByIson(string jsonInfo);
+    void UpdateMessageByIson(string jsonInfo);//jsonInfo为网站传入的更新的MessageOfObj类型，将其解析为messageOfObj类型
 }
