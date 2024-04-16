@@ -53,7 +53,7 @@ namespace Preparation.Utility
             {
                 long previousV = v;
                 long addV = (Environment.TickCount64 - startTime.Stop());
-                if (addV < 0) v += (long)(addV * speed);
+                if (addV > 0) v += (long)(addV * speed);
                 else return 0;
                 if (v > maxV) v = maxV;
                 return v - previousV;

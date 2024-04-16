@@ -7,4 +7,5 @@ public class CivilLaserGun : IWeapon
 {
     public int Cost => GameData.CivilShipLaserGunCost;
     public BulletType BulletType => BulletType.Laser;
+    public WeaponType WeaponModuleType => WeaponType.LaserGun;
 }

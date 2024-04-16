@@ -430,6 +430,7 @@ namespace installer.ViewModel
                 DateTime t = DateTime.Now;
                 while (!serverStarted && (DateTime.Now - t).TotalSeconds < 20) ;
                 Log.LogWarning("Server成功启动，请保持网络稳定");
+                Downloader.Data.Config.Commands.PlayerID = 2024;
                 var client = Process.Start(new ProcessStartInfo()
                 {
                     FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
