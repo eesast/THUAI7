@@ -70,5 +70,6 @@ jobs:
 
     - name: Check Interface
       run: |
-        dotnet format whitespace "./interface/interface/Assets/Scripts/" --folder --verify-no-changes
+        dotnet format whitespace "./interface/interface_live/Assets/Scripts/" --folder --verify-no-changes
+        dotnet format whitespace "./interface/interface_playback/Assets/Scripts/" --folder --verify-no-changes
         dotnet format whitespace "./interface/interface_local/Assets/Scripts/" --folder --verify-no-changes

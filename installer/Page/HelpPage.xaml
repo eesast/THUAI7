@@ -26,9 +26,14 @@
                 ItemsSource="{Binding InstallerHelp}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Label
-                            Text="{Binding Content}"
-                            FontSize="{Binding FontSize}"/>
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="{Binding Title}"
+                                FontSize="{Binding TitleSize}" />
+                            <Label
+                                Text="{Binding Content}"
+                                FontSize="{Binding ContentSize}"/>
+                        </VerticalStackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
@@ -48,9 +53,14 @@
                 ItemsSource="{Binding LauncherHelp}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Label
-                            Text="{Binding Content}"
-                            FontSize="{Binding FontSize}"/>
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="{Binding Title}"
+                                FontSize="{Binding TitleSize}" />
+                            <Label
+                                Text="{Binding Content}"
+                                FontSize="{Binding ContentSize}"/>
+                        </VerticalStackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
@@ -70,9 +80,14 @@
                 ItemsSource="{Binding OtherHelp}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Label
-                            Text="{Binding Content}"
-                            FontSize="{Binding FontSize}"/>
+                        <VerticalStackLayout>
+                            <Label 
+                                Text="{Binding Title}"
+                                FontSize="{Binding TitleSize}" />
+                            <Label
+                                Text="{Binding Content}"
+                                FontSize="{Binding ContentSize}"/>
+                        </VerticalStackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
