@@ -11,8 +11,8 @@ namespace GameClass.GameObj
         public AtomicLong PlayerID { get; } = new(0);
         public const long invalidTeamID = long.MaxValue;
         public const long noneTeamID = long.MinValue;
-        private readonly List<XY> birthPointList = [];
         public ObjPool<Ship, ShipType> ShipPool { get; }
+        private readonly List<XY> birthPointList = [];
         public List<XY> BirthPointList => birthPointList;
         public Home Home { get; set; }
         public MoneyPool MoneyPool { get; } = new();
