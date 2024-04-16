@@ -2,6 +2,7 @@ using GameClass.GameObj;
 using Gaming;
 using Grpc.Core;
 using Preparation.Utility;
+using Utility = Preparation.Utility;
 using Protobuf;
 
 namespace Server
@@ -518,11 +519,24 @@ namespace Server
 #if DEBUG
             Console.WriteLine($"TRY BuildShip: ShipType {request.ShipType} from Team {request.TeamId}");
 #endif
+            var activateCost = Transformation.ShipTypeFromProto(request.ShipType) switch
+            {
+                Utility.ShipType.CivilShip => GameData.CivilShipCost,
+                Utility.ShipType.WarShip => GameData.WarShipCost,
+                Utility.ShipType.FlagShip => GameData.FlagShipCost,
+                _ => int.MaxValue
+            };
+            var teamMoneyPool = game.TeamList[(int)request.TeamId].MoneyPool;
+            if (activateCost > teamMoneyPool.Money)
+            {
+                return Task.FromResult(new BoolRes { ActSuccess = false });
+            }
             BoolRes boolRes = new()
             {
                 ActSuccess =
                     game.ActivateShip(request.TeamId, Transformation.ShipTypeFromProto(request.ShipType), request.BirthpointIndex) != GameObj.invalidID
             };
+            if (boolRes.ActSuccess) teamMoneyPool.SubMoney(activateCost);
 #if DEBUG
             Console.WriteLine("END BuildShip");
 #endif
@@ -534,12 +548,29 @@ namespace Server
 #if DEBUG
             Console.WriteLine($"TRY BuildShipRID: ShipType {request.ShipType} from Team {request.TeamId}");
 #endif
-            var playerId = game.ActivateShip(request.TeamId, Transformation.ShipTypeFromProto(request.ShipType), request.BirthpointIndex);
+
+            var activateCost = Transformation.ShipTypeFromProto(request.ShipType) switch
+            {
+                Utility.ShipType.CivilShip => GameData.CivilShipCost,
+                Utility.ShipType.WarShip => GameData.WarShipCost,
+                Utility.ShipType.FlagShip => GameData.FlagShipCost,
+                _ => int.MaxValue
+            };
+            var teamMoneyPool = game.TeamList[(int)request.TeamId].MoneyPool;
+            if (activateCost > teamMoneyPool.Money)
+            {
+                return Task.FromResult(new BuildShipRes { ActSuccess = false });
+            }
+            var playerId = game.ActivateShip(request.TeamId,
+                                      Transformation.ShipTypeFromProto(request.ShipType),
+                                      request.BirthpointIndex);
+
             BuildShipRes buildShipRes = new()
             {
                 ActSuccess = playerId != GameObj.invalidID,
                 PlayerId = playerId
             };
+            if (buildShipRes.ActSuccess) teamMoneyPool.SubMoney(activateCost);
 #if DEBUG
             Console.WriteLine("END BuildShipRID");
 #endif

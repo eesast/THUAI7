@@ -60,14 +60,6 @@ namespace installer.Data
             }
         }
 
-        public event PropertyChangingEventHandler? OnReport;
-
-        public override void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            OnReport?.Invoke(this, null);
-            base.OnPropertyChanged(propertyName);
-        }
-
         private bool bFTE;
         private long cot;
         private long com;

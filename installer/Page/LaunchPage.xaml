@@ -40,56 +40,126 @@
                     FontSize="16"/>
             </HorizontalStackLayout>
 
-            <HorizontalStackLayout>
-                <Label
-                    WidthRequest="170"
-                    Text="Playback File"
-                    VerticalOptions="Center"
-                    FontSize="{Binding ConstFontSize}"/>
-                <Entry
-                    WidthRequest="400"
-                    Placeholder=""
-                    Text="{Binding PlaybackFile}"
-                    FontSize="16"/>
-            </HorizontalStackLayout>
+            <Label/>
 
             <HorizontalStackLayout>
                 <Label
                     WidthRequest="170"
-                    Text="Playback Speed"
+                    Text="Mode"
                     VerticalOptions="Center"
                     FontSize="{Binding ConstFontSize}"/>
-                <Entry
-                    WidthRequest="400"
-                    Placeholder=""
-                    Text="{Binding PlaybackSpeed}"
-                    FontSize="16"/>
+                <Picker
+                    SelectedItem="{Binding Mode}"
+                    WidthRequest="400">
+                    <Picker.ItemsSource>
+                        <x:Array
+                            Type="{x:Type x:String}">
+                            <x:String>Debug</x:String>
+                            <x:String>Playback</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
             </HorizontalStackLayout>
-            
-            <HorizontalStackLayout>
-                <Label
-                    WidthRequest="170"
-                    Text="Language"
-                    VerticalOptions="Center"
-                    FontSize="{Binding ConstFontSize}"/>
-                <CheckBox
-                    IsChecked="{Binding CppSelect}"/>
-                <Label
-                    WidthRequest="100"
-                    Text="C++"
-                    VerticalOptions="Center"
-                    FontSize="{Binding ConstFontSize}"/>
-                <CheckBox
-                    IsChecked="{Binding PySelect}"/>
-                <Label
-                    WidthRequest="100"
-                    Text="Python"
-                    VerticalOptions="Center"
-                    FontSize="{Binding ConstFontSize}"/>
-            </HorizontalStackLayout>
+
+            <VerticalStackLayout
+                IsVisible="{Binding PlaybackVisible}">
+                <HorizontalStackLayout>
+                    <Label
+                        WidthRequest="170"
+                        Text="Playback File"
+                        VerticalOptions="Center"
+                        FontSize="{Binding ConstFontSize}"/>
+                    <Entry
+                        WidthRequest="400"
+                        Placeholder=""
+                        Text="{Binding PlaybackFile}"
+                        FontSize="16"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout>
+                    <Label
+                        WidthRequest="170"
+                        Text="Playback Speed"
+                        VerticalOptions="Center"
+                        FontSize="{Binding ConstFontSize}"/>
+                    <Entry
+                        WidthRequest="400"
+                        Placeholder=""
+                        Text="{Binding PlaybackSpeed}"
+                        FontSize="16"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout
+                IsVisible="{Binding DebugVisible}">
+                <HorizontalStackLayout>
+                    <Label
+                        WidthRequest="170"
+                        Text="Team Count"
+                        VerticalOptions="Center"
+                        FontSize="{Binding ConstFontSize}"/>
+                    <Picker
+                        SelectedItem="{Binding TeamCount}"
+                        WidthRequest="400">
+                        <Picker.ItemsSource>
+                            <x:Array
+                                Type="{x:Type x:Int32}">
+                                <x:Int32>1</x:Int32>
+                                <x:Int32>2</x:Int32>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout>
+                    <Label
+                        WidthRequest="170"
+                        Text="Ship Count"
+                        VerticalOptions="Center"
+                        FontSize="{Binding ConstFontSize}"/>
+                    <Picker
+                        SelectedItem="{Binding ShipCount}"
+                        WidthRequest="400">
+                        <Picker.ItemsSource>
+                            <x:Array
+                                Type="{x:Type x:Int32}">
+                                <x:Int32>0</x:Int32>
+                                <x:Int32>1</x:Int32>
+                                <x:Int32>2</x:Int32>
+                                <x:Int32>3</x:Int32>
+                                <x:Int32>4</x:Int32>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout>
+                    <Label
+                        WidthRequest="180"
+                        Text="Language"
+                        VerticalOptions="Center"
+                        FontSize="{Binding ConstFontSize}"/>
+                    <CheckBox
+                        IsChecked="{Binding CppSelect}"/>
+                    <Label
+                        WidthRequest="100"
+                        Text="C++"
+                        VerticalOptions="Center"
+                        FontSize="{Binding ConstFontSize}"/>
+                    <CheckBox
+                        IsChecked="{Binding PySelect}"/>
+                    <Label
+                        WidthRequest="100"
+                        Text="Python"
+                        VerticalOptions="Center"
+                        FontSize="{Binding ConstFontSize}"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
 
             <Label
                 Text="{Binding DebugAlert}"/>
+
+            <Label/>
 
             <Button
                 WidthRequest="400"
@@ -109,6 +179,32 @@
                 BackgroundColor="{Binding ConstBackgroundColor}"
                 FontSize="{Binding ConstFontSize}"
                 TextColor="{Binding ConstTextColor}"/>
+
+            <Frame
+                BorderColor="Gray"
+                Padding="3"
+                Margin="5"
+                WidthRequest="600"
+                HeightRequest="200">
+
+                <CollectionView
+                    BackgroundColor="LightGray"
+                    ItemsSource="{Binding LogList}"
+                    ItemsUpdatingScrollMode="KeepLastItemInView"
+                    VerticalScrollBarVisibility="Always">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+
+                            <Label
+                                WidthRequest="570"
+                                Text="{Binding Message}"
+                                TextColor="{Binding Color}"/>
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </Frame>
 
         </VerticalStackLayout>
 
