@@ -421,7 +421,7 @@ namespace installer.Model
                     var tncpp = Cloud.DownloadFileAsync(tpncpp, $"./Templates/t.{Data.FileHashData.TVersion.TemplateVersion}.cpp");
                     var tnpy = Cloud.DownloadFileAsync(tpnpy, $"./Templates/t.{Data.FileHashData.TVersion.TemplateVersion}.py");
                     Task.WaitAll(tocpp, topy, tncpp, tnpy);
-                    var r = tocpp.Result >= 0 ? 1 : 0 + topy.Result >= 0 ? 1 : 0 + tncpp.Result >= 0 ? 1 : 0 + tnpy.Result >= 0 ? 1 : 0;
+                    var r = (tocpp.Result >= 0 ? 1 : 0) + (topy.Result >= 0 ? 1 : 0) + (tncpp.Result >= 0 ? 1 : 0) + (tnpy.Result >= 0 ? 1 : 0);
                     CloudReport.ComCount += r;
                     if (r == 4)
                     {
@@ -490,18 +490,21 @@ namespace installer.Model
                 if (Log.CountDict[LogLevel.Error] == 0)
                 {
                     Data.MD5Update.Clear();
+                    var c = CurrentVersion;
+                    CurrentVersion = Data.FileHashData.TVersion;
                     Status = UpdateStatus.hash_computing;
                     Data.Log.LogInfo("正在校验……");
                     if (!CheckUpdate())
                     {
                         Data.Log.LogInfo("更新成功！");
                         Status = UpdateStatus.success;
-                        CurrentVersion = Data.FileHashData.TVersion;
                         Data.Installed = true;
                         result |= 8;
                         Data.SaveMD5Data();
                         return result;
                     }
+                    else
+                        CurrentVersion = c;
                 }
             }
             else
