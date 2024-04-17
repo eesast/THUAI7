@@ -6,7 +6,7 @@
 #include "constants.h"
 // 注意不要使用conio.h，Windows.h等非标准库
 // 为假则play()期间确保游戏状态不更新，为真则只保证游戏状态在调用相关方法时不更新，大致一帧更新一次
-extern const bool asynchronous = false;
+extern const bool asynchronous = true;
 
 // 选手需要依次将player1到player4的船类型在这里定义
 extern const std::array<THUAI7::ShipType, 4> ShipTypeDict = {
@@ -25,14 +25,17 @@ void AI::play(IShipAPI& api)
     }
     else if (this->playerID == 2)
     {
-        api.MoveDown(100);
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        api.MoveLeft(100);
-        api.PrintSelfInfo();
-        api.PrintShip();
-        api.Recover(10);
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        api.Attack(1.5);
+        while (true)
+        {
+            api.MoveDown(100);
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            api.MoveLeft(100);
+            api.PrintSelfInfo();
+            api.PrintShip();
+            api.Recover(10);
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            api.Attack(1.5);
+        }
     }
 
     else if (this->playerID == 3)
@@ -49,5 +52,6 @@ void AI::play(IShipAPI& api)
 void AI::play(ITeamAPI& api)  // 默认team playerID 为0
 {
     api.PrintSelfInfo();
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     api.InstallModule(2, THUAI7::ModuleType::ModuleLaserGun);
 }
