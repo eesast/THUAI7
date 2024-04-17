@@ -391,7 +391,7 @@ namespace installer.ViewModel
                 {
                     FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
                 });
-            }   
+            }
             else if (Mode == "Debug")
             {
                 serverStarted = false;
