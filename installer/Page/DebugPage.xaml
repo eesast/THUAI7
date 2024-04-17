@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewModels="clr-namespace:installer.ViewModel"
-             x:Class="installer.Page.LaunchPage"
+             x:Class="installer.Page.DebugPage"
              Title="Launcher">
-
+    
     <Grid
+        x:Name="BasicGrid"
         HorizontalOptions="Center"
         WidthRequest="600"
         RowDefinitions="20,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*"
@@ -18,29 +18,24 @@
 
             <HorizontalStackLayout>
                 <Label
-                    WidthRequest="170"
+                    WidthRequest="100"
                     Text="IP"
                     VerticalOptions="Center"
                     FontSize="{Binding ConstFontSize}"/>
                 <Entry
-                    WidthRequest="400"
+                    WidthRequest="200"
                     Text="{Binding IP}"
                     FontSize="16"/>
-            </HorizontalStackLayout>
-
-            <HorizontalStackLayout>
                 <Label
-                    WidthRequest="170"
+                    WidthRequest="100"
                     Text="Port"
                     VerticalOptions="Center"
                     FontSize="{Binding ConstFontSize}"/>
                 <Entry
-                    WidthRequest="400"
+                    WidthRequest="200"
                     Text="{Binding Port}"
                     FontSize="16"/>
             </HorizontalStackLayout>
-
-            <Label/>
 
             <HorizontalStackLayout>
                 <Label
@@ -53,45 +48,79 @@
                     WidthRequest="400">
                     <Picker.ItemsSource>
                         <x:Array
-                            Type="{x:Type x:String}">
-                            <x:String>Debug</x:String>
-                            <x:String>Playback</x:String>
+                        Type="{x:Type x:String}">
+                            <x:String>Client</x:String>
+                            <x:String>Server</x:String>
                         </x:Array>
                     </Picker.ItemsSource>
                 </Picker>
             </HorizontalStackLayout>
 
             <VerticalStackLayout
-                IsVisible="{Binding PlaybackVisible}">
+                IsVisible="{Binding ClientVisible}">
                 <HorizontalStackLayout>
                     <Label
-                        WidthRequest="170"
-                        Text="Playback File"
-                        VerticalOptions="Center"
-                        FontSize="{Binding ConstFontSize}"/>
-                    <Entry
-                        WidthRequest="400"
-                        Placeholder=""
-                        Text="{Binding PlaybackFile}"
-                        FontSize="16"/>
+                        Text="Team ID"/>
+                    <Label
+                        Text="Player ID"/>
+                    <Label
+                        Text="Mode"/>
+                    <Button
+                        Text="Add Player"/>
                 </HorizontalStackLayout>
+                <ScrollView>
+                    <CollectionView
+                        VerticalScrollBarVisibility="Always">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+
+                                <HorizontalStackLayout>
+                                    <Label
+                                        Text="{Binding TeamID}"/>
+                                    <Label
+                                        Text="{Binding PlayerID}"/>
+                                    <Picker>
+                                        <Picker.ItemsSource>
+                                            <x:Array
+                                                Type="{x:Type x:String}">
+                                                <x:String>API</x:String>
+                                                <x:String>Manual</x:String>
+                                            </x:Array>
+                                        </Picker.ItemsSource>
+                                    </Picker>
+                                </HorizontalStackLayout>
+
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </ScrollView>
 
                 <HorizontalStackLayout>
                     <Label
-                        WidthRequest="170"
-                        Text="Playback Speed"
+                        WidthRequest="180"
+                        Text="Language"
                         VerticalOptions="Center"
                         FontSize="{Binding ConstFontSize}"/>
-                    <Entry
-                        WidthRequest="400"
-                        Placeholder=""
-                        Text="{Binding PlaybackSpeed}"
-                        FontSize="16"/>
+                    <CheckBox
+                        IsChecked="{Binding CppSelect}"/>
+                    <Label
+                        WidthRequest="100"
+                        Text="C++"
+                        VerticalOptions="Center"
+                        FontSize="{Binding ConstFontSize}"/>
+                    <CheckBox
+                        IsChecked="{Binding PySelect}"/>
+                    <Label
+                        WidthRequest="100"
+                        Text="Python"
+                        VerticalOptions="Center"
+                        FontSize="{Binding ConstFontSize}"/>
                 </HorizontalStackLayout>
+                
             </VerticalStackLayout>
 
             <VerticalStackLayout
-                IsVisible="{Binding DebugVisible}">
+                    IsVisible="{Binding ServerVisible}">
                 <HorizontalStackLayout>
                     <Label
                         WidthRequest="170"
@@ -133,33 +162,10 @@
                     </Picker>
                 </HorizontalStackLayout>
 
-                <HorizontalStackLayout>
-                    <Label
-                        WidthRequest="180"
-                        Text="Language"
-                        VerticalOptions="Center"
-                        FontSize="{Binding ConstFontSize}"/>
-                    <CheckBox
-                        IsChecked="{Binding CppSelect}"/>
-                    <Label
-                        WidthRequest="100"
-                        Text="C++"
-                        VerticalOptions="Center"
-                        FontSize="{Binding ConstFontSize}"/>
-                    <CheckBox
-                        IsChecked="{Binding PySelect}"/>
-                    <Label
-                        WidthRequest="100"
-                        Text="Python"
-                        VerticalOptions="Center"
-                        FontSize="{Binding ConstFontSize}"/>
-                </HorizontalStackLayout>
             </VerticalStackLayout>
 
             <Label
                 Text="{Binding DebugAlert}"/>
-
-            <Label/>
 
             <Button
                 WidthRequest="400"
@@ -209,5 +215,5 @@
         </VerticalStackLayout>
 
     </Grid>
-
+    
 </ContentPage>
