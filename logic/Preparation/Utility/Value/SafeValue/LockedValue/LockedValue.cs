@@ -9,7 +9,7 @@ namespace Preparation.Utility
     public abstract class LockedValue
     {
         protected readonly object vLock = new();
-        protected object VLock => vLock;
+        public object VLock => vLock;
 
         #region NeedToDo
         public virtual TResult ReadNeed<TResult>(Func<TResult> func)

@@ -20,6 +20,19 @@ namespace Preparation.Utility
         public virtual T? CompareExROri(T? newV, T? compareTo) => Interlocked.CompareExchange(ref v, newV, compareTo);
     }
 
+    public class AtomicTNotNull<T>(T x) : Atomic where T : class
+    {
+        protected T v = x;
+
+        public override string ToString() => Interlocked.CompareExchange(ref v!, null, null).ToString()!;
+        public T Get() => Interlocked.CompareExchange(ref v!, null, null);
+        public static implicit operator T(AtomicTNotNull<T> aint) => Interlocked.CompareExchange(ref aint.v!, null, null);
+        /// <returns>返回操作前的值</returns>
+        public virtual T SetROri(T value) => Interlocked.Exchange(ref v, value);
+        /// <returns>返回操作前的值</returns>
+        public virtual T CompareExROri(T newV, T compareTo) => Interlocked.CompareExchange(ref v, newV, compareTo);
+    }
+
     public class AtomicDouble(double x) : Atomic, IDouble
     {
         private double v = x;
@@ -64,5 +77,21 @@ namespace Preparation.Utility
         public void Add(bool x) => Xor(x);
         /// <returns>等价于异或</returns>
         public void Sub(bool x) => Xor(x);
+    }
+
+    public class AtomicEnum<T>(T x) : Atomic
+        where T : struct, System.Enum
+    {
+        protected T v = x;
+
+        public T Get() => InterlockedEx.ReadEnum(ref v);
+        public override string ToString() => Get().ToString();
+
+        public virtual void Set(T value) => InterlockedEx.ExchangeEnum(ref v, value);
+        /// <returns>返回操作前的值</returns>
+        public virtual T SetROri(T value) => InterlockedEx.ExchangeEnum(ref v, value);
+
+        /// <returns>返回操作前的值</returns>
+        public virtual T CompareExROri(T newV, T compareTo) => InterlockedEx.CompareExchangeEnum(ref v, newV, compareTo);
     }
 }
