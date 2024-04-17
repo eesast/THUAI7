@@ -72,7 +72,6 @@ namespace installer.ViewModel
             set
             {
                 mode = value;
-                OnPropertyChanged();
                 if (mode == "Playback")
                 {
                     playbackFileChanged = true;
@@ -96,6 +95,7 @@ namespace installer.ViewModel
                     PlaybackVisible = false;
                     DebugVisible = false;
                 }
+                OnPropertyChanged();
             }
         }
 

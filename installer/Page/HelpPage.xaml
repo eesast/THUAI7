@@ -4,6 +4,7 @@
              xmlns:viewModels="clr-namespace:installer.ViewModel"
              x:Class="installer.Page.HelpPage"
              Title="Help">
+
     <ScrollView
         WidthRequest="750"
         HeightRequest="500"
@@ -102,4 +103,5 @@
 
         </VerticalStackLayout>
     </ScrollView>
+    
 </ContentPage>
