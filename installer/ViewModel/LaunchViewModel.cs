@@ -387,123 +387,33 @@ namespace installer.ViewModel
         {
             if (Mode == "Playback")
             {
-                Process.Start(new ProcessStartInfo()
-                {
-                    FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
-                });
+                LaunchPlayback();
             }
             else if (Mode == "Debug")
             {
-                serverStarted = false;
-                Log.LogInfo("Server Start!");
-                server = Process.Start(new ProcessStartInfo()
-                {
-                    FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Server", "Server.exe"),
-                    Arguments = $"--ip {IP} --port {Port} --teamCount {TeamCount} --shipNum {ShipCount}",
-                    RedirectStandardOutput = true
-                });
-                if (server is null)
-                {
-                    Log.LogError("未能启动Server!");
+                if (!LaunchServer())
                     return;
-                }
-                server.EnableRaisingEvents = true;
-                server.OutputDataReceived += (_, args) =>
-                {
-                    if (!string.IsNullOrEmpty(args.Data))
-                    {
-                        Log.LogInfo(args.Data);
-                        if (args.Data.Contains("Server begins to listen"))
-                            serverStarted = true;
-                    }
-                };
-                server.Exited += (_, _) =>
-                {
-                    while (children.Count > 0)
-                    {
-                        children[0].Kill(true);
-                        children.RemoveAt(0);
-                    }
-                    Log.LogWarning("Server已退出!");
-                };
-                server.BeginOutputReadLine();
                 DateTime t = DateTime.Now;
-                while (!serverStarted && (DateTime.Now - t).TotalSeconds < 20) ;
-                Log.LogWarning("Server成功启动，请保持网络稳定");
-                Downloader.Data.Config.Commands.PlayerID = 2024;
-                var client = Process.Start(new ProcessStartInfo()
-                {
-                    FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
-                });
-                if (client is null)
-                {
-                    Log.LogError("未能启动Client!");
+                while ((DateTime.Now - t).TotalSeconds < 2) ;
+                if (!LaunchClient(true))
                     return;
-                }
-                children.Add(client);
                 if (CppSelect && string.IsNullOrEmpty(PlaybackFile))
                 {
-                    var exe = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "cpp", "x64", "Debug", "API.exe");
-                    if (File.Exists(exe))
-                    {
-                        for (int teamID = 0; teamID <= TeamCount; teamID++)
-                            for (int playerID = 0; playerID <= ShipCount + 1; playerID++)
-                            {
-                                var cpp = Process.Start(new ProcessStartInfo()
-                                {
-                                    FileName = exe,
-                                    Arguments = $"-I {IP} -P {Port} -t {teamID} -p {playerID} -o"
-                                });
-                                if (cpp is null)
-                                {
-                                    Log.LogError($"未能启动API.exe, team:{teamID}, player: {playerID}!");
-                                    return;
-                                }
-                                children.Add(cpp);
-                            }
-                    }
-                    else
-                    {
-                        DebugAlert = "请先生成cpp对应可执行文件后再启动，参见“Help-Launch-CPP可执行文件构建”";
-                        Process.Start(new ProcessStartInfo()
+                    for (int teamID = 0; teamID <= TeamCount; teamID++)
+                        for (int playerID = 0; playerID <= ShipCount + 1; playerID++)
                         {
-                            FileName = "explorer.exe",
-                            Arguments = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "cpp")
-                        });
-                    }
+                            if (!LaunchCppAPI(teamID, playerID))
+                                return;
+                        }
                 }
                 else if (PySelect && string.IsNullOrEmpty(PlaybackFile))
                 {
-                    var p = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python");
-                    if (Directory.Exists(Path.Combine(p, "proto")))
-                    {
-                        for (int teamID = 0; teamID <= TeamCount; teamID++)
-                            for (int playerID = 0; playerID <= ShipCount + 1; playerID++)
-                            {
-                                var py = Process.Start(new ProcessStartInfo()
-                                {
-                                    FileName = "cmd.exe",
-                                    Arguments = "/c python "
-                                        + Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py")
-                                        + $" -I {IP} -P {Port} -t {teamID} -p {playerID} -o"
-                                });
-                                if (py is null)
-                                {
-                                    Log.LogError($"未能启动main.py, team:{teamID}, player: {playerID}!");
-                                    return;
-                                }
-                                children.Add(py);
-                            }
-                    }
-                    else
-                    {
-                        DebugAlert = "请构建proto后安装，参见“Help-Launch-Python proto构建”";
-                        Process.Start(new ProcessStartInfo()
+                    for (int teamID = 0; teamID <= TeamCount; teamID++)
+                        for (int playerID = 0; playerID <= ShipCount + 1; playerID++)
                         {
-                            FileName = "explorer.exe",
-                            Arguments = p
-                        });
-                    }
+                            if (!LaunchPyAPI(teamID, playerID))
+                                return;
+                        }
                 }
             }
         }
@@ -518,5 +428,133 @@ namespace installer.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        #region 启动方法组
+        public bool LaunchPlayback()
+        {
+            return Process.Start(new ProcessStartInfo()
+            {
+                FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
+            }) is not null;
+        }
+
+        public event EventHandler? OnServerLaunched;
+        public event EventHandler? OnServerExited;
+
+        public bool LaunchServer()
+        {
+            server = Process.Start(new ProcessStartInfo()
+            {
+                FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Server", "Server.exe"),
+                Arguments = $"--ip {IP} --port {Port} --teamCount {TeamCount} --shipNum {ShipCount}",
+            });
+            if (server is null)
+            {
+                Log.LogError("Server未能启动！");
+                return false;
+            }
+            server.EnableRaisingEvents = true;
+            server.Exited += (_, _) =>
+            {
+                OnServerExited?.Invoke(this, EventArgs.Empty);
+                Log.LogWarning("Server已退出。");
+            };
+            Log.LogWarning("Server成功启动，请保持网络稳定。");
+            OnServerLaunched?.Invoke(this, EventArgs.Empty);
+            return true;
+        }
+
+        public bool LaunchClient(bool isSpectator)
+        {
+            if (isSpectator)
+            {
+                Downloader.Data.Config.Commands.PlayerID = 2024;
+            }
+            var client = Process.Start(new ProcessStartInfo()
+            {
+                FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
+            });
+            if (client is null)
+            {
+                Log.LogError("未能启动Client!");
+                return false;
+            }
+            Log.LogInfo("Client成功启动。");
+            return true;
+        }
+
+        protected bool ExplorerLaunched_CppAPI = false;
+        protected bool ExplorerLaunched_PyAPI = false;
+        public bool LaunchCppAPI(int team, int player)
+        {
+            var exe = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "cpp", "x64", "Debug", "API.exe");
+            if (File.Exists(exe))
+            {
+                var cpp = Process.Start(new ProcessStartInfo()
+                {
+                    FileName = exe,
+                    Arguments = $"-I {IP} -P {Port} -t {team} -p {player} -o"
+                });
+                if (cpp is null)
+                {
+                    Log.LogError($"未能启动API.exe, team:{team}, player: {player}!");
+                    return false;
+                }
+                Log.LogInfo($"API.exe启动成功, team:{team}, player: {player}!");
+                return true;
+            }
+            else
+            {
+                Log.LogError("请先生成cpp对应可执行文件后再启动，参见“Help-Launch-CPP可执行文件构建”");
+                if (!ExplorerLaunched_CppAPI)
+                {
+                    Process.Start(new ProcessStartInfo()
+                    {
+                        FileName = "explorer.exe",
+                        Arguments = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "cpp")
+                    });
+                    ExplorerLaunched_CppAPI = true;
+                }
+                return false;
+            }
+        }
+
+        public bool LaunchPyAPI(int team, int player)
+        {
+            var p = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python");
+            if (Directory.Exists(Path.Combine(p, "proto")))
+            {
+
+                var py = Process.Start(new ProcessStartInfo()
+                {
+                    FileName = "cmd.exe",
+                    Arguments = "/c python "
+                        + Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py")
+                        + $" -I {IP} -P {Port} -t {team} -p {player} -o"
+                });
+                if (py is null)
+                {
+                    Log.LogError($"未能启动main.py, team:{team}, player: {player}!");
+                    return false;
+                }
+                Log.LogError($"main.py启动成功, team:{team}, player: {player}!");
+                return true;
+            }
+            else
+            {
+                DebugAlert = "请构建proto后安装，参见“Help-Launch-Python proto构建”";
+                if (!ExplorerLaunched_PyAPI)
+                {
+                    Process.Start(new ProcessStartInfo()
+                    {
+                        FileName = "explorer.exe",
+                        Arguments = p
+                    });
+                    ExplorerLaunched_PyAPI = true;
+                }
+                return false;
+            }
+        }
+        #endregion
     }
 }

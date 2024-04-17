@@ -32,7 +32,7 @@ namespace installer.Model
         public string StartName = "maintest.exe";           // 启动的程序名
         public Local_Data Data;                             // 本地文件管理器
         public Tencent_Cos Cloud;                           // THUAI7 Cos桶
-        public Version CurrentVersion { get => Data.CurrentVersion; set => Data.CurrentVersion = value; }
+        public TVersion CurrentVersion { get => Data.CurrentVersion; set => Data.CurrentVersion = value; }
 
         public HttpClient Client = new HttpClient();
         public EEsast Web;                                  // EEsast服务器
@@ -195,15 +195,14 @@ namespace installer.Model
             Cloud.Log.LogInfo($"解压完成");
             File.Delete(zp);
 
-            CurrentVersion = Data.FileHashData.Version;
+            CurrentVersion = Data.FileHashData.TVersion;
             Cloud.Log.LogInfo("正在下载选手代码……");
             Status = UpdateStatus.downloading;
             CloudReport.Count = 3;
-            var c = $"{CurrentVersion.Major}_{CurrentVersion.Minor}";
             var tocpp = Cloud.DownloadFileAsync(Path.Combine(Data.Config.InstallPath, "CAPI", "cpp", "API", "src", "AI.cpp"),
-                $"./Templates/t.{c}.cpp").ContinueWith(_ => CloudReport.ComCount++);
+                $"./Templates/t.{CurrentVersion.TemplateVersion}.cpp").ContinueWith(_ => CloudReport.ComCount++);
             var topy = Cloud.DownloadFileAsync(Path.Combine(Data.Config.InstallPath, "CAPI", "python", "PyAPI", "AI.py"),
-                $"./Templates/t.{c}.py").ContinueWith(_ => CloudReport.ComCount++);
+                $"./Templates/t.{CurrentVersion.TemplateVersion}.py").ContinueWith(_ => CloudReport.ComCount++);
             Task.WaitAll(tocpp, topy);
             if (CloudReport.ComCount == CloudReport.Count)
             {
@@ -279,7 +278,7 @@ namespace installer.Model
         /// 返回真时则表明需要更新
         /// </summary>
         /// <returns></returns>
-        public bool CheckUpdate()
+        public bool CheckUpdate(bool writeMD5 = true)
         {
             UpdateMD5();
             Data.MD5Update.Clear();
@@ -287,14 +286,31 @@ namespace installer.Model
             Status = UpdateStatus.hash_computing;
             Data.ScanDir(false);
             Status = UpdateStatus.success;
-            if (Data.MD5Update.Count != 0 || CurrentVersion < Data.FileHashData.Version)
+            if (Data.MD5Update.Count != 0 || CurrentVersion < Data.FileHashData.TVersion)
             {
                 Data.Log.LogInfo("需要更新，请点击更新按钮以更新。");
+                if (writeMD5)
+                {
+                    Data.SaveMD5Data();
+                }
+                return true;
+            }
+            else if (!Data.LangEnabled[LanguageOption.cpp].Item1 || !Data.LangEnabled[LanguageOption.python].Item1)
+            {
+                Data.Log.LogInfo("未检测到选手代码，请点击更新按钮以修复。");
+                if (writeMD5)
+                {
+                    Data.SaveMD5Data();
+                }
                 return true;
             }
             else
             {
                 Data.Log.LogInfo("您的版本已经是最新版本！");
+                if (writeMD5)
+                {
+                    Data.SaveMD5Data();
+                }
                 return false;
             }
         }
@@ -305,49 +321,85 @@ namespace installer.Model
         public int Update()
         {
             int result = 0;
-            if (CheckUpdate())
+            if (CheckUpdate(false))
             {
-                // 如果Major版本号不一致，说明启动器本身需要更新，返回结果为16
-                if (CurrentVersion.Major < Data.FileHashData.Version.Major)
+                // 如果缺少选手代码，应当立刻下载最新的选手代码
+                if (!Data.LangEnabled[LanguageOption.cpp].Item1)
                 {
-                    var local = Path.Combine(Environment.CurrentDirectory, "Cache", $"Setup/Installer_v{Data.FileHashData.Version.Major}.zip");
+                    Log.LogWarning("已检测到选手包cpp代码缺失。");
+                    CloudReport.Count++;
+                    var tocpp = Cloud.DownloadFileAsync(Path.Combine(Data.Config.InstallPath, "CAPI", "cpp", "API", "src", "AI.cpp"),
+                        $"./Templates/t.{CurrentVersion.TemplateVersion}.cpp").ContinueWith(_ => CloudReport.ComCount++);
+                    tocpp.Wait();
+                    if (CloudReport.ComCount == CloudReport.Count)
+                    {
+                        Cloud.Log.LogInfo("选手包cpp代码下载成功！");
+                        Data.LangEnabled[LanguageOption.cpp] = (true, Path.Combine(Data.Config.InstallPath, "CAPI", "cpp", "API", "src", "AI.cpp"));
+                    }
+                    else
+                    {
+                        Cloud.Log.LogError("选手包cpp代码下载失败！");
+                        Data.SaveMD5Data();
+                        return -1;
+                    }
+                }
+                if (!Data.LangEnabled[LanguageOption.python].Item1)
+                {
+                    Log.LogWarning("已检测到选手包py代码缺失。");
+                    CloudReport.Count++;
+                    var topy = Cloud.DownloadFileAsync(Path.Combine(Data.Config.InstallPath, "CAPI", "python", "PyAPI", "AI.py"),
+                        $"./Templates/t.{CurrentVersion.TemplateVersion}.py").ContinueWith(_ => CloudReport.ComCount++);
+                    topy.Wait();
+                    if (CloudReport.ComCount == CloudReport.Count)
+                    {
+                        Cloud.Log.LogInfo("选手包py代码下载成功！");
+                        Data.LangEnabled[LanguageOption.python] = (true, Path.Combine(Data.Config.InstallPath, "CAPI", "python", "PyAPI", "AI.py"));
+                    }
+                    else
+                    {
+                        Cloud.Log.LogError("选手包py代码下载失败！");
+                        Data.SaveMD5Data();
+                        return -1;
+                    }
+                }
+
+                // 启动器本身需要更新，返回结果为16
+                if (CurrentVersion.InstallerVersion < Data.FileHashData.TVersion.InstallerVersion)
+                {
+                    var local = Path.Combine(AppContext.BaseDirectory, "Cache", $"Installer_v{Data.FileHashData.TVersion.InstallerVersion}.zip");
                     Cloud.Log.LogWarning("启动器即将升级，正在下载压缩包……");
                     Status = UpdateStatus.downloading;
                     Log.CountDict[LogLevel.Error] = 0;
-                    var i = Cloud.DownloadFileAsync(local, $"Setup/Installer_v{Data.FileHashData.Version.Major}.zip").Result;
+                    CloudReport.Count++;
+                    var i = Cloud.DownloadFileAsync(local, $"Setup/Installer_v{Data.FileHashData.TVersion.InstallerVersion}.zip").Result;
                     if (i >= 0)
                     {
-                        Cloud.Log.LogWarning("下载完成，请将压缩包解压到原安装位置。");
+                        CloudReport.ComCount++;
+                        Cloud.Log.LogWarning("下载完成，请退出下载器，并将压缩包解压到原下载器安装位置。");
                         Status = UpdateStatus.exiting;
                         if (DeviceInfo.Platform == DevicePlatform.WinUI)
                         {
                             Process.Start(new ProcessStartInfo()
                             {
-                                Arguments = local,
+                                Arguments = '\"' + local + '\"',
                                 FileName = "explorer.exe"
                             });
                         }
-                        Task.Run(() =>
-                        {
-                            var t = DateTime.Now;
-                            while ((DateTime.Now - t).TotalSeconds < 10) ;
-                            Application.Current?.Quit();
-                        });
+                        Data.SaveMD5Data();
                         return 16;
                     }
                     else
                     {
                         // 下载失败
                         Cloud.Log.LogError("启动器下载失败。");
+                        Data.SaveMD5Data();
                         return -1;
                     }
                 }
-                // 如果Minor版本号不一致，说明AI.cpp/AI.py有改动
+                // AI.cpp/AI.py有改动
                 // 返回结果为Flags，1: AI.cpp升级；2: AI.py升级
-                else if (CurrentVersion.Minor < Data.FileHashData.Version.Minor)
+                if (CurrentVersion.TemplateVersion < Data.FileHashData.TVersion.TemplateVersion)
                 {
-                    var c = $"{CurrentVersion.Major}_{CurrentVersion.Minor}";
-                    var v = $"{Data.FileHashData.Version.Major}_{Data.FileHashData.Version.Minor}";
                     Cloud.Log.LogWarning("检测到选手代码升级，即将下载选手代码模板……");
                     Status = UpdateStatus.downloading;
                     var p = Path.Combine(Data.Config.InstallPath, "Templates");
@@ -356,24 +408,28 @@ namespace installer.Model
                         Directory.CreateDirectory(p);
                     }
                     Log.CountDict[LogLevel.Error] = 0;
-                    CloudReport.Count = 4;
-                    var tocpp = Cloud.DownloadFileAsync(Path.Combine(p, $"t.{c}.cpp"),
-                        $"./Templates/t.{c}.cpp");
-                    var topy = Cloud.DownloadFileAsync(Path.Combine(p, $"t.{c}.py"),
-                        $"./Templates/t.{c}.py");
-                    var tncpp = Cloud.DownloadFileAsync(Path.Combine(p, $"t.{v}.cpp"),
-                        $"./Templates/t.{v}.cpp");
-                    var tnpy = Cloud.DownloadFileAsync(Path.Combine(p, $"t.{v}.py"),
-                        $"./Templates/t.{v}.py");
+                    CloudReport.Count += 4;
+
+                    // 下载路径
+                    var tpocpp = Path.Combine(Directory.GetParent(Data.LangEnabled[LanguageOption.cpp].Item2)?.FullName ?? Data.Config.InstallPath, $"oldTemplate.cpp");
+                    var tpncpp = Path.Combine(Directory.GetParent(Data.LangEnabled[LanguageOption.cpp].Item2)?.FullName ?? Data.Config.InstallPath, $"newTemplate.cpp");
+                    var tpopy = Path.Combine(Directory.GetParent(Data.LangEnabled[LanguageOption.python].Item2)?.FullName ?? Data.Config.InstallPath, $"oldTemplate.py");
+                    var tpnpy = Path.Combine(Directory.GetParent(Data.LangEnabled[LanguageOption.python].Item2)?.FullName ?? Data.Config.InstallPath, $"newTemplate.py");
+                    // 下载任务
+                    var tocpp = Cloud.DownloadFileAsync(tpocpp, $"./Templates/t.{CurrentVersion.TemplateVersion}.cpp");
+                    var topy = Cloud.DownloadFileAsync(tpopy, $"./Templates/t.{CurrentVersion.TemplateVersion}.py");
+                    var tncpp = Cloud.DownloadFileAsync(tpncpp, $"./Templates/t.{Data.FileHashData.TVersion.TemplateVersion}.cpp");
+                    var tnpy = Cloud.DownloadFileAsync(tpnpy, $"./Templates/t.{Data.FileHashData.TVersion.TemplateVersion}.py");
                     Task.WaitAll(tocpp, topy, tncpp, tnpy);
-                    CloudReport.ComCount = tocpp.Result >= 0 ? 1 : 0 + topy.Result >= 0 ? 1 : 0 + tncpp.Result >= 0 ? 1 : 0 + tnpy.Result >= 0 ? 1 : 0;
-                    if (CloudReport.ComCount >= CloudReport.Count)
+                    var r = tocpp.Result >= 0 ? 1 : 0 + topy.Result >= 0 ? 1 : 0 + tncpp.Result >= 0 ? 1 : 0 + tnpy.Result >= 0 ? 1 : 0;
+                    CloudReport.ComCount += r;
+                    if (r == 4)
                     {
-                        Cloud.Log.LogWarning("下载完毕，即将合并模板与用户代码，结果可能出现问题，请务必确认正确后用同名temp文件覆盖源文件");
+                        Cloud.Log.LogWarning("下载完毕，即将合并模板与用户代码，结果可能出现问题，请务必核实新旧模板代码和选手代码，确认正确后用同名temp文件覆盖源文件");
                         if (Data.LangEnabled[LanguageOption.cpp].Item1)
                         {
-                            var so = FileService.ReadToEnd(Path.Combine(p, $"t.{c}.cpp"));
-                            var sn = FileService.ReadToEnd(Path.Combine(p, $"t.{v}.cpp"));
+                            var so = FileService.ReadToEnd(tpocpp);
+                            var sn = FileService.ReadToEnd(tpncpp);
                             var sa = FileService.ReadToEnd(Data.LangEnabled[LanguageOption.cpp].Item2);
                             var s = FileService.MergeUserCode(sa, so, sn);
                             using (var f = new FileStream(Data.LangEnabled[LanguageOption.cpp].Item2 + ".temp", FileMode.Create))
@@ -394,8 +450,8 @@ namespace installer.Model
                         }
                         if (Data.LangEnabled[LanguageOption.python].Item1)
                         {
-                            var so = FileService.ReadToEnd(Path.Combine(p, $"t.{c}.py"));
-                            var sn = FileService.ReadToEnd(Path.Combine(p, $"t.{v}.py"));
+                            var so = FileService.ReadToEnd(tpopy);
+                            var sn = FileService.ReadToEnd(tpnpy);
                             var sa = FileService.ReadToEnd(Data.LangEnabled[LanguageOption.python].Item2);
                             var s = FileService.MergeUserCode(sa, so, sn);
                             using (var f = new FileStream(Data.LangEnabled[LanguageOption.python].Item2 + ".temp", FileMode.Create))
@@ -418,7 +474,7 @@ namespace installer.Model
                 }
                 Log.CountDict[LogLevel.Error] = 0;
 
-                // 后两位留给其他更新，更新成功后返回值Flags增加0x8
+                // 更新成功后返回值Flags增加0x8
                 Status = UpdateStatus.downloading;
                 Cloud.Log.LogInfo("正在更新……");
                 Cloud.DownloadQueueAsync(Data.Config.InstallPath,
@@ -434,15 +490,16 @@ namespace installer.Model
                 if (Log.CountDict[LogLevel.Error] == 0)
                 {
                     Data.MD5Update.Clear();
-                    CurrentVersion = Data.FileHashData.Version;
                     Status = UpdateStatus.hash_computing;
                     Data.Log.LogInfo("正在校验……");
                     if (!CheckUpdate())
                     {
                         Data.Log.LogInfo("更新成功！");
                         Status = UpdateStatus.success;
+                        CurrentVersion = Data.FileHashData.TVersion;
                         Data.Installed = true;
                         result |= 8;
+                        Data.SaveMD5Data();
                         return result;
                     }
                 }
@@ -452,10 +509,13 @@ namespace installer.Model
                 Cloud.Log.LogInfo("已经是最新版本啦！");
                 Data.Installed = true;
                 Status = UpdateStatus.success;
+                Data.SaveMD5Data();
                 return 0;
             }
             Cloud.Log.LogError("更新出问题了 -_-b");
             Status = UpdateStatus.error;
+            Data.FileHashData.TVersion = CurrentVersion;
+            Data.SaveMD5Data();
             return -1;
         }
 
