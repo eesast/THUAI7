@@ -19,7 +19,7 @@ namespace installer.Model
         public string MD5DataPath;      // 标记MD5本地缓存文件的路径
         public MD5DataFile FileHashData = new MD5DataFile();
         public ConfigData Config;
-        public Version CurrentVersion;
+        public TVersion CurrentVersion;
         public Dictionary<LanguageOption, (bool, string)> LangEnabled;
         public string LogPath { get => Path.Combine(Config.InstallPath, "Logs"); }
         public ConcurrentDictionary<string, string> MD5Data
@@ -51,14 +51,14 @@ namespace installer.Model
                     if (!File.Exists(MD5DataPath))
                         SaveMD5Data();
                     ReadMD5Data();
-                    CurrentVersion = FileHashData.Version;
+                    CurrentVersion = FileHashData.TVersion;
                     MD5Update.Clear();
                 }
                 else
                 {
                     MD5DataPath = Path.Combine(Config.InstallPath, $"hash.json");
                     Config.MD5DataPath = $".{Path.DirectorySeparatorChar}hash.json";
-                    CurrentVersion = FileHashData.Version;
+                    CurrentVersion = FileHashData.TVersion;
                     SaveMD5Data();
                 }
                 RememberMe = (Config.Remembered && Convert.ToBoolean(Config.Remembered));
@@ -71,7 +71,7 @@ namespace installer.Model
                 Config.InstallPath = dir.FullName;
                 MD5DataPath = Path.Combine(Config.InstallPath, "hash.json");
                 Config.MD5DataPath = $".{Path.DirectorySeparatorChar}hash.json";
-                CurrentVersion = FileHashData.Version;
+                CurrentVersion = FileHashData.TVersion;
                 SaveMD5Data();
                 Config.SaveFile();
             }
@@ -199,10 +199,10 @@ namespace installer.Model
 
         public void SaveMD5Data(bool VersionRefresh = true)
         {
-            try
+            try 
             {
                 if (VersionRefresh)
-                    FileHashData.Version = CurrentVersion;
+                    FileHashData.TVersion = CurrentVersion;
                 using (FileStream fs = new FileStream(MD5DataPath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 using (StreamWriter sw = new StreamWriter(fs))
                 {
@@ -306,9 +306,9 @@ namespace installer.Model
 
         public static bool IsUserFile(string filename, Dictionary<LanguageOption, (bool, string)> dict)
         {
-            if (filename.Contains("AI.cpp"))
+            if (filename.EndsWith("AI.cpp"))
                 dict[LanguageOption.cpp] = (true, filename);
-            if (filename.Contains("AI.py"))
+            if (filename.EndsWith("AI.py"))
                 dict[LanguageOption.python] = (true, filename);
             return IsUserFile(filename);
         }

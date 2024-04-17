@@ -90,9 +90,9 @@ namespace installer.Model
                 remotePath = remotePath?.Replace('\\', '/')?.TrimStart('.').TrimStart('/');
                 var head = cosXml.HeadObject(new HeadObjectRequest(bucket, remotePath ?? localFileName));
                 long c = 0;
-                if (head.size > (100 << 20))
+                if (head.size > (1 << 20))
                 {
-                    // 文件大小大于100MB则设置回调函数
+                    // 文件大小大于1MB则设置回调函数
                     Report.Total = head.size;
                     Report.Completed = 0;
                     Report.BigFileTraceEnabled = true;

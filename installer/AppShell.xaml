@@ -16,9 +16,9 @@
         <ShellContent
             Title="Launch"
             ContentTemplate="{DataTemplate local:LaunchPage}"/>
-        <!--<ShellContent
+        <ShellContent
             Title="Login"
-            ContentTemplate="{DataTemplate local:LoginPage}"/>-->
+            ContentTemplate="{DataTemplate local:LoginPage}"/>
         <ShellContent
             Title="Help"
             ContentTemplate="{DataTemplate local:HelpPage}"/>
