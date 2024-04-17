@@ -440,7 +440,7 @@ namespace installer.ViewModel
 
         public event EventHandler? OnServerLaunched;
         public event EventHandler? OnServerExited;
-        
+
         public bool LaunchServer()
         {
             server = Process.Start(new ProcessStartInfo()

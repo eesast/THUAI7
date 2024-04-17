@@ -409,7 +409,7 @@ namespace installer.Model
                     }
                     Log.CountDict[LogLevel.Error] = 0;
                     CloudReport.Count += 4;
-                    
+
                     // 下载路径
                     var tpocpp = Path.Combine(Directory.GetParent(Data.LangEnabled[LanguageOption.cpp].Item2)?.FullName ?? Data.Config.InstallPath, $"oldTemplate.cpp");
                     var tpncpp = Path.Combine(Directory.GetParent(Data.LangEnabled[LanguageOption.cpp].Item2)?.FullName ?? Data.Config.InstallPath, $"newTemplate.cpp");

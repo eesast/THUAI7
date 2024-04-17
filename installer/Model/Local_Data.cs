@@ -199,7 +199,7 @@ namespace installer.Model
 
         public void SaveMD5Data(bool VersionRefresh = true)
         {
-            try 
+            try
             {
                 if (VersionRefresh)
                     FileHashData.TVersion = CurrentVersion;
