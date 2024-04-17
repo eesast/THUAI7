@@ -72,7 +72,6 @@ namespace installer.ViewModel
             set
             {
                 mode = value;
-                OnPropertyChanged();
                 if (mode == "Playback")
                 {
                     playbackFileChanged = true;
@@ -96,6 +95,7 @@ namespace installer.ViewModel
                     PlaybackVisible = false;
                     DebugVisible = false;
                 }
+                OnPropertyChanged();
             }
         }
 
@@ -483,7 +483,7 @@ namespace installer.ViewModel
                                 var py = Process.Start(new ProcessStartInfo()
                                 {
                                     FileName = "cmd.exe",
-                                    Arguments = "/c python"
+                                    Arguments = "/c python "
                                         + Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py")
                                         + $" -I {IP} -P {Port} -t {teamID} -p {playerID} -o"
                                 });

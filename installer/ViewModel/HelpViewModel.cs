@@ -24,7 +24,7 @@ namespace installer.ViewModel
                 new HelpMessage
                 {
                     Title = "选择安装路径",
-                    Content = "> 下载功能需要选择空文件夹路径，否则该路径下所有文件将丢失。"
+                    Content = "> 下载功能需要选择空文件夹路径。"
                 },
                 new HelpMessage
                 {
@@ -35,11 +35,6 @@ namespace installer.ViewModel
                 {
                     Title = "更新",
                     Content = "> 更新前请先进行检查更新操作。"
-                },
-                new HelpMessage
-                {
-                    Title = "按钮全部不可用",
-                    Content = "> 如果选择的文件夹之前曾经下载过THUAI7，那么请在“文档-THUAI7-config.json”中添加项“\"Installed\": true”"
                 }
                 });
 
@@ -85,7 +80,7 @@ namespace installer.ViewModel
         }
         public string? Title { get; set; }
         public string? Content { get; set; }
-        public string TitleSize { get; } = "20";
+        public string TitleSize { get; } = "18";
         public string ContentSize { get; } = "16";
     }
 }
