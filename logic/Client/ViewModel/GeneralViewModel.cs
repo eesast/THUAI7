@@ -499,6 +499,8 @@ namespace Client.ViewModel
 
                         //RedPlayer.Ships.Clear();
                         //BluePlayer.Ships.Clear();
+                        int RedShipCount = 0;
+                        int BlueShipCount = 0;
                         for (int i = 0; i < listOfShip.Count; i++)
                         {
                             MessageOfShip data = listOfShip[i];
@@ -516,12 +518,13 @@ namespace Client.ViewModel
                                     ProducerModule = data.ProducerType,
                                     ConstuctorModule = data.ConstructorType,
                                 };
-                                System.Diagnostics.Debug.WriteLine(String.Format("i:{0}, Redplayers.ships.count:{1}", i, RedPlayer.Ships.Count));
-                                if (i < RedPlayer.Ships.Count && UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[i]))
+                                System.Diagnostics.Debug.WriteLine(String.Format("RedShipCount:{0}, Redplayers.ships.count:{1}", RedShipCount, RedPlayer.Ships.Count));
+                                if (RedShipCount < RedPlayer.Ships.Count && UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[RedShipCount]))
                                     continue;
-                                else if (i < RedPlayer.Ships.Count && !UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[i]))
-                                    RedPlayer.Ships[i] = ship;
+                                else if (RedShipCount < RedPlayer.Ships.Count && !UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[RedShipCount]))
+                                    RedPlayer.Ships[RedShipCount] = ship;
                                 else RedPlayer.Ships.Add(ship);
+                                RedShipCount++;
                             }
                             // else if (data.TeamId == (long)PlayerTeam.Blue)
                             else if (data.TeamId == 1)
@@ -537,41 +540,42 @@ namespace Client.ViewModel
                                     ProducerModule = data.ProducerType,
                                     ConstuctorModule = data.ConstructorType,
                                 };
-                                System.Diagnostics.Debug.WriteLine(String.Format("i:{0}, Blueplayer.ships.count:{1}", i, BluePlayer.Ships.Count));
+                                System.Diagnostics.Debug.WriteLine(String.Format("BlueShipCount:{0}, Blueplayer.ships.count:{1}", BlueShipCount, BluePlayer.Ships.Count));
 
-                                if (i < BluePlayer.Ships.Count && UtilFunctions.IsShipEqual(ship, BluePlayer.Ships[i]))
+                                if (BlueShipCount < BluePlayer.Ships.Count && UtilFunctions.IsShipEqual(ship, BluePlayer.Ships[BlueShipCount]))
                                     continue;
-                                else if (i < BluePlayer.Ships.Count && !UtilFunctions.IsShipEqual(ship, BluePlayer.Ships[i]))
-                                    BluePlayer.Ships[i] = ship;
+                                else if (BlueShipCount < BluePlayer.Ships.Count && !UtilFunctions.IsShipEqual(ship, BluePlayer.Ships[BlueShipCount]))
+                                    BluePlayer.Ships[BlueShipCount] = ship;
                                 else BluePlayer.Ships.Add(ship);
+                                BlueShipCount++;
                             }
-                            else
-                            {
-                                Ship ship = new Ship
-                                {
-                                    HP = data.Hp,
-                                    Type = data.ShipType,
-                                    State = data.ShipState,
-                                    ArmorModule = data.ArmorType,
-                                    ShieldModule = data.ShieldType,
-                                    WeaponModule = data.WeaponType,
-                                    ProducerModule = data.ProducerType,
-                                    ConstuctorModule = data.ConstructorType,
-                                    //Type_s = UtilInfo.ShipTypeNameDict[data.ShipType],
-                                    //State_s = UtilInfo.ShipStateNameDict[data.ShipState],
-                                    //ArmorModule_s = UtilInfo.ShipArmorTypeNameDict[data.ArmorType],
-                                    //ShieldModule_s = UtilInfo.ShipShieldTypeNameDict[data.ShieldType],
-                                    //WeaponModule_s = UtilInfo.ShipWeaponTypeNameDict[data.WeaponType],
-                                    //ConstuctorModule_s = UtilInfo.ShipConstructorNameDict[data.ConstructorType],
-                                    //ProducerModule_s = UtilInfo.ShipProducerTypeNameDict[data.ProducerType]
-                                };
-                                System.Diagnostics.Debug.WriteLine(String.Format("i:{0}, Redplayers.ships.count:{1}", i, RedPlayer.Ships.Count));
-                                if (i < RedPlayer.Ships.Count && UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[i]))
-                                    continue;
-                                else if (i < RedPlayer.Ships.Count && !UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[i]))
-                                    RedPlayer.Ships[i] = ship;
-                                else RedPlayer.Ships.Add(ship);
-                            }
+                            //else
+                            //{
+                            //    Ship ship = new Ship
+                            //    {
+                            //        HP = data.Hp,
+                            //        Type = data.ShipType,
+                            //        State = data.ShipState,
+                            //        ArmorModule = data.ArmorType,
+                            //        ShieldModule = data.ShieldType,
+                            //        WeaponModule = data.WeaponType,
+                            //        ProducerModule = data.ProducerType,
+                            //        ConstuctorModule = data.ConstructorType,
+                            //        //Type_s = UtilInfo.ShipTypeNameDict[data.ShipType],
+                            //        //State_s = UtilInfo.ShipStateNameDict[data.ShipState],
+                            //        //ArmorModule_s = UtilInfo.ShipArmorTypeNameDict[data.ArmorType],
+                            //        //ShieldModule_s = UtilInfo.ShipShieldTypeNameDict[data.ShieldType],
+                            //        //WeaponModule_s = UtilInfo.ShipWeaponTypeNameDict[data.WeaponType],
+                            //        //ConstuctorModule_s = UtilInfo.ShipConstructorNameDict[data.ConstructorType],
+                            //        //ProducerModule_s = UtilInfo.ShipProducerTypeNameDict[data.ProducerType]
+                            //    };
+                            //    System.Diagnostics.Debug.WriteLine(String.Format("i:{0}, Redplayers.ships.count:{1}", i, RedPlayer.Ships.Count));
+                            //    if (i < RedPlayer.Ships.Count && UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[i]))
+                            //        continue;
+                            //    else if (i < RedPlayer.Ships.Count && !UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[i]))
+                            //        RedPlayer.Ships[i] = ship;
+                            //    else RedPlayer.Ships.Add(ship);
+                            //}
                             System.Diagnostics.Debug.WriteLine("============= Draw Ship list ================");
                         }
 
@@ -956,33 +960,33 @@ namespace Client.ViewModel
             System.Diagnostics.Debug.WriteLine($"playbackfile[{0}]", playbackFile);
 
             //Playback("E:\\program\\Project\\THUAI7\\logic\\Client\\114514.thuai7.pb", 2.0);
-            if (playbackFile.Length == 0)
-            {
-                try
-                {
-                    string[] comInfo = new string[5];
-                    comInfo[0] = ip;
-                    comInfo[1] = port;
-                    comInfo[2] = Convert.ToString(playerID);
-                    comInfo[3] = Convert.ToString(teamID);
-                    comInfo[4] = Convert.ToString(shipTypeID);
-                    System.Diagnostics.Debug.WriteLine($"cominfo[{0}]", comInfo[0]);
-                    System.Diagnostics.Debug.WriteLine($"cominfo[{1}]", comInfo[1]);
-                    System.Diagnostics.Debug.WriteLine($"cominfo[{2}]", comInfo[2]);
-                    System.Diagnostics.Debug.WriteLine($"cominfo[{3}]", comInfo[3]);
-                    System.Diagnostics.Debug.WriteLine($"cominfo[{4}]", comInfo[4]);
-                    ConnectToServer(comInfo);
-                    OnReceive();
-                }
-                catch
-                {
-                    OnReceive();
-                }
-            }
-            else
-            {
-                Playback(playbackFile, playbackSpeed);
-            }
+            //if (playbackFile.Length == 0)
+            //{
+            //    try
+            //    {
+            //        string[] comInfo = new string[5];
+            //        comInfo[0] = ip;
+            //        comInfo[1] = port;
+            //        comInfo[2] = Convert.ToString(playerID);
+            //        comInfo[3] = Convert.ToString(teamID);
+            //        comInfo[4] = Convert.ToString(shipTypeID);
+            //        System.Diagnostics.Debug.WriteLine($"cominfo[{0}]", comInfo[0]);
+            //        System.Diagnostics.Debug.WriteLine($"cominfo[{1}]", comInfo[1]);
+            //        System.Diagnostics.Debug.WriteLine($"cominfo[{2}]", comInfo[2]);
+            //        System.Diagnostics.Debug.WriteLine($"cominfo[{3}]", comInfo[3]);
+            //        System.Diagnostics.Debug.WriteLine($"cominfo[{4}]", comInfo[4]);
+            //        ConnectToServer(comInfo);
+            //        OnReceive();
+            //    }
+            //    catch
+            //    {
+            //        OnReceive();
+            //    }
+            //}
+            //else
+            //{
+            //    Playback(playbackFile, playbackSpeed);
+            //}
             //连接Server,comInfo[] 的格式：0 - ip 1 - port 2 - playerID 3 - teamID 4 - ShipType
 
             //ConnectToServer(new string[]{
@@ -996,20 +1000,20 @@ namespace Client.ViewModel
 
 
             // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID (>2023则为观察者模式）
-            //ConnectToServer(new string[]{
-            //    "localhost",
-            //    "8888",
-            //    "2025",
-            //    "0",
-            //    "1"
-            //});
+            ConnectToServer(new string[]{
+                "localhost",
+                "8888",
+                "2025",
+                "0",
+                "1"
+            });
 
             timerViewModel = Dispatcher.CreateTimer();
             timerViewModel.Interval = TimeSpan.FromMilliseconds(50);
             timerViewModel.Tick += new EventHandler(Refresh);
             timerViewModel.Start();
 
-            //OnReceive();
+            OnReceive();
         }
     }
 }
