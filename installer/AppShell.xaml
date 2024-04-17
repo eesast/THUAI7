@@ -23,11 +23,11 @@
                 Title="Playback"
                 ContentTemplate="{DataTemplate local:PlaybackPage}"/>
         </Tab>
-        
-        <!--<ShellContent
+
+        <ShellContent
             Title="Login"
-            ContentTemplate="{DataTemplate local:LoginPage}"/>-->
-        
+            ContentTemplate="{DataTemplate local:LoginPage}"/>
+            
         <ShellContent
             Title="Help"
             ContentTemplate="{DataTemplate local:HelpPage}"/>

@@ -46,8 +46,6 @@ namespace installer.Data
             Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             "THUAI7", "Data"
         );
-        [RequiresAssemblyFiles()]
-        public string InstallerPath { get; set; } = typeof(ConfigDataFile).Assembly.Location;
         public string Token { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
@@ -219,23 +217,6 @@ namespace installer.Data
 
             if (autoSave)
                 OnMemoryChanged += (_, _) => SaveFile();
-            watcher = new FileSystemWatcher(Directory.GetParent(path)?.FullName ?? dataDir);
-            watcher.Filter = "*.json";
-            watcher.NotifyFilter = NotifyFilters.Attributes
-                                 | NotifyFilters.CreationTime
-                                 | NotifyFilters.DirectoryName
-                                 | NotifyFilters.FileName
-                                 | NotifyFilters.LastAccess
-                                 | NotifyFilters.LastWrite
-                                 | NotifyFilters.Security
-                                 | NotifyFilters.Size;
-            watcher.IncludeSubdirectories = false;
-            watcher.EnableRaisingEvents = true;
-            watcher.Changed += (_, _) =>
-            {
-                ReadFile();
-                OnFileChanged?.Invoke(this, new EventArgs());
-            };
         }
 
         public void ReadFile()
@@ -274,7 +255,6 @@ namespace installer.Data
 
         protected string path;
         protected ConfigDataFile file;
-        protected FileSystemWatcher watcher;
         protected Command com;
 
         public string Description
