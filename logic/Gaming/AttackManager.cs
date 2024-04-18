@@ -80,7 +80,7 @@ namespace Gaming
                                 {
                                     Debugger.Output(ship, " is destroyed!");
                                     var money = ship.GetCost();
-                                    bullet.Parent.AddMoney(money);
+                                    bullet.Parent!.AddMoney(money);
                                     Debugger.Output(bullet.Parent, " get " + money.ToString() + " money because of destroying " + ship);
                                     shipManager.Remove(ship);
                                 }

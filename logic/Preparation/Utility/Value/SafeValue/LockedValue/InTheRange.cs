@@ -60,6 +60,10 @@ namespace Preparation.Utility
         {
             return ReadNeed(() => (v, maxV));
         }
+        public double GetDivideValueByMaxV()
+        {
+            return ReadNeed(() => (v.ToDouble(null) / maxV.ToDouble(null)));
+        }
         #endregion
 
         #region 特别的读取
