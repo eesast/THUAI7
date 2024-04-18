@@ -173,7 +173,7 @@ namespace Gaming
                         return false;
                 }
                 Debugger.Output(ship, $" 's value is {shipValue}");
-                ship.AddMoney((long)(shipValue * 0.5 * ship.HP / ship.HP.GetMaxV()));
+                ship.AddMoney((long)(shipValue * 0.5 * ship.HP.GetDivideValueByMaxV()));
                 Debugger.Output(ship, " is recycled!");
                 Remove(ship);
                 return false;
