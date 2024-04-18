@@ -60,7 +60,7 @@ namespace installer.ViewModel
             SaveBtnClickedCommand = new AsyncRelayCommand(SaveBtnClicked);
         }
 
-        
+
         #region Parameters
         protected string? ip;
         protected string? port;

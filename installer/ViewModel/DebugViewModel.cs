@@ -213,7 +213,7 @@ namespace installer.ViewModel
             return true;
         }
 
-        
+
         protected Process? client;
         public bool LaunchClient()
         {

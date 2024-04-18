@@ -4,9 +4,9 @@ namespace installer.Page;
 
 public partial class DebugPage : ContentPage
 {
-	public DebugPage(DebugViewModel viewModel)
-	{
-		InitializeComponent();
-		BindingContext = viewModel;
-	}
+    public DebugPage(DebugViewModel viewModel)
+    {
+        InitializeComponent();
+        BindingContext = viewModel;
+    }
 }
