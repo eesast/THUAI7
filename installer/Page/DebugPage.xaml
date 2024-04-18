@@ -247,7 +247,7 @@
                     TextColor="{Binding ConstTextColor}"/>
                 <Button
                     WidthRequest="400"
-                    Text="启动"
+                    Text="{Binding ServerStartBtnText}"
                     BorderWidth="2"
                     Command="{Binding ServerStartBtnClickedCommand}"
                     IsEnabled="{Binding StartEnabled}"

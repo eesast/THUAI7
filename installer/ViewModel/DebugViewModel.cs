@@ -11,34 +11,17 @@ using System.Diagnostics;
 
 namespace installer.ViewModel
 {
-    public class Player
-    {
-        public int TeamID { get; set; }
-        public int PlayerID { get; set; }
-        public string PlayerMode { get; set; }
-
-        public Player()
-        {
-            TeamID = 0;
-            PlayerID = 1;
-            PlayerMode = "API";
-        }
-    }
-
-
     public class DebugViewModel : LaunchViewModel
     {
-        public ObservableCollection<Player> Players { get; }
-
+        public ObservableCollection<Player> Players { get => Downloader.Data.Config.Players; }
 
         public DebugViewModel(Downloader downloader) : base(downloader)
         {
-            Players = new ObservableCollection<Player>();
-
             AddBtnClickedCommand = new AsyncRelayCommand(AddBtnClicked);
             DelBtnClickedCommand = new AsyncRelayCommand(DelBtnClicked);
             ClientStartBtnClickedCommand = new AsyncRelayCommand(ClientStartBtnClicked);
             ServerStartBtnClickedCommand = new AsyncRelayCommand(ServerStartBtnClicked);
+            OnServerExited += ServerExited;
         }
 
 
@@ -118,6 +101,31 @@ namespace installer.ViewModel
         public IAsyncRelayCommand ClientStartBtnClickedCommand { get; }
         public IAsyncRelayCommand ServerStartBtnClickedCommand { get; }
 
+        private string serverStartBtnText = "启动";
+
+        public string ServerStartBtnText
+        {
+            get => serverStartBtnText;
+            set
+            {
+                serverStartBtnText = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool serverStartMode = false;
+
+        public bool ServerStartMode
+        {
+            get => serverStartMode;
+            set
+            {
+                serverStartMode = value;
+                ServerStartBtnText = value ? "停止" : "启动";
+                OnPropertyChanged();
+            }
+        }
+
 
         private async Task AddBtnClicked()
         {
@@ -141,8 +149,19 @@ namespace installer.ViewModel
 
         private async Task ServerStartBtnClicked()
         {
-            DebugAlert = "Start";
-            await Task.Run(() => ServerStart());
+            StartEnabled = false;
+            if (ServerStartMode)
+            {
+                DebugAlert = "Stop";
+                await Task.Run(() => ServerStop());
+            }
+            else
+            {
+                DebugAlert = "Start";
+                await Task.Run(() => ServerStart());
+            }
+            ServerStartMode = !ServerStartMode;
+            StartEnabled = true;
         }
         #endregion
 
@@ -181,6 +200,18 @@ namespace installer.ViewModel
         private void ServerStart()
         {
             LaunchServer();
+        }
+
+        private void ServerStop()
+        {
+            server?.Kill();
+        }
+
+        private void ServerExited(object? sender, EventArgs e)
+        {
+            children.ForEach(c => c.Kill());
+            children.Clear();
+            ServerStartMode = false;
         }
         #endregion
 
@@ -227,6 +258,7 @@ namespace installer.ViewModel
                 return false;
             }
             Log.LogInfo("Client成功启动。");
+            children.Add(client);
             return true;
         }
 
@@ -248,6 +280,7 @@ namespace installer.ViewModel
                     return false;
                 }
                 Log.LogInfo($"API.exe启动成功, team:{team}, player: {player}!");
+                children.Add(cpp);
                 return true;
             }
             else
@@ -285,6 +318,7 @@ namespace installer.ViewModel
                     return false;
                 }
                 Log.LogError($"main.py启动成功, team:{team}, player: {player}!");
+                children.Add(py);
                 return true;
             }
             else
