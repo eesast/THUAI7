@@ -297,7 +297,9 @@ namespace installer.Model
                 return true;
             if (filename.EndsWith(".gitignore") || filename.EndsWith(".gitattributes"))
                 return true;
-            if (filename.EndsWith("AI.cpp") || filename.EndsWith("AI.py"))
+            if (filename.EndsWith("AI.cpp") || filename.EndsWith("AI.py") || filename.EndsWith("AI.cpp.temp") || filename.EndsWith("AI.py.temp"))
+                return true;
+            if (filename.EndsWith("oldTemplate.cpp") || filename.EndsWith("oldTemplate.py") || filename.EndsWith("newTemplate.cpp") || filename.EndsWith("newTemplate.py"))
                 return true;
             if (filename.EndsWith("hash.json"))
                 return true;
