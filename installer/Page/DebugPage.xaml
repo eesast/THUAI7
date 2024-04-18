@@ -5,38 +5,38 @@
              Title="Launcher">
     
     <Grid
-        x:Name="BasicGrid"
         HorizontalOptions="Center"
         WidthRequest="600"
-        RowDefinitions="20,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*"
+        RowDefinitions="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*"
         ColumnDefinitions="*">
 
         <VerticalStackLayout
-            Grid.Row="1"
+            Grid.Row="0"
             Grid.RowSpan="15"
             HorizontalOptions="Center">
 
             <HorizontalStackLayout>
                 <Label
-                    WidthRequest="100"
+                    WidthRequest="170"
                     Text="IP"
                     VerticalOptions="Center"
                     FontSize="{Binding ConstFontSize}"/>
                 <Entry
-                    WidthRequest="200"
+                    WidthRequest="400"
                     Text="{Binding IP}"
                     FontSize="16"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout>
                 <Label
-                    WidthRequest="100"
+                    WidthRequest="170"
                     Text="Port"
                     VerticalOptions="Center"
                     FontSize="{Binding ConstFontSize}"/>
                 <Entry
-                    WidthRequest="200"
+                    WidthRequest="400"
                     Text="{Binding Port}"
                     FontSize="16"/>
             </HorizontalStackLayout>
-
             <HorizontalStackLayout>
                 <Label
                     WidthRequest="170"
@@ -48,7 +48,7 @@
                     WidthRequest="400">
                     <Picker.ItemsSource>
                         <x:Array
-                        Type="{x:Type x:String}">
+                            Type="{x:Type x:String}">
                             <x:String>Client</x:String>
                             <x:String>Server</x:String>
                         </x:Array>
@@ -56,44 +56,91 @@
                 </Picker>
             </HorizontalStackLayout>
 
+            <Label/>
+
             <VerticalStackLayout
                 IsVisible="{Binding ClientVisible}">
-                <HorizontalStackLayout>
+                
+                <HorizontalStackLayout
+                    HeightRequest="30">
                     <Label
-                        Text="Team ID"/>
+                        WidthRequest="150"
+                        Text="Team ID"
+                        VerticalOptions="Center"/>
                     <Label
-                        Text="Player ID"/>
+                        WidthRequest="150"
+                        Text="Player ID"
+                        VerticalOptions="Center"/>
                     <Label
-                        Text="Mode"/>
-                    <Button
-                        Text="Add Player"/>
+                        WidthRequest="270"
+                        Text="Player Mode"
+                        VerticalOptions="Center"/>
                 </HorizontalStackLayout>
-                <ScrollView>
-                    <CollectionView
-                        VerticalScrollBarVisibility="Always">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
+                <CollectionView
+                    HeightRequest="200"
+                    ItemsSource="{Binding Players}"
+                    VerticalScrollBarVisibility="Always">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <HorizontalStackLayout>
+                                <Picker
+                                    WidthRequest="150"
+                                    SelectedItem="{Binding TeamID}">
+                                    <Picker.ItemsSource>
+                                        <x:Array
+                                            Type="{x:Type x:Int32}">
+                                            <x:Int32>0</x:Int32>
+                                            <x:Int32>1</x:Int32>
+                                        </x:Array>
+                                    </Picker.ItemsSource>
+                                </Picker>
+                                <Picker
+                                    WidthRequest="150"
+                                    SelectedItem="{Binding PlayerID}">
+                                    <Picker.ItemsSource>
+                                        <x:Array
+                                            Type="{x:Type x:Int32}">
+                                            <x:Int32>0</x:Int32>
+                                            <x:Int32>1</x:Int32>
+                                            <x:Int32>2</x:Int32>
+                                            <x:Int32>3</x:Int32>
+                                            <x:Int32>4</x:Int32>
+                                        </x:Array>
+                                    </Picker.ItemsSource>
+                                </Picker>
+                                <Picker
+                                    WidthRequest="270"
+                                    SelectedItem="{Binding PlayerMode}">
+                                    <Picker.ItemsSource>
+                                        <x:Array
+                                            Type="{x:Type x:String}">
+                                            <x:String>API</x:String>
+                                            <x:String>Manual</x:String>
+                                        </x:Array>
+                                    </Picker.ItemsSource>
+                                </Picker>
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
-                                <HorizontalStackLayout>
-                                    <Label
-                                        Text="{Binding TeamID}"/>
-                                    <Label
-                                        Text="{Binding PlayerID}"/>
-                                    <Picker>
-                                        <Picker.ItemsSource>
-                                            <x:Array
-                                                Type="{x:Type x:String}">
-                                                <x:String>API</x:String>
-                                                <x:String>Manual</x:String>
-                                            </x:Array>
-                                        </Picker.ItemsSource>
-                                    </Picker>
-                                </HorizontalStackLayout>
-
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </ScrollView>
+                <Grid
+                    ColumnDefinitions="15,370,100,100,15">
+                    <Button
+                        Grid.Column="2"
+                        Text="Add"
+                        BackgroundColor="DimGray"
+                        BorderWidth="2"
+                        TextColor="{Binding ConstTextColor}"
+                        Command="{Binding AddBtnClickedCommand}"/>
+                    <Button
+                        Grid.Column="3"
+                        Text="Delete"
+                        BackgroundColor="DimGray"
+                        BorderWidth="2"
+                        TextColor="{Binding ConstTextColor}"
+                        Command="{Binding DelBtnClickedCommand}"/>
+                </Grid>
 
                 <HorizontalStackLayout>
                     <Label
@@ -116,11 +163,34 @@
                         VerticalOptions="Center"
                         FontSize="{Binding ConstFontSize}"/>
                 </HorizontalStackLayout>
-                
+
+                <Label
+                    Text="{Binding DebugAlert}"/>
+
+                <Button
+                    WidthRequest="400"
+                    Text="保存"
+                    BorderWidth="2"
+                    Command="{Binding SaveBtnClickedCommand}"
+                    IsEnabled="{Binding SaveEnabled}"
+                    BackgroundColor="{Binding ConstBackgroundColor}"
+                    FontSize="{Binding ConstFontSize}"
+                    TextColor="{Binding ConstTextColor}"/>
+                <Button
+                    WidthRequest="400"
+                    Text="启动"
+                    BorderWidth="2"
+                    Command="{Binding ClientStartBtnClickedCommand}"
+                    IsEnabled="{Binding StartEnabled}"
+                    BackgroundColor="{Binding ConstBackgroundColor}"
+                    FontSize="{Binding ConstFontSize}"
+                    TextColor="{Binding ConstTextColor}"/>
+
             </VerticalStackLayout>
 
             <VerticalStackLayout
                     IsVisible="{Binding ServerVisible}">
+                
                 <HorizontalStackLayout>
                     <Label
                         WidthRequest="170"
@@ -162,31 +232,32 @@
                     </Picker>
                 </HorizontalStackLayout>
 
+
+                <Label
+                    Text="{Binding DebugAlert}"/>
+
+                <Button
+                    WidthRequest="400"
+                    Text="保存"
+                    BorderWidth="2"
+                    Command="{Binding SaveBtnClickedCommand}"
+                    IsEnabled="{Binding SaveEnabled}"
+                    BackgroundColor="{Binding ConstBackgroundColor}"
+                    FontSize="{Binding ConstFontSize}"
+                    TextColor="{Binding ConstTextColor}"/>
+                <Button
+                    WidthRequest="400"
+                    Text="启动"
+                    BorderWidth="2"
+                    Command="{Binding ServerStartBtnClickedCommand}"
+                    IsEnabled="{Binding StartEnabled}"
+                    BackgroundColor="{Binding ConstBackgroundColor}"
+                    FontSize="{Binding ConstFontSize}"
+                    TextColor="{Binding ConstTextColor}"/>
+
             </VerticalStackLayout>
 
-            <Label
-                Text="{Binding DebugAlert}"/>
-
-            <Button
-                WidthRequest="400"
-                Text="保存"
-                BorderWidth="2"
-                Command="{Binding SaveBtnClickedCommand}"
-                IsEnabled="{Binding SaveEnabled}"
-                BackgroundColor="{Binding ConstBackgroundColor}"
-                FontSize="{Binding ConstFontSize}"
-                TextColor="{Binding ConstTextColor}"/>
-            <Button
-                WidthRequest="400"
-                Text="启动"
-                BorderWidth="2"
-                Command="{Binding StartBtnClickedCommand}"
-                IsEnabled="{Binding StartEnabled}"
-                BackgroundColor="{Binding ConstBackgroundColor}"
-                FontSize="{Binding ConstFontSize}"
-                TextColor="{Binding ConstTextColor}"/>
-
-            <Frame
+            <!--<Frame
                 BorderColor="Gray"
                 Padding="3"
                 Margin="5"
@@ -210,7 +281,7 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
-            </Frame>
+            </Frame>-->
 
         </VerticalStackLayout>
 

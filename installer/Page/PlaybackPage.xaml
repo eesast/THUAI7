@@ -6,43 +6,18 @@
              Title="Launcher">
 
     <Grid
-        x:Name="BasicGrid"
         HorizontalOptions="Center"
         WidthRequest="600"
-        RowDefinitions="20,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*"
+        RowDefinitions="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*"
         ColumnDefinitions="*">
 
         <VerticalStackLayout
-            Grid.Row="1"
+            Grid.Row="0"
             Grid.RowSpan="15"
-            HorizontalOptions="Center">
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
 
-            <HorizontalStackLayout>
-                <Label
-                    WidthRequest="170"
-                    Text="IP"
-                    VerticalOptions="Center"
-                    FontSize="{Binding ConstFontSize}"/>
-                <Entry
-                    WidthRequest="400"
-                    Text="{Binding IP}"
-                    FontSize="16"/>
-            </HorizontalStackLayout>
-
-            <HorizontalStackLayout>
-                <Label
-                    WidthRequest="170"
-                    Text="Port"
-                    VerticalOptions="Center"
-                    FontSize="{Binding ConstFontSize}"/>
-                <Entry
-                    WidthRequest="400"
-                    Text="{Binding Port}"
-                    FontSize="16"/>
-            </HorizontalStackLayout>
-
-            <VerticalStackLayout
-                IsVisible="{Binding PlaybackVisible}">
+            <VerticalStackLayout>
                 <HorizontalStackLayout>
                     <Label
                         WidthRequest="170"
@@ -70,6 +45,8 @@
                 </HorizontalStackLayout>
             </VerticalStackLayout>
 
+            <Label/>
+
             <Label
                 Text="{Binding DebugAlert}"/>
 
@@ -86,13 +63,13 @@
                 WidthRequest="400"
                 Text="启动"
                 BorderWidth="2"
-                Command="{Binding StartBtnClickedCommand}"
+                Command="{Binding PlaybackStartBtnClickedCommand}"
                 IsEnabled="{Binding StartEnabled}"
                 BackgroundColor="{Binding ConstBackgroundColor}"
                 FontSize="{Binding ConstFontSize}"
                 TextColor="{Binding ConstTextColor}"/>
 
-            <Frame
+            <!--<Frame
                 BorderColor="Gray"
                 Padding="3"
                 Margin="5"
@@ -116,7 +93,7 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
-            </Frame>
+            </Frame>-->
 
         </VerticalStackLayout>
 

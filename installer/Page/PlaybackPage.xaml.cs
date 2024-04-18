@@ -4,7 +4,7 @@ namespace installer.Page;
 
 public partial class PlaybackPage : ContentPage
 {
-    public PlaybackPage(LaunchViewModel viewModel)
+    public PlaybackPage(PlaybackViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;
