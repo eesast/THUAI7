@@ -61,6 +61,11 @@
 	  <None Remove="View\uhlobqco.ueo~" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Include="..\..\installer\Data\ConfigFileData.cs" Link="Interact\ConfigFileData.cs" />
+	  <Compile Include="..\..\installer\Model\Logger.cs" Link="Interact\Logger.cs" />
+	</ItemGroup>
+
 
 	<ItemGroup>
 		<PackageReference Include="CommandLineParser" Version="2.9.1" />
