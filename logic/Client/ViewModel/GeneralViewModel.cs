@@ -556,7 +556,7 @@ namespace Client.ViewModel
                                 else BluePlayer.Ships.Add(ship);
                                 BlueShipCount++;
                             }
-                            
+
                             //else
                             //{
                             //    Ship ship = new Ship
