@@ -52,7 +52,7 @@ namespace installer.ViewModel
                 new HelpMessage
                 {
                     Title = "Python proto构建",
-                    Content = "> 首先请确保电脑已经安装了python3和pip，然后执行位于CAPI/python下的generate_proto.cmd(Windows)/generate_proto.sh(Mac/Linux)，等待protos文件夹生成完毕即可。"
+                    Content = "> 首先请确保电脑已经安装了python和pip，然后执行位于CAPI/python下的generate_proto.cmd(Windows)/generate_proto.sh(Mac/Linux)，等待protos文件夹生成完毕即可。"
                 },
                 new HelpMessage
                 {

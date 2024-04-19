@@ -95,10 +95,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Page\PlaybackPage.xaml.cs">
+	    <DependentUpon>PlaybackPage.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Page\DebugPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Page\InstallPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Page\LaunchPage.xaml">
+	  <MauiXaml Update="Page\PlaybackPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Page\LoginPage.xaml">
