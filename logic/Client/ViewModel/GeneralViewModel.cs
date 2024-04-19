@@ -15,6 +15,7 @@ using Newtonsoft;
 using System.Globalization;
 using System.Collections.ObjectModel;
 using installer;
+using installer.Model;
 
 namespace Client.ViewModel
 {
@@ -82,7 +83,7 @@ namespace Client.ViewModel
             if (Convert.ToInt64(comInfo[2]) > 2023)
             {
                 isSpectatorMode = true;
-                System.Diagnostics.Debug.WriteLine("isSpectatorMode = true");
+                myLogger.LogInfo("isSpectatorMode = true");
             }
 
             //if (!isSpectatorMode && comInfo.Length != 5 || isSpectatorMode && comInfo.Length != 3)
@@ -132,7 +133,7 @@ namespace Client.ViewModel
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("Playback failed");
+                myLogger.LogInfo("Playback failed");
                 isClientStocked = true;
             }
         }
@@ -198,17 +199,17 @@ namespace Client.ViewModel
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine("============= OnReceiving Server Stream ================");
+                myLogger.LogInfo("============= OnReceiving Server Stream ================");
                 //if (responseStream != null)
-                //    System.Diagnostics.Debug.WriteLine("============= responseStream != null ================");
+                //    myLogger.LogInfo("============= responseStream != null ================");
 
                 //if (await responseStream.ResponseStream.MoveNext())
-                //    System.Diagnostics.Debug.WriteLine("============= responseStream.ResponseStream.MoveNext() ================");
+                //    myLogger.LogInfo("============= responseStream.ResponseStream.MoveNext() ================");
                 //await MainThread.InvokeOnMainThreadAsync(async () =>
                 {
                     while (responseStream != null && await responseStream.ResponseStream.MoveNext())
                     {
-                        System.Diagnostics.Debug.WriteLine("============= Receiving Server Stream ================");
+                        myLogger.LogInfo("============= Receiving Server Stream ================");
                         lock (drawPicLock)
                         {
                             //if (ballx_receive >= 500)
@@ -221,8 +222,8 @@ namespace Client.ViewModel
                             //}
                             //ballx_receive += dx;
                             //bally_receive += dx;
-                            //System.Diagnostics.Debug.WriteLine(String.Format("============= Onreceive: ballx_receive:{0}, bally_receive:{1} ================", ballx_receive, bally_receive));
-                            //System.Diagnostics.Debug.WriteLine(String.Format("OnReceive--cou:{0}, coud{1}", cou, Countdow));
+                            //myLogger.LogInfo(String.Format("============= Onreceive: ballx_receive:{0}, bally_receive:{1} ================", ballx_receive, bally_receive));
+                            //myLogger.LogInfo(String.Format("OnReceive--cou:{0}, coud{1}", cou, Countdow));
 
                             listOfAll.Clear();
                             listOfShip.Clear();
@@ -241,7 +242,7 @@ namespace Client.ViewModel
                             switch (content.GameState)
                             {
                                 case GameState.GameStart:
-                                    System.Diagnostics.Debug.WriteLine("============= GameState: Game Start ================");
+                                    myLogger.LogInfo("============= GameState: Game Start ================");
                                     foreach (var obj in content.ObjMessage)
                                     {
                                         switch (obj.MessageOfObjCase)
@@ -296,13 +297,13 @@ namespace Client.ViewModel
                                     GetMap(mapMassage);
                                     break;
                                 case GameState.GameRunning:
-                                    System.Diagnostics.Debug.WriteLine("============= GameState: Game Running ================");
+                                    myLogger.LogInfo("============= GameState: Game Running ================");
                                     foreach (var obj in content.ObjMessage)
                                     {
                                         switch (obj.MessageOfObjCase)
                                         {
                                             case MessageOfObj.MessageOfObjOneofCase.ShipMessage:
-                                                System.Diagnostics.Debug.WriteLine(String.Format("============= ShipOrd: {0},{1} ============", obj.ShipMessage.X, obj.ShipMessage.Y));
+                                                myLogger.LogInfo(String.Format("============= ShipOrd: {0},{1} ============", obj.ShipMessage.X, obj.ShipMessage.Y));
                                                 listOfShip.Add(obj.ShipMessage);
                                                 break;
 
@@ -319,7 +320,7 @@ namespace Client.ViewModel
                                                 break;
 
                                             case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
-                                                System.Diagnostics.Debug.WriteLine(String.Format("============= BulletOrd: {0},{1} ============", obj.BulletMessage.X, obj.BulletMessage.Y));
+                                                myLogger.LogInfo(String.Format("============= BulletOrd: {0},{1} ============", obj.BulletMessage.X, obj.BulletMessage.Y));
                                                 listOfBullet.Add(obj.BulletMessage);
                                                 break;
 
@@ -359,7 +360,7 @@ namespace Client.ViewModel
                                     break;
 
                                 case GameState.GameEnd:
-                                    System.Diagnostics.Debug.WriteLine("============= GameState: Game End ================");
+                                    myLogger.LogInfo("============= GameState: Game End ================");
                                     //DisplayAlert("Info", "Game End", "OK");
                                     foreach (var obj in content.ObjMessage)
                                     {
@@ -433,8 +434,8 @@ namespace Client.ViewModel
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("-----------------------------");
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                myLogger.LogInfo("-----------------------------");
+                myLogger.LogInfo(ex.Message);
                 /* 
                     #TODO
                     Show the error message
@@ -469,8 +470,8 @@ namespace Client.ViewModel
                         //ShipCircList[5].Y += 4;
                         foreach (var data in listOfAll)
                         {
-                            System.Diagnostics.Debug.WriteLine(String.Format("Red team Energy: {0}", Convert.ToString(data.RedTeamEnergy)));
-                            System.Diagnostics.Debug.WriteLine(String.Format("Blue team Energy: {0}", Convert.ToString(data.BlueTeamEnergy)));
+                            myLogger.LogInfo(String.Format("Red team Energy: {0}", Convert.ToString(data.RedTeamEnergy)));
+                            myLogger.LogInfo(String.Format("Blue team Energy: {0}", Convert.ToString(data.BlueTeamEnergy)));
                             RedPlayer.Money = data.RedTeamEnergy;
                             RedPlayer.Hp = data.RedHomeHp;
                             RedPlayer.Score = data.RedTeamScore;
@@ -479,7 +480,7 @@ namespace Client.ViewModel
                             BluePlayer.Score = data.BlueTeamScore;
                         }
 
-                        System.Diagnostics.Debug.WriteLine("============= Read data of ALL ================");
+                        myLogger.LogInfo("============= Read data of ALL ================");
                         foreach (var data in listOfHome)
                         {
                             DrawHome(data);
@@ -494,7 +495,7 @@ namespace Client.ViewModel
                                 BluePlayer.Team = data.TeamId;
                             }
                         }
-                        System.Diagnostics.Debug.WriteLine("============= Draw Home ================");
+                        myLogger.LogInfo("============= Draw Home ================");
 
 
                         //RedPlayer.Ships.Clear();
@@ -518,9 +519,12 @@ namespace Client.ViewModel
                                     ProducerModule = data.ProducerType,
                                     ConstuctorModule = data.ConstructorType,
                                 };
-                                System.Diagnostics.Debug.WriteLine(String.Format("RedShipCount:{0}, Redplayers.ships.count:{1}", RedShipCount, RedPlayer.Ships.Count));
+                                myLogger.LogInfo(String.Format("RedShipCount:{0}, Redplayers.ships.count:{1}", RedShipCount, RedPlayer.Ships.Count));
                                 if (RedShipCount < RedPlayer.Ships.Count && UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[RedShipCount]))
+                                {
+                                    RedShipCount++;
                                     continue;
+                                }
                                 else if (RedShipCount < RedPlayer.Ships.Count && !UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[RedShipCount]))
                                     RedPlayer.Ships[RedShipCount] = ship;
                                 else RedPlayer.Ships.Add(ship);
@@ -540,15 +544,19 @@ namespace Client.ViewModel
                                     ProducerModule = data.ProducerType,
                                     ConstuctorModule = data.ConstructorType,
                                 };
-                                System.Diagnostics.Debug.WriteLine(String.Format("BlueShipCount:{0}, Blueplayer.ships.count:{1}", BlueShipCount, BluePlayer.Ships.Count));
+                                myLogger.LogInfo(String.Format("BlueShipCount:{0}, Blueplayer.ships.count:{1}", BlueShipCount, BluePlayer.Ships.Count));
 
                                 if (BlueShipCount < BluePlayer.Ships.Count && UtilFunctions.IsShipEqual(ship, BluePlayer.Ships[BlueShipCount]))
+                                {
+                                    BlueShipCount++;
                                     continue;
+                                }
                                 else if (BlueShipCount < BluePlayer.Ships.Count && !UtilFunctions.IsShipEqual(ship, BluePlayer.Ships[BlueShipCount]))
                                     BluePlayer.Ships[BlueShipCount] = ship;
                                 else BluePlayer.Ships.Add(ship);
                                 BlueShipCount++;
                             }
+                            
                             //else
                             //{
                             //    Ship ship = new Ship
@@ -569,14 +577,24 @@ namespace Client.ViewModel
                             //        //ConstuctorModule_s = UtilInfo.ShipConstructorNameDict[data.ConstructorType],
                             //        //ProducerModule_s = UtilInfo.ShipProducerTypeNameDict[data.ProducerType]
                             //    };
-                            //    System.Diagnostics.Debug.WriteLine(String.Format("i:{0}, Redplayers.ships.count:{1}", i, RedPlayer.Ships.Count));
+                            //    myLogger.LogInfo(String.Format("i:{0}, Redplayers.ships.count:{1}", i, RedPlayer.Ships.Count));
                             //    if (i < RedPlayer.Ships.Count && UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[i]))
                             //        continue;
                             //    else if (i < RedPlayer.Ships.Count && !UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[i]))
                             //        RedPlayer.Ships[i] = ship;
                             //    else RedPlayer.Ships.Add(ship);
                             //}
-                            System.Diagnostics.Debug.WriteLine("============= Draw Ship list ================");
+                            myLogger.LogInfo("============= Draw Ship list ================");
+                        }
+
+                        for (int i = 0; i < RedPlayer.Ships.Count; i++)
+                        {
+                            myLogger.LogInfo(String.Format("RedPlayer.Ships[{0}].Type:{1}", i, RedPlayer.Ships[i].Type_s));
+                        }
+
+                        for (int i = 0; i < BluePlayer.Ships.Count; i++)
+                        {
+                            myLogger.LogInfo(String.Format("BluePlayer.Ships[{0}].Type:{1}", i, BluePlayer.Ships[i].Type_s));
                         }
 
                         foreach (var data in listOfCommunity)
@@ -691,24 +709,37 @@ namespace Client.ViewModel
 
         public readonly int ShipStatusAttributesFontSize = 13;
 
+        Logger myLogger;
+
         public GeneralViewModel()
         {
             //ConfigData d = new();
             //d.Commands.Launched = true;
-            //System.Diagnostics.Debug.WriteLine(String.Format("========={0}============", d.Commands.LaunchID));
+            //myLogger.LogInfo(String.Format("========={0}============", d.Commands.LaunchID));
             //d.Commands.LaunchID = d.Commands.LaunchID + 1;
-            //System.Diagnostics.Debug.WriteLine(String.Format("========={0}============", d.Commands.LaunchID));
+            //myLogger.LogInfo(String.Format("========={0}============", d.Commands.LaunchID));
             //d.Commands.PlayerID = Convert.ToString(d.Commands.LaunchID);
-            //System.Diagnostics.Debug.WriteLine(String.Format("========={0}============", d.Commands.PlayerID));
+            //myLogger.LogInfo(String.Format("========={0}============", d.Commands.PlayerID));
             InitiateObjects();
             Title = "THUAI7";
+
+            installer.Data.ConfigData d = new();
+            ip = d.Commands.IP;
+            port = d.Commands.Port;
+            playerID = Convert.ToInt64(d.Commands.PlayerID);
+            teamID = Convert.ToInt64(d.Commands.TeamID);
+            shipTypeID = Convert.ToInt32(d.Commands.ShipType);
+            playbackFile = d.Commands.PlaybackFile;
+            playbackSpeed = d.Commands.PlaybackSpeed;
+            myLogger = LoggerProvider.FromFile(Path.Combine(d.InstallPath, "Logs", "Client.log"));
+
             MoveUpCommand = new Command(() =>
             {
                 try
                 {
                     if (client == null || isSpectatorMode || isPlaybackMode)
                     {
-                        System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                        myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                         return;
                     }
                     MoveMsg movemsg = new MoveMsg();
@@ -721,8 +752,8 @@ namespace Client.ViewModel
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine("-------- Move Exception -------");
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    myLogger.LogInfo("-------- Move Exception -------");
+                    myLogger.LogInfo(ex.Message);
                     /* 
                         #TODO
                         Show the error message
@@ -736,7 +767,7 @@ namespace Client.ViewModel
             {
                 if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 MoveMsg movemsg = new MoveMsg();
@@ -752,7 +783,7 @@ namespace Client.ViewModel
             {
                 if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 MoveMsg movemsg = new MoveMsg();
@@ -768,7 +799,7 @@ namespace Client.ViewModel
             {
                 if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 MoveMsg movemsg = new MoveMsg();
@@ -784,7 +815,7 @@ namespace Client.ViewModel
             {
                 if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 MoveMsg movemsg = new MoveMsg();
@@ -800,7 +831,7 @@ namespace Client.ViewModel
             {
                 if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 MoveMsg movemsg = new MoveMsg();
@@ -816,7 +847,7 @@ namespace Client.ViewModel
             {
                 if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 MoveMsg movemsg = new MoveMsg();
@@ -832,7 +863,7 @@ namespace Client.ViewModel
             {
                 if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 MoveMsg movemsg = new MoveMsg();
@@ -848,7 +879,7 @@ namespace Client.ViewModel
             {
                 if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 AttackMsg attackMsg = new AttackMsg();
@@ -862,7 +893,7 @@ namespace Client.ViewModel
             {
                 if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 RecoverMsg recoverMsg = new RecoverMsg();
@@ -875,7 +906,7 @@ namespace Client.ViewModel
             {
                 if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 IDMsg iDMsg = new IDMsg();
@@ -888,7 +919,7 @@ namespace Client.ViewModel
             {
                 if (client == null || isSpectatorMode || isPlaybackMode)
                 {
-                    System.Diagnostics.Debug.WriteLine("Client is null or is SpectatorMode or isPlaybackMode");
+                    myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
                 ConstructMsg constructMsg = new ConstructMsg();
@@ -949,44 +980,37 @@ namespace Client.ViewModel
 
             // PureDrawMap(GameMap.GameMapArray);
             //ReactToCommandline();
-            installer.Data.ConfigData d = new();
-            ip = d.Commands.IP;
-            port = d.Commands.Port;
-            playerID = Convert.ToInt64(d.Commands.PlayerID);
-            teamID = Convert.ToInt64(d.Commands.TeamID);
-            shipTypeID = Convert.ToInt32(d.Commands.ShipType);
-            playbackFile = d.Commands.PlaybackFile;
-            playbackSpeed = d.Commands.PlaybackSpeed;
-            System.Diagnostics.Debug.WriteLine($"playbackfile[{0}]", playbackFile);
+
+            myLogger.LogInfo(String.Format("ip:{0}, port:{1}, playerid:{2}, teamid:{3}, shiptype:{4}, playbackfile:{5}, playbackspeed:{6}", ip, port, playerID, teamID, shipTypeID, playbackFile, playbackSpeed));
 
             //Playback("E:\\program\\Project\\THUAI7\\logic\\Client\\114514.thuai7.pb", 2.0);
-            //if (playbackFile.Length == 0)
-            //{
-            //    try
-            //    {
-            //        string[] comInfo = new string[5];
-            //        comInfo[0] = ip;
-            //        comInfo[1] = port;
-            //        comInfo[2] = Convert.ToString(playerID);
-            //        comInfo[3] = Convert.ToString(teamID);
-            //        comInfo[4] = Convert.ToString(shipTypeID);
-            //        System.Diagnostics.Debug.WriteLine($"cominfo[{0}]", comInfo[0]);
-            //        System.Diagnostics.Debug.WriteLine($"cominfo[{1}]", comInfo[1]);
-            //        System.Diagnostics.Debug.WriteLine($"cominfo[{2}]", comInfo[2]);
-            //        System.Diagnostics.Debug.WriteLine($"cominfo[{3}]", comInfo[3]);
-            //        System.Diagnostics.Debug.WriteLine($"cominfo[{4}]", comInfo[4]);
-            //        ConnectToServer(comInfo);
-            //        OnReceive();
-            //    }
-            //    catch
-            //    {
-            //        OnReceive();
-            //    }
-            //}
-            //else
-            //{
-            //    Playback(playbackFile, playbackSpeed);
-            //}
+            if (playbackFile.Length == 0)
+            {
+                try
+                {
+                    string[] comInfo = new string[5];
+                    comInfo[0] = ip;
+                    comInfo[1] = port;
+                    comInfo[2] = Convert.ToString(playerID);
+                    comInfo[3] = Convert.ToString(teamID);
+                    comInfo[4] = Convert.ToString(shipTypeID);
+                    myLogger.LogInfo(String.Format("cominfo[{0}]", comInfo[0]));
+                    myLogger.LogInfo(String.Format("cominfo[{0}]", comInfo[1]));
+                    myLogger.LogInfo(String.Format("cominfo[{0}]", comInfo[2]));
+                    myLogger.LogInfo(String.Format("cominfo[{0}]", comInfo[3]));
+                    myLogger.LogInfo(String.Format("cominfo[{0}]", comInfo[4]));
+                    ConnectToServer(comInfo);
+                    OnReceive();
+                }
+                catch
+                {
+                    OnReceive();
+                }
+            }
+            else
+            {
+                Playback(playbackFile, playbackSpeed);
+            }
             //连接Server,comInfo[] 的格式：0 - ip 1 - port 2 - playerID 3 - teamID 4 - ShipType
 
             //ConnectToServer(new string[]{
@@ -1000,20 +1024,22 @@ namespace Client.ViewModel
 
 
             // 连接Server,comInfo[]的格式：0-ip 1- port 2-playerID (>2023则为观察者模式）
-            ConnectToServer(new string[]{
-                "localhost",
-                "8888",
-                "2025",
-                "0",
-                "1"
-            });
+            //ConnectToServer(new string[]{
+            //    "localhost",
+            //    "8888",
+            //    "2025",
+            //    "0",
+            //    "1"
+            //});
+
+            //Playback("E:\\program\\Project\\THUAI7\\logic\\Server\\bin\\Debug\\net8.0\\114514.thuai7.pb", 1);
 
             timerViewModel = Dispatcher.CreateTimer();
             timerViewModel.Interval = TimeSpan.FromMilliseconds(50);
             timerViewModel.Tick += new EventHandler(Refresh);
             timerViewModel.Start();
 
-            OnReceive();
+            //OnReceive();
         }
     }
 }
