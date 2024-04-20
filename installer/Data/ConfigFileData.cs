@@ -1,9 +1,11 @@
-﻿using installer.ViewModel;
+﻿//using installer.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -11,6 +13,18 @@ using System.Threading.Tasks;
 
 namespace installer.Data
 {
+    public abstract class NotificationObject : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler? PropertyChanged;
+        ///<summary>
+        ///announce notification
+        ///</summary>
+        ///<param name="propertyName">property name</param>
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
     public enum LanguageOption
     {
         cpp = 0, python = 1

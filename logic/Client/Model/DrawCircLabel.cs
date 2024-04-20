@@ -18,6 +18,7 @@ namespace Client.Model
             }
             set
             {
+                if (value == x) return;
                 x = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(Thick));
@@ -32,6 +33,7 @@ namespace Client.Model
             }
             set
             {
+                if (value == y) return;
                 y = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(Thick));
@@ -48,6 +50,7 @@ namespace Client.Model
             }
             set
             {
+                if (value == thick) return;
                 thick = value;
                 OnPropertyChanged();
             }
@@ -61,6 +64,7 @@ namespace Client.Model
             }
             set
             {
+                if (value == radius) return;
                 radius = value;
                 OnPropertyChanged();
             }
@@ -74,6 +78,7 @@ namespace Client.Model
             }
             set
             {
+                if (value == color) return;
                 color = value;
                 OnPropertyChanged();
             }
@@ -87,6 +92,7 @@ namespace Client.Model
             }
             set
             {
+                if (value == text) return;
                 text = value;
                 OnPropertyChanged();
             }
@@ -101,6 +107,7 @@ namespace Client.Model
             }
             set
             {
+                if (value == fontSize) return;
                 fontSize = value;
                 OnPropertyChanged();
             }
@@ -115,6 +122,7 @@ namespace Client.Model
             }
             set
             {
+                if (value == textColor) return;
                 textColor = value;
                 OnPropertyChanged();
             }
