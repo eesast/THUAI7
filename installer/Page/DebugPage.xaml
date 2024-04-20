@@ -7,13 +7,15 @@
     <Grid
         HorizontalOptions="Center"
         WidthRequest="600"
-        RowDefinitions="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*"
+        RowDefinitions="*,*,*,*,*,*,*,*,*,*"
         ColumnDefinitions="*">
 
+        
         <VerticalStackLayout
             Grid.Row="0"
-            Grid.RowSpan="15"
-            HorizontalOptions="Center">
+            Grid.RowSpan="9"
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
 
             <HorizontalStackLayout>
                 <Label
@@ -72,8 +74,12 @@
                         Text="Player ID"
                         VerticalOptions="Center"/>
                     <Label
-                        WidthRequest="270"
+                        WidthRequest="170"
                         Text="Player Mode"
+                        VerticalOptions="Center"/>
+                    <Label
+                        WidthRequest="100"
+                        Text="Ship Type"
                         VerticalOptions="Center"/>
                 </HorizontalStackLayout>
                 <CollectionView
@@ -109,13 +115,27 @@
                                     </Picker.ItemsSource>
                                 </Picker>
                                 <Picker
-                                    WidthRequest="270"
+                                    WidthRequest="170"
                                     SelectedItem="{Binding PlayerMode}">
                                     <Picker.ItemsSource>
                                         <x:Array
                                             Type="{x:Type x:String}">
                                             <x:String>API</x:String>
                                             <x:String>Manual</x:String>
+                                        </x:Array>
+                                    </Picker.ItemsSource>
+                                </Picker>
+                                <Picker
+                                    WidthRequest="100"
+                                    IsEnabled="{Binding ShipTypePickerEnabled}"
+                                    SelectedItem="{Binding ShipType}">
+                                    <Picker.ItemsSource>
+                                        <x:Array
+                                            Type="{x:Type x:Int32}">
+                                            <x:Int32>0</x:Int32>
+                                            <x:Int32>1</x:Int32>
+                                            <x:Int32>2</x:Int32>
+                                            <x:Int32>3</x:Int32>
                                         </x:Array>
                                     </Picker.ItemsSource>
                                 </Picker>
@@ -188,6 +208,7 @@
 
             </VerticalStackLayout>
 
+                
             <VerticalStackLayout
                     IsVisible="{Binding ServerVisible}">
                 
@@ -257,6 +278,7 @@
 
             </VerticalStackLayout>
 
+            
             <!--<Frame
                 BorderColor="Gray"
                 Padding="3"

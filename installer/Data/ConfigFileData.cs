@@ -45,6 +45,8 @@ namespace installer.Data
         protected int teamID = 0;
         protected int playerID = 0;
         protected string playerMode = "API";
+        protected bool shipTypePickerEnabled = false;
+        protected int shipType = 0;
         [JsonInclude]
         public int TeamID
         {
@@ -72,6 +74,35 @@ namespace installer.Data
             set
             {
                 playerMode = value;
+                if (playerMode == "API")
+                {
+                    ShipTypePickerEnabled = false;
+                    ShipType = 0;
+                }
+                else
+                {
+                    ShipTypePickerEnabled = true;
+                }
+                OnPropertyChanged();
+            }
+        }
+        [JsonInclude]
+        public bool ShipTypePickerEnabled
+        {
+            get => shipTypePickerEnabled;
+            set
+            {
+                shipTypePickerEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+        [JsonInclude]
+        public int ShipType
+        {
+            get => shipType;
+            set
+            {
+                shipType = value;
                 OnPropertyChanged();
             }
         }
