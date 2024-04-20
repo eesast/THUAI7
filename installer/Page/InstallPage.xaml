@@ -8,14 +8,14 @@
     <Grid
         HorizontalOptions="Center"
         WidthRequest="600"
-        RowDefinitions="10,*,*,*,*,*,*,*,*,*,*"
+        RowDefinitions="*,*,*,*,*,*,*,*,*,*"
         ColumnDefinitions="*">
 
         <VerticalStackLayout
-            Grid.Row="1"
-            Grid.RowSpan="10"
+            Grid.Row="0"
+            Grid.RowSpan="9"
             HorizontalOptions="Center"
-            WidthRequest="600">
+            VerticalOptions="Center">
 
             <HorizontalStackLayout>
                 <Label

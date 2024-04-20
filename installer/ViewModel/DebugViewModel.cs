@@ -114,7 +114,6 @@ namespace installer.ViewModel
         }
 
         private bool serverStartMode = false;
-
         public bool ServerStartMode
         {
             get => serverStartMode;
@@ -185,6 +184,7 @@ namespace installer.ViewModel
                 {
                     Downloader.Data.Config.Commands.TeamID = Players[i].TeamID;
                     Downloader.Data.Config.Commands.PlayerID = Players[i].PlayerID;
+                    Downloader.Data.Config.Commands.ShipType = Players[i].ShipType;
                     haveSpectator = true;
                     LaunchClient();
                 }
