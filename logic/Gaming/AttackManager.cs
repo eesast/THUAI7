@@ -80,7 +80,7 @@ namespace Gaming
                                 {
                                     Debugger.Output(ship, " is destroyed!");
                                     var money = ship.GetCost();
-                                    bullet.Parent.AddMoney(money);
+                                    bullet.Parent!.AddMoney(money);
                                     Debugger.Output(bullet.Parent, " get " + money.ToString() + " money because of destroying " + ship);
                                     shipManager.Remove(ship);
                                 }
@@ -131,11 +131,11 @@ namespace Gaming
                 {
                     if (objBeingShot == null)
                     {
-                        shipManager.BackSwing((Ship)bullet.Parent!, bullet.SwingTime);
+                        ShipManager.BackSwing((Ship)bullet.Parent!, bullet.SwingTime);
                         return;
                     }
                     BombObj(bullet, objBeingShot);
-                    shipManager.BackSwing((Ship)bullet.Parent!, bullet.SwingTime);
+                    ShipManager.BackSwing((Ship)bullet.Parent!, bullet.SwingTime);
                     return;
                 }
                 else
@@ -154,7 +154,7 @@ namespace Gaming
                         BombObj(bullet, beAttackedObj);
                     }
                     beAttackedList.Clear();
-                    shipManager.BackSwing((Ship)bullet.Parent!, bullet.SwingTime);
+                    ShipManager.BackSwing((Ship)bullet.Parent!, bullet.SwingTime);
                 }
             }
             public bool Attack(Ship ship, double angle)

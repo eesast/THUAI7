@@ -2,9 +2,9 @@ using installer.ViewModel;
 
 namespace installer.Page;
 
-public partial class LaunchPage : ContentPage
+public partial class PlaybackPage : ContentPage
 {
-    public LaunchPage(LaunchViewModel viewModel)
+    public PlaybackPage(PlaybackViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;

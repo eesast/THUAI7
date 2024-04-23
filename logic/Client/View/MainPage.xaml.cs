@@ -99,7 +99,7 @@ namespace Client
             }
 
             //timer = Dispatcher.CreateTimer();
-            //timer.Interval = TimeSpan.FromMilliseconds(500);
+            //timer.Interval = TimeSpan.FromMilliseconds(100);
             //timer.Tick += new EventHandler(TestRefresh);
             //timer.Start();
 
@@ -125,11 +125,10 @@ namespace Client
         {
             lock (viewModel.drawPicLock)
             {
-                for (int i = 0; i < viewModel.ShipCircList.Count; i++)
+                for (int i = 0; i < viewModel.numOfShips; i++)
                 {
-                    System.Diagnostics.Debug.WriteLine(String.Format("ship{0}.xy=({1}, {2})", i, viewModel.ShipCircList[i].X, viewModel.ShipCircList[i].Y));
-                    System.Diagnostics.Debug.WriteLine(String.Format("numOfShipCirc{0}", shipCirc.Count));
-                    //shipCirc[i].Margin = XY2Margin(viewModel.ShipCircList[i].X, viewModel.ShipCircList[i].Y);
+                    //viewModel.myLogger.LogInfo(String.Format("MainPage.xaml: ship{0}.Color - {1}", i, Convert.ToString(shipCirc[i].CLBackgroundColor)));
+                    //viewModel.myLogger.LogInfo(String.Format("MainPage.xaml: ship{0}.Thick - {1}", i, Convert.ToString(shipCirc[i].CLMargin)));
                 }
             }
         }

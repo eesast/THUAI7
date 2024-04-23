@@ -261,7 +261,7 @@ namespace Preparation.Utility
     {
         private int num;
         private int maxNum;
-        private int cd;
+        public AtomicInt CD { get; } = new(int.MaxValue);
         private long updateTime = 0;
         private readonly object numLock = new();
         public IntNumUpdateEachCD(int num, int maxNum, int cd)
@@ -271,7 +271,7 @@ namespace Preparation.Utility
             if (cd <= 0) Debugger.Output("Bug:IntNumUpdateEachCD.cd (" + cd.ToString() + ") is less than 0.");
             this.num = (num < maxNum) ? num : maxNum;
             this.maxNum = maxNum;
-            this.cd = cd;
+            CD.Set(cd);
             this.updateTime = Environment.TickCount64;
         }
         /// <summary>
@@ -282,24 +282,23 @@ namespace Preparation.Utility
             if (maxNum < 0) Debugger.Output("Bug:IntNumUpdateEachCD.maxNum (" + maxNum.ToString() + ") is less than 0.");
             if (cd <= 0) Debugger.Output("Bug:IntNumUpdateEachCD.cd (" + cd.ToString() + ") is less than 0.");
             this.num = this.maxNum = maxNum;
-            this.cd = cd;
+            CD.Set(cd);
         }
         public IntNumUpdateEachCD()
         {
             this.num = this.maxNum = 0;
-            this.cd = int.MaxValue;
         }
 
         public int GetMaxNum() { lock (numLock) return maxNum; }
-        public int GetCD() { lock (numLock) return cd; }
+        public int GetCD() => CD.Get();
         public int GetNum(long time)
         {
             lock (numLock)
             {
-                if (num < maxNum && time - updateTime >= cd)
+                if (num < maxNum && time - updateTime >= CD)
                 {
-                    int add = (int)Math.Min(maxNum - num, (time - updateTime) / cd);
-                    updateTime += add * cd;
+                    int add = (int)Math.Min(maxNum - num, (time - updateTime) / CD);
+                    updateTime += add * CD;
                     return (num += add);
                 }
                 return num;
@@ -316,10 +315,10 @@ namespace Preparation.Utility
             long time = Environment.TickCount64;
             lock (numLock)
             {
-                if (num < maxNum && time - updateTime >= cd)
+                if (num < maxNum && time - updateTime >= CD)
                 {
-                    int add = (int)Math.Min(maxNum - num, (time - updateTime) / cd);
-                    updateTime += add * cd;
+                    int add = (int)Math.Min(maxNum - num, (time - updateTime) / CD);
+                    updateTime += add * CD;
                     num += add;
                 }
                 if (num == maxNum) updateTime = time;
@@ -423,11 +422,8 @@ namespace Preparation.Utility
         }
         public void SetCD(int cd)
         {
-            lock (numLock)
-            {
-                if (cd <= 0) Debugger.Output("Bug:Set IntNumUpdateEachCD.cd to " + cd.ToString() + ".");
-                this.cd = cd;
-            }
+            if (cd <= 0) Debugger.Output("Bug:Set IntNumUpdateEachCD.cd to " + cd.ToString() + ".");
+            CD.Set(cd);
         }
     }
 }
