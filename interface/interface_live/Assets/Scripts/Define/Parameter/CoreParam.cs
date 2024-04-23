@@ -1,14 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using Protobuf;
-using UnityEditor.VersionControl;
-using UnityEngine;
+using UnityEngine.UIElements;
 
 public class CoreParam
 {
-    public struct MessageOfFrame//存储一帧需要使用的信息
+    public class FrameQueue<T>
     {
-        public MessageOfObj messageOfObj;//存储接受到的信息
-    }
-    public static MessageOfFrame messageOfFrame;
+        public FrameQueue(int _maxSize = 10)
+        {
+            maxSize = _maxSize;
+            tail = maxSize - 1;
+            valQueue = new T[maxSize];
+        }
+        public readonly int maxSize;
+        private T[] valQueue;
+        private int tail;
+        public void Add(T val)
+        {
+            tail = (tail + 1) % maxSize;
+            valQueue[tail] = val;
+        }
+        public T GetValue(int index)
+        {
+            if (index >= maxSize)
+                return default;
+            return valQueue[(tail + maxSize - index) % maxSize];
+        }
+    };
+    public static FrameQueue<MessageToClient> frameQueue;
 }
