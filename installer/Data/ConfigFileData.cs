@@ -1,13 +1,30 @@
-﻿using System;
+﻿//using installer.ViewModel;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace installer.Data
 {
+    public abstract class NotificationObject : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler? PropertyChanged;
+        ///<summary>
+        ///announce notification
+        ///</summary>
+        ///<param name="propertyName">property name</param>
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
     public enum LanguageOption
     {
         cpp = 0, python = 1
@@ -37,6 +54,74 @@ namespace installer.Data
         public int ShipType { get; set; } = 0;
     }
 
+    public class Player : NotificationObject
+    {
+        protected int teamID = 0;
+        protected int playerID = 0;
+        protected string playerMode = "API";
+        protected bool shipTypePickerEnabled = false;
+        protected int shipType = 0;
+        [JsonInclude]
+        public int TeamID
+        {
+            get => teamID;
+            set
+            {
+                teamID = value;
+                OnPropertyChanged();
+            }
+        }
+        [JsonInclude]
+        public int PlayerID
+        {
+            get => playerID;
+            set
+            {
+                playerID = value;
+                OnPropertyChanged();
+            }
+        }
+        [JsonInclude]
+        public string PlayerMode
+        {
+            get => playerMode;
+            set
+            {
+                playerMode = value;
+                if (playerMode == "API")
+                {
+                    ShipTypePickerEnabled = false;
+                    ShipType = 0;
+                }
+                else
+                {
+                    ShipTypePickerEnabled = true;
+                }
+                OnPropertyChanged();
+            }
+        }
+        [JsonInclude]
+        public bool ShipTypePickerEnabled
+        {
+            get => shipTypePickerEnabled;
+            set
+            {
+                shipTypePickerEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+        [JsonInclude]
+        public int ShipType
+        {
+            get => shipType;
+            set
+            {
+                shipType = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
     public record ConfigDataFile
     {
         public string Description { get; set; } = "THUAI7-2024";
@@ -46,13 +131,12 @@ namespace installer.Data
             Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             "THUAI7", "Data"
         );
-        [RequiresAssemblyFiles()]
-        public string InstallerPath { get; set; } = typeof(ConfigDataFile).Assembly.Location;
         public string Token { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public bool Remembered { get; set; } = false;
         public CommandFile Commands { get; set; } = new CommandFile();
+        public List<Player> Players { get; set; } = new List<Player>();
     }
 
     public class Command
@@ -215,27 +299,22 @@ namespace installer.Data
             path = string.IsNullOrEmpty(p) ? Path.Combine(dataDir, "config.json") : p;
             file = new ConfigDataFile();
             com = new Command(file.Commands);
+            Players = new ObservableCollection<Player>();
+            Players.CollectionChanged += (sender, args) =>
+            {
+                if (args.NewItems is not null)
+                {
+                    foreach (var item in args.NewItems)
+                    {
+                        ((Player)item).PropertyChanged += (_, _) => OnMemoryChanged?.Invoke(this, new EventArgs());
+                    }
+                }
+                OnMemoryChanged?.Invoke(this, new EventArgs());
+            };
             ReadFile();
 
             if (autoSave)
                 OnMemoryChanged += (_, _) => SaveFile();
-            watcher = new FileSystemWatcher(Directory.GetParent(path)?.FullName ?? dataDir);
-            watcher.Filter = "*.json";
-            watcher.NotifyFilter = NotifyFilters.Attributes
-                                 | NotifyFilters.CreationTime
-                                 | NotifyFilters.DirectoryName
-                                 | NotifyFilters.FileName
-                                 | NotifyFilters.LastAccess
-                                 | NotifyFilters.LastWrite
-                                 | NotifyFilters.Security
-                                 | NotifyFilters.Size;
-            watcher.IncludeSubdirectories = false;
-            watcher.EnableRaisingEvents = true;
-            watcher.Changed += (_, _) =>
-            {
-                ReadFile();
-                OnFileChanged?.Invoke(this, new EventArgs());
-            };
         }
 
         public void ReadFile()
@@ -256,12 +335,15 @@ namespace installer.Data
                 file = new ConfigDataFile();
             }
             com = new Command(file.Commands);
+            Players.Clear();
+            file.Players.ForEach(p => Players.Add(p));
             com.OnMemoryChanged += (_, _) => OnMemoryChanged?.Invoke(this, new EventArgs());
         }
 
         public void SaveFile()
         {
             file.Commands = com.file;
+            file.Players = new List<Player>(Players);
             using FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
             using StreamWriter sw = new StreamWriter(fs);
             fs.SetLength(0);
@@ -271,10 +353,10 @@ namespace installer.Data
 
         public event EventHandler? OnMemoryChanged;
         public event EventHandler? OnFileChanged;
+        public ObservableCollection<Player> Players;
 
         protected string path;
         protected ConfigDataFile file;
-        protected FileSystemWatcher watcher;
         protected Command com;
 
         public string Description

@@ -147,7 +147,7 @@ namespace Gaming
                 {
                     return false;
                 }
-                if (construction.HP == construction.HP.GetMaxV())
+                if (construction.HP.IsMaxV())
                 {
                     return false;
                 }
@@ -178,7 +178,7 @@ namespace Gaming
                                     ship.ResetShipState(stateNum);
                                     return false;
                                 }
-                                if (construction.HP == construction.HP.GetMaxV())
+                                if (construction.HP.IsMaxV())
                                 {
                                     ship.ResetShipState(stateNum);
                                     if (!construction.IsActivated)
@@ -200,8 +200,7 @@ namespace Gaming
                                                         new FrameRateTaskExecutor<int>
                                                         (
                                                             loopCondition: () =>
-                                                                gameMap.Timer.IsGaming && construction.HP >
-                                                                construction.HP.GetMaxV() * 0.5,
+                                                                gameMap.Timer.IsGaming && !construction.HP.IsBelowMaxTimes(0.5),
                                                             loopToDo: () =>
                                                             {
                                                                 var ships = gameMap.ShipInTheRange(
@@ -247,7 +246,7 @@ namespace Gaming
                 {
                     return false;
                 }
-                if (wormhole.HP == wormhole.HP.GetMaxV())
+                if (wormhole.HP.IsMaxV())
                 {
                     return false;
                 }
