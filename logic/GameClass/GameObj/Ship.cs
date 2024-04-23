@@ -30,7 +30,14 @@ public class Ship : Movable, IShip
     public InVariableRange<long> Shield { get; }
     public ShipType ShipType { get; }
     private ShipStateType shipState = ShipStateType.Deceased;
-    public ShipStateType ShipState => shipState;
+    public ShipStateType ShipState
+    {
+        get
+        {
+            lock (actionLock)
+                return shipState;
+        }
+    }
     public IOccupation Occupation { get; }
     public MoneyPool MoneyPool { get; }
     /// <summary>
@@ -307,7 +314,7 @@ public class Ship : Movable, IShip
         GameObj? gameObj = (GameObj?)obj;
         lock (actionLock)
         {
-            ShipStateType nowShipState = ShipState;
+            ShipStateType nowShipState = shipState;
             Debugger.Output(this, "SetShipState from " + nowShipState + " to " + value);
             if (nowShipState == value) return -1;
             GameObj? lastObj = whatInteractingWith;

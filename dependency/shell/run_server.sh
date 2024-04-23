@@ -1,5 +1,7 @@
 #!/usr/local
 
+# 该代码暂时弃用，请使用run.sh
+
 python_dir=/usr/local/PlayerCode/CAPI/python/PyAPI
 python_main_dir=/usr/local/PlayerCode/CAPI/python
 playback_dir=/usr/local/playback
@@ -8,7 +10,7 @@ if [ $EXPOSED -eq 1 ]; then
     nice -10 ./Server --port 8888 --TeamCount 2 --ShipNum 4 --resultFileName $playback_dir/result --gameTimeInSecond $TIME --mode $MODE --mapResource $MAP --url $URL --token $TOKEN --fileName $playback_dir/video --startLockFile $playback_dir/start.lock > $playback_dir/server.log 2>&1 &
     server_pid=$!
 else
-    nice -10 ./Server --port 8888 --TeamCount 2 --ShipNum 1 --resultFileName $playback_dir/result --gameTimeInSecond $TIME --mode $MODE --mapResource $MAP --notAllowSpectator --url $URL --token $TOKEN --fileName $playback_dir/video --startLockFile $playback_dir/start.lock > $playback_dir/server.log 2>&1 &
+    nice -10 ./Server --port 8888 --TeamCount 2 --ShipNum 4 --resultFileName $playback_dir/result --gameTimeInSecond $TIME --mode $MODE --mapResource $MAP --notAllowSpectator --url $URL --token $TOKEN --fileName $playback_dir/video --startLockFile $playback_dir/start.lock > $playback_dir/server.log 2>&1 &
     server_pid=$!
 fi
 sleep 5
@@ -31,7 +33,15 @@ do
     popd
 done
 
+
+
 sleep 10
+    nice -10 ./Server --ip 127.0.0.1 --port 8888 --teamCount 2 --shipNum 4 --resultFileName $playback_dir/result --gameTimeInSecond $TIME --mode $MODE --mapResource $MAP --url $URL --token $TOKEN --fileName $playback_dir/video --startLockFile $playback_dir/start.lock > $playback_dir/server.log 2>&1 &
+    server_pid=$!
+else
+    nice -10 ./Server --ip 127.0.0.1 --port 8888 --teamCount 2 --shipNum 4 --resultFileName $playback_dir/result --gameTimeInSecond $TIME --mode $MODE --mapResource $MAP --notAllowSpectator --url $URL --token $TOKEN --fileName $playback_dir/video --startLockFile $playback_dir/start.lock > $playback_dir/server.log 2>&1 &
+    server_pid=$!
+fi
 
 if [ -f $playback_dir/start.lock ]; then
     ps -p $server_pid

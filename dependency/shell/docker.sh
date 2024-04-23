@@ -10,8 +10,7 @@ while getopts ':cr' 'OPT'; do
         'r') #运行
             #NO_PROMPT='true'
             cd /usr/local
-            ./run_server.sh
-            ./run_client.sh
+            ./run.sh
             ;;
         'l') 
 
