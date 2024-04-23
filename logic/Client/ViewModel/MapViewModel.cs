@@ -273,31 +273,31 @@ namespace Client.ViewModel
             for (int i = 0; i < listOfShip.Count; i++)
             {
                 MessageOfShip data = listOfShip[i];
-                DrawCircLabel shipinfo = ShipCircList[i];
+                //DrawCircLabel shipinfo = ShipCircList[i];
                 PointF point = UtilFunctions.Grid2CellPoint(data.X, data.Y);
-                shipinfo.X = point.X;
-                shipinfo.Y = point.Y;
-                myLogger.LogInfo(String.Format("shipinfo.X:{0}", shipinfo.X));
-                myLogger.LogInfo(String.Format("shipinfo.Y:{0}", shipinfo.Y));
+                ShipCircList[i].X = point.X;
+                ShipCircList[i].Y = point.Y;
+                myLogger.LogInfo(String.Format("shipinfo.X:{0}", ShipCircList[i].X));
+                myLogger.LogInfo(String.Format("shipinfo.Y:{0}", ShipCircList[i].Y));
                 long team_id = data.TeamId;
                 myLogger.LogInfo(String.Format("shipTeamid{0}", team_id));
                 switch (team_id)
                 {
                     case 0:
                         myLogger.LogInfo("shipinfo.color = red");
-                        shipinfo.Color = Colors.DarkRed;
+                        ShipCircList[i].Color = Colors.DarkRed;
                         break;
 
                     case 1:
                         myLogger.LogInfo("shipinfo.color = blue");
 
-                        shipinfo.Color = Colors.DarkBlue;
+                        ShipCircList[i].Color = Colors.DarkBlue;
                         break;
 
                     default:
                         myLogger.LogInfo("shipinfo.color = black");
 
-                        shipinfo.Color = Colors.DarkGreen;
+                        ShipCircList[i].Color = Colors.DarkGreen;
                         break;
                 }
                 //shipinfo.Radius = 4.5F;
@@ -305,12 +305,12 @@ namespace Client.ViewModel
                 //shipinfo.TextColor = Colors.White;
                 //ShipCircList.Add(shipinfo);
             }
-            for (int i = 0; i < ShipCircList.Count; i++)
-            {
-                myLogger.LogInfo(String.Format("DrawnShip{0}.X:{1}", i, ShipCircList[i].X));
-                myLogger.LogInfo(String.Format("DrawnShip{0}.Y:{1}", i, ShipCircList[i].Y));
-                myLogger.LogInfo(String.Format("DrawnShip{0}.Color:{1}", i, ShipCircList[i].Color));
-            }
+            //for (int i = 0; i < ShipCircList.Count; i++)
+            //{
+            //    myLogger.LogInfo(String.Format("DrawnShip{0}.X:{1}", i, ShipCircList[i].X));
+            //    myLogger.LogInfo(String.Format("DrawnShip{0}.Y:{1}", i, ShipCircList[i].Y));
+            //    myLogger.LogInfo(String.Format("DrawnShip{0}.Color:{1}", i, ShipCircList[i].Color));
+            //}
         }
 
         private void DrawBullet()
