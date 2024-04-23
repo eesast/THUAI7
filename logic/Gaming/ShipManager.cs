@@ -144,13 +144,7 @@ namespace Gaming
                 {
                     return false;
                 }
-                if (ship.MoneyPool.Money < ship.HP.GetDifference() * 1.2)
-                {
-                    return false;
-                }
-                long actualRecover = ship.HP.AddPositiveVRChange(recover);
-                ship.SubMoney((long)(actualRecover * 1.2));
-                return true;
+                return ship.MoneyPool.Money.SubVLimitedByAddingOtherRChange(recover, ship.HP, 1.2) > 0;
             }
             public bool Recycle(Ship ship)
             {
