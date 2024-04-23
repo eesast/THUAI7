@@ -1,53 +1,18 @@
 #!/usr/local
 
+# 该代码暂时弃用，请使用run.sh
+
 python_dir=/usr/local/PlayerCode/CAPI/python/PyAPI
 python_main_dir=/usr/local/PlayerCode/CAPI/python
 playback_dir=/usr/local/playback
 
 if [ $EXPOSED -eq 1 ]; then
-    nice -10 ./Server --port 8888 --studentCount 4 --trickerCount 1 --resultFileName $playback_dir/result --gameTimeInSecond $TIME --mode $MODE --mapResource $MAP --url $URL --token $TOKEN --fileName $playback_dir/video --startLockFile $playback_dir/start.lock > $playback_dir/server.log 2>&1 &
+    nice -10 ./Server --ip 127.0.0.1 --port 8888 --teamCount 2 --shipNum 4 --resultFileName $playback_dir/result --gameTimeInSecond $TIME --mode $MODE --mapResource $MAP --url $URL --token $TOKEN --fileName $playback_dir/video --startLockFile $playback_dir/start.lock > $playback_dir/server.log 2>&1 &
     server_pid=$!
 else
-    nice -10 ./Server --port 8888 --studentCount 4 --trickerCount 1 --resultFileName $playback_dir/result --gameTimeInSecond $TIME --mode $MODE --mapResource $MAP --notAllowSpectator --url $URL --token $TOKEN --fileName $playback_dir/video --startLockFile $playback_dir/start.lock > $playback_dir/server.log 2>&1 &
+    nice -10 ./Server --ip 127.0.0.1 --port 8888 --teamCount 2 --shipNum 4 --resultFileName $playback_dir/result --gameTimeInSecond $TIME --mode $MODE --mapResource $MAP --notAllowSpectator --url $URL --token $TOKEN --fileName $playback_dir/video --startLockFile $playback_dir/start.lock > $playback_dir/server.log 2>&1 &
     server_pid=$!
 fi
-sleep 5
-for k in {1..2}
-do
-    pushd /usr/local/team$k
-    if [ $k -eq 1 ]; then
-        for i in {1..4}
-        do
-            j=$((i - 1))
-            if [ -f "./player$i.py" ]; then
-                cp -r $python_main_dir $python_main_dir$i
-                cp -f ./player$i.py $python_main_dir$i/PyAPI/AI.py
-                nice -0 python3 $python_main_dir$i/PyAPI/main.py -I 127.0.0.1 -P 8888 -p $j > $playback_dir/team$k-player$j.log 2>&1 &
-            elif [ -f "./capi$i" ]; then
-                nice -0 ./capi$i -I 127.0.0.1 -P 8888 -p $j > $playback_dir/team$k-player$j.log 2>&1 &
-            else
-                echo "ERROR. $i is not found."
-            fi
-        done
-    else
-        for i in {5..5}
-        do
-            j=$((i - 1))
-            if [ -f "./player$i.py" ]; then
-                cp -r $python_main_dir $python_main_dir$i
-                cp -f ./player$i.py $python_main_dir$i/PyAPI/AI.py
-                nice -0 python3 $python_main_dir$i/PyAPI/main.py -I 127.0.0.1 -P 8888 -p $j > $playback_dir/team$k-player$j.log 2>&1 &
-            elif [ -f "./capi$i" ]; then
-                nice -0 ./capi$i -I 127.0.0.1 -P 8888 -p $j > $playback_dir/team$k-player$j.log 2>&1 &
-            else
-                echo "ERROR. $i is not found."
-            fi
-        done
-    fi
-    popd
-done
-
-sleep 10
 
 if [ -f $playback_dir/start.lock ]; then
     ps -p $server_pid
