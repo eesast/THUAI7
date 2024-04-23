@@ -60,6 +60,7 @@ namespace Preparation.Utility
         {
             return ReadNeed(() => (v, maxV));
         }
+        public T GetDifference() => ReadNeed(() => (maxV - v));
         public double GetDivideValueByMaxV()
         {
             return ReadNeed(() => (v.ToDouble(null) / maxV.ToDouble(null)));
