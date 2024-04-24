@@ -556,7 +556,6 @@ namespace Client.ViewModel
                                 else BluePlayer.Ships.Add(ship);
                                 BlueShipCount++;
                             }
-
                             //else
                             //{
                             //    Ship ship = new Ship
@@ -584,8 +583,8 @@ namespace Client.ViewModel
                             //        RedPlayer.Ships[i] = ship;
                             //    else RedPlayer.Ships.Add(ship);
                             //}
-                            myLogger.LogInfo("============= Draw Ship list ================");
                         }
+                        myLogger.LogInfo("============= Draw Ship list ================");
 
                         for (int i = 0; i < RedPlayer.Ships.Count; i++)
                         {
@@ -709,7 +708,7 @@ namespace Client.ViewModel
 
         public readonly int ShipStatusAttributesFontSize = 13;
 
-        Logger myLogger;
+        public Logger myLogger;
 
         public GeneralViewModel()
         {
