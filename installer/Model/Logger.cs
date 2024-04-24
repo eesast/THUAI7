@@ -344,26 +344,20 @@ namespace installer.Model
         protected ConcurrentQueue<LogRecord> Queue = new ConcurrentQueue<LogRecord>();
         public ObservableCollection<LogRecord> List = new ObservableCollection<LogRecord>();
         public override DateTime LastRecordTime => DateTime.Now;
-        private Task Timer;
+        private Timer timer;
         private DateTime time;
         private int ind;
         public ListLogger()
         {
-            Timer = Task.Run(() =>
+            ind = 0;
+            timer = new Timer(_ =>
             {
-                time = DateTime.Now;
-                ind = 0;
-                while (true)
+                for (int i = ind; i < Queue.Count; i++)
                 {
-                    while ((DateTime.Now - time).TotalMilliseconds <= 100) ;
-                    for (int i = ind; i < Queue.Count; i++)
-                    {
-                        List.Add(Queue.ElementAt(i));
-                    }
-                    ind = Queue.Count;
-                    time = DateTime.Now;
+                    List.Add(Queue.ElementAt(i));
                 }
-            });
+                ind = Queue.Count;
+            }, null, 0, 100);
         }
         protected override void Log(LogLevel logLevel, int eventId, string message)
         {
