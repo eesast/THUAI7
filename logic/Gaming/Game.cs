@@ -93,7 +93,7 @@ namespace Gaming
                 birthPointIndex = teamList[(int)teamID].BirthPointList.Count - 1;
             XY pos = teamList[(int)teamID].BirthPointList[birthPointIndex];
             pos += new XY(((random.Next() & 2) - 1) * 1000, ((random.Next() & 2) - 1) * 1000);
-            if (shipManager.ActivateShip(ship, pos))
+            if (ShipManager.ActivateShip(ship, pos))
             {
                 Debugger.Output($"Successfully activated: {teamID} {shipType} at {pos}");
                 return ship.PlayerID;
@@ -193,7 +193,7 @@ namespace Gaming
                 }
                 if (validRecoverPoint)
                 {
-                    return shipManager.Recover(ship, recover);
+                    return ShipManager.Recover(ship, recover);
                 }
             }
             return false;

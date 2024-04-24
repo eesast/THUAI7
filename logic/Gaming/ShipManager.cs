@@ -27,15 +27,14 @@ namespace Gaming
                 );
                 return newShip;
             }
-            public bool ActivateShip(Ship ship, XY pos)
+            public static bool ActivateShip(Ship ship, XY pos)
             {
                 if (ship.ShipState != ShipStateType.Deceased)
                 {
                     return false;
                 }
                 ship.ReSetPos(pos);
-                long stateNum = ship.SetShipState(RunningStateType.RunningActively, ShipStateType.Null);
-                ship.ResetShipState(stateNum);
+                ship.SetShipState(RunningStateType.Null, ShipStateType.Null);
                 Debugger.Output(ship, " is activated!");
                 return true;
             }
@@ -117,7 +116,7 @@ namespace Gaming
                 { IsBackground = true }.Start();
                 return stateNum;
             }
-            public bool BackSwing(Ship ship, int time)
+            public static bool BackSwing(Ship ship, int time)
             {
                 if (time <= 0)
                 {
@@ -139,13 +138,13 @@ namespace Gaming
                 { IsBackground = true }.Start();
                 return true;
             }
-            public bool Recover(Ship ship, long recover)
+            public static bool Recover(Ship ship, long recover)
             {
                 if (recover <= 0)
                 {
                     return false;
                 }
-                if (ship.MoneyPool.Money < (ship.HP.GetMaxV() - ship.HP.GetValue()) * 1.2)
+                if (ship.MoneyPool.Money < ship.HP.GetDifference() * 1.2)
                 {
                     return false;
                 }
