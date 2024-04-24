@@ -385,6 +385,7 @@ namespace installer.Model
                                 FileName = "explorer.exe"
                             });
                         }
+                        CurrentVersion = Data.FileHashData.TVersion;
                         Data.SaveMD5Data();
                         return 16;
                     }
