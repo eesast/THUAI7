@@ -19,7 +19,7 @@ namespace Preparation.Utility.Value.SafeValue.LockedValue
         {
             if (value < T.Zero)
             {
-                Debugger.Output("Warning:Try to set PositiveValue to " + value.ToString() + ".");
+                LockedValueLogging.logger.ConsoleLogDebug($"Warning: Try to set PositiveValue to {value}");
                 value = T.Zero;
             }
             v = value;

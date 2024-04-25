@@ -1,4 +1,5 @@
 ﻿using GameClass.GameObj;
+using GameClass.GameObj.Map;
 using GameClass.MapGenerator;
 using Gaming;
 using Newtonsoft.Json;

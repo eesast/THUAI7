@@ -7,24 +7,20 @@ using Timothy.FrameRateTask;
 
 namespace Preparation.Utility.Logging;
 
-public struct LogInfo
-{
-    public string FileName;
-    public string Info;
-}
-
 public class LogQueue
 {
     public static LogQueue Global { get; } = new();
+    private static uint logNum = 0;
+    private static uint logCopyNum = 0;
     private static readonly object queueLock = new();
 
-    private readonly Queue<LogInfo> logInfoQueue = new();
+    private readonly Queue<string> logInfoQueue = new();
 
-    public async Task Commit(LogInfo logInfo)
+    public async Task Commit(string info)
     {
         await Task.Run(() =>
         {
-            lock (queueLock) logInfoQueue.Enqueue(logInfo);
+            lock (queueLock) logInfoQueue.Enqueue(info);
         });
     }
 
@@ -40,8 +36,17 @@ public class LogQueue
                     {
                         while (logInfoQueue.Count != 0)
                         {
-                            var logInfo = logInfoQueue.Dequeue();
-                            File.AppendAllText(logInfo.FileName, logInfo.Info + Environment.NewLine);
+                            var info = logInfoQueue.Dequeue();
+                            File.AppendAllText(LoggingData.ServerLogPath, info + Environment.NewLine);
+                            logNum++;
+                            if (logNum >= LoggingData.MaxLogNum)
+                            {
+                                File.Copy(LoggingData.ServerLogPath,
+                                          $"{LoggingData.ServerLogPath}-copy{logCopyNum}.txt");
+                                logCopyNum++;
+                                File.Delete(LoggingData.ServerLogPath);
+                                logNum = 0;
+                            }
                         }
                     }
                 },
@@ -53,38 +58,40 @@ public class LogQueue
     }
 }
 
-public class Logger(string module, string file)
+public class Logger(string module)
 {
-    public void ConsoleLog(string msg, bool Duplicate = false)
+    public readonly string Module = module;
+
+    public void ConsoleLog(string msg, bool Duplicate = true)
     {
-        var info = $"[{module}]{msg}";
+        var info = $"[{Module}]{msg}";
         Console.WriteLine(info);
         if (Duplicate)
-            _ = LogQueue.Global.Commit(new()
-            {
-                FileName = file,
-                Info = info
-            });
+            _ = LogQueue.Global.Commit(info);
     }
-    public void ConsoleLogDebug(string msg, bool Duplicate = false)
+    public void ConsoleLogDebug(string msg, bool Duplicate = true)
     {
 #if DEBUG
-        var info = $"[{module}]{msg}";
+        var info = $"[{Module}]{msg}";
         Console.WriteLine(info);
         if (Duplicate)
-            _ = LogQueue.Global.Commit(new()
-            {
-                FileName = file,
-                Info = info
-            });
+            _ = LogQueue.Global.Commit(info);
 #endif
     }
     public static string TypeName(object obj)
-    {
-        return obj.GetType().Name;
-    }
-    public static string ObjInfo(object obj, string msg)
-    {
-        return $"<{TypeName(obj)} {msg}>";
-    }
+        => obj.GetType().Name;
+    public static string TypeName(Type tp)
+        => tp.Name;
+    public static string ObjInfo(object obj, string msg = "")
+        => msg == "" ? $"<{TypeName(obj)}>"
+                     : $"<{TypeName(obj)} {msg}>";
+    public static string ObjInfo(Type tp, string msg = "")
+        => msg == "" ? $"<{TypeName(tp)}>"
+                     : $"<{TypeName(tp)} {msg}>";
+}
+
+public static class LoggingData
+{
+    public const string ServerLogPath = "log.txt";
+    public const uint MaxLogNum = 5000;
 }

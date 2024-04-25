@@ -2,9 +2,14 @@
 using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
+using Preparation.Utility.Logging;
 
 namespace Preparation.Utility.Value.SafeValue.LockedValue
 {
+    public static class LockedValueLogging
+    {
+        public static readonly Logger logger = new("LockedValue");
+    }
     public abstract class LockedValue
     {
         protected readonly object vLock = new();

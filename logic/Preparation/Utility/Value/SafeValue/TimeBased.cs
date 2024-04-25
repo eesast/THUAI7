@@ -1,9 +1,15 @@
-﻿using Preparation.Utility.Value.SafeValue.Atomic;
+﻿using Preparation.Utility.Logging;
+using Preparation.Utility.Value.SafeValue.Atomic;
 using System;
 using System.Threading;
 
 namespace Preparation.Utility.Value.SafeValue.TimeBased
 {
+    public static class TimeBasedLogging
+    {
+        public static readonly Logger logger = new("TimeBased");
+    }
+
     //其对应属性不应当有set访问器，避免不安全的=赋值
 
     /// <summary>
@@ -49,7 +55,9 @@ namespace Preparation.Utility.Value.SafeValue.TimeBased
 
         public TimeBasedProgressOptimizedForInterrupting(long needTime)
         {
-            if (needTime <= 0) Debugger.Output("Bug:TimeBasedProgressOptimizedForInterrupting.needProgress (" + needTime.ToString() + ") is less than 0.");
+            if (needTime <= 0)
+                TimeBasedLogging.logger.ConsoleLogDebug(
+                    $"Bug: TimeBasedProgressOptimizedForInterrupting.needProgress({needTime}) is less than 0");
             needT = needTime;
         }
         public TimeBasedProgressOptimizedForInterrupting()
@@ -58,7 +66,8 @@ namespace Preparation.Utility.Value.SafeValue.TimeBased
         }
         public long GetEndTime() => Interlocked.CompareExchange(ref endT, -2, -2);
         public long GetNeedTime() => Interlocked.CompareExchange(ref needT, -2, -2);
-        public override string ToString() => "EndTime:" + Interlocked.CompareExchange(ref endT, -2, -2).ToString() + " ms, NeedTime:" + Interlocked.CompareExchange(ref needT, -2, -2).ToString() + " ms";
+        public override string ToString()
+            => $"EndTime: {Interlocked.CompareExchange(ref endT, -2, -2)} ms, NeedTime: {Interlocked.CompareExchange(ref needT, -2, -2)} ms";
         public bool IsFinished()
         {
             return Interlocked.CompareExchange(ref endT, -2, -2) <= Environment.TickCount64;
@@ -70,13 +79,15 @@ namespace Preparation.Utility.Value.SafeValue.TimeBased
         public long GetProgress()
         {
             long cutime = Interlocked.CompareExchange(ref endT, -2, -2) - Environment.TickCount64;
-            if (cutime <= 0) return Interlocked.CompareExchange(ref needT, -2, -2);
+            if (cutime <= 0)
+                return Interlocked.CompareExchange(ref needT, -2, -2);
             return Interlocked.CompareExchange(ref needT, -2, -2) - cutime;
         }
         public long GetNonNegativeProgress()
         {
             long cutime = Interlocked.CompareExchange(ref endT, -2, -2) - Environment.TickCount64;
-            if (cutime <= 0) return Interlocked.CompareExchange(ref needT, -2, -2);
+            if (cutime <= 0)
+                return Interlocked.CompareExchange(ref needT, -2, -2);
             long progress = Interlocked.CompareExchange(ref needT, -2, -2) - cutime;
             return progress < 0 ? 0 : progress;
         }
@@ -86,38 +97,45 @@ namespace Preparation.Utility.Value.SafeValue.TimeBased
         public long GetProgress(long time)
         {
             long cutime = Interlocked.CompareExchange(ref endT, -2, -2) - time;
-            if (cutime <= 0) return Interlocked.CompareExchange(ref needT, -2, -2);
+            if (cutime <= 0)
+                return Interlocked.CompareExchange(ref needT, -2, -2);
             return Interlocked.CompareExchange(ref needT, -2, -2) - cutime;
         }
         public long GetNonNegativeProgress(long time)
         {
             long cutime = Interlocked.Read(ref endT) - time;
-            if (cutime <= 0) return Interlocked.CompareExchange(ref needT, -2, -2);
+            if (cutime <= 0)
+                return Interlocked.CompareExchange(ref needT, -2, -2);
             long progress = Interlocked.CompareExchange(ref needT, -2, -2) - cutime;
             return progress < 0 ? 0 : progress;
         }
         /// <summary>
-        /// <0则表明未开始
+        /// 小于0则表明未开始
         /// </summary>
-        public static implicit operator long(TimeBasedProgressOptimizedForInterrupting pLong) => pLong.GetProgress();
+        public static implicit operator long(TimeBasedProgressOptimizedForInterrupting pLong)
+            => pLong.GetProgress();
 
         /// <summary>
-        /// GetProgressDouble<0则表明未开始
+        /// GetProgressDouble < 0则表明未开始
         /// </summary>
         public double GetProgressDouble()
         {
             long cutime = Interlocked.CompareExchange(ref endT, -2, -2) - Environment.TickCount64;
-            if (cutime <= 0) return 1;
+            if (cutime <= 0)
+                return 1;
             long needTime = Interlocked.CompareExchange(ref needT, -2, -2);
-            if (needTime == 0) return 0;
+            if (needTime == 0)
+                return 0;
             return 1.0 - (double)cutime / needTime;
         }
         public double GetNonNegativeProgressDouble(long time)
         {
             long cutime = Interlocked.Read(ref endT) - time;
-            if (cutime <= 0) return 1;
+            if (cutime <= 0)
+                return 1;
             long needTime = Interlocked.CompareExchange(ref needT, -2, -2);
-            if (needTime <= cutime) return 0;
+            if (needTime <= cutime)
+                return 0;
             return 1.0 - (double)cutime / needTime;
         }
 
@@ -125,19 +143,24 @@ namespace Preparation.Utility.Value.SafeValue.TimeBased
         {
             if (needTime <= 0)
             {
-                Debugger.Output("Warning:Start TimeBasedProgressOptimizedForInterrupting with the needProgress (" + needTime.ToString() + ") which is less than 0.");
+                TimeBasedLogging.logger.ConsoleLogDebug(
+                    $"Warning: Start TimeBasedProgressOptimizedForInterrupting with the needProgress({needTime}) which is less than 0");
                 return false;
             }
             //规定只有Start可以修改needT，且需要先访问endTime，从而避免锁（某种程度上endTime可以认为是needTime的锁）
-            if (Interlocked.CompareExchange(ref endT, Environment.TickCount64 + needTime, long.MaxValue) != long.MaxValue) return false;
-            if (needTime <= 2) Debugger.Output("Warning:the field of TimeBasedProgressOptimizedForInterrupting is " + needTime.ToString() + ",which is too small.");
+            if (Interlocked.CompareExchange(ref endT, Environment.TickCount64 + needTime, long.MaxValue) != long.MaxValue)
+                return false;
+            if (needTime <= 2)
+                TimeBasedLogging.logger.ConsoleLogDebug(
+                    $"Warning: The field of TimeBasedProgressOptimizedForInterrupting is {needTime},which is too small");
             Interlocked.Exchange(ref needT, needTime);
             return true;
         }
         public bool Start()
         {
             long needTime = Interlocked.CompareExchange(ref needT, -2, -2);
-            if (Interlocked.CompareExchange(ref endT, Environment.TickCount64 + needTime, long.MaxValue) != long.MaxValue) return false;
+            if (Interlocked.CompareExchange(ref endT, Environment.TickCount64 + needTime, long.MaxValue) != long.MaxValue)
+                return false;
             return true;
         }
         /// <summary>
@@ -168,17 +191,20 @@ namespace Preparation.Utility.Value.SafeValue.TimeBased
         private long nextUpdateTime = 0;
         public BoolUpdateEachCD(int cd)
         {
-            if (cd <= 1) Debugger.Output("Bug:BoolUpdateEachCD.cd (" + cd.ToString() + ") is less than 1.");
+            if (cd <= 1)
+                TimeBasedLogging.logger.ConsoleLogDebug($"Bug: BoolUpdateEachCD.cd({cd}) is less than 1");
             this.cd = cd;
         }
         public BoolUpdateEachCD(long cd)
         {
-            if (cd <= 1) Debugger.Output("Bug:BoolUpdateEachCD.cd (" + cd.ToString() + ") is less than 1.");
+            if (cd <= 1)
+                TimeBasedLogging.logger.ConsoleLogDebug($"Bug: BoolUpdateEachCD.cd({cd}) is less than 1");
             this.cd = cd;
         }
         public BoolUpdateEachCD(long cd, long startTime)
         {
-            if (cd <= 1) Debugger.Output("Bug:BoolUpdateEachCD.cd (" + cd.ToString() + ") is less than 1.");
+            if (cd <= 1)
+                TimeBasedLogging.logger.ConsoleLogDebug($"Bug: BoolUpdateEachCD.cd({cd}) is less than 1");
             this.cd = cd;
             nextUpdateTime = startTime;
         }
@@ -198,7 +224,8 @@ namespace Preparation.Utility.Value.SafeValue.TimeBased
         }
         public void SetCD(int cd)
         {
-            if (cd <= 1) Debugger.Output("Bug:BoolUpdateEachCD.cd to " + cd.ToString() + ".");
+            if (cd <= 1)
+                TimeBasedLogging.logger.ConsoleLogDebug($"Bug: BoolUpdateEachCD.cd to {cd}");
             Interlocked.Exchange(ref this.cd, cd);
         }
     }
@@ -213,17 +240,20 @@ namespace Preparation.Utility.Value.SafeValue.TimeBased
         private long nextUpdateTime = 0;
         public LongProgressUpdateEachCD(int cd)
         {
-            if (cd <= 1) Debugger.Output("Bug:LongProgressUpdateEachCD.cd (" + cd.ToString() + ") is less than 1.");
+            if (cd <= 1)
+                TimeBasedLogging.logger.ConsoleLogDebug($"Bug: LongProgressUpdateEachCD.cd({cd}) is less than 1");
             this.cd = cd;
         }
         public LongProgressUpdateEachCD(long cd)
         {
-            if (cd <= 1) Debugger.Output("Bug:LongProgressUpdateEachCD.cd (" + cd.ToString() + ") is less than 1.");
+            if (cd <= 1)
+                TimeBasedLogging.logger.ConsoleLogDebug($"Bug: LongProgressUpdateEachCD.cd({cd}) is less than 1");
             this.cd = cd;
         }
         public LongProgressUpdateEachCD(long cd, long startTime)
         {
-            if (cd <= 1) Debugger.Output("Bug:LongProgressUpdateEachCD.cd (" + cd.ToString() + ") is less than 1.");
+            if (cd <= 1)
+                TimeBasedLogging.logger.ConsoleLogDebug($"Bug: LongProgressUpdateEachCD.cd({cd}) is less than 1");
             this.cd = cd;
             nextUpdateTime = startTime;
         }
@@ -250,7 +280,8 @@ namespace Preparation.Utility.Value.SafeValue.TimeBased
         }
         public void SetCD(int cd)
         {
-            if (cd <= 1) Debugger.Output("Bug:Set LongProgressUpdateEachCD.cd to " + cd.ToString() + ".");
+            if (cd <= 1)
+                TimeBasedLogging.logger.ConsoleLogDebug($"Bug: Set LongProgressUpdateEachCD.cd to {cd}");
             Interlocked.Exchange(ref this.cd, cd);
         }
     }
@@ -267,9 +298,12 @@ namespace Preparation.Utility.Value.SafeValue.TimeBased
         private readonly object numLock = new();
         public IntNumUpdateEachCD(int num, int maxNum, int cd)
         {
-            if (num < 0) Debugger.Output("Bug:IntNumUpdateEachCD.num (" + num.ToString() + ") is less than 0.");
-            if (maxNum < 0) Debugger.Output("Bug:IntNumUpdateEachCD.maxNum (" + maxNum.ToString() + ") is less than 0.");
-            if (cd <= 0) Debugger.Output("Bug:IntNumUpdateEachCD.cd (" + cd.ToString() + ") is less than 0.");
+            if (num < 0)
+                TimeBasedLogging.logger.ConsoleLogDebug($"Bug: IntNumUpdateEachCD.num({num}) is less than 0");
+            if (maxNum < 0)
+                TimeBasedLogging.logger.ConsoleLogDebug($"Bug: IntNumUpdateEachCD.maxNum({maxNum}) is less than 0");
+            if (cd <= 0)
+                TimeBasedLogging.logger.ConsoleLogDebug($"Bug: IntNumUpdateEachCD.cd({cd}) is less than 0");
             this.num = num < maxNum ? num : maxNum;
             this.maxNum = maxNum;
             CD.Set(cd);
@@ -280,8 +314,10 @@ namespace Preparation.Utility.Value.SafeValue.TimeBased
         /// </summary>
         public IntNumUpdateEachCD(int maxNum, int cd)
         {
-            if (maxNum < 0) Debugger.Output("Bug:IntNumUpdateEachCD.maxNum (" + maxNum.ToString() + ") is less than 0.");
-            if (cd <= 0) Debugger.Output("Bug:IntNumUpdateEachCD.cd (" + cd.ToString() + ") is less than 0.");
+            if (maxNum < 0)
+                TimeBasedLogging.logger.ConsoleLogDebug($"Bug: IntNumUpdateEachCD.maxNum({maxNum}) is less than 0");
+            if (cd <= 0)
+                TimeBasedLogging.logger.ConsoleLogDebug($"Bug: IntNumUpdateEachCD.cd({cd}) is less than 0");
             num = this.maxNum = maxNum;
             CD.Set(cd);
         }
@@ -312,7 +348,8 @@ namespace Preparation.Utility.Value.SafeValue.TimeBased
         /// </summary>
         public int TrySub(int subV)
         {
-            if (subV < 0) Debugger.Output("Bug:IntNumUpdateEachCD Try to sub " + subV.ToString() + ", which is less than 0.");
+            if (subV < 0)
+                TimeBasedLogging.logger.ConsoleLogDebug($"Bug: IntNumUpdateEachCD Try to sub {subV}, which is less than 0");
             long time = Environment.TickCount64;
             lock (numLock)
             {
@@ -332,7 +369,8 @@ namespace Preparation.Utility.Value.SafeValue.TimeBased
         /// </summary>
         public void TryAdd(int addV)
         {
-            if (addV < 0) Debugger.Output("Bug:IntNumUpdateEachCD Try to add " + addV.ToString() + ", which is less than 0.");
+            if (addV < 0)
+                TimeBasedLogging.logger.ConsoleLogDebug($"Bug: IntNumUpdateEachCD Try to add {addV}, which is less than 0");
             lock (numLock)
             {
                 num += Math.Min(addV, maxNum - num);
@@ -423,7 +461,8 @@ namespace Preparation.Utility.Value.SafeValue.TimeBased
         }
         public void SetCD(int cd)
         {
-            if (cd <= 0) Debugger.Output("Bug:Set IntNumUpdateEachCD.cd to " + cd.ToString() + ".");
+            if (cd <= 0)
+                TimeBasedLogging.logger.ConsoleLogDebug($"Bug: Set IntNumUpdateEachCD.cd to {cd}");
             CD.Set(cd);
         }
     }

@@ -23,12 +23,14 @@ namespace Preparation.Utility.Value.SafeValue.LockedValue
         {
             if (value < T.Zero)
             {
-                Debugger.Output("Warning:Try to set IntInTheVariableRange to " + value.ToString() + ".");
+                LockedValueLogging.logger.ConsoleLogDebug(
+                    $"Warning: Try to set IntInTheVariableRange to {value}");
                 value = T.Zero;
             }
             if (maxValue < T.Zero)
             {
-                Debugger.Output("Warning:Try to set IntInTheVariableRange.maxValue to " + maxValue.ToString() + ".");
+                LockedValueLogging.logger.ConsoleLogDebug(
+                    $"Warning: Try to set IntInTheVariableRange.maxValue to {maxValue}");
                 maxValue = T.Zero;
             }
             v = value.CompareTo(maxValue) < 0 ? value : maxValue;
@@ -41,7 +43,8 @@ namespace Preparation.Utility.Value.SafeValue.LockedValue
         {
             if (maxValue < T.Zero)
             {
-                Debugger.Output("Warning:Try to set IntInTheVariableRange.maxValue to " + maxValue.ToString() + ".");
+                LockedValueLogging.logger.ConsoleLogDebug(
+                    $"Warning: Try to set IntInTheVariableRange.maxValue to {maxValue}");
                 maxValue = T.Zero;
             }
             v = maxV = maxValue;
@@ -49,7 +52,7 @@ namespace Preparation.Utility.Value.SafeValue.LockedValue
 
         public override string ToString()
         {
-            return ReadNeed(() => "value:" + v.ToString() + " , maxValue:" + maxV.ToString());
+            return ReadNeed(() => $"value: {v} , maxValue: {maxV}");
         }
         public T GetValue() { return ReadNeed(() => v); }
         public double ToDouble() => GetValue().ToDouble(null);
@@ -419,7 +422,8 @@ namespace Preparation.Utility.Value.SafeValue.LockedValue
         #endregion
 
         #region 与InVariableRange类的运算，运算会影响该对象的值
-        public T AddRChange<TA>(InVariableRange<TA> a, double speed = 1.0) where TA : IConvertible, IComparable<TA>, INumber<TA>
+        public T AddRChange<TA>(InVariableRange<TA> a, double speed = 1.0)
+            where TA : IConvertible, IComparable<TA>, INumber<TA>
         {
             return EnterOtherLock<T>(a, () => WriteNeed(() =>
             {
@@ -430,7 +434,8 @@ namespace Preparation.Utility.Value.SafeValue.LockedValue
                 return v - previousV;
             }))!;
         }
-        public T AddVUseOtherRChange<TA>(T value, InVariableRange<TA> other, double speed = 1.0) where TA : IConvertible, IComparable<TA>, INumber<TA>
+        public T AddVUseOtherRChange<TA>(T value, InVariableRange<TA> other, double speed = 1.0)
+            where TA : IConvertible, IComparable<TA>, INumber<TA>
         {
             return EnterOtherLock<T>(other, () => WriteNeed(() =>
             {
@@ -443,7 +448,8 @@ namespace Preparation.Utility.Value.SafeValue.LockedValue
                 return v - previousV;
             }))!;
         }
-        public T SubVLimitedByAddingOtherRChange<TA>(T value, InVariableRange<TA> other, double speed = 1.0) where TA : IConvertible, IComparable<TA>, INumber<TA>
+        public T SubVLimitedByAddingOtherRChange<TA>(T value, InVariableRange<TA> other, double speed = 1.0)
+            where TA : IConvertible, IComparable<TA>, INumber<TA>
         {
             return EnterOtherLock<T>(other, () => WriteNeed(() =>
             {
@@ -457,7 +463,8 @@ namespace Preparation.Utility.Value.SafeValue.LockedValue
                 return value;
             }))!;
         }
-        public T SubRChange<TA>(InVariableRange<TA> a) where TA : IConvertible, IComparable<TA>, IComparable<int>, INumber<TA>
+        public T SubRChange<TA>(InVariableRange<TA> a)
+            where TA : IConvertible, IComparable<TA>, IComparable<int>, INumber<TA>
         {
             return EnterOtherLock<T>(a, () => WriteNeed(() =>
             {
@@ -481,8 +488,10 @@ namespace Preparation.Utility.Value.SafeValue.LockedValue
             return WriteNeed(() =>
             {
                 long addV = (long)(startTime.StopIfPassing((maxV - v).ToInt64(null)) * speed);
-                if (addV < 0) return (v, maxV, startTime.Get());
-                if (maxV - v < T.CreateChecked(addV)) return (v = maxV, maxV, startTime.Get());
+                if (addV < 0)
+                    return (v, maxV, startTime.Get());
+                if (maxV - v < T.CreateChecked(addV))
+                    return (v = maxV, maxV, startTime.Get());
                 return (v, maxV, startTime.Get());
             });
         }

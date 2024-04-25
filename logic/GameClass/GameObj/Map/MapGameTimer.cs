@@ -3,7 +3,7 @@ using System;
 using System.Threading;
 using ITimer = Preparation.Interface.ITimer;
 
-namespace GameClass.GameObj
+namespace GameClass.GameObj.Map
 {
     public partial class Map
     {
