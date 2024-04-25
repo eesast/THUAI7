@@ -19,6 +19,10 @@ namespace GameClass.GameObj
         public readonly PlaceType[,] protoGameMap;
         public PlaceType[,] ProtoGameMap => protoGameMap;
 
+        // xfgg说：爱因斯坦说，每个坐标系都有与之绑定的时钟，(x, y, z, ict) 构成四维时空坐标，在洛伦兹变换下满足矢量性（狗头）
+        private readonly MyTimer timer = new();
+        public IMyTimer Timer => timer;
+
         #region 大本营相关
         public List<Home> Homes { get; }
         private readonly long currentHomeNum = 0;

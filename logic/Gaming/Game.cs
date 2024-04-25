@@ -115,16 +115,7 @@ namespace Gaming
                 actionManager.AddMoneyNaturally(team);
                 ActivateShip(team.TeamID, ShipType.CivilShip);
             }
-            new Thread
-            (
-                () =>
-                {
-                    if (!gameMap.Timer.StartGame(milliSeconds))
-                        return;
-                    EndGame();  // 游戏结束时要做的事
-                }
-            )
-            { IsBackground = true }.Start();
+            gameMap.Timer.Start(() => { }, () => EndGame(), milliSeconds);
             return true;
         }
         public void EndGame()

@@ -5,7 +5,7 @@ namespace Preparation.Interface
 {
     public interface IMap
     {
-        ITimer Timer { get; }
+        IMyTimer Timer { get; }
 
         // the two dicts must have same keys
         Dictionary<GameObjType, LockedClassList<IGameObj>> GameObjDict { get; }
