@@ -47,6 +47,5 @@ class AI(IAI):
         return
 
     def TeamPlay(self, api: ITeamAPI) -> None:
-        assert self.__playerID == 0, "Team's playerID must be 0"
-        
+        # player0的操作
         return

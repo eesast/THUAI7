@@ -22,19 +22,23 @@ void AI::play(IShipAPI& api)
 {
     if (this->playerID == 1)
     {
+        // player1的操作
     }
     else if (this->playerID == 2)
     {
+        // player2的操作
     }
-
     else if (this->playerID == 3)
     {
+        // player3的操作
     }
     else if (this->playerID == 4)
     {
+        // player4的操作
     }
 }
 
 void AI::play(ITeamAPI& api)  // 默认team playerID 为0
 {
+    // player0的操作
 }
