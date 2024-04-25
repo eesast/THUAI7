@@ -11,94 +11,81 @@ class Constants:
     recycleMultiplier = 0.5
     sizeOfShip = 800
 
-
 class Home:
     maxHp = 24000
-    energySpeed = 1
-
+    energySpeed = 100
 
 class Factory:
     maxHp = 8000
-    energySpeed = 3
-
+    energySpeed = 300
 
 class Community:
     maxHp = 6000
-
 
 class Fort:
     maxHp = 12000
     attackRange = 8000
     damage = 1200
 
-
 class CivilianShip:
     Speed = 3000
     basicArmor = 0
     basicShield = 0
     maxHp = 3000
-    Cost = 40
-
+    Cost = 4000
 
 class MilitaryShip:
     Speed = 2800
     basicArmor = 400
     basicShield = 400
     maxHp = 4000
-    Cost = 120
-
+    Cost = 12000
 
 class FlagShip:
     Speed = 2700
     basicArmor = 800
     basicShield = 800
     maxHp = 12000
-    Cost = 500
-
+    Cost = 50000
 
 class Producer:
-    energySpeed1 = 5
-    energySpeed2 = 7
-    energySpeed3 = 10
+    energySpeed1 = 100
+    energySpeed2 = 200
+    energySpeed3 = 300
     Cost1 = 0
-    Cost2 = 40
-    Cost3 = 80
-
+    Cost2 = 4000
+    Cost3 = 8000
 
 class Constructor:
-    constructSpeed1 = 500
-    constructSpeed2 = 750
-    constructSpeed3 = 1000
+    constructSpeed1 = 300
+    constructSpeed2 = 400
+    constructSpeed3 = 500
     Cost1 = 0
-    Cost2 = 40
-    Cost3 = 80
-
+    Cost2 = 4000
+    Cost3 = 8000
 
 class Armor:
     armor1 = 2000
     armor2 = 3000
     armor3 = 4000
-    Cost1 = 60
-    Cost2 = 120
-    Cost3 = 180
-
+    Cost1 = 6000
+    Cost2 = 12000
+    Cost3 = 18000
 
 class Shield:
     shield1 = 2000
     shield2 = 3000
     shield3 = 4000
-    Cost1 = 60
-    Cost2 = 120
-    Cost3 = 180
-
+    Cost1 = 6000
+    Cost2 = 12000
+    Cost3 = 18000
 
 class Weapon:
     LaserCost = 0
-    PlasmaCost = 120
-    ShellCost = 130
-    MissleCost = 180
-    ArcCost = 240
-
+    PlasmaCost = 12000
+    ShellCost = 13000
+    MissleCost = 18000
+    ArcCost = 24000
 
 class Laser:
     Damage = 1200
@@ -109,16 +96,14 @@ class Laser:
     CastTime = 300
     BackSwing = 300
 
-
 class Plasma:
     Damage = 1300
     AttackRange = 4000
-    ArmorDamageMultiplier = 2
+    ArmorDamageMultiplier = 2.0
     ShieldDamageMultiplier = 0.4
     Speed = 10000
     CastTime = 400
     BackSwing = 400
-
 
 class Shell:
     Damage = 1800
@@ -129,7 +114,6 @@ class Shell:
     CastTime = 200
     BackSwing = 200
 
-
 class Missle:
     Damage = 1600
     AttackRange = 8000
@@ -139,7 +123,6 @@ class Missle:
     Speed = 6000
     CastTime = 600
     BackSwing = 600
-
 
 class Arc:
     Damage = 3200
