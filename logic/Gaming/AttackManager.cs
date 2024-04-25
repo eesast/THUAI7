@@ -131,11 +131,11 @@ namespace Gaming
                 {
                     if (objBeingShot == null)
                     {
-                        shipManager.BackSwing((Ship)bullet.Parent!, bullet.SwingTime);
+                        ShipManager.BackSwing((Ship)bullet.Parent!, bullet.SwingTime);
                         return;
                     }
                     BombObj(bullet, objBeingShot);
-                    shipManager.BackSwing((Ship)bullet.Parent!, bullet.SwingTime);
+                    ShipManager.BackSwing((Ship)bullet.Parent!, bullet.SwingTime);
                     return;
                 }
                 else
@@ -154,7 +154,7 @@ namespace Gaming
                         BombObj(bullet, beAttackedObj);
                     }
                     beAttackedList.Clear();
-                    shipManager.BackSwing((Ship)bullet.Parent!, bullet.SwingTime);
+                    ShipManager.BackSwing((Ship)bullet.Parent!, bullet.SwingTime);
                 }
             }
             public bool Attack(Ship ship, double angle)
