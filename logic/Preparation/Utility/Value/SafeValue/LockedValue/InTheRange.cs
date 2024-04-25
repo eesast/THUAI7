@@ -1,9 +1,10 @@
-﻿using Preparation.Utility;
+﻿using Preparation.Interface;
 using System;
 using System.Numerics;
 using System.Threading;
+using Preparation.Utility.Value.SafeValue.Atomic;
 
-namespace Preparation.Utility
+namespace Preparation.Utility.Value.SafeValue.LockedValue
 {
     //其对应属性不应当有set访问器，避免不安全的=赋值
 
@@ -30,7 +31,7 @@ namespace Preparation.Utility
                 maxValue = T.Zero;
             }
             v = value.CompareTo(maxValue) < 0 ? value : maxValue;
-            this.maxV = maxValue;
+            maxV = maxValue;
         }
         /// <summary>
         /// 默认使Value=maxValue
@@ -42,7 +43,7 @@ namespace Preparation.Utility
                 Debugger.Output("Warning:Try to set IntInTheVariableRange.maxValue to " + maxValue.ToString() + ".");
                 maxValue = T.Zero;
             }
-            v = this.maxV = maxValue;
+            v = maxV = maxValue;
         }
 
         public override string ToString()
@@ -60,10 +61,10 @@ namespace Preparation.Utility
         {
             return ReadNeed(() => (v, maxV));
         }
-        public T GetDifference() => ReadNeed(() => (maxV - v));
+        public T GetDifference() => ReadNeed(() => maxV - v);
         public double GetDivideValueByMaxV()
         {
-            return ReadNeed(() => (v.ToDouble(null) / maxV.ToDouble(null)));
+            return ReadNeed(() => v.ToDouble(null) / maxV.ToDouble(null));
         }
         #endregion
 
@@ -132,7 +133,7 @@ namespace Preparation.Utility
             }
             else
             {
-                return WriteNeed(() => v = (value > maxV) ? maxV : value);
+                return WriteNeed(() => v = value > maxV ? maxV : value);
             }
         }
 
@@ -143,7 +144,7 @@ namespace Preparation.Utility
                 WriteNeed(() => v = T.Zero);
             }
             T va = T.CreateChecked(value);
-            WriteNeed(() => v = (va > maxV) ? maxV : va);
+            WriteNeed(() => v = va > maxV ? maxV : va);
         }
 
         /// <summary>
@@ -151,7 +152,7 @@ namespace Preparation.Utility
         /// </summary>
         public T SetPositiveVRNow(T value)
         {
-            return WriteNeed(() => v = (value > maxV) ? maxV : value);
+            return WriteNeed(() => v = value > maxV ? maxV : value);
         }
         #endregion
 
@@ -263,7 +264,7 @@ namespace Preparation.Utility
         {
             WriteNeed(() =>
             {
-                addPositiveV = (addPositiveV < maxV - v) ? addPositiveV : maxV - v;
+                addPositiveV = addPositiveV < maxV - v ? addPositiveV : maxV - v;
                 v += addPositiveV;
             });
             return addPositiveV;
@@ -363,7 +364,7 @@ namespace Preparation.Utility
         {
             WriteNeed(() =>
             {
-                subPositiveV = (subPositiveV < v) ? subPositiveV : v;
+                subPositiveV = subPositiveV < v ? subPositiveV : v;
                 v -= subPositiveV;
             });
             return subPositiveV;
@@ -375,7 +376,7 @@ namespace Preparation.Utility
         {
             WriteNeed(() =>
             {
-                v = (subPositiveV < v) ? v - subPositiveV : T.Zero;
+                v = subPositiveV < v ? v - subPositiveV : T.Zero;
             });
         }
         #endregion

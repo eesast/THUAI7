@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace Preparation.Utility
+namespace Preparation.Utility.Value.SafeValue
 {
     public class LockedClassList<T> where T : class?
     {

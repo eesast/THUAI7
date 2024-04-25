@@ -1,9 +1,9 @@
-﻿using Preparation.Utility;
-using System;
-using System.Numerics;
+﻿using System;
 using System.Threading;
+using Preparation.Interface;
+using Preparation.Utility.Value.SafeValue.Atomic;
 
-namespace Preparation.Utility
+namespace Preparation.Utility.Value.SafeValue.LockedValue
 {
     //其对应属性不应当有set访问器，避免不安全的=赋值
 
@@ -52,7 +52,7 @@ namespace Preparation.Utility
             return WriteNeed(() =>
             {
                 long previousV = v;
-                long addV = (Environment.TickCount64 - startTime.Stop());
+                long addV = Environment.TickCount64 - startTime.Stop();
                 if (addV > 0) v += (long)(addV * speed);
                 else return 0;
                 if (v > maxV) v = maxV;
@@ -91,7 +91,7 @@ namespace Preparation.Utility
         {
             WriteNeed(() =>
             {
-                this.v = value;
+                v = value;
                 startTime.Stop();
             });
         }
@@ -126,7 +126,7 @@ namespace Preparation.Utility
         public TimeBasedProgressAtVariableSpeed()
         {
             progress = new LongInVariableRangeWithStartTime(0, 0);
-            this.speed = new AtomicDouble(1.0);
+            speed = new AtomicDouble(1.0);
         }
         #endregion
 
@@ -155,7 +155,7 @@ namespace Preparation.Utility
         {
             long progressNow, needTime, startT;
             (progressNow, needTime, startT) = progress.AddStartTimeToMaxV(speed.ToDouble());
-            return (startT != long.MaxValue && progressNow != needTime);
+            return startT != long.MaxValue && progressNow != needTime;
         }
         #endregion
 

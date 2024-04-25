@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Preparation.Utility.Value.SafeValue.Atomic;
+using System;
 using System.Threading;
 
-namespace Preparation.Utility
+namespace Preparation.Utility.Value.SafeValue
 {
     //其对应属性不应当有set访问器，避免不安全的=赋值
 
@@ -49,11 +50,11 @@ namespace Preparation.Utility
         public TimeBasedProgressOptimizedForInterrupting(long needTime)
         {
             if (needTime <= 0) Debugger.Output("Bug:TimeBasedProgressOptimizedForInterrupting.needProgress (" + needTime.ToString() + ") is less than 0.");
-            this.needT = needTime;
+            needT = needTime;
         }
         public TimeBasedProgressOptimizedForInterrupting()
         {
-            this.needT = 0;
+            needT = 0;
         }
         public long GetEndTime() => Interlocked.CompareExchange(ref endT, -2, -2);
         public long GetNeedTime() => Interlocked.CompareExchange(ref needT, -2, -2);
@@ -109,7 +110,7 @@ namespace Preparation.Utility
             if (cutime <= 0) return 1;
             long needTime = Interlocked.CompareExchange(ref needT, -2, -2);
             if (needTime == 0) return 0;
-            return 1.0 - ((double)cutime / needTime);
+            return 1.0 - (double)cutime / needTime;
         }
         public double GetNonNegativeProgressDouble(long time)
         {
@@ -117,7 +118,7 @@ namespace Preparation.Utility
             if (cutime <= 0) return 1;
             long needTime = Interlocked.CompareExchange(ref needT, -2, -2);
             if (needTime <= cutime) return 0;
-            return 1.0 - ((double)cutime / needTime);
+            return 1.0 - (double)cutime / needTime;
         }
 
         public bool Start(long needTime)
@@ -179,7 +180,7 @@ namespace Preparation.Utility
         {
             if (cd <= 1) Debugger.Output("Bug:BoolUpdateEachCD.cd (" + cd.ToString() + ") is less than 1.");
             this.cd = cd;
-            this.nextUpdateTime = startTime;
+            nextUpdateTime = startTime;
         }
 
         public long GetCD() => Interlocked.Read(ref cd);
@@ -224,7 +225,7 @@ namespace Preparation.Utility
         {
             if (cd <= 1) Debugger.Output("Bug:LongProgressUpdateEachCD.cd (" + cd.ToString() + ") is less than 1.");
             this.cd = cd;
-            this.nextUpdateTime = startTime;
+            nextUpdateTime = startTime;
         }
 
         public long GetRemainingTime()
@@ -269,10 +270,10 @@ namespace Preparation.Utility
             if (num < 0) Debugger.Output("Bug:IntNumUpdateEachCD.num (" + num.ToString() + ") is less than 0.");
             if (maxNum < 0) Debugger.Output("Bug:IntNumUpdateEachCD.maxNum (" + maxNum.ToString() + ") is less than 0.");
             if (cd <= 0) Debugger.Output("Bug:IntNumUpdateEachCD.cd (" + cd.ToString() + ") is less than 0.");
-            this.num = (num < maxNum) ? num : maxNum;
+            this.num = num < maxNum ? num : maxNum;
             this.maxNum = maxNum;
             CD.Set(cd);
-            this.updateTime = Environment.TickCount64;
+            updateTime = Environment.TickCount64;
         }
         /// <summary>
         /// 默认使num=maxNum
@@ -281,12 +282,12 @@ namespace Preparation.Utility
         {
             if (maxNum < 0) Debugger.Output("Bug:IntNumUpdateEachCD.maxNum (" + maxNum.ToString() + ") is less than 0.");
             if (cd <= 0) Debugger.Output("Bug:IntNumUpdateEachCD.cd (" + cd.ToString() + ") is less than 0.");
-            this.num = this.maxNum = maxNum;
+            num = this.maxNum = maxNum;
             CD.Set(cd);
         }
         public IntNumUpdateEachCD()
         {
-            this.num = this.maxNum = 0;
+            num = maxNum = 0;
         }
 
         public int GetMaxNum() { lock (numLock) return maxNum; }
@@ -299,7 +300,7 @@ namespace Preparation.Utility
                 {
                     int add = (int)Math.Min(maxNum - num, (time - updateTime) / CD);
                     updateTime += add * CD;
-                    return (num += add);
+                    return num += add;
                 }
                 return num;
             }
@@ -345,7 +346,7 @@ namespace Preparation.Utility
             if (maxNum < 0) maxNum = 0;
             lock (numLock)
             {
-                this.num = this.maxNum = maxNum;
+                num = this.maxNum = maxNum;
             }
             return maxNum > 0;
         }
@@ -356,7 +357,7 @@ namespace Preparation.Utility
         {
             lock (numLock)
             {
-                this.num = this.maxNum = maxNum;
+                num = this.maxNum = maxNum;
             }
         }
         /// <summary>

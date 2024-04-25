@@ -3,7 +3,10 @@ using GameClass.GameObj.Modules;
 using GameClass.GameObj.Occupations;
 using Preparation.Interface;
 using Preparation.Utility;
-using System.Threading;
+using Preparation.Utility.Value;
+using Preparation.Utility.Value.SafeValue;
+using Preparation.Utility.Value.SafeValue.Atomic;
+using Preparation.Utility.Value.SafeValue.LockedValue;
 
 namespace GameClass.GameObj;
 

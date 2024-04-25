@@ -2,6 +2,8 @@
 using GameClass.MapGenerator;
 using Preparation.Interface;
 using Preparation.Utility;
+using Preparation.Utility.Value;
+using Preparation.Utility.Value.SafeValue;
 using System;
 using System.Collections.Generic;
 
@@ -11,7 +13,7 @@ namespace GameClass.GameObj
     {
         private readonly Dictionary<GameObjType, LockedClassList<IGameObj>> gameObjDict;
         public Dictionary<GameObjType, LockedClassList<IGameObj>> GameObjDict => gameObjDict;
-        private readonly List<Wormhole> wormholes = new();
+        private readonly List<Wormhole> wormholes = [];
         private readonly uint height;
         public uint Height => height;
         private readonly uint width;
