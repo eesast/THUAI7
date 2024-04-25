@@ -12,7 +12,7 @@ public class UpdateManager : SingletonMono<UpdateManager>, IUpdateManager
     };
     public void UpdateMessageByJson(string jsonInfo)
     {
-        Debugger.GetInstance().text.text = jsonInfo;
+        // Debugger.GetInstance().text.text = jsonInfo;
         CoreParam.frameQueue.Add(JsonConvert.DeserializeObject<MessageToClient>(jsonInfo, jSetting));
     }
     // Start is called before the first frame update

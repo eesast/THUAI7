@@ -1,7 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Protobuf;
-using UnityEngine.UIElements;
+using UnityEngine;
 
 public class CoreParam
 {
@@ -29,4 +30,14 @@ public class CoreParam
         }
     };
     public static FrameQueue<MessageToClient> frameQueue;
+    public static MessageOfMap map;
+    public static Dictionary<Tuple<int, int>, MessageOfResource> resources;
+    public static MessageOfHome[] homes = new MessageOfHome[2];
+    public static MessageOfTeam[] teams = new MessageOfTeam[2];
+    public static MessageOfShip[] ships = new MessageOfShip[8];
+    public static Dictionary<long, MessageOfBullet> bullets;
+    public static Dictionary<long, MessageOfBombedBullet> bombedBullets;
+    public static List<MessageOfFactory> factories;
+    public static List<MessageOfCommunity> communities;
+    public static List<MessageOfFort> forts;
 }
