@@ -441,6 +441,20 @@ namespace Preparation.Utility
                 return v - previousV;
             }))!;
         }
+        public T SubVLimitedByAddingOtherRChange<TA>(T value, InVariableRange<TA> other, double speed = 1.0) where TA : IConvertible, IComparable<TA>, INumber<TA>
+        {
+            return EnterOtherLock<T>(other, () => WriteNeed(() =>
+            {
+                T previousV = v;
+                T otherValue = T.CreateChecked(other.GetDifference().ToDouble(null) * speed);
+                value = value > otherValue ? otherValue : value;
+                if (v < value)
+                    return -T.One;
+                v -= value;
+                other.AddPositiveVRChange(TA.CreateChecked(value.ToDouble(null) / speed));
+                return value;
+            }))!;
+        }
         public T SubRChange<TA>(InVariableRange<TA> a) where TA : IConvertible, IComparable<TA>, IComparable<int>, INumber<TA>
         {
             return EnterOtherLock<T>(a, () => WriteNeed(() =>
