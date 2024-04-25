@@ -242,7 +242,7 @@ namespace installer.Model
         protected void LogDate()
         {
             mutex.WaitOne();
-            using var writer = new StreamWriter(path, Encoding.UTF8, new FileStreamOptions()
+            var writer = new StreamWriter(path, Encoding.UTF8, new FileStreamOptions()
             {
                 Mode = FileMode.Append,
                 Access = FileAccess.Write
@@ -252,6 +252,7 @@ namespace installer.Model
                 time = DateTime.Now;
                 writer.WriteLine($"\nLogged on {time:yyyy-MM-dd}\n");
             }
+            writer.Dispose();
             mutex.ReleaseMutex();
         }
         protected override void Log(LogLevel logLevel, int eventId, string message)
@@ -340,16 +341,32 @@ namespace installer.Model
     }
     public class ListLogger : Logger
     {
+        protected ConcurrentQueue<LogRecord> Queue = new ConcurrentQueue<LogRecord>();
         public ObservableCollection<LogRecord> List = new ObservableCollection<LogRecord>();
         public override DateTime LastRecordTime => DateTime.Now;
+        private Timer timer;
+        private DateTime time;
+        private int ind;
+        public ListLogger()
+        {
+            ind = 0;
+            timer = new Timer(_ =>
+            {
+                for (int i = ind; i < Queue.Count; i++)
+                {
+                    List.Add(Queue.ElementAt(i));
+                }
+                ind = Queue.Count;
+            }, null, 0, 100);
+        }
         protected override void Log(LogLevel logLevel, int eventId, string message)
         {
-            List.Add(new LogRecord { Level = logLevel, Message = message });
+            Queue.Enqueue(new LogRecord { Level = logLevel, Message = message });
             base.Log(logLevel, eventId, message);
         }
         protected override void Log(LogLevel logLevel, string message)
         {
-            List.Add(new LogRecord { Level = logLevel, Message = message });
+            Queue.Enqueue(new LogRecord { Level = logLevel, Message = message });
             base.Log(logLevel, message);
         }
     }

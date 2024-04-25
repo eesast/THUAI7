@@ -57,7 +57,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="PlaybackClient.cs~RF5b18a5f.TMP" />
 	  <None Remove="View\uhlobqco.ueo~" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Include="..\..\installer\Data\ConfigFileData.cs" Link="Interact\ConfigFileData.cs" />
+	  <Compile Include="..\..\installer\Model\Logger.cs" Link="Interact\Logger.cs" />
 	</ItemGroup>
 
 
@@ -75,12 +81,12 @@
 
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.20" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="SkiaSharp" Version="2.88.7" />
+		<PackageReference Include="SkiaSharp" Version="2.88.8" />
 
 		<PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
 		
-		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.7" />
-		<PackageReference Include="SkiaSharp.Views.Maui.Core" Version="2.88.7" />
+		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.8" />
+		<PackageReference Include="SkiaSharp.Views.Maui.Core" Version="2.88.8" />
 		
 	</ItemGroup>
 

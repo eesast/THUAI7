@@ -125,17 +125,17 @@ namespace Client.ViewModel
         //{
         //    lock (drawPicLock)
         //    {
-        //        System.Diagnostics.Debug.WriteLine(String.Format("Draw--cou:{0}, coud{1}", cou, Countdow));
+        //        myLogger.LogInfo(String.Format("Draw--cou:{0}, coud{1}", cou, Countdow));
 
-        //        System.Diagnostics.Debug.WriteLine("Draw");
+        //        myLogger.LogInfo("Draw");
         //        canvas.FillColor = Colors.Red;
 
         //        // 绘制小球
         //        ballx = ballx_receive;
         //        bally = bally_receive;
         //        canvas.FillEllipse(ballx, bally, 20, 20);
-        //        System.Diagnostics.Debug.WriteLine(String.Format("============= Draw: ballX:{0}, ballY:{1} ================", ballx, bally));
-        //        System.Diagnostics.Debug.WriteLine(String.Format("============= Draw Receive: ballX:{0}, ballY:{1} ================", ballx_receive, bally_receive));
+        //        myLogger.LogInfo(String.Format("============= Draw: ballX:{0}, ballY:{1} ================", ballx, bally));
+        //        myLogger.LogInfo(String.Format("============= Draw Receive: ballX:{0}, ballY:{1} ================", ballx_receive, bally_receive));
 
         //        DrawBullet(new MessageOfBullet
         //        {
@@ -263,38 +263,41 @@ namespace Client.ViewModel
         {
             for (int i = 0; i < ShipCircList.Count; i++)
             {
-                ShipCircList[i].Color = Colors.Transparent;
+                //ShipCircList[i].Color = Colors.Transparent;
+                ShipCircList[i].X = 51;
+                ShipCircList[i].Y = 51;
                 ShipCircList[i].Text = "";
             }
-            System.Diagnostics.Debug.WriteLine(String.Format("listOfShip.Count:{0}", listOfShip.Count));
-            System.Diagnostics.Debug.WriteLine(String.Format("ShipCircList.Count:{0}", ShipCircList.Count));
+            myLogger.LogInfo(String.Format("listOfShip.Count:{0}", listOfShip.Count));
+            myLogger.LogInfo(String.Format("ShipCircList.Count:{0}", ShipCircList.Count));
             for (int i = 0; i < listOfShip.Count; i++)
             {
                 MessageOfShip data = listOfShip[i];
-                DrawCircLabel shipinfo = ShipCircList[i];
+                //DrawCircLabel shipinfo = ShipCircList[i];
                 PointF point = UtilFunctions.Grid2CellPoint(data.X, data.Y);
-                shipinfo.X = point.X;
-                shipinfo.Y = point.Y;
-                System.Diagnostics.Debug.WriteLine(String.Format("shipinfo.X:{0}", shipinfo.X));
-                System.Diagnostics.Debug.WriteLine(String.Format("shipinfo.Y:{0}", shipinfo.Y));
+                ShipCircList[i].X = point.X;
+                ShipCircList[i].Y = point.Y;
+                myLogger.LogInfo(String.Format("shipinfo.X:{0}", ShipCircList[i].X));
+                myLogger.LogInfo(String.Format("shipinfo.Y:{0}", ShipCircList[i].Y));
                 long team_id = data.TeamId;
+                myLogger.LogInfo(String.Format("shipTeamid{0}", team_id));
                 switch (team_id)
                 {
                     case 0:
-                        System.Diagnostics.Debug.WriteLine("shipinfo.color = red");
-                        shipinfo.Color = Colors.DarkRed;
+                        myLogger.LogInfo("shipinfo.color = red");
+                        ShipCircList[i].Color = Colors.DarkRed;
                         break;
 
                     case 1:
-                        System.Diagnostics.Debug.WriteLine("shipinfo.color = blue");
+                        myLogger.LogInfo("shipinfo.color = blue");
 
-                        shipinfo.Color = Colors.DarkBlue;
+                        ShipCircList[i].Color = Colors.DarkBlue;
                         break;
 
                     default:
-                        System.Diagnostics.Debug.WriteLine("shipinfo.color = black");
+                        myLogger.LogInfo("shipinfo.color = black");
 
-                        shipinfo.Color = Colors.DarkGreen;
+                        ShipCircList[i].Color = Colors.DarkGreen;
                         break;
                 }
                 //shipinfo.Radius = 4.5F;
@@ -302,16 +305,12 @@ namespace Client.ViewModel
                 //shipinfo.TextColor = Colors.White;
                 //ShipCircList.Add(shipinfo);
             }
-            //shipCircList.Add(
-            //    new DrawCircLabel
-            //    {
-            //        Radius = 4.5F,
-            //        Color = Colors.Purple,
-            //        Text = "100",
-            //        FontSize = 5.5F,
-            //        TextColor = Colors.White
-            //    }
-            //);
+            //for (int i = 0; i < ShipCircList.Count; i++)
+            //{
+            //    myLogger.LogInfo(String.Format("DrawnShip{0}.X:{1}", i, ShipCircList[i].X));
+            //    myLogger.LogInfo(String.Format("DrawnShip{0}.Y:{1}", i, ShipCircList[i].Y));
+            //    myLogger.LogInfo(String.Format("DrawnShip{0}.Color:{1}", i, ShipCircList[i].Color));
+            //}
         }
 
         private void DrawBullet()
@@ -323,8 +322,8 @@ namespace Client.ViewModel
                 BulletCircList[i].Y = 51;
                 BulletCircList[i].Text = "";
             }
-            System.Diagnostics.Debug.WriteLine(String.Format("listOfBullet.Count:{0}", listOfBullet.Count));
-            System.Diagnostics.Debug.WriteLine(String.Format("BulletCircList.Count:{0}", BulletCircList.Count));
+            myLogger.LogInfo(String.Format("listOfBullet.Count:{0}", listOfBullet.Count));
+            myLogger.LogInfo(String.Format("BulletCircList.Count:{0}", BulletCircList.Count));
             for (int i = 0; i < listOfBullet.Count; i++)
             {
                 MessageOfBullet data = listOfBullet[i];
@@ -333,23 +332,23 @@ namespace Client.ViewModel
                 bulletinfo.X = point.X;
                 bulletinfo.Y = point.Y;
                 long team_id = data.TeamId;
-                System.Diagnostics.Debug.WriteLine(String.Format("bulletinfo.X:{0}", bulletinfo.X));
-                System.Diagnostics.Debug.WriteLine(String.Format("bulletinfo.Y:{0}", bulletinfo.Y));
-                //System.Diagnostics.Debug.WriteLine(String.Format("Bullet{0}.Teamid:{1}", i, data.TeamId));
+                myLogger.LogInfo(String.Format("bulletinfo.X:{0}", bulletinfo.X));
+                myLogger.LogInfo(String.Format("bulletinfo.Y:{0}", bulletinfo.Y));
+                //myLogger.LogInfo(String.Format("Bullet{0}.Teamid:{1}", i, data.TeamId));
                 switch (team_id)
                 {
                     case 0:
-                        System.Diagnostics.Debug.WriteLine("bulletinfo.color = red");
+                        myLogger.LogInfo("bulletinfo.color = red");
                         bulletinfo.Color = Colors.DarkRed;
                         break;
 
                     case 1:
-                        System.Diagnostics.Debug.WriteLine("bulletinfo.color = blue");
+                        myLogger.LogInfo("bulletinfo.color = blue");
                         bulletinfo.Color = Colors.DarkBlue;
                         break;
 
                     default:
-                        System.Diagnostics.Debug.WriteLine("bulletinfo.color = black");
+                        myLogger.LogInfo("bulletinfo.color = black");
                         bulletinfo.Color = Colors.DarkGreen;
                         break;
                 }
@@ -541,7 +540,7 @@ namespace Client.ViewModel
             int hp = data.Hp;
             long team_id = data.TeamId;
             int index = UtilFunctions.getCellIndex(x, y);
-            System.Diagnostics.Debug.WriteLine(String.Format("Draw Home index: {0}", index));
+            myLogger.LogInfo(String.Format("Draw Home index: {0}", index));
 
             MapPatchesList[index].Text = Convert.ToString(hp);
             switch (team_id)
@@ -654,13 +653,26 @@ namespace Client.ViewModel
 
         private void DrawWormHole(MessageOfWormhole data)
         {
-            //int x = data.X;
-            //int y = data.Y;
+            int x = data.X;
+            int y = data.Y;
             int hp = data.Hp;
-            int index = data.Id;
+            int index = UtilFunctions.getGridIndex(x, y);
             MapPatchesList[index].Text = Convert.ToString(hp);
             MapPatchesList[index].PatchColor = PatchColorDict[MapPatchType.WormHole];
             MapPatchesList[index].TextColor = Colors.White;
+            int id = data.Id;
+            switch (id)
+            {
+                case 0:
+                    WormHole1HP = hp;
+                    break;
+                case 1:
+                    WormHole2HP = hp;
+                    break;
+                case 2:
+                    WormHole3HP = hp;
+                    break;
+            }
         }
 
         private void DrawResource(MessageOfResource data)

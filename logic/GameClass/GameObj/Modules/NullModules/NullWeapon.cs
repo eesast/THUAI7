@@ -8,5 +8,6 @@ public class NullWeapon : IWeapon
     public static NullWeapon Instance { get; } = new();
     public BulletType BulletType => BulletType.Null;
     public int Cost => 0;
+    public WeaponType WeaponModuleType => WeaponType.Null;
     private NullWeapon() { }
 }

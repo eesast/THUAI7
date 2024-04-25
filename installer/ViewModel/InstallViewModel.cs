@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Maui.Storage;
 using installer.Model;
+using installer.Services;
 
 namespace installer.ViewModel
 {
@@ -17,19 +18,35 @@ namespace installer.ViewModel
     {
         private readonly Downloader Downloader;
         private readonly IFolderPicker FolderPicker;
-        public ObservableCollection<LogRecord> LogCollection { get => Downloader.LogList.List; }
+        public ObservableCollection<LogRecord> LogCollection { get => Log.List; }
+
+        private Timer timer;
+        protected ListLogger Log = new ListLogger();
 
         public InstallViewModel(IFolderPicker folderPicker, Downloader downloader)
         {
             Downloader = downloader;
             FolderPicker = folderPicker;
 
-            downloadPath = Downloader.Data.Config.InstallPath;
+            DownloadPath = Downloader.Data.Config.InstallPath;
+            Installed = Downloader.Data.Installed;
 
-            BrowseBtnClickedCommand = new AsyncRelayCommand(BrowseBtnClicked);
+            timer = new Timer((_) =>
+            {
+                ProgressReport(null, new EventArgs());
+            }, null, 0, 500);
+
+            Downloader.Cloud.Log.Partner.Add(Log);
+            Downloader.Data.Log.Partner.Add(Log);
+
+            Installed = Downloader.Data.Installed;
+            DownloadPath = Downloader.Data.Config.InstallPath;
+            BrowseBtnClickedCommand = new RelayCommand(BrowseBtnClicked);
             CheckUpdBtnClickedCommand = new RelayCommand(CheckUpdBtnClicked);
-            DownloadBtnClickedCommand = new AsyncRelayCommand(DownloadBtnClicked);
-            UpdateBtnClickedCommand = new AsyncRelayCommand(UpdateBtnClicked);
+            DownloadBtnClickedCommand = new RelayCommand(DownloadBtnClicked);
+            UpdateBtnClickedCommand = new RelayCommand(UpdateBtnClicked);
+
+            Downloader.CloudReport.PropertyChanged += ProgressReport;
         }
 
         private string? debugAlert;
@@ -67,26 +84,93 @@ namespace installer.ViewModel
             set
             {
                 installed = value;
+                DownloadBtnText = value ? "移动" : "下载";
                 OnPropertyChanged();
             }
         }
 
-        public double NumProgress
+
+        #region 进度报告区
+        private double numPro = 0;
+        public double NumPro
         {
-            get
+            get => numPro;
+            set
             {
-                if (Downloader.CloudReport.Count == 0)
-                    return 1;
-                return Downloader.CloudReport.ComCount / Downloader.CloudReport.Count;
+                numPro = value;
+                OnPropertyChanged();
             }
         }
-        public double FileProgress
+
+        private string numReport = string.Empty;
+        public string NumReport
         {
-            get
+            get => numReport;
+            set
             {
-                if (!Downloader.CloudReport.BigFileTraceEnabled)
-                    return 1;
-                return Downloader.CloudReport.Completed / Downloader.CloudReport.Total;
+                numReport = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double filePro = 0;
+        public double FilePro
+        {
+            get => filePro;
+            set
+            {
+                filePro = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string fileReport = string.Empty;
+        public string FileReport
+        {
+            get => fileReport;
+            set
+            {
+                fileReport = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool bigFileProEnabled = false;
+        public bool BigFileProEnabled
+        {
+            get => bigFileProEnabled;
+            set
+            {
+                bigFileProEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private DateTime ProgressReportTime = DateTime.Now;
+        private void ProgressReport(object? sender, EventArgs e)
+        {
+            if ((DateTime.Now - ProgressReportTime).TotalMilliseconds <= 100)
+                return;
+            var r = Downloader.CloudReport;
+            NumPro = r.Count == 0 ? 1 : (double)r.ComCount / r.Count;
+            NumReport = $"{r.ComCount} / {r.Count}";
+            FilePro = r.Total == 0 ? 1 : (double)r.Completed / r.Total;
+            FileReport = $"{FileService.GetFileSizeReport(r.Completed)} / {FileService.GetFileSizeReport(r.Total)}";
+            BigFileProEnabled = r.BigFileTraceEnabled;
+            ProgressReportTime = DateTime.Now;
+        }
+        #endregion
+
+
+        #region 按钮
+        private string downloadBtnText;
+        public string DownloadBtnText
+        {
+            get => downloadBtnText;
+            set
+            {
+                downloadBtnText = value;
+                OnPropertyChanged();
             }
         }
 
@@ -96,7 +180,7 @@ namespace installer.ViewModel
             get => browseEnabled;
             set
             {
-                browseEnabled = Downloader.Data.Installed && value;
+                browseEnabled = value;
                 OnPropertyChanged();
             }
         }
@@ -106,7 +190,9 @@ namespace installer.ViewModel
             get => checkEnabled;
             set
             {
-                checkEnabled = value;
+                checkEnabled = value && Installed
+                    && !DownloadPath.EndsWith(':') && !DownloadPath.EndsWith('\\')
+                    && Directory.Exists(DownloadPath) && Local_Data.CountFile(DownloadPath) > 0; ;
                 OnPropertyChanged();
             }
         }
@@ -116,11 +202,12 @@ namespace installer.ViewModel
             get => downloadEnabled;
             set
             {
-                downloadEnabled = value;
+                downloadEnabled = value
+                    && !DownloadPath.EndsWith(':') && !DownloadPath.EndsWith('\\')
+                    && Directory.Exists(DownloadPath) && Local_Data.CountFile(DownloadPath) == 0;
                 OnPropertyChanged();
             }
         }
-
         private bool updateEnabled = false;
         public bool UpdateEnabled
         {
@@ -133,77 +220,91 @@ namespace installer.ViewModel
         }
 
         public ICommand BrowseBtnClickedCommand { get; }
-        private async Task BrowseBtnClicked()
+        private void BrowseBtnClicked()
         {
             // DebugAlert = "Browse Button Clicked";
             BrowseEnabled = false;
             CheckEnabled = false;
             DownloadEnabled = false;
             UpdateEnabled = false;
-            var result = await FolderPicker.PickAsync(DownloadPath);
-            if (result.IsSuccessful)
+            FolderPicker.PickAsync(DownloadPath).ContinueWith(result =>
             {
-                DownloadPath = result.Folder.Path;
-            }
-            else
-            {
-                DownloadPath = DownloadPath;
-            }
-            BrowseEnabled = true;
+                if (result.Result.IsSuccessful)
+                {
+                    DownloadPath = result.Result.Folder.Path;
+                }
+                else
+                {
+                    DownloadEnabled = true;
+                    CheckEnabled = true;
+                }
+                BrowseEnabled = true;
+            });
         }
         public ICommand CheckUpdBtnClickedCommand { get; }
-        private async void CheckUpdBtnClicked()
+        private void CheckUpdBtnClicked()
         {
             // DebugAlert = "Check Button Clicked";
             BrowseEnabled = false;
             CheckEnabled = false;
             DownloadEnabled = false;
             UpdateEnabled = false;
-            bool updated = await Task.Run(() => Downloader.CheckUpdate());
-            if (updated)
+            Downloader.CheckUpdateAsync().ContinueWith(r =>
             {
-                DebugAlert = "Need to update.";
-                UpdateEnabled = true;
-            }
-            else
-            {
-                DebugAlert = "Nothing to update.";
-                UpdateEnabled = false;
-            }
-            BrowseEnabled = true;
-            CheckEnabled = true;
+                var updated = r.Result;
+                if (updated)
+                {
+                    DebugAlert = "Need to update.";
+                    UpdateEnabled = true;
+                }
+                else
+                {
+                    DebugAlert = "Nothing to update.";
+                    UpdateEnabled = false;
+                }
+                BrowseEnabled = true;
+                CheckEnabled = true;
+            });
         }
         public ICommand DownloadBtnClickedCommand { get; }
-        private async Task DownloadBtnClicked()
+        private void DownloadBtnClicked()
         {
             // DebugAlert = "Download Button Clicked";
             BrowseEnabled = false;
             CheckEnabled = false;
             DownloadEnabled = false;
             UpdateEnabled = false;
-            if (Downloader.Data.Installed)
+            Task t;
+            if (Installed)
             {
-                await Task.Run(() => Downloader.ResetInstallPath(DownloadPath));
+                t = Downloader.ResetInstallPathAsync(DownloadPath);
             }
             else
             {
-                await Task.Run(() => Downloader.Install(DownloadPath));
+                t = Downloader.InstallAsync(DownloadPath);
             }
-            Installed = Downloader.Data.Installed;
-            CheckEnabled = true;
-            BrowseEnabled = true;
+            t.ContinueWith(_ =>
+            {
+                Installed = Downloader.Data.Installed;
+                BrowseEnabled = true;
+                CheckEnabled = true;
+            });
         }
         public ICommand UpdateBtnClickedCommand { get; }
-        private async Task UpdateBtnClicked()
+        private void UpdateBtnClicked()
         {
             // DebugAlert = "Update Button Clicked";
             BrowseEnabled = false;
             CheckEnabled = false;
             DownloadEnabled = false;
             UpdateEnabled = false;
-            await Task.Run(() => Downloader.Update());
-            CheckEnabled = true;
-            BrowseEnabled = true;
+
+            Downloader.UpdateAsync().ContinueWith(_ =>
+            {
+                BrowseEnabled = true;
+                CheckEnabled = true;
+            });
         }
+        #endregion
     }
 }

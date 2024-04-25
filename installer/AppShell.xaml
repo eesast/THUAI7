@@ -13,15 +13,24 @@
         <ShellContent
             Title="Install"
             ContentTemplate="{DataTemplate local:InstallPage}"/>
-        <ShellContent
-            Title="Launch"
-            ContentTemplate="{DataTemplate local:LaunchPage}"/>
+
+        <Tab
+            Title="Launch">
+            <ShellContent
+                Title="Debug"
+                ContentTemplate="{DataTemplate local:DebugPage}"/>
+            <ShellContent
+                Title="Playback"
+                ContentTemplate="{DataTemplate local:PlaybackPage}"/>
+        </Tab>
+
         <ShellContent
             Title="Login"
             ContentTemplate="{DataTemplate local:LoginPage}"/>
-        <ShellContent
+            
+        <!-- <ShellContent
             Title="Help"
-            ContentTemplate="{DataTemplate local:HelpPage}"/>
+            ContentTemplate="{DataTemplate local:HelpPage}"/> -->
 
     </FlyoutItem>
     

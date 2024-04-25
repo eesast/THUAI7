@@ -22,31 +22,23 @@ void AI::play(IShipAPI& api)
 {
     if (this->playerID == 1)
     {
-        api.Move(10, 2.1);
-        api.PrintSelfInfo();
-        api.Attack(1.1);
+        // player1的操作
     }
     else if (this->playerID == 2)
     {
-        api.Move(10, 2.1);
-        api.PrintSelfInfo();
+        // player2的操作
     }
-
     else if (this->playerID == 3)
     {
-        api.Move(10, 2.1);
-        api.PrintSelfInfo();
+        // player3的操作
     }
     else if (this->playerID == 4)
     {
-        api.Move(10, 2.1);
-        api.PrintSelfInfo();
+        // player4的操作
     }
 }
 
 void AI::play(ITeamAPI& api)  // 默认team playerID 为0
 {
-    api.PrintSelfInfo();
-    api.InstallModule(1, THUAI7::ModuleType::ModuleArcGun);
-    api.Recycle(1);
+    // player0的操作
 }

@@ -5,88 +5,103 @@
              x:Class="installer.Page.HelpPage"
              Title="Help">
 
-    <VerticalStackLayout
-        WidthRequest="600"
+    <ScrollView
+        WidthRequest="750"
+        HeightRequest="500"
         HorizontalOptions="Center">
+        <VerticalStackLayout>
+            
+            <Label
+                Text="Installer"
+                FontAttributes="Bold"
+                FontSize="24"/>
+            <Frame
+                BorderColor="Gray"
+                Padding="10"
+                Margin="5"
+                VerticalOptions="FillAndExpand"
+                WidthRequest="700">
+                <CollectionView
+                    ItemsSource="{Binding InstallerHelp}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <VerticalStackLayout>
+                                <Label 
+                                    Text="{Binding Title}"
+                                    FontSize="{Binding TitleSize}" />
+                                <Label
+                                    Text="{Binding Content}"
+                                    FontSize="{Binding ContentSize}"/>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Frame>
 
-        <Label/>
-        <Label/>
+            <Label
+                Text="Launcher"
+                FontAttributes="Bold"
+                FontSize="24"/>
+            <Frame
+                BorderColor="Gray"
+                Padding="10"
+                Margin="5"
+                VerticalOptions="FillAndExpand"
+                WidthRequest="700">
+                <CollectionView
+                    ItemsSource="{Binding LauncherHelp}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <VerticalStackLayout>
+                                <Label 
+                                    Text="{Binding Title}"
+                                    FontSize="{Binding TitleSize}" />
+                                <Label
+                                    Text="{Binding Content}"
+                                    FontSize="{Binding ContentSize}"/>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Frame>
 
-        <Label
-            Text="Installer"
-            FontAttributes="Bold"
-            FontSize="24"/>
-        <Frame
-            BorderColor="Gray"
-            Padding="10"
-            Margin="5"
-            VerticalOptions="FillAndExpand"
-            WidthRequest="600">
-            <CollectionView
-                ItemsSource="{Binding InstallerHelp}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Label
-                            Text="{Binding Content}"
-                            FontSize="{Binding FontSize}"/>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </Frame>
+            <Label
+                Text="Other"
+                FontAttributes="Bold"
+                FontSize="24"/>
+            <Frame
+                BorderColor="Gray"
+                Padding="10"
+                Margin="5"
+                VerticalOptions="FillAndExpand"
+                WidthRequest="700">
+                <CollectionView
+                    ItemsSource="{Binding OtherHelp}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <VerticalStackLayout>
+                                <Label 
+                                    Text="{Binding Title}"
+                                    FontSize="{Binding TitleSize}" />
+                                <Label
+                                    Text="{Binding Content}"
+                                    FontSize="{Binding ContentSize}"/>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Frame>
 
-        <Label
-            Text="Launcher"
-            FontAttributes="Bold"
-            FontSize="24"/>
-        <Frame
-            BorderColor="Gray"
-            Padding="10"
-            Margin="5"
-            VerticalOptions="FillAndExpand"
-            WidthRequest="600">
-            <CollectionView
-                ItemsSource="{Binding LauncherHelp}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Label
-                            Text="{Binding Content}"
-                            FontSize="{Binding FontSize}"/>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </Frame>
+            <Label/>
+            <Label/>
 
-        <Label
-            Text="Other"
-            FontAttributes="Bold"
-            FontSize="24"/>
-        <Frame
-            BorderColor="Gray"
-            Padding="10"
-            Margin="5"
-            VerticalOptions="FillAndExpand"
-            WidthRequest="600">
-            <CollectionView
-                ItemsSource="{Binding OtherHelp}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Label
-                            Text="{Binding Content}"
-                            FontSize="{Binding FontSize}"/>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </Frame>
+            <Label
+                Text="祝大家 Debug 快乐！"
+                FontAttributes="Bold"
+                FontSize="22"
+                HorizontalOptions="Center"/>
 
-        <Label/>
-        <Label/>
-        
-        <Label
-            Text="祝大家 Debug 快乐！"
-            FontAttributes="Bold"
-            FontSize="22"
-            HorizontalOptions="Center"/>
-
-    </VerticalStackLayout>
-
+        </VerticalStackLayout>
+    </ScrollView>
+    
 </ContentPage>

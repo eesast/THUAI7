@@ -330,7 +330,11 @@ class Logic(ILogic):
             )
 
             self.__LoadBufferSelf(message)
-            if self.__playerType==THUAI7.Ship and isinstance(self.__bufferState.self,None):
+            if (
+                self.__playerType == THUAI7.PlayerType.Ship
+                and self.__bufferState.self is None
+            ):
+                self.__logger.debug("exit for null self")
                 return
             for item in message.obj_message:
                 self.__LoadBufferCase(item)
@@ -352,7 +356,7 @@ class Logic(ILogic):
         if self.__playerType == THUAI7.PlayerType.Ship:
             for item in message.obj_message:
                 if item.WhichOneof("message_of_obj") == "ship_message":
-                    if item.ship_message.player_id == self.__playerID:
+                    if item.ship_message.player_id == self.__playerID and item.ship_message.team_id == self.__teamID:
                         self.__bufferState.self = Proto2THUAI7.Protobuf2THUAI7Ship(
                             item.ship_message
                         )
@@ -360,7 +364,7 @@ class Logic(ILogic):
                         self.__logger.debug("Load self ship")
         else:
             for item in message.obj_message:
-                if item.WhichOneof("message_of_obj") == "team_message":
+                if item.WhichOneof("message_of_obj") == "team_message" and item.team_message.team_id==self.__teamID:
                     self.__bufferState.self = Proto2THUAI7.Protobuf2THUAI7Team(
                         item.team_message
                     )
@@ -395,7 +399,7 @@ class Logic(ILogic):
                     self.__logger.debug("Load ship")
 
             elif item.WhichOneof("message_of_obj") == "bullet_message":
-                if AssistFunction.HaveView(
+                if item.bullet_message.team_id!=self.__teamID and AssistFunction.HaveView(
                     self.__bufferState.self.viewRange,
                     self.__bufferState.self.x,
                     self.__bufferState.self.y,
@@ -609,14 +613,19 @@ class Logic(ILogic):
             #         self.__bufferState.bombedBullets.append(Proto2THUAI7.Protobuf2THUAI7BombedBullet(item.bombed_bullet_message))
             #         self.__logger.debug('Add Bombed Bullet!')
 
-            else:
-                self.__logger.error("Unknown message!")
+            # else:
+            #     self.__logger.error("Unknown message!")
         elif self.__playerType == THUAI7.PlayerType.Team:
 
             def HaveOverView(targetX: int, targetY: int):
                 for ship in self.__bufferState.ships:
                     if AssistFunction.HaveView(
-                        ship.viewRange, ship.x, ship.y, targetX, targetY, self.__bufferState.gameMap
+                        ship.viewRange,
+                        ship.x,
+                        ship.y,
+                        targetX,
+                        targetY,
+                        self.__bufferState.gameMap,
                     ):
                         return True
                 return False
@@ -788,8 +797,8 @@ class Logic(ILogic):
             #         self.__bufferState.bombedBullets.append(Proto2THUAI7.Protobuf2THUAI7BombedBullet(item.bombed_bullet_message))
             #         self.__logger.debug('Add Bombed Bullet!')
 
-            else:
-                self.__logger.error("Unknown message!")
+            # else:
+            #     self.__logger.error("Unknown message!")
 
     def __UnBlockAI(self) -> None:
         with self.__cvAI:

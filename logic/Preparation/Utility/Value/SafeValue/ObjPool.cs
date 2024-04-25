@@ -89,7 +89,7 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
         lock (dictLock)
         {
             if (CheckEmpty(tp) || GetIdleNum(tp) == 0) return null;
-            var ret = Find(idleChecker);
+            var ret = Find(tp, idleChecker);
             if (ret is null) return null;
             activator(ret);
             return ret;
