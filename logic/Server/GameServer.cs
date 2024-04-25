@@ -156,7 +156,7 @@ namespace Server
                             currentNews.Clear();
                         }
                         currentGameInfo.GameState = gameState;
-                        currentGameInfo.AllMessage = GetMessageOfAll(game.GameMap.Timer.nowTime());
+                        currentGameInfo.AllMessage = GetMessageOfAll(game.GameMap.Timer.NowTime());
                         mwr?.WriteOne(currentGameInfo);
                         break;
                     default:

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 #pragma warning disable CA1416
 
@@ -52,9 +47,9 @@ namespace installer.Model
     public abstract class Logger : IDisposable
     {
         private int jobID = 0;
-        public List<Logger> Partner = new List<Logger>();
+        public List<Logger> Partner = [];
         public string PartnerInfo = string.Empty;
-        public Dictionary<LogLevel, int> CountDict = new Dictionary<LogLevel, int>
+        public Dictionary<LogLevel, int> CountDict = new()
         {
             { LogLevel.Trace, 0 }, { LogLevel.Debug, 1 },
             { LogLevel.Information, 2 }, { LogLevel.Warning, 3 },
@@ -202,7 +197,7 @@ namespace installer.Model
     {
         private DateTime time = DateTime.MinValue;
         private string path;
-        private Mutex mutex = new Mutex();
+        private readonly Mutex mutex = new();
         public string Path
         {
             get => path; set
@@ -341,8 +336,8 @@ namespace installer.Model
     }
     public class ListLogger : Logger
     {
-        protected ConcurrentQueue<LogRecord> Queue = new ConcurrentQueue<LogRecord>();
-        public ObservableCollection<LogRecord> List = new ObservableCollection<LogRecord>();
+        protected ConcurrentQueue<LogRecord> Queue = new();
+        public ObservableCollection<LogRecord> List = [];
         public override DateTime LastRecordTime => DateTime.Now;
         private Timer timer;
         private DateTime time;

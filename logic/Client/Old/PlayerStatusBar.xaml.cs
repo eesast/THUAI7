@@ -1,4 +1,3 @@
-using System;
 using Client.Util;
 using Protobuf;
 
@@ -12,9 +11,9 @@ namespace Client
             Red,    //the down player
             Blue    //the up player
         };
-        PlayerRole myRole;
+        readonly PlayerRole myRole;
         private double lengthOfHpSlide = 240;
-        List<ShipLabel> shipLabels = new List<ShipLabel>();
+        readonly List<ShipLabel> shipLabels = [];
         public PlayerStatusBar(Grid parent, int Row, int Column, int role)
         {
             InitializeComponent();
@@ -116,7 +115,7 @@ namespace Client
         {
             if (ship.TeamId == (long)PlayerTeam.Red && myRole == PlayerRole.Red || ship.TeamId == (long)PlayerTeam.Blue && myRole == PlayerRole.Blue)
             {
-                ShipLabel shipLabel = new ShipLabel();
+                ShipLabel shipLabel = new();
                 shipLabel.name.Text = ship.ShipType.ToString() + ship.PlayerId.ToString();
                 shipLabel.producer.Text = ship.ProducerType.ToString();
                 shipLabel.armor.Text = ship.ArmorType.ToString();
@@ -140,15 +139,15 @@ namespace Client
     }
     public class ShipLabel
     {
-        public Label name = new Label() { Text = "name" };
-        public Label producer = new Label() { Text = "producer" };
-        public Label constructor = new Label() { Text = "constructor" };
-        public Label armor = new Label() { Text = "armor" };
-        public Label shield = new Label() { Text = "shield" };
-        public Label weapon = new Label() { Text = "weapon" };
-        public Label status = new Label() { Text = "IDLE" };
+        public Label name = new() { Text = "name" };
+        public Label producer = new() { Text = "producer" };
+        public Label constructor = new() { Text = "constructor" };
+        public Label armor = new() { Text = "armor" };
+        public Label shield = new() { Text = "shield" };
+        public Label weapon = new() { Text = "weapon" };
+        public Label status = new() { Text = "IDLE" };
         public double lengthOfShipHpSlide = 80;
-        public BoxView hpSlide = new BoxView() { Color = Colors.Red, WidthRequest = 80, HeightRequest = 3, HorizontalOptions = LayoutOptions.Start, VerticalOptions = LayoutOptions.End };
-        public Grid shipStatusGrid = new Grid();
+        public BoxView hpSlide = new() { Color = Colors.Red, WidthRequest = 80, HeightRequest = 3, HorizontalOptions = LayoutOptions.Start, VerticalOptions = LayoutOptions.End };
+        public Grid shipStatusGrid = new();
     };
 }

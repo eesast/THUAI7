@@ -25,7 +25,7 @@ namespace Client
     {
         private bool UIinitiated = false;
 
-        GeneralViewModel viewModel;
+        readonly GeneralViewModel viewModel;
         public MainPage()
         {
             viewModel = new GeneralViewModel();
@@ -113,9 +113,9 @@ namespace Client
             //InitiateObjects();
             UIinitiated = true;
         }
-        private Label[,] mapPatches_ = new Label[50, 50];
-        private List<CircleLabel> shipCirc = new List<CircleLabel>();
-        private List<CircleLabel> bulletCirc = new List<CircleLabel>();
+        private readonly Label[,] mapPatches_ = new Label[50, 50];
+        private readonly List<CircleLabel> shipCirc = [];
+        private readonly List<CircleLabel> bulletCirc = [];
         private readonly IDispatcherTimer timer;
         private long counter;
         public float unitWidth = 10;
