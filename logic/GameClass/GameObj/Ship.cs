@@ -4,9 +4,9 @@ using GameClass.GameObj.Occupations;
 using Preparation.Interface;
 using Preparation.Utility;
 using Preparation.Utility.Value;
-using Preparation.Utility.Value.SafeValue;
 using Preparation.Utility.Value.SafeValue.Atomic;
 using Preparation.Utility.Value.SafeValue.LockedValue;
+using Preparation.Utility.Value.SafeValue.TimeBased;
 
 namespace GameClass.GameObj;
 

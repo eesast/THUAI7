@@ -2,7 +2,7 @@
 using System;
 using System.Threading;
 
-namespace Preparation.Utility.Value.SafeValue
+namespace Preparation.Utility.Value.SafeValue.TimeBased
 {
     //其对应属性不应当有set访问器，避免不安全的=赋值
 

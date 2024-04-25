@@ -1,6 +1,6 @@
 ﻿using Preparation.Utility;
-using Preparation.Utility.Value.SafeValue;
 using Preparation.Utility.Value.SafeValue.LockedValue;
+using Preparation.Utility.Value.SafeValue.TimeBased;
 
 namespace Preparation.Interface
 {
