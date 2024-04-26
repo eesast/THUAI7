@@ -276,11 +276,11 @@ namespace installer.Model
                     writer.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}, {eventId}] Warning: {message}");
                     break;
                 case LogLevel.Error:
-                    writer.WriteLine("\nError happens!");
+                    writer.WriteLine("\nError occurred!");
                     writer.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}, {eventId}] Error: {message}\n");
                     break;
                 case LogLevel.Critical:
-                    writer.WriteLine("\nCritical error happens!");
+                    writer.WriteLine("\nCritical error occurred!");
                     writer.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}, {eventId}] Critical: {message}\n");
                     break;
                 default:
@@ -318,11 +318,11 @@ namespace installer.Model
                     writer.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}, ~] Warning: {message}");
                     break;
                 case LogLevel.Error:
-                    writer.WriteLine("\nError happens!");
+                    writer.WriteLine("\nError occurred!");
                     writer.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}, ~] Error: {message}\n");
                     break;
                 case LogLevel.Critical:
-                    writer.WriteLine("\nCritical error happens!");
+                    writer.WriteLine("\nCritical error occurred!");
                     writer.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}, ~] Critical: {message}\n");
                     break;
                 default:
