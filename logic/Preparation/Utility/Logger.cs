@@ -26,32 +26,37 @@ public class LogQueue
 
     private LogQueue()
     {
+        void WriteInFile()
+        {
+            lock (queueLock)
+            {
+                while (logInfoQueue.Count != 0)
+                {
+                    var info = logInfoQueue.Dequeue();
+                    File.AppendAllText(LoggingData.ServerLogPath, info + Environment.NewLine);
+                    logNum++;
+                    if (logNum >= LoggingData.MaxLogNum)
+                    {
+                        File.Copy(LoggingData.ServerLogPath,
+                                  $"{LoggingData.ServerLogPath}-copy{logCopyNum}.txt");
+                        logCopyNum++;
+                        File.Delete(LoggingData.ServerLogPath);
+                        logNum = 0;
+                    }
+                }
+            }
+        }
         new Thread(() =>
         {
             new FrameRateTaskExecutor<int>(
                 loopCondition: () => Global != null,
-                loopToDo: () =>
+                loopToDo: WriteInFile,
+                timeInterval: 100,
+                finallyReturn: () =>
                 {
-                    lock (queueLock)
-                    {
-                        while (logInfoQueue.Count != 0)
-                        {
-                            var info = logInfoQueue.Dequeue();
-                            File.AppendAllText(LoggingData.ServerLogPath, info + Environment.NewLine);
-                            logNum++;
-                            if (logNum >= LoggingData.MaxLogNum)
-                            {
-                                File.Copy(LoggingData.ServerLogPath,
-                                          $"{LoggingData.ServerLogPath}-copy{logCopyNum}.txt");
-                                logCopyNum++;
-                                File.Delete(LoggingData.ServerLogPath);
-                                logNum = 0;
-                            }
-                        }
-                    }
-                },
-                timeInterval: 200,
-                finallyReturn: () => 0
+                    WriteInFile();
+                    return 0;
+                }
                 ).Start();
         })
         { IsBackground = true }.Start();
@@ -61,23 +66,48 @@ public class LogQueue
 public class Logger(string module)
 {
     public readonly string Module = module;
+    public bool Enable { get; set; } = true;
+    public bool Background { get; set; } = false;
 
     public void ConsoleLog(string msg, bool Duplicate = true)
     {
         var info = $"[{Module}]{msg}";
-        Console.WriteLine(info);
-        if (Duplicate)
-            _ = LogQueue.Global.Commit(info);
+        if (Enable)
+        {
+            if (!Background)
+                Console.WriteLine(info);
+            if (Duplicate)
+                _ = LogQueue.Global.Commit(info);
+        }
     }
     public void ConsoleLogDebug(string msg, bool Duplicate = true)
     {
 #if DEBUG
         var info = $"[{Module}]{msg}";
-        Console.WriteLine(info);
-        if (Duplicate)
-            _ = LogQueue.Global.Commit(info);
+        if (Enable)
+        {
+            if (!Background)
+                Console.WriteLine(info);
+            if (Duplicate)
+                _ = LogQueue.Global.Commit(info);
+        }
 #endif
     }
+    public static void RawConsoleLog(string msg, bool Duplicate = true)
+    {
+        Console.WriteLine(msg);
+        if (Duplicate)
+            _ = LogQueue.Global.Commit(msg);
+    }
+    public static void RawConsoleLogDebug(string msg, bool Duplicate = true)
+    {
+#if DEBUG
+        Console.WriteLine(msg);
+        if (Duplicate)
+            _ = LogQueue.Global.Commit(msg);
+#endif
+    }
+
     public static string TypeName(object obj)
         => obj.GetType().Name;
     public static string TypeName(Type tp)
