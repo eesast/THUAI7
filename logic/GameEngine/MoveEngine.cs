@@ -216,14 +216,11 @@ namespace GameEngine
                                 MaxTolerantTimeExceedCount = ulong.MaxValue,
                                 TimeExceedAction = b =>
                                 {
-                                    if (b)
-                                        Console.WriteLine("Fatal Error: The computer runs so slow that the object cannot finish moving during this time!!!!!!");
-#if DEBUG
-                                    else
-                                    {
-                                        Console.WriteLine("Debug info: Object moving time exceed for once.");
-                                    }
-#endif
+                                    if (b) GameEngineLogging.logger.ConsoleLog(
+                                            "Fatal Error: The computer runs so slow that " +
+                                            "the object cannot finish moving during this time!!!!!!");
+                                    else GameEngineLogging.logger.ConsoleLogDebug(
+                                            "Debug info: Object moving time exceed for once");
                                 }
                             }.Start();
                             if (!isEnded && obj.StateNum == stateNum && obj.CanMove && !obj.IsRemoved)
