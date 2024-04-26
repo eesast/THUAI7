@@ -14,19 +14,20 @@ public class RenderManager : SingletonMono<RenderManager>
     // Update is called once per frame
     void Update()
     {
-
+        DealFrame(CoreParam.frameQueue.GetValue(0));
+        ShowFrame();
     }
-    void ShowFrame(MessageToClient info)
+    void DealFrame(MessageToClient info)
     {
         if (info.GameState == GameState.GameRunning)
         {
             foreach (MessageOfObj obj in info.ObjMessage)
             {
-                ShowObj(obj);
+                DealObj(obj);
             }
         }
     }
-    void ShowObj(MessageOfObj obj)
+    void DealObj(MessageOfObj obj)
     {
         switch (obj.MessageOfObjCase)
         {
@@ -34,6 +35,7 @@ public class RenderManager : SingletonMono<RenderManager>
                 CoreParam.map = obj.MapMessage;
                 break;
             case MessageOfObj.MessageOfObjOneofCase.ShipMessage:
+                Debug.Log("receive shipmessage" + obj.ShipMessage);
                 CoreParam.ships[obj.ShipMessage.TeamId * 4 + obj.ShipMessage.PlayerId] = obj.ShipMessage;
                 break;
             case MessageOfObj.MessageOfObjOneofCase.BulletMessage:
@@ -63,6 +65,15 @@ public class RenderManager : SingletonMono<RenderManager>
                 break;
             default:
                 break;
+        }
+    }
+    void ShowFrame()
+    {
+        if (!CoreParam.initialized)
+        {
+            ShowShip(CoreParam.ships);
+            ShowMap(CoreParam.map);
+            CoreParam.initialized = true;
         }
     }
     void ShowMap(MessageOfMap map)
@@ -96,7 +107,16 @@ public class RenderManager : SingletonMono<RenderManager>
             }
         }
     }
-    void ShowShip(MessageOfShip ship)
+    void ShowShip(MessageOfShip[] ships)
     {
+        foreach (MessageOfShip ship in ships)
+        {
+            Debug.Log(ship);
+            if (!CoreParam.shipsG[ship.TeamId * 4 + ship.PlayerId])
+            {
+                CoreParam.shipsG[ship.TeamId * 4 + ship.PlayerId] = ObjCreater.GetInstance().CreateObj(ship.ShipType, new Vector2(ship.X, ship.Y));
+
+            }
+        }
     }
 }

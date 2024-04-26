@@ -14,6 +14,7 @@ public class UpdateManager : SingletonMono<UpdateManager>, IUpdateManager
     {
         // Debugger.GetInstance().text.text = jsonInfo;
         CoreParam.frameQueue.Add(JsonConvert.DeserializeObject<MessageToClient>(jsonInfo, jSetting));
+        Debug.Log(CoreParam.frameQueue.GetValue(0));
     }
     // Start is called before the first frame update
     void Start()

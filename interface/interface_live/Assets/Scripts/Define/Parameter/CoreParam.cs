@@ -29,15 +29,17 @@ public class CoreParam
             return valQueue[(tail + maxSize - index) % maxSize];
         }
     };
-    public static FrameQueue<MessageToClient> frameQueue;
+    public static FrameQueue<MessageToClient> frameQueue = new FrameQueue<MessageToClient>();
     public static MessageOfMap map;
     public static Dictionary<Tuple<int, int>, MessageOfResource> resources;
     public static MessageOfHome[] homes = new MessageOfHome[2];
     public static MessageOfTeam[] teams = new MessageOfTeam[2];
     public static MessageOfShip[] ships = new MessageOfShip[8];
+    public static GameObject[] shipsG = new GameObject[8];
     public static Dictionary<long, MessageOfBullet> bullets;
     public static Dictionary<long, MessageOfBombedBullet> bombedBullets;
     public static List<MessageOfFactory> factories;
     public static List<MessageOfCommunity> communities;
     public static List<MessageOfFort> forts;
+    public static bool initialized;
 }
