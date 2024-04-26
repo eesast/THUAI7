@@ -476,8 +476,5 @@ public class Ship : Movable, IShip
         ArmorModule.SetROri(ModuleFactory.FindIArmor(ShipType, ArmorType.Null));
         ShieldModule.SetROri(ModuleFactory.FindIShield(ShipType, ShieldType.Null));
         WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, weaponType));
-        ShipLogging.logger.ConsoleLogDebug(
-            ShipLogging.ShipLogInfo(this)
-            + "Ship created");
     }
 }

@@ -25,13 +25,15 @@ namespace Gaming
                 newShip.TeamID.SetROri(teamID);
                 newShip.PlayerID.SetROri(playerID);
                 ShipManagerLogging.logger.ConsoleLogDebug(
-                    "Added ship: " + newShip.ShipType + " with "
-                    + newShip.ProducerModuleType + ", "
-                    + newShip.ConstructorModuleType + ", "
-                    + newShip.ArmorModuleType + ", "
-                    + newShip.ShieldModuleType + ", "
-                    + newShip.WeaponModuleType
-                    );
+                    ShipLogging.ShipLogInfo(newShip)
+                    + " created");
+                ShipManagerLogging.logger.ConsoleLogDebug(
+                    $"Added ship: {newShip.ShipType} with "
+                    + $"{newShip.ProducerModuleType}, "
+                    + $"{newShip.ConstructorModuleType}, "
+                    + $"{newShip.ArmorModuleType}, "
+                    + $"{newShip.ShieldModuleType}, "
+                    + $"{newShip.WeaponModuleType}");
                 return newShip;
             }
             public static bool ActivateShip(Ship ship, XY pos)
@@ -44,20 +46,17 @@ namespace Gaming
                 ship.SetShipState(RunningStateType.Null, ShipStateType.Null);
                 ShipManagerLogging.logger.ConsoleLogDebug(
                     ShipLogging.ShipLogInfo(ship)
-                    + " is activated!"
-                    );
+                    + " is activated!");
                 return true;
             }
             public void BeAttacked(Ship ship, Bullet bullet)
             {
                 ShipManagerLogging.logger.ConsoleLogDebug(
                     ShipLogging.ShipLogInfo(ship)
-                    + " is attacked!"
-                    );
+                    + " is attacked!");
                 ShipManagerLogging.logger.ConsoleLogDebug(
                     Logger.TypeName(bullet)
-                    + $" 's AP is {bullet.AP}"
-                    );
+                    + $" 's AP is {bullet.AP}");
                 if (bullet!.Parent!.TeamID == ship.TeamID)
                 {
                     return;
@@ -68,24 +67,21 @@ namespace Gaming
                     ship.Shield.SubPositiveV((long)(subHP * bullet.ShieldModifier));
                     ShipManagerLogging.logger.ConsoleLogDebug(
                         ShipLogging.ShipLogInfo(ship)
-                        + $" 's shield is {ship.Shield}"
-                        );
+                        + $" 's shield is {ship.Shield}");
                 }
                 else if (ship.Armor > 0)
                 {
                     ship.Armor.SubPositiveV((long)(subHP * bullet.ArmorModifier));
                     ShipManagerLogging.logger.ConsoleLogDebug(
                         ShipLogging.ShipLogInfo(ship)
-                        + $" 's armor is {ship.Armor}"
-                        );
+                        + $" 's armor is {ship.Armor}");
                 }
                 else
                 {
                     ship.HP.SubPositiveV(subHP);
                     ShipManagerLogging.logger.ConsoleLogDebug(
                         ShipLogging.ShipLogInfo(ship)
-                        + $" 's HP is {ship.HP}"
-                        );
+                        + $" 's HP is {ship.HP}");
                 }
                 if (ship.HP == 0)
                 {

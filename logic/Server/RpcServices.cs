@@ -195,7 +195,8 @@ namespace Server
                         {
                             await responseStream.WriteAsync(currentGameInfo);
                             GameServerLogging.logger.ConsoleLog(
-                                $"Send to Player{request.PlayerId} from Team {request.TeamId}!");
+                                $"Send to Player{request.PlayerId} from Team {request.TeamId}!",
+                                false);
                         }
                     }
                     catch

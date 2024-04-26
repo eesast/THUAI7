@@ -26,7 +26,20 @@ public class LogQueue
 
     private LogQueue()
     {
-        void WriteInFile()
+        if (File.Exists(LoggingData.ServerLogPath))
+            File.Delete(LoggingData.ServerLogPath);
+        File.AppendAllText(LoggingData.ServerLogPath, $"[{Logger.NowDate()}]" + Environment.NewLine);
+        void LogCopy()
+        {
+            string copyPath = $"{LoggingData.ServerLogPath}-copy{logCopyNum}.txt";
+            if (File.Exists(copyPath))
+                File.Delete(copyPath);
+            File.Copy(LoggingData.ServerLogPath, copyPath);
+            logCopyNum++;
+            File.Delete(LoggingData.ServerLogPath);
+            logNum = 0;
+        }
+        void LogWrite()
         {
             lock (queueLock)
             {
@@ -36,13 +49,7 @@ public class LogQueue
                     File.AppendAllText(LoggingData.ServerLogPath, info + Environment.NewLine);
                     logNum++;
                     if (logNum >= LoggingData.MaxLogNum)
-                    {
-                        File.Copy(LoggingData.ServerLogPath,
-                                  $"{LoggingData.ServerLogPath}-copy{logCopyNum}.txt");
-                        logCopyNum++;
-                        File.Delete(LoggingData.ServerLogPath);
-                        logNum = 0;
-                    }
+                        LogCopy();
                 }
             }
         }
@@ -50,11 +57,12 @@ public class LogQueue
         {
             new FrameRateTaskExecutor<int>(
                 loopCondition: () => Global != null,
-                loopToDo: WriteInFile,
+                loopToDo: LogWrite,
                 timeInterval: 100,
                 finallyReturn: () =>
                 {
-                    WriteInFile();
+                    LogWrite();
+                    LogCopy();
                     return 0;
                 }
                 ).Start();
@@ -71,7 +79,7 @@ public class Logger(string module)
 
     public void ConsoleLog(string msg, bool Duplicate = true)
     {
-        var info = $"[{Module}]{msg}";
+        var info = $"[{NowTime()}][{Module}] {msg}";
         if (Enable)
         {
             if (!Background)
@@ -83,7 +91,7 @@ public class Logger(string module)
     public void ConsoleLogDebug(string msg, bool Duplicate = true)
     {
 #if DEBUG
-        var info = $"[{Module}]{msg}";
+        var info = $"[{NowTime()}][{Module}] {msg}";
         if (Enable)
         {
             if (!Background)
@@ -118,6 +126,17 @@ public class Logger(string module)
     public static string ObjInfo(Type tp, string msg = "")
         => msg == "" ? $"<{TypeName(tp)}>"
                      : $"<{TypeName(tp)} {msg}>";
+
+    public static string NowTime()
+    {
+        DateTime now = DateTime.Now;
+        return $"{now.Hour}:{now.Minute}:{now.Second}.{now.Millisecond:D3}";
+    }
+    public static string NowDate()
+    {
+        DateTime now = DateTime.Today;
+        return $"{now.Year}/{now.Month}/{now.Day} {now.DayOfWeek}";
+    }
 }
 
 public static class LoggingData
