@@ -926,7 +926,7 @@ void Logic::Main(CreateAIFunc createAI, std::string IP, std::string port, bool f
     fileLogger->set_pattern(pattern);
     printLogger->set_pattern(pattern);
     if (file)
-        fileLogger->set_level(spdlog::level::trace);
+        fileLogger->set_level(spdlog::level::debug);
     else
         fileLogger->set_level(spdlog::level::off);
     if (print)
@@ -936,10 +936,8 @@ void Logic::Main(CreateAIFunc createAI, std::string IP, std::string port, bool f
     if (warnOnly)
         printLogger->set_level(spdlog::level::warn);
     logger = std::make_unique<spdlog::logger>("logicLogger", spdlog::sinks_init_list{fileLogger, printLogger});
-    // TODO
-    // logger->flush_on(spdlog::level::warn);
-    logger->flush_on(spdlog::level::trace);
 
+    logger->flush_on(spdlog::level::warn);
     // 打印当前的调试信息
     logger->info("*********Basic Info*********");
     logger->info("asynchronous: {}", asynchronous);

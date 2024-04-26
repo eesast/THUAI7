@@ -26,12 +26,12 @@ namespace Constants
     struct Home
     {
         SCCI int32_t maxHp = 24000;
-        SCCI int32_t energySpeed = 1;
+        SCCI int32_t energySpeed = 100;
     };
     struct Factory
     {
         SCCI int32_t maxHp = 8000;
-        SCCI int32_t energySpeed = 3;
+        SCCI int32_t energySpeed = 300;
     };
     struct Community
     {
@@ -52,7 +52,7 @@ namespace Constants
         SCCI int32_t basicArmor = 0;
         SCCI int32_t basicShield = 0;
         SCCI int32_t Speed = 3000;
-        SCCI int32_t Cost = 40;
+        SCCI int32_t Cost = 4000;
     };
     struct MilitaryShip
     {
@@ -60,7 +60,7 @@ namespace Constants
         SCCI int32_t basicArmor = 400;
         SCCI int32_t basicShield = 400;
         SCCI int32_t Speed = 2800;
-        SCCI int32_t Cost = 120;
+        SCCI int32_t Cost = 12000;
     };
     struct FlagShip
     {
@@ -68,53 +68,53 @@ namespace Constants
         SCCI int32_t basicArmor = 800;
         SCCI int32_t basicShield = 800;
         SCCI int32_t Speed = 2700;
-        SCCI int32_t Cost = 500;
+        SCCI int32_t Cost = 50000;
     };
 
     // 模块
     struct Producer
     {
-        SCCI int32_t energySpeed1 = 5;
-        SCCI int32_t energySpeed2 = 7;
-        SCCI int32_t energySpeed3 = 10;
+        SCCI int32_t energySpeed1 = 100;
+        SCCI int32_t energySpeed2 = 200;
+        SCCI int32_t energySpeed3 = 300;
         SCCI int32_t Cost1 = 0;
-        SCCI int32_t Cost2 = 40;
-        SCCI int32_t Cost3 = 80;
+        SCCI int32_t Cost2 = 4000;
+        SCCI int32_t Cost3 = 8000;
     };
     struct Constructor
     {
-        SCCI int32_t constructSpeed1 = 500;
-        SCCI int32_t constructSpeed2 = 750;
-        SCCI int32_t constructSpeed3 = 1000;
+        SCCI int32_t constructSpeed1 = 300;
+        SCCI int32_t constructSpeed2 = 400;
+        SCCI int32_t constructSpeed3 = 500;
         SCCI int32_t Cost1 = 0;
-        SCCI int32_t Cost2 = 40;
-        SCCI int32_t Cost3 = 80;
+        SCCI int32_t Cost2 = 4000;
+        SCCI int32_t Cost3 = 8000;
     };
     struct Armor
     {
         SCCI int32_t armor1 = 2000;
         SCCI int32_t armor2 = 3000;
         SCCI int32_t armor3 = 4000;
-        SCCI int32_t Cost1 = 60;
-        SCCI int32_t Cost2 = 120;
-        SCCI int32_t Cost3 = 180;
+        SCCI int32_t Cost1 = 6000;
+        SCCI int32_t Cost2 = 12000;
+        SCCI int32_t Cost3 = 18000;
     };
     struct Shield
     {
         SCCI int32_t shield1 = 2000;
         SCCI int32_t shield2 = 3000;
         SCCI int32_t shield3 = 4000;
-        SCCI int32_t Cost1 = 60;
-        SCCI int32_t Cost2 = 120;
-        SCCI int32_t Cost3 = 180;
+        SCCI int32_t Cost1 = 6000;
+        SCCI int32_t Cost2 = 12000;
+        SCCI int32_t Cost3 = 18000;
     };
     struct Weapon
     {
         SCCI int32_t LaserCost = 0;
-        SCCI int32_t PlasmaCost = 120;
-        SCCI int32_t ShellCost = 130;
-        SCCI int32_t MissileCost = 180;
-        SCCI int32_t ArcCost = 240;
+        SCCI int32_t PlasmaCost = 12000;
+        SCCI int32_t ShellCost = 13000;
+        SCCI int32_t MissileCost = 18000;
+        SCCI int32_t ArcCost = 24000;
     };
 
     // 子弹
@@ -169,10 +169,5 @@ namespace Constants
         SCCI int32_t CastTime = 600;  // ms
         SCCI int32_t BackSwing = 600;
     };
-
-    // SCCI int32_t basicStudentAlertnessRadius = 15 * numOfGridPerCell;
-    // SCCI int32_t basicTrickerAlertnessRadius = 17 * numOfGridPerCell;
-    // SCCI int32_t basicStudentViewRange = 10 * numOfGridPerCell;
-    // SCCI int32_t basicTrickerViewRange = 13 * numOfGridPerCell;
 }  // namespace Constants
 #endif
