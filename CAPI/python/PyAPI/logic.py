@@ -242,13 +242,13 @@ class Logic(ILogic):
         self.__logger.debug("Called Construct")
         return self.__comm.Construct(constructionType, self.__playerID, self.__teamID)
 
-    def InstallModule(self, moduleType: THUAI7.ModuleType) -> bool:
+    def InstallModule(self, playerID: int, moduleType: THUAI7.ModuleType) -> bool:
         self.__logger.debug("Called InstallModule")
-        return self.__comm.InstallModule(moduleType, self.__playerID, self.__teamID)
+        return self.__comm.InstallModule(moduleType, playerID, self.__teamID)
 
-    def Recycle(self) -> bool:
+    def Recycle(self, playerID: int) -> bool:
         self.__logger.debug("Called Recycle")
-        return self.__comm.Recycle(self.__playerID, self.__teamID)
+        return self.__comm.Recycle(playerID, self.__teamID)
 
     def BuildShip(self, shipType: THUAI7.ShipType, birthIndex: int) -> bool:
         self.__logger.debug("Called BuildShip")
