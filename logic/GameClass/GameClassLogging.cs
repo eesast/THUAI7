@@ -6,7 +6,7 @@ namespace GameClass.GameObj
     public static class LoggingFunctional
     {
         public static string ShipLogInfo(Ship ship)
-                        => Logger.ObjInfo(typeof(Ship), $"{ship.TeamID} {ship.PlayerID}");
+            => Logger.ObjInfo(typeof(Ship), $"{ship.TeamID} {ship.PlayerID}");
         public static string ShipLogInfo(long teamId, long shipId)
             => Logger.ObjInfo(typeof(Ship), $"{teamId} {shipId}");
         public static string BulletLogInfo(Bullet bullet)

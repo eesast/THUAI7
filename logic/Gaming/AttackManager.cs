@@ -240,7 +240,7 @@ namespace Gaming
                 if (bullet != null)
                 {
                     AttackManagerLogging.logger.ConsoleLogDebug(
-                            LoggingFunctional.ShipLogInfo(ship)
+                        LoggingFunctional.ShipLogInfo(ship)
                         + " successfully attacked!");
                     return true;
                 }
