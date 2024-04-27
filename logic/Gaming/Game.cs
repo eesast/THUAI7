@@ -1,8 +1,11 @@
 using GameClass.GameObj;
+using GameClass.GameObj.Map;
 using GameClass.GameObj.Areas;
 using GameClass.MapGenerator;
 using Preparation.Interface;
 using Preparation.Utility;
+using Preparation.Utility.Logging;
+using Preparation.Utility.Value;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +13,10 @@ using System.Threading;
 
 namespace Gaming
 {
+    public static class GameLogging
+    {
+        public static readonly Logger logger = new("Game");
+    }
     public partial class Game
     {
         public struct PlayerInitInfo(long teamID, long playerID, ShipType shipType)
@@ -80,11 +87,11 @@ namespace Gaming
         }
         public long ActivateShip(long teamID, ShipType shipType, int birthPointIndex = 0)
         {
-            Debugger.Output($"Trying to activate: {teamID} {shipType} at {birthPointIndex}");
+            GameLogging.logger.ConsoleLogDebug($"Try to activate {teamID} {shipType} at birthpoint {birthPointIndex}");
             Ship? ship = teamList[(int)teamID].ShipPool.GetObj(shipType);
             if (ship == null)
             {
-                Debugger.Output($"Failed to activate: {teamID} {shipType}, no ship available");
+                GameLogging.logger.ConsoleLogDebug($"Fail to activate {teamID} {shipType}, no ship available");
                 return GameObj.invalidID;
             }
             if (birthPointIndex < 0)
@@ -95,13 +102,13 @@ namespace Gaming
             pos += new XY(((random.Next() & 2) - 1) * 1000, ((random.Next() & 2) - 1) * 1000);
             if (ShipManager.ActivateShip(ship, pos))
             {
-                Debugger.Output($"Successfully activated: {teamID} {shipType} at {pos}");
+                GameLogging.logger.ConsoleLogDebug($"Successfully activated {teamID} {shipType} at {pos}");
                 return ship.PlayerID;
             }
             else
             {
                 teamList[(int)teamID].ShipPool.ReturnObj(ship);
-                Debugger.Output($"Failed to activate: {teamID} {shipType} at {pos}, rule not permitted");
+                GameLogging.logger.ConsoleLogDebug($"Fail to activate {teamID} {shipType} at {pos}, rule not permitted");
                 return GameObj.invalidID;
             }
         }
@@ -137,12 +144,18 @@ namespace Gaming
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
             if (ship != null && ship.IsRemoved == false)
             {
-                Debugger.Output("Trying to move: " + teamID + " " + shipID + " " + moveTimeInMilliseconds + " " + angle);
+                GameLogging.logger.ConsoleLogDebug(
+                    "Try to move "
+                    + ShipLogging.ShipLogInfo(ship)
+                    + $" {moveTimeInMilliseconds} {angle}");
                 return actionManager.MoveShip(ship, moveTimeInMilliseconds, angle);
             }
             else
             {
-                Debugger.Output("Failed to move: " + teamID + " " + shipID + ", no ship found");
+                GameLogging.logger.ConsoleLogDebug(
+                    "Fail to move "
+                    + ShipLogging.ShipLogInfo(teamID, shipID)
+                    + ", not found");
                 return false;
             }
         }
