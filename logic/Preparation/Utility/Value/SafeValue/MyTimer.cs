@@ -32,7 +32,7 @@ namespace Preparation.Utility.Value.SafeValue
             catch (Exception ex)
             {
                 startTime.SetROri(long.MaxValue);
-                Console.WriteLine(ex.Message);
+                MyTimerLogging.logger.ConsoleLog(ex.Message);
             }
             return true;
         }
@@ -57,7 +57,7 @@ namespace Preparation.Utility.Value.SafeValue
             catch (Exception ex)
             {
                 startTime.SetROri(long.MaxValue);
-                Console.WriteLine(ex.Message);
+                MyTimerLogging.logger.ConsoleLog(ex.Message);
             }
             return true;
         }
