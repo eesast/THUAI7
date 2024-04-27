@@ -443,12 +443,44 @@ namespace Client.ViewModel
             }
         }
 
+        public bool redShipsLabelIsBusy = true;
+
+        public bool RedShipsLabelIsBusy
+        {
+            get
+            {
+                return redShipsLabelIsBusy;
+            }
+
+            set
+            {
+                redShipsLabelIsBusy = value;
+            }
+        }
+
+        public bool blueShipsLabelIsBusy = true;
+
+        public bool BlueShipsLabelIsBusy
+        {
+            get
+            {
+                return blueShipsLabelIsBusy;
+            }
+
+            set
+            {
+                blueShipsLabelIsBusy = value;
+            }
+        }
+
+
         private void Refresh(object sender, EventArgs e)
         {
             try
             {
                 lock (drawPicLock)
                 {
+
                     //if (UIinitiated)
                     //{
                     //    redPlayer.SlideLengthSet();
@@ -500,6 +532,8 @@ namespace Client.ViewModel
 
                         //RedPlayer.Ships.Clear();
                         //BluePlayer.Ships.Clear();
+                        redShipsLabelIsBusy = true;
+                        blueShipsLabelIsBusy = true;
                         int RedShipCount = 0;
                         int BlueShipCount = 0;
                         for (int i = 0; i < listOfShip.Count; i++)
@@ -520,15 +554,40 @@ namespace Client.ViewModel
                                     ConstuctorModule = data.ConstructorType,
                                 };
                                 myLogger.LogInfo(String.Format("RedShipCount:{0}, Redplayers.ships.count:{1}", RedShipCount, RedPlayer.Ships.Count));
-                                if (RedShipCount < RedPlayer.Ships.Count && UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[RedShipCount]))
+                                //if (listOfShip.Count >= RedPlayer.Ships.Count)
                                 {
+                                    myLogger.LogInfo(String.Format("listOfShip.Count:{0}, RedPlayer.Ships.Count:{1}", listOfShip.Count, RedPlayer.Ships.Count));
+
+                                    if (RedShipCount < RedPlayer.Ships.Count && UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[RedShipCount]))
+                                    {
+                                        RedShipCount++;
+                                        continue;
+                                    }
+                                    else if (RedShipCount < RedPlayer.Ships.Count && !UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[RedShipCount]))
+                                        RedPlayer.Ships[RedShipCount] = ship;
+                                    else RedPlayer.Ships.Add(ship);
                                     RedShipCount++;
-                                    continue;
                                 }
-                                else if (RedShipCount < RedPlayer.Ships.Count && !UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[RedShipCount]))
-                                    RedPlayer.Ships[RedShipCount] = ship;
-                                else RedPlayer.Ships.Add(ship);
-                                RedShipCount++;
+                                //else
+                                //{
+                                //    myLogger.LogInfo("listOfShip.Count < RedPlayer.Ships.Count");
+                                //    myLogger.LogInfo(String.Format("listOfShip.Count:{0}, RedPlayer.Ships.Count:{1}", listOfShip.Count, RedPlayer.Ships.Count));
+                                //    if (RedShipCount < listOfShip.Count && UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[RedShipCount]))
+                                //    {
+                                //        RedShipCount++;
+                                //        continue;
+                                //    }
+                                //    else if (RedShipCount < listOfShip.Count && !UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[RedShipCount]))
+                                //    {
+                                //        RedPlayer.Ships[RedShipCount] = ship;
+                                //        RedShipCount++;
+                                //    }
+                                //    else
+                                //    {
+                                //        for (int index = listOfShip.Count; index < RedPlayer.Ships.Count - 1; index++)
+                                //        RedPlayer.Ships.RemoveAt(index);
+                                //    }
+                                //}
                             }
                             // else if (data.TeamId == (long)PlayerTeam.Blue)
                             else if (data.TeamId == 1)
@@ -556,6 +615,7 @@ namespace Client.ViewModel
                                 else BluePlayer.Ships.Add(ship);
                                 BlueShipCount++;
                             }
+
                             //else
                             //{
                             //    Ship ship = new Ship
@@ -584,6 +644,18 @@ namespace Client.ViewModel
                             //    else RedPlayer.Ships.Add(ship);
                             //}
                         }
+                        for (int index = RedShipCount; index < RedPlayer.Ships.Count; index++)
+                        {
+                            RedPlayer.Ships.RemoveAt(index);
+                            myLogger.LogInfo(String.Format("redRemoveIndex: {0}", index));
+                        }
+                        for (int index = BlueShipCount; index < BluePlayer.Ships.Count; index++)
+                        {
+                            BluePlayer.Ships.RemoveAt(index);
+                            myLogger.LogInfo(String.Format("blueRemoveIndex: {0}", index));
+                        }
+                        redShipsLabelIsBusy = false;
+                        blueShipsLabelIsBusy = false;
                         myLogger.LogInfo("============= Draw Ship list ================");
 
                         for (int i = 0; i < RedPlayer.Ships.Count; i++)
