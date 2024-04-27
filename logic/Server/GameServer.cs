@@ -160,7 +160,7 @@ namespace Server
             else return new double[0];
         }
 
-        protected double[] Cal(double[] orgScore , double[] competitionScore)
+        protected double[] Cal(double[] orgScore, double[] competitionScore)
         {
             // 调整顺序，让第一个元素成为获胜者，便于计算
             bool reverse = false; // 记录是否需要调整
@@ -203,7 +203,7 @@ namespace Server
             resScore[0] = orgScore[0] + Math.Round(competitionScore[0] * competitionScore[0] * firstnerGet * (1 - Math.Tanh(delta)) * correct); // 胜者所加天梯分
             resScore[1] = orgScore[1] - Math.Round(
             (competitionScore[0] - competitionScore[1]) * (competitionScore[0] - competitionScore[1]) * secondrGet * (1 - Math.Tanh(delta)) * correct); // 败者所扣天梯分
-              // 如果换过，再换回来
+                                                                                                                                                        // 如果换过，再换回来
             if (reverse)
             {
                 double t = resScore[1];
@@ -212,7 +212,7 @@ namespace Server
             }
             return resScore;
         }
-        
+
 
         private void OnGameEnd()
         {
@@ -224,7 +224,7 @@ namespace Server
                              : options.ResultFileName + ".json");
             int[] scores = GetScore();
             double[] doubleArray = scores.Select(x => (double)x).ToArray();
-            if(options.Mode==2)
+            if (options.Mode == 2)
                 scores = GetLadderScore(options.Mode, doubleArray).Result;
             SendGameResult(scores, options.Mode);
             endGameSem.Release();
