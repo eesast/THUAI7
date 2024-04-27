@@ -86,7 +86,7 @@
                         <Label x:Name="RedScore" Grid.Row="0" Grid.Column="3" Text="{Binding RedPlayer.Score, StringFormat='🚩: {0}'}" Style="{StaticResource littleAttributes}" />
                     </Grid>
 
-                    <Grid x:Name="RedShipStatusAttributesGrid" Grid.Row="1">
+                    <Grid x:Name="RedShipStatusAttributesGrid" Grid.Row="1" IsVisible="{Binding RedShipsLabelIsBusy}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
@@ -194,7 +194,7 @@
                         <Label x:Name="BlueShipHp" Grid.Row="1" Grid.Column="7" Text="血量❤️" Style="{x:StaticResource shipStatusTagAttributes}"/>
                     </Grid>
 
-                    <CollectionView ItemsSource="{Binding BluePlayer.Ships}" Grid.Row="2">
+                    <CollectionView ItemsSource="{Binding BluePlayer.Ships}" Grid.Row="2" IsVisible="{Binding BlueShipsLabelIsBusy}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="model:Ship">
                                 <Grid>
