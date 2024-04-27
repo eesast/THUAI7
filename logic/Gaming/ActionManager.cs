@@ -203,8 +203,8 @@ namespace Gaming
                                                                 gameMap.Timer.IsGaming && !construction.HP.IsBelowMaxTimes(0.5),
                                                             loopToDo: () =>
                                                             {
-                                                                var ships = gameMap.ShipInTheRange(
-                                                                    construction.Position, GameData.FortRange);
+                                                                var ships = gameMap.ShipInTheRangeNotTeamID(
+                                                                    construction.Position, GameData.FortRange, construction.TeamID);
                                                                 if (ships == null || ships.Count == 0)
                                                                 {
                                                                     return true;
