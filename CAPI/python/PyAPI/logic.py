@@ -107,7 +107,7 @@ class Logic(ILogic):
 
     def Move(self, time: int, angle: float) -> bool:
         self.__logger.debug("Called Move")
-        return self.__comm.Move(time, angle, self.__playerID)
+        return self.__comm.Move(time, angle, self.__playerID, self.__teamID)
 
     def SendMessage(self, toID: int, message: Union[str, bytes]) -> bool:
         self.__logger.debug("Called SendMessage")
