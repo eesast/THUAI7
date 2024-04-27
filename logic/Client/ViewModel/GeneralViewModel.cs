@@ -451,7 +451,7 @@ namespace Client.ViewModel
             {
                 return redShipsLabelIsBusy;
             }
-             
+
             set
             {
                 redShipsLabelIsBusy = value;
@@ -480,7 +480,7 @@ namespace Client.ViewModel
             {
                 lock (drawPicLock)
                 {
-                    
+
                     //if (UIinitiated)
                     //{
                     //    redPlayer.SlideLengthSet();
@@ -615,7 +615,7 @@ namespace Client.ViewModel
                                 else BluePlayer.Ships.Add(ship);
                                 BlueShipCount++;
                             }
-                            
+
                             //else
                             //{
                             //    Ship ship = new Ship
