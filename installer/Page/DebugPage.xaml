@@ -10,7 +10,6 @@
         RowDefinitions="*,*,*,*,*,*,*,*,*,*"
         ColumnDefinitions="*">
 
-        
         <VerticalStackLayout
             Grid.Row="0"
             Grid.RowSpan="9"
