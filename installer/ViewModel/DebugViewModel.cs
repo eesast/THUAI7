@@ -35,19 +35,32 @@ namespace installer.ViewModel
                 mode = value;
                 if (mode == "Client")
                 {
+                    IPVisible = true;
                     ClientVisible = true;
                     ServerVisible = false;
                 }
                 else if (mode == "Server")
                 {
+                    IPVisible = false;
                     ClientVisible = false;
                     ServerVisible = true;
                 }
                 else
                 {
+                    IPVisible = true;
                     ClientVisible = false;
                     ServerVisible = false;
                 }
+            }
+        }
+        private bool ipVisible = false;
+        public bool IPVisible
+        {
+            get => ipVisible;
+            set
+            {
+                ipVisible = value;
+                OnPropertyChanged();
             }
         }
 
@@ -89,6 +102,27 @@ namespace installer.ViewModel
             set
             {
                 shipCount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool haveSpectator = false;
+        public bool HaveSpectator
+        {
+            get => haveSpectator;
+            set
+            {
+                haveSpectator = value;
+                OnPropertyChanged();
+            }
+        }
+        private string spectatorID = "2024";
+        public string SpectatorID
+        {
+            get => spectatorID;
+            set
+            {
+                spectatorID = value;
                 OnPropertyChanged();
             }
         }
@@ -169,8 +203,20 @@ namespace installer.ViewModel
         private void ClientStart()
         {
             Downloader.Data.Config.Commands.PlaybackFile = "";
-
-            bool haveSpectator = false;
+            if (HaveSpectator)
+            {
+                Downloader.Data.Config.Commands.TeamID = 0;
+                try
+                {
+                    Downloader.Data.Config.Commands.PlayerID = Convert.ToInt32(SpectatorID);
+                }
+                catch (Exception)
+                {
+                    DebugAlert = "观战ID输入错误";
+                    return;
+                }
+                LaunchClient();
+            }
             for (int i = 0; i < Players.Count(); i++)
             {
                 if (Players[i].PlayerMode == "API")
@@ -185,15 +231,8 @@ namespace installer.ViewModel
                     Downloader.Data.Config.Commands.TeamID = Players[i].TeamID;
                     Downloader.Data.Config.Commands.PlayerID = Players[i].PlayerID;
                     Downloader.Data.Config.Commands.ShipType = Players[i].ShipType;
-                    haveSpectator = true;
                     LaunchClient();
                 }
-            }
-            if (!haveSpectator)
-            {
-                Downloader.Data.Config.Commands.TeamID = 0;
-                Downloader.Data.Config.Commands.PlayerID = 2024;
-                LaunchClient();
             }
         }
 
@@ -226,7 +265,7 @@ namespace installer.ViewModel
             server = Process.Start(new ProcessStartInfo()
             {
                 FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Server", "Server.exe"),
-                Arguments = $"--ip {IP} --port {Port} --teamCount {TeamCount} --shipNum {ShipCount}",
+                Arguments = $"--ip 0.0.0.0 --port {Port} --teamCount {TeamCount} --shipNum {ShipCount}",
             });
             if (server is null)
             {

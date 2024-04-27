@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Preparation.Interface;
+using Preparation.Utility.Value.SafeValue.TimeBased;
+using System;
 using System.Numerics;
-using System.Threading;
 
-namespace Preparation.Utility
+namespace Preparation.Utility.Value.SafeValue.LockedValue
 {
     /// <summary>
     /// 一个保证大于0的可变值
@@ -18,7 +19,7 @@ namespace Preparation.Utility
         {
             if (value < T.Zero)
             {
-                Debugger.Output("Warning:Try to set PositiveValue to " + value.ToString() + ".");
+                LockedValueLogging.logger.ConsoleLogDebug($"Warning: Try to set PositiveValue to {value}");
                 value = T.Zero;
             }
             v = value;
@@ -151,7 +152,7 @@ namespace Preparation.Utility
         {
             WriteNeed(() =>
             {
-                subV = (subV.CompareTo(v) > 0) ? v : subV;
+                subV = subV.CompareTo(v) > 0 ? v : subV;
                 v -= subV;
             });
             return subV;

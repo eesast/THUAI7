@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace Client.Interact
 {
@@ -11,7 +6,7 @@ namespace Client.Interact
     {
         public static void StartProcess()
         {
-            ProcessStartInfo startInfo = new ProcessStartInfo
+            ProcessStartInfo startInfo = new()
             {
                 FileName = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
                 RedirectStandardInput = true,
@@ -19,7 +14,7 @@ namespace Client.Interact
                 UseShellExecute = false
             };
 
-            Process process = new Process { StartInfo = startInfo };
+            Process process = new() { StartInfo = startInfo };
             process.Start();
 
             // 写入命令行

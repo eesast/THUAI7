@@ -57,7 +57,7 @@ namespace Client.ViewModel
         {
             get
             {
-                return links ?? (links = new List<Link>());
+                return links ??= [];
             }
             set
             {
@@ -67,9 +67,9 @@ namespace Client.ViewModel
         }
 
         private long playerID;
-        private string ip;
-        private string port;
-        private int shipTypeID;
+        private readonly string ip;
+        private readonly string port;
+        private readonly int shipTypeID;
         private long teamID;
         ShipType shipType;
         AvailableService.AvailableServiceClient? client;
@@ -92,12 +92,12 @@ namespace Client.ViewModel
                 throw new Exception("Error Registration Information！");
             }
 
-            string connect = new string(comInfo[0]);
+            string connect = new(comInfo[0]);
             connect += ':';
             connect += comInfo[1];
-            Channel channel = new Channel(connect, ChannelCredentials.Insecure);
+            Channel channel = new(connect, ChannelCredentials.Insecure);
             client = new AvailableService.AvailableServiceClient(channel);
-            PlayerMsg playerMsg = new PlayerMsg();
+            PlayerMsg playerMsg = new();
             playerID = Convert.ToInt64(comInfo[2]);
             playerMsg.PlayerId = playerID;
             if (!isSpectatorMode)
@@ -443,12 +443,44 @@ namespace Client.ViewModel
             }
         }
 
+        public bool redShipsLabelIsBusy = true;
+
+        public bool RedShipsLabelIsBusy
+        {
+            get
+            {
+                return redShipsLabelIsBusy;
+            }
+
+            set
+            {
+                redShipsLabelIsBusy = value;
+            }
+        }
+
+        public bool blueShipsLabelIsBusy = true;
+
+        public bool BlueShipsLabelIsBusy
+        {
+            get
+            {
+                return blueShipsLabelIsBusy;
+            }
+
+            set
+            {
+                blueShipsLabelIsBusy = value;
+            }
+        }
+
+
         private void Refresh(object sender, EventArgs e)
         {
             try
             {
                 lock (drawPicLock)
                 {
+
                     //if (UIinitiated)
                     //{
                     //    redPlayer.SlideLengthSet();
@@ -500,6 +532,8 @@ namespace Client.ViewModel
 
                         //RedPlayer.Ships.Clear();
                         //BluePlayer.Ships.Clear();
+                        redShipsLabelIsBusy = true;
+                        blueShipsLabelIsBusy = true;
                         int RedShipCount = 0;
                         int BlueShipCount = 0;
                         for (int i = 0; i < listOfShip.Count; i++)
@@ -508,7 +542,7 @@ namespace Client.ViewModel
                             // if (data.TeamId == (long)PlayerTeam.Red)
                             if (data.TeamId == 0)
                             {
-                                Ship ship = new Ship
+                                Ship ship = new()
                                 {
                                     HP = data.Hp,
                                     Type = data.ShipType,
@@ -520,20 +554,45 @@ namespace Client.ViewModel
                                     ConstuctorModule = data.ConstructorType,
                                 };
                                 myLogger.LogInfo(String.Format("RedShipCount:{0}, Redplayers.ships.count:{1}", RedShipCount, RedPlayer.Ships.Count));
-                                if (RedShipCount < RedPlayer.Ships.Count && UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[RedShipCount]))
+                                //if (listOfShip.Count >= RedPlayer.Ships.Count)
                                 {
+                                    myLogger.LogInfo(String.Format("listOfShip.Count:{0}, RedPlayer.Ships.Count:{1}", listOfShip.Count, RedPlayer.Ships.Count));
+
+                                    if (RedShipCount < RedPlayer.Ships.Count && UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[RedShipCount]))
+                                    {
+                                        RedShipCount++;
+                                        continue;
+                                    }
+                                    else if (RedShipCount < RedPlayer.Ships.Count && !UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[RedShipCount]))
+                                        RedPlayer.Ships[RedShipCount] = ship;
+                                    else RedPlayer.Ships.Add(ship);
                                     RedShipCount++;
-                                    continue;
                                 }
-                                else if (RedShipCount < RedPlayer.Ships.Count && !UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[RedShipCount]))
-                                    RedPlayer.Ships[RedShipCount] = ship;
-                                else RedPlayer.Ships.Add(ship);
-                                RedShipCount++;
+                                //else
+                                //{
+                                //    myLogger.LogInfo("listOfShip.Count < RedPlayer.Ships.Count");
+                                //    myLogger.LogInfo(String.Format("listOfShip.Count:{0}, RedPlayer.Ships.Count:{1}", listOfShip.Count, RedPlayer.Ships.Count));
+                                //    if (RedShipCount < listOfShip.Count && UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[RedShipCount]))
+                                //    {
+                                //        RedShipCount++;
+                                //        continue;
+                                //    }
+                                //    else if (RedShipCount < listOfShip.Count && !UtilFunctions.IsShipEqual(ship, RedPlayer.Ships[RedShipCount]))
+                                //    {
+                                //        RedPlayer.Ships[RedShipCount] = ship;
+                                //        RedShipCount++;
+                                //    }
+                                //    else
+                                //    {
+                                //        for (int index = listOfShip.Count; index < RedPlayer.Ships.Count - 1; index++)
+                                //        RedPlayer.Ships.RemoveAt(index);
+                                //    }
+                                //}
                             }
                             // else if (data.TeamId == (long)PlayerTeam.Blue)
                             else if (data.TeamId == 1)
                             {
-                                Ship ship = new Ship
+                                Ship ship = new()
                                 {
                                     HP = data.Hp,
                                     Type = data.ShipType,
@@ -556,6 +615,7 @@ namespace Client.ViewModel
                                 else BluePlayer.Ships.Add(ship);
                                 BlueShipCount++;
                             }
+
                             //else
                             //{
                             //    Ship ship = new Ship
@@ -584,6 +644,18 @@ namespace Client.ViewModel
                             //    else RedPlayer.Ships.Add(ship);
                             //}
                         }
+                        for (int index = RedShipCount; index < RedPlayer.Ships.Count; index++)
+                        {
+                            RedPlayer.Ships.RemoveAt(index);
+                            myLogger.LogInfo(String.Format("redRemoveIndex: {0}", index));
+                        }
+                        for (int index = BlueShipCount; index < BluePlayer.Ships.Count; index++)
+                        {
+                            BluePlayer.Ships.RemoveAt(index);
+                            myLogger.LogInfo(String.Format("blueRemoveIndex: {0}", index));
+                        }
+                        redShipsLabelIsBusy = false;
+                        blueShipsLabelIsBusy = false;
                         myLogger.LogInfo("============= Draw Ship list ================");
 
                         for (int i = 0; i < RedPlayer.Ships.Count; i++)
@@ -741,10 +813,12 @@ namespace Client.ViewModel
                         myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                         return;
                     }
-                    MoveMsg movemsg = new MoveMsg();
-                    movemsg.PlayerId = playerID;
-                    movemsg.TeamId = teamID;
-                    movemsg.Angle = double.Pi;
+                    MoveMsg movemsg = new()
+                    {
+                        PlayerId = playerID,
+                        TeamId = teamID,
+                        Angle = double.Pi
+                    };
                     lastMoveAngle = movemsg.Angle;
                     movemsg.TimeInMilliseconds = 50;
                     client.Move(movemsg);
@@ -769,10 +843,12 @@ namespace Client.ViewModel
                     myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
-                MoveMsg movemsg = new MoveMsg();
-                movemsg.PlayerId = playerID;
-                movemsg.TeamId = teamID;
-                movemsg.Angle = double.NegativeZero;
+                MoveMsg movemsg = new()
+                {
+                    PlayerId = playerID,
+                    TeamId = teamID,
+                    Angle = double.NegativeZero
+                };
                 lastMoveAngle = movemsg.Angle;
                 movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
@@ -785,10 +861,12 @@ namespace Client.ViewModel
                     myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
-                MoveMsg movemsg = new MoveMsg();
-                movemsg.PlayerId = playerID;
-                movemsg.TeamId = teamID;
-                movemsg.Angle = double.Pi * 3 / 2;
+                MoveMsg movemsg = new()
+                {
+                    PlayerId = playerID,
+                    TeamId = teamID,
+                    Angle = double.Pi * 3 / 2
+                };
                 lastMoveAngle = movemsg.Angle;
                 movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
@@ -801,10 +879,12 @@ namespace Client.ViewModel
                     myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
-                MoveMsg movemsg = new MoveMsg();
-                movemsg.PlayerId = playerID;
-                movemsg.TeamId = teamID;
-                movemsg.Angle = double.Pi / 2;
+                MoveMsg movemsg = new()
+                {
+                    PlayerId = playerID,
+                    TeamId = teamID,
+                    Angle = double.Pi / 2
+                };
                 lastMoveAngle = movemsg.Angle;
                 movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
@@ -817,10 +897,12 @@ namespace Client.ViewModel
                     myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
-                MoveMsg movemsg = new MoveMsg();
-                movemsg.PlayerId = playerID;
-                movemsg.TeamId = teamID;
-                movemsg.Angle = double.Pi * 5 / 4;
+                MoveMsg movemsg = new()
+                {
+                    PlayerId = playerID,
+                    TeamId = teamID,
+                    Angle = double.Pi * 5 / 4
+                };
                 lastMoveAngle = movemsg.Angle;
                 movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
@@ -833,10 +915,12 @@ namespace Client.ViewModel
                     myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
-                MoveMsg movemsg = new MoveMsg();
-                movemsg.PlayerId = playerID;
-                movemsg.TeamId = teamID;
-                movemsg.Angle = double.Pi * 3 / 4;
+                MoveMsg movemsg = new()
+                {
+                    PlayerId = playerID,
+                    TeamId = teamID,
+                    Angle = double.Pi * 3 / 4
+                };
                 lastMoveAngle = movemsg.Angle;
                 movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
@@ -849,10 +933,12 @@ namespace Client.ViewModel
                     myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
-                MoveMsg movemsg = new MoveMsg();
-                movemsg.PlayerId = playerID;
-                movemsg.TeamId = teamID;
-                movemsg.Angle = double.Pi * 7 / 4;
+                MoveMsg movemsg = new()
+                {
+                    PlayerId = playerID,
+                    TeamId = teamID,
+                    Angle = double.Pi * 7 / 4
+                };
                 lastMoveAngle = movemsg.Angle;
                 movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
@@ -865,10 +951,12 @@ namespace Client.ViewModel
                     myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
-                MoveMsg movemsg = new MoveMsg();
-                movemsg.PlayerId = playerID;
-                movemsg.TeamId = teamID;
-                movemsg.Angle = double.Pi / 4;
+                MoveMsg movemsg = new()
+                {
+                    PlayerId = playerID,
+                    TeamId = teamID,
+                    Angle = double.Pi / 4
+                };
                 lastMoveAngle = movemsg.Angle;
                 movemsg.TimeInMilliseconds = moveTime;
                 client.Move(movemsg);
@@ -881,10 +969,12 @@ namespace Client.ViewModel
                     myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
-                AttackMsg attackMsg = new AttackMsg();
-                attackMsg.PlayerId = playerID;
-                attackMsg.TeamId = teamID;
-                attackMsg.Angle = lastMoveAngle;
+                AttackMsg attackMsg = new()
+                {
+                    PlayerId = playerID,
+                    TeamId = teamID,
+                    Angle = lastMoveAngle
+                };
                 client.Attack(attackMsg);
             });
 
@@ -895,9 +985,11 @@ namespace Client.ViewModel
                     myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
-                RecoverMsg recoverMsg = new RecoverMsg();
-                recoverMsg.PlayerId = playerID;
-                recoverMsg.TeamId = teamID;
+                RecoverMsg recoverMsg = new()
+                {
+                    PlayerId = playerID,
+                    TeamId = teamID
+                };
                 client.Recover(recoverMsg);
             });
 
@@ -908,9 +1000,11 @@ namespace Client.ViewModel
                     myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
-                IDMsg iDMsg = new IDMsg();
-                iDMsg.PlayerId = playerID;
-                iDMsg.TeamId = teamID;
+                IDMsg iDMsg = new()
+                {
+                    PlayerId = playerID,
+                    TeamId = teamID
+                };
                 client.Produce(iDMsg);
             });
 
@@ -921,10 +1015,12 @@ namespace Client.ViewModel
                     myLogger.LogInfo("Client is null or is SpectatorMode or isPlaybackMode");
                     return;
                 }
-                ConstructMsg constructMsg = new ConstructMsg();
-                constructMsg.PlayerId = playerID;
-                constructMsg.TeamId = teamID;
-                constructMsg.ConstructionType = ConstructionType.Factory;
+                ConstructMsg constructMsg = new()
+                {
+                    PlayerId = playerID,
+                    TeamId = teamID,
+                    ConstructionType = ConstructionType.Factory
+                };
                 client.Construct(constructMsg);
             });
 
@@ -953,7 +1049,7 @@ namespace Client.ViewModel
                 }
             }
 
-            shipCircList = new ObservableCollection<DrawCircLabel>();
+            shipCircList = [];
             for (int i = 0; i < numOfShips; i++)
             {
                 shipCircList.Add(new DrawCircLabel
@@ -965,7 +1061,7 @@ namespace Client.ViewModel
                 });
             }
 
-            bulletCircList = new ObservableCollection<DrawCircLabel>();
+            bulletCircList = [];
             for (int i = 0; i < numOfBullets; i++)
             {
                 bulletCircList.Add(new DrawCircLabel
@@ -987,17 +1083,19 @@ namespace Client.ViewModel
             {
                 try
                 {
-                    string[] comInfo = new string[5];
-                    comInfo[0] = ip;
-                    comInfo[1] = port;
-                    comInfo[2] = Convert.ToString(playerID);
-                    comInfo[3] = Convert.ToString(teamID);
-                    comInfo[4] = Convert.ToString(shipTypeID);
-                    myLogger.LogInfo(String.Format("cominfo[{0}]", comInfo[0]));
-                    myLogger.LogInfo(String.Format("cominfo[{0}]", comInfo[1]));
-                    myLogger.LogInfo(String.Format("cominfo[{0}]", comInfo[2]));
-                    myLogger.LogInfo(String.Format("cominfo[{0}]", comInfo[3]));
-                    myLogger.LogInfo(String.Format("cominfo[{0}]", comInfo[4]));
+                    string[] comInfo =
+                    [
+                        ip,
+                        port,
+                        Convert.ToString(playerID),
+                        Convert.ToString(teamID),
+                        Convert.ToString(shipTypeID),
+                    ];
+                    myLogger.LogInfo(string.Format("cominfo[{0}]", comInfo[0]));
+                    myLogger.LogInfo(string.Format("cominfo[{0}]", comInfo[1]));
+                    myLogger.LogInfo(string.Format("cominfo[{0}]", comInfo[2]));
+                    myLogger.LogInfo(string.Format("cominfo[{0}]", comInfo[3]));
+                    myLogger.LogInfo(string.Format("cominfo[{0}]", comInfo[4]));
                     ConnectToServer(comInfo);
                     OnReceive();
                 }

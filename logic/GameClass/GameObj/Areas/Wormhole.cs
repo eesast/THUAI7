@@ -1,5 +1,6 @@
-﻿using Preparation.Interface;
-using Preparation.Utility;
+﻿using Preparation.Utility;
+using Preparation.Utility.Value.SafeValue.Atomic;
+using Preparation.Utility.Value.SafeValue.LockedValue;
 using System.Collections.Generic;
 
 namespace GameClass.GameObj.Areas;

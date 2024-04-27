@@ -7,6 +7,35 @@ python_main_dir=/usr/local/PlayerCode/CAPI/python
 playback_dir=/usr/local/playback
 
 if [ $EXPOSED -eq 1 ]; then
+    nice -10 ./Server --port 8888 --TeamCount 2 --ShipNum 4 --resultFileName $playback_dir/result --gameTimeInSecond $TIME --mode $MODE --mapResource $MAP --url $URL --token $TOKEN --fileName $playback_dir/video --startLockFile $playback_dir/start.lock > $playback_dir/server.log 2>&1 &
+    server_pid=$!
+else
+    nice -10 ./Server --port 8888 --TeamCount 2 --ShipNum 4 --resultFileName $playback_dir/result --gameTimeInSecond $TIME --mode $MODE --mapResource $MAP --notAllowSpectator --url $URL --token $TOKEN --fileName $playback_dir/video --startLockFile $playback_dir/start.lock > $playback_dir/server.log 2>&1 &
+    server_pid=$!
+fi
+sleep 5
+for k in {1..2}
+do
+    pushd /usr/local/team$k
+    for i in {1..5}
+    do
+        j=$((i - 1))
+        if [ -f "./player$i.py" ]; then
+            cp -r $python_main_dir $python_main_dir$i
+            cp -f ./player$i.py $python_main_dir$i/PyAPI/AI.py
+            nice -0 python3 $python_main_dir$i/PyAPI/main.py -I 127.0.0.1 -P 8888 -p $j > $playback_dir/team$k-player$j.log 2>&1 &
+        elif [ -f "./capi$i" ]; then
+            nice -0 ./capi$i -I 127.0.0.1 -P 8888 -p $j > $playback_dir/team$k-player$j.log 2>&1 &
+        else
+            echo "ERROR. $i is not found."
+        fi
+    done
+    popd
+done
+
+
+
+sleep 10
     nice -10 ./Server --ip 127.0.0.1 --port 8888 --teamCount 2 --shipNum 4 --resultFileName $playback_dir/result --gameTimeInSecond $TIME --mode $MODE --mapResource $MAP --url $URL --token $TOKEN --fileName $playback_dir/video --startLockFile $playback_dir/start.lock > $playback_dir/server.log 2>&1 &
     server_pid=$!
 else
