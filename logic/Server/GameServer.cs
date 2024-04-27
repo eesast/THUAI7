@@ -225,7 +225,10 @@ namespace Server
             int[] scores = GetScore();
             double[] doubleArray = scores.Select(x => (double)x).ToArray();
             if (options.Mode == 2)
-                scores = GetLadderScore(options.Mode, doubleArray).Result;
+            {
+                doubleArray = GetLadderScore(options.Mode, doubleArray).Result;
+                scores = doubleArray.Select(x => (int)x).ToArray();
+            }
             SendGameResult(scores, options.Mode);
             endGameSem.Release();
         }
