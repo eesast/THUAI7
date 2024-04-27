@@ -4,7 +4,7 @@
              x:Class="Client.View.CircleLabel"
              x:Name="this">
     <Grid BindingContext="{x:Reference this}" Margin="{Binding CLMargin}">
-        <Ellipse HeightRequest="{Binding CLDiameter}" WidthRequest="{Binding CLDiameter}" BackgroundColor="{Binding CLBackgroundColor}" />
+        <Ellipse HeightRequest="{Binding CLDiameter}" WidthRequest="{Binding CLDiameter}" Fill="{Binding CLBackgroundColor}" Stroke="{Binding CLBackgroundColor}" />
         <Label Text="{Binding CLText}" TextColor="{Binding CLTextColor}" FontSize="{Binding CLFontSize}" />
     </Grid>
 </ContentView>

@@ -30,7 +30,7 @@ class Communication:
         self.__limit = 50
         self.__moveLimit = 10
 
-    def Move(self, time: int, angle: float, playerID: int) -> bool:
+    def Move(self, time: int, angle: float, playerID: int, teamID: int) -> bool:
         try:
             with self.__mtxLimit:
                 if (
@@ -41,7 +41,7 @@ class Communication:
                 self.__counter += 1
                 self.__counterMove += 1
             moveResult: Message2Clients.MoveRes = self.__THUAI7Stub.Move(
-                THUAI72Proto.THUAI72ProtobufMoveMsg(time, angle, playerID)
+                THUAI72Proto.THUAI72ProtobufMoveMsg(playerID, teamID, time, angle)
             )
         except grpc.RpcError:
             return False
