@@ -1,11 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
+using Preparation.Utility.Logging;
 
-namespace Preparation.Utility
+namespace Preparation.Utility.Value.SafeValue.LockedValue
 {
+    public static class LockedValueLogging
+    {
+        public static readonly Logger logger = new("LockedValue");
+    }
     public abstract class LockedValue
     {
         protected readonly object vLock = new();
@@ -55,12 +59,12 @@ namespace Preparation.Utility
 
         public TResult? EnterOtherLock<TResult>(LockedValue a, Func<TResult?> func)
         {
-            if (this.idInClass == a.idInClass) return default(TResult?);
+            if (idInClass == a.idInClass) return default;
             bool thisLock = false;
             bool thatLock = false;
             try
             {
-                if (this.idInClass < a.idInClass)
+                if (idInClass < a.idInClass)
                 {
                     Monitor.Enter(vLock, ref thisLock);
                     Monitor.Enter(a.VLock, ref thatLock);
@@ -80,12 +84,12 @@ namespace Preparation.Utility
         }
         public void EnterOtherLock(LockedValue a, Action func)
         {
-            if (this.idInClass == a.idInClass) return;
+            if (idInClass == a.idInClass) return;
             bool thisLock = false;
             bool thatLock = false;
             try
             {
-                if (this.idInClass < a.idInClass)
+                if (idInClass < a.idInClass)
                 {
                     Monitor.Enter(vLock, ref thisLock);
                     Monitor.Enter(a.VLock, ref thatLock);

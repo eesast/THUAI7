@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Preparation.Utility;
+namespace Preparation.Utility.Value.SafeValue;
 
 public class ObjPool<T, TType>(Func<T, TType> classfier,
                                Func<T, bool> idleChecker,

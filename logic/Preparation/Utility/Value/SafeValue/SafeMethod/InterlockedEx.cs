@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
 
-namespace Preparation.Utility
+namespace Preparation.Utility.Value.SafeValue.SafeMethod
 {
     static class CompareExchangeEnumImpl<T>
     {
@@ -13,7 +13,7 @@ namespace Preparation.Utility
         static dImpl CreateCompareExchangeImpl()
         {
             var underlyingType = Enum.GetUnderlyingType(typeof(T));
-            var dynamicMethod = new DynamicMethod(string.Empty, typeof(T), new[] { typeof(T).MakeByRefType(), typeof(T), typeof(T) });
+            var dynamicMethod = new DynamicMethod(string.Empty, typeof(T), [typeof(T).MakeByRefType(), typeof(T), typeof(T)]);
             var ilGenerator = dynamicMethod.GetILGenerator();
             ilGenerator.Emit(OpCodes.Ldarg_0);
             ilGenerator.Emit(OpCodes.Ldarg_1);
@@ -24,7 +24,7 @@ namespace Preparation.Utility
                     "CompareExchange",
                     BindingFlags.Static | BindingFlags.Public,
                     null,
-                    new[] { underlyingType.MakeByRefType(), underlyingType, underlyingType },
+                    [underlyingType.MakeByRefType(), underlyingType, underlyingType],
                     null));
             ilGenerator.Emit(OpCodes.Ret);
             return (dImpl)dynamicMethod.CreateDelegate(typeof(dImpl));
@@ -39,7 +39,7 @@ namespace Preparation.Utility
         static dImpl CreateExchangeImpl()
         {
             var underlyingType = Enum.GetUnderlyingType(typeof(T));
-            var dynamicMethod = new DynamicMethod(string.Empty, typeof(T), new[] { typeof(T).MakeByRefType(), typeof(T) });
+            var dynamicMethod = new DynamicMethod(string.Empty, typeof(T), [typeof(T).MakeByRefType(), typeof(T)]);
             var ilGenerator = dynamicMethod.GetILGenerator();
             ilGenerator.Emit(OpCodes.Ldarg_0);
             ilGenerator.Emit(OpCodes.Ldarg_1);
@@ -49,7 +49,7 @@ namespace Preparation.Utility
                     "Exchange",
                     BindingFlags.Static | BindingFlags.Public,
                     null,
-                    new[] { underlyingType.MakeByRefType(), underlyingType },
+                    [underlyingType.MakeByRefType(), underlyingType],
                     null));
             ilGenerator.Emit(OpCodes.Ret);
             return (dImpl)dynamicMethod.CreateDelegate(typeof(dImpl));
@@ -70,7 +70,7 @@ namespace Preparation.Utility
 
         public static T ReadEnum<T>(ref T location)
         {
-            T dummy = default(T);
+            T dummy = default;
             return CompareExchangeEnum(ref location!, dummy, dummy)!;
         }
     }

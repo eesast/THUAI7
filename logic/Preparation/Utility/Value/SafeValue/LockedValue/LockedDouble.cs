@@ -1,7 +1,6 @@
-﻿using System;
-using System.Threading;
+﻿using Preparation.Interface;
 
-namespace Preparation.Utility
+namespace Preparation.Utility.Value.SafeValue.LockedValue
 {
     public class LockedDouble(double x) : LockedValue, IDouble
     {
