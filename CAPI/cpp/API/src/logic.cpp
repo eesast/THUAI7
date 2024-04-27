@@ -393,7 +393,7 @@ void Logic::LoadBufferSelf(const protobuf::MessageToClient& message)
                 bufferState->teamSelf = Proto2THUAI7::Protobuf2THUAI7Team(item.team_message());
                 logger->debug("Load Self Team!");
             }
-            else if (Proto2THUAI7::messageOfObjDict[item.message_of_obj_case()] == THUAI7::MessageOfObj::ShipMessage && item.team_message().team_id() == teamID)
+            else if (Proto2THUAI7::messageOfObjDict[item.message_of_obj_case()] == THUAI7::MessageOfObj::ShipMessage && item.ship_message().team_id() == teamID)
             {
                 std::shared_ptr<THUAI7::Ship> Ship = Proto2THUAI7::Protobuf2THUAI7Ship(item.ship_message());
                 bufferState->ships.push_back(Ship);
