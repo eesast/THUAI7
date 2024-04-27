@@ -107,7 +107,7 @@ class Logic(ILogic):
 
     def Move(self, time: int, angle: float) -> bool:
         self.__logger.debug("Called Move")
-        return self.__comm.Move(time, angle, self.__playerID)
+        return self.__comm.Move(time, angle, self.__playerID, self.__teamID)
 
     def SendMessage(self, toID: int, message: Union[str, bytes]) -> bool:
         self.__logger.debug("Called SendMessage")
@@ -248,7 +248,7 @@ class Logic(ILogic):
 
     def Recycle(self) -> bool:
         self.__logger.debug("Called Recycle")
-        return self.__comm.Recycle(self.__playerID, self.__playerID, self.__teamID)
+        return self.__comm.Recycle(self.__playerID, self.__teamID)
 
     def BuildShip(self, shipType: THUAI7.ShipType, birthIndex: int) -> bool:
         self.__logger.debug("Called BuildShip")
@@ -356,7 +356,10 @@ class Logic(ILogic):
         if self.__playerType == THUAI7.PlayerType.Ship:
             for item in message.obj_message:
                 if item.WhichOneof("message_of_obj") == "ship_message":
-                    if item.ship_message.player_id == self.__playerID and item.ship_message.team_id == self.__teamID:
+                    if (
+                        item.ship_message.player_id == self.__playerID
+                        and item.ship_message.team_id == self.__teamID
+                    ):
                         self.__bufferState.self = Proto2THUAI7.Protobuf2THUAI7Ship(
                             item.ship_message
                         )
@@ -364,7 +367,10 @@ class Logic(ILogic):
                         self.__logger.debug("Load self ship")
         else:
             for item in message.obj_message:
-                if item.WhichOneof("message_of_obj") == "team_message" and item.team_message.team_id==self.__teamID:
+                if (
+                    item.WhichOneof("message_of_obj") == "team_message"
+                    and item.team_message.team_id == self.__teamID
+                ):
                     self.__bufferState.self = Proto2THUAI7.Protobuf2THUAI7Team(
                         item.team_message
                     )
@@ -399,13 +405,16 @@ class Logic(ILogic):
                     self.__logger.debug("Load ship")
 
             elif item.WhichOneof("message_of_obj") == "bullet_message":
-                if item.bullet_message.team_id!=self.__teamID and AssistFunction.HaveView(
-                    self.__bufferState.self.viewRange,
-                    self.__bufferState.self.x,
-                    self.__bufferState.self.y,
-                    item.bullet_message.x,
-                    item.bullet_message.y,
-                    self.__bufferState.gameMap,
+                if (
+                    item.bullet_message.team_id != self.__teamID
+                    and AssistFunction.HaveView(
+                        self.__bufferState.self.viewRange,
+                        self.__bufferState.self.x,
+                        self.__bufferState.self.y,
+                        item.bullet_message.x,
+                        item.bullet_message.y,
+                        self.__bufferState.gameMap,
+                    )
                 ):
                     self.__bufferState.bullets.append(
                         Proto2THUAI7.Protobuf2THUAI7Bullet(item.bullet_message)
