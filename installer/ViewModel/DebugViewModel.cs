@@ -92,6 +92,27 @@ namespace installer.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        private bool haveSpectator = false;
+        public bool HaveSpectator
+        {
+            get => haveSpectator;
+            set
+            {
+                haveSpectator = value;
+                OnPropertyChanged();
+            }
+        }
+        private string spectatorID = "2024";
+        public string SpectatorID
+        {
+            get => spectatorID;
+            set
+            {
+                spectatorID = value;
+                OnPropertyChanged();
+            }
+        }
         #endregion
 
 
@@ -169,8 +190,20 @@ namespace installer.ViewModel
         private void ClientStart()
         {
             Downloader.Data.Config.Commands.PlaybackFile = "";
-
-            bool haveSpectator = false;
+            if (HaveSpectator)
+            {
+                Downloader.Data.Config.Commands.TeamID = 0;
+                try
+                {
+                    Downloader.Data.Config.Commands.PlayerID = Convert.ToInt32(SpectatorID);
+                }
+                catch (Exception)
+                {
+                    DebugAlert = "观战ID输入错误";
+                    return;
+                }
+                LaunchClient();
+            }
             for (int i = 0; i < Players.Count(); i++)
             {
                 if (Players[i].PlayerMode == "API")
@@ -185,15 +218,8 @@ namespace installer.ViewModel
                     Downloader.Data.Config.Commands.TeamID = Players[i].TeamID;
                     Downloader.Data.Config.Commands.PlayerID = Players[i].PlayerID;
                     Downloader.Data.Config.Commands.ShipType = Players[i].ShipType;
-                    haveSpectator = true;
                     LaunchClient();
                 }
-            }
-            if (!haveSpectator)
-            {
-                Downloader.Data.Config.Commands.TeamID = 0;
-                Downloader.Data.Config.Commands.PlayerID = 2024;
-                LaunchClient();
             }
         }
 
