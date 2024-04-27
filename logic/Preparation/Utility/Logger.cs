@@ -24,7 +24,7 @@ public class LogQueue
         });
     }
 
-    public static bool IsClosed {  get; private set; } = false;
+    public static bool IsClosed { get; private set; } = false;
     public static void Close()
     {
         if (IsClosed) return;

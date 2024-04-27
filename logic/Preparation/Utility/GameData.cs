@@ -9,7 +9,7 @@ namespace Preparation.Utility
         public const int NumOfStepPerSecond = 100;      // 每秒行走的步数
         public const int FrameDuration = 50;            // 每帧时长
         public const int CheckInterval = 10;            // 检查间隔
-        public const uint GameDurationInSecond = 60*10; // 游戏时长
+        public const uint GameDurationInSecond = 60 * 10; // 游戏时长
         public const int LimitOfStopAndMove = 15;       // 停止和移动的最大间隔
 
         public const int TolerancesLength = 3;
