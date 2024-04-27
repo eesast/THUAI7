@@ -1,9 +1,9 @@
-﻿using Preparation.Utility;
+﻿using Preparation.Utility.Value.SafeValue.Atomic;
 using System;
 using System.Threading;
 using ITimer = Preparation.Interface.ITimer;
 
-namespace GameClass.GameObj
+namespace GameClass.GameObj.Map
 {
     public partial class Map
     {
@@ -14,7 +14,7 @@ namespace GameClass.GameObj
         public class GameTimer : ITimer
         {
             private long startTime;
-            public int nowTime() => (int)(Environment.TickCount64 - startTime);
+            public int NowTime() => (int)(Environment.TickCount64 - startTime);
 
             private readonly AtomicBool isGaming = new(false);
             public AtomicBool IsGaming => isGaming;

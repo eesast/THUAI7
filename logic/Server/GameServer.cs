@@ -1,15 +1,21 @@
 ﻿using GameClass.GameObj;
+using GameClass.GameObj.Map;
 using GameClass.MapGenerator;
 using Gaming;
 using Newtonsoft.Json;
 using Playback;
 using Preparation.Utility;
+using Preparation.Utility.Logging;
 using Protobuf;
 using System.Collections.Concurrent;
 using Timothy.FrameRateTask;
 
 namespace Server
 {
+    public static class GameServerLogging
+    {
+        public static readonly Logger logger = new("GameServer");
+    }
     partial class GameServer : ServerBase
     {
         private readonly ConcurrentDictionary<long, (SemaphoreSlim, SemaphoreSlim)> semaDict0 = new(); //for spectator and team0 player
@@ -43,7 +49,7 @@ namespace Server
                     if (id == GameObj.invalidID) return;//如果有未初始化的玩家，不开始游戏
                 }
             }
-            Console.WriteLine("Game starts!");
+            GameServerLogging.logger.ConsoleLog("Game starts!");
             CreateStartFile();
             game.StartGame((int)options.GameTimeInSecond * 1000);
             Thread.Sleep(1);
@@ -79,7 +85,7 @@ namespace Server
             if (options.StartLockFile != DefaultArgumentOptions.FileName)
             {
                 using var _ = File.Create(options.StartLockFile);
-                Console.WriteLine("Successfully Created StartLockFile!");
+                GameServerLogging.logger.ConsoleLog("Successfully Created StartLockFile!");
             }
         }
 
@@ -155,7 +161,7 @@ namespace Server
                             currentNews.Clear();
                         }
                         currentGameInfo.GameState = gameState;
-                        currentGameInfo.AllMessage = GetMessageOfAll(game.GameMap.Timer.nowTime());
+                        currentGameInfo.AllMessage = GetMessageOfAll(game.GameMap.Timer.NowTime());
                         mwr?.WriteOne(currentGameInfo);
                         break;
                     default:
@@ -349,7 +355,7 @@ namespace Server
                 }
                 catch
                 {
-                    Console.WriteLine($"Error: Cannot create the playback file: {options.FileName}!");
+                    GameServerLogging.logger.ConsoleLog($"Error: Cannot create the playback file: {options.FileName}!");
                 }
             }
 
