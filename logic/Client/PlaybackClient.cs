@@ -21,7 +21,7 @@ namespace Client
         private readonly double playbackSpeed;
         private readonly int frameTimeInMilliseconds;
         public MessageReader? Reader;
-        private SemaphoreSlim sema;
+        private readonly SemaphoreSlim sema;
         public SemaphoreSlim Sema => sema;
         public PlaybackClient(string fileName, double playbackSpeed = 1.0, int frameTimeInMilliseconds = 50)
         {
@@ -63,8 +63,8 @@ namespace Client
             bool endFile = false;
             bool mapFlag = false;  // 是否获取了地图
             int[,] map = new int[50, 50];
-            long frame = (long)(this.frameTimeInMilliseconds / this.playbackSpeed);
-            var mapCollecter = new MessageReader(this.fileName);
+            long frame = (long)(frameTimeInMilliseconds / playbackSpeed);
+            var mapCollecter = new MessageReader(fileName);
             while (!mapFlag)
             {
                 var msg = mapCollecter.ReadOne();

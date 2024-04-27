@@ -1,11 +1,16 @@
 ﻿using Grpc.Core;
 using Playback;
+using Preparation.Utility.Logging;
 using Protobuf;
 using System.Collections.Concurrent;
 using Timothy.FrameRateTask;
 
 namespace Server
 {
+    public static class PlaybackServerLogging
+    {
+        public static readonly Logger logger = new("PlaybackServer");
+    }
     class PlaybackServer(ArgumentOptions options) : ServerBase
     {
         protected readonly ArgumentOptions options = options;
@@ -50,7 +55,7 @@ namespace Server
                                              IServerStreamWriter<MessageToClient> responseStream,
                                              ServerCallContext context)
         {
-            Console.WriteLine($"AddPlayer: {request.PlayerId}");
+            PlaybackServerLogging.logger.ConsoleLog($"AddPlayer: {request.PlayerId}");
             if (request.PlayerId >= spectatorMinPlayerID && options.NotAllowSpectator == false)
             {
                 // 观战模式
@@ -58,12 +63,12 @@ namespace Server
                 {
                     if (semaDict.TryAdd(request.PlayerId, (new SemaphoreSlim(0, 1), new SemaphoreSlim(0, 1))))
                     {
-                        Console.WriteLine("A new spectator comes to watch this game.");
+                        PlaybackServerLogging.logger.ConsoleLog("A new spectator comes to watch this game");
                         IsSpectatorJoin = true;
                     }
                     else
                     {
-                        Console.WriteLine($"Duplicated Spectator ID {request.PlayerId}");
+                        PlaybackServerLogging.logger.ConsoleLog($"Duplicated Spectator ID {request.PlayerId}");
                         return;
                     }
                 }
@@ -75,7 +80,7 @@ namespace Server
                         if (currentGameInfo != null)
                         {
                             await responseStream.WriteAsync(currentGameInfo);
-                            Console.WriteLine("Send!");
+                            PlaybackServerLogging.logger.ConsoleLog("Send!", false);
                         }
                     }
                     catch (InvalidOperationException)
@@ -88,13 +93,13 @@ namespace Server
                                 semas.Item2.Release();
                             }
                             catch { }
-                            Console.WriteLine($"The spectator {request.PlayerId} exited");
+                            PlaybackServerLogging.logger.ConsoleLog($"The spectator {request.PlayerId} exited");
                             return;
                         }
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
-                        // Console.WriteLine(ex);
+                        PlaybackServerLogging.logger.ConsoleLog(e.ToString());
                     }
                     finally
                     {
@@ -142,7 +147,7 @@ namespace Server
                 {
                     using (MessageReader mr = new(options.FileName))
                     {
-                        Console.WriteLine("Parsing playback file...");
+                        PlaybackServerLogging.logger.ConsoleLog("Parsing playback file...");
                         teamScore = new long[mr.teamCount];
                         finalScore = new int[mr.teamCount];
                         int infoNo = 0;
@@ -159,7 +164,8 @@ namespace Server
                                     msg = mr.ReadOne();
                                     if (msg == null)
                                     {
-                                        Console.WriteLine("The game doesn't come to an end because of timing up!");
+                                        PlaybackServerLogging.logger.ConsoleLog(
+                                            "The game doesn't come to an end because of timing up!");
                                         IsGaming = false;
                                         goto endParse;
                                     }
@@ -169,7 +175,8 @@ namespace Server
                                         var curTop = Console.CursorTop;
                                         var curLeft = Console.CursorLeft;
                                         Console.SetCursorPosition(initialLeft, initialTop);
-                                        Console.WriteLine($"Parsing messages... Current message number: {infoNo}");
+                                        PlaybackServerLogging.logger.ConsoleLog(
+                                            $"Parsing messages... Current message number: {infoNo}");
                                         Console.SetCursorPosition(curLeft, curTop);
                                     }
 
@@ -184,21 +191,19 @@ namespace Server
 
                             if (msg == null)
                             {
-                                Console.WriteLine("No game information in this file!");
+                                PlaybackServerLogging.logger.ConsoleLog("No game information in this file!");
                                 goto endParse;
                             }
                             if (msg.GameState == GameState.GameEnd)
                             {
-                                Console.WriteLine("Game over normally!");
+                                PlaybackServerLogging.logger.ConsoleLog("Game over normally!");
                                 finalScore[0] = msg.AllMessage.RedTeamScore;
                                 finalScore[1] = msg.AllMessage.BlueTeamScore;
                                 goto endParse;
                             }
                         }
-
                     endParse:
-
-                        Console.WriteLine($"Successfully parsed {infoNo} informations!");
+                        PlaybackServerLogging.logger.ConsoleLog($"Successfully parsed {infoNo} informations!");
                     }
                 }
                 else
@@ -226,7 +231,8 @@ namespace Server
                             msg = mr.ReadOne();
                             if (msg == null)
                             {
-                                Console.WriteLine("The game doesn't come to an end because of timing up!");
+                                PlaybackServerLogging.logger.ConsoleLog(
+                                    "The game doesn't come to an end because of timing up!");
                                 IsGaming = false;
                                 ReportGame(msg);
                                 return false;
@@ -237,7 +243,8 @@ namespace Server
                                 var curTop = Console.CursorTop;
                                 var curLeft = Console.CursorLeft;
                                 Console.SetCursorPosition(msgCurLeft, msgCurTop);
-                                Console.WriteLine($"Sending messages... Current message number: {infoNo}.");
+                                PlaybackServerLogging.logger.ConsoleLog(
+                                    $"Sending messages... Current message number: {infoNo}");
                                 Console.SetCursorPosition(curLeft, curTop);
                             }
                             if (msg != null)
@@ -253,14 +260,14 @@ namespace Server
                             ++infoNo;
                             if (msg == null)
                             {
-                                Console.WriteLine("No game information in this file!");
+                                PlaybackServerLogging.logger.ConsoleLog("No game information in this file!");
                                 IsGaming = false;
                                 ReportGame(msg);
                                 return false;
                             }
                             if (msg.GameState == GameState.GameEnd)
                             {
-                                Console.WriteLine("Game over normally!");
+                                PlaybackServerLogging.logger.ConsoleLog("Game over normally!");
                                 IsGaming = false;
                                 finalScore[0] = msg.AllMessage.BlueTeamScore;
                                 finalScore[1] = msg.AllMessage.RedTeamScore;
@@ -273,9 +280,13 @@ namespace Server
                         finallyReturn: () => 0
                     )
                     { AllowTimeExceed = true, MaxTolerantTimeExceedCount = 5 };
-
-                    Console.WriteLine("The server is well prepared! Please MAKE SURE that you have opened all the clients to watch the game!");
-                    Console.WriteLine("If ALL clients have opened, press any key to start.");
+                    PlaybackServerLogging.logger.ConsoleLog("The server is well prepared!");
+                    PlaybackServerLogging.logger.ConsoleLog(
+                        "Please MAKE SURE that you have opened all the clients to watch the game!",
+                        false);
+                    PlaybackServerLogging.logger.ConsoleLog(
+                        "If ALL clients have opened, press any key to start",
+                        false);
                     Console.ReadKey();
 
                     new Thread
@@ -288,7 +299,8 @@ namespace Server
                                 {
                                     rateCurTop = Console.CursorTop;
                                     rateCurLeft = Console.CursorLeft;
-                                    Console.WriteLine($"Send message to clients frame rate: {frt.FrameRate}");
+                                    PlaybackServerLogging.logger.ConsoleLog(
+                                        $"Send message to clients frame rate: {frt.FrameRate}");
                                 }
                                 while (!frt.Finished)
                                 {
@@ -297,7 +309,8 @@ namespace Server
                                         var curTop = Console.CursorTop;
                                         var curLeft = Console.CursorLeft;
                                         Console.SetCursorPosition(rateCurLeft, rateCurTop);
-                                        Console.WriteLine($"Send message to clients frame rate: {frt.FrameRate}");
+                                        PlaybackServerLogging.logger.ConsoleLog(
+                                            $"Send message to clients frame rate: {frt.FrameRate}");
                                         Console.SetCursorPosition(curLeft, curTop);
                                     }
                                     Thread.Sleep(1000);
@@ -310,7 +323,7 @@ namespace Server
                     {
                         msgCurLeft = Console.CursorLeft;
                         msgCurTop = Console.CursorTop;
-                        Console.WriteLine("Sending messages...");
+                        PlaybackServerLogging.logger.ConsoleLog("Sending messages...", false);
                     }
                     frt.Start();
                 }

@@ -26,13 +26,13 @@ namespace Server
                     },
                     mode
                 }));
-                Console.WriteLine("Send to web successfully!");
-                Console.WriteLine($"Web response: {await response.Content.ReadAsStringAsync()}");
+                GameServerLogging.logger.ConsoleLog("Send to web successfully!");
+                GameServerLogging.logger.ConsoleLog($"Web response: {await response.Content.ReadAsStringAsync()}");
             }
             catch (Exception e)
             {
-                Console.WriteLine("Fail to send msg to web!");
-                Console.WriteLine(e);
+                GameServerLogging.logger.ConsoleLog("Fail to send msg to web!");
+                GameServerLogging.logger.ConsoleLog(e.ToString());
             }
         }
     }

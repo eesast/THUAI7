@@ -1,6 +1,6 @@
 ﻿using GameClass.MapGenerator;
 
-namespace GameClass.GameObj
+namespace GameClass.GameObj.Map
 {
     public static class MapInfo
     {

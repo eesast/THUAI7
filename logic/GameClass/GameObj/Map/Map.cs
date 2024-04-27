@@ -2,16 +2,23 @@
 using GameClass.MapGenerator;
 using Preparation.Interface;
 using Preparation.Utility;
+using Preparation.Utility.Logging;
+using Preparation.Utility.Value;
+using Preparation.Utility.Value.SafeValue;
 using System;
 using System.Collections.Generic;
 
-namespace GameClass.GameObj
+namespace GameClass.GameObj.Map
 {
+    public static class MapLogging
+    {
+        public static readonly Logger logger = new("Map");
+    }
     public partial class Map : IMap
     {
         private readonly Dictionary<GameObjType, LockedClassList<IGameObj>> gameObjDict;
         public Dictionary<GameObjType, LockedClassList<IGameObj>> GameObjDict => gameObjDict;
-        private readonly List<Wormhole> wormholes = new();
+        private readonly List<Wormhole> wormholes = [];
         private readonly uint height;
         public uint Height => height;
         private readonly uint width;
@@ -209,7 +216,7 @@ namespace GameClass.GameObj
         public void Add(IGameObj gameObj)
         {
             GameObjDict[gameObj.Type].Add(gameObj);
-            Debugger.Output($"Found a {gameObj.Type} at {gameObj.Position}");
+            MapLogging.logger.ConsoleLogDebug($"Add {gameObj.Type} at {gameObj.Position}");
         }
         public Map(MapStruct mapResource)
         {
