@@ -7,10 +7,6 @@ using System.Threading;
 
 namespace Gaming
 {
-    public static class ShipManagerLogging
-    {
-        public static readonly Logger logger = new("ShipManager");
-    }
     public partial class Game
     {
         private readonly ShipManager shipManager;
@@ -25,7 +21,7 @@ namespace Gaming
                 newShip.TeamID.SetROri(teamID);
                 newShip.PlayerID.SetROri(playerID);
                 ShipManagerLogging.logger.ConsoleLogDebug(
-                    ShipLogging.ShipLogInfo(newShip)
+                    LoggingFunctional.ShipLogInfo(newShip)
                     + " created");
                 ShipManagerLogging.logger.ConsoleLogDebug(
                     $"Added ship: {newShip.ShipType} with "
@@ -45,17 +41,17 @@ namespace Gaming
                 ship.ReSetPos(pos);
                 ship.SetShipState(RunningStateType.Null, ShipStateType.Null);
                 ShipManagerLogging.logger.ConsoleLogDebug(
-                    ShipLogging.ShipLogInfo(ship)
+                    LoggingFunctional.ShipLogInfo(ship)
                     + " is activated!");
                 return true;
             }
             public void BeAttacked(Ship ship, Bullet bullet)
             {
                 ShipManagerLogging.logger.ConsoleLogDebug(
-                    ShipLogging.ShipLogInfo(ship)
+                    LoggingFunctional.ShipLogInfo(ship)
                     + " is attacked!");
                 ShipManagerLogging.logger.ConsoleLogDebug(
-                    Logger.TypeName(bullet)
+                    LoggingFunctional.BulletLogInfo(bullet)
                     + $" 's AP is {bullet.AP}");
                 if (bullet!.Parent!.TeamID == ship.TeamID)
                 {
@@ -66,41 +62,41 @@ namespace Gaming
                 {
                     ship.Shield.SubPositiveV((long)(subHP * bullet.ShieldModifier));
                     ShipManagerLogging.logger.ConsoleLogDebug(
-                        ShipLogging.ShipLogInfo(ship)
+                        LoggingFunctional.ShipLogInfo(ship)
                         + $" 's shield is {ship.Shield}");
                 }
                 else if (ship.Armor > 0)
                 {
                     ship.Armor.SubPositiveV((long)(subHP * bullet.ArmorModifier));
                     ShipManagerLogging.logger.ConsoleLogDebug(
-                        ShipLogging.ShipLogInfo(ship)
+                        LoggingFunctional.ShipLogInfo(ship)
                         + $" 's armor is {ship.Armor}");
                 }
                 else
                 {
                     ship.HP.SubPositiveV(subHP);
                     ShipManagerLogging.logger.ConsoleLogDebug(
-                        ShipLogging.ShipLogInfo(ship)
+                        LoggingFunctional.ShipLogInfo(ship)
                         + $" 's HP is {ship.HP}");
                 }
                 if (ship.HP == 0)
                 {
                     ShipManagerLogging.logger.ConsoleLogDebug(
-                        ShipLogging.ShipLogInfo(ship)
+                        LoggingFunctional.ShipLogInfo(ship)
                         + " is destroyed!");
                     var money = ship.GetCost();
                     bullet.Parent.AddMoney(money);
                     ShipManagerLogging.logger.ConsoleLogDebug(
-                        ShipLogging.ShipLogInfo((Ship)bullet.Parent)
+                        LoggingFunctional.ShipLogInfo((Ship)bullet.Parent)
                         + $" get {money} money because of destroying "
-                        + ShipLogging.ShipLogInfo(ship));
+                        + LoggingFunctional.ShipLogInfo(ship));
                     Remove(ship);
                 }
             }
             public void BeAttacked(Ship ship, long AP, long teamID)
             {
                 ShipManagerLogging.logger.ConsoleLogDebug(
-                    ShipLogging.ShipLogInfo(ship)
+                    LoggingFunctional.ShipLogInfo(ship)
                     + " is attacked!");
                 ShipManagerLogging.logger.ConsoleLogDebug($"AP is {AP}");
                 if (AP <= 0)
@@ -111,20 +107,20 @@ namespace Gaming
                 {
                     ship.Armor.SubPositiveV(AP);
                     ShipManagerLogging.logger.ConsoleLogDebug(
-                        ShipLogging.ShipLogInfo(ship)
+                        LoggingFunctional.ShipLogInfo(ship)
                         + $" 's armor is {ship.Armor}");
                 }
                 else
                 {
                     ship.HP.SubPositiveV(AP);
                     ShipManagerLogging.logger.ConsoleLogDebug(
-                        ShipLogging.ShipLogInfo(ship)
+                        LoggingFunctional.ShipLogInfo(ship)
                         + $" 's HP is {ship.HP}");
                 }
                 if (ship.HP == 0)
                 {
                     ShipManagerLogging.logger.ConsoleLogDebug(
-                        ShipLogging.ShipLogInfo(ship)
+                        LoggingFunctional.ShipLogInfo(ship)
                         + " is destroyed!");
                     var money = ship.GetCost();
                     var team = game.TeamList[(int)teamID];
@@ -132,7 +128,7 @@ namespace Gaming
                     ShipManagerLogging.logger.ConsoleLogDebug(
                         Logger.ObjInfo(typeof(Base), teamID.ToString())
                         + $" get {money} money because of destroying "
-                        + ShipLogging.ShipLogInfo(ship));
+                        + LoggingFunctional.ShipLogInfo(ship));
                     Remove(ship);
                 }
             }
@@ -147,7 +143,7 @@ namespace Gaming
                 (() =>
                 {
                     ShipManagerLogging.logger.ConsoleLogDebug(
-                        ShipLogging.ShipLogInfo(ship)
+                        LoggingFunctional.ShipLogInfo(ship)
                         + $" is stunned for {time} ms");
                     Thread.Sleep(time);
                     ship.ResetShipState(stateNum);
@@ -171,7 +167,7 @@ namespace Gaming
                 (() =>
                 {
                     ShipManagerLogging.logger.ConsoleLogDebug(
-                        ShipLogging.ShipLogInfo(ship)
+                        LoggingFunctional.ShipLogInfo(ship)
                         + $" is swinging for {time} ms");
                     Thread.Sleep(time);
                     ship.ResetShipState(stateNum);
@@ -208,11 +204,11 @@ namespace Gaming
                         return false;
                 }
                 ShipManagerLogging.logger.ConsoleLogDebug(
-                    ShipLogging.ShipLogInfo(ship)
+                    LoggingFunctional.ShipLogInfo(ship)
                     + $" 's value is {shipValue}");
                 ship.AddMoney((long)(shipValue * 0.5 * ship.HP.GetDivideValueByMaxV()));
                 ShipManagerLogging.logger.ConsoleLogDebug(
-                    ShipLogging.ShipLogInfo(ship)
+                    LoggingFunctional.ShipLogInfo(ship)
                     + " is recycled!");
                 Remove(ship);
                 return false;
@@ -222,12 +218,12 @@ namespace Gaming
                 if (!ship.TryToRemoveFromGame(ShipStateType.Deceased))
                 {
                     ShipManagerLogging.logger.ConsoleLogDebug(
-                        ShipLogging.ShipLogInfo(ship)
+                        LoggingFunctional.ShipLogInfo(ship)
                         + " hasn't been removed from game!");
                     return;
                 }
                 ShipManagerLogging.logger.ConsoleLogDebug(
-                    ShipLogging.ShipLogInfo(ship)
+                    LoggingFunctional.ShipLogInfo(ship)
                     + " hasn been removed from game!");
                 gameMap.Remove(ship);
             }

@@ -6,11 +6,11 @@ namespace Preparation.Utility
 {
     public static class GameData
     {
-        public const int NumOfStepPerSecond = 100;      // 每秒行走的步数
-        public const int FrameDuration = 50;            // 每帧时长
-        public const int CheckInterval = 10;            // 检查间隔
-        public const uint GameDurationInSecond = 60 * 10; // 游戏时长
-        public const int LimitOfStopAndMove = 15;       // 停止和移动的最大间隔
+        public const int NumOfStepPerSecond = 100;          // 每秒行走的步数
+        public const int FrameDuration = 50;                // 每帧时长
+        public const int CheckInterval = 10;                // 检查间隔
+        public const uint GameDurationInSecond = 30;   // 游戏时长
+        public const int LimitOfStopAndMove = 15;           // 停止和移动的最大间隔
 
         public const int TolerancesLength = 3;
         public const int AdjustLength = 3;
@@ -126,7 +126,7 @@ namespace Preparation.Utility
         public const int CivilShipShield1Cost = 6000;
         public const int CivilShipLaserGunCost = 10000;
 
-        public const int WarShipCost = 12000;
+        public const int WarShipCost = 120;
         public const int WarShipMaxHP = 4000;
         public const int WarShipMoveSpeed = 2800;
         public const int WarShipViewRange = 8000;

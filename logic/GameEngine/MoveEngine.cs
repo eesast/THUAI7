@@ -8,10 +8,6 @@ using Timothy.FrameRateTask;
 
 namespace GameEngine
 {
-    public static class GameEngineLogging
-    {
-        public static readonly Logger logger = new("GameEngine");
-    }
     /// <summary>
     /// Constrctor
     /// </summary>

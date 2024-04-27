@@ -1,16 +1,11 @@
 ﻿using Grpc.Core;
 using Playback;
-using Preparation.Utility.Logging;
 using Protobuf;
 using System.Collections.Concurrent;
 using Timothy.FrameRateTask;
 
 namespace Server
 {
-    public static class PlaybackServerLogging
-    {
-        public static readonly Logger logger = new("PlaybackServer");
-    }
     class PlaybackServer(ArgumentOptions options) : ServerBase
     {
         protected readonly ArgumentOptions options = options;
