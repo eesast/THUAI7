@@ -10,7 +10,6 @@
         RowDefinitions="*,*,*,*,*,*,*,*,*,*"
         ColumnDefinitions="*">
 
-        
         <VerticalStackLayout
             Grid.Row="0"
             Grid.RowSpan="9"
@@ -18,6 +17,26 @@
             VerticalOptions="Center">
 
             <HorizontalStackLayout>
+                <Label
+                    WidthRequest="170"
+                    Text="Mode"
+                    VerticalOptions="Center"
+                    FontSize="{Binding ConstFontSize}"/>
+                <Picker
+                    SelectedItem="{Binding Mode}"
+                    WidthRequest="400">
+                    <Picker.ItemsSource>
+                        <x:Array
+                            Type="{x:Type x:String}">
+                            <x:String>Client</x:String>
+                            <x:String>Server</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+            </HorizontalStackLayout>
+            
+            <HorizontalStackLayout
+                IsVisible="{Binding IPVisible}">
                 <Label
                     WidthRequest="170"
                     Text="IP"
@@ -38,24 +57,6 @@
                     WidthRequest="400"
                     Text="{Binding Port}"
                     FontSize="16"/>
-            </HorizontalStackLayout>
-            <HorizontalStackLayout>
-                <Label
-                    WidthRequest="170"
-                    Text="Mode"
-                    VerticalOptions="Center"
-                    FontSize="{Binding ConstFontSize}"/>
-                <Picker
-                    SelectedItem="{Binding Mode}"
-                    WidthRequest="400">
-                    <Picker.ItemsSource>
-                        <x:Array
-                            Type="{x:Type x:String}">
-                            <x:String>Client</x:String>
-                            <x:String>Server</x:String>
-                        </x:Array>
-                    </Picker.ItemsSource>
-                </Picker>
             </HorizontalStackLayout>
 
             <Label/>
@@ -146,6 +147,20 @@
 
                 <Grid
                     ColumnDefinitions="15,370,100,100,15">
+                    <HorizontalStackLayout
+                        Grid.Column="1">
+                        <CheckBox
+                            IsChecked="{Binding HaveSpectator}"/>
+                        <Label
+                            WidthRequest="90"
+                            Text="Spectator"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"/>
+                        <Entry
+                            WidthRequest="100"
+                            IsEnabled="{Binding HaveSpectator}"
+                            Text="{Binding SpectatorID}"/>
+                    </HorizontalStackLayout>
                     <Button
                         Grid.Column="2"
                         Text="Add"
@@ -210,7 +225,7 @@
 
                 
             <VerticalStackLayout
-                    IsVisible="{Binding ServerVisible}">
+                IsVisible="{Binding ServerVisible}">
                 
                 <HorizontalStackLayout>
                     <Label
