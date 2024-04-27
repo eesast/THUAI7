@@ -117,10 +117,10 @@ namespace GameClass.GameObj.Map
             return (GameObj?)GameObjDict[gameObjType].Find(gameObj =>
                 GameData.IsInTheRange(gameObj.Position, Pos, range));
         }
-        public List<Ship>? ShipInTheRange(XY Pos, int range)
+        public List<Ship>? ShipInTheRangeNotTeamID(XY Pos, int range, long teamID)
         {
             return GameObjDict[GameObjType.Ship].Cast<Ship>()?.FindAll(ship =>
-                GameData.IsInTheRange(ship.Position, Pos, range));
+                (GameData.IsInTheRange(ship.Position, Pos, range) && ship.TeamID != teamID));
         }
         public List<Ship>? ShipInTheList(List<CellXY> PosList)
         {
