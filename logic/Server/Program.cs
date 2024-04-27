@@ -65,7 +65,6 @@ namespace Server
                 logger.ConsoleLog("Server end!");
                 rpcServer.ShutdownAsync().Wait();
 
-                Thread.Sleep(50);
                 Logger.RawConsoleLog("", false);
                 logger.ConsoleLog("===================  Final Score  ====================", false);
                 logger.ConsoleLog($"Team0: {server.GetScore()[0]}"); //红队
@@ -76,6 +75,11 @@ namespace Server
                 Logger.RawConsoleLog(ex.ToString());
                 if (ex.StackTrace is not null)
                     Logger.RawConsoleLog(ex.StackTrace);
+            }
+            finally
+            {
+                Thread.Sleep(1000);  // 确保log被Duplicate
+                LogQueue.Close();
             }
             return 0;
         }

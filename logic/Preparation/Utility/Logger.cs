@@ -24,35 +24,47 @@ public class LogQueue
         });
     }
 
+    public static bool IsClosed {  get; private set; } = false;
+    public static void Close()
+    {
+        if (IsClosed) return;
+        LogWrite();
+        LogCopy();
+        IsClosed = true;
+    }
+
+    static void LogCopy()
+    {
+        if (IsClosed) return;
+        string copyPath = $"{LoggingData.ServerLogPath}-copy{logCopyNum}.txt";
+        if (File.Exists(copyPath))
+            File.Delete(copyPath);
+        File.Copy(LoggingData.ServerLogPath, copyPath);
+        logCopyNum++;
+        File.Delete(LoggingData.ServerLogPath);
+        logNum = 0;
+    }
+    static void LogWrite()
+    {
+        if (IsClosed) return;
+        lock (queueLock)
+        {
+            while (Global.logInfoQueue.Count != 0)
+            {
+                var info = Global.logInfoQueue.Dequeue();
+                File.AppendAllText(LoggingData.ServerLogPath, info + Environment.NewLine);
+                logNum++;
+                if (logNum >= LoggingData.MaxLogNum)
+                    LogCopy();
+            }
+        }
+    }
+
     private LogQueue()
     {
         if (File.Exists(LoggingData.ServerLogPath))
             File.Delete(LoggingData.ServerLogPath);
         File.AppendAllText(LoggingData.ServerLogPath, $"[{Logger.NowDate()}]" + Environment.NewLine);
-        void LogCopy()
-        {
-            string copyPath = $"{LoggingData.ServerLogPath}-copy{logCopyNum}.txt";
-            if (File.Exists(copyPath))
-                File.Delete(copyPath);
-            File.Copy(LoggingData.ServerLogPath, copyPath);
-            logCopyNum++;
-            File.Delete(LoggingData.ServerLogPath);
-            logNum = 0;
-        }
-        void LogWrite()
-        {
-            lock (queueLock)
-            {
-                while (logInfoQueue.Count != 0)
-                {
-                    var info = logInfoQueue.Dequeue();
-                    File.AppendAllText(LoggingData.ServerLogPath, info + Environment.NewLine);
-                    logNum++;
-                    if (logNum >= LoggingData.MaxLogNum)
-                        LogCopy();
-                }
-            }
-        }
         new Thread(() =>
         {
             new FrameRateTaskExecutor<int>(
@@ -61,13 +73,13 @@ public class LogQueue
                 timeInterval: 100,
                 finallyReturn: () =>
                 {
-                    LogWrite();
-                    LogCopy();
+                    Close();
                     return 0;
                 }
                 ).Start();
         })
         { IsBackground = true }.Start();
+        var t = new Thread(() => { });
     }
 }
 
@@ -130,12 +142,12 @@ public class Logger(string module)
     public static string NowTime()
     {
         DateTime now = DateTime.Now;
-        return $"{now.Hour}:{now.Minute}:{now.Second}.{now.Millisecond:D3}";
+        return $"{now.Hour:D2}:{now.Minute:D2}:{now.Second:D2}.{now.Millisecond:D3}";
     }
     public static string NowDate()
     {
         DateTime now = DateTime.Today;
-        return $"{now.Year}/{now.Month}/{now.Day} {now.DayOfWeek}";
+        return $"{now.Year:D4}/{now.Month:D2}/{now.Day:D2} {now.DayOfWeek}";
     }
 }
 
