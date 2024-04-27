@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using Preparation.Utility;
 
 namespace Server
 {
@@ -27,7 +28,7 @@ namespace Server
         public ushort HomeCount { get; set; } = 1;
 
         [Option('g', "gameTimeInSecond", Required = false, HelpText = "The time of the game in second, 10 minutes by default")]
-        public uint GameTimeInSecond { get; set; } = 10 * 60;
+        public uint GameTimeInSecond { get; set; } = GameData.GameDurationInSecond;
         [Option('f', "fileName", Required = false, HelpText = "The file to store playback file or to read file.")]
         public string FileName { get; set; } = "114514";
         [Option("notAllowSpectator", Required = false, HelpText = "Whether to allow a spectator to watch the game.")]
