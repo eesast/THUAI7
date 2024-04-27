@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Preparation.Interface;
+using System;
 using System.Threading;
 
-namespace Preparation.Utility
+namespace Preparation.Utility.Value.SafeValue.Atomic
 {
     //其对应属性不应当有set访问器，避免不安全的=赋值
 
@@ -123,12 +124,12 @@ namespace Preparation.Utility
 
         public override int SubRNow(int x)
         {
-            if (x < 0) Score.Add(Convert.ToInt32((-x) * speed.ToDouble()));
+            if (x < 0) Score.Add(Convert.ToInt32(-x * speed.ToDouble()));
             return Interlocked.Add(ref v, -x);
         }
         public override void Sub(int x)
         {
-            if (x < 0) Score.Add(Convert.ToInt32((-x) * speed.ToDouble()));
+            if (x < 0) Score.Add(Convert.ToInt32(-x * speed.ToDouble()));
             Interlocked.Add(ref v, -x);
         }
         public int SubRNowNotAddScore(int x)
@@ -200,12 +201,12 @@ namespace Preparation.Utility
 
         public override void Add(int x)
         {
-            Score.Add(Convert.ToInt32((x) * speed));
+            Score.Add(Convert.ToInt32(x * speed));
             Interlocked.Add(ref v, x);
         }
         public override int AddRNow(int x)
         {
-            Score.Add(Convert.ToInt32((x) * speed));
+            Score.Add(Convert.ToInt32(x * speed));
             return Interlocked.Add(ref v, x);
         }
         public void AddNotAddScore(int x) => Interlocked.Add(ref v, x);
@@ -214,7 +215,7 @@ namespace Preparation.Utility
         /// </summary>
         public override void AddPositive(int x)
         {
-            Score.Add(Convert.ToInt32((x) * speed));
+            Score.Add(Convert.ToInt32(x * speed));
             Interlocked.Add(ref v, x);
         }
         /// <summary>
@@ -222,18 +223,18 @@ namespace Preparation.Utility
         /// </summary>
         public override int AddPositiveRNow(int x)
         {
-            Score.Add(Convert.ToInt32((x) * speed));
+            Score.Add(Convert.ToInt32(x * speed));
             return Interlocked.Add(ref v, x);
         }
 
         public override void Sub(int x)
         {
-            Score.Add(Convert.ToInt32((-x) * speed));
+            Score.Add(Convert.ToInt32(-x * speed));
             Interlocked.Add(ref v, -x);
         }
         public override int SubRNow(int x)
         {
-            Score.Add(Convert.ToInt32((-x) * speed));
+            Score.Add(Convert.ToInt32(-x * speed));
             return Interlocked.Add(ref v, -x);
         }
         public void SubNotAddScore(int x) => Interlocked.Add(ref v, -x);
@@ -242,7 +243,7 @@ namespace Preparation.Utility
         /// </summary>
         public override void SubPositive(int x)
         {
-            Score.Add(Convert.ToInt32((-x) * speed));
+            Score.Add(Convert.ToInt32(-x * speed));
             Interlocked.Add(ref v, -x);
         }
         public override int Inc()
@@ -288,7 +289,7 @@ namespace Preparation.Utility
         /// <returns>返回操作前的值</returns>
         public virtual long SetROri(long value) => Interlocked.Exchange(ref v, value);
         public virtual void Add(long x) => Interlocked.Add(ref v, x);
-        public virtual void Add(int x) => Interlocked.Add(ref v, (long)x);
+        public virtual void Add(int x) => Interlocked.Add(ref v, x);
         public virtual long AddRNow(long x) => Interlocked.Add(ref v, x);
 
         public virtual void Sub(long x) => Interlocked.Add(ref v, -x);
@@ -337,12 +338,12 @@ namespace Preparation.Utility
         }
         public override void Add(long x)
         {
-            if (x > 0) Score.Add(Convert.ToInt32((x) * speed));
+            if (x > 0) Score.Add(Convert.ToInt32(x * speed));
             Interlocked.Add(ref v, x);
         }
         public override long AddRNow(long x)
         {
-            if (x > 0) Score.Add(Convert.ToInt32((x) * speed));
+            if (x > 0) Score.Add(Convert.ToInt32(x * speed));
             return Interlocked.Add(ref v, x);
         }
         public void AddNotAddScore(long x)
@@ -352,12 +353,12 @@ namespace Preparation.Utility
 
         public override void Sub(long x)
         {
-            if (x < 0) Score.Add(Convert.ToInt32((-x) * speed));
+            if (x < 0) Score.Add(Convert.ToInt32(-x * speed));
             Interlocked.Add(ref v, -x);
         }
         public override long SubRNow(long x)
         {
-            if (x < 0) Score.Add(Convert.ToInt32((-x) * speed));
+            if (x < 0) Score.Add(Convert.ToInt32(-x * speed));
             return Interlocked.Add(ref v, -x);
         }
         public void SubNotAddScore(long x)

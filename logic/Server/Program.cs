@@ -1,5 +1,6 @@
 using CommandLine;
 using Grpc.Core;
+using Preparation.Utility.Logging;
 using Protobuf;
 
 namespace Server
@@ -24,37 +25,34 @@ namespace Server
                           \/           \/               \/        \/    
         """;
 
-        static ServerBase CreateServer(ArgumentOptions options)
-        {
-            return options.Playback ? new PlaybackServer(options) : new GameServer(options);
-            //return new PlaybackServer(options);
-        }
+        static (ServerBase, Logger) CreateServer(ArgumentOptions options)
+            => options.Playback ? (new PlaybackServer(options), PlaybackServerLogging.logger)
+                                : (new GameServer(options), GameServerLogging.logger);
 
         static int Main(string[] args)
         {
+            string args_str = "";
             foreach (var arg in args)
-            {
-                Console.Write($"{arg} ");
-            }
-            Console.WriteLine();
+                args_str += arg + " ";
+            Logger.RawConsoleLog(args_str);
 
             ArgumentOptions? options = null;
             _ = Parser.Default.ParseArguments<ArgumentOptions>(args).WithParsed(o => { options = o; });
             if (options == null)
             {
-                Console.WriteLine("Argument parsing failed!");
+                Logger.RawConsoleLog("Argument parsing failed!");
                 return 1;
             }
 
             if (options.StartLockFile == "114514")
             {
-                Console.WriteLine(welcome);
+                Logger.RawConsoleLog(welcome, false);
             }
-            Console.WriteLine($"Server begins to run: {options.ServerPort}");
+            Logger.RawConsoleLog($"Server begins to run: {options.ServerPort}");
 
             try
             {
-                var server = CreateServer(options);
+                var (server, logger) = CreateServer(options);
                 Grpc.Core.Server rpcServer = new([new ChannelOption(ChannelOptions.SoReuseport, 0)])
                 {
                     Services = { AvailableService.BindService(server) },
@@ -62,21 +60,26 @@ namespace Server
                 };
                 rpcServer.Start();
 
-                Console.WriteLine("Server begins to listen!");
+                logger.ConsoleLog("Server begins to listen!");
                 server.WaitForEnd();
-                Console.WriteLine("Server end!");
+                logger.ConsoleLog("Server end!");
                 rpcServer.ShutdownAsync().Wait();
 
-                Thread.Sleep(50);
-                Console.WriteLine("");
-                Console.WriteLine("===================  Final Score  ====================");
-                Console.WriteLine($"Team0: {server.GetScore()[0]}"); //红队
-                Console.WriteLine($"Team1: {server.GetScore()[1]}"); //蓝队
+                Logger.RawConsoleLog("", false);
+                logger.ConsoleLog("===================  Final Score  ====================", false);
+                logger.ConsoleLog($"Team0: {server.GetScore()[0]}"); //红队
+                logger.ConsoleLog($"Team1: {server.GetScore()[1]}"); //蓝队
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
-                Console.WriteLine(ex.StackTrace);
+                Logger.RawConsoleLog(ex.ToString());
+                if (ex.StackTrace is not null)
+                    Logger.RawConsoleLog(ex.StackTrace);
+            }
+            finally
+            {
+                Thread.Sleep(1000);  // 确保log被Duplicate
+                LogQueue.Close();
             }
             return 0;
         }

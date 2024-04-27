@@ -1,22 +1,18 @@
 ﻿using Protobuf;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Client.Util
 {
     public static class UtilInfo
     {
-        public static Dictionary<ShipType, string> ShipTypeNameDict = new Dictionary<ShipType, string>{
+        public static readonly Dictionary<ShipType, string> ShipTypeNameDict = new()
+        {
             { ShipType.NullShipType, "Null" },
             { ShipType.CivilianShip, "Civilian" },
             { ShipType.MilitaryShip, "Military" },
             { ShipType.FlagShip, "FlagShip" }
         };
 
-        public static Dictionary<ShipState, string> ShipStateNameDict = new Dictionary<ShipState, string>
+        public static readonly Dictionary<ShipState, string> ShipStateNameDict = new()
         {
             { ShipState.Idle, "Idle" },
             { ShipState.Producing, "Producing" },
@@ -30,7 +26,7 @@ namespace Client.Util
 
         };
 
-        public static Dictionary<ArmorType, string> ShipArmorTypeNameDict = new Dictionary<ArmorType, string>
+        public static readonly Dictionary<ArmorType, string> ShipArmorTypeNameDict = new()
         {
             //{ ArmorType.NullArmorType, "Null" },
             //{ ArmorType.Armor1, "Armor1" },
@@ -42,7 +38,7 @@ namespace Client.Util
             { ArmorType.Armor3, "🪖🌟" }
         };
 
-        public static Dictionary<ShieldType, string> ShipShieldTypeNameDict = new Dictionary<ShieldType, string>
+        public static readonly Dictionary<ShieldType, string> ShipShieldTypeNameDict = new()
         {
             { ShieldType.NullShieldType, "Null" },
             { ShieldType.Shield1, "🛡️🔸" },
@@ -50,7 +46,7 @@ namespace Client.Util
             { ShieldType.Shield3, "🛡️🌟" }
         };
 
-        public static Dictionary<ConstructorType, string> ShipConstructorNameDict = new Dictionary<ConstructorType, string>
+        public static readonly Dictionary<ConstructorType, string> ShipConstructorNameDict = new()
         {
             { ConstructorType.NullConstructorType, "Null" },
             { ConstructorType.Constructor1, "🔨🔸" },
@@ -58,7 +54,7 @@ namespace Client.Util
             { ConstructorType.Constructor3, "🔨🌟" }
         };
 
-        public static Dictionary<ProducerType, string> ShipProducerTypeNameDict = new Dictionary<ProducerType, string>
+        public static readonly Dictionary<ProducerType, string> ShipProducerTypeNameDict = new()
         {
             { ProducerType.NullProducerType, "Null" },
             { ProducerType.Producer1, "⛏🔸" },
@@ -66,7 +62,7 @@ namespace Client.Util
             { ProducerType.Producer3, "⛏🌟" }
         };
 
-        public static Dictionary<WeaponType, string> ShipWeaponTypeNameDict = new Dictionary<WeaponType, string>
+        public static readonly Dictionary<WeaponType, string> ShipWeaponTypeNameDict = new()
         {
             { WeaponType.NullWeaponType, "Null" },
             { WeaponType.Lasergun, "Lasergun" },
@@ -79,8 +75,8 @@ namespace Client.Util
         public static bool isRedPlayerShipsEmpty = true;
         public static bool isBluePlayerShipsEmpty = false;
 
-        public static int unitWidth = 10;
-        public static int unitHeight = 10;
+        public const int unitWidth = 10;
+        public const int unitHeight = 10;
     }
 
 

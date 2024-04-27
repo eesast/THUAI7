@@ -1,13 +1,19 @@
 ﻿using GameClass.GameObj;
+using GameClass.GameObj.Map;
 using GameClass.GameObj.Areas;
 using GameEngine;
 using Preparation.Utility;
 using System;
 using System.Threading;
 using Timothy.FrameRateTask;
+using Preparation.Utility.Logging;
 
 namespace Gaming
 {
+    public static class ActionManagerLogging
+    {
+        public static readonly Logger logger = new("ActionManager");
+    }
     public partial class Game
     {
         private readonly ActionManager actionManager;
@@ -46,13 +52,13 @@ namespace Gaming
             {
                 if (moveTimeInMilliseconds < 5)
                 {
-                    Debugger.Output("Move time is too short.");
+                    ActionManagerLogging.logger.ConsoleLogDebug("Move time is too short");
                     return false;
                 }
                 long stateNum = shipToMove.SetShipState(RunningStateType.Waiting, ShipStateType.Moving);
                 if (stateNum == -1)
                 {
-                    Debugger.Output("Ship is not commandable.");
+                    ActionManagerLogging.logger.ConsoleLogDebug("Ship is not commandable");
                     return false;
                 }
                 new Thread
