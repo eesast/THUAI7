@@ -107,45 +107,48 @@ public class Ship : Movable, IShip
             case ModuleType.Producer1:
                 if (ProducerModuleType != ProducerType.Producer1)
                 {
-                    SubMoney(
-                        ProducerModule.SetROri(
-                            ModuleFactory.FindIProducer(ShipType, ProducerType.Producer1)
-                            ).Cost);
+                    ProducerModule.SetROri(ModuleFactory.FindIProducer(ShipType, ProducerType.Producer1));
+                    SubMoney(ProducerModule.Get().Cost);
                     return true;
                 }
                 break;
             case ModuleType.Producer2:
                 if (ProducerModuleType != ProducerType.Producer2)
                 {
-                    SubMoney(ProducerModule.SetROri(ModuleFactory.FindIProducer(ShipType, ProducerType.Producer2)).Cost);
+                    ProducerModule.SetROri(ModuleFactory.FindIProducer(ShipType, ProducerType.Producer2));
+                    SubMoney(ProducerModule.Get().Cost);
                     return true;
                 }
                 break;
             case ModuleType.Producer3:
                 if (ProducerModuleType != ProducerType.Producer3)
                 {
-                    SubMoney(ProducerModule.SetROri(ModuleFactory.FindIProducer(ShipType, ProducerType.Producer3)).Cost);
+                    ProducerModule.SetROri(ModuleFactory.FindIProducer(ShipType, ProducerType.Producer3));
+                    SubMoney(ProducerModule.Get().Cost);
                     return true;
                 }
                 break;
             case ModuleType.Constructor1:
                 if (ConstructorModuleType != ConstructorType.Constructor1)
                 {
-                    SubMoney(ConstructorModule.SetROri(ModuleFactory.FindIConstructor(ShipType, ConstructorType.Constructor1)).Cost);
+                    ConstructorModule.SetROri(ModuleFactory.FindIConstructor(ShipType, ConstructorType.Constructor1));
+                    SubMoney(ConstructorModule.Get().Cost);
                     return true;
                 }
                 break;
             case ModuleType.Constructor2:
                 if (ConstructorModuleType != ConstructorType.Constructor2)
                 {
-                    SubMoney(ConstructorModule.SetROri(ModuleFactory.FindIConstructor(ShipType, ConstructorType.Constructor2)).Cost);
+                    ConstructorModule.SetROri(ModuleFactory.FindIConstructor(ShipType, ConstructorType.Constructor2));
+                    SubMoney(ConstructorModule.Get().Cost);
                     return true;
                 }
                 break;
             case ModuleType.Constructor3:
                 if (ConstructorModuleType != ConstructorType.Constructor3)
                 {
-                    SubMoney(ConstructorModule.SetROri(ModuleFactory.FindIConstructor(ShipType, ConstructorType.Constructor3)).Cost);
+                    ConstructorModule.SetROri(ModuleFactory.FindIConstructor(ShipType, ConstructorType.Constructor3));
+                    SubMoney(ConstructorModule.Get().Cost);
                     return true;
                 }
                 break;
@@ -211,14 +214,16 @@ public class Ship : Movable, IShip
             case ModuleType.LaserGun:
                 if (WeaponModuleType != WeaponType.LaserGun)
                 {
-                    SubMoney(WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.LaserGun)).Cost);
+                    WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.LaserGun));
+                    SubMoney(WeaponModule.Get().Cost);
                     return true;
                 }
                 break;
             case ModuleType.PlasmaGun:
                 if (WeaponModuleType != WeaponType.PlasmaGun)
                 {
-                    SubMoney(WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.PlasmaGun)).Cost);
+                    WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.PlasmaGun));
+                    SubMoney(WeaponModule.Get().Cost);
                     return true;
                 }
                 break;
@@ -226,7 +231,8 @@ public class Ship : Movable, IShip
             case ModuleType.ShellGun:
                 if (WeaponModuleType != WeaponType.ShellGun)
                 {
-                    SubMoney(WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.ShellGun)).Cost);
+                    WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.ShellGun));
+                    SubMoney(WeaponModule.Get().Cost);
                     return true;
                 }
                 break;
@@ -234,7 +240,8 @@ public class Ship : Movable, IShip
             case ModuleType.MissileGun:
                 if (WeaponModuleType != WeaponType.MissileGun)
                 {
-                    SubMoney(WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.MissileGun)).Cost);
+                    WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.MissileGun));
+                    SubMoney(WeaponModule.Get().Cost);
                     return true;
                 }
                 break;
@@ -242,7 +249,8 @@ public class Ship : Movable, IShip
             case ModuleType.ArcGun:
                 if (WeaponModuleType != WeaponType.ArcGun)
                 {
-                    SubMoney(WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.ArcGun)).Cost);
+                    WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.ArcGun));
+                    SubMoney(WeaponModule.Get().Cost);
                     return true;
                 }
                 break;
