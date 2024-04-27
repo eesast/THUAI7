@@ -35,19 +35,32 @@ namespace installer.ViewModel
                 mode = value;
                 if (mode == "Client")
                 {
+                    IPVisible = true;
                     ClientVisible = true;
                     ServerVisible = false;
                 }
                 else if (mode == "Server")
                 {
+                    IPVisible = false;
                     ClientVisible = false;
                     ServerVisible = true;
                 }
                 else
                 {
+                    IPVisible = true;
                     ClientVisible = false;
                     ServerVisible = false;
                 }
+            }
+        }
+        private bool ipVisible = false;
+        public bool IPVisible
+        {
+            get => ipVisible;
+            set
+            {
+                ipVisible = value;
+                OnPropertyChanged();
             }
         }
 
@@ -252,7 +265,7 @@ namespace installer.ViewModel
             server = Process.Start(new ProcessStartInfo()
             {
                 FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Server", "Server.exe"),
-                Arguments = $"--ip {IP} --port {Port} --teamCount {TeamCount} --shipNum {ShipCount}",
+                Arguments = $"--ip 0.0.0.0 --port {Port} --teamCount {TeamCount} --shipNum {ShipCount}",
             });
             if (server is null)
             {

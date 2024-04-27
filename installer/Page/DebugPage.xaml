@@ -20,6 +20,26 @@
             <HorizontalStackLayout>
                 <Label
                     WidthRequest="170"
+                    Text="Mode"
+                    VerticalOptions="Center"
+                    FontSize="{Binding ConstFontSize}"/>
+                <Picker
+                    SelectedItem="{Binding Mode}"
+                    WidthRequest="400">
+                    <Picker.ItemsSource>
+                        <x:Array
+                            Type="{x:Type x:String}">
+                            <x:String>Client</x:String>
+                            <x:String>Server</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+            </HorizontalStackLayout>
+            
+            <HorizontalStackLayout
+                IsVisible="{Binding IPVisible}">
+                <Label
+                    WidthRequest="170"
                     Text="IP"
                     VerticalOptions="Center"
                     FontSize="{Binding ConstFontSize}"/>
@@ -38,24 +58,6 @@
                     WidthRequest="400"
                     Text="{Binding Port}"
                     FontSize="16"/>
-            </HorizontalStackLayout>
-            <HorizontalStackLayout>
-                <Label
-                    WidthRequest="170"
-                    Text="Mode"
-                    VerticalOptions="Center"
-                    FontSize="{Binding ConstFontSize}"/>
-                <Picker
-                    SelectedItem="{Binding Mode}"
-                    WidthRequest="400">
-                    <Picker.ItemsSource>
-                        <x:Array
-                            Type="{x:Type x:String}">
-                            <x:String>Client</x:String>
-                            <x:String>Server</x:String>
-                        </x:Array>
-                    </Picker.ItemsSource>
-                </Picker>
             </HorizontalStackLayout>
 
             <Label/>
