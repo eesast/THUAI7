@@ -34,7 +34,7 @@ namespace Client.Util
         }
         public static int getGridIndex(float i, float j)
         {
-            return 50 * (49 - (int)i / 1000) + (49 - (int)j / 1000);
+            return 50 * ((int)i / 1000) + ((int)j / 1000);
         }
 
         public static PointF Grid2CellPoint(float i, float j)
