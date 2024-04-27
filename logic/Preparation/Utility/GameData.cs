@@ -126,7 +126,7 @@ namespace Preparation.Utility
         public const int CivilShipShield1Cost = 6000;
         public const int CivilShipLaserGunCost = 10000;
 
-        public const int WarShipCost = 120;
+        public const int WarShipCost = 12000;
         public const int WarShipMaxHP = 4000;
         public const int WarShipMoveSpeed = 2800;
         public const int WarShipViewRange = 8000;

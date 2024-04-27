@@ -328,7 +328,7 @@ public class Ship : Movable, IShip
             ShipStateType nowShipState = shipState;
             ShipLogging.logger.ConsoleLogDebug(
                 LoggingFunctional.ShipLogInfo(this)
-                + $"SetShipState from {nowShipState} to {value}");
+                + $" SetShipState from {nowShipState} to {value}");
             if (nowShipState == value) return -1;
             GameObj? lastObj = whatInteractingWith;
             switch (nowShipState)
@@ -372,7 +372,7 @@ public class Ship : Movable, IShip
             {
                 ShipLogging.logger.ConsoleLogDebug(
                     LoggingFunctional.ShipLogInfo(this)
-                    + "ResetShipState failed");
+                    + " ResetShipState failed");
                 return false;
             }
             runningState = running;
@@ -381,7 +381,7 @@ public class Ship : Movable, IShip
             ++stateNum;
             ShipLogging.logger.ConsoleLogDebug(
                 LoggingFunctional.ShipLogInfo(this)
-                + $"ResetShipState succeeded {stateNum}");
+                + $" ResetShipState succeeded {stateNum}");
             return true;
         }
     }
@@ -404,14 +404,14 @@ public class Ship : Movable, IShip
             {
                 ShipLogging.logger.ConsoleLogDebug(
                     LoggingFunctional.ShipLogInfo(this)
-                    + "StartThread succeeded");
+                    + " StartThread succeeded");
                 this.runningState = runningState;
                 return true;
             }
         }
         ShipLogging.logger.ConsoleLogDebug(
             LoggingFunctional.ShipLogInfo(this)
-            + "StartThread failed");
+            + " StartThread failed");
         return false;
     }
     public bool TryToRemoveFromGame(ShipStateType shipStateType)
