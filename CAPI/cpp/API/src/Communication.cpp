@@ -202,7 +202,7 @@ bool Communication::BuildShip(int32_t teamID, THUAI7::ShipType ShipType, int32_t
     auto request = THUAI72Proto::THUAI72ProtobufBuildShipMsg(teamID, ShipType, birthIndex);
     auto status = THUAI7Stub->BuildShip(&context, request, &reply);
     if (status.ok())
-        return true;
+        return reply.act_success();
     else
         return false;
 }

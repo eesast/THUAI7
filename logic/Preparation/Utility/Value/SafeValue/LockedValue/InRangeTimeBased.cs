@@ -1,9 +1,10 @@
-﻿using Preparation.Utility;
-using System;
-using System.Numerics;
+﻿using System;
 using System.Threading;
+using Preparation.Interface;
+using Preparation.Utility.Value.SafeValue.Atomic;
+using Preparation.Utility.Value.SafeValue.TimeBased;
 
-namespace Preparation.Utility
+namespace Preparation.Utility.Value.SafeValue.LockedValue
 {
     //其对应属性不应当有set访问器，避免不安全的=赋值
 
@@ -37,8 +38,10 @@ namespace Preparation.Utility
             return WriteNeed(() =>
             {
                 long addV = (long)(startTime.StopIfPassing(maxV - v) * speed);
-                if (addV < 0) return (v, maxV, startTime.Get());
-                if (maxV - v < addV) return (v = maxV, maxV, startTime.Get());
+                if (addV < 0)
+                    return (v, maxV, startTime.Get());
+                if (maxV - v < addV)
+                    return (v = maxV, maxV, startTime.Get());
                 return (v + addV, maxV, startTime.Get());
             });
         }
@@ -52,7 +55,7 @@ namespace Preparation.Utility
             return WriteNeed(() =>
             {
                 long previousV = v;
-                long addV = (Environment.TickCount64 - startTime.Stop());
+                long addV = Environment.TickCount64 - startTime.Stop();
                 if (addV > 0) v += (long)(addV * speed);
                 else return 0;
                 if (v > maxV) v = maxV;
@@ -91,7 +94,7 @@ namespace Preparation.Utility
         {
             WriteNeed(() =>
             {
-                this.v = value;
+                v = value;
                 startTime.Stop();
             });
         }
@@ -120,13 +123,15 @@ namespace Preparation.Utility
         public TimeBasedProgressAtVariableSpeed(long needProgress, double speed = 1.0)
         {
             progress = new LongInVariableRangeWithStartTime(0, needProgress);
-            if (needProgress <= 0) Debugger.Output("Bug:TimeBasedProgressAtVariableSpeed.needProgress (" + needProgress.ToString() + ") is less than 0.");
+            if (needProgress <= 0)
+                LockedValueLogging.logger.ConsoleLogDebug(
+                    $"Bug: TimeBasedProgressAtVariableSpeed.needProgress({needProgress}) is less than 0");
             this.speed = new AtomicDouble(speed);
         }
         public TimeBasedProgressAtVariableSpeed()
         {
             progress = new LongInVariableRangeWithStartTime(0, 0);
-            this.speed = new AtomicDouble(1.0);
+            speed = new AtomicDouble(1.0);
         }
         #endregion
 
@@ -135,15 +140,20 @@ namespace Preparation.Utility
         {
             long progressStored, lastStartTime;
             (progressStored, lastStartTime) = progress.GetValueWithStartTime();
-            return "ProgressStored: " + progressStored.ToString()
-                        + " ; LastStartTime: " + lastStartTime.ToString() + "ms"
-                        + " ; Speed: " + speed.ToString();
+            return $"ProgressStored: {progressStored}; "
+                   + $"LastStartTime: {lastStartTime} ms; "
+                   + $"Speed: {speed}";
         }
-        public long GetProgressNow() => progress.AddStartTimeToMaxV(speed.ToDouble()).Item1;
-        public (long, long, long) GetProgressNowAndNeedTimeAndLastStartTime() => progress.AddStartTimeToMaxV(speed.ToDouble());
-        public long GetProgressStored() => progress.GetValue();
-        public (long, long) GetProgressStoredAndNeedTime() => progress.GetValueAndMaxV();
-        public (long, long, long) GetProgressStoredAndNeedTimeAndLastStartTime() => progress.GetValueAndMaxVWithStartTime();
+        public long GetProgressNow()
+            => progress.AddStartTimeToMaxV(speed.ToDouble()).Item1;
+        public (long, long, long) GetProgressNowAndNeedTimeAndLastStartTime()
+            => progress.AddStartTimeToMaxV(speed.ToDouble());
+        public long GetProgressStored()
+            => progress.GetValue();
+        public (long, long) GetProgressStoredAndNeedTime()
+            => progress.GetValueAndMaxV();
+        public (long, long, long) GetProgressStoredAndNeedTimeAndLastStartTime()
+            => progress.GetValueAndMaxVWithStartTime();
 
         public bool IsFinished()
         {
@@ -155,7 +165,7 @@ namespace Preparation.Utility
         {
             long progressNow, needTime, startT;
             (progressNow, needTime, startT) = progress.AddStartTimeToMaxV(speed.ToDouble());
-            return (startT != long.MaxValue && progressNow != needTime);
+            return startT != long.MaxValue && progressNow != needTime;
         }
         #endregion
 
@@ -163,10 +173,12 @@ namespace Preparation.Utility
         {
             if (needTime <= 2)
             {
-                Debugger.Output("Warning:Start TimeBasedProgressAtVariableSpeed with the needProgress (" + needTime.ToString() + ") which is less than 0.");
+                LockedValueLogging.logger.ConsoleLogDebug(
+                    $"Warning: Start TimeBasedProgressAtVariableSpeed with the needProgress({needTime}) which is less than 0");
                 return false;
             }
-            if (progress.startTime.Start() != long.MaxValue) return false;
+            if (progress.startTime.Start() != long.MaxValue)
+                return false;
             progress.SetMaxV(needTime);
             return true;
         }

@@ -363,7 +363,7 @@ class Logic(ILogic):
                         self.__bufferState.self = Proto2THUAI7.Protobuf2THUAI7Ship(
                             item.ship_message
                         )
-                        self.__bufferState.ships.append(self.__bufferState.self)
+                        # self.__bufferState.ships.append(self.__bufferState.self)
                         self.__logger.debug("Load self ship")
         else:
             for item in message.obj_message:
