@@ -3,22 +3,12 @@ using GameClass.GameObj.Modules;
 using GameClass.GameObj.Occupations;
 using Preparation.Interface;
 using Preparation.Utility;
-using Preparation.Utility.Logging;
 using Preparation.Utility.Value;
 using Preparation.Utility.Value.SafeValue.Atomic;
 using Preparation.Utility.Value.SafeValue.LockedValue;
 using Preparation.Utility.Value.SafeValue.TimeBased;
 
 namespace GameClass.GameObj;
-
-public static class ShipLogging
-{
-    public static Logger logger = new("Ship");
-    public static string ShipLogInfo(Ship ship)
-            => Logger.ObjInfo(typeof(Ship), $"{ship.TeamID} {ship.PlayerID}");
-    public static string ShipLogInfo(long teamId, long shipId)
-        => Logger.ObjInfo(typeof(Ship), $"{teamId} {shipId}");
-}
 
 public class Ship : Movable, IShip
 {
@@ -337,8 +327,8 @@ public class Ship : Movable, IShip
         {
             ShipStateType nowShipState = shipState;
             ShipLogging.logger.ConsoleLogDebug(
-                ShipLogging.ShipLogInfo(this)
-                + $"SetShipState from {nowShipState} to {value}");
+                LoggingFunctional.ShipLogInfo(this)
+                + $" SetShipState from {nowShipState} to {value}");
             if (nowShipState == value) return -1;
             GameObj? lastObj = whatInteractingWith;
             switch (nowShipState)
@@ -381,8 +371,8 @@ public class Ship : Movable, IShip
             if (state != stateNum)
             {
                 ShipLogging.logger.ConsoleLogDebug(
-                    ShipLogging.ShipLogInfo(this)
-                    + "ResetShipState failed");
+                    LoggingFunctional.ShipLogInfo(this)
+                    + " ResetShipState failed");
                 return false;
             }
             runningState = running;
@@ -390,8 +380,8 @@ public class Ship : Movable, IShip
             shipState = value;
             ++stateNum;
             ShipLogging.logger.ConsoleLogDebug(
-                ShipLogging.ShipLogInfo(this)
-                + $"ResetShipState succeeded {stateNum}");
+                LoggingFunctional.ShipLogInfo(this)
+                + $" ResetShipState succeeded {stateNum}");
             return true;
         }
     }
@@ -413,15 +403,15 @@ public class Ship : Movable, IShip
             if (StateNum == stateNum)
             {
                 ShipLogging.logger.ConsoleLogDebug(
-                    ShipLogging.ShipLogInfo(this)
-                    + "StartThread succeeded");
+                    LoggingFunctional.ShipLogInfo(this)
+                    + " StartThread succeeded");
                 this.runningState = runningState;
                 return true;
             }
         }
         ShipLogging.logger.ConsoleLogDebug(
-            ShipLogging.ShipLogInfo(this)
-            + "StartThread failed");
+            LoggingFunctional.ShipLogInfo(this)
+            + " StartThread failed");
         return false;
     }
     public bool TryToRemoveFromGame(ShipStateType shipStateType)
