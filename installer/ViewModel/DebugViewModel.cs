@@ -203,9 +203,9 @@ namespace installer.ViewModel
         private void ClientStart()
         {
             Downloader.Data.Config.Commands.PlaybackFile = "";
-            
+
             bool haveManual = false;
-            
+
             for (int i = 0; i < Players.Count(); i++)
             {
                 if (Players[i].PlayerMode == "API")
