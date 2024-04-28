@@ -13,10 +13,6 @@ using System.Collections;
 
 namespace Server
 {
-    public static class GameServerLogging
-    {
-        public static readonly Logger logger = new("GameServer");
-    }
     public class ContestResult
     {
         public int score;
