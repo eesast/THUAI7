@@ -75,6 +75,15 @@ namespace Gaming
                 switch (objBeingShot.Type)
                 {
                     case GameObjType.Ship:
+                        if (((Ship)objBeingShot).TeamID.Get() == bullet.Parent!.TeamID.Get())
+                        {
+                            AttackManagerLogging.logger.ConsoleLogDebug(
+                                ShipLogging.ShipLogInfo((Ship)bullet.Parent)
+                                + " bombed "
+                                + ShipLogging.ShipLogInfo((Ship)objBeingShot)
+                                + " in the same team!");
+                            return;
+                        }
                         shipManager.BeAttacked((Ship)objBeingShot, bullet);
                         break;
                     case GameObjType.Construction:

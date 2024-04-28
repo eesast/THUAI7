@@ -53,7 +53,13 @@ namespace Gaming
                 ShipManagerLogging.logger.ConsoleLogDebug(
                     LoggingFunctional.BulletLogInfo(bullet)
                     + $" 's AP is {bullet.AP}");
-                if (bullet!.Parent!.TeamID == ship.TeamID)
+                ShipManagerLogging.logger.ConsoleLogDebug(
+                    Logger.ObjInfo(typeof(Base), bullet.Parent!.TeamID.ToString())
+                    + " is the attacker's TeamID");
+                ShipManagerLogging.logger.ConsoleLogDebug(
+                    Logger.ObjInfo(typeof(Base), ship.TeamID.ToString())
+                    + " is the attacked's TeamID");
+                if (bullet!.Parent!.TeamID.Get() == ship.TeamID.Get())
                 {
                     return;
                 }
