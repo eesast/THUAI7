@@ -6,14 +6,9 @@ using Preparation.Utility;
 using System;
 using System.Threading;
 using Timothy.FrameRateTask;
-using Preparation.Utility.Logging;
 
 namespace Gaming
 {
-    public static class ActionManagerLogging
-    {
-        public static readonly Logger logger = new("ActionManager");
-    }
     public partial class Game
     {
         private readonly ActionManager actionManager;
