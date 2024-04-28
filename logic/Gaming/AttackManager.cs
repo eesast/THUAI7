@@ -78,9 +78,9 @@ namespace Gaming
                         if (((Ship)objBeingShot).TeamID.Get() == bullet.Parent!.TeamID.Get())
                         {
                             AttackManagerLogging.logger.ConsoleLogDebug(
-                                ShipLogging.ShipLogInfo((Ship)bullet.Parent)
+                                LoggingFunctional.BulletLogInfo(bullet)
                                 + " bombed "
-                                + ShipLogging.ShipLogInfo((Ship)objBeingShot)
+                                + LoggingFunctional.ShipLogInfo((Ship)objBeingShot)
                                 + " in the same team!");
                             return;
                         }
