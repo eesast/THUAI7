@@ -186,7 +186,6 @@ namespace installer.ViewModel
         private bool startEnabled;
         public bool StartEnabled
         {
-
             get => startEnabled;
             set
             {

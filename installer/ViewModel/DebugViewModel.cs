@@ -203,20 +203,9 @@ namespace installer.ViewModel
         private void ClientStart()
         {
             Downloader.Data.Config.Commands.PlaybackFile = "";
-            if (HaveSpectator)
-            {
-                Downloader.Data.Config.Commands.TeamID = 0;
-                try
-                {
-                    Downloader.Data.Config.Commands.PlayerID = Convert.ToInt32(SpectatorID);
-                }
-                catch (Exception)
-                {
-                    DebugAlert = "观战ID输入错误";
-                    return;
-                }
-                LaunchClient();
-            }
+            
+            bool haveManual = false;
+            
             for (int i = 0; i < Players.Count(); i++)
             {
                 if (Players[i].PlayerMode == "API")
@@ -232,7 +221,27 @@ namespace installer.ViewModel
                     Downloader.Data.Config.Commands.PlayerID = Players[i].PlayerID;
                     Downloader.Data.Config.Commands.ShipType = Players[i].ShipType;
                     LaunchClient();
+                    haveManual = true;
                 }
+            }
+            if (HaveSpectator && !haveManual)
+            {
+                Downloader.Data.Config.Commands.TeamID = 0;
+                try
+                {
+                    var id = Convert.ToInt32(SpectatorID);
+                    if (id < 2024)
+                    {
+                        throw new Exception();
+                    }
+                    Downloader.Data.Config.Commands.PlayerID = id;
+                }
+                catch (Exception)
+                {
+                    DebugAlert = "观战ID输入错误";
+                    return;
+                }
+                LaunchClient();
             }
         }
 
