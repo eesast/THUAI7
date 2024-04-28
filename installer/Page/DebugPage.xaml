@@ -159,6 +159,7 @@
                         <Entry
                             WidthRequest="100"
                             IsEnabled="{Binding HaveSpectator}"
+                            Placeholder="ID"
                             Text="{Binding SpectatorID}"/>
                     </HorizontalStackLayout>
                     <Button
