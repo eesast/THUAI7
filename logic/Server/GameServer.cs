@@ -119,7 +119,7 @@ namespace Server
 
         }
 
-        protected async Task<double[]> GetLadderScore(int mode, double[] scores)
+        protected async Task<double[]> GetLadderScore(double[] scores)
         {
 
             string? url2 = Environment.GetEnvironmentVariable("SCORE_URL");
@@ -130,34 +130,28 @@ namespace Server
                     var httpClient = new HttpClient();
                     httpClient.DefaultRequestHeaders.Authorization = new("Bearer", options.Token);
                     var response = await httpClient.PostAsync(url2, JsonContent.Create(new { HttpHeaders = options.Token }));
-                    if (response.IsSuccessStatusCode)
-                    {
-                        // 读取响应内容为字符串
-                        var jsonString = await response.Content.ReadAsStringAsync();
 
-                        // 解析 JSON 字符串
-                        var result = JsonConvert.DeserializeObject<List<ContestResult>>(jsonString);
-                        double[] org = (from r in result select (double)(r.score)).ToArray();
-                        double[] final = Cal(org, scores);
-                        return final;
+                    // 读取响应内容为字符串
+                    var jsonString = await response.Content.ReadAsStringAsync();
 
-
-                        // 从 JSON 文档中获取需要的数据
-                        // 例如：var result = jsonDocument.RootElement.GetProperty("result");
-                        // Console.WriteLine(result.ToString());
-                        //double[] finalscores = Cal(result, scores);
-                    }
-                    else return new double[0];
-
+                    // 解析 JSON 字符串
+                    var result = JsonConvert.DeserializeObject<List<ContestResult>>(jsonString);
+                    double[] org = (from r in result select (double)(r.score)).ToArray();
+                    double[] final = Cal(org, scores);
+                    return final;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Fail to send msg to web!");
-                    Console.WriteLine(e);
+                    GameServerLogging.logger.ConsoleLog("No response from ladder URL!");
+                    GameServerLogging.logger.ConsoleLog(e.ToString());
                     return new double[0];
                 }
             }
-            else return new double[0];
+            else
+            {
+                GameServerLogging.logger.ConsoleLog("Null URL!");
+                return new double[0];
+            }
         }
 
         protected double[] Cal(double[] orgScore, double[] competitionScore)
@@ -226,10 +220,10 @@ namespace Server
             double[] doubleArray = scores.Select(x => (double)x).ToArray();
             if (options.Mode == 2)
             {
-                doubleArray = GetLadderScore(options.Mode, doubleArray).Result;
+                doubleArray = GetLadderScore(doubleArray).Result;
                 scores = doubleArray.Select(x => (int)x).ToArray();
+                SendGameResult(scores, options.Mode);
             }
-            SendGameResult(scores, options.Mode);
             endGameSem.Release();
         }
         public void ReportGame(GameState gameState, bool requiredGaming = true)
