@@ -2,7 +2,6 @@
 using GameClass.MapGenerator;
 using Preparation.Interface;
 using Preparation.Utility;
-using Preparation.Utility.Logging;
 using Preparation.Utility.Value;
 using Preparation.Utility.Value.SafeValue;
 using System;
@@ -10,10 +9,6 @@ using System.Collections.Generic;
 
 namespace GameClass.GameObj.Map
 {
-    public static class MapLogging
-    {
-        public static readonly Logger logger = new("Map");
-    }
     public partial class Map : IMap
     {
         private readonly Dictionary<GameObjType, LockedClassList<IGameObj>> gameObjDict;
@@ -25,6 +20,10 @@ namespace GameClass.GameObj.Map
         public uint Width => width;
         public readonly PlaceType[,] protoGameMap;
         public PlaceType[,] ProtoGameMap => protoGameMap;
+
+        // xfgg说：爱因斯坦说，每个坐标系都有与之绑定的时钟，(x, y, z, ict) 构成四维时空坐标，在洛伦兹变换下满足矢量性（狗头）
+        private readonly MyTimer timer = new();
+        public IMyTimer Timer => timer;
 
         #region 大本营相关
         public List<Home> Homes { get; }

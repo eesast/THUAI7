@@ -15,10 +15,6 @@ using Preparation.Utility.Logging;
 
 namespace Gaming
 {
-    public static class AttackManagerLogging
-    {
-        public static readonly Logger logger = new("AttackManager");
-    }
     public partial class Game
     {
         private readonly AttackManager attackManager;
@@ -43,7 +39,7 @@ namespace Gaming
                     EndMove: obj =>
                     {
                         AttackManagerLogging.logger.ConsoleLogDebug(
-                            Logger.ObjInfo(obj)
+                            LoggingFunctional.AutoLogInfo(obj)
                             + $" end move at {obj.Position} Time: {Environment.TickCount64}");
                         if (obj.CanMove)
                         {
@@ -61,7 +57,7 @@ namespace Gaming
                 Bullet? bullet = BulletFactory.GetBullet(ship, pos, bulletType);
                 if (bullet == null) return;
                 AttackManagerLogging.logger.ConsoleLogDebug(
-                    Logger.TypeName(bullet)
+                    LoggingFunctional.BulletLogInfo(bullet)
                     + $" attack in {pos}");
                 gameMap.Add(bullet);
                 moveEngine.MoveObj(
@@ -73,12 +69,21 @@ namespace Gaming
             private void BombObj(Bullet bullet, GameObj objBeingShot)
             {
                 AttackManagerLogging.logger.ConsoleLogDebug(
-                    Logger.TypeName(bullet)
+                    LoggingFunctional.BulletLogInfo(bullet)
                     + " bombed "
-                    + Logger.ObjInfo(objBeingShot));
+                    + LoggingFunctional.AutoLogInfo(objBeingShot));
                 switch (objBeingShot.Type)
                 {
                     case GameObjType.Ship:
+                        if (((Ship)objBeingShot).TeamID.Get() == bullet.Parent!.TeamID.Get())
+                        {
+                            AttackManagerLogging.logger.ConsoleLogDebug(
+                                LoggingFunctional.BulletLogInfo(bullet)
+                                + " bombed "
+                                + LoggingFunctional.ShipLogInfo((Ship)objBeingShot)
+                                + " in the same team!");
+                            return;
+                        }
                         shipManager.BeAttacked((Ship)objBeingShot, bullet);
                         break;
                     case GameObjType.Construction:
@@ -101,14 +106,14 @@ namespace Gaming
                                 foreach (Ship ship in shipList)
                                 {
                                     AttackManagerLogging.logger.ConsoleLogDebug(
-                                        ShipLogging.ShipLogInfo(ship)
+                                        LoggingFunctional.ShipLogInfo(ship)
                                         + " is destroyed!");
                                     var money = ship.GetCost();
                                     bullet.Parent!.AddMoney(money);
                                     AttackManagerLogging.logger.ConsoleLogDebug(
-                                        ShipLogging.ShipLogInfo((Ship)bullet.Parent)
+                                        LoggingFunctional.ShipLogInfo((Ship)bullet.Parent)
                                         + $" get {money} money because of destroying "
-                                        + ShipLogging.ShipLogInfo(ship));
+                                        + LoggingFunctional.ShipLogInfo(ship));
                                     shipManager.Remove(ship);
                                 }
                             }
@@ -147,12 +152,12 @@ namespace Gaming
             {
                 if (objBeingShot != null)
                     AttackManagerLogging.logger.ConsoleLogDebug(
-                        Logger.TypeName(bullet)
-                        + " bombed with"
-                        + Logger.ObjInfo(objBeingShot));
+                        LoggingFunctional.BulletLogInfo(bullet)
+                        + " bombed with "
+                        + LoggingFunctional.AutoLogInfo(objBeingShot));
                 else
                     AttackManagerLogging.logger.ConsoleLogDebug(
-                        Logger.TypeName(bullet)
+                        LoggingFunctional.BulletLogInfo(bullet)
                         + " bombed without objBeingShot");
 
                 if (!TryRemoveBullet(bullet))
@@ -199,7 +204,7 @@ namespace Gaming
                 if (bullet != null)
                 {
                     AttackManagerLogging.logger.ConsoleLogDebug(
-                        Logger.TypeName(bullet)
+                        LoggingFunctional.BulletLogInfo(bullet)
                         + $" attack in {bullet.Position}");
                     gameMap.Add(bullet);
                     moveEngine.MoveObj(bullet, (int)(bullet.AttackDistance * 1000 / bullet.MoveSpeed), angle, ++bullet.StateNum);  // 这里时间参数除出来的单位要是ms
@@ -244,14 +249,14 @@ namespace Gaming
                 if (bullet != null)
                 {
                     AttackManagerLogging.logger.ConsoleLogDebug(
-                        ShipLogging.ShipLogInfo(ship)
+                        LoggingFunctional.ShipLogInfo(ship)
                         + " successfully attacked!");
                     return true;
                 }
                 else
                 {
                     AttackManagerLogging.logger.ConsoleLogDebug(
-                        ShipLogging.ShipLogInfo(ship)
+                        LoggingFunctional.ShipLogInfo(ship)
                         + " failed to attack!");
                     return false;
                 }

@@ -1,4 +1,4 @@
-﻿namespace Preparation.Interface
+﻿namespace Preparation.Utility
 {
     public interface IAddable<T>
     {

@@ -5,14 +5,9 @@ using Preparation.Utility.Value;
 using System;
 using System.Threading;
 using Timothy.FrameRateTask;
-using ITimer = Preparation.Interface.ITimer;
 
 namespace GameEngine
 {
-    public static class GameEngineLogging
-    {
-        public static readonly Logger logger = new("GameEngine");
-    }
     /// <summary>
     /// Constrctor
     /// </summary>
@@ -41,7 +36,7 @@ namespace GameEngine
             Destroyed = 2       // 物体已经毁坏
         }
 
-        private readonly ITimer gameTimer = gameMap.Timer;
+        private readonly IMyTimer gameTimer = gameMap.Timer;
         private readonly Action<IMovable> EndMove = EndMove;
 
         public IGameObj? CheckCollision(IMovable obj, XY Pos)

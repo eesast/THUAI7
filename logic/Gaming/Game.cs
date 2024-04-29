@@ -4,7 +4,6 @@ using GameClass.GameObj.Areas;
 using GameClass.MapGenerator;
 using Preparation.Interface;
 using Preparation.Utility;
-using Preparation.Utility.Logging;
 using Preparation.Utility.Value;
 using System;
 using System.Collections.Generic;
@@ -13,10 +12,6 @@ using System.Threading;
 
 namespace Gaming
 {
-    public static class GameLogging
-    {
-        public static readonly Logger logger = new("Game");
-    }
     public partial class Game
     {
         public struct PlayerInitInfo(long teamID, long playerID, ShipType shipType)
@@ -122,16 +117,7 @@ namespace Gaming
                 actionManager.AddMoneyNaturally(team);
                 ActivateShip(team.TeamID, ShipType.CivilShip);
             }
-            new Thread
-            (
-                () =>
-                {
-                    if (!gameMap.Timer.StartGame(milliSeconds))
-                        return;
-                    EndGame();  // 游戏结束时要做的事
-                }
-            )
-            { IsBackground = true }.Start();
+            gameMap.Timer.Start(() => { }, () => EndGame(), milliSeconds);
             return true;
         }
         public void EndGame()
@@ -146,7 +132,7 @@ namespace Gaming
             {
                 GameLogging.logger.ConsoleLogDebug(
                     "Try to move "
-                    + ShipLogging.ShipLogInfo(ship)
+                    + LoggingFunctional.ShipLogInfo(ship)
                     + $" {moveTimeInMilliseconds} {angle}");
                 return actionManager.MoveShip(ship, moveTimeInMilliseconds, angle);
             }
@@ -154,7 +140,7 @@ namespace Gaming
             {
                 GameLogging.logger.ConsoleLogDebug(
                     "Fail to move "
-                    + ShipLogging.ShipLogInfo(teamID, shipID)
+                    + LoggingFunctional.ShipLogInfo(teamID, shipID)
                     + ", not found");
                 return false;
             }

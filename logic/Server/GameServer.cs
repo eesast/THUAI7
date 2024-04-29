@@ -5,17 +5,12 @@ using Gaming;
 using Newtonsoft.Json;
 using Playback;
 using Preparation.Utility;
-using Preparation.Utility.Logging;
 using Protobuf;
 using System.Collections.Concurrent;
 using Timothy.FrameRateTask;
 
 namespace Server
 {
-    public static class GameServerLogging
-    {
-        public static readonly Logger logger = new("GameServer");
-    }
     partial class GameServer : ServerBase
     {
         private readonly ConcurrentDictionary<long, (SemaphoreSlim, SemaphoreSlim)> semaDict0 = new(); //for spectator and team0 player
