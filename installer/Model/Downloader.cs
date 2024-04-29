@@ -76,12 +76,19 @@ namespace installer.Model
         {
             Data = new Local_Data();
             Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.log"));
-            if (Log.LastRecordTime != DateTime.MinValue && DateTime.Now.Month != Log.LastRecordTime.Month)
+            long size = 0;
+            foreach (var log in new DirectoryInfo(Data.LogPath).EnumerateFiles())
+            {
+                size += log.Length;
+            }
+            // 检测到最近日志为上个月或日志总量达到10MB以上时压缩logs
+            if ((Log.LastRecordTime != DateTime.MinValue && DateTime.Now.Month != Log.LastRecordTime.Month)
+                || size >= (10 << 20))
             {
                 string tardir = Path.Combine(Data.Config.InstallPath, "LogArchieved");
                 if (!Directory.Exists(tardir))
                     Directory.CreateDirectory(tardir);
-                string tarPath = Path.Combine(tardir, $"Backup-{Log.LastRecordTime.Year}-{Log.LastRecordTime.Month}.tar");
+                string tarPath = Path.Combine(tardir, $"LogBackup_{DateTime.Now:yyyy_MM_dd_HH_mm}.tar");
                 if (File.Exists(tarPath))
                     File.Delete(tarPath);
                 if (File.Exists(tarPath + ".gz"))
@@ -98,6 +105,8 @@ namespace installer.Model
                 {
                     File.Delete(log);
                 }
+                if (Data.Log is FileLogger) ((FileLogger)Data.Log).Path = ((FileLogger)Data.Log).Path;
+                if (Log is FileLogger) ((FileLogger)Log).Path = ((FileLogger)Log).Path;
             }
             Route = Data.Config.InstallPath;
             Cloud = new Tencent_Cos("1319625962", "ap-beijing", "thuai7",
