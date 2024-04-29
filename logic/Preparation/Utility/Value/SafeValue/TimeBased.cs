@@ -1,15 +1,9 @@
-﻿using Preparation.Utility.Logging;
-using Preparation.Utility.Value.SafeValue.Atomic;
+﻿using Preparation.Utility.Value.SafeValue.Atomic;
 using System;
 using System.Threading;
 
 namespace Preparation.Utility.Value.SafeValue.TimeBased
 {
-    public static class TimeBasedLogging
-    {
-        public static readonly Logger logger = new("TimeBased");
-    }
-
     //其对应属性不应当有set访问器，避免不安全的=赋值
 
     /// <summary>
