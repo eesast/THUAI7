@@ -8,9 +8,15 @@ using Preparation.Utility;
 using Protobuf;
 using System.Collections.Concurrent;
 using Timothy.FrameRateTask;
+using System.Net.Http.Json;
+using System.Collections;
 
 namespace Server
 {
+    public class ContestResult
+    {
+        public int score;
+    }
     partial class GameServer : ServerBase
     {
         private readonly ConcurrentDictionary<long, (SemaphoreSlim, SemaphoreSlim)> semaDict0 = new(); //for spectator and team0 player
@@ -100,12 +106,103 @@ namespace Server
             using StreamWriter sw = new(path);
             using JsonTextWriter writer = new(sw);
             serializer.Serialize(writer, result);
+
         }
 
         protected void SendGameResult(int[] scores, int mode)		// 天梯的 Server 给网站发消息记录比赛结果
         {
             httpSender?.SendHttpRequest(scores, mode).Wait();
+
         }
+
+        protected async Task<double[]> GetLadderScore(double[] scores)
+        {
+
+            string? url2 = Environment.GetEnvironmentVariable("SCORE_URL");
+            if (url2 != null)
+            {
+                try
+                {
+                    var httpClient = new HttpClient();
+                    httpClient.DefaultRequestHeaders.Authorization = new("Bearer", options.Token);
+                    var response = await httpClient.PostAsync(url2, JsonContent.Create(new { HttpHeaders = options.Token }));
+
+                    // 读取响应内容为字符串
+                    var jsonString = await response.Content.ReadAsStringAsync();
+
+                    // 解析 JSON 字符串
+                    var result = JsonConvert.DeserializeObject<List<ContestResult>>(jsonString);
+                    double[] org = (from r in result select (double)(r.score)).ToArray();
+                    double[] final = Cal(org, scores);
+                    return final;
+                }
+                catch (Exception e)
+                {
+                    GameServerLogging.logger.ConsoleLog("No response from ladder URL!");
+                    GameServerLogging.logger.ConsoleLog(e.ToString());
+                    return new double[0];
+                }
+            }
+            else
+            {
+                GameServerLogging.logger.ConsoleLog("Null URL!");
+                return new double[0];
+            }
+        }
+
+        protected double[] Cal(double[] orgScore, double[] competitionScore)
+        {
+            // 调整顺序，让第一个元素成为获胜者，便于计算
+            bool reverse = false; // 记录是否需要调整
+            if (competitionScore[0] < competitionScore[1])
+            {
+                reverse = true;
+            }
+            else if (competitionScore[0] == competitionScore[1])
+            {
+                if (orgScore[0] == orgScore[1])
+                {
+                    // 完全平局，不改变天梯分数
+                    return orgScore;
+                }
+                if (orgScore[0] > orgScore[1])
+                {
+                    // 本次游戏平局，但一方天梯分数高，另一方天梯分数低，需要将两者向中间略微靠拢，因此天梯分数低的定为获胜者
+                    reverse = true;
+                }
+            }
+            if (reverse)
+            {
+                // 如果需要换，换两者的顺序
+                double t = competitionScore[1];
+                competitionScore[1] = competitionScore[0];
+                competitionScore[0] = t;
+                t = orgScore[1];
+                orgScore[1] = orgScore[0];
+                orgScore[0] = t;
+            }
+            double[] resScore = [0, 0];
+            double deltaWeight = 1000.0; // 差距悬殊判断参数
+            double delta = (orgScore[0] - orgScore[1]) / deltaWeight;
+            // 盈利者天梯得分权值、落败者天梯得分权值
+            double firstnerGet = 9e-6;
+            double secondrGet = 5e-6;
+            double deltaScore = 2100.0; // 两队竞争分差超过多少时就认为非常大
+            double correctRate = (orgScore[0] - orgScore[1]) / (deltaWeight * 1.2); // 订正的幅度，该值越小，则在势均力敌时天梯分数改变越大
+            double correct = 0.5 * (Math.Tanh((competitionScore[0] - competitionScore[1] - deltaScore) / deltaScore - correctRate) + 1.0); // 一场比赛中，在双方势均力敌时，减小天梯分数的改变量
+            resScore[0] = orgScore[0] + Math.Round(competitionScore[0] * competitionScore[0] * firstnerGet * (1 - Math.Tanh(delta)) * correct); // 胜者所加天梯分
+            resScore[1] = orgScore[1] - Math.Round(
+            (competitionScore[0] - competitionScore[1]) * (competitionScore[0] - competitionScore[1]) * secondrGet * (1 - Math.Tanh(delta)) * correct); // 败者所扣天梯分
+                                                                                                                                                        // 如果换过，再换回来
+            if (reverse)
+            {
+                double t = resScore[1];
+                resScore[1] = resScore[0];
+                resScore[0] = t;
+            }
+            return resScore;
+        }
+
 
         private void OnGameEnd()
         {
@@ -116,7 +213,13 @@ namespace Server
                              ? options.ResultFileName
                              : options.ResultFileName + ".json");
             int[] scores = GetScore();
-            SendGameResult(scores, options.Mode);
+            double[] doubleArray = scores.Select(x => (double)x).ToArray();
+            if (options.Mode == 2)
+            {
+                doubleArray = GetLadderScore(doubleArray).Result;
+                scores = doubleArray.Select(x => (int)x).ToArray();
+                SendGameResult(scores, options.Mode);
+            }
             endGameSem.Release();
         }
         public void ReportGame(GameState gameState, bool requiredGaming = true)
@@ -353,6 +456,7 @@ namespace Server
                     GameServerLogging.logger.ConsoleLog($"Error: Cannot create the playback file: {options.FileName}!");
                 }
             }
+
 
             if (options.Url != DefaultArgumentOptions.Url && options.Token != DefaultArgumentOptions.Token)
             {
