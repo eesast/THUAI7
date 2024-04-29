@@ -781,7 +781,7 @@ namespace Client.ViewModel
         public readonly int ShipStatusAttributesFontSize = 13;
 
         public Logger myLogger;
-
+        public Logger lockGenerator;
         public GeneralViewModel()
         {
             //ConfigData d = new();
@@ -803,7 +803,7 @@ namespace Client.ViewModel
             playbackFile = d.Commands.PlaybackFile;
             playbackSpeed = d.Commands.PlaybackSpeed;
             myLogger = LoggerProvider.FromFile(Path.Combine(d.InstallPath, "Logs", "Client.log"));
-
+            lockGenerator = LoggerProvider.FromFile(Path.Combine(d.InstallPath, "Logs", String.Format("lock.{0}.{1}.log", teamID, playerID)));
             MoveUpCommand = new Command(() =>
             {
                 try
