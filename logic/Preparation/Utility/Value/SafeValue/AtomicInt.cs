@@ -6,13 +6,109 @@ namespace Preparation.Utility.Value.SafeValue.Atomic
 {
     //其对应属性不应当有set访问器，避免不安全的=赋值
 
-    public class AtomicInt(int x) : Atomic, IIntAddable
+    public class AtomicInt(int x) : Atomic, IIntAddable, IConvertible
     {
         protected int v = x;
+
+        #region 实现IConvertible接口
+
+        public TypeCode GetTypeCode()
+        {
+            return TypeCode.Int32;
+        }
+
+        public bool ToBoolean(IFormatProvider? provider)
+        {
+            return Convert.ToBoolean(Get(), provider);
+        }
+
+        public char ToChar(IFormatProvider? provider)
+        {
+            return Convert.ToChar(Get(), provider);
+        }
+
+        public sbyte ToSByte(IFormatProvider? provider)
+        {
+            return Convert.ToSByte(Get(), provider);
+        }
+
+        public byte ToByte(IFormatProvider? provider)
+        {
+            return Convert.ToByte(Get(), provider);
+        }
+
+        public short ToInt16(IFormatProvider? provider)
+        {
+            return Convert.ToInt16(Get(), provider);
+        }
+
+        public ushort ToUInt16(IFormatProvider? provider)
+        {
+            return Convert.ToUInt16(Get(), provider);
+        }
+
+        public int ToInt32(IFormatProvider? provider)
+        {
+            return Convert.ToInt32(Get(), provider);
+        }
+
+        public uint ToUInt32(IFormatProvider? provider)
+        {
+            return Convert.ToUInt32(Get(), provider);
+        }
+
+        public long ToInt64(IFormatProvider? provider)
+        {
+            return Convert.ToInt64(Get(), provider);
+        }
+
+        public ulong ToUInt64(IFormatProvider? provider)
+        {
+            return Convert.ToUInt64(Get(), provider);
+        }
+
+        public float ToSingle(IFormatProvider? provider)
+        {
+            return Convert.ToSingle(Get(), provider);
+        }
+
+        public double ToDouble(IFormatProvider? provider)
+        {
+            return Get();
+        }
+
+        public decimal ToDecimal(IFormatProvider? provider)
+        {
+            return Convert.ToDecimal(Get(), provider);
+        }
+
+        public DateTime ToDateTime(IFormatProvider? provider)
+        {
+            return Convert.ToDateTime(Get(), provider);
+        }
+
+        public string ToString(IFormatProvider? provider)
+        {
+            return Get().ToString(provider);
+        }
+
+        public object ToType(Type conversionType, IFormatProvider? provider)
+        {
+            return Convert.ChangeType(Get(), conversionType, provider);
+        }
+        #endregion
 
         public override string ToString() => Interlocked.CompareExchange(ref v, -1, -1).ToString();
         public int Get() => Interlocked.CompareExchange(ref v, -1, -1);
         public static implicit operator int(AtomicInt aint) => Interlocked.CompareExchange(ref aint.v, -1, -1);
+        public override bool Equals(object? obj)
+        {
+            return obj != null && (obj is IConvertible k) && ToDouble(null) == k.ToDouble(null);
+        }
+        public override int GetHashCode()
+        {
+            return Get().GetHashCode();
+        }
 
         public virtual void Set(int value) => Interlocked.Exchange(ref v, value);
         /// <returns>返回操作前的值</returns>
@@ -278,13 +374,109 @@ namespace Preparation.Utility.Value.SafeValue.Atomic
         }
     }
 
-    public class AtomicLong(long x) : Atomic, IIntAddable, IAddable<long>
+    public class AtomicLong(long x) : Atomic, IIntAddable, IAddable<long>, IConvertible
     {
         protected long v = x;
+
+        #region 实现IConvertible接口
+
+        public TypeCode GetTypeCode()
+        {
+            return TypeCode.Int64;
+        }
+
+        public bool ToBoolean(IFormatProvider? provider)
+        {
+            return Convert.ToBoolean(Get(), provider);
+        }
+
+        public char ToChar(IFormatProvider? provider)
+        {
+            return Convert.ToChar(Get(), provider);
+        }
+
+        public sbyte ToSByte(IFormatProvider? provider)
+        {
+            return Convert.ToSByte(Get(), provider);
+        }
+
+        public byte ToByte(IFormatProvider? provider)
+        {
+            return Convert.ToByte(Get(), provider);
+        }
+
+        public short ToInt16(IFormatProvider? provider)
+        {
+            return Convert.ToInt16(Get(), provider);
+        }
+
+        public ushort ToUInt16(IFormatProvider? provider)
+        {
+            return Convert.ToUInt16(Get(), provider);
+        }
+
+        public int ToInt32(IFormatProvider? provider)
+        {
+            return Convert.ToInt32(Get(), provider);
+        }
+
+        public uint ToUInt32(IFormatProvider? provider)
+        {
+            return Convert.ToUInt32(Get(), provider);
+        }
+
+        public long ToInt64(IFormatProvider? provider)
+        {
+            return Convert.ToInt64(Get(), provider);
+        }
+
+        public ulong ToUInt64(IFormatProvider? provider)
+        {
+            return Convert.ToUInt64(Get(), provider);
+        }
+
+        public float ToSingle(IFormatProvider? provider)
+        {
+            return Convert.ToSingle(Get(), provider);
+        }
+
+        public double ToDouble(IFormatProvider? provider)
+        {
+            return Get();
+        }
+
+        public decimal ToDecimal(IFormatProvider? provider)
+        {
+            return Convert.ToDecimal(Get(), provider);
+        }
+
+        public DateTime ToDateTime(IFormatProvider? provider)
+        {
+            return Convert.ToDateTime(Get(), provider);
+        }
+
+        public string ToString(IFormatProvider? provider)
+        {
+            return Get().ToString(provider);
+        }
+
+        public object ToType(Type conversionType, IFormatProvider? provider)
+        {
+            return Convert.ChangeType(Get(), conversionType, provider);
+        }
+        #endregion
 
         public override string ToString() => Interlocked.CompareExchange(ref v, -1, -1).ToString();
         public long Get() => Interlocked.CompareExchange(ref v, -1, -1);
         public static implicit operator long(AtomicLong along) => Interlocked.CompareExchange(ref along.v, -1, -1);
+        public override bool Equals(object? obj)
+        {
+            return obj != null && (obj is IConvertible k) && ToDouble(null) == k.ToDouble(null);
+        }
+        public override int GetHashCode()
+        {
+            return Get().GetHashCode();
+        }
 
         /// <returns>返回操作前的值</returns>
         public virtual long SetROri(long value) => Interlocked.Exchange(ref v, value);
