@@ -12,11 +12,97 @@ namespace Preparation.Utility.Value.SafeValue.LockedValue
     /// <summary>
     /// 一个保证在[0,maxValue]的可变值，支持可变的maxValue（请确保大于0）
     /// </summary>
-    public class InVariableRange<T> : LockedValue, IIntAddable, IAddable<T>, IDouble
+    public class InVariableRange<T> : LockedValue, IIntAddable, IAddable<T>, IDouble, IDoubleAddable, IConvertible
         where T : IConvertible, IComparable<T>, INumber<T>
     {
         protected T v;
         protected T maxV;
+
+        #region 实现IConvertible接口
+        public TypeCode GetTypeCode()
+        {
+            return ReadNeed(() => v.GetTypeCode());
+        }
+
+        public bool ToBoolean(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToBoolean(provider));
+        }
+        public byte ToByte(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToByte(provider));
+        }
+
+        public char ToChar(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToChar(provider));
+        }
+
+        public DateTime ToDateTime(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToDateTime(provider));
+        }
+
+        public decimal ToDecimal(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToDecimal(provider));
+        }
+
+        public double ToDouble(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToDouble(provider));
+        }
+
+        public short ToInt16(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToInt16(provider));
+        }
+
+        public int ToInt32(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToInt32(provider));
+        }
+
+        public long ToInt64(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToInt64(provider));
+        }
+
+        public sbyte ToSByte(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToSByte(provider));
+        }
+
+        public float ToSingle(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToSingle(provider));
+        }
+
+        public string ToString(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToString(provider));
+        }
+
+        public object ToType(Type conversionType, IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToType(conversionType, provider));
+        }
+
+        public ushort ToUInt16(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToUInt16(provider));
+        }
+
+        public uint ToUInt32(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToUInt32(provider));
+        }
+
+        public ulong ToUInt64(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToUInt64(provider));
+        }
+        #endregion
 
         #region 构造与读取
         public InVariableRange(T value, T maxValue) : base()
@@ -57,6 +143,15 @@ namespace Preparation.Utility.Value.SafeValue.LockedValue
         public T GetValue() { return ReadNeed(() => v); }
         public double ToDouble() => GetValue().ToDouble(null);
         public static implicit operator T(InVariableRange<T> aint) => aint.GetValue();
+        public override bool Equals(object? obj)
+        {
+            return obj != null && (obj is IConvertible k) && ToDouble(null) == k.ToDouble(null);
+        }
+        public override int GetHashCode()
+        {
+            return ReadNeed(() => v.GetHashCode() ^ maxV.GetHashCode());
+        }
+
         public T GetMaxV()
         {
             return ReadNeed(() => maxV);
@@ -227,6 +322,16 @@ namespace Preparation.Utility.Value.SafeValue.LockedValue
         }
 
         public void Add(int addV)
+        {
+            WriteNeed(() =>
+            {
+                v += T.CreateChecked(addV);
+                if (v < T.Zero) v = T.Zero;
+                if (v > maxV) v = maxV;
+            });
+        }
+
+        public void Add(double addV)
         {
             WriteNeed(() =>
             {
@@ -544,7 +649,7 @@ namespace Preparation.Utility.Value.SafeValue.LockedValue
     /// 可以设定IIntAddable类的Score，默认初始为0的AtomicInt
     /// 在发生正向的变化时，自动给Score加上正向变化的差乘以speed（取整）。
     /// </summary>
-    public class InVariableRangeOnlyAddScore<T>(T value, T maxValue, double speed = 1.0) : InVariableRange<T>(value, maxValue), IIntAddable, IAddable<T>
+    public class InVariableRangeOnlyAddScore<T>(T value, T maxValue, double speed = 1.0) : InVariableRange<T>(value, maxValue)
         where T : IConvertible, IComparable<T>, INumber<T>
     {
         private IIntAddable score = new AtomicInt(0);
