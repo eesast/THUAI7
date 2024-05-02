@@ -314,12 +314,12 @@ class Logic(ILogic):
             self.__bufferState.bullets.clear()
             self.__bufferState.bombedBullets.clear()
             self.__bufferState.guids.clear()
-            self.__bufferState.guids_all.clear()
+            self.__bufferState.allGuids.clear()
             self.__logger.debug("Buffer cleared")
 
             for obj in message.obj_message:
                 if obj.WhichOneof("message_of_obj") == "ship_message":
-                    self.__bufferState.guids_all.append(obj.ship_message.guid)
+                    self.__bufferState.allGuids.append(obj.ship_message.guid)
                     if obj.ship_message.team_id == self.__teamID:
                         self.__bufferState.guids.append(obj.ship_message.guid)
 
