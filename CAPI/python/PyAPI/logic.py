@@ -126,7 +126,8 @@ class Logic(ILogic):
             return self.__messageQueue.get()
 
     def WaitThread(self) -> bool:
-        self.__Update()
+        if Setting.Asynchronous():
+            self.__Wait()
         return True
 
     def GetCounter(self) -> int:
