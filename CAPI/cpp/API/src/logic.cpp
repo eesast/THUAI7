@@ -281,7 +281,8 @@ bool Logic::EndAllAction()
 
 bool Logic::WaitThread()
 {
-    Update();
+    if (asynchronous)
+        Wait();
     return true;
 }
 
