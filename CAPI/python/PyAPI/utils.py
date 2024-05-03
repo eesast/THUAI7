@@ -280,6 +280,10 @@ class Proto2THUAI7:
         gameInfo.gameTime = allMsg.game_time
         gameInfo.redScore = allMsg.red_team_score
         gameInfo.blueScore = allMsg.blue_team_score
+        gameInfo.redEnergy = allMsg.red_team_energy
+        gameInfo.blueEnergy = allMsg.blue_team_energy
+        gameInfo.redHomeHp = allMsg.red_home_hp
+        gameInfo.blueHomeHp = allMsg.blue_home_hp
         return gameInfo
 
 
