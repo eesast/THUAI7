@@ -60,7 +60,7 @@ namespace installer.ViewModel
             }
         }
 
-        private string downloadPath;
+        private string downloadPath = string.Empty;
         public string DownloadPath
         {
             get => downloadPath;
@@ -163,7 +163,7 @@ namespace installer.ViewModel
 
 
         #region 按钮
-        private string downloadBtnText;
+        private string downloadBtnText = string.Empty;
         public string DownloadBtnText
         {
             get => downloadBtnText;

@@ -129,6 +129,11 @@ namespace installer.Data
         public string UserName { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public bool Remembered { get; set; } = false;
+        // 开发人员接口
+        public string? DevCppPath { get; set; } = null;
+        public string? DevPyPath { get; set; } = null;
+        public string? DevServerPath { get; set; } = null;
+        public string? DevClientPath { get; set; } = null;
         public CommandFile Commands { get; set; } = new();
         public List<Player> Players { get; set; } = [];
     }
@@ -446,6 +451,14 @@ namespace installer.Data
                     OnMemoryChanged?.Invoke(this, new EventArgs());
             }
         }
+
+        public string? DevCppPath { get => file.DevCppPath; }
+
+        public string? DevPyPath { get => file.DevPyPath; }
+
+        public string? DevServerPath { get => file.DevServerPath; }
+
+        public string? DevClientPath { get => file.DevClientPath; }
 
         public Command Commands
         {

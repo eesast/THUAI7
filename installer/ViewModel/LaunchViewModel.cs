@@ -56,6 +56,8 @@ namespace installer.ViewModel
 
             SaveEnabled = true;
             StartEnabled = true;
+            Log.PartnerInfo = "[Launcher]";
+            Log.Partner.Add(Downloader.Log);
 
             SaveBtnClickedCommand = new AsyncRelayCommand(SaveBtnClicked);
         }

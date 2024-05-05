@@ -75,7 +75,7 @@ namespace installer.Model
         public Downloader()
         {
             Data = new Local_Data();
-            Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.log"));
+            Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Installer.log"));
             long size = 0;
             foreach (var log in new DirectoryInfo(Data.LogPath).EnumerateFiles())
             {
@@ -109,9 +109,8 @@ namespace installer.Model
                 if (Log is FileLogger) ((FileLogger)Log).Path = ((FileLogger)Log).Path;
             }
             Route = Data.Config.InstallPath;
-            Cloud = new Tencent_Cos("1319625962", "ap-beijing", "thuai7",
-                LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.log")));
-            Web = new EEsast(LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.log")));
+            Cloud = new Tencent_Cos("1319625962", "ap-beijing", "thuai7");
+            Web = new EEsast();
             Web.Token_Changed += SaveToken;
 
             Data.Log.Partner.Add(Log);
@@ -188,7 +187,7 @@ namespace installer.Model
             if (Cloud.Log is FileLogger) ((FileLogger)Cloud.Log).Path = Path.Combine(Data.Config.InstallPath, "Logs", "TencentCos.log");
             if (Web.Log is FileLogger) ((FileLogger)Web.Log).Path = Path.Combine(Data.Config.InstallPath, "Logs", "EESAST.log");
             if (Data.Log is FileLogger) ((FileLogger)Data.Log).Path = Path.Combine(Data.Config.InstallPath, "Logs", "Local_Data.log");
-            if (Log is FileLogger) ((FileLogger)Log).Path = Path.Combine(Data.Config.InstallPath, "Logs", "Main.log");
+            if (Log is FileLogger) ((FileLogger)Log).Path = Path.Combine(Data.Config.InstallPath, "Logs", "Installer.log");
             Data.ResetInstallPath(Data.Config.InstallPath);
 
 
@@ -276,7 +275,7 @@ namespace installer.Model
                 if (Cloud.Log is FileLogger) ((FileLogger)Cloud.Log).Path = Path.Combine(newPath, "Logs", "TencentCos.log");
                 if (Web.Log is FileLogger) ((FileLogger)Web.Log).Path = Path.Combine(newPath, "Logs", "EESAST.log");
                 if (Data.Log is FileLogger) ((FileLogger)Data.Log).Path = Path.Combine(newPath, "Logs", "Local_Data.log");
-                if (Log is FileLogger) ((FileLogger)Log).Path = Path.Combine(newPath, "Logs", "Main.log");
+                if (Log is FileLogger) ((FileLogger)Log).Path = Path.Combine(newPath, "Logs", "Installer.log");
                 Data.ResetInstallPath(newPath);
             }
             Update();

@@ -802,7 +802,7 @@ namespace Client.ViewModel
             shipTypeID = Convert.ToInt32(d.Commands.ShipType);
             playbackFile = d.Commands.PlaybackFile;
             playbackSpeed = d.Commands.PlaybackSpeed;
-            myLogger = LoggerProvider.FromFile(Path.Combine(d.InstallPath, "Logs", "Client.log"));
+            myLogger = LoggerProvider.FromFile(Path.Combine(d.InstallPath, "Logs", $"Client.{teamID}.{playerID}.log"));
             lockGenerator = LoggerProvider.FromFile(Path.Combine(d.InstallPath, "Logs", String.Format("lock.{0}.{1}.log", teamID, playerID)));
             MoveUpCommand = new Command(() =>
             {
