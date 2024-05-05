@@ -332,7 +332,7 @@ namespace installer.ViewModel
             {
                 var cpp = Process.Start(new ProcessStartInfo()
                 {
-                    FileName =  Downloader.Data.Config.DevCppPath ??exe,
+                    FileName = Downloader.Data.Config.DevCppPath ?? exe,
                     Arguments = $"-I {IP} -P {Port} -t {team} -p {player} -o"
                 });
                 if (cpp is null)
