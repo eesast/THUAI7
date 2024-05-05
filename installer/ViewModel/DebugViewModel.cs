@@ -206,6 +206,7 @@ namespace installer.ViewModel
 
             bool haveManual = false;
 
+            // 启动Manual很慢，先启动API
             for (int i = 0; i < Players.Count(); i++)
             {
                 if (Players[i].PlayerMode == "API")
@@ -215,12 +216,15 @@ namespace installer.ViewModel
                     else if (PySelect)
                         LaunchPyAPI(Players[i].TeamID, Players[i].PlayerID);
                 }
+            }
+            for (int i = 0; i < Players.Count(); i++)
+            {
                 if (Players[i].PlayerMode == "Manual")
                 {
                     Downloader.Data.Config.Commands.TeamID = Players[i].TeamID;
                     Downloader.Data.Config.Commands.PlayerID = Players[i].PlayerID;
                     Downloader.Data.Config.Commands.ShipType = Players[i].ShipType;
-                    LaunchClient();
+                    LaunchClient(Players[i].TeamID, Players[i].PlayerID, Players[i].ShipType);
                     haveManual = true;
                 }
             }
@@ -235,13 +239,13 @@ namespace installer.ViewModel
                         throw new Exception();
                     }
                     Downloader.Data.Config.Commands.PlayerID = id;
+                    LaunchClient(0, id, 0);
                 }
                 catch (Exception)
                 {
                     DebugAlert = "观战ID输入错误";
                     return;
                 }
-                LaunchClient();
             }
         }
 
@@ -273,7 +277,7 @@ namespace installer.ViewModel
         {
             server = Process.Start(new ProcessStartInfo()
             {
-                FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Server", "Server.exe"),
+                FileName = Downloader.Data.Config.DevServerPath ?? Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Server", "Server.exe"),
                 Arguments = $"--ip 0.0.0.0 --port {Port} --teamCount {TeamCount} --shipNum {ShipCount}",
             });
             if (server is null)
@@ -293,19 +297,28 @@ namespace installer.ViewModel
         }
 
 
-        protected Process? client;
-        public bool LaunchClient()
+        public bool LaunchClient(int team, int player, int ship)
         {
-            client = Process.Start(new ProcessStartInfo()
+            Downloader.Data.Config.Commands.TeamID = team;
+            Downloader.Data.Config.Commands.PlayerID = player;
+            Downloader.Data.Config.Commands.ShipType = ship;
+
+            var client = Process.Start(new ProcessStartInfo()
             {
-                FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
+                FileName = Downloader.Data.Config.DevClientPath ?? Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
             });
             if (client is null)
             {
                 Log.LogError("未能启动Client!");
                 return false;
             }
-            Log.LogInfo("Client成功启动。");
+            while (!File.Exists(Path.Combine(Downloader.Data.LogPath, $"lock.{team}.{player}.log")))
+            {
+                Thread.Sleep(500);
+            }
+            Thread.Sleep(500);
+            File.Delete(Path.Combine(Downloader.Data.LogPath, $"lock.{team}.{player}.log"));
+            Log.LogInfo($"Client({team}: {player})成功启动。");
             children.Add(client);
             return true;
         }
@@ -314,12 +327,12 @@ namespace installer.ViewModel
         protected bool ExplorerLaunched_PyAPI = false;
         public bool LaunchCppAPI(int team, int player)
         {
-            var exe = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "cpp", "x64", "Debug", "API.exe");
+            var exe = Downloader.Data.Config.DevCppPath ?? Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "cpp", "x64", "Debug", "API.exe");
             if (File.Exists(exe))
             {
                 var cpp = Process.Start(new ProcessStartInfo()
                 {
-                    FileName = exe,
+                    FileName =  Downloader.Data.Config.DevCppPath ??exe,
                     Arguments = $"-I {IP} -P {Port} -t {team} -p {player} -o"
                 });
                 if (cpp is null)
@@ -357,7 +370,7 @@ namespace installer.ViewModel
                 {
                     FileName = "cmd.exe",
                     Arguments = "/c python "
-                        + Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py")
+                        + Downloader.Data.Config.DevPyPath ?? Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py")
                         + $" -I {IP} -P {Port} -t {team} -p {player} -o"
                 });
                 if (py is null)

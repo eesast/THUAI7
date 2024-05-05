@@ -85,7 +85,7 @@ namespace installer.Model
                     File.Delete(log);
                 }
             }
-            Log = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.log"));
+            Log = LoggerProvider.FromConsole();
             Log.PartnerInfo = "[LocalData]";
             LangEnabled = new Dictionary<LanguageOption, (bool, string)>();
             foreach (var a in typeof(LanguageOption).GetEnumValues())

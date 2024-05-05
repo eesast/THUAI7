@@ -43,6 +43,8 @@ namespace installer.Model
         }
         public async Task LoginToEEsast(HttpClient client, string useremail = "", string userpassword = "")
         {
+            Status = LoginStatus.offline;
+            Token = string.Empty;
             try
             {
                 using (var response = await client.PostAsync("https://api.eesast.com/user/login", JsonContent.Create(new
@@ -55,9 +57,16 @@ namespace installer.Model
                     {
                         case System.Net.HttpStatusCode.OK:
                             var info = JsonSerializer.Deserialize<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
-                            Token = info.Keys.Contains("token") ? info["token"] : string.Empty;
-                            Log.LogInfo($"{Username} logined successfully.");
-                            Status = LoginStatus.logined;
+                            if (info is not null)
+                            {
+                                string? token;
+                                if (info.TryGetValue("token", out token) && token is not null)
+                                {
+                                    Token = token;
+                                    Log.LogInfo($"{Username} logined successfully.");
+                                    Status = LoginStatus.logined;
+                                }
+                            }
                             break;
                         default:
                             int code = ((int)response.StatusCode);
@@ -113,15 +122,18 @@ namespace installer.Model
                     {
                         case System.Net.HttpStatusCode.OK:
                             var res = JsonSerializer.Deserialize<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
-                            string tmpSecretId = res["TmpSecretId"];        //"临时密钥 SecretId";
-                            string tmpSecretKey = res["TmpSecretKey"];      //"临时密钥 SecretKey";
-                            string tmpToken = res["SecurityToken"];         //"临时密钥 token";
-                            long tmpExpiredTime = Convert.ToInt64(res["ExpiredTime"]);  //临时密钥有效截止时间，精确到秒
-                            EEsast_Cos.UpdateSecret(tmpSecretId, tmpSecretKey, tmpExpiredTime, tmpToken);
+                            if (res is not null)
+                            {
+                                string tmpSecretId = res["TmpSecretId"];        //"临时密钥 SecretId";
+                                string tmpSecretKey = res["TmpSecretKey"];      //"临时密钥 SecretKey";
+                                string tmpToken = res["SecurityToken"];         //"临时密钥 token";
+                                long tmpExpiredTime = Convert.ToInt64(res["ExpiredTime"]);  //临时密钥有效截止时间，精确到秒
+                                EEsast_Cos.UpdateSecret(tmpSecretId, tmpSecretKey, tmpExpiredTime, tmpToken);
 
-                            string cosPath = $"/THUAI7/{GetTeamId()}/{type}/{plr}"; //对象在存储桶中的位置标识符，即称对象键
-                            EEsast_Cos.UploadFileAsync(userfile, cosPath).Wait();
-                            Log.LogInfo($"{userfile}上传成功。");
+                                string cosPath = $"/THUAI7/{GetTeamId()}/{type}/{plr}"; //对象在存储桶中的位置标识符，即称对象键
+                                EEsast_Cos.UploadFileAsync(userfile, cosPath).Wait();
+                                Log.LogInfo($"{userfile}上传成功。");
+                            }
                             break;
                         case System.Net.HttpStatusCode.Unauthorized:
                             Log.LogError("未登录或登录过期，无法向EEsast上传文件。");

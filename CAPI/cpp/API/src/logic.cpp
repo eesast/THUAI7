@@ -828,7 +828,7 @@ void Logic::LoadBuffer(const protobuf::MessageToClient& message)
             if (Proto2THUAI7::messageOfObjDict[obj.message_of_obj_case()] == THUAI7::MessageOfObj::ShipMessage)
             {
                 bufferState->guids_all.push_back(obj.ship_message().guid());
-                if (obj.obj.ship_message().team_id() == teamID)
+                if (obj.ship_message().team_id() == teamID)
                     bufferState->guids.push_back(obj.ship_message().guid());
             }
         bufferState->gameInfo = Proto2THUAI7::Protobuf2THUAI7GameInfo(message.all_message());
