@@ -55,7 +55,7 @@ namespace Server
         public string ResultFileName { get; set; } = "114514";
         [Option("startLockFile", Required = false, HelpText = "Whether to create a file that identifies whether the game has started")]
         public string StartLockFile { get; set; } = "114514";
-        [Option("mode", Required = false, HelpText = "Whether to run final competition")]
+        [Option("mode", Required = false, HelpText = "Whether to run final competition. 0 本地玩,1 最终比赛,2 天梯")]
         public int Mode { get; set; } = 0;
     }
 }

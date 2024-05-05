@@ -281,7 +281,8 @@ bool Logic::EndAllAction()
 
 bool Logic::WaitThread()
 {
-    Update();
+    if (asynchronous)
+        Wait();
     return true;
 }
 
@@ -821,14 +822,14 @@ void Logic::LoadBuffer(const protobuf::MessageToClient& message)
         bufferState->enemyShips.clear();
         bufferState->bullets.clear();
         bufferState->guids.clear();
-        bufferState->guids_all.clear();
+        bufferState->allGuids.clear();
         logger->info("Buffer cleared!");
         // 读取新的信息
         for (const auto& obj : message.obj_message())
             if (Proto2THUAI7::messageOfObjDict[obj.message_of_obj_case()] == THUAI7::MessageOfObj::ShipMessage)
             {
-                bufferState->guids_all.push_back(obj.ship_message().guid());
-                if (obj.obj.ship_message().team_id() == teamID)
+                bufferState->allGuids.push_back(obj.ship_message().guid());
+                if (obj.ship_message().team_id() == teamID)
                     bufferState->guids.push_back(obj.ship_message().guid());
             }
         bufferState->gameInfo = Proto2THUAI7::Protobuf2THUAI7GameInfo(message.all_message());

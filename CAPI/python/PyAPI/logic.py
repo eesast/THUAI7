@@ -126,7 +126,8 @@ class Logic(ILogic):
             return self.__messageQueue.get()
 
     def WaitThread(self) -> bool:
-        self.__Update()
+        if Setting.Asynchronous():
+            self.__Wait()
         return True
 
     def GetCounter(self) -> int:
@@ -183,7 +184,7 @@ class Logic(ILogic):
             self.__logger.debug("Called GetHomeHp")
             return copy.deepcopy(
                 self.__currentState.gameInfo.redHomeHp
-                if self.__teamID == 1
+                if self.__teamID == 0
                 else self.__currentState.gameInfo.blueHomeHp
             )
 
@@ -192,7 +193,7 @@ class Logic(ILogic):
             self.__logger.debug("Called GetEnergy")
             return copy.deepcopy(
                 self.__currentState.gameInfo.redEnergy
-                if self.__teamID == 1
+                if self.__teamID == 0
                 else self.__currentState.gameInfo.blueEnergy
             )
 
@@ -201,7 +202,7 @@ class Logic(ILogic):
             self.__logger.debug("Called GetScore")
             return copy.deepcopy(
                 self.__currentState.gameInfo.redScore
-                if self.__teamID == 1
+                if self.__teamID == 0
                 else self.__currentState.gameInfo.blueScore
             )
 
@@ -314,12 +315,12 @@ class Logic(ILogic):
             self.__bufferState.bullets.clear()
             self.__bufferState.bombedBullets.clear()
             self.__bufferState.guids.clear()
-            self.__bufferState.guids_all.clear()
+            self.__bufferState.allGuids.clear()
             self.__logger.debug("Buffer cleared")
 
             for obj in message.obj_message:
                 if obj.WhichOneof("message_of_obj") == "ship_message":
-                    self.__bufferState.guids_all.append(obj.ship_message.guid)
+                    self.__bufferState.allGuids.append(obj.ship_message.guid)
                     if obj.ship_message.team_id == self.__teamID:
                         self.__bufferState.guids.append(obj.ship_message.guid)
 
