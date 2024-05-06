@@ -24,7 +24,7 @@ namespace Preparation.Utility.Value.SafeValue.Atomic
             T? g = Get();
             if (g == null) return obj == null;
             if (g == obj) return true;
-            return obj != null && (obj is IReturnClass<T> k) && Get() == k.Get();
+            return obj != null && (obj is IReturnClass<T> k) && g == k.Get();
         }
         public override int GetHashCode()
         {
@@ -48,7 +48,7 @@ namespace Preparation.Utility.Value.SafeValue.Atomic
             T? g = Get();
             if (g == null) return obj == null;
             if (g == obj) return true;
-            return obj != null && (obj is IReturnClass<T> k) && Get() == k.Get();
+            return obj != null && (obj is IReturnClass<T> k) && g == k.Get();
         }
         public override int GetHashCode()
         {

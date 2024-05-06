@@ -6,6 +6,7 @@ namespace Preparation.Utility.Value.SafeValue;
 
 public class ObjPool<T, TType>(Func<T, TType> classfier,
                                Func<T, bool> idleChecker,
+                               Func<T, bool> tryActivator,
                                Action<T> activator,
                                Action<T> inactivator)
     : IObjPool<T, TType>
@@ -16,6 +17,7 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
     private readonly Dictionary<TType, LockedClassList<T>> objs = [];
     private readonly Func<T, TType> classfier = classfier;
     private readonly Func<T, bool> idleChecker = idleChecker;
+    private readonly Func<T, bool> tryActivator = tryActivator;
     private readonly Action<T> activator = activator;
     private readonly Action<T> inactivator = inactivator;
 
@@ -89,10 +91,7 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
         lock (dictLock)
         {
             if (CheckEmpty(tp) || GetIdleNum(tp) == 0) return null;
-            var ret = Find(tp, idleChecker);
-            if (ret is null) return null;
-            activator(ret);
-            return ret;
+            return Find(tp, tryActivator);
         }
     }
     public void ReturnObj(T obj)
