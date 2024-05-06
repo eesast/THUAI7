@@ -28,6 +28,15 @@ namespace GameClass.GameObj
             ShipPool = new(
                 classfier: (ship) => ship.ShipType,
                 idleChecker: (ship) => ship.IsRemoved,
+                tryActivator: (ship) =>
+                {
+                    if (ship.IsRemoved.TrySet(false))
+                    {
+                        ship.CanMove.SetROri(true);
+                        return true;
+                    }
+                    return false;
+                },
                 activator: (ship) =>
                 {
                     ship.CanMove.SetROri(true);
