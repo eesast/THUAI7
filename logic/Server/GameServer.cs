@@ -141,7 +141,7 @@ namespace Server
                 }
                 else
                 {
-                    double[] final = Cal(org, scores);
+                    double[] final = LadderCalculate(org, scores);
                     return final;
                 }
             }
