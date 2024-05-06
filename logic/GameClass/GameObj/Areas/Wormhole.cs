@@ -7,7 +7,7 @@ namespace GameClass.GameObj.Areas;
 
 public class Wormhole(List<WormholeCell> cells, int id)
 {
-    public InVariableRange<long> HP = new(GameData.WormholeHP);
+    public InVariableRange<long> HP { get; } = new(GameData.WormholeHP);
     private readonly List<WormholeCell> cells = cells;
     public List<WormholeCell> Cells => cells;
     public AtomicInt RepairNum { get; } = new AtomicInt(0);

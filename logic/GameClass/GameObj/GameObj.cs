@@ -7,10 +7,6 @@ using System.Threading;
 
 namespace GameClass.GameObj
 {
-    public static class GameObjLogger
-    {
-        public static readonly Logger logger = new("GameObj");
-    }
     /// <summary>
     /// 一切游戏元素的总基类，与THUAI4不同，继承IMoveable接口（出于一切物体其实都是可运动的指导思想）——LHR
     /// </summary>

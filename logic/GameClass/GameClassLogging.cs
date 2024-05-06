@@ -3,6 +3,11 @@ using Preparation.Utility.Logging;
 
 namespace GameClass.GameObj
 {
+    public static class GameObjLogger
+    {
+        public static readonly Logger logger = new("GameObj");
+    }
+
     public static class LoggingFunctional
     {
         public static string ShipLogInfo(Ship ship)
