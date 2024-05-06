@@ -202,7 +202,7 @@ bool Logic::Move(int64_t time, double angle)
 bool Logic::Send(int32_t toID, std::string message, bool binary)
 {
     logger->debug("Called SendMessage");
-    return pComm->Send(playerID, teamID, toID, std::move(message), binary);
+    return pComm->Send(playerID, toID, teamID, std::move(message), binary);
 }
 
 bool Logic::HaveMessage()
