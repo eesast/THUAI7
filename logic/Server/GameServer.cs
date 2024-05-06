@@ -111,42 +111,44 @@ namespace Server
 
         protected void SendGameResult(int[] scores, int mode)		// 天梯的 Server 给网站发消息记录比赛结果
         {
+            string? url2 = Environment.GetEnvironmentVariable("FINISH_URL");
+            if (url2 == null)
+            {
+                GameServerLogging.logger.ConsoleLog("Null FINISH_URL!");
+                return;
+            }
+            else
+            {
+                httpSender.Url = url2;
+                httpSender.Token = options.Token;
+            }
             httpSender?.SendHttpRequest(scores, mode).Wait();
-
         }
 
-        protected async Task<double[]> GetLadderScore(double[] scores)
+        protected double[] PullScore(double[] scores)
         {
 
             string? url2 = Environment.GetEnvironmentVariable("SCORE_URL");
             if (url2 != null)
             {
-                try
+                httpSender.Url = url2;
+                httpSender.Token = options.Token;
+                double[] org = httpSender.GetLadderScore(scores).Result;
+                if (org.Length == 0)
                 {
-                    var httpClient = new HttpClient();
-                    httpClient.DefaultRequestHeaders.Authorization = new("Bearer", options.Token);
-                    var response = await httpClient.PostAsync(url2, JsonContent.Create(new { HttpHeaders = options.Token }));
-
-                    // 读取响应内容为字符串
-                    var jsonString = await response.Content.ReadAsStringAsync();
-
-                    // 解析 JSON 字符串
-                    var result = JsonConvert.DeserializeObject<List<ContestResult>>(jsonString);
-                    double[] org = (from r in result select (double)(r.score)).ToArray();
-                    double[] final = LadderCalculate(org, scores);
-                    return final;
+                    GameServerLogging.logger.ConsoleLog("Error: No data returned from the web!");
+                    return new double[0];
                 }
-                catch (Exception e)
+                else
                 {
-                    GameServerLogging.logger.ConsoleLog("No response from ladder URL!");
-                    GameServerLogging.logger.ConsoleLog(e.ToString());
-                    return [];
+                    double[] final = Cal(org, scores);
+                    return final;
                 }
             }
             else
             {
-                GameServerLogging.logger.ConsoleLog("Null URL!");
-                return [];
+                GameServerLogging.logger.ConsoleLog("Null SCORE_URL Environment!");
+                return new double[0];
             }
         }
 
@@ -212,9 +214,15 @@ namespace Server
             double[] doubleArray = scores.Select(x => (double)x).ToArray();
             if (options.Mode == 2)
             {
-                doubleArray = GetLadderScore(doubleArray).Result;
+                doubleArray = PullScore(doubleArray);
                 scores = doubleArray.Select(x => (int)x).ToArray();
-                SendGameResult(scores, options.Mode);
+                if (scores.Length == 0)
+                {
+                    Console.WriteLine("Error: No data returned from the web!");
+
+                }
+                else
+                    SendGameResult(scores, options.Mode);
             }
             endGameSem.Release();
         }
@@ -453,10 +461,20 @@ namespace Server
                 }
             }
 
-
+            string? token2 = Environment.GetEnvironmentVariable("TOKEN");
+            if (token2 == null)
+            {
+                GameServerLogging.logger.ConsoleLog("Null TOKEN Environment!");
+            }
+            else
+                options.Token = token2;
             if (options.Url != DefaultArgumentOptions.Url && options.Token != DefaultArgumentOptions.Token)
             {
                 httpSender = new(options.Url, options.Token);
+            }
+            else
+            {
+                httpSender = new(DefaultArgumentOptions.Url, DefaultArgumentOptions.Token);
             }
         }
     }
