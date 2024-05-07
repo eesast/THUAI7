@@ -49,6 +49,35 @@ fi
 #     done
 # }
 
+function retry_command {
+    local command="$1"
+    local max_attempts=2
+    local attempt_num=1
+    local sleep_seconds=10
+
+    while [ $attempt_num -le $max_attempts ]; do
+        echo "Attempt $attempt_num / $max_attempts to run command: $command"
+
+        eval $command &
+        local PID=$!
+
+        sleep $sleep_seconds
+
+        if kill -0 $PID 2>/dev/null; then
+            echo "Connected to server successfully."
+            return 0
+        else
+            echo "Failed to connect to server. Retrying..."
+            ((attempt_num++))
+        fi
+    done
+
+    echo "Failed to connect to server after $max_attempts attempts."
+    return 1
+}
+
+
+
 if [ "$TERMINAL" = "SERVER" ]; then
     map_path=$map_dir/$MAP_ID.txt
     if [ $EXPOSED -eq 1 ]; then
@@ -91,10 +120,12 @@ elif [ "$TERMINAL" = "CLIENT" ]; then
                     echo "find ./$code_name.py"
                     cp -r $python_main_dir $python_main_dir$i
                     cp -f ./$code_name.py $python_main_dir$i/PyAPI/AI.py
-                    nice -0 python3 $python_main_dir$i/PyAPI/main.py -I $CONNECT_IP -P $PORT -t $k -p $i > $playback_dir/team$k-$code_name.log 2>&1 &
+                    command="nice -0 python3 $python_main_dir$i/PyAPI/main.py -I $CONNECT_IP -P $PORT -t $k -p $i > $playback_dir/team$k-$code_name.log 2>&1 &"
+                    retry_command "$command" &
                 elif [ -f "./$code_name" ]; then
                     echo "find ./$code_name"
-                    nice -0 ./$code_name -I $CONNECT_IP -P $PORT -t $k -p $i > $playback_dir/team$k-$codename.log 2>&1 &
+                    command="nice -0 ./$code_name -I $CONNECT_IP -P $PORT -t $k -p $i > $playback_dir/team$k-$codename.log 2>&1 &"
+                    retry_command "$command" &
                 else
                     echo "ERROR. $code_name is not found."
                 fi
@@ -104,16 +135,18 @@ elif [ "$TERMINAL" = "CLIENT" ]; then
                     echo "find ./$code_name.py"
                     cp -r $python_main_dir $python_main_dir$i
                     cp -f ./$code_name.py $python_main_dir$i/PyAPI/AI.py
-                    nice -0 python3 $python_main_dir$i/PyAPI/main.py -I $CONNECT_IP -P $PORT -t $k -p $i > $playback_dir/team$k-$code_name.log 2>&1 &
+                    command="nice -0 python3 $python_main_dir$i/PyAPI/main.py -I $CONNECT_IP -P $PORT -t $k -p $i > $playback_dir/team$k-$code_name.log 2>&1 &"
+                    retry_command "$command" &
                 elif [ -f "./$code_name" ]; then
                     echo "find ./$code_name"
-                    nice -0 ./$code_name -I $CONNECT_IP -P $PORT -t $k -p $i > $playback_dir/team$k-$code_name.log 2>&1 &
+                    command="nice -0 ./$code_name -I $CONNECT_IP -P $PORT -t $k -p $i > $playback_dir/team$k-$code_name.log 2>&1 &"
+                    retry_command "$command" &
                 else
                     echo "ERROR. $code_name is not found."
                 fi
             fi
         done
-        sleep $((GAME_TIME))
+        sleep $((GAME_TIME+90))
     popd
 else
     echo "VALUE ERROR: TERMINAL is neither SERVER nor CLIENT."
