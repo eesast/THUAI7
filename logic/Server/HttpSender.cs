@@ -59,7 +59,7 @@ namespace Server
 
                 // 解析 JSON 字符串
                 var result = JsonConvert.DeserializeObject<ContestResult>(jsonString);
-                return result.Scores.Select(score => (double)score).ToArray();
+                return result.scores.Select(score => (double)score).ToArray();
             }
             catch (Exception e)
             {
