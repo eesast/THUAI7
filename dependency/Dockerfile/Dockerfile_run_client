@@ -16,4 +16,4 @@ RUN bash ../../dependency/shell/generate_proto.sh
 
 WORKDIR /usr/local
 RUN export TERMINAL=CLIENT
-ENTRYPOINT [ "bash","./run.sh" ]
+ENTRYPOINT [ "bash","./run.sh > /usr/local/output/client$TEAM_SEQ_ID.log" ]
