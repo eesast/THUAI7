@@ -130,11 +130,11 @@ elif [ "$TERMINAL" = "CLIENT" ]; then
                     cp -r $python_main_dir $python_main_dir$i
                     cp -f ./$code_name.py $python_main_dir$i/PyAPI/AI.py
                     command="nice -0 python3 $python_main_dir$i/PyAPI/main.py -I $CONNECT_IP -P $PORT -t $k -p $i > $playback_dir/team$k-$code_name.log 2>&1 &"
-                    retry_command "$command" &
+                    retry_command "$command" > $playback_dir/client$k.log &
                 elif [ -f "./$code_name" ]; then
                     echo "find ./$code_name"
                     command="nice -0 ./$code_name -I $CONNECT_IP -P $PORT -t $k -p $i > $playback_dir/team$k-$codename.log 2>&1 &"
-                    retry_command "$command" &
+                    retry_command "$command" > $playback_dir/client$k.log &
                 else
                     echo "ERROR. $code_name is not found."
                 fi
@@ -145,11 +145,11 @@ elif [ "$TERMINAL" = "CLIENT" ]; then
                     cp -r $python_main_dir $python_main_dir$i
                     cp -f ./$code_name.py $python_main_dir$i/PyAPI/AI.py
                     command="nice -0 python3 $python_main_dir$i/PyAPI/main.py -I $CONNECT_IP -P $PORT -t $k -p $i > $playback_dir/team$k-$code_name.log 2>&1 &"
-                    retry_command "$command" &
+                    retry_command "$command" > $playback_dir/client$k.log &
                 elif [ -f "./$code_name" ]; then
                     echo "find ./$code_name"
                     command="nice -0 ./$code_name -I $CONNECT_IP -P $PORT -t $k -p $i > $playback_dir/team$k-$code_name.log 2>&1 &"
-                    retry_command "$command" &
+                    retry_command "$command" > $playback_dir/client$k.log &
                 else
                     echo "ERROR. $code_name is not found."
                 fi
