@@ -58,8 +58,8 @@ namespace Server
                 var jsonString = await response.Content.ReadAsStringAsync();
 
                 // 解析 JSON 字符串
-                var result = JsonConvert.DeserializeObject<ResponseResult>(jsonString);
-                return result.Scores.Select(score => (double)score).ToArray();;
+                var result = JsonConvert.DeserializeObject<ContestResult>(jsonString);
+                return result.Scores.Select(score => (double)score).ToArray();
             }
             catch (Exception e)
             {
