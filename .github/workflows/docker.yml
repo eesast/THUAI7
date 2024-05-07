@@ -16,7 +16,18 @@ jobs:
     #- name: Push base image to DockerHub
     #  run: docker push ${{ secrets.DOCKER_USERNAME }}/thuai7_base:base
 
+
     - name: Build cpp_compile docker image
       run: docker build -t ${{ secrets.DOCKER_USERNAME }}/thuai7_cpp:latest -f ./dependency/Dockerfile/Dockerfile_cpp .
     - name: Push cpp_compile image to DockerHub
       run: docker push ${{ secrets.DOCKER_USERNAME }}/thuai7_cpp:latest
+
+    - name: Build run_server docker image
+      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/thuai7_run_server:latest -f ./dependency/Dockerfile/Dockerfile_run_server .
+    - name: Push run_server image to DockerHub
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/thuai7_run_server:latest
+
+    - name: Build run_client docker image
+      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/thuai7_run_client:latest -f ./dependency/Dockerfile/Dockerfile_run_client .
+    - name: Push run_client image to DockerHub
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/thuai7_run_client:latest
