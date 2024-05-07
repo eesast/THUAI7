@@ -26,7 +26,7 @@ namespace installer.Data
     {
         // 代码库版本
         [JsonInclude]
-        public Version LibVersion = new Version(1, 0, 2, 0);
+        public Version LibVersion = new Version(1, 0, 2, 1);
         // 选手代码模板版本
         [JsonInclude]
         public Version TemplateVersion = new Version(1, 0, 0, 3);
