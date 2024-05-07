@@ -16,7 +16,7 @@ namespace Server
     public class ContestResult
     {
         public string status;
-        public int[] scores;
+        public double[] scores;
     }
     partial class GameServer : ServerBase
     {
