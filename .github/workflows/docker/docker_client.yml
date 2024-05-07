@@ -1,0 +1,22 @@
+name: "docker"
+on:
+  push:
+    branches: [main]
+
+jobs:
+  upload_docker_images:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Log in to DockerHub
+      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+    #- name: Build base docker image
+    #  run: docker build -t ${{ secrets.DOCKER_USERNAME }}/thuai7_base:base -f ./dependency/Dockerfile/Dockerfile_base .
+    #- name: Push base image to DockerHub
+    #  run: docker push ${{ secrets.DOCKER_USERNAME }}/thuai7_base:base
+
+    - name: Build run_client docker image
+      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/thuai7_run_client:latest -f ./dependency/Dockerfile/Dockerfile_run_client .
+    - name: Push run_client image to DockerHub
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/thuai7_run_client:latest
