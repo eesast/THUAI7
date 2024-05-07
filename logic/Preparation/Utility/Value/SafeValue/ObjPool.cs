@@ -7,7 +7,6 @@ namespace Preparation.Utility.Value.SafeValue;
 public class ObjPool<T, TType>(Func<T, TType> classfier,
                                Func<T, bool> idleChecker,
                                Func<T, bool> tryActivator,
-                               Action<T> activator,
                                Action<T> inactivator)
     : IObjPool<T, TType>
     where T : class
@@ -18,7 +17,6 @@ public class ObjPool<T, TType>(Func<T, TType> classfier,
     private readonly Func<T, TType> classfier = classfier;
     private readonly Func<T, bool> idleChecker = idleChecker;
     private readonly Func<T, bool> tryActivator = tryActivator;
-    private readonly Action<T> activator = activator;
     private readonly Action<T> inactivator = inactivator;
 
     #region 属性

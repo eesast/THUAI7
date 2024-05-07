@@ -37,16 +37,12 @@ namespace GameClass.GameObj
                     }
                     return false;
                 },
-                activator: (ship) =>
-                {
-                    ship.CanMove.SetROri(true);
-                    ship.IsRemoved.SetROri(false);
-                },
                 inactivator: (ship) =>
                 {
                     ship.CanMove.SetROri(false);
                     ship.IsRemoved.SetROri(true);
                 });
+            // 池初始化，但是由于服务器采用逐个添加船只的方式，因此这里不进行任何行为
             ShipPool.Initiate(ShipType.CivilShip, 0,
                               () => new(GameData.ShipRadius, ShipType.CivilShip, MoneyPool));
             ShipPool.Initiate(ShipType.WarShip, 0,

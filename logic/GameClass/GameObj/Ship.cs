@@ -46,7 +46,7 @@ public class Ship : Movable, IShip
     /// <summary>
     /// 子弹数上限, THUAI7为无穷
     /// </summary>
-    public IntNumUpdateEachCD BulletNum => new(int.MaxValue, 1);
+    public IntNumUpdateEachCD BulletNum { get; } = new(int.MaxValue, 1);
     /// <summary>
     /// 模块相关
     /// </summary>

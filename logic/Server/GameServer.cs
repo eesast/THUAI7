@@ -109,97 +109,96 @@ namespace Server
 
         }
 
-        protected void SendGameResult(int[] scores, int mode)		// 天梯的 Server 给网站发消息记录比赛结果
+        protected void SendGameResult(int[] scores, bool crashed)		// 天梯的 Server 给网站发消息记录比赛结果
         {
-            httpSender?.SendHttpRequest(scores, mode).Wait();
-
+            string? url2 = Environment.GetEnvironmentVariable("FINISH_URL");
+            if (url2 == null)
+            {
+                GameServerLogging.logger.ConsoleLog("Null FINISH_URL!");
+                return;
+            }
+            else
+            {
+                httpSender.Url = url2;
+                httpSender.Token = options.Token;
+            }
+            string state = crashed ? "Crashed" : "Finished";
+            httpSender?.SendHttpRequest(scores, state).Wait();
         }
 
-        protected async Task<double[]> GetLadderScore(double[] scores)
+        protected double[] PullScore(double[] scores)
         {
 
             string? url2 = Environment.GetEnvironmentVariable("SCORE_URL");
             if (url2 != null)
             {
-                try
+                httpSender.Url = url2;
+                httpSender.Token = options.Token;
+                double[] org = httpSender.GetLadderScore(scores).Result;
+                if (org.Length == 0)
                 {
-                    var httpClient = new HttpClient();
-                    httpClient.DefaultRequestHeaders.Authorization = new("Bearer", options.Token);
-                    var response = await httpClient.PostAsync(url2, JsonContent.Create(new { HttpHeaders = options.Token }));
-
-                    // 读取响应内容为字符串
-                    var jsonString = await response.Content.ReadAsStringAsync();
-
-                    // 解析 JSON 字符串
-                    var result = JsonConvert.DeserializeObject<List<ContestResult>>(jsonString);
-                    double[] org = (from r in result select (double)(r.score)).ToArray();
-                    double[] final = Cal(org, scores);
-                    return final;
-                }
-                catch (Exception e)
-                {
-                    GameServerLogging.logger.ConsoleLog("No response from ladder URL!");
-                    GameServerLogging.logger.ConsoleLog(e.ToString());
+                    GameServerLogging.logger.ConsoleLog("Error: No data returned from the web!");
                     return new double[0];
+                }
+                else
+                {
+                    double[] final = LadderCalculate(org, scores);
+                    return final;
                 }
             }
             else
             {
-                GameServerLogging.logger.ConsoleLog("Null URL!");
+                GameServerLogging.logger.ConsoleLog("Null SCORE_URL Environment!");
                 return new double[0];
             }
         }
 
-        protected double[] Cal(double[] orgScore, double[] competitionScore)
+        protected static double[] LadderCalculate(double[] oriScores, double[] competitionScores)
         {
-            // 调整顺序，让第一个元素成为获胜者，便于计算
-            bool reverse = false; // 记录是否需要调整
-            if (competitionScore[0] < competitionScore[1])
+            // 调整顺序，让第一项成为获胜者，便于计算
+            bool scoresReverse = false; // 顺序是否需要交换
+            if (competitionScores[0] < competitionScores[1])      // 第一项为落败者
+                scoresReverse = true;
+            else if (competitionScores[0] == competitionScores[1])// 平局
             {
-                reverse = true;
-            }
-            else if (competitionScore[0] == competitionScore[1])
-            {
-                if (orgScore[0] == orgScore[1])
-                {
+                if (oriScores[0] == oriScores[1])
                     // 完全平局，不改变天梯分数
-                    return orgScore;
-                }
-                if (orgScore[0] > orgScore[1])
-                {
-                    // 本次游戏平局，但一方天梯分数高，另一方天梯分数低，需要将两者向中间略微靠拢，因此天梯分数低的定为获胜者
-                    reverse = true;
-                }
+                    return oriScores;
+                if (oriScores[0] > oriScores[1])
+                    // 本次游戏平局，但一方天梯分数高，另一方天梯分数低，
+                    // 需要将两者向中间略微靠拢，因此天梯分数低的定为获胜者
+                    scoresReverse = true;
             }
-            if (reverse)
+            if (scoresReverse)// 如果需要换，交换两者的顺序
             {
-                // 如果需要换，换两者的顺序
-                double t = competitionScore[1];
-                competitionScore[1] = competitionScore[0];
-                competitionScore[0] = t;
-                t = orgScore[1];
-                orgScore[1] = orgScore[0];
-                orgScore[0] = t;
+                (competitionScores[0], competitionScores[1]) = (competitionScores[1], competitionScores[0]);
+                (oriScores[0], oriScores[1]) = (oriScores[1], oriScores[0]);
             }
+
+            const double normalDeltaThereshold = 1000.0;            // 分数差标准化参数，同时也是大分数差阈值
+            const double correctParam = normalDeltaThereshold * 1.2;// 修正参数
+            const double winnerWeight = 9e-6;                       // 获胜者天梯得分权值
+            const double loserWeight = 5e-6;                        // 落败者天梯得分权值
+            const double scoreDeltaThereshold = 2100.0;             // 极大分数差阈值
+
             double[] resScore = [0, 0];
-            double deltaWeight = 1000.0; // 差距悬殊判断参数
-            double delta = (orgScore[0] - orgScore[1]) / deltaWeight;
-            // 盈利者天梯得分权值、落败者天梯得分权值
-            double firstnerGet = 9e-6;
-            double secondrGet = 5e-6;
-            double deltaScore = 2100.0; // 两队竞争分差超过多少时就认为非常大
-            double correctRate = (orgScore[0] - orgScore[1]) / (deltaWeight * 1.2); // 订正的幅度，该值越小，则在势均力敌时天梯分数改变越大
-            double correct = 0.5 * (Math.Tanh((competitionScore[0] - competitionScore[1] - deltaScore) / deltaScore - correctRate) + 1.0); // 一场比赛中，在双方势均力敌时，减小天梯分数的改变量
-            resScore[0] = orgScore[0] + Math.Round(competitionScore[0] * competitionScore[0] * firstnerGet * (1 - Math.Tanh(delta)) * correct); // 胜者所加天梯分
-            resScore[1] = orgScore[1] - Math.Round(
-            (competitionScore[0] - competitionScore[1]) * (competitionScore[0] - competitionScore[1]) * secondrGet * (1 - Math.Tanh(delta)) * correct); // 败者所扣天梯分
-                                                                                                                                                        // 如果换过，再换回来
-            if (reverse)
-            {
-                double t = resScore[1];
-                resScore[1] = resScore[0];
-                resScore[0] = t;
-            }
+            double oriDelta = oriScores[0] - oriScores[1];                          // 原分数差
+            double competitionDelta = competitionScores[0] - competitionScores[1];  // 本次比赛分数差
+            double normalOriDelta = oriDelta / normalDeltaThereshold;               // 标准化原分数差
+            double correctRate = oriDelta / correctParam;                           // 修正率，修正方向为缩小分数差
+            double correct = 0.5 * (Math.Tanh((competitionDelta - scoreDeltaThereshold) / scoreDeltaThereshold
+                                              - correctRate)
+                                    + 1.0); // 分数修正
+            resScore[0] = oriScores[0] + Math.Round(Math.Pow(competitionScores[0], 2)
+                                                    * winnerWeight
+                                                    * (1 - Math.Tanh(normalOriDelta))
+                                                    * correct); // 胜者所加天梯分
+            resScore[1] = oriScores[1] - Math.Round(Math.Pow(competitionDelta, 2)
+                                                    * loserWeight
+                                                    * (1 - Math.Tanh(normalOriDelta))
+                                                    * correct); // 败者所扣天梯分
+            if (scoresReverse)// 顺序换回
+                (resScore[0], resScore[1]) = (resScore[1], resScore[0]);
             return resScore;
         }
 
@@ -216,9 +215,16 @@ namespace Server
             double[] doubleArray = scores.Select(x => (double)x).ToArray();
             if (options.Mode == 2)
             {
-                doubleArray = GetLadderScore(doubleArray).Result;
-                scores = doubleArray.Select(x => (int)x).ToArray();
-                SendGameResult(scores, options.Mode);
+                bool crash = false;
+                doubleArray = PullScore(doubleArray);
+                if (doubleArray.Length == 0)
+                {
+                    crash = true;
+                    Console.WriteLine("Error: No data returned from the web!");
+                }
+                else
+                    scores = doubleArray.Select(x => (int)x).ToArray();
+                SendGameResult(scores, crash);
             }
             endGameSem.Release();
         }
@@ -457,10 +463,20 @@ namespace Server
                 }
             }
 
-
+            string? token2 = Environment.GetEnvironmentVariable("TOKEN");
+            if (token2 == null)
+            {
+                GameServerLogging.logger.ConsoleLog("Null TOKEN Environment!");
+            }
+            else
+                options.Token = token2;
             if (options.Url != DefaultArgumentOptions.Url && options.Token != DefaultArgumentOptions.Token)
             {
                 httpSender = new(options.Url, options.Token);
+            }
+            else
+            {
+                httpSender = new(DefaultArgumentOptions.Url, DefaultArgumentOptions.Token);
             }
         }
     }
