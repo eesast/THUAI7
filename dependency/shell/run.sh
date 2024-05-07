@@ -105,6 +105,14 @@ if [ "$TERMINAL" = "SERVER" ]; then
         kill -9 $server_pid
         finish_payload='{"result": {"status": "Crashed", "scores": [0, 0]}}'
         curl $FINISH_URL -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" -d "${finish_payload}" > $playback_dir/send.log 2>&1
+    else
+        ps -p $server_pid
+        while [ $? -eq 0 ]
+        do
+            sleep 1
+            ps -p $server_pid > /dev/null 2>&1
+        done
+        echo "Server is down."
     fi
 
 elif [ "$TERMINAL" = "CLIENT" ]; then
