@@ -23,7 +23,7 @@ namespace Server
         private readonly ConcurrentDictionary<long, (SemaphoreSlim, SemaphoreSlim)> semaDict1 = new();
         // private object semaDictLock = new();
         protected readonly ArgumentOptions options;
-        private readonly HttpSender? httpSender;
+        private readonly HttpSender httpSender;
         private readonly object gameLock = new();
         private MessageToClient currentGameInfo = new();
         private readonly MessageOfObj currentMapMsg = new();
@@ -220,7 +220,7 @@ namespace Server
                 if (doubleArray.Length == 0)
                 {
                     crash = true;
-                    Console.WriteLine("Error: No data returned from the web!");
+                    GameServerLogging.logger.ConsoleLog("Error: No data returned from the web!");
                 }
                 else
                     scores = doubleArray.Select(x => (int)x).ToArray();
