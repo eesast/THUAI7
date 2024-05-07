@@ -13,7 +13,7 @@ namespace Server
     public class ArgumentOptions
     {
         [Option("ip", Required = false, HelpText = "Server listening ip")]
-        public string ServerIP { get; set; } = "localhost";
+        public string ServerIP { get; set; } = "0.0.0.0";
 
         [Option('p', "port", Required = true, HelpText = "Server listening port")]
         public ushort ServerPort { get; set; } = 8888;
