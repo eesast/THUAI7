@@ -31,7 +31,7 @@ namespace Server
             {
                 var request = new HttpClient();
                 request.DefaultRequestHeaders.Authorization = new("Bearer", token);
-                using var response = await request.PutAsync(url, JsonContent.Create(new
+                using var response = await request.PostAsync(url, JsonContent.Create(new
                 {
                     status = state,
                     scores = new int[] { scores[0], scores[1] },
@@ -48,12 +48,11 @@ namespace Server
 
         public async Task<double[]> GetLadderScore(double[] scores)
         {
-
             try
             {
                 var httpClient = new HttpClient();
                 httpClient.DefaultRequestHeaders.Authorization = new("Bearer", token);
-                var response = await httpClient.PostAsync(url, JsonContent.Create(new { HttpHeaders = token }));
+                var response = await httpClient.PostAsync(url, null);
 
                 // 读取响应内容为字符串
                 var jsonString = await response.Content.ReadAsStringAsync();

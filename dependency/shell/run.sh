@@ -81,7 +81,7 @@ if [ "$TERMINAL" = "SERVER" ]; then
 elif [ "$TERMINAL" = "CLIENT" ]; then
     echo "Client Mode! Team Label data - $TEAM_LABELS"
 
-    k = $TEAM_SEQ_ID
+    k=$TEAM_SEQ_ID
     pushd /usr/local/code
         for i in {0..4}
         do
@@ -113,6 +113,7 @@ elif [ "$TERMINAL" = "CLIENT" ]; then
                 fi
             fi
         done
+        sleep $((GAME_TIME))
     popd
 else
     echo "VALUE ERROR: TERMINAL is neither SERVER nor CLIENT."
