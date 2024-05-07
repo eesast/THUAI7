@@ -1078,7 +1078,7 @@ namespace Client.ViewModel
 
             myLogger.LogInfo(String.Format("ip:{0}, port:{1}, playerid:{2}, teamid:{3}, shiptype:{4}, playbackfile:{5}, playbackspeed:{6}", ip, port, playerID, teamID, shipTypeID, playbackFile, playbackSpeed));
 
-            //Playback("E:\\program\\Project\\THUAI7\\logic\\Client\\114514.thuai7.pb", 2.0);
+            //Playback("E:\\program\\Project\\THUAI7\\logic\\Client\\114514.thuaipb", 2.0);
             if (playbackFile.Length == 0)
             {
                 try
@@ -1129,7 +1129,7 @@ namespace Client.ViewModel
             //    "1"
             //});
 
-            //Playback("E:\\program\\Project\\THUAI7\\logic\\Server\\bin\\Debug\\net8.0\\114514.thuai7.pb", 1);
+            //Playback("E:\\program\\Project\\THUAI7\\logic\\Server\\bin\\Debug\\net8.0\\114514.thuaipb", 1);
 
             timerViewModel = Dispatcher.CreateTimer();
             timerViewModel.Interval = TimeSpan.FromMilliseconds(50);
