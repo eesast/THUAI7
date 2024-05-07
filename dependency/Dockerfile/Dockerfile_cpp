@@ -1,6 +1,6 @@
 #FROM ubuntu:18.04
 FROM eesast/thuai7_base:base
-MAINTAINER eesast
+LABEL maintainer="eesast"
 WORKDIR /usr/local
 
 COPY ./CAPI/cpp /usr/local/PlayerCode/CAPI/cpp

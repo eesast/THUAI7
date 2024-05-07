@@ -1,5 +1,5 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0.204-jammy-amd64 AS build
-MAINTAINER eesast
+LABEL maintainer="eesast"
 WORKDIR /usr/local
 COPY . .
 RUN dotnet publish logic/Server/Server.csproj -c Release -o /usr/local/Server --self-contained true -r linux-x64
