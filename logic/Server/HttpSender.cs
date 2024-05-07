@@ -25,7 +25,7 @@ namespace Server
         // {
         //     this.SendHttpRequest(new()).Wait();
         // }
-        public async Task SendHttpRequest(int[] scores, int mode)
+        public async Task SendHttpRequest(int[] scores, string state)
         {
             try
             {
@@ -33,12 +33,8 @@ namespace Server
                 request.DefaultRequestHeaders.Authorization = new("Bearer", token);
                 using var response = await request.PutAsync(url, JsonContent.Create(new
                 {
-                    result = new TeamScore[]
-                    {
-                        new() { TeamID = 0, Score = scores[0], },
-                        new() { TeamID = 1, Score = scores[1], },
-                    },
-                    mode
+                    status = state,
+                    scores = new int[] { scores[0], scores[1] },
                 }));
                 GameServerLogging.logger.ConsoleLog("Send to web successfully!");
                 GameServerLogging.logger.ConsoleLog($"Web response: {await response.Content.ReadAsStringAsync()}");
