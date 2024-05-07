@@ -3,6 +3,23 @@ python_dir=/usr/local/PlayerCode/CAPI/python/PyAPI
 python_main_dir=/usr/local/PlayerCode/CAPI/python
 playback_dir=/usr/local/playback
 map_dir=/usr/local/map
+mkdir -p $playback_dir
+
+# initialize
+if [[ "${MODE}" == "ARENA" ]]; then
+    MODE=0
+elif [[ "${MODE}" == "COMPETITION" ]]; then
+    MODE=1
+fi
+
+# set default value
+: "${TEAM_SEQ_ID:=0}"
+: "${TEAM_LABELS:=1:2}"
+: "${TEAM_LABEL:=1}"
+: "${EXPOSED=1}"
+: "${MODE=0}"
+: "${TIME=10}"
+: "${CONNECT_IP=172.17.0.1}"
 
 get_current_team_label() {
     if [ $TEAM_SEQ_ID -eq $2 ]; then
@@ -42,6 +59,8 @@ if [ "$TERMINAL" = "SERVER" ]; then
         nice -10 ./Server --port 8888 --teamCount 2 --shipNum 4 --resultFileName $playback_dir/result --gameTimeInSecond $TIME --mode $MODE --mapResource $map_path --notAllowSpectator --url $URL --token $TOKEN --fileName $playback_dir/video --startLockFile $playback_dir/start.lock > $playback_dir/server.log 2>&1 &
         server_pid=$!
     fi
+    echo "server pid: $server_pid"
+    ls $playback_dir
 
     sleep 10
 
@@ -52,10 +71,10 @@ if [ "$TERMINAL" = "SERVER" ]; then
             sleep 1
             ps -p $server_pid > /dev/null 2>&1
         done
-        # result=$(cat /usr/local/playback/result.json)
-        # score0=$(echo "$result" | grep -oP '(?<="Student":)\d+')
-        # score1=$(echo "$result" | grep -oP '(?<="Tricker":)\d+')
-        # curl $URL -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" -d '{"result":[{"team_id":0, "score":'${score0}'}, {"team_id":1, "score":'${score1}'}], "mode":'${MODE}'}'> $playback_dir/send.log 2>&1
+        result=$(cat /usr/local/playback/result.json)
+        score0=$(echo "$result" | grep -oP '(?<="Team1":)\d+')
+        score1=$(echo "$result" | grep -oP '(?<="Team2":)\d+')
+        curl $URL -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" -d '{"result":[{"team_id":0, "score":'${score0}'}, {"team_id":1, "score":'${score1}'}], "mode":'${MODE}'}'> $playback_dir/send.log 2>&1
         touch $playback_dir/finish.lock
         echo "Finish"
     else
@@ -72,35 +91,31 @@ elif [ "$TERMINAL" = "CLIENT" ]; then
     # parse team label name
     read_array get_current_team_label $TEAM_LABELS
 
-    # k is an enum (1,2), 1 = STUDENT, 2 = TRICKER
-    if [ "$current_team_label" = "Student" ]; then
+    if [ "$current_team_label" = "1" ]; then
         k=1
-    elif [ "$current_team_label" = "Tricker" ]; then
+    elif [ "$current_team_label" = "2" ]; then
         k=2
     else
         echo "Error: Invalid Team Label"
         exit
     fi
     pushd /usr/local/code
-        if [ $k -eq 1 ]; then
-            for i in {1..4}
-            do
-                j=$((i - 1)) # student player id from 0 to 3
-                code_name=Student$i
-                if [ -f "./$code_name.py" ]; then
-                    cp -r $python_main_dir $python_main_dir$i
-                    cp -f ./$code_name.py $python_main_dir$i/PyAPI/AI.py
-                    nice -0 python3 $python_main_dir$i/PyAPI/main.py -I 127.0.0.1 -P 8888 -p $j > $playback_dir/team$k-player$j.log 2>&1 &
-                elif [ -f "./$code_name" ]; then
-                    nice -0 ./$code_name -I 127.0.0.1 -P 8888 -p $j > $playback_dir/team$k-player$j.log 2>&1 &
-                else
-                    echo "ERROR. $code_name is not found."
-                fi
-            done
+    for i in {0..4}
+    do
+        if [ $i -eq 0 ]; then
+            code_name=Home
+            if [ -f "./$code_name.py" ]; then
+                cp -r $python_main_dir $python_main_dir$i
+                cp -f ./$code_name.py $python_main_dir$i/PyAPI/AI.py
+                nice -0 python3 $python_main_dir$i/PyAPI/main.py -I
+            elif [ -f "./$code_name" ]; then
+                nice -0 ./$code_name -I 127.0.0.1 -P 8888 -p $j > $playback_dir/team$k-player$j.log 2>&1 &
+            else
+                echo "ERROR. $code_name is not found."
+            fi
         else
-            i=5
-            j=4 # tricker id is 4
-            code_name=Tricker
+            j=$i
+            code_name=Ship$i
             if [ -f "./$code_name.py" ]; then
                 cp -r $python_main_dir $python_main_dir$i
                 cp -f ./$code_name.py $python_main_dir$i/PyAPI/AI.py
@@ -111,6 +126,7 @@ elif [ "$TERMINAL" = "CLIENT" ]; then
                 echo "ERROR. $code_name is not found."
             fi
         fi
+    done
     popd
 else
     echo "VALUE ERROR: TERMINAL is neither SERVER nor CLIENT."
