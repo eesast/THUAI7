@@ -109,7 +109,7 @@ namespace Server
 
         }
 
-        protected void SendGameResult(int[] scores, int mode)		// 天梯的 Server 给网站发消息记录比赛结果
+        protected void SendGameResult(int[] scores, bool crashed)		// 天梯的 Server 给网站发消息记录比赛结果
         {
             string? url2 = Environment.GetEnvironmentVariable("FINISH_URL");
             if (url2 == null)
@@ -122,7 +122,8 @@ namespace Server
                 httpSender.Url = url2;
                 httpSender.Token = options.Token;
             }
-            httpSender?.SendHttpRequest(scores, mode).Wait();
+            string state = crashed ? "Crashed" : "Finished";
+            httpSender?.SendHttpRequest(scores, state).Wait();
         }
 
         protected double[] PullScore(double[] scores)
@@ -214,15 +215,16 @@ namespace Server
             double[] doubleArray = scores.Select(x => (double)x).ToArray();
             if (options.Mode == 2)
             {
+                bool crash = false;
                 doubleArray = PullScore(doubleArray);
-                scores = doubleArray.Select(x => (int)x).ToArray();
-                if (scores.Length == 0)
+                if (doubleArray.Length == 0)
                 {
+                    crash = true;
                     Console.WriteLine("Error: No data returned from the web!");
-
                 }
                 else
-                    SendGameResult(scores, options.Mode);
+                    scores = doubleArray.Select(x => (int)x).ToArray();
+                SendGameResult(scores, crash);
             }
             endGameSem.Release();
         }
