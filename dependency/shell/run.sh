@@ -113,6 +113,7 @@ elif [ "$TERMINAL" = "CLIENT" ]; then
                 fi
             fi
         done
+        sleep $((GAME_TIME))
     popd
 else
     echo "VALUE ERROR: TERMINAL is neither SERVER nor CLIENT."
