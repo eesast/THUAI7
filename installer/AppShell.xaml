@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="installer.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:installer.Page"
+    Shell.FlyoutBehavior="Disabled"
+    Title="THUAI7">
+
+    <FlyoutItem
+        FlyoutDisplayOptions="AsMultipleItems">
+
+        <ShellContent
+            Title="Install"
+            ContentTemplate="{DataTemplate local:InstallPage}"/>
+
+        <Tab
+            Title="Launch">
+            <ShellContent
+                Title="Debug"
+                ContentTemplate="{DataTemplate local:DebugPage}"/>
+            <ShellContent
+                Title="Playback"
+                ContentTemplate="{DataTemplate local:PlaybackPage}"/>
+        </Tab>
+
+        <ShellContent
+            Title="Login"
+            ContentTemplate="{DataTemplate local:LoginPage}"/>
+            
+        <!-- <ShellContent
+            Title="Help"
+            ContentTemplate="{DataTemplate local:HelpPage}"/> -->
+
+    </FlyoutItem>
+    
+</Shell>

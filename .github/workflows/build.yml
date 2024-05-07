@@ -1,24 +1,57 @@
 name: build
-on: [push, pull_request]
+on:
+  push:
+    branches: [dev, main, master]
+  pull_request:
+    branches: [dev, main, master]
 jobs:
-  dotnet-build:
+  dotnet-build-logic:
     if: true
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 6.0.x
-        
+        dotnet-version: 8.0.x
+    - name: Setup dotnet-script
+      run: dotnet tool install --global dotnet-script
+    - name: Pre-Process1
+      run: dotnet script .github/preProcess/MauiEnvConfig.csx
+    - name: Install Workloads
+      run: dotnet workload install maui-windows
+    - name: Build Proto
+      run: dotnet build "./dependency/proto/Protos.csproj" -c Release
     - name: Build Logic
       run: dotnet build "./logic/logic.sln" -c Release
       
+  dotnet-build-install:
+    if: true
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Setup dotnet-script
+      run: dotnet tool install --global dotnet-script
+    - name: Pre-Process1
+      run: dotnet script .github/preProcess/MauiEnvConfig.csx  
+    - name: Install Workloads
+      run: dotnet workload install maui-windows
     - name: Build Installer
       run: dotnet build "./installer/installer.sln" -c Release
       
+  dotnet-build-launcher:
+    if: true
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+        
     - name: Build Launcher
       run: dotnet build "./launcher/launcher.sln" -c Release
-      
-    - name: Build Playback
-      run: dotnet build "./playback/playback.sln" -c Release

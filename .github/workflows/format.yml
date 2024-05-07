@@ -1,10 +1,14 @@
 name: format
-on: [push, pull_request]
+on:
+  push:
+    branches: [dev, main, master]
+  pull_request:
+    branches: [dev, main, master]
 jobs:
   clang-format-checking:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: DoozyX/clang-format-lint-action@v0.15
       with:
         source: '.'
@@ -12,32 +16,60 @@ jobs:
         clangFormatVersion: 14
         exclude: './players'
         inplace: False
- 
-  dotnet-format-checking:
+
+  dotnet-format-checking-logic:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 6.0.x
-        
+        dotnet-version: 8.0.x
+
     - name: Check Logic
       run: |
         dotnet restore "./logic/logic.sln"
         dotnet format "./logic/logic.sln" --severity error --no-restore --verify-no-changes
-      
+
+  dotnet-format-checking-installer:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
     - name: Check Installer
       run: |
         dotnet restore "./installer/installer.sln"
         dotnet format "./installer/installer.sln" --severity error --no-restore --verify-no-changes
-      
+
+  dotnet-format-checking-launcher:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
     - name: Check Launcher
       run: |
         dotnet restore "./launcher/launcher.sln"
         dotnet format "./launcher/launcher.sln" --severity error --no-restore --verify-no-changes
-      
-    - name: Check Playback
+
+  dotnet-format-checking-interface:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Check Interface
       run: |
-        dotnet restore "./playback/playback.sln"
-        dotnet format "./playback/playback.sln" --severity error --no-restore --verify-no-changes
+        dotnet format whitespace "./interface/interface_live/Assets/Scripts/" --folder --verify-no-changes
+        dotnet format whitespace "./interface/interface_playback/Assets/Scripts/" --folder --verify-no-changes
+        dotnet format whitespace "./interface/interface_local/Assets/Scripts/" --folder --verify-no-changes

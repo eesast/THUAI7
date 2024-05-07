@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ApplicationIcon />
+    <StartupObject />
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="FrameRateTask" Version="1.2.0" />
+		<PackageReference Include="Google.Protobuf" Version="3.26.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\dependency\proto\Protos.csproj" />
+	</ItemGroup>
+	
+</Project>

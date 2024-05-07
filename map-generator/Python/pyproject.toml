@@ -1,0 +1,5 @@
+[tool.autopep8]
+max_line_length = 120
+aggressive = true
+in-place = true
+recursive = true

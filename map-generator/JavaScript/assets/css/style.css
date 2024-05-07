@@ -1,0 +1,185 @@
+html {
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+    background-color: #fff;
+}
+
+header {
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+    height: 60px;
+    line-height: 60px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+}
+
+header .logo {
+    float: left;
+    margin-left: 30px;
+}
+
+header .logo a {
+    color: #333;
+    font-size: 20px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+header .logo a:hover {
+    color: #025b9e;
+}
+
+header .logo img {
+    height: 40px;
+    margin-top: 10px;
+}
+
+header .top-nav {
+    float: right;
+    margin-right: 30px;
+}
+
+header .top-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+header .top-nav ul li {
+    display: inline-block;
+    margin-left: 20px;
+    position: relative;
+}
+
+header .top-nav ul li a {
+    color: #333;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+header .top-nav ul li a:hover {
+    color: #025b9e;
+}
+
+main {
+    margin-top: 60px;
+    padding: 30px;
+}
+
+main h1 {
+    color: #333;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 20px;
+}
+
+main h2 {
+    color: #333;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 20px;
+}
+
+main p {
+    color: #333;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    margin: 0 0 20px;
+}
+
+main a {
+    color: #027dcd;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+main a:hover {
+    color: #025b9e;
+}
+
+main ul {
+    /* list-style: none; */
+    margin: 0;
+    /* padding: 0; */
+}
+
+main ul li {
+    margin-bottom: 20px;
+}
+
+main ul li a {
+    color: #333;
+    font-size: 16px;
+    font-weight: 500;
+    /* text-decoration: none; */
+}
+
+main ul li a:hover {
+    color: #025b9e;
+}
+
+main button {
+    background-color: #027dcd;
+    border: 0;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    height: 40px;
+    margin-bottom: 20px;
+    padding: 0 20px;
+}
+
+main button:hover {
+    background-color: #025b9e;
+    box-shadow: 0 0 5px #333;
+    text-shadow: 0 0 5px #333;
+}
+
+main fieldset {
+    border: 1px solid #333;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+main fieldset legend {
+    color: #333;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+main fieldset label {
+    color: #333;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+main fieldset input[type="text"],
+main fieldset input[type="email"],
+main fieldset input[type="password"],
+main fieldset select {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    color: #333;
+    font-size: 16px;
+    font-weight: 400;
+    height: 40px;
+    margin-bottom: 20px;
+    padding: 0 10px;
+    width: 100%;
+}
+
+main fieldset input[type="text"]:focus,
+main fieldset input[type="email"]:focus,
+main fieldset input[type="password"]:focus,
+main fieldset select:focus {
+    border: 1px solid #333;
+    box-shadow: 0 0 5px #333;
+}
