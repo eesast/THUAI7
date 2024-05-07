@@ -64,11 +64,11 @@ function retry_command {
         sleep $sleep_seconds
 
         if kill -0 $PID 2>/dev/null; then
-            echo "Failed to connect to server. Retrying..."
-            ((attempt_num++))
-        else
             echo "Connected to server successfully."
             return 0
+        else
+            echo "Failed to connect to server. Retrying..."
+            ((attempt_num++))
         fi
     done
 
@@ -106,7 +106,6 @@ if [ "$TERMINAL" = "SERVER" ]; then
         finish_payload='{"result": {"status": "Crashed", "scores": [0, 0]}}'
         curl $FINISH_URL -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" -d "${finish_payload}" > $playback_dir/send.log 2>&1
     else
-        echo "Game is started."
         ps -p $server_pid
         while [ $? -eq 0 ]
         do
