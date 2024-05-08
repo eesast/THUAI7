@@ -51,9 +51,9 @@ fi
 
 function retry_command {
     local command="$1"
-    local max_attempts=2
+    local max_attempts=10
     local attempt_num=1
-    local sleep_seconds=10
+    local sleep_seconds=5
 
     while [ $attempt_num -le $max_attempts ]; do
         echo "Attempt $attempt_num / $max_attempts to run command: $command"
@@ -64,11 +64,11 @@ function retry_command {
         sleep $sleep_seconds
 
         if kill -0 $PID 2>/dev/null; then
-            echo "Connected to server successfully."
-            return 0
-        else
             echo "Failed to connect to server. Retrying..."
             ((attempt_num++))
+        else
+            echo "Connected to server successfully."
+            return 0
         fi
     done
 
@@ -81,10 +81,10 @@ function retry_command {
 if [ "$TERMINAL" = "SERVER" ]; then
     map_path=$map_dir/$MAP_ID.txt
     if [ $EXPOSED -eq 1 ]; then
-        nice -10 ./Server --port 8888 --teamCount 2 --shipNum 4 --resultFileName $playback_dir/result --gameTimeInSecond $GAME_TIME --mode $MODE_NUM --mapResource $map_path --url $SCORE_URL --token $TOKEN --fileName $playback_dir/video --startLockFile $playback_dir/start.lock > $playback_dir/server.log 2>&1 &
+        nice -10 ./Server --port 8888 --teamCount 2 --shipNum 4 --resultFileName $playback_dir/result --gameTimeInSecond $GAME_TIME --mode $MODE_NUM --mapResource $map_path --url $SCORE_URL --token $TOKEN --fileName $playback_dir/playback --startLockFile $playback_dir/start.lock > $playback_dir/server.log 2>&1 &
         server_pid=$!
     else
-        nice -10 ./Server --port 8888 --teamCount 2 --shipNum 4 --resultFileName $playback_dir/result --gameTimeInSecond $GAME_TIME --mode $MODE_NUM --mapResource $map_path --notAllowSpectator --url $SCORE_URL --token $TOKEN --fileName $playback_dir/video --startLockFile $playback_dir/start.lock > $playback_dir/server.log 2>&1 &
+        nice -10 ./Server --port 8888 --teamCount 2 --shipNum 4 --resultFileName $playback_dir/result --gameTimeInSecond $GAME_TIME --mode $MODE_NUM --mapResource $map_path --notAllowSpectator --url $SCORE_URL --token $TOKEN --fileName $playback_dir/playback --startLockFile $playback_dir/start.lock > $playback_dir/server.log 2>&1 &
         server_pid=$!
     fi
 
@@ -95,16 +95,25 @@ if [ "$TERMINAL" = "SERVER" ]; then
     echo "FINISH URL: $FINISH_URL"
 
     echo "waiting..."
-    sleep 30 # wait connection time
+    sleep 60 # wait connection time
     echo "watching..."
 
     if [ ! -f $playback_dir/start.lock ]; then
         echo "Failed to start game."
         touch temp.lock
-        mv -f temp.lock $playback_dir/video.thuaipb
+        mv -f temp.lock $playback_dir/playback.thuaipb
         kill -9 $server_pid
-        finish_payload='{"result": {"status": "Crashed", "scores": [0, 0]}}'
+        finish_payload='{"status": "Crashed", "scores": [0, 0]}'
         curl $FINISH_URL -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" -d "${finish_payload}" > $playback_dir/send.log 2>&1
+    else
+        echo "Game is started."
+        ps -p $server_pid
+        while [ $? -eq 0 ]
+        do
+            sleep 1
+            ps -p $server_pid > /dev/null 2>&1
+        done
+        echo "Server is down."
     fi
 
 elif [ "$TERMINAL" = "CLIENT" ]; then
@@ -121,11 +130,11 @@ elif [ "$TERMINAL" = "CLIENT" ]; then
                     cp -r $python_main_dir $python_main_dir$i
                     cp -f ./$code_name.py $python_main_dir$i/PyAPI/AI.py
                     command="nice -0 python3 $python_main_dir$i/PyAPI/main.py -I $CONNECT_IP -P $PORT -t $k -p $i > $playback_dir/team$k-$code_name.log 2>&1 &"
-                    retry_command "$command" &
+                    retry_command "$command" > $playback_dir/client$k.log &
                 elif [ -f "./$code_name" ]; then
                     echo "find ./$code_name"
                     command="nice -0 ./$code_name -I $CONNECT_IP -P $PORT -t $k -p $i > $playback_dir/team$k-$codename.log 2>&1 &"
-                    retry_command "$command" &
+                    retry_command "$command" > $playback_dir/client$k.log &
                 else
                     echo "ERROR. $code_name is not found."
                 fi
@@ -136,11 +145,11 @@ elif [ "$TERMINAL" = "CLIENT" ]; then
                     cp -r $python_main_dir $python_main_dir$i
                     cp -f ./$code_name.py $python_main_dir$i/PyAPI/AI.py
                     command="nice -0 python3 $python_main_dir$i/PyAPI/main.py -I $CONNECT_IP -P $PORT -t $k -p $i > $playback_dir/team$k-$code_name.log 2>&1 &"
-                    retry_command "$command" &
+                    retry_command "$command" > $playback_dir/client$k.log &
                 elif [ -f "./$code_name" ]; then
                     echo "find ./$code_name"
                     command="nice -0 ./$code_name -I $CONNECT_IP -P $PORT -t $k -p $i > $playback_dir/team$k-$code_name.log 2>&1 &"
-                    retry_command "$command" &
+                    retry_command "$command" > $playback_dir/client$k.log &
                 else
                     echo "ERROR. $code_name is not found."
                 fi

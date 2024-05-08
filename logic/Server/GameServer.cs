@@ -15,7 +15,8 @@ namespace Server
 {
     public class ContestResult
     {
-        public int score;
+        public string status;
+        public double[] scores;
     }
     partial class GameServer : ServerBase
     {
@@ -128,7 +129,6 @@ namespace Server
 
         protected double[] PullScore(double[] scores)
         {
-
             string? url2 = Environment.GetEnvironmentVariable("SCORE_URL");
             if (url2 != null)
             {
@@ -143,6 +143,8 @@ namespace Server
                 else
                 {
                     double[] final = LadderCalculate(org, scores);
+                    final[0] -= org[0];
+                    final[1] -= org[1];
                     return final;
                 }
             }

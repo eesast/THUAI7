@@ -8,7 +8,7 @@ public static class Constants
     /// <summary>
     /// 回放文件扩展名
     /// </summary>
-    public static readonly string FileExtension = $".thuai{Version}.pb";
+    public static readonly string FileExtension = $".thuaipb";
     /// <summary>
     /// 回放文件头
     /// </summary>

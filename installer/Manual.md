@@ -52,7 +52,7 @@
 
 ### Playback
 
-每次调试后会在 `%InstallPath%\logic\Server` 中生成 `114514.thuai7.pb`，在 `Playback File` 中输入 `114514.thuai7.pb`，点击 `保存` 和 `启动`。也可以对回放文件进行改名，输入对应文件名即可。
+每次调试后会在 `%InstallPath%\logic\Server` 中生成 `114514.thuaipb`，在 `Playback File` 中输入 `114514.thuaipb`，点击 `保存` 和 `启动`。也可以对回放文件进行改名，输入对应文件名即可。
 
 ## Login
 
