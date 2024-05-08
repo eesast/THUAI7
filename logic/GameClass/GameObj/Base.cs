@@ -20,7 +20,7 @@ namespace GameClass.GameObj
         public Home Home { get; set; }
         public MoneyPool MoneyPool { get; } = new();
         public AtomicInt FactoryNum { get; } = new(0);
-        public int MoneyAddPerSecond => GameData.ScoreHomePerSecond + FactoryNum * GameData.ScoreFactoryPerSecond;
+        public int MoneyAddPerSecond => FactoryNum * GameData.ScoreFactoryPerSecond + (Home.HP > 0 ? GameData.ScoreHomePerSecond : 0);
         public Base(Home home)
         {
             TeamID = new(home.TeamID);
