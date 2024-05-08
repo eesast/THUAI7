@@ -140,14 +140,14 @@ THUAI7::PlaceType TeamAPI::GetPlaceType(int32_t cellX, int32_t cellY) const
     return logic.GetPlaceType(cellX, cellY);
 }
 
-int32_t ShipAPI::GetConstructionHp(int32_t cellX, int32_t cellY) const
+std::pair<int32_t, int32_t> ShipAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetConstructionHp(cellX, cellY);
+    return logic.GetConstructionState(cellX, cellY);
 }
 
-int32_t TeamAPI::GetConstructionHp(int32_t cellX, int32_t cellY) const
+std::pair<int32_t, int32_t> TeamAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetConstructionHp(cellX, cellY);
+    return logic.GetConstructionState(cellX, cellY);
 }
 
 int32_t ShipAPI::GetWormholeHp(int32_t cellX, int32_t cellY) const

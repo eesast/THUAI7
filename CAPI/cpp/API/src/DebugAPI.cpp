@@ -201,9 +201,9 @@ THUAI7::PlaceType ShipDebugAPI::GetPlaceType(int32_t cellX, int32_t cellY) const
     return logic.GetPlaceType(cellX, cellY);
 }
 
-int32_t ShipDebugAPI::GetConstructionHp(int32_t cellX, int32_t cellY) const
+std::pair<int32_t, int32_t> ShipDebugAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetConstructionHp(cellX, cellY);
+    return logic.GetConstructionState(cellX, cellY);
 }
 
 int32_t ShipDebugAPI::GetWormholeHp(int32_t cellX, int32_t cellY) const
@@ -395,9 +395,9 @@ THUAI7::PlaceType TeamDebugAPI::GetPlaceType(int32_t cellX, int32_t cellY) const
     return logic.GetPlaceType(cellX, cellY);
 }
 
-int32_t TeamDebugAPI::GetConstructionHp(int32_t cellX, int32_t cellY) const
+std::pair<int32_t, int32_t> TeamDebugAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetConstructionHp(cellX, cellY);
+    return logic.GetConstructionState(cellX, cellY);
 }
 
 int32_t TeamDebugAPI::GetWormholeHp(int32_t cellX, int32_t cellY) const
