@@ -227,18 +227,14 @@ bool Communication::Recycle(int32_t playerID, int32_t teamID)
 
 bool Communication::TryConnection(int32_t playerID, int32_t teamID)
 {
-    constexpr int maxRetryNum = 10;
+    protobuf::BoolRes reply;
+    ClientContext context;
     auto request = THUAI72Proto::THUAI72ProtobufIDMsg(playerID, teamID);
-    for (int retryNum = 0; retryNum < maxRetryNum; retryNum++)
-    {
-        protobuf::BoolRes reply;
-        ClientContext context;
-        std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-        auto status = THUAI7Stub->TryConnection(&context, request, &reply);
-        if (status.ok())
-            return true;
-    }
-    return false;
+    auto status = THUAI7Stub->TryConnection(&context, request, &reply);
+    if (status.ok())
+        return true;
+    else
+        return false;
 }
 
 void Communication::AddPlayer(int32_t playerID, int32_t teamID, THUAI7::ShipType ShipType)
