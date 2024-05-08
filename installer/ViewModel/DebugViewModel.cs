@@ -370,7 +370,7 @@ namespace installer.ViewModel
                 {
                     FileName = "cmd.exe",
                     Arguments = "/c python "
-                        + Downloader.Data.Config.DevPyPath ?? Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py")
+                        + (Downloader.Data.Config.DevPyPath ?? Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py"))
                         + $" -I {IP} -P {Port} -t {team} -p {player} -o"
                 });
                 if (py is null)
@@ -378,7 +378,7 @@ namespace installer.ViewModel
                     Log.LogError($"未能启动main.py, team:{team}, player: {player}!");
                     return false;
                 }
-                Log.LogError($"main.py启动成功, team:{team}, player: {player}!");
+                Log.LogInfo($"main.py启动成功, team:{team}, player: {player}!");
                 children.Add(py);
                 return true;
             }
