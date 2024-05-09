@@ -98,7 +98,7 @@ private:
     [[nodiscard]] std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const;
     [[nodiscard]] THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const;
     [[nodiscard]] std::vector<int64_t> GetPlayerGUIDs() const;
-    [[nodiscard]] int32_t GetConstructionHp(int32_t cellX, int32_t cellY) const;
+    [[nodiscard]] std::pair<int32_t, int32_t> GetConstructionState(int32_t cellX, int32_t cellY) const;
     [[nodiscard]] int32_t GetWormholeHp(int32_t cellX, int32_t cellY) const;
     [[nodiscard]] int32_t GetResourceState(int32_t cellX, int32_t cellY) const;
     [[nodiscard]] int32_t GetHomeHp() const;
