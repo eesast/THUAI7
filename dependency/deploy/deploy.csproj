@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Downloader.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\installer\Data\ConfigFileData.cs" Link="Data\ConfigFileData.cs" />
+    <Compile Include="..\..\installer\Data\DownloadReport.cs" Link="Data\DownloadReport.cs" />
+    <Compile Include="..\..\installer\Data\MD5FileData.cs" Link="Data\MD5FileData.cs" />
+    <Compile Include="..\..\installer\Model\Downloader.cs" Link="Models\Downloader.cs" />
+    <Compile Include="..\..\installer\Model\EEsast.cs" Link="Models\EEsast.cs" />
+    <Compile Include="..\..\installer\Model\Local_Data.cs" Link="Models\Local_Data.cs" />
+    <Compile Include="..\..\installer\Model\Logger.cs" Link="Models\Logger.cs" />
+    <Compile Include="..\..\installer\Model\Run_Program.cs" Link="Models\Run_Program.cs" />
+    <Compile Include="..\..\installer\Model\Tencent_Cos.cs" Link="Models\Tencent_Cos.cs" />
+    <Compile Include="..\..\installer\Services\FileService.cs" Link="Services\FileService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Tencent.QCloud.Cos.Sdk" Version="5.4.35" />
+  </ItemGroup>
+
+</Project>

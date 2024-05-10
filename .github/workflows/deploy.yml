@@ -1,0 +1,56 @@
+name: build
+on:
+  push:
+    branches: [dev, main, master]
+  pull_request:
+    branches: [dev, main, master]
+jobs:
+  deploy-to-tencent-cos:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Setup dotnet-script
+      run: dotnet tool install --global dotnet-script
+    - name: Pre-Process
+      run: dotnet script .github/preProcess/MauiEnvConfig.csx
+    - name: Install Workloads
+      run: dotnet workload install maui-windows
+    - name: Create Folders need
+      run: |
+        mkdir D:\a\mirror
+        mkdir D:\a\installer
+        mkdir D:\a\publish
+    - name: Copy THUAI7
+      run: copy D:\a\THUAI7 D:\a\mirror
+    - name: Remove directories not needed
+      run: |
+        rmdir /S /Q D:\a\mirror\.git
+        rmdir /S /Q D:\a\mirror\.github
+        rmdir /S /Q D:\a\mirror\installer
+        rmdir /S /Q D:\a\mirror\interface
+        rmdir /S /Q D:\a\mirror\logic
+    - name: Build Server
+      run: |
+        mkdir D:\a\mirror\logic
+        dotnet build "./logic/Server/Server.csproj" -o "D:\a\mirror\logic\Server" -p:WindowsAppSDKSelfContained=true -c Release
+    - name: Build Client
+      run: dotnet publish "./logic/Client/Client.csproj" -o "D:\a\mirror\logic\Client" -f net8.0-windows10.0.19041.0 -c Release -p:RuntimeIdentifierOverride=win10-x64 -p:WindowsPackageType=None -p:WindowsAppSDKSelfContained=true
+    - name: Deploy to bucket
+      run: dotnet run "./dependency/deploy/deploy.csproj" "***" "***"
+    - name: Get installer package(No Key contained for safety)
+      run: |
+        cd D:\a\publish
+        for /f "delims=" %i in ('dir /b /a-d') do set version=%i
+        del /S /F /Q %version%
+        cd D:\a\THUAI7
+        dotnet publish "./installer/installer.csproj" -o "D:\a\installer" -f net8.0-windows10.0.19041.0 -c Release -p:RuntimeIdentifierOverride=win10-x64 -p:WindowsPackageType=None -p:WindowsAppSDKSelfContained=true
+        ./dependency/7z/7za.exe a -r D:\a\publish\Installer_v%version%.zip D:\a\installer\*
+    - name: Upload installer package
+      uses: actions/upload-artifact@v4
+      with:
+        name: Installer_v%version%.zip
+        path: /home/runner/work/THUAI7/hash.json
