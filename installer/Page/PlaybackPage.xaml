@@ -4,32 +4,33 @@
              xmlns:viewModels="clr-namespace:installer.ViewModel"
              x:Class="installer.Page.PlaybackPage"
              Title="Launcher">
+    <ScrollView Margin="20">
 
-    <Grid
+        <Grid
         HorizontalOptions="Center"
         WidthRequest="600"
         RowDefinitions="*,*,*,*,*,*,*,*,*,*"
         ColumnDefinitions="*">
 
-        <VerticalStackLayout
+            <VerticalStackLayout
             Grid.Row="0"
             Grid.RowSpan="8"
             HorizontalOptions="Center"
             VerticalOptions="Center">
 
-            <VerticalStackLayout>
-                <HorizontalStackLayout>
-                    <Label
+                <VerticalStackLayout>
+                    <HorizontalStackLayout>
+                        <Label
                         WidthRequest="170"
                         Text="Playback File"
                         VerticalOptions="Center"
                         FontSize="{Binding ConstFontSize}"/>
-                    <Entry
+                        <Entry
                         WidthRequest="280"
                         Placeholder=""
                         Text="{Binding PlaybackFile}"
                         FontSize="16"/>
-                    <Button
+                        <Button
                         WidthRequest="120"
                         Text="选择文件"
                         BorderWidth="2"
@@ -37,28 +38,28 @@
                         IsEnabled="{Binding BrowseEnabled}"
                         BackgroundColor="{Binding ConstBackgroundColor}"
                         TextColor="{Binding ConstTextColor}"/>
-                </HorizontalStackLayout>
+                    </HorizontalStackLayout>
 
-                <HorizontalStackLayout>
-                    <Label
+                    <HorizontalStackLayout>
+                        <Label
                         WidthRequest="170"
                         Text="Playback Speed"
                         VerticalOptions="Center"
                         FontSize="{Binding ConstFontSize}"/>
-                    <Entry
+                        <Entry
                         WidthRequest="400"
                         Placeholder=""
                         Text="{Binding PlaybackSpeed}"
                         FontSize="16"/>
-                </HorizontalStackLayout>
-            </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
 
-            <Label/>
+                <Label/>
 
-            <Label
+                <Label
                 Text="{Binding DebugAlert}"/>
 
-            <Button
+                <Button
                 WidthRequest="400"
                 Text="保存"
                 BorderWidth="2"
@@ -67,7 +68,7 @@
                 BackgroundColor="{Binding ConstBackgroundColor}"
                 FontSize="{Binding ConstFontSize}"
                 TextColor="{Binding ConstTextColor}"/>
-            <Button
+                <Button
                 WidthRequest="400"
                 Text="启动"
                 BorderWidth="2"
@@ -77,34 +78,34 @@
                 FontSize="{Binding ConstFontSize}"
                 TextColor="{Binding ConstTextColor}"/>
 
-            <!--<Frame
-                BorderColor="Gray"
-                Padding="3"
-                Margin="5"
-                WidthRequest="600"
-                HeightRequest="200">
+                    <!--<Frame
+                    BorderColor="Gray"
+                    Padding="3"
+                    Margin="5"
+                    WidthRequest="600"
+                    HeightRequest="200">
 
-                <CollectionView
-                    BackgroundColor="LightGray"
-                    ItemsSource="{Binding LogList}"
-                    ItemsUpdatingScrollMode="KeepLastItemInView"
-                    VerticalScrollBarVisibility="Always">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
+                    <CollectionView
+                        BackgroundColor="LightGray"
+                        ItemsSource="{Binding LogList}"
+                        ItemsUpdatingScrollMode="KeepLastItemInView"
+                        VerticalScrollBarVisibility="Always">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
 
-                            <Label
-                                WidthRequest="570"
-                                Text="{Binding Message}"
-                                TextColor="{Binding Color}"/>
+                                <Label
+                                    WidthRequest="570"
+                                    Text="{Binding Message}"
+                                    TextColor="{Binding Color}"/>
 
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
-            </Frame>-->
+                </Frame>-->
 
-        </VerticalStackLayout>
+            </VerticalStackLayout>
 
-    </Grid>
-
+        </Grid>
+    </ScrollView>
 </ContentPage>
