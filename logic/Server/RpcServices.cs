@@ -387,7 +387,8 @@ namespace Server
                         {
                             TextMessage = request.TextMessage,
                             FromId = request.PlayerId,
-                            ToId = request.ToPlayerId
+                            ToId = request.ToPlayerId,
+                            TeamId = request.TeamId
                         };
                         lock (newsLock)
                         {
@@ -410,7 +411,8 @@ namespace Server
                         {
                             BinaryMessage = request.BinaryMessage,
                             FromId = request.PlayerId,
-                            ToId = request.ToPlayerId
+                            ToId = request.ToPlayerId,
+                            TeamId = request.TeamId
                         };
                         lock (newsLock)
                         {
