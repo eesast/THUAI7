@@ -10,6 +10,8 @@ using COSXML.Transfer;
 using System;
 using installer.Data;
 using System.Threading.Tasks;
+using COSXML.Model.Bucket;
+using COSXML.Model.Tag;
 
 // 禁用对没有调用异步API的异步函数的警告
 #pragma warning disable CS1998
@@ -153,12 +155,14 @@ namespace installer.Model
             int thID = Log.StartNew();
             Log.LogDebug(thID, "Batch download task started.");
             var array = queue.ToArray();
-            Report.Count = array.Count();
-            Report.ComCount = 0;
-            if (Report.Count == 0)
-                return 0;
-            var partitionar = Partitioner.Create(0, Report.Count, Report.Count / 4 > 0 ? Report.Count / 4 : Report.Count);
-            var c = 0;
+            var count = array.Length;
+            if (count == 0)
+                return 0;            
+            var comCount = 0;
+            var comCountOld = Report.ComCount;
+            Report.Count += count;
+
+            var partitionar = Partitioner.Create(0, count, count / 4 > 0 ? count / 4 : count);
             Parallel.ForEach(partitionar, (range, loopState) =>
             {
                 for (long i = range.Item1; i < range.Item2; i++)
@@ -177,14 +181,14 @@ namespace installer.Model
                     }
                     finally
                     {
-                        Interlocked.Increment(ref c);
-                        Report.ComCount = c;
+                        Interlocked.Increment(ref comCount);
+                        Report.ComCount = comCount + comCountOld;
                         Log.LogInfo(thID, $"Child process: {subID} finished.");
                     }
                 }
             });
             Log.LogInfo(thID, "Batch download task finished.");
-            Report.ComCount = Report.Count;
+            Report.ComCount = comCount + comCountOld;
             return thID;
         }
 
@@ -300,6 +304,37 @@ namespace installer.Model
             }
         }
 
+        public List<string> EnumerateDir(string remotePath)
+        {
+            int thID = Log.StartNew();
+            var result = new List<string>();
+            string bucket = $"{BucketName}-{Appid}";
+            remotePath = remotePath.TrimStart('.').TrimStart('/');
+            Log.LogInfo(thID, $"Enumerate files in {remotePath}");
+
+            bool truncated = false;
+            string marker = string.Empty;
+            do
+            {
+                GetBucketRequest request = new GetBucketRequest(bucket);
+                request.SetPrefix(remotePath);
+                request.SetDelimiter("/");
+                if (!string.IsNullOrEmpty(marker))
+                    request.SetMarker(marker);
+                //执行请求
+                GetBucketResult res = cosXml.GetBucket(request);
+                ListBucket info = res.listBucket;
+                result.AddRange(info.contentsList.Select(i => i.key).Where(i => i != remotePath));
+                foreach (var dir in info.commonPrefixesList)
+                {
+                    result.AddRange(EnumerateDir(dir.prefix));
+                }
+                truncated = info.isTruncated;
+                marker = info.nextMarker;
+            } while ( truncated );
+
+            return result;
+        }
         #region 异步方法包装
         public Task<int> DownloadFileAsync(string savePath, string? remotePath = null)
         {
