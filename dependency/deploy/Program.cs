@@ -13,6 +13,7 @@ Cloud.UpdateSecret(args[0], args[1]);
 Downloader d = new Downloader();
 d.Cloud.UpdateSecret(args[0], args[1]);
 d.Data.Config.InstallPath = @"D:\a\mirror\";
+d.Data.Config.MD5DataPath = Path.Combine(Config.InstallPath, "hash.json");
 d.Log.Partner.Add(Log);
 // 每次更新需要更新默认值
 d.CurrentVersion = new TVersion();
@@ -48,7 +49,7 @@ else
 }
 
 d.Data.SaveMD5Data();
-Cloud.UploadFile(Path.Combine(d.Data.Config.InstallPath, "hash.json"), "hash.json");
+Cloud.UploadFile(d.Data.Config.MD5DataPath, "hash.json");
 
 Cloud.UploadFile(Path.Combine(d.Data.Config.InstallPath, "CAPI", "cpp", "API", "src", "AI.cpp"),
     $"Templates/t.{d.CurrentVersion.TemplateVersion}.cpp");
