@@ -216,7 +216,7 @@ namespace installer.Model
                     }));
                     sw.Flush();
                 }
-                Log.LogInfo("MD5Data saved.");
+                // Log.LogInfo("MD5Data saved.");
             }
             catch (Exception e)
             {
