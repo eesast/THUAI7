@@ -178,16 +178,16 @@ namespace Server
                 (oriScores[0], oriScores[1]) = (oriScores[1], oriScores[0]);
             }
 
-            const double normalDeltaThereshold = 2000.0;            // 分数差标准化参数，同时也是大分数差阈值
-            const double correctParam = normalDeltaThereshold * 1.2;// 修正参数
-            const double winnerWeight = 9e-8;                       // 获胜者天梯得分权值
-            const double loserWeight = 5e-8;                        // 落败者天梯得分权值
-            const double scoreDeltaThereshold = 40000.0;             // 极大分数差阈值
+            const double normalDeltaThereshold = 2000.0;                // 天梯分数差参数，天梯分差超过此阈值太多则增长缓慢
+            const double correctParam = normalDeltaThereshold * 1.2;    // 修正参数
+            const double winnerWeight = 9e-8;                           // 获胜者天梯得分权值
+            const double loserWeight = 5e-8;                            // 落败者天梯得分权值
+            const double scoreDeltaThereshold = 40000.0;                // 比赛得分参数，比赛得分超过此阈值太多则增长缓慢
 
             double[] resScore = [0, 0];
-            double oriDelta = oriScores[0] - oriScores[1];                          // 原分数差
+            double oriDelta = oriScores[0] - oriScores[1];                          // 天梯原分数差
             double competitionDelta = competitionScores[0] - competitionScores[1];  // 本次比赛分数差
-            double normalOriDelta = oriDelta / normalDeltaThereshold;               // 标准化原分数差
+            double normalOriDelta = oriDelta / normalDeltaThereshold;               // 标准化天梯原分数差
             double correctRate = oriDelta / correctParam;                           // 修正率，修正方向为缩小分数差
             double correct = 0.5 * (Math.Tanh((competitionDelta - scoreDeltaThereshold) / scoreDeltaThereshold
                                               - correctRate)
