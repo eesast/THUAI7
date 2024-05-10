@@ -49,7 +49,7 @@ jobs:
     - name: Get installer package(No Key contained for safety)
       run: |
         $version=Get-ChildItem -Path D:\a\publish | ForEach-Object { $_.name }
-        [Environment]::SetEnvironmentVariable("version", $version, "User")
+        [Environment]::SetEnvironmentVariable("version", $version, "Machine")
         dotnet publish "./installer/installer.csproj" -o "D:\a\installer" -f net8.0-windows10.0.19041.0 -c Release -p:RuntimeIdentifierOverride=win10-x64 -p:WindowsPackageType=None -p:WindowsAppSDKSelfContained=true
         ./dependency/7z/7za.exe a -r D:\a\publish\Installer_v${version}.zip D:\a\installer\*
     - name: Upload installer package

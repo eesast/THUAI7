@@ -48,6 +48,7 @@ else
     Log.LogInfo("Nothing to update");    
 }
 
+d.Data.Config.MD5DataPath = @"D:\a\mirror\hash.json";
 d.Data.SaveMD5Data();
 Cloud.UploadFile(d.Data.Config.MD5DataPath, "hash.json");
 
