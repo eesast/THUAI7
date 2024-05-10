@@ -24,7 +24,6 @@ if (d.CheckUpdate())
     {
         Log.LogInfo($"{r.state}, {r.name}");
     }
-    return;
 
     d.Data.SaveMD5Data();
     List<Task> l = new List<Task>();

@@ -4,6 +4,10 @@ on:
     branches: [dev, main, master]
   pull_request:
     branches: [dev, main, master]
+
+env:
+  version: 1.0.0.0
+
 jobs:
   deploy-to-tencent-cos:
     runs-on: windows-latest
@@ -29,6 +33,7 @@ jobs:
       run: tree D:\a\mirror
     - name: Remove directories not needed
       run: |
+        Remove-Item -recurse D:\a\mirror\.git
         Remove-Item -recurse D:\a\mirror\.github
         Remove-Item -recurse D:\a\mirror\installer
         Remove-Item -recurse D:\a\mirror\interface
@@ -45,9 +50,9 @@ jobs:
       run: |
         $version=Get-ChildItem -Path D:\a\publish | ForEach-Object { $_.name }
         dotnet publish "./installer/installer.csproj" -o "D:\a\installer" -f net8.0-windows10.0.19041.0 -c Release -p:RuntimeIdentifierOverride=win10-x64 -p:WindowsPackageType=None -p:WindowsAppSDKSelfContained=true
-        ./dependency/7z/7za.exe a -r D:\a\publish\Installer_v%version%.zip D:\a\installer\*
+        ./dependency/7z/7za.exe a -r D:\a\publish\Installer_v${version}.zip D:\a\installer\*
     - name: Upload installer package
       uses: actions/upload-artifact@v4
       with:
-        name: Installer_v%version%.zip
-        path: D:\a\publish\Installer_v%version%.zip
+        name: Installer_v${{ env.version }}.zip
+        path: D:\a\publish\Installer_v${{ env.version }}.zip

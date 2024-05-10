@@ -157,7 +157,7 @@ namespace installer.Model
             var array = queue.ToArray();
             var count = array.Length;
             if (count == 0)
-                return 0;            
+                return 0;
             var comCount = 0;
             var comCountOld = Report.ComCount;
             Report.Count += count;
@@ -331,7 +331,7 @@ namespace installer.Model
                 }
                 truncated = info.isTruncated;
                 marker = info.nextMarker;
-            } while ( truncated );
+            } while (truncated);
 
             return result;
         }
