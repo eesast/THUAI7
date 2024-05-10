@@ -11,6 +11,7 @@ Tencent_Cos Cloud = new Tencent_Cos("1319625962", "ap-beijing", "thuai7", Log);
 Cloud.UpdateSecret(args[0], args[1]);
 
 Downloader d = new Downloader();
+d.Cloud.UpdateSecret(args[0], args[1]);
 d.Data.Config.InstallPath = @"D:\a\mirror\";
 d.Log.Partner.Add(Log);
 // 每次更新需要更新默认值
@@ -23,6 +24,7 @@ if (d.CheckUpdate())
     {
         Log.LogInfo($"{r.state}, {r.name}");
     }
+    return;
 
     d.Data.SaveMD5Data();
     List<Task> l = new List<Task>();
