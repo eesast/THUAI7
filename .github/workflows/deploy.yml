@@ -21,11 +21,10 @@ jobs:
       run: dotnet workload install maui-windows
     - name: Create Folders need
       run: |
-        mkdir D:\a\mirror
         mkdir D:\a\installer
         mkdir D:\a\publish
     - name: Copy THUAI7
-      run: Copy-Item -recurse D:\a\THUAI7\THUAI7\THUAI7\ D:\a\mirror\
+      run: Copy-Item -recurse D:\a\THUAI7\THUAI7\ D:\a\mirror\
     - name: Test
       run: tree D:\a\mirror
     - name: Remove directories not needed
