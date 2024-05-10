@@ -28,11 +28,11 @@ jobs:
       run: copy D:\a\THUAI7 D:\a\mirror
     - name: Remove directories not needed
       run: |
-        rmdir /S /Q D:\a\mirror\.git
-        rmdir /S /Q D:\a\mirror\.github
-        rmdir /S /Q D:\a\mirror\installer
-        rmdir /S /Q D:\a\mirror\interface
-        rmdir /S /Q D:\a\mirror\logic
+        rmdir -S -Q D:\a\mirror\.git
+        rmdir -S -Q D:\a\mirror\.github
+        rmdir -S -Q D:\a\mirror\installer
+        rmdir -S -Q D:\a\mirror\interface
+        rmdir -S -Q D:\a\mirror\logic
     - name: Build Server
       run: |
         mkdir D:\a\mirror\logic
@@ -45,7 +45,7 @@ jobs:
       run: |
         cd D:\a\publish
         for /f "delims=" %i in ('dir /b /a-d') do set version=%i
-        del /S /F /Q %version%
+        del -S -F -Q %version%
         cd D:\a\THUAI7
         dotnet publish "./installer/installer.csproj" -o "D:\a\installer" -f net8.0-windows10.0.19041.0 -c Release -p:RuntimeIdentifierOverride=win10-x64 -p:WindowsPackageType=None -p:WindowsAppSDKSelfContained=true
         ./dependency/7z/7za.exe a -r D:\a\publish\Installer_v%version%.zip D:\a\installer\*
