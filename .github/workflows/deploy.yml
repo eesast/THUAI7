@@ -26,6 +26,8 @@ jobs:
         mkdir D:\a\publish
     - name: Copy THUAI7
       run: xcopy /S /E /Y D:\a\THUAI7\THUAI7 D:\a\mirror
+    - name: Test
+      run: tree D:\a\mirror
     - name: Remove directories not needed
       run: |
         rmdir -S -Q D:\a\mirror\.github
