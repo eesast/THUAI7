@@ -28,7 +28,6 @@ jobs:
       run: xcopy /S /E /Y D:\a\THUAI7 D:\a\mirror
     - name: Remove directories not needed
       run: |
-        rmdir -S -Q D:\a\mirror\.git
         rmdir -S -Q D:\a\mirror\.github
         rmdir -S -Q D:\a\mirror\installer
         rmdir -S -Q D:\a\mirror\interface
