@@ -288,8 +288,8 @@ namespace installer.Model
         public static bool IsUserFile(string filename)
         {
             filename = filename.Replace(Path.DirectorySeparatorChar, '/');
-            if (filename.Contains("/git/") || filename.Contains("bin/") || filename.Contains("/obj/") || filename.Contains("/x64/")
-                || filename.Contains("__pycache__"))
+            if (filename.Contains("/git/") || filename.Contains("/bin/") || filename.Contains("/obj/") || filename.Contains("/x64/")
+                || filename.Contains("__pycache__") || filename.Contains("/CAPI/cpp/lib/"))
                 return true;
             if (filename.Contains("/vs/") || filename.Contains("/.vs/") || filename.Contains("/.vscode/"))
                 return true;

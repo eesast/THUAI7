@@ -190,28 +190,42 @@ namespace installer.Model
             if (Log is FileLogger) ((FileLogger)Log).Path = Path.Combine(Data.Config.InstallPath, "Logs", "Installer.log");
             Data.ResetInstallPath(Data.Config.InstallPath);
 
-
             string zp = Path.Combine(Data.Config.InstallPath, "THUAI7.tar.gz");
             Status = UpdateStatus.downloading;
             (CloudReport.ComCount, CloudReport.Count) = (0, 1);
-            Cloud.Log.LogInfo($"正在下载安装包……");
+            Cloud.Log.LogInfo($"正在下载installer安装包……");
             Cloud.DownloadFileAsync(zp, "THUAI7.tar.gz").Wait();
             CloudReport.ComCount = 1;
             Status = UpdateStatus.unarchieving;
-            Cloud.Log.LogInfo($"安装包下载完毕，正在解压……");
+            Cloud.Log.LogInfo($"installer安装包下载完毕，正在解压……");
             Cloud.ArchieveUnzip(zp, Data.Config.InstallPath);
-            Cloud.Log.LogInfo($"解压完成");
+            Cloud.Log.LogInfo($"installer解压完成");
             File.Delete(zp);
 
             CurrentVersion = Data.FileHashData.TVersion;
             Cloud.Log.LogInfo("正在下载选手代码……");
             Status = UpdateStatus.downloading;
-            CloudReport.Count = 3;
+            CloudReport.Count += 2;
             var tocpp = Cloud.DownloadFileAsync(Path.Combine(Data.Config.InstallPath, "CAPI", "cpp", "API", "src", "AI.cpp"),
                 $"./Templates/t.{CurrentVersion.TemplateVersion}.cpp").ContinueWith(_ => CloudReport.ComCount++);
             var topy = Cloud.DownloadFileAsync(Path.Combine(Data.Config.InstallPath, "CAPI", "python", "PyAPI", "AI.py"),
                 $"./Templates/t.{CurrentVersion.TemplateVersion}.py").ContinueWith(_ => CloudReport.ComCount++);
             Task.WaitAll(tocpp, topy);
+
+            Cloud.Report.Count += 1;
+            zp = Path.Combine(Data.Config.InstallPath, "protoCpp.tar.gz");
+            Cloud.Log.LogInfo("正在下载proto cpp库……");
+            Cloud.DownloadFileAsync(zp, "Setup/proto/protoCpp.tar.gz").Wait();
+            CloudReport.ComCount += 1;
+            Status = UpdateStatus.unarchieving;
+            Cloud.Log.LogInfo($"proto cpp库下载完毕，正在解压……");
+            var protoCppLibPath = Path.Combine(Data.Config.InstallPath, "CAPI", "cpp", "lib");
+            if (!Directory.Exists(protoCppLibPath))
+                Directory.CreateDirectory(protoCppLibPath);
+            Cloud.ArchieveUnzip(zp, protoCppLibPath);
+            Cloud.Log.LogInfo($"proto cpp库解压完成");
+            File.Delete(zp);
+
             if (CloudReport.ComCount == CloudReport.Count)
             {
                 Cloud.Log.LogInfo("选手代码下载成功！");
@@ -296,7 +310,7 @@ namespace installer.Model
             Status = UpdateStatus.success;
             if (Data.MD5Update.Count != 0 || CurrentVersion < Data.FileHashData.TVersion)
             {
-                Data.Log.LogInfo("需要更新，请点击更新按钮以更新。");
+                Data.Log.LogInfo("代码库需要更新，请点击更新按钮以更新。");
                 if (writeMD5)
                 {
                     Data.SaveMD5Data();
@@ -306,6 +320,15 @@ namespace installer.Model
             else if (!Data.LangEnabled[LanguageOption.cpp].Item1 || !Data.LangEnabled[LanguageOption.python].Item1)
             {
                 Data.Log.LogInfo("未检测到选手代码，请点击更新按钮以修复。");
+                if (writeMD5)
+                {
+                    Data.SaveMD5Data();
+                }
+                return true;
+            }
+            else if (!Directory.Exists(Path.Combine(Data.Config.InstallPath, "CAPI", "cpp", "lib")))
+            {
+                Data.Log.LogInfo("未检测到proto cpp库，请点击更新按钮以修复。");
                 if (writeMD5)
                 {
                     Data.SaveMD5Data();
@@ -370,7 +393,23 @@ namespace installer.Model
                         return -1;
                     }
                 }
-
+                // 如果缺少proto cpp库，应当立刻下载
+                if (!Directory.Exists(Path.Combine(Data.Config.InstallPath, "CAPI", "cpp", "lib")))
+                {
+                    Cloud.Report.Count += 1;
+                    string zp = Path.Combine(Data.Config.InstallPath, "protoCpp.tar.gz");
+                    Cloud.Log.LogInfo("正在下载proto cpp库……");
+                    Cloud.DownloadFileAsync(zp, "Setup/proto/protoCpp.tar.gz").Wait();
+                    CloudReport.ComCount += 1;
+                    Status = UpdateStatus.unarchieving;
+                    Cloud.Log.LogInfo($"proto cpp库下载完毕，正在解压……");
+                    var protoCppLibPath = Path.Combine(Data.Config.InstallPath, "CAPI", "cpp", "lib");
+                    if (!Directory.Exists(protoCppLibPath))
+                        Directory.CreateDirectory(protoCppLibPath);
+                    Cloud.ArchieveUnzip(zp, protoCppLibPath);
+                    Cloud.Log.LogInfo($"proto cpp库解压完成");
+                    File.Delete(zp);
+                }
                 // 启动器本身需要更新，返回结果为16
                 if (CurrentVersion.InstallerVersion < Data.FileHashData.TVersion.InstallerVersion)
                 {
