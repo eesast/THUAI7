@@ -111,6 +111,8 @@ namespace installer.ViewModel
             get => playbackFile;
             set
             {
+                if (!(value?.EndsWith(".thuaipb") ?? false))
+                    return;
                 playbackFile = value;
                 if (playbackFile == Downloader.Data.Config.Commands.PlaybackFile)
                     playbackFileChanged = false;
