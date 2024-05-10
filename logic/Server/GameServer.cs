@@ -196,7 +196,7 @@ namespace Server
                                                     * winnerWeight
                                                     * (1 - Math.Tanh(normalOriDelta))
                                                     * correct)); // 胜者所加天梯分)
-            resScore[1] = Math.Max(-120,-Math.Round(Math.Pow(competitionDelta, 2)
+            resScore[1] = Math.Max(-120, -Math.Round(Math.Pow(competitionDelta, 2)
                                                     * loserWeight
                                                     * (1 - Math.Tanh(normalOriDelta))
                                                     * correct)); // 败者所扣天梯分
