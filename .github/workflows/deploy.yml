@@ -25,7 +25,7 @@ jobs:
         mkdir D:\a\installer
         mkdir D:\a\publish
     - name: Copy THUAI7
-      run: xcopy -S -E -Y D:\a\THUAI7 D:\a\mirror
+      run: xcopy /S /E /Y D:\a\THUAI7 D:\a\mirror
     - name: Remove directories not needed
       run: |
         rmdir -S -Q D:\a\mirror\.git
