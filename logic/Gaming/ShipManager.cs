@@ -109,7 +109,14 @@ namespace Gaming
                 {
                     return;
                 }
-                if (ship.Armor > 0)
+                if (ship.Shield > 0)
+                {
+                    ship.Shield.SubPositiveV(AP);
+                    ShipManagerLogging.logger.ConsoleLogDebug(
+                        LoggingFunctional.ShipLogInfo(ship)
+                        + $" 's shield is {ship.Shield}");
+                }
+                else if (ship.Armor > 0)
                 {
                     ship.Armor.SubPositiveV(AP);
                     ShipManagerLogging.logger.ConsoleLogDebug(

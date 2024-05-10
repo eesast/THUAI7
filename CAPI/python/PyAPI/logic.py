@@ -138,9 +138,9 @@ class Logic(ILogic):
         with self.__mtxState:
             return copy.deepcopy(self.__currentState.guids)
 
-    def GetConstructionHp(self, cellX: int, cellY: int) -> int:
+    def GetConstructionState(self, cellX: int, cellY: int) -> tuple:
         with self.__mtxState:
-            self.__logger.debug("Called GetConstructionHp")
+            self.__logger.debug("Called GetConstructionState")
             if (cellX, cellY) in self.__currentState.mapInfo.factoryState:
                 return copy.deepcopy(
                     self.__currentState.mapInfo.factoryState[(cellX, cellY)]
@@ -154,8 +154,8 @@ class Logic(ILogic):
                     self.__currentState.mapInfo.fortState[(cellX, cellY)]
                 )
             else:
-                self.__logger.warning("GetConstructionHp: Out of range")
-                return -1
+                self.__logger.warning("GetConstructionState: Out of range")
+                return (-1,-1)
 
     def GetWormholeHp(self, cellX: int, cellY: int) -> int:
         with self.__mtxState:
@@ -427,15 +427,14 @@ class Logic(ILogic):
                         AssistFunction.GridToCell(item.factory_message.y),
                     )
                     if pos not in self.__bufferState.mapInfo.factoryState:
-                        self.__bufferState.mapInfo.factoryState[pos] = (
-                            item.factory_message.hp
-                        )
                         self.__logger.debug("New Factory")
                     else:
-                        self.__bufferState.mapInfo.factoryState[pos] = (
-                            item.factory_message.hp
-                        )
                         self.__logger.debug("Update Factory")
+                    self.__bufferState.mapInfo.factoryState[pos] = (
+                        item.factory_message.team_id,
+                        item.factory_message.hp,
+                    )
+
                 elif AssistFunction.HaveView(
                     self.__bufferState.self.viewRange,
                     self.__bufferState.self.x,
@@ -449,15 +448,13 @@ class Logic(ILogic):
                         AssistFunction.GridToCell(item.factory_message.y),
                     )
                     if pos not in self.__bufferState.mapInfo.factoryState:
-                        self.__bufferState.mapInfo.factoryState[pos] = (
-                            item.factory_message.hp
-                        )
                         self.__logger.debug("New Factory")
                     else:
-                        self.__bufferState.mapInfo.factoryState[pos] = (
-                            item.factory_message.hp
-                        )
                         self.__logger.debug("Update Factory")
+                    self.__bufferState.mapInfo.factoryState[pos] = (
+                        item.factory_message.team_id,
+                        item.factory_message.hp,
+                    )
 
             elif item.WhichOneof("message_of_obj") == "community_message":
                 if item.community_message.team_id == self.__teamID:
@@ -466,15 +463,14 @@ class Logic(ILogic):
                         AssistFunction.GridToCell(item.community_message.y),
                     )
                     if pos not in self.__bufferState.mapInfo.communityState:
-                        self.__bufferState.mapInfo.communityState[pos] = (
-                            item.community_message.hp
-                        )
                         self.__logger.debug("New Community")
                     else:
-                        self.__bufferState.mapInfo.communityState[pos] = (
-                            item.community_message.hp
-                        )
                         self.__logger.debug("Update Community")
+                    self.__bufferState.mapInfo.communityState[pos] = (
+                        item.community_message.team_id,
+                        item.community_message.hp,
+                    )
+
                 elif AssistFunction.HaveView(
                     self.__bufferState.self.viewRange,
                     self.__bufferState.self.x,
@@ -488,15 +484,13 @@ class Logic(ILogic):
                         AssistFunction.GridToCell(item.community_message.y),
                     )
                     if pos not in self.__bufferState.mapInfo.communityState:
-                        self.__bufferState.mapInfo.communityState[pos] = (
-                            item.community_message.hp
-                        )
                         self.__logger.debug("New Community")
                     else:
-                        self.__bufferState.mapInfo.communityState[pos] = (
-                            item.community_message.hp
-                        )
                         self.__logger.debug("Update Community")
+                    self.__bufferState.mapInfo.communityState[pos] = (
+                        item.community_message.team_id,
+                        item.community_message.hp,
+                    )
 
             elif item.WhichOneof("message_of_obj") == "fort_message":
                 if item.fort_message.team_id == self.__teamID:
@@ -505,11 +499,13 @@ class Logic(ILogic):
                         AssistFunction.GridToCell(item.fort_message.y),
                     )
                     if pos not in self.__bufferState.mapInfo.fortState:
-                        self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
                         self.__logger.debug("New Fort")
                     else:
-                        self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
                         self.__logger.debug("Update Fort")
+                    self.__bufferState.mapInfo.fortState[pos] = (
+                        item.fort_message.team_id,
+                        item.fort_message.hp,
+                    )
                 elif AssistFunction.HaveView(
                     self.__bufferState.self.viewRange,
                     self.__bufferState.self.x,
@@ -523,11 +519,13 @@ class Logic(ILogic):
                         AssistFunction.GridToCell(item.fort_message.y),
                     )
                     if pos not in self.__bufferState.mapInfo.fortState:
-                        self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
                         self.__logger.debug("New Fort")
                     else:
-                        self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
                         self.__logger.debug("Update Fort")
+                    self.__bufferState.mapInfo.fortState[pos] = (
+                        item.fort_message.team_id,
+                        item.fort_message.hp,
+                    )
 
             elif item.WhichOneof("message_of_obj") == "wormhole_message":
                 if AssistFunction.HaveView(
@@ -553,7 +551,10 @@ class Logic(ILogic):
                         AssistFunction.GridToCell(item.home_message.x),
                         AssistFunction.GridToCell(item.home_message.y),
                     )
-                    self.__bufferState.mapInfo.homeState[pos] = item.home_message.hp
+                    self.__bufferState.mapInfo.homeState[pos] = (
+                        item.home_message.team_id,
+                        item.home_message.hp,
+                    )
                     self.__logger.debug("Update Home")
                 elif AssistFunction.HaveView(
                     self.__bufferState.self.viewRange,
@@ -567,7 +568,10 @@ class Logic(ILogic):
                         AssistFunction.GridToCell(item.home_message.x),
                         AssistFunction.GridToCell(item.home_message.y),
                     )
-                    self.__bufferState.mapInfo.homeState[pos] = item.home_message.hp
+                    self.__bufferState.mapInfo.homeState[pos] = (
+                        item.home_message.team_id,
+                        item.home_message.hp,
+                    )
                     self.__logger.debug("Update Home")
 
             elif item.WhichOneof("message_of_obj") == "resource_message":
@@ -653,30 +657,26 @@ class Logic(ILogic):
                         AssistFunction.GridToCell(item.factory_message.y),
                     )
                     if pos not in self.__bufferState.mapInfo.factoryState:
-                        self.__bufferState.mapInfo.factoryState[pos] = (
-                            item.factory_message.hp
-                        )
                         self.__logger.debug("New Factory")
                     else:
-                        self.__bufferState.mapInfo.factoryState[pos] = (
-                            item.factory_message.hp
-                        )
                         self.__logger.debug("Update Factory")
+                    self.__bufferState.mapInfo.factoryState[pos] = (
+                        item.factory_message.team_id,
+                        item.factory_message.hp,
+                    )
                 elif HaveOverView(item.factory_message.x, item.factory_message.y):
                     pos = (
                         AssistFunction.GridToCell(item.factory_message.x),
                         AssistFunction.GridToCell(item.factory_message.y),
                     )
                     if pos not in self.__bufferState.mapInfo.factoryState:
-                        self.__bufferState.mapInfo.factoryState[pos] = (
-                            item.factory_message.hp
-                        )
                         self.__logger.debug("New Factory")
                     else:
-                        self.__bufferState.mapInfo.factoryState[pos] = (
-                            item.factory_message.hp
-                        )
                         self.__logger.debug("Update Factory")
+                    self.__bufferState.mapInfo.factoryState[pos] = (
+                        item.factory_message.team_id,
+                        item.factory_message.hp,
+                    )
 
             elif item.WhichOneof("message_of_obj") == "community_message":
                 if item.community_message.team_id == self.__teamID:
@@ -685,31 +685,26 @@ class Logic(ILogic):
                         AssistFunction.GridToCell(item.community_message.y),
                     )
                     if pos not in self.__bufferState.mapInfo.communityState:
-                        self.__bufferState.mapInfo.communityState[pos] = (
-                            item.community_message.hp
-                        )
                         self.__logger.debug("New Community")
                     else:
-                        self.__bufferState.mapInfo.communityState[pos] = (
-                            item.community_message.hp
-                        )
                         self.__logger.debug("Update Community")
+                    self.__bufferState.mapInfo.communityState[pos] = (
+                        item.community_message.team_id,
+                        item.community_message.hp,
+                    )
                 elif HaveOverView(item.community_message.x, item.community_message.y):
                     pos = (
                         AssistFunction.GridToCell(item.community_message.x),
                         AssistFunction.GridToCell(item.community_message.y),
                     )
                     if pos not in self.__bufferState.mapInfo.communityState:
-                        self.__bufferState.mapInfo.communityState[pos] = (
-                            item.community_message.hp
-                        )
                         self.__logger.debug("New Community")
                     else:
-                        self.__bufferState.mapInfo.communityState[pos] = (
-                            item.community_message.hp
-                        )
                         self.__logger.debug("Update Community")
-
+                    self.__bufferState.mapInfo.communityState[pos] = (
+                        item.community_message.team_id,
+                        item.community_message.hp,
+                    )
             elif item.WhichOneof("message_of_obj") == "fort_message":
                 if item.fort_message.team_id == self.__teamID:
                     pos = (
@@ -717,22 +712,26 @@ class Logic(ILogic):
                         AssistFunction.GridToCell(item.fort_message.y),
                     )
                     if pos not in self.__bufferState.mapInfo.fortState:
-                        self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
                         self.__logger.debug("New Fort")
                     else:
-                        self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
                         self.__logger.debug("Update Fort")
+                    self.__bufferState.mapInfo.fortState[pos] = (
+                        item.fort_message.team_id,
+                        item.fort_message.hp,
+                    )
                 elif HaveOverView(item.fort_message.x, item.fort_message.y):
                     pos = (
                         AssistFunction.GridToCell(item.fort_message.x),
                         AssistFunction.GridToCell(item.fort_message.y),
                     )
                     if pos not in self.__bufferState.mapInfo.fortState:
-                        self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
                         self.__logger.debug("New Fort")
                     else:
-                        self.__bufferState.mapInfo.fortState[pos] = item.fort_message.hp
                         self.__logger.debug("Update Fort")
+                    self.__bufferState.mapInfo.fortState[pos] = (
+                        item.fort_message.team_id,
+                        item.fort_message.hp,
+                    )
 
             elif item.WhichOneof("message_of_obj") == "wormhole_message":
                 if HaveOverView(item.wormhole_message.x, item.wormhole_message.y):

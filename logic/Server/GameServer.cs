@@ -143,8 +143,6 @@ namespace Server
                 else
                 {
                     double[] final = LadderCalculate(org, scores);
-                    final[0] -= org[0];
-                    final[1] -= org[1];
                     return final;
                 }
             }
@@ -164,8 +162,11 @@ namespace Server
             else if (competitionScores[0] == competitionScores[1])// 平局
             {
                 if (oriScores[0] == oriScores[1])
-                    // 完全平局，不改变天梯分数
-                    return oriScores;
+                // 完全平局，不改变天梯分数
+                {
+                    double[] Score = [0, 0];
+                    return Score;
+                }
                 if (oriScores[0] > oriScores[1])
                     // 本次游戏平局，但一方天梯分数高，另一方天梯分数低，
                     // 需要将两者向中间略微靠拢，因此天梯分数低的定为获胜者
@@ -177,25 +178,25 @@ namespace Server
                 (oriScores[0], oriScores[1]) = (oriScores[1], oriScores[0]);
             }
 
-            const double normalDeltaThereshold = 1000.0;            // 分数差标准化参数，同时也是大分数差阈值
-            const double correctParam = normalDeltaThereshold * 1.2;// 修正参数
-            const double winnerWeight = 9e-6;                       // 获胜者天梯得分权值
-            const double loserWeight = 5e-6;                        // 落败者天梯得分权值
-            const double scoreDeltaThereshold = 2100.0;             // 极大分数差阈值
+            const double normalDeltaThereshold = 2000.0;                // 天梯分数差参数，天梯分差超过此阈值太多则增长缓慢
+            const double correctParam = normalDeltaThereshold * 1.2;    // 修正参数
+            const double winnerWeight = 9e-8;                           // 获胜者天梯得分权值
+            const double loserWeight = 5e-8;                            // 落败者天梯得分权值
+            const double scoreDeltaThereshold = 40000.0;                // 比赛得分参数，比赛得分超过此阈值太多则增长缓慢
 
             double[] resScore = [0, 0];
-            double oriDelta = oriScores[0] - oriScores[1];                          // 原分数差
+            double oriDelta = oriScores[0] - oriScores[1];                          // 天梯原分数差
             double competitionDelta = competitionScores[0] - competitionScores[1];  // 本次比赛分数差
-            double normalOriDelta = oriDelta / normalDeltaThereshold;               // 标准化原分数差
+            double normalOriDelta = oriDelta / normalDeltaThereshold;               // 标准化天梯原分数差
             double correctRate = oriDelta / correctParam;                           // 修正率，修正方向为缩小分数差
             double correct = 0.5 * (Math.Tanh((competitionDelta - scoreDeltaThereshold) / scoreDeltaThereshold
                                               - correctRate)
                                     + 1.0); // 分数修正
-            resScore[0] = oriScores[0] + Math.Round(Math.Pow(competitionScores[0], 2)
+            resScore[0] = Math.Round(Math.Pow(competitionScores[0], 2)
                                                     * winnerWeight
                                                     * (1 - Math.Tanh(normalOriDelta))
                                                     * correct); // 胜者所加天梯分
-            resScore[1] = oriScores[1] - Math.Round(Math.Pow(competitionDelta, 2)
+            resScore[1] = -Math.Round(Math.Pow(competitionDelta, 2)
                                                     * loserWeight
                                                     * (1 - Math.Tanh(normalOriDelta))
                                                     * correct); // 败者所扣天梯分

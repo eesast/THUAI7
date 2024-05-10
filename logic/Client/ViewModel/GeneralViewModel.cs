@@ -1078,7 +1078,7 @@ namespace Client.ViewModel
 
             myLogger.LogInfo(String.Format("ip:{0}, port:{1}, playerid:{2}, teamid:{3}, shiptype:{4}, playbackfile:{5}, playbackspeed:{6}", ip, port, playerID, teamID, shipTypeID, playbackFile, playbackSpeed));
 
-            //Playback("E:\\program\\Project\\THUAI7\\logic\\Client\\114514.thuaipb", 2.0);
+            //Playback("E:\\program\\Project\\playback.thuaipb", 0.5);
             if (playbackFile.Length == 0)
             {
                 try
@@ -1106,6 +1106,7 @@ namespace Client.ViewModel
             }
             else
             {
+                //myLogger.LogInfo(String.Format("PlaybackFile:{0}", playbackFile));
                 Playback(playbackFile, playbackSpeed);
             }
             //连接Server,comInfo[] 的格式：0 - ip 1 - port 2 - playerID 3 - teamID 4 - ShipType
