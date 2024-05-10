@@ -25,7 +25,7 @@ jobs:
         mkdir D:\a\installer
         mkdir D:\a\publish
     - name: Copy THUAI7
-      run: Copy-Item -recurse D:\a\THUAI7\THUAI7 D:\a\mirror
+      run: Copy-Item -recurse D:\a\THUAI7\THUAI7\ D:\a\mirror\
     - name: Test
       run: tree D:\a\mirror
     - name: Remove directories not needed
