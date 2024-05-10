@@ -48,10 +48,6 @@ else
     Log.LogInfo("Nothing to update");    
 }
 
-var found = (from i in d.Data.MD5Data
-         where i.Key.Contains("interface")
-         select i).ToList();
-
 d.Data.SaveMD5Data();
 Cloud.UploadFile(Path.Combine(d.Data.Config.InstallPath, "hash.json"), "hash.json");
 
