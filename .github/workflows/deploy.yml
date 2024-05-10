@@ -25,7 +25,7 @@ jobs:
         mkdir D:\a\installer
         mkdir D:\a\publish
     - name: Copy THUAI7
-      run: xcopy /S /E /Y D:\a\THUAI7 D:\a\mirror
+      run: xcopy /S /E /Y D:\a\THUAI7\THUAI7 D:\a\mirror
     - name: Remove directories not needed
       run: |
         rmdir -S -Q D:\a\mirror\.github
@@ -45,11 +45,11 @@ jobs:
         cd D:\a\publish
         for /f "delims=" %i in ('dir /b /a-d') do set version=%i
         del -S -F -Q %version%
-        cd D:\a\THUAI7
+        cd D:\a\THUAI7\THUAI7
         dotnet publish "./installer/installer.csproj" -o "D:\a\installer" -f net8.0-windows10.0.19041.0 -c Release -p:RuntimeIdentifierOverride=win10-x64 -p:WindowsPackageType=None -p:WindowsAppSDKSelfContained=true
         ./dependency/7z/7za.exe a -r D:\a\publish\Installer_v%version%.zip D:\a\installer\*
     - name: Upload installer package
       uses: actions/upload-artifact@v4
       with:
         name: Installer_v%version%.zip
-        path: /home/runner/work/THUAI7/hash.json
+        path: D:\a\publish\Installer_v%version%.zip
