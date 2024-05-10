@@ -40,7 +40,7 @@ jobs:
     - name: Build Client
       run: dotnet publish "./logic/Client/Client.csproj" -o "D:\a\mirror\logic\Client" -f net8.0-windows10.0.19041.0 -c Release -p:RuntimeIdentifierOverride=win10-x64 -p:WindowsPackageType=None -p:WindowsAppSDKSelfContained=true
     - name: Deploy to bucket
-      run: dotnet run "./dependency/deploy/deploy.csproj" "***" "***"
+      run: dotnet run --project "./dependency/deploy/deploy.csproj" ${{ secrets.INSTALLER_COS_SECRET_ID }} ${{ secrets.INSTALLER_COS_SECRET_KEY }}
     - name: Get installer package(No Key contained for safety)
       run: |
         $version=Get-ChildItem -Path D:\a\publish | ForEach-Object { $_.name }
