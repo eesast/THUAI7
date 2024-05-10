@@ -90,7 +90,7 @@ namespace Gaming
                     ShipManagerLogging.logger.ConsoleLogDebug(
                         LoggingFunctional.ShipLogInfo(ship)
                         + " is destroyed!");
-                    var money = ship.GetCost();
+                    var money = (long)(ship.GetCost() * 0.2);
                     bullet.Parent.AddMoney(money);
                     ShipManagerLogging.logger.ConsoleLogDebug(
                         LoggingFunctional.ShipLogInfo((Ship)bullet.Parent)
@@ -109,7 +109,14 @@ namespace Gaming
                 {
                     return;
                 }
-                if (ship.Armor > 0)
+                if (ship.Shield > 0)
+                {
+                    ship.Shield.SubPositiveV(AP);
+                    ShipManagerLogging.logger.ConsoleLogDebug(
+                        LoggingFunctional.ShipLogInfo(ship)
+                        + $" 's shield is {ship.Shield}");
+                }
+                else if (ship.Armor > 0)
                 {
                     ship.Armor.SubPositiveV(AP);
                     ShipManagerLogging.logger.ConsoleLogDebug(

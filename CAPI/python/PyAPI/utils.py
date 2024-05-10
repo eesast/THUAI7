@@ -32,45 +32,44 @@ class AssistFunction:
         newPlace = map[AssistFunction.GridToCell(newX)][AssistFunction.GridToCell(newY)]
         if myPlace != THUAI7.PlaceType.Shadow and newPlace == THUAI7.PlaceType.Shadow:
             return False
-        if distance <= viewRange * viewRange:
-            divide = max(abs(deltaX), abs(deltaY)) // 100
-            if divide == 0:
-                return True
-            dx = deltaX / divide
-            dy = deltaY / divide
-            selfX = float(x)
-            selfY = float(y)
-            if (
-                newPlace == THUAI7.PlaceType.Shadow
-                and myPlace == THUAI7.PlaceType.Shadow
-            ):
-                for _ in range(divide):
-                    selfX += dx
-                    selfY += dy
-                    if (
-                        map[AssistFunction.GridToCell(int(selfX))][
-                            AssistFunction.GridToCell(int(selfY))
-                        ]
-                        != THUAI7.PlaceType.Shadow
-                    ):
-                        return False
-                else:
-                    return True
-            else:
-                for _ in range(divide):
-                    selfX += dx
-                    selfY += dy
-                    if (
-                        map[AssistFunction.GridToCell(int(selfX))][
-                            AssistFunction.GridToCell(int(selfY))
-                        ]
-                        == THUAI7.PlaceType.Ruin
-                    ):
-                        return False
-                else:
-                    return True
-        else:
+        if distance > viewRange * viewRange:
             return False
+        divide = max(abs(deltaX), abs(deltaY)) // 100
+        if divide == 0:
+            return True
+        dx = deltaX / divide
+        dy = deltaY / divide
+        selfX = float(x)
+        selfY = float(y)
+        if (
+            newPlace == THUAI7.PlaceType.Shadow
+            and myPlace == THUAI7.PlaceType.Shadow
+        ):
+            for _ in range(divide):
+                selfX += dx
+                selfY += dy
+                if (
+                    map[AssistFunction.GridToCell(int(selfX))][
+                        AssistFunction.GridToCell(int(selfY))
+                    ]
+                    != THUAI7.PlaceType.Shadow
+                ):
+                    return False
+            else:
+                return True
+        else:
+            for _ in range(divide):
+                selfX += dx
+                selfY += dy
+                if (
+                    map[AssistFunction.GridToCell(int(selfX))][
+                        AssistFunction.GridToCell(int(selfY))
+                    ]
+                    == THUAI7.PlaceType.Ruin
+                ):
+                    return False
+            else:
+                return True
 
 
 class Proto2THUAI7:

@@ -91,26 +91,26 @@ THUAI7::PlaceType Logic::GetPlaceType(int32_t cellX, int32_t cellY) const
     return currentState->gameMap[cellX][cellY];
 }
 
-int32_t Logic::GetConstructionHp(int32_t cellX, int32_t cellY) const
+std::pair<int32_t, int32_t> Logic::GetConstructionState(int32_t cellX, int32_t cellY) const
 {
     std::unique_lock<std::mutex> lock(mtxState);
-    logger->debug("Called GetConstructionHp");
+    logger->debug("Called GetConstructionState");
     auto pos = std::make_pair(cellX, cellY);
     auto it = currentState->mapInfo->factoryState.find(pos);
     auto it2 = currentState->mapInfo->communityState.find(pos);
     auto it3 = currentState->mapInfo->fortState.find(pos);
     if (it != currentState->mapInfo->factoryState.end())
     {
-        return currentState->mapInfo->factoryState[pos].first;
+        return currentState->mapInfo->factoryState[pos];
     }
     else if (it2 != currentState->mapInfo->communityState.end())
-        return currentState->mapInfo->communityState[pos].first;
+        return currentState->mapInfo->communityState[pos];
     else if (it3 != currentState->mapInfo->fortState.end())
-        return currentState->mapInfo->fortState[pos].first;
+        return currentState->mapInfo->fortState[pos];
     else
     {
         logger->warn("Construction not found");
-        return -1;
+        return std::make_pair(-1, -1);
     }
 }
 
@@ -477,6 +477,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->factoryState[pos].first = item.factory_message().team_id();
                         bufferState->mapInfo->factoryState[pos].second = item.factory_message().hp();
                         logger->debug("Update Factory!");
                     }
@@ -491,6 +492,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->factoryState[pos].first = item.factory_message().team_id();
                         bufferState->mapInfo->factoryState[pos].second = item.factory_message().hp();
                         logger->debug("Update Factory!");
                     }
@@ -507,6 +509,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->communityState[pos].first = item.community_message().team_id();
                         bufferState->mapInfo->communityState[pos].second = item.community_message().hp();
                         logger->debug("Update Community!");
                     }
@@ -521,6 +524,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->communityState[pos].first = item.community_message().team_id();
                         bufferState->mapInfo->communityState[pos].second = item.community_message().hp();
                         logger->debug("Update Community!");
                     }
@@ -537,6 +541,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->fortState[pos].first = item.fort_message().team_id();
                         bufferState->mapInfo->fortState[pos].second = item.fort_message().hp();
                         logger->debug("Update Fort!");
                     }
@@ -551,6 +556,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->fortState[pos].first = item.fort_message().team_id();
                         bufferState->mapInfo->fortState[pos].second = item.fort_message().hp();
                         logger->debug("Update Fort!");
                     }
@@ -675,6 +681,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->factoryState[pos].first = item.factory_message().team_id();
                         bufferState->mapInfo->factoryState[pos].second = item.factory_message().hp();
                         logger->debug("Update Factory!");
                     }
@@ -689,6 +696,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->factoryState[pos].first = item.factory_message().team_id();
                         bufferState->mapInfo->factoryState[pos].second = item.factory_message().hp();
                         logger->debug("Update Factory!");
                     }
@@ -705,6 +713,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->communityState[pos].first = item.community_message().team_id();
                         bufferState->mapInfo->communityState[pos].second = item.community_message().hp();
                         logger->debug("Update Community!");
                     }
@@ -719,6 +728,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->communityState[pos].first = item.community_message().team_id();
                         bufferState->mapInfo->communityState[pos].second = item.community_message().hp();
                         logger->debug("Update Community!");
                     }
@@ -735,6 +745,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->fortState[pos].first = item.fort_message().team_id();
                         bufferState->mapInfo->fortState[pos].second = item.fort_message().hp();
                         logger->debug("Update Fort!");
                     }
@@ -749,6 +760,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->fortState[pos].first = item.fort_message().team_id();
                         bufferState->mapInfo->fortState[pos].second = item.fort_message().hp();
                         logger->debug("Update Fort!");
                     }
