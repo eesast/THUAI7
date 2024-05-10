@@ -27,7 +27,7 @@ jobs:
     - name: Copy THUAI7
       run: Copy-Item -recurse D:\a\THUAI7 D:\a\mirror
     - name: Test
-      run: tree D:\a\mirror
+      run: tree D:\a\THUAI7
     - name: Remove directories not needed
       run: |
         Remove-Item -recurse D:\a\mirror\.github
