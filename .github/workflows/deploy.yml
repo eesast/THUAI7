@@ -33,7 +33,7 @@ jobs:
       run: tree D:\a\mirror
     - name: Remove directories not needed
       run: |
-        Remove-Item -recurse D:\a\mirror\.git
+        Remove-Item -recurse -force D:\a\mirror\.git
         Remove-Item -recurse D:\a\mirror\.github
         Remove-Item -recurse D:\a\mirror\installer
         Remove-Item -recurse D:\a\mirror\interface
