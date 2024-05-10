@@ -25,10 +25,18 @@
                         VerticalOptions="Center"
                         FontSize="{Binding ConstFontSize}"/>
                     <Entry
-                        WidthRequest="400"
+                        WidthRequest="280"
                         Placeholder=""
                         Text="{Binding PlaybackFile}"
                         FontSize="16"/>
+                    <Button
+                        WidthRequest="120"
+                        Text="选择文件"
+                        BorderWidth="2"
+                        Command="{Binding BrowseBtnClickedCommand}"
+                        IsEnabled="{Binding BrowseEnabled}"
+                        BackgroundColor="{Binding ConstBackgroundColor}"
+                        TextColor="{Binding ConstTextColor}"/>
                 </HorizontalStackLayout>
 
                 <HorizontalStackLayout>
