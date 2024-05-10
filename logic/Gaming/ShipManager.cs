@@ -90,7 +90,7 @@ namespace Gaming
                     ShipManagerLogging.logger.ConsoleLogDebug(
                         LoggingFunctional.ShipLogInfo(ship)
                         + " is destroyed!");
-                    var money = ship.GetCost();
+                    var money = (long)(ship.GetCost() * 0.2);
                     bullet.Parent.AddMoney(money);
                     ShipManagerLogging.logger.ConsoleLogDebug(
                         LoggingFunctional.ShipLogInfo((Ship)bullet.Parent)
