@@ -63,7 +63,7 @@ namespace Gaming
                     default:
                         return GameObj.invalidID;
                 }
-                Ship? newShip = shipManager.AddShip(playerInitInfo.teamID,
+                Ship? newShip = ShipManager.AddShip(playerInitInfo.teamID,
                                                     playerInitInfo.playerID,
                                                     playerInitInfo.shipType,
                                                     teamList[(int)playerInitInfo.teamID].MoneyPool);
@@ -95,7 +95,7 @@ namespace Gaming
                 birthPointIndex = teamList[(int)teamID].BirthPointList.Count - 1;
             XY pos = teamList[(int)teamID].BirthPointList[birthPointIndex];
             pos += new XY(((random.Next() & 2) - 1) * 1000, ((random.Next() & 2) - 1) * 1000);
-            if (ShipManager.ActivateShip(ship, pos))
+            if (shipManager.ActivateShip(ship, pos))
             {
                 GameLogging.logger.ConsoleLogDebug($"Successfully activated {teamID} {shipType} at {pos}");
                 return ship.PlayerID;

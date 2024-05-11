@@ -212,8 +212,8 @@ namespace Client.ViewModel
             {MapPatchType.Asteroid, Color.FromRgb(164, 217, 235)},
             {MapPatchType.Resource, Color.FromRgb(160, 75, 166)},
             {MapPatchType.Factory, Color.FromRgb(231, 144, 74)},
-            {MapPatchType.Community, Color.FromRgb(231, 144, 74)},
-            {MapPatchType.Fort, Color.FromRgb(231, 144, 74)},
+            {MapPatchType.Community, Color.FromRgb(131, 144, 74)},
+            {MapPatchType.Fort, Color.FromRgb(131, 34, 74)},
             {MapPatchType.WormHole, Color.FromRgb(137, 17, 26)},
             {MapPatchType.Space, Color.FromRgb(255, 255, 255)},
             {MapPatchType.Null, Color.FromRgb(0,0,0)}
