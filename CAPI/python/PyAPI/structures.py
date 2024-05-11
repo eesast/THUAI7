@@ -162,6 +162,27 @@ class NewsType(Enum):
 
 
 class Ship:
+    """
+    :attr x: X坐标, 单位Grid
+    :attr y: Y坐标, 单位Grid
+    :attr speed: 速度, 单位Grid/s
+    :attr hp: 生命值
+    :attr armor: 装甲值
+    :attr shield: 护盾值
+    :attr playerID: 舰船编号, 1~4
+    :attr teamID: 所属队伍编号
+    :attr guid: GUID
+    :attr shipState: 行为状态
+    :attr shipType: 舰船类型
+    :attr viewRange: 视距
+    :attr producerType: 采集器类型
+    :attr constructorType: 建造器类型
+    :attr armorType: 装甲类型
+    :attr shieldType: 护盾类型
+    :attr weaponType: 武器类型
+    :attr facingDirection: 面朝方向的弧度数, 向下为x轴正方向, 向右为y轴正方向
+    """
+
     def __init__(self):
         self.x: int = 0
         self.y: int = 0
@@ -184,6 +205,13 @@ class Ship:
 
 
 class Team:
+    """
+    :attr playerID: 队内编号, 应当为0
+    :attr teamID: 所属队伍编号
+    :attr score: 得分
+    :attr energy: 经济
+    """
+
     def __init__(self):
         self.playerID: int = 0
         self.teamID: int = 0
@@ -201,6 +229,19 @@ class Home:
 
 
 class Bullet:
+    """
+    :attr x: X坐标, 单位Grid
+    :attr y: Y坐标, 单位Grid
+    :attr facingDirection: 运动方向的弧度数, 向下为x轴正方向, 向右为y轴正方向
+    :attr guid: GUID
+    :attr teamID: 所属队伍编号
+    :attr bulletType: 子弹类型
+    :attr damage: 伤害
+    :attr attackRange: 射程
+    :attr bombRange: 爆炸半径
+    :attr speed: 运动速度, 单位Grid/s
+    """
+
     def __init__(self):
         self.x: int = 0
         self.y: int = 0
@@ -211,7 +252,6 @@ class Bullet:
         self.damage: int = 0
         self.attackRange: int = 0
         self.bombRange: int = 0
-        self.explodeRange: float = 0.0
         self.speed: int = 0
 
 
@@ -226,6 +266,16 @@ class GameMap:
 
 
 class GameInfo:
+    """
+    :attr gameTime: 当前游戏时间
+    :attr redScore: 红队当前分数
+    :attr redEnergy: 红队当前经济
+    :attr redHomeHp: 红队当前基地血量
+    :attr blueScore: 蓝队当前分数
+    :attr blueEnergy: 蓝队当前经济
+    :attr blueHomeHp: 蓝队当前基地血量
+    """
+
     def __init__(self):
         self.gameTime: int = 0
         self.redScore: int = 0
