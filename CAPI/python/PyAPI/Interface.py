@@ -111,6 +111,14 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
+    def RepairHome(self) -> bool:
+        pass
+
+    @abstractmethod
+    def RepairWormhole(self) -> bool:
+        pass
+
+    @abstractmethod
     def Attack(self, angle: float) -> bool:
         pass
 
@@ -417,6 +425,24 @@ class IShipAPI(IAPI, metaclass=ABCMeta):
         pass
 
     @abstractmethod
+    def RepairWormhole(self) -> Future[bool]:
+        """发出修复虫洞指令
+        - 需要接近待建造的 `Wormhole`
+
+        :return: 是否成功进入修复虫洞状态，通过`.result()`方法等待获取`bool`
+        """
+        pass
+
+    @abstractmethod
+    def RepairHome(self) -> Future[bool]:
+        """发出修复大本营指令
+        - 需要接近待建造的 `Home`
+
+        :return: 是否成功进入修复大本营状态，通过`.result()`方法等待获取`bool`
+        """
+        pass
+
+    @abstractmethod
     def Construct(self, constructionType: THUAI7.ConstructionType) -> Future[bool]:
         """发出建造指令
         - 需要接近待建 `Construction`
@@ -455,7 +481,9 @@ class ITeamAPI(IAPI, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def InstallModule(self, playerID: int, moduleType: THUAI7.ModuleType) -> Future[bool]:
+    def InstallModule(
+        self, playerID: int, moduleType: THUAI7.ModuleType
+    ) -> Future[bool]:
         """安装模块
 
         :param playerID: 待安装模块的舰船编号

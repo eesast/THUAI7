@@ -117,6 +117,8 @@ private:
     bool Move(int64_t time, double angle);
     bool Recover(int64_t recover);
     bool Produce();
+    bool RepairWormhole();
+    bool RepairHome();
     bool Rebuild(THUAI7::ConstructionType constructionType);
     bool Construct(THUAI7::ConstructionType constructionType);
     bool Attack(double angle);

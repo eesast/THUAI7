@@ -10,7 +10,13 @@ import datetime
 
 class ShipDebugAPI(IShipAPI, IGameTimer):
     def __init__(
-        self, logic: ILogic, file: bool, screen: bool, warnOnly: bool, playerID: int, teamID: int
+        self,
+        logic: ILogic,
+        file: bool,
+        screen: bool,
+        warnOnly: bool,
+        playerID: int,
+        teamID: int,
     ) -> None:
         self.__logic = logic
         self.__pool = ThreadPoolExecutor(20)
@@ -105,6 +111,28 @@ class ShipDebugAPI(IShipAPI, IGameTimer):
             return result
 
         return self.__pool.submit(logProduce)
+
+    def RepairWormhole(self) -> Future[bool]:
+        self.__logger.info(f"RepairWormhole: called at {self.__GetTime()}ms")
+
+        def logRepairWormhole() -> bool:
+            result = self.__logic.RepairWormhole()
+            if not result:
+                self.__logger.warning(f"RepairWormhole failed at {self.__GetTime()}ms")
+            return result
+
+        return self.__pool.submit(logRepairWormhole)
+
+    def RepairHome(self) -> Future[bool]:
+        self.__logger.info(f"RepairHome: called at {self.__GetTime()}ms")
+
+        def logRepairHome() -> bool:
+            result = self.__logic.RepairHome()
+            if not result:
+                self.__logger.warning(f"RepairHome failed at {self.__GetTime()}ms")
+            return result
+
+        return self.__pool.submit(logRepairHome)
 
     def Rebuild(self, constructionType: THUAI7.ConstructionType) -> Future[bool]:
         self.__logger.info(
@@ -300,7 +328,13 @@ class ShipDebugAPI(IShipAPI, IGameTimer):
 
 class TeamDebugAPI(ITeamAPI, IGameTimer):
     def __init__(
-        self, logic: ILogic, file: bool, screen: bool, warnOnly: bool, playerID: int, teamID: int
+        self,
+        logic: ILogic,
+        file: bool,
+        screen: bool,
+        warnOnly: bool,
+        playerID: int,
+        teamID: int,
     ) -> None:
         self.__logic = logic
         self.__pool = ThreadPoolExecutor(20)

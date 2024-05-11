@@ -64,6 +64,8 @@ public:
     virtual bool Move(int64_t time, double angle) = 0;
     virtual bool Recover(int64_t recover) = 0;
     virtual bool Produce() = 0;
+    virtual bool RepairWormhole() = 0;
+    virtual bool RepairHome() = 0;
     virtual bool Rebuild(THUAI7::ConstructionType constructionType) = 0;
     virtual bool Construct(THUAI7::ConstructionType constructionType) = 0;
     virtual bool Attack(double angle) = 0;
@@ -139,6 +141,8 @@ public:
     virtual std::future<bool> Attack(double angleInRadian) = 0;
     virtual std::future<bool> Recover(int64_t recover) = 0;
     virtual std::future<bool> Produce() = 0;
+    virtual std::future<bool> RepairWormhole() = 0;
+    virtual std::future<bool> RepairHome() = 0;
     virtual std::future<bool> Rebuild(THUAI7::ConstructionType constructionType) = 0;
     virtual std::future<bool> Construct(THUAI7::ConstructionType constructionType) = 0;
     virtual std::shared_ptr<const THUAI7::Ship> GetSelfInfo() const = 0;
@@ -195,6 +199,8 @@ public:
     std::future<bool> Attack(double angleInRadian) override;
     std::future<bool> Recover(int64_t recover) override;
     std::future<bool> Produce() override;
+    std::future<bool> RepairWormhole() override;
+    std::future<bool> RepairHome() override;
     std::future<bool> Rebuild(THUAI7::ConstructionType constructionType) override;
     std::future<bool> Construct(THUAI7::ConstructionType constructionType) override;
 
@@ -312,6 +318,8 @@ public:
     std::future<bool> Attack(double angleInRadian) override;
     std::future<bool> Recover(int64_t recover) override;
     std::future<bool> Produce() override;
+    std::future<bool> RepairWormhole() override;
+    std::future<bool> RepairHome() override;
     std::future<bool> Rebuild(THUAI7::ConstructionType constructionType) override;
     std::future<bool> Construct(THUAI7::ConstructionType constructionType) override;
 

@@ -275,6 +275,18 @@ std::future<bool> ShipAPI::Produce()
                       { return logic.Produce(); });
 }
 
+std::future<bool> ShipAPI::RepairWormhole()
+{
+    return std::async(std::launch::async, [=]()
+                      { return logic.RepairWormhole(); });
+}
+
+std::future<bool> ShipAPI::RepairHome()
+{
+    return std::async(std::launch::async, [=]()
+                      { return logic.RepairHome(); });
+}
+
 std::future<bool> ShipAPI::Rebuild(THUAI7::ConstructionType constructionType)
 {
     return std::async(std::launch::async, [=]()

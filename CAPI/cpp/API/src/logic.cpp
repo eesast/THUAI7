@@ -261,6 +261,18 @@ bool Logic::Produce()
     return pComm->Produce(playerID, teamID);
 }
 
+bool Logic::RepairWormhole()
+{
+    logger->debug("Called RepairWormhole");
+    return pComm->RepairWormhole(playerID, teamID);
+}
+
+bool Logic::RepairHome()
+{
+    logger->debug("Called RepairHome");
+    return pComm->RepairHome(playerID, teamID);
+}
+
 bool Logic::Rebuild(THUAI7::ConstructionType constructionType)
 {
     logger->debug("Called Rebuild");

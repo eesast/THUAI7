@@ -156,6 +156,27 @@ std::future<bool> ShipDebugAPI::Produce()
                         logger->warn("Produce: failed at {}ms",Time::TimeSinceStart(startPoint));
                         return result; });
 }
+
+std::future<bool> ShipDebugAPI::RepairWormhole()
+{
+    logger->info("RepairWormhole: called at {}ms", Time::TimeSinceStart(startPoint));
+    return std::async(std::launch::async, [=]()
+                      { auto result= logic.RepairWormhole();
+                        if(!result)
+                        logger->warn("RepairWormhole: failed at {}ms",Time::TimeSinceStart(startPoint));
+                        return result; });
+}
+
+std::future<bool> ShipDebugAPI::RepairHome()
+{
+    logger->info("RepairHome: called at {}ms", Time::TimeSinceStart(startPoint));
+    return std::async(std::launch::async, [=]()
+                      { auto result= logic.RepairHome();
+                        if(!result)
+                        logger->warn("RepairHome: failed at {}ms",Time::TimeSinceStart(startPoint));
+                        return result; });
+}
+
 std::future<bool> ShipDebugAPI::Rebuild(THUAI7::ConstructionType constructionType)
 {
     logger->info("Rebuild: rebuilding {}, called at {}ms", THUAI7::constructionDict[constructionType], Time::TimeSinceStart(startPoint));

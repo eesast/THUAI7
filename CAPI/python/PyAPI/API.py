@@ -34,6 +34,12 @@ class ShipAPI(IShipAPI, IGameTimer):
     def Produce(self) -> Future[bool]:
         return self.__pool.submit(self.__logic.Produce)
 
+    def RepairWormhole(self) -> Future[bool]:
+        return self.__pool.submit(self.__logic.RepairWormhole)
+
+    def RepairHome(self) -> Future[bool]:
+        return self.__pool.submit(self.__logic.RepairHome)
+
     def Rebuild(self, constructionType: THUAI7.ConstructionType) -> Future[bool]:
         return self.__pool.submit(self.__logic.Rebuild, constructionType)
 
