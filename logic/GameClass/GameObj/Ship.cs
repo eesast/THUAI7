@@ -434,23 +434,16 @@ public class Ship : Movable, IShip
                 && shipState != ShipStateType.Attacking);
         }
     }
-    public Ship(int initRadius, ShipType shipType, MoneyPool moneyPool) :
-        base(GameData.PosNotInGame, initRadius, GameObjType.Ship)
+    public void Init()
     {
-        CanMove.SetROri(false);
-        IsRemoved.SetROri(true);
-        Occupation = OccupationFactory.FindIOccupation(ShipType = shipType);
-        ViewRange = Occupation.ViewRange;
-        HP = new(Occupation.MaxHp);
-        Armor = new(Occupation.BaseArmor);
-        Shield = new(Occupation.BaseShield);
+        HP.SetMaxV(Occupation.MaxHp);
+        HP.SetVToMaxV();
+        Armor.SetMaxV(Occupation.BaseArmor);
+        Armor.SetVToMaxV();
+        Shield.SetMaxV(Occupation.BaseShield);
+        Shield.SetVToMaxV();
         MoveSpeed.SetROri(orgMoveSpeed = Occupation.MoveSpeed);
-        MoneyPool = moneyPool;
-
-        ProducerType producerType;
-        ConstructorType constructorType;
-        WeaponType weaponType;
-        (producerType, constructorType, weaponType) = ShipType switch
+        var (producerType, constructorType, weaponType) = ShipType switch
         {
             ShipType.CivilShip => (
                 ProducerType.Producer1,
@@ -474,5 +467,18 @@ public class Ship : Movable, IShip
         ArmorModule.SetROri(ModuleFactory.FindIArmor(ShipType, ArmorType.Null));
         ShieldModule.SetROri(ModuleFactory.FindIShield(ShipType, ShieldType.Null));
         WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, weaponType));
+    }
+    public Ship(int initRadius, ShipType shipType, MoneyPool moneyPool) :
+        base(GameData.PosNotInGame, initRadius, GameObjType.Ship)
+    {
+        CanMove.SetROri(false);
+        IsRemoved.SetROri(true);
+        Occupation = OccupationFactory.FindIOccupation(ShipType = shipType);
+        ViewRange = Occupation.ViewRange;
+        HP = new(Occupation.MaxHp);
+        Armor = new(Occupation.BaseArmor);
+        Shield = new(Occupation.BaseShield);
+        MoneyPool = moneyPool;
+        Init();
     }
 }
