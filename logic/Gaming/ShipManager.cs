@@ -14,10 +14,9 @@ namespace Gaming
         {
             private readonly Game game = game;
             private readonly Map gameMap = gameMap;
-            public Ship? AddShip(long teamID, long playerID, ShipType shipType, MoneyPool moneyPool)
+            public static Ship? AddShip(long teamID, long playerID, ShipType shipType, MoneyPool moneyPool)
             {
                 Ship newShip = new(GameData.ShipRadius, shipType, moneyPool);
-                gameMap.Add(newShip);
                 newShip.TeamID.SetROri(teamID);
                 newShip.PlayerID.SetROri(playerID);
                 ShipManagerLogging.logger.ConsoleLogDebug(
@@ -32,12 +31,13 @@ namespace Gaming
                     + $"{newShip.WeaponModuleType}");
                 return newShip;
             }
-            public static bool ActivateShip(Ship ship, XY pos)
+            public bool ActivateShip(Ship ship, XY pos)
             {
                 if (ship.ShipState != ShipStateType.Deceased)
                 {
                     return false;
                 }
+                gameMap.Add(ship);
                 ship.ReSetPos(pos);
                 ship.SetShipState(RunningStateType.Null, ShipStateType.Null);
                 ShipManagerLogging.logger.ConsoleLogDebug(
