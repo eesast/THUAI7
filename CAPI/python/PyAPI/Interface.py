@@ -43,7 +43,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetConstructionHp(self, cellX: int, cellY: int) -> int:
+    def GetConstructionState(self, cellX: int, cellY: int) -> tuple:
         pass
 
     @abstractmethod
@@ -194,7 +194,7 @@ class IAPI(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetConstructionHp(self, cellX: int, cellY: int) -> int:
+    def GetConstructionState(self, cellX: int, cellY: int) -> tuple:
         pass
 
     @abstractmethod

@@ -4,31 +4,32 @@
              xmlns:viewModels="clr-namespace:installer.ViewModel"
              x:Class="installer.Page.InstallPage"
              Title="Installer">
+    <ScrollView Margin="20">
 
-    <Grid
+        <Grid
         HorizontalOptions="Center"
         WidthRequest="600"
         RowDefinitions="*,*,*,*,*,*,*,*,*,*"
         ColumnDefinitions="*">
 
-        <VerticalStackLayout
+            <VerticalStackLayout
             Grid.Row="0"
             Grid.RowSpan="9"
             HorizontalOptions="Center"
             VerticalOptions="Center">
 
-            <HorizontalStackLayout>
-                <Label
+                <HorizontalStackLayout>
+                    <Label
                     WidthRequest="100"
                     Text="文件路径:"
                     VerticalOptions="Center"
                     FontSize="16"/>
-                <Entry
+                    <Entry
                     WidthRequest="380"
                     Placeholder="请输入文件路径……"
                     Text="{Binding DownloadPath}"
                     FontSize="16"/>
-                <Button
+                    <Button
                     WidthRequest="120"
                     Text="选择文件夹"
                     BorderWidth="2"
@@ -36,9 +37,9 @@
                     IsEnabled="{Binding BrowseEnabled}"
                     BackgroundColor="{Binding ConstBackgroundColor}"
                     TextColor="{Binding ConstTextColor}"/>
-            </HorizontalStackLayout>
+                </HorizontalStackLayout>
 
-            <Button
+                <Button
                 Text="{Binding DownloadBtnText}"
                 BorderWidth="2"
                 Command="{Binding DownloadBtnClickedCommand}"
@@ -47,8 +48,8 @@
                 FontSize="{Binding ConstFontSize}"
                 TextColor="{Binding ConstTextColor}"/>
 
-            <HorizontalStackLayout>
-                <Button
+                <HorizontalStackLayout>
+                    <Button
                     WidthRequest="200"
                     Text="检查更新"
                     BorderWidth="2"
@@ -57,7 +58,7 @@
                     BackgroundColor="{Binding ConstBackgroundColor}"
                     FontSize="{Binding ConstFontSize}"
                     TextColor="{Binding ConstTextColor}"/>
-                <Button
+                    <Button
                     WidthRequest="400"
                     Text="更新"
                     BorderWidth="2"
@@ -66,73 +67,73 @@
                     BackgroundColor="{Binding ConstBackgroundColor}"
                     FontSize="{Binding ConstFontSize}"
                     TextColor="{Binding ConstTextColor}"/>
-            </HorizontalStackLayout>
+                </HorizontalStackLayout>
 
-            <HorizontalStackLayout>
-                <CheckBox
+                <HorizontalStackLayout>
+                    <CheckBox
                     IsChecked="{Binding Installed}"
                     IsEnabled="False"/>
-                <Label
+                    <Label
                     WidthRequest="200"
                     Text="是否已下载选手包"
                     VerticalOptions="Center"
                     FontSize="{Binding ConstFontSize}"/>
-            </HorizontalStackLayout>
-                
-            <Label
+                </HorizontalStackLayout>
+
+                <Label
                 Text="{Binding DebugAlert}"/>
 
-            <VerticalStackLayout>
-                <Label
+                <VerticalStackLayout>
+                    <Label
                     Text="{Binding NumReport}"
                     HorizontalOptions="End"
                     FontSize="14"/>
-                <ProgressBar
+                    <ProgressBar
                     Progress="{Binding NumPro}"
                     HeightRequest="10"
                     WidthRequest="580"/>
-            </VerticalStackLayout>
+                </VerticalStackLayout>
 
-            <VerticalStackLayout
+                <VerticalStackLayout
                 IsVisible="{Binding BigFileProEnabled}">
-                <Label
+                    <Label
                     Text="{Binding FileReport}"
                     HorizontalOptions="End"
                     FontSize="14"/>
-                <ProgressBar
+                    <ProgressBar
                     Progress="{Binding FilePro}"
                     HeightRequest="10"
                     WidthRequest="580"/>
-            </VerticalStackLayout>
+                </VerticalStackLayout>
 
-            <Frame
+                <Frame
                 BorderColor="Gray"
                 Padding="3"
                 Margin="5"
                 WidthRequest="600"
                 HeightRequest="250">
 
-                <CollectionView
+                    <CollectionView
                     BackgroundColor="LightGray"
                     ItemsSource="{Binding LogCollection}"
                     ItemsUpdatingScrollMode="KeepLastItemInView"
                     VerticalScrollBarVisibility="Always">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
 
-                            <Label
+                                <Label
                                 WidthRequest="570"
                                 Text="{Binding Message}"
                                 TextColor="{Binding Color}"/>
 
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
-            </Frame>
+                </Frame>
 
-        </VerticalStackLayout>
+            </VerticalStackLayout>
 
-    </Grid>
-
+        </Grid>
+    </ScrollView>
 </ContentPage>

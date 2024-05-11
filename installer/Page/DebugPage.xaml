@@ -3,207 +3,208 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="installer.Page.DebugPage"
              Title="Launcher">
-    
-    <Grid
+
+    <ScrollView Margin="20">
+        <Grid
         HorizontalOptions="Center"
         WidthRequest="600"
         RowDefinitions="*,*,*,*,*,*,*,*,*,*"
         ColumnDefinitions="*">
 
-        <VerticalStackLayout
+            <VerticalStackLayout
             Grid.Row="0"
             Grid.RowSpan="9"
             HorizontalOptions="Center"
             VerticalOptions="Center">
 
-            <HorizontalStackLayout>
-                <Label
+                <HorizontalStackLayout>
+                    <Label
                     WidthRequest="170"
                     Text="Mode"
                     VerticalOptions="Center"
                     FontSize="{Binding ConstFontSize}"/>
-                <Picker
+                    <Picker
                     SelectedItem="{Binding Mode}"
                     WidthRequest="400">
-                    <Picker.ItemsSource>
-                        <x:Array
+                        <Picker.ItemsSource>
+                            <x:Array
                             Type="{x:Type x:String}">
-                            <x:String>Client</x:String>
-                            <x:String>Server</x:String>
-                        </x:Array>
-                    </Picker.ItemsSource>
-                </Picker>
-            </HorizontalStackLayout>
-            
-            <HorizontalStackLayout
+                                <x:String>Client</x:String>
+                                <x:String>Server</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout
                 IsVisible="{Binding IPVisible}">
-                <Label
+                    <Label
                     WidthRequest="170"
                     Text="IP"
                     VerticalOptions="Center"
                     FontSize="{Binding ConstFontSize}"/>
-                <Entry
+                    <Entry
                     WidthRequest="400"
                     Text="{Binding IP}"
                     FontSize="16"/>
-            </HorizontalStackLayout>
-            <HorizontalStackLayout>
-                <Label
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label
                     WidthRequest="170"
                     Text="Port"
                     VerticalOptions="Center"
                     FontSize="{Binding ConstFontSize}"/>
-                <Entry
+                    <Entry
                     WidthRequest="400"
                     Text="{Binding Port}"
                     FontSize="16"/>
-            </HorizontalStackLayout>
+                </HorizontalStackLayout>
 
-            <Label/>
+                <Label/>
 
-            <VerticalStackLayout
+                <VerticalStackLayout
                 IsVisible="{Binding ClientVisible}">
-                
-                <HorizontalStackLayout
+
+                    <HorizontalStackLayout
                     HeightRequest="30">
-                    <Label
+                        <Label
                         WidthRequest="150"
                         Text="Team ID"
                         VerticalOptions="Center"/>
-                    <Label
+                        <Label
                         WidthRequest="150"
                         Text="Player ID"
                         VerticalOptions="Center"/>
-                    <Label
+                        <Label
                         WidthRequest="170"
                         Text="Player Mode"
                         VerticalOptions="Center"/>
-                    <Label
+                        <Label
                         WidthRequest="100"
                         Text="Ship Type"
                         VerticalOptions="Center"/>
-                </HorizontalStackLayout>
-                <CollectionView
+                    </HorizontalStackLayout>
+                    <CollectionView
                     HeightRequest="200"
                     ItemsSource="{Binding Players}"
                     VerticalScrollBarVisibility="Always">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <HorizontalStackLayout>
-                                <Picker
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <HorizontalStackLayout>
+                                    <Picker
                                     WidthRequest="150"
                                     SelectedItem="{Binding TeamID}">
-                                    <Picker.ItemsSource>
-                                        <x:Array
+                                        <Picker.ItemsSource>
+                                            <x:Array
                                             Type="{x:Type x:Int32}">
-                                            <x:Int32>0</x:Int32>
-                                            <x:Int32>1</x:Int32>
-                                        </x:Array>
-                                    </Picker.ItemsSource>
-                                </Picker>
-                                <Picker
+                                                <x:Int32>0</x:Int32>
+                                                <x:Int32>1</x:Int32>
+                                            </x:Array>
+                                        </Picker.ItemsSource>
+                                    </Picker>
+                                    <Picker
                                     WidthRequest="150"
                                     SelectedItem="{Binding PlayerID}">
-                                    <Picker.ItemsSource>
-                                        <x:Array
+                                        <Picker.ItemsSource>
+                                            <x:Array
                                             Type="{x:Type x:Int32}">
-                                            <x:Int32>0</x:Int32>
-                                            <x:Int32>1</x:Int32>
-                                            <x:Int32>2</x:Int32>
-                                            <x:Int32>3</x:Int32>
-                                            <x:Int32>4</x:Int32>
-                                        </x:Array>
-                                    </Picker.ItemsSource>
-                                </Picker>
-                                <Picker
+                                                <x:Int32>0</x:Int32>
+                                                <x:Int32>1</x:Int32>
+                                                <x:Int32>2</x:Int32>
+                                                <x:Int32>3</x:Int32>
+                                                <x:Int32>4</x:Int32>
+                                            </x:Array>
+                                        </Picker.ItemsSource>
+                                    </Picker>
+                                    <Picker
                                     WidthRequest="170"
                                     SelectedItem="{Binding PlayerMode}">
-                                    <Picker.ItemsSource>
-                                        <x:Array
+                                        <Picker.ItemsSource>
+                                            <x:Array
                                             Type="{x:Type x:String}">
-                                            <x:String>API</x:String>
-                                            <x:String>Manual</x:String>
-                                        </x:Array>
-                                    </Picker.ItemsSource>
-                                </Picker>
-                                <Picker
+                                                <x:String>API</x:String>
+                                                <x:String>Manual</x:String>
+                                            </x:Array>
+                                        </Picker.ItemsSource>
+                                    </Picker>
+                                    <Picker
                                     WidthRequest="100"
                                     IsEnabled="{Binding ShipTypePickerEnabled}"
                                     SelectedItem="{Binding ShipType}">
-                                    <Picker.ItemsSource>
-                                        <x:Array
+                                        <Picker.ItemsSource>
+                                            <x:Array
                                             Type="{x:Type x:Int32}">
-                                            <x:Int32>0</x:Int32>
-                                            <x:Int32>1</x:Int32>
-                                            <x:Int32>2</x:Int32>
-                                            <x:Int32>3</x:Int32>
-                                        </x:Array>
-                                    </Picker.ItemsSource>
-                                </Picker>
-                            </HorizontalStackLayout>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                                                <x:Int32>0</x:Int32>
+                                                <x:Int32>1</x:Int32>
+                                                <x:Int32>2</x:Int32>
+                                                <x:Int32>3</x:Int32>
+                                            </x:Array>
+                                        </Picker.ItemsSource>
+                                    </Picker>
+                                </HorizontalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
-                <Grid
+                    <Grid
                     ColumnDefinitions="15,370,100,100,15">
-                    <HorizontalStackLayout
+                        <HorizontalStackLayout
                         Grid.Column="1">
-                        <CheckBox
+                            <CheckBox
                             IsChecked="{Binding HaveSpectator}"/>
-                        <Label
+                            <Label
                             WidthRequest="90"
                             Text="Spectator"
                             HorizontalOptions="Center"
                             VerticalOptions="Center"/>
-                        <Entry
+                            <Entry
                             WidthRequest="100"
                             IsEnabled="{Binding HaveSpectator}"
                             Placeholder="ID"
                             Text="{Binding SpectatorID}"/>
-                    </HorizontalStackLayout>
-                    <Button
+                        </HorizontalStackLayout>
+                        <Button
                         Grid.Column="2"
                         Text="Add"
                         BackgroundColor="DimGray"
                         BorderWidth="2"
                         TextColor="{Binding ConstTextColor}"
                         Command="{Binding AddBtnClickedCommand}"/>
-                    <Button
+                        <Button
                         Grid.Column="3"
                         Text="Delete"
                         BackgroundColor="DimGray"
                         BorderWidth="2"
                         TextColor="{Binding ConstTextColor}"
                         Command="{Binding DelBtnClickedCommand}"/>
-                </Grid>
+                    </Grid>
 
-                <HorizontalStackLayout>
-                    <Label
+                    <HorizontalStackLayout>
+                        <Label
                         WidthRequest="180"
                         Text="Language"
                         VerticalOptions="Center"
                         FontSize="{Binding ConstFontSize}"/>
-                    <CheckBox
+                        <CheckBox
                         IsChecked="{Binding CppSelect}"/>
-                    <Label
+                        <Label
                         WidthRequest="100"
                         Text="C++"
                         VerticalOptions="Center"
                         FontSize="{Binding ConstFontSize}"/>
-                    <CheckBox
+                        <CheckBox
                         IsChecked="{Binding PySelect}"/>
-                    <Label
+                        <Label
                         WidthRequest="100"
                         Text="Python"
                         VerticalOptions="Center"
                         FontSize="{Binding ConstFontSize}"/>
-                </HorizontalStackLayout>
+                    </HorizontalStackLayout>
 
-                <Label
+                    <Label
                     Text="{Binding DebugAlert}"/>
 
-                <Button
+                    <Button
                     WidthRequest="400"
                     Text="保存"
                     BorderWidth="2"
@@ -212,7 +213,7 @@
                     BackgroundColor="{Binding ConstBackgroundColor}"
                     FontSize="{Binding ConstFontSize}"
                     TextColor="{Binding ConstTextColor}"/>
-                <Button
+                    <Button
                     WidthRequest="400"
                     Text="启动"
                     BorderWidth="2"
@@ -222,58 +223,58 @@
                     FontSize="{Binding ConstFontSize}"
                     TextColor="{Binding ConstTextColor}"/>
 
-            </VerticalStackLayout>
+                </VerticalStackLayout>
 
-                
-            <VerticalStackLayout
+
+                <VerticalStackLayout
                 IsVisible="{Binding ServerVisible}">
-                
-                <HorizontalStackLayout>
-                    <Label
+
+                    <HorizontalStackLayout>
+                        <Label
                         WidthRequest="170"
                         Text="Team Count"
                         VerticalOptions="Center"
                         FontSize="{Binding ConstFontSize}"/>
-                    <Picker
+                        <Picker
                         SelectedItem="{Binding TeamCount}"
                         WidthRequest="400">
-                        <Picker.ItemsSource>
-                            <x:Array
+                            <Picker.ItemsSource>
+                                <x:Array
                                 Type="{x:Type x:Int32}">
-                                <x:Int32>1</x:Int32>
-                                <x:Int32>2</x:Int32>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
-                </HorizontalStackLayout>
+                                    <x:Int32>1</x:Int32>
+                                    <x:Int32>2</x:Int32>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </HorizontalStackLayout>
 
-                <HorizontalStackLayout>
-                    <Label
+                    <HorizontalStackLayout>
+                        <Label
                         WidthRequest="170"
                         Text="Ship Count"
                         VerticalOptions="Center"
                         FontSize="{Binding ConstFontSize}"/>
-                    <Picker
+                        <Picker
                         SelectedItem="{Binding ShipCount}"
                         WidthRequest="400">
-                        <Picker.ItemsSource>
-                            <x:Array
+                            <Picker.ItemsSource>
+                                <x:Array
                                 Type="{x:Type x:Int32}">
-                                <x:Int32>0</x:Int32>
-                                <x:Int32>1</x:Int32>
-                                <x:Int32>2</x:Int32>
-                                <x:Int32>3</x:Int32>
-                                <x:Int32>4</x:Int32>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
-                </HorizontalStackLayout>
+                                    <x:Int32>0</x:Int32>
+                                    <x:Int32>1</x:Int32>
+                                    <x:Int32>2</x:Int32>
+                                    <x:Int32>3</x:Int32>
+                                    <x:Int32>4</x:Int32>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </HorizontalStackLayout>
 
 
-                <Label
+                    <Label
                     Text="{Binding DebugAlert}"/>
 
-                <Button
+                    <Button
                     WidthRequest="400"
                     Text="保存"
                     BorderWidth="2"
@@ -282,7 +283,7 @@
                     BackgroundColor="{Binding ConstBackgroundColor}"
                     FontSize="{Binding ConstFontSize}"
                     TextColor="{Binding ConstTextColor}"/>
-                <Button
+                    <Button
                     WidthRequest="400"
                     Text="{Binding ServerStartBtnText}"
                     BorderWidth="2"
@@ -292,37 +293,38 @@
                     FontSize="{Binding ConstFontSize}"
                     TextColor="{Binding ConstTextColor}"/>
 
+                </VerticalStackLayout>
+
+
+                    <!--<Frame
+                    BorderColor="Gray"
+                    Padding="3"
+                    Margin="5"
+                    WidthRequest="600"
+                    HeightRequest="200">
+
+                    <CollectionView
+                        BackgroundColor="LightGray"
+                        ItemsSource="{Binding LogList}"
+                        ItemsUpdatingScrollMode="KeepLastItemInView"
+                        VerticalScrollBarVisibility="Always">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+
+                                <Label
+                                    WidthRequest="570"
+                                    Text="{Binding Message}"
+                                    TextColor="{Binding Color}"/>
+
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                </Frame>-->
+
             </VerticalStackLayout>
 
-            
-            <!--<Frame
-                BorderColor="Gray"
-                Padding="3"
-                Margin="5"
-                WidthRequest="600"
-                HeightRequest="200">
+        </Grid>
+    </ScrollView>
 
-                <CollectionView
-                    BackgroundColor="LightGray"
-                    ItemsSource="{Binding LogList}"
-                    ItemsUpdatingScrollMode="KeepLastItemInView"
-                    VerticalScrollBarVisibility="Always">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-
-                            <Label
-                                WidthRequest="570"
-                                Text="{Binding Message}"
-                                TextColor="{Binding Color}"/>
-
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-
-            </Frame>-->
-
-        </VerticalStackLayout>
-
-    </Grid>
-    
 </ContentPage>

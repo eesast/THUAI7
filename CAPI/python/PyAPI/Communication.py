@@ -6,7 +6,7 @@ import proto.Services_pb2_grpc as Services
 import proto.Message2Clients_pb2 as Message2Clients
 import threading
 import grpc
-
+import time
 from typing import Union
 
 
@@ -235,18 +235,14 @@ class Communication:
             return buildResult.act_success
 
     def TryConnection(self, playerID: int, teamID: int) -> bool:
-        maxRetryNum: int = 10
-        for _ in range(maxRetryNum):
-            try:
-                time.sleep(1)
-                tryResult: Message2Clients.BoolRes = self.__THUAI7Stub.TryConnection(
-                    THUAI72Proto.THUAI72ProtobufIDMsg(playerID, teamID)
-                )
-            except grpc.RpcError:
-                continue
-            else:
-                return tryResult.act_success
-        return False
+        try:
+            tryResult: Message2Clients.BoolRes = self.__THUAI7Stub.TryConnection(
+                THUAI72Proto.THUAI72ProtobufIDMsg(playerID, teamID)
+            )
+        except grpc.RpcError:
+            return False
+        else:
+            return tryResult.act_success
 
     def GetMessage2Client(self) -> Message2Clients.MessageToClient:
         with self.__cvMessage:
