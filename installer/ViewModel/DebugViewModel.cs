@@ -273,12 +273,14 @@ namespace installer.ViewModel
         protected Process? server;
         public event EventHandler? OnServerLaunched;
         public event EventHandler? OnServerExited;
+
         public bool LaunchServer()
         {
             server = Process.Start(new ProcessStartInfo()
             {
                 FileName = Downloader.Data.Config.DevServerPath ?? Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Server", "Server.exe"),
                 Arguments = $"--ip 0.0.0.0 --port {Port} --teamCount {TeamCount} --shipNum {ShipCount}",
+                WorkingDirectory = Downloader.Data.Config.InstallPath
             });
             if (server is null)
             {
@@ -296,7 +298,6 @@ namespace installer.ViewModel
             return true;
         }
 
-
         public bool LaunchClient(int team, int player, int ship)
         {
             Downloader.Data.Config.Commands.TeamID = team;
@@ -313,6 +314,7 @@ namespace installer.ViewModel
             var client = Process.Start(new ProcessStartInfo()
             {
                 FileName = Downloader.Data.Config.DevClientPath ?? Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
+                WorkingDirectory = Downloader.Data.Config.InstallPath
             });
             if (client is null)
             {
@@ -341,7 +343,8 @@ namespace installer.ViewModel
                 var cpp = Process.Start(new ProcessStartInfo()
                 {
                     FileName = Downloader.Data.Config.DevCppPath ?? exe,
-                    Arguments = $"-I {IP} -P {Port} -t {team} -p {player} -o"
+                    Arguments = $"-I {IP} -P {Port} -t {team} -p {player} -d",
+                    WorkingDirectory = Downloader.Data.Config.InstallPath
                 });
                 if (cpp is null)
                 {
@@ -379,7 +382,8 @@ namespace installer.ViewModel
                     FileName = "cmd.exe",
                     Arguments = "/c python "
                         + (Downloader.Data.Config.DevPyPath ?? Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py"))
-                        + $" -I {IP} -P {Port} -t {team} -p {player} -o"
+                        + $" -I {IP} -P {Port} -t {team} -p {player} -d",
+                    WorkingDirectory = Downloader.Data.Config.InstallPath
                 });
                 if (py is null)
                 {
