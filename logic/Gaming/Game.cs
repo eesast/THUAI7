@@ -220,22 +220,13 @@ namespace Gaming
             }
             return false;
         }
-        public bool RepairHome(long teamID, long shipID)
+        public bool Repair(long teamID, long shipID)
         {
             if (!gameMap.Timer.IsGaming)
                 return false;
             Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
             if (ship != null)
-                return actionManager.RepairHome(ship);
-            return false;
-        }
-        public bool RepairWormhole(long teamID, long shipID)
-        {
-            if (!gameMap.Timer.IsGaming)
-                return false;
-            Ship? ship = gameMap.FindShipInPlayerID(teamID, shipID);
-            if (ship != null)
-                return actionManager.RepairWormhole(ship);
+                return actionManager.Repair(ship);
             return false;
         }
         public bool Stop(long teamID, long shipID)
