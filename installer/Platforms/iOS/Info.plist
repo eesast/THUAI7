@@ -28,5 +28,30 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.plain-text</string>
+				<string>public.text</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>PlaybackFileOfTHUAI</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.thueesast.thuaiplayback</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<string>thuaipb</string>
+				<key>public.mime-type</key>
+				<string>application/com.thueesast.thuaiplayback</string>
+			</dict>
+		</dict>
+	</array>
+	<key>CFBundleIdentifier</key>
+	<string>com.thueesast.thuai7_installer</string>
+	<key>CFBundleDisplayName</key>
+	<string>THUAI7</string>
 </dict>
 </plist>

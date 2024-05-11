@@ -67,7 +67,7 @@ namespace installer
             var c = builder.Services.AddSingleton<Downloader>().First();
 
             builder.Services.AddSingleton(FolderPicker.Default);
-
+            builder.Services.AddSingleton(FilePicker.Default);
 
             AddViewModelService(builder);
             AddPageService(builder);

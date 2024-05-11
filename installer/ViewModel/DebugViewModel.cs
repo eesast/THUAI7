@@ -302,6 +302,13 @@ namespace installer.ViewModel
             Downloader.Data.Config.Commands.TeamID = team;
             Downloader.Data.Config.Commands.PlayerID = player;
             Downloader.Data.Config.Commands.ShipType = ship;
+            var p = Downloader.Data.Config.Commands.PlaybackFile;
+            Downloader.Data.Config.Commands.PlaybackFile = null;
+
+            if (File.Exists(Path.Combine(Downloader.Data.LogPath, $"lock.{team}.{player}.log")))
+            {
+                File.Delete(Path.Combine(Downloader.Data.LogPath, $"lock.{team}.{player}.log"));
+            }
 
             var client = Process.Start(new ProcessStartInfo()
             {
@@ -318,6 +325,7 @@ namespace installer.ViewModel
             }
             Thread.Sleep(500);
             File.Delete(Path.Combine(Downloader.Data.LogPath, $"lock.{team}.{player}.log"));
+            Downloader.Data.Config.Commands.PlaybackFile = p;
             Log.LogInfo($"Client({team}: {player})成功启动。");
             children.Add(client);
             return true;
