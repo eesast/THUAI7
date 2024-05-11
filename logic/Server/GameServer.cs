@@ -178,11 +178,11 @@ namespace Server
                 (oriScores[0], oriScores[1]) = (oriScores[1], oriScores[0]);
             }
 
-            const double normalDeltaThereshold = 2000.0;                // 天梯分数差参数，天梯分差超过此阈值太多则增长缓慢
+            const double normalDeltaThereshold = 100.0;                // 天梯分数差参数，天梯分差超过此阈值太多则增长缓慢
             const double correctParam = normalDeltaThereshold * 1.2;    // 修正参数
-            const double winnerWeight = 9e-8;                           // 获胜者天梯得分权值
-            const double loserWeight = 5e-8;                            // 落败者天梯得分权值
-            const double scoreDeltaThereshold = 40000.0;                // 比赛得分参数，比赛得分超过此阈值太多则增长缓慢
+            const double winnerWeight = 4e-10;                           // 获胜者天梯得分权值
+            const double loserWeight = 1.5e-10;                            // 落败者天梯得分权值
+            const double scoreDeltaThereshold = 50000.0;                // 比赛得分参数，比赛得分超过此阈值太多则增长缓慢
 
             double[] resScore = [0, 0];
             double oriDelta = oriScores[0] - oriScores[1];                          // 天梯原分数差
@@ -192,14 +192,14 @@ namespace Server
             double correct = 0.5 * (Math.Tanh((competitionDelta - scoreDeltaThereshold) / scoreDeltaThereshold
                                               - correctRate)
                                     + 1.0); // 分数修正
-            resScore[0] = Math.Round(Math.Pow(competitionScores[0], 2)
+            resScore[0] = Math.Min(300, Math.Round(Math.Pow(competitionScores[0], 2)
                                                     * winnerWeight
                                                     * (1 - Math.Tanh(normalOriDelta))
-                                                    * correct); // 胜者所加天梯分
-            resScore[1] = -Math.Round(Math.Pow(competitionDelta, 2)
+                                                    * correct)); // 胜者所加天梯分)
+            resScore[1] = Math.Max(-120, -Math.Round(Math.Pow(competitionDelta, 2)
                                                     * loserWeight
                                                     * (1 - Math.Tanh(normalOriDelta))
-                                                    * correct); // 败者所扣天梯分
+                                                    * correct)); // 败者所扣天梯分
             if (scoresReverse)// 顺序换回
                 (resScore[0], resScore[1]) = (resScore[1], resScore[0]);
             return resScore;
