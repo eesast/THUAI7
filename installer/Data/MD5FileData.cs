@@ -32,7 +32,7 @@ namespace installer.Data
         public Version TemplateVersion = new Version(1, 0, 0, 3);
         // 本体版本
         [JsonInclude]
-        public Version InstallerVersion = new Version(1, 1, 0, 1);
+        public Version InstallerVersion = new Version(1, 1, 0, 2);
         public static bool operator <(TVersion l, TVersion r)
         {
             return l.LibVersion < r.LibVersion || l.TemplateVersion < r.TemplateVersion || l.InstallerVersion < r.InstallerVersion;
