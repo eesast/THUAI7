@@ -77,15 +77,8 @@ switch (args[2])
         break;
     case "upload":
         d.UpdateMD5();
-        if (d.Data.FileHashData.TVersion.InstallerVersion < d.CurrentVersion.InstallerVersion)
-        {
-            Cloud.DownloadFile(@"D:\a\publish\Secret.csv", "Secret.csv");
-            ZipFile.CreateFromDirectory(@"D:\a\publish", @$"D:\a\Installer_v{d.CurrentVersion.InstallerVersion}.zip", CompressionLevel.SmallestSize, false);
-            Cloud.UploadFile(@$"D:\a\Installer_v{d.CurrentVersion.InstallerVersion}.zip", $"Setup/Installer_v{d.CurrentVersion.InstallerVersion}.zip");
-        }
-        else
-        {
-            Log.LogInfo("No installer version update found.");
-        }
+        Cloud.DownloadFile(@"D:\a\publish\Secret.csv", "Secret.csv");
+        ZipFile.CreateFromDirectory(@"D:\a\publish", @$"D:\a\Installer_v{d.CurrentVersion.InstallerVersion}.zip", CompressionLevel.SmallestSize, false);
+        Cloud.UploadFile(@$"D:\a\Installer_v{d.CurrentVersion.InstallerVersion}.zip", $"Setup/Installer_v{d.CurrentVersion.InstallerVersion}.zip");
         break;
 }
