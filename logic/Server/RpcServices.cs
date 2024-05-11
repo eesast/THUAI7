@@ -76,6 +76,13 @@ namespace Server
                     {
                         if (currentGameInfo != null)
                         {
+                            for (int i = currentGameInfo.ObjMessage.Count - 1; i >= 0; i--)
+                            {
+                                if (currentGameInfo.ObjMessage[i].NewsMessage != null)
+                                {
+                                    currentGameInfo.ObjMessage.RemoveAt(i);
+                                }
+                            }
                             await responseStream.WriteAsync(currentGameInfo);
                             GameServerLogging.logger.ConsoleLog("Send!", false);
                         }
