@@ -346,7 +346,7 @@ public class Ship : Movable, IShip
                         return ChangeShipState(running, value, gameObj);
                     else return -1;
                 case ShipStateType.Deceased:
-                    if (value == ShipStateType.Null || value == ShipStateType.Deceased)
+                    if (value == ShipStateType.Null)
                         return ChangeShipState(running, value, gameObj);
                     else return -1;
                 default:
