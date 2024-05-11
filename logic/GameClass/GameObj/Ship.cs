@@ -334,19 +334,19 @@ public class Ship : Movable, IShip
             switch (nowShipState)
             {
                 case ShipStateType.Attacking:
-                    if (value == ShipStateType.Null || value == ShipStateType.Stunned || value == ShipStateType.Swinging)
+                    if (value == ShipStateType.Null || value == ShipStateType.Deceased || value == ShipStateType.Stunned || value == ShipStateType.Swinging)
                         return ChangeShipState(running, value, gameObj);
                     else return -1;
                 case ShipStateType.Stunned:
-                    if (value == ShipStateType.Null)
+                    if (value == ShipStateType.Null || value == ShipStateType.Deceased)
                         return ChangeShipState(running, value, gameObj);
                     else return -1;
                 case ShipStateType.Swinging:
-                    if (value == ShipStateType.Null || value == ShipStateType.Stunned)
+                    if (value == ShipStateType.Null || value == ShipStateType.Deceased || value == ShipStateType.Stunned)
                         return ChangeShipState(running, value, gameObj);
                     else return -1;
                 case ShipStateType.Deceased:
-                    if (value == ShipStateType.Null)
+                    if (value == ShipStateType.Null || value == ShipStateType.Deceased)
                         return ChangeShipState(running, value, gameObj);
                     else return -1;
                 default:
