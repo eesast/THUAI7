@@ -155,7 +155,7 @@ class Logic(ILogic):
                 )
             else:
                 self.__logger.warning("GetConstructionState: Out of range")
-                return (-1,-1)
+                return (-1, -1)
 
     def GetWormholeHp(self, cellX: int, cellY: int) -> int:
         with self.__mtxState:

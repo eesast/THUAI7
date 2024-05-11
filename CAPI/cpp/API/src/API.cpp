@@ -290,7 +290,7 @@ std::future<bool> ShipAPI::Construct(THUAI7::ConstructionType constructionType)
 bool ShipAPI::HaveView(int32_t targetX, int32_t targetY) const
 {
     auto selfInfo = GetSelfInfo();
-    return logic.HaveView(targetX, targetY, selfInfo->x, selfInfo->y, selfInfo->viewRange);
+    return logic.HaveView(selfInfo->x, selfInfo->y, targetX, targetY, selfInfo->viewRange);
 }
 
 // Team独有

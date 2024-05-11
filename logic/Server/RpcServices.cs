@@ -446,6 +446,10 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             // var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            if (game.TeamList[(int)request.TeamId].Home.HP <= 0)
+            {
+                return Task.FromResult(new BoolRes { ActSuccess = false });
+            }
             boolRes.ActSuccess = game.InstallModule(
                 request.TeamId, request.PlayerId,
                 Transformation.ModuleFromProto(request.ModuleType));
@@ -464,6 +468,10 @@ namespace Server
                 return Task.FromResult(boolRes);
             }
             // var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            if (game.TeamList[(int)request.TeamId].Home.HP <= 0)
+            {
+                return Task.FromResult(new BoolRes { ActSuccess = false });
+            }
             boolRes.ActSuccess = game.Recycle(request.TeamId, request.PlayerId);
             GameServerLogging.logger.ConsoleLogDebug("END Recycle");
             return Task.FromResult(boolRes);
@@ -482,6 +490,10 @@ namespace Server
             };
             var teamMoneyPool = game.TeamList[(int)request.TeamId].MoneyPool;
             if (activateCost > teamMoneyPool.Money)
+            {
+                return Task.FromResult(new BoolRes { ActSuccess = false });
+            }
+            if (game.TeamList[(int)request.TeamId].Home.HP <= 0)
             {
                 return Task.FromResult(new BoolRes { ActSuccess = false });
             }
@@ -512,6 +524,10 @@ namespace Server
             };
             var teamMoneyPool = game.TeamList[(int)request.TeamId].MoneyPool;
             if (activateCost > teamMoneyPool.Money)
+            {
+                return Task.FromResult(new BuildShipRes { ActSuccess = false });
+            }
+            if (game.TeamList[(int)request.TeamId].Home.HP <= 0)
             {
                 return Task.FromResult(new BuildShipRes { ActSuccess = false });
             }
