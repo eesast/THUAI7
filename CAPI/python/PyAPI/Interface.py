@@ -149,7 +149,7 @@ class IAPI(metaclass=ABCMeta):
         """检查是否拥有待接收消息
 
         :return: 是否拥有待接收消息
-        """        
+        """
         pass
 
     @abstractmethod
@@ -157,7 +157,7 @@ class IAPI(metaclass=ABCMeta):
         """接收消息队列的第一个消息
 
         :return: 消息发送方的队内编号与消息, 如无消息发送方编号为-1
-        """        
+        """
         pass
 
     @abstractmethod
@@ -174,7 +174,7 @@ class IAPI(metaclass=ABCMeta):
         - 在 `Setting.Asynchronous() == True` 下
 
         :return: 等待是否成功, 通过 `.result()` 方法等待获取 `bool`
-        """        
+        """
         pass
 
     @abstractmethod
@@ -182,15 +182,15 @@ class IAPI(metaclass=ABCMeta):
         """发出停止一切行动指令
 
         :return: 是否进入无行动状态, 通过 `.result()` 方法等待获取 `bool`
-        """        
+        """
         pass
 
     @abstractmethod
     def GetShips(self) -> List[THUAI7.Ship]:
         """获取本队所有舰船
 
-        :return: 本队所有舰船
-        """        
+        :return: 本队所有舰船, 详见 `THUAI7.Ship` 定义
+        """
         pass
 
     @abstractmethod
@@ -198,8 +198,8 @@ class IAPI(metaclass=ABCMeta):
         """获取敌方舰船
         - 需要敌方舰船处于视野内, 对于 `TeamAPI` 指所有舰船视野
 
-        :return: 视野内敌方所有舰船
-        """        
+        :return: 视野内敌方所有舰船, 详见 `THUAI7.Ship` 定义
+        """
         pass
 
     @abstractmethod
@@ -207,9 +207,9 @@ class IAPI(metaclass=ABCMeta):
         """获取敌方子弹
         - 需要子弹处于视野内
 
-        :return: 视野内敌方所有子弹
+        :return: 视野内敌方所有子弹, 详见 `THUAI7.Bullet` 定义
         :raise: `NotImplementedError` 对于 `TeamAPI`
-        """        
+        """
         pass
 
     @abstractmethod
@@ -217,7 +217,7 @@ class IAPI(metaclass=ABCMeta):
         """获取地图
 
         :return: `THUAI7.PlaceType` 的二维数组
-        """        
+        """
         pass
 
     @abstractmethod
@@ -225,7 +225,7 @@ class IAPI(metaclass=ABCMeta):
         """获取当前游戏信息
 
         :return: 当前游戏信息, 详见 `THUAI7.GameInfo` 定义
-        """        
+        """
         pass
 
     @abstractmethod
@@ -235,7 +235,7 @@ class IAPI(metaclass=ABCMeta):
         :param cellX: X坐标, 单位Cell
         :param cellY: Y坐标, 单位Cell
         :return: 该坐标的区域类型
-        """        
+        """
         pass
 
     @abstractmethod
@@ -245,7 +245,7 @@ class IAPI(metaclass=ABCMeta):
         :param cellX: X坐标, 单位Cell
         :param cellY: Y坐标, 单位Cell
         :return: 该建筑当前的所属队伍编号与血量
-        """        
+        """
         pass
 
     @abstractmethod
@@ -255,7 +255,7 @@ class IAPI(metaclass=ABCMeta):
         :param cellX: X坐标, 单位Cell
         :param cellY: Y坐标, 单位Cell
         :return: 当前虫洞血量
-        """        
+        """
         pass
 
     @abstractmethod
@@ -265,7 +265,7 @@ class IAPI(metaclass=ABCMeta):
         :param cellX: X坐标, 单位Cell
         :param cellY: Y坐标, 单位Cell
         :return: 当前资源剩余可开采量
-        """        
+        """
         pass
 
     @abstractmethod
@@ -273,7 +273,7 @@ class IAPI(metaclass=ABCMeta):
         """获取当前大本营血量
 
         :return: 当前大本营血量
-        """        
+        """
         pass
 
     @abstractmethod
@@ -281,7 +281,7 @@ class IAPI(metaclass=ABCMeta):
         """获取当前经济
 
         :return: 当前经济
-        """        
+        """
         pass
 
     @abstractmethod
@@ -289,7 +289,7 @@ class IAPI(metaclass=ABCMeta):
         """获取当前得分
 
         :return: 当前得分
-        """        
+        """
         pass
 
     @abstractmethod
@@ -297,33 +297,37 @@ class IAPI(metaclass=ABCMeta):
         """获取本队所有舰船GUID
 
         :return: 本队所有舰船GUID
-        """        
+        """
         pass
 
     @abstractmethod
     def Print(self, string: str) -> None:
-        """(DEBUG)打印字符串
+        """
+        (DEBUG)打印字符串
 
         :param string: 待打印字符串
-        """        
+        """
         pass
 
     @abstractmethod
     def PrintShip(self) -> None:
-        """(DEBUG)打印所有舰船
-        """        
+        """
+        (DEBUG)打印所有舰船
+        """
         pass
 
     @abstractmethod
     def PrintTeam(self) -> None:
-        """(DEBUG)打印队伍信息
-        """        
+        """
+        (DEBUG)打印队伍信息
+        """
         pass
 
     @abstractmethod
     def PrintSelfInfo(self) -> None:
-        """(DEBUG)打印自身信息, `ShipDebugAPI` 打印舰船信息, `TeamDebugAPI` 打印队伍信息
-        """        
+        """
+        (DEBUG)打印自身信息, `ShipDebugAPI` 打印舰船信息, `TeamDebugAPI` 打印队伍信息
+        """
         pass
 
 
