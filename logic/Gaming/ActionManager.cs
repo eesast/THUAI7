@@ -240,62 +240,7 @@ namespace Gaming
                 { IsBackground = true }.Start();
                 return false;
             }
-            public bool RepairHome(Ship ship)
-            {
-                Home? home = ((Home?)gameMap.OneForInteract(ship.Position, GameObjType.Home));
-                if (home == null)
-                {
-                    return false;
-                }
-                if (home.HP.IsMaxV())
-                {
-                    return false;
-                }
-                long stateNum = ship.SetShipState(RunningStateType.Waiting, ShipStateType.Constructing);
-                if (stateNum == -1)
-                {
-                    return false;
-                }
-                new Thread
-                (
-                    () =>
-                    {
-                        ship.ThreadNum.WaitOne();
-                        if (!ship.StartThread(stateNum, RunningStateType.RunningActively))
-                        {
-                            ship.ThreadNum.Release();
-                            return;
-                        }
-                        home.AddRepairNum();
-                        Thread.Sleep(GameData.CheckInterval);
-                        new FrameRateTaskExecutor<int>
-                        (
-                            loopCondition: () => stateNum == ship.StateNum && gameMap.Timer.IsGaming,
-                            loopToDo: () =>
-                            {
-                                if (!home.Repair(ship.ConstructSpeed / GameData.NumOfStepPerSecond, ship))
-                                {
-                                    ship.ResetShipState(stateNum);
-                                    return false;
-                                }
-                                if (home.HP == home.HP.GetMaxV())
-                                {
-                                    ship.ResetShipState(stateNum);
-                                    return false;
-                                }
-                                return true;
-                            },
-                            timeInterval: GameData.CheckInterval,
-                            finallyReturn: () => 0
-                        ).Start();
-                        ship.ThreadNum.Release();
-                        home.SubRepairNum();
-                    }
-                )
-                { IsBackground = true }.Start();
-                return false;
-            }
-            public bool RepairWormhole(Ship ship)
+            public bool Repair(Ship ship)
             {
                 Wormhole? wormhole = ((WormholeCell?)gameMap.OneForInteract(ship.Position, GameObjType.Wormhole))?.Wormhole;
                 if (wormhole == null)
