@@ -14,7 +14,7 @@ namespace Gaming
         {
             private readonly Game game = game;
             private readonly Map gameMap = gameMap;
-            public Ship? AddShip(long teamID, long playerID, ShipType shipType, MoneyPool moneyPool)
+            public static Ship? AddShip(long teamID, long playerID, ShipType shipType, MoneyPool moneyPool)
             {
                 Ship newShip = new(GameData.ShipRadius, shipType, moneyPool);
                 newShip.TeamID.SetROri(teamID);

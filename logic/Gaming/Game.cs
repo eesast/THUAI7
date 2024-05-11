@@ -63,7 +63,7 @@ namespace Gaming
                     default:
                         return GameObj.invalidID;
                 }
-                Ship? newShip = shipManager.AddShip(playerInitInfo.teamID,
+                Ship? newShip = ShipManager.AddShip(playerInitInfo.teamID,
                                                     playerInitInfo.playerID,
                                                     playerInitInfo.shipType,
                                                     teamList[(int)playerInitInfo.teamID].MoneyPool);
