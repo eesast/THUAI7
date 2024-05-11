@@ -110,7 +110,7 @@ namespace Server
 
         }
 
-        protected void SendGameResult(int[] scores, bool crashed)		// 天梯的 Server 给网站发消息记录比赛结果
+        protected void SendGameResult(int[] scores, bool crashed = false)		// 天梯的 Server 给网站发消息记录比赛结果
         {
             string? url2 = Environment.GetEnvironmentVariable("FINISH_URL");
             if (url2 == null)
@@ -228,6 +228,17 @@ namespace Server
                 else
                     scores = doubleArray.Select(x => (int)x).ToArray();
                 SendGameResult(scores, crash);
+            }
+            else if (options.Mode == 1)
+            {
+                int[] s = new int[2];
+                if (scores[1] > scores[0])
+                    s = [0, 2];
+                else if (scores[1] == scores[0])
+                    s = [1, 1];
+                else
+                    s = [2, 0];
+                SendGameResult(s);
             }
             endGameSem.Release();
         }
