@@ -239,7 +239,7 @@ std::shared_ptr<const THUAI7::Ship> ShipDebugAPI::GetSelfInfo() const
 bool ShipDebugAPI::HaveView(int32_t targetX, int32_t targetY) const
 {
     auto selfInfo = GetSelfInfo();
-    return logic.HaveView(targetX, targetY, selfInfo->x, selfInfo->y, selfInfo->viewRange);
+    return logic.HaveView(selfInfo->x, selfInfo->y, targetX, targetY, selfInfo->viewRange);
 }
 
 int32_t ShipDebugAPI::GetEnergy() const

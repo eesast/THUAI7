@@ -10,8 +10,8 @@ class ShipAPI(IShipAPI, IGameTimer):
         self.__logic = logic
         self.__pool = ThreadPoolExecutor(20)
 
-    def Move(self, timeInMilliseconds: int, angle: float) -> Future[bool]:
-        return self.__pool.submit(self.__logic.Move, timeInMilliseconds, angle)
+    def Move(self, timeInMilliseconds: int, angleInRadian: float) -> Future[bool]:
+        return self.__pool.submit(self.__logic.Move, timeInMilliseconds, angleInRadian)
 
     def MoveRight(self, timeInMilliseconds: int) -> Future[bool]:
         return self.Move(timeInMilliseconds, pi * 0.5)
@@ -25,8 +25,8 @@ class ShipAPI(IShipAPI, IGameTimer):
     def MoveDown(self, timeInMilliseconds: int) -> Future[bool]:
         return self.Move(timeInMilliseconds, 0)
 
-    def Attack(self, angle: float) -> Future[bool]:
-        return self.__pool.submit(self.__logic.Attack, angle)
+    def Attack(self, angleInRadian: float) -> Future[bool]:
+        return self.__pool.submit(self.__logic.Attack, angleInRadian)
 
     def Recover(self, recover: int) -> Future[bool]:
         return self.__pool.submit(self.__logic.Recover, recover)
@@ -76,7 +76,7 @@ class ShipAPI(IShipAPI, IGameTimer):
     def GetPlaceType(self, cellX: int, cellY: int) -> THUAI7.PlaceType:
         return self.__logic.GetPlaceType(cellX, cellY)
 
-    def GetConstructionState(self, cellX: int, cellY: int) -> tuple:
+    def GetConstructionState(self, cellX: int, cellY: int) -> Tuple[int, int]:
         return self.__logic.GetConstructionState(cellX, cellY)
 
     def GetWormholeHp(self, cellX: int, cellY: int) -> int:
@@ -112,7 +112,7 @@ class ShipAPI(IShipAPI, IGameTimer):
             self.GetSelfInfo().viewRange,
         )
 
-    def Print(self, cont: str) -> None:
+    def Print(self, string: str) -> None:
         pass
 
     def PrintShip(self) -> None:
@@ -184,7 +184,7 @@ class TeamAPI(ITeamAPI, IGameTimer):
     def GetPlaceType(self, cellX: int, cellY: int) -> THUAI7.PlaceType:
         return self.__logic.GetPlaceType(cellX, cellY)
 
-    def GetConstructionState(self, cellX: int, cellY: int) -> tuple:
+    def GetConstructionState(self, cellX: int, cellY: int) -> Tuple[int, int]:
         return self.__logic.GetConstructionState(cellX, cellY)
 
     def GetWormholeHp(self, cellX: int, cellY: int) -> int:
