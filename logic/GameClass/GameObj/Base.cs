@@ -32,6 +32,7 @@ namespace GameClass.GameObj
                 {
                     if (ship.IsRemoved.TrySet(false))
                     {
+                        ship.Init();
                         ship.CanMove.SetROri(true);
                         return true;
                     }
