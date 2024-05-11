@@ -44,6 +44,7 @@ namespace installer.Services
 
         public static string ConvertAbsToRel(string basePath, string fullPath)
         {
+            basePath = basePath.TrimEnd(Path.DirectorySeparatorChar);
             if (fullPath.StartsWith(basePath))
             {
                 fullPath = fullPath.Replace(basePath, ".");
