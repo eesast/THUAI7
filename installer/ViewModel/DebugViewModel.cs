@@ -343,7 +343,7 @@ namespace installer.ViewModel
                 var cpp = Process.Start(new ProcessStartInfo()
                 {
                     FileName = Downloader.Data.Config.DevCppPath ?? exe,
-                    Arguments = $"-I {IP} -P {Port} -t {team} -p {player} -d",
+                    Arguments = $"-I {IP} -P {Port} -t {team} -p {player} -o -d",
                     WorkingDirectory = Downloader.Data.Config.InstallPath
                 });
                 if (cpp is null)
@@ -382,7 +382,7 @@ namespace installer.ViewModel
                     FileName = "cmd.exe",
                     Arguments = "/c python "
                         + (Downloader.Data.Config.DevPyPath ?? Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py"))
-                        + $" -I {IP} -P {Port} -t {team} -p {player} -d",
+                        + $" -I {IP} -P {Port} -t {team} -p {player} -o -d",
                     WorkingDirectory = Downloader.Data.Config.InstallPath
                 });
                 if (py is null)
