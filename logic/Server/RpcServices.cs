@@ -74,9 +74,9 @@ namespace Server
                     semaDict0[request.PlayerId].Item1.Wait();
                     try
                     {
-                        var info = currentGameInfo.Clone();
-                        if (info != null)
+                        if (currentGameInfo != null)
                         {
+                            var info = currentGameInfo.Clone();
                             for (int i = info.ObjMessage.Count - 1; i >= 0; i--)
                             {
                                 if (info.ObjMessage[i].NewsMessage != null)
