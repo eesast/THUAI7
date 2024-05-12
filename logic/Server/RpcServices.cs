@@ -74,16 +74,17 @@ namespace Server
                     semaDict0[request.PlayerId].Item1.Wait();
                     try
                     {
-                        if (currentGameInfo != null)
+                        var info = currentGameInfo.Clone();
+                        if (info != null)
                         {
-                            for (int i = currentGameInfo.ObjMessage.Count - 1; i >= 0; i--)
+                            for (int i = info.ObjMessage.Count - 1; i >= 0; i--)
                             {
-                                if (currentGameInfo.ObjMessage[i].NewsMessage != null)
+                                if (info.ObjMessage[i].NewsMessage != null)
                                 {
-                                    currentGameInfo.ObjMessage.RemoveAt(i);
+                                    info.ObjMessage.RemoveAt(i);
                                 }
                             }
-                            await responseStream.WriteAsync(currentGameInfo);
+                            await responseStream.WriteAsync(info);
                             GameServerLogging.logger.ConsoleLog("Send!", false);
                         }
                     }
