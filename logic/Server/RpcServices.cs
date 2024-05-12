@@ -76,14 +76,15 @@ namespace Server
                     {
                         if (currentGameInfo != null)
                         {
-                            for (int i = currentGameInfo.ObjMessage.Count - 1; i >= 0; i--)
+                            var info = currentGameInfo.Clone();
+                            for (int i = info.ObjMessage.Count - 1; i >= 0; i--)
                             {
-                                if (currentGameInfo.ObjMessage[i].NewsMessage != null)
+                                if (info.ObjMessage[i].NewsMessage != null)
                                 {
-                                    currentGameInfo.ObjMessage.RemoveAt(i);
+                                    info.ObjMessage.RemoveAt(i);
                                 }
                             }
-                            await responseStream.WriteAsync(currentGameInfo);
+                            await responseStream.WriteAsync(info);
                             GameServerLogging.logger.ConsoleLog("Send!", false);
                         }
                     }
