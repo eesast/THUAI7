@@ -301,7 +301,10 @@ namespace Gaming
                 (
                     () =>
                     {
-                        Thread.Sleep(GameData.CheckInterval);
+                        while (!gameMap.Timer.IsGaming)
+                        {
+                            Thread.Sleep(1);
+                        }
                         new FrameRateTaskExecutor<int>
                         (
                             loopCondition: () => gameMap.Timer.IsGaming,
