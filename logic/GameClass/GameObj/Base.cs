@@ -1,6 +1,9 @@
 ﻿using GameClass.GameObj.Areas;
 using Preparation.Interface;
 using Preparation.Utility;
+using Preparation.Utility.Value;
+using Preparation.Utility.Value.SafeValue;
+using Preparation.Utility.Value.SafeValue.Atomic;
 using System.Collections.Generic;
 
 namespace GameClass.GameObj
@@ -17,7 +20,7 @@ namespace GameClass.GameObj
         public Home Home { get; set; }
         public MoneyPool MoneyPool { get; } = new();
         public AtomicInt FactoryNum { get; } = new(0);
-        public int MoneyAddPerSecond => GameData.ScoreHomePerSecond + FactoryNum * GameData.ScoreFactoryPerSecond;
+        public int MoneyAddPerSecond => FactoryNum * GameData.ScoreFactoryPerSecond + (Home.HP > 0 ? GameData.ScoreHomePerSecond : 0);
         public Base(Home home)
         {
             TeamID = new(home.TeamID);
@@ -25,16 +28,22 @@ namespace GameClass.GameObj
             ShipPool = new(
                 classfier: (ship) => ship.ShipType,
                 idleChecker: (ship) => ship.IsRemoved,
-                activator: (ship) =>
+                tryActivator: (ship) =>
                 {
-                    ship.CanMove.SetROri(true);
-                    ship.IsRemoved.SetROri(false);
+                    if (ship.IsRemoved.TrySet(false))
+                    {
+                        ship.Init();
+                        ship.CanMove.SetROri(true);
+                        return true;
+                    }
+                    return false;
                 },
                 inactivator: (ship) =>
                 {
                     ship.CanMove.SetROri(false);
                     ship.IsRemoved.SetROri(true);
                 });
+            // 池初始化，但是由于服务器采用逐个添加船只的方式，因此这里不进行任何行为
             ShipPool.Initiate(ShipType.CivilShip, 0,
                               () => new(GameData.ShipRadius, ShipType.CivilShip, MoneyPool));
             ShipPool.Initiate(ShipType.WarShip, 0,

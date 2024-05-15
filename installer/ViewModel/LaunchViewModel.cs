@@ -56,6 +56,8 @@ namespace installer.ViewModel
 
             SaveEnabled = true;
             StartEnabled = true;
+            Log.PartnerInfo = "[Launcher]";
+            Log.Partner.Add(Downloader.Log);
 
             SaveBtnClickedCommand = new AsyncRelayCommand(SaveBtnClicked);
         }
@@ -109,6 +111,8 @@ namespace installer.ViewModel
             get => playbackFile;
             set
             {
+                if (!(value?.EndsWith(".thuaipb") ?? false))
+                    return;
                 playbackFile = value;
                 if (playbackFile == Downloader.Data.Config.Commands.PlaybackFile)
                     playbackFileChanged = false;
@@ -186,7 +190,6 @@ namespace installer.ViewModel
         private bool startEnabled;
         public bool StartEnabled
         {
-
             get => startEnabled;
             set
             {

@@ -14,6 +14,7 @@ class State:
         self.mapInfo = THUAI7.GameMap()
         self.gameInfo = THUAI7.GameInfo()
         self.guids = []
+        self.allGuids = []
 
     teamScore: int
     self: Union[THUAI7.Ship, THUAI7.Team]
@@ -31,3 +32,4 @@ class State:
     gameInfo: THUAI7.GameInfo
 
     guids: List[int]
+    allGuids: List[int]

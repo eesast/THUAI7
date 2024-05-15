@@ -41,6 +41,8 @@ namespace AssistFunction
         THUAI7::PlaceType newPlace = map[GridToCell(newX)][GridToCell(newY)];
         if (newPlace == THUAI7::PlaceType::Shadow && myPlace != THUAI7::PlaceType::Shadow)
             return false;
+        if (distance > viewRange * viewRange)
+            return false;
         int32_t divide = std::max(std::abs(deltaX), std::abs(deltaY)) / 100;
         if (divide == 0)
             return true;

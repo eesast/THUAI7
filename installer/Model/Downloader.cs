@@ -75,13 +75,20 @@ namespace installer.Model
         public Downloader()
         {
             Data = new Local_Data();
-            Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Main.log"));
-            if (Log.LastRecordTime != DateTime.MinValue && DateTime.Now.Month != Log.LastRecordTime.Month)
+            Log = LoggerProvider.FromFile(Path.Combine(Data.LogPath, "Installer.log"));
+            long size = 0;
+            foreach (var log in new DirectoryInfo(Data.LogPath).EnumerateFiles())
+            {
+                size += log.Length;
+            }
+            // 检测到最近日志为上个月或日志总量达到10MB以上时压缩logs
+            if ((Log.LastRecordTime != DateTime.MinValue && DateTime.Now.Month != Log.LastRecordTime.Month)
+                || size >= (10 << 20))
             {
                 string tardir = Path.Combine(Data.Config.InstallPath, "LogArchieved");
                 if (!Directory.Exists(tardir))
                     Directory.CreateDirectory(tardir);
-                string tarPath = Path.Combine(tardir, $"Backup-{Log.LastRecordTime.Year}-{Log.LastRecordTime.Month}.tar");
+                string tarPath = Path.Combine(tardir, $"LogBackup_{DateTime.Now:yyyy_MM_dd_HH_mm}.tar");
                 if (File.Exists(tarPath))
                     File.Delete(tarPath);
                 if (File.Exists(tarPath + ".gz"))
@@ -98,11 +105,12 @@ namespace installer.Model
                 {
                     File.Delete(log);
                 }
+                if (Data.Log is FileLogger) ((FileLogger)Data.Log).Path = ((FileLogger)Data.Log).Path;
+                if (Log is FileLogger) ((FileLogger)Log).Path = ((FileLogger)Log).Path;
             }
             Route = Data.Config.InstallPath;
-            Cloud = new Tencent_Cos("1319625962", "ap-beijing", "thuai7",
-                LoggerProvider.FromFile(Path.Combine(Data.LogPath, "TencentCos.log")));
-            Web = new EEsast(LoggerProvider.FromFile(Path.Combine(Data.LogPath, "EESAST.log")));
+            Cloud = new Tencent_Cos("1319625962", "ap-beijing", "thuai7");
+            Web = new EEsast();
             Web.Token_Changed += SaveToken;
 
             Data.Log.Partner.Add(Log);
@@ -179,31 +187,45 @@ namespace installer.Model
             if (Cloud.Log is FileLogger) ((FileLogger)Cloud.Log).Path = Path.Combine(Data.Config.InstallPath, "Logs", "TencentCos.log");
             if (Web.Log is FileLogger) ((FileLogger)Web.Log).Path = Path.Combine(Data.Config.InstallPath, "Logs", "EESAST.log");
             if (Data.Log is FileLogger) ((FileLogger)Data.Log).Path = Path.Combine(Data.Config.InstallPath, "Logs", "Local_Data.log");
-            if (Log is FileLogger) ((FileLogger)Log).Path = Path.Combine(Data.Config.InstallPath, "Logs", "Main.log");
+            if (Log is FileLogger) ((FileLogger)Log).Path = Path.Combine(Data.Config.InstallPath, "Logs", "Installer.log");
             Data.ResetInstallPath(Data.Config.InstallPath);
-
 
             string zp = Path.Combine(Data.Config.InstallPath, "THUAI7.tar.gz");
             Status = UpdateStatus.downloading;
             (CloudReport.ComCount, CloudReport.Count) = (0, 1);
-            Cloud.Log.LogInfo($"正在下载安装包……");
+            Cloud.Log.LogInfo($"正在下载installer安装包……");
             Cloud.DownloadFileAsync(zp, "THUAI7.tar.gz").Wait();
             CloudReport.ComCount = 1;
             Status = UpdateStatus.unarchieving;
-            Cloud.Log.LogInfo($"安装包下载完毕，正在解压……");
+            Cloud.Log.LogInfo($"installer安装包下载完毕，正在解压……");
             Cloud.ArchieveUnzip(zp, Data.Config.InstallPath);
-            Cloud.Log.LogInfo($"解压完成");
+            Cloud.Log.LogInfo($"installer解压完成");
             File.Delete(zp);
 
             CurrentVersion = Data.FileHashData.TVersion;
             Cloud.Log.LogInfo("正在下载选手代码……");
             Status = UpdateStatus.downloading;
-            CloudReport.Count = 3;
+            CloudReport.Count += 2;
             var tocpp = Cloud.DownloadFileAsync(Path.Combine(Data.Config.InstallPath, "CAPI", "cpp", "API", "src", "AI.cpp"),
                 $"./Templates/t.{CurrentVersion.TemplateVersion}.cpp").ContinueWith(_ => CloudReport.ComCount++);
             var topy = Cloud.DownloadFileAsync(Path.Combine(Data.Config.InstallPath, "CAPI", "python", "PyAPI", "AI.py"),
                 $"./Templates/t.{CurrentVersion.TemplateVersion}.py").ContinueWith(_ => CloudReport.ComCount++);
             Task.WaitAll(tocpp, topy);
+
+            Cloud.Report.Count += 1;
+            zp = Path.Combine(Data.Config.InstallPath, "protoCpp.tar.gz");
+            Cloud.Log.LogInfo("正在下载proto cpp库……");
+            Cloud.DownloadFileAsync(zp, "Setup/proto/protoCpp.tar.gz").Wait();
+            CloudReport.ComCount += 1;
+            Status = UpdateStatus.unarchieving;
+            Cloud.Log.LogInfo($"proto cpp库下载完毕，正在解压……");
+            var protoCppLibPath = Path.Combine(Data.Config.InstallPath, "CAPI", "cpp", "lib");
+            if (!Directory.Exists(protoCppLibPath))
+                Directory.CreateDirectory(protoCppLibPath);
+            Cloud.ArchieveUnzip(zp, protoCppLibPath);
+            Cloud.Log.LogInfo($"proto cpp库解压完成");
+            File.Delete(zp);
+
             if (CloudReport.ComCount == CloudReport.Count)
             {
                 Cloud.Log.LogInfo("选手代码下载成功！");
@@ -267,7 +289,7 @@ namespace installer.Model
                 if (Cloud.Log is FileLogger) ((FileLogger)Cloud.Log).Path = Path.Combine(newPath, "Logs", "TencentCos.log");
                 if (Web.Log is FileLogger) ((FileLogger)Web.Log).Path = Path.Combine(newPath, "Logs", "EESAST.log");
                 if (Data.Log is FileLogger) ((FileLogger)Data.Log).Path = Path.Combine(newPath, "Logs", "Local_Data.log");
-                if (Log is FileLogger) ((FileLogger)Log).Path = Path.Combine(newPath, "Logs", "Main.log");
+                if (Log is FileLogger) ((FileLogger)Log).Path = Path.Combine(newPath, "Logs", "Installer.log");
                 Data.ResetInstallPath(newPath);
             }
             Update();
@@ -288,7 +310,7 @@ namespace installer.Model
             Status = UpdateStatus.success;
             if (Data.MD5Update.Count != 0 || CurrentVersion < Data.FileHashData.TVersion)
             {
-                Data.Log.LogInfo("需要更新，请点击更新按钮以更新。");
+                Data.Log.LogInfo("代码库需要更新，请点击更新按钮以更新。");
                 if (writeMD5)
                 {
                     Data.SaveMD5Data();
@@ -298,6 +320,15 @@ namespace installer.Model
             else if (!Data.LangEnabled[LanguageOption.cpp].Item1 || !Data.LangEnabled[LanguageOption.python].Item1)
             {
                 Data.Log.LogInfo("未检测到选手代码，请点击更新按钮以修复。");
+                if (writeMD5)
+                {
+                    Data.SaveMD5Data();
+                }
+                return true;
+            }
+            else if (!Directory.Exists(Path.Combine(Data.Config.InstallPath, "CAPI", "cpp", "lib")))
+            {
+                Data.Log.LogInfo("未检测到proto cpp库，请点击更新按钮以修复。");
                 if (writeMD5)
                 {
                     Data.SaveMD5Data();
@@ -362,7 +393,23 @@ namespace installer.Model
                         return -1;
                     }
                 }
-
+                // 如果缺少proto cpp库，应当立刻下载
+                if (!Directory.Exists(Path.Combine(Data.Config.InstallPath, "CAPI", "cpp", "lib")))
+                {
+                    Cloud.Report.Count += 1;
+                    string zp = Path.Combine(Data.Config.InstallPath, "protoCpp.tar.gz");
+                    Cloud.Log.LogInfo("正在下载proto cpp库……");
+                    Cloud.DownloadFileAsync(zp, "Setup/proto/protoCpp.tar.gz").Wait();
+                    CloudReport.ComCount += 1;
+                    Status = UpdateStatus.unarchieving;
+                    Cloud.Log.LogInfo($"proto cpp库下载完毕，正在解压……");
+                    var protoCppLibPath = Path.Combine(Data.Config.InstallPath, "CAPI", "cpp", "lib");
+                    if (!Directory.Exists(protoCppLibPath))
+                        Directory.CreateDirectory(protoCppLibPath);
+                    Cloud.ArchieveUnzip(zp, protoCppLibPath);
+                    Cloud.Log.LogInfo($"proto cpp库解压完成");
+                    File.Delete(zp);
+                }
                 // 启动器本身需要更新，返回结果为16
                 if (CurrentVersion.InstallerVersion < Data.FileHashData.TVersion.InstallerVersion)
                 {

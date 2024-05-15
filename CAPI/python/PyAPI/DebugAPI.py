@@ -199,8 +199,8 @@ class ShipDebugAPI(IShipAPI, IGameTimer):
     def GetPlaceType(self, cellX: int, cellY: int) -> THUAI7.PlaceType:
         return self.__logic.GetPlaceType(cellX, cellY)
 
-    def GetConstructionHp(self, cellX: int, cellY: int) -> int:
-        return self.__logic.GetConstructionHp(cellX, cellY)
+    def GetConstructionState(self, cellX: int, cellY: int) -> Tuple[int, int]:
+        return self.__logic.GetConstructionState(cellX, cellY)
 
     def GetWormholeHp(self, cellX: int, cellY: int) -> int:
         return self.__logic.GetWormholeHp(cellX, cellY)
@@ -235,8 +235,8 @@ class ShipDebugAPI(IShipAPI, IGameTimer):
             self.GetSelfInfo().viewRange,
         )
 
-    def Print(self, cont: str) -> None:
-        self.__logger.info(cont)
+    def Print(self, string: str) -> None:
+        self.__logger.info(string)
 
     def PrintShip(self) -> None:
         for ship in self.__logic.GetShips():
@@ -440,8 +440,8 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
     def GetPlaceType(self, cellX: int, cellY: int) -> THUAI7.PlaceType:
         return self.__logic.GetPlaceType(cellX, cellY)
 
-    def GetConstructionHp(self, cellX: int, cellY: int) -> int:
-        return self.__logic.GetConstructionHp(cellX, cellY)
+    def GetConstructionState(self, cellX: int, cellY: int) -> Tuple[int, int]:
+        return self.__logic.GetConstructionState(cellX, cellY)
 
     def GetWormholeHp(self, cellX: int, cellY: int) -> int:
         return self.__logic.GetWormholeHp(cellX, cellY)

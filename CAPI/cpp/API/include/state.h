@@ -25,6 +25,7 @@ struct State
     std::shared_ptr<THUAI7::GameMap> mapInfo;
     std::shared_ptr<THUAI7::GameInfo> gameInfo;
     std::vector<int64_t> guids;
+    std::vector<int64_t> allGuids;
 };
 
 #endif

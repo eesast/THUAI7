@@ -3,7 +3,10 @@ using GameClass.GameObj.Modules;
 using GameClass.GameObj.Occupations;
 using Preparation.Interface;
 using Preparation.Utility;
-using System.Threading;
+using Preparation.Utility.Value;
+using Preparation.Utility.Value.SafeValue.Atomic;
+using Preparation.Utility.Value.SafeValue.LockedValue;
+using Preparation.Utility.Value.SafeValue.TimeBased;
 
 namespace GameClass.GameObj;
 
@@ -43,7 +46,7 @@ public class Ship : Movable, IShip
     /// <summary>
     /// 子弹数上限, THUAI7为无穷
     /// </summary>
-    public IntNumUpdateEachCD BulletNum => new(int.MaxValue, 1);
+    public IntNumUpdateEachCD BulletNum { get; } = new(int.MaxValue, 1);
     /// <summary>
     /// 模块相关
     /// </summary>
@@ -94,45 +97,48 @@ public class Ship : Movable, IShip
             case ModuleType.Producer1:
                 if (ProducerModuleType != ProducerType.Producer1)
                 {
-                    SubMoney(
-                        ProducerModule.SetROri(
-                            ModuleFactory.FindIProducer(ShipType, ProducerType.Producer1)
-                            ).Cost);
+                    ProducerModule.SetROri(ModuleFactory.FindIProducer(ShipType, ProducerType.Producer1));
+                    SubMoney(ProducerModule.Get().Cost);
                     return true;
                 }
                 break;
             case ModuleType.Producer2:
                 if (ProducerModuleType != ProducerType.Producer2)
                 {
-                    SubMoney(ProducerModule.SetROri(ModuleFactory.FindIProducer(ShipType, ProducerType.Producer2)).Cost);
+                    ProducerModule.SetROri(ModuleFactory.FindIProducer(ShipType, ProducerType.Producer2));
+                    SubMoney(ProducerModule.Get().Cost);
                     return true;
                 }
                 break;
             case ModuleType.Producer3:
                 if (ProducerModuleType != ProducerType.Producer3)
                 {
-                    SubMoney(ProducerModule.SetROri(ModuleFactory.FindIProducer(ShipType, ProducerType.Producer3)).Cost);
+                    ProducerModule.SetROri(ModuleFactory.FindIProducer(ShipType, ProducerType.Producer3));
+                    SubMoney(ProducerModule.Get().Cost);
                     return true;
                 }
                 break;
             case ModuleType.Constructor1:
                 if (ConstructorModuleType != ConstructorType.Constructor1)
                 {
-                    SubMoney(ConstructorModule.SetROri(ModuleFactory.FindIConstructor(ShipType, ConstructorType.Constructor1)).Cost);
+                    ConstructorModule.SetROri(ModuleFactory.FindIConstructor(ShipType, ConstructorType.Constructor1));
+                    SubMoney(ConstructorModule.Get().Cost);
                     return true;
                 }
                 break;
             case ModuleType.Constructor2:
                 if (ConstructorModuleType != ConstructorType.Constructor2)
                 {
-                    SubMoney(ConstructorModule.SetROri(ModuleFactory.FindIConstructor(ShipType, ConstructorType.Constructor2)).Cost);
+                    ConstructorModule.SetROri(ModuleFactory.FindIConstructor(ShipType, ConstructorType.Constructor2));
+                    SubMoney(ConstructorModule.Get().Cost);
                     return true;
                 }
                 break;
             case ModuleType.Constructor3:
                 if (ConstructorModuleType != ConstructorType.Constructor3)
                 {
-                    SubMoney(ConstructorModule.SetROri(ModuleFactory.FindIConstructor(ShipType, ConstructorType.Constructor3)).Cost);
+                    ConstructorModule.SetROri(ModuleFactory.FindIConstructor(ShipType, ConstructorType.Constructor3));
+                    SubMoney(ConstructorModule.Get().Cost);
                     return true;
                 }
                 break;
@@ -198,14 +204,16 @@ public class Ship : Movable, IShip
             case ModuleType.LaserGun:
                 if (WeaponModuleType != WeaponType.LaserGun)
                 {
-                    SubMoney(WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.LaserGun)).Cost);
+                    WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.LaserGun));
+                    SubMoney(WeaponModule.Get().Cost);
                     return true;
                 }
                 break;
             case ModuleType.PlasmaGun:
                 if (WeaponModuleType != WeaponType.PlasmaGun)
                 {
-                    SubMoney(WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.PlasmaGun)).Cost);
+                    WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.PlasmaGun));
+                    SubMoney(WeaponModule.Get().Cost);
                     return true;
                 }
                 break;
@@ -213,7 +221,8 @@ public class Ship : Movable, IShip
             case ModuleType.ShellGun:
                 if (WeaponModuleType != WeaponType.ShellGun)
                 {
-                    SubMoney(WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.ShellGun)).Cost);
+                    WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.ShellGun));
+                    SubMoney(WeaponModule.Get().Cost);
                     return true;
                 }
                 break;
@@ -221,7 +230,8 @@ public class Ship : Movable, IShip
             case ModuleType.MissileGun:
                 if (WeaponModuleType != WeaponType.MissileGun)
                 {
-                    SubMoney(WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.MissileGun)).Cost);
+                    WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.MissileGun));
+                    SubMoney(WeaponModule.Get().Cost);
                     return true;
                 }
                 break;
@@ -229,7 +239,8 @@ public class Ship : Movable, IShip
             case ModuleType.ArcGun:
                 if (WeaponModuleType != WeaponType.ArcGun)
                 {
-                    SubMoney(WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.ArcGun)).Cost);
+                    WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, WeaponType.ArcGun));
+                    SubMoney(WeaponModule.Get().Cost);
                     return true;
                 }
                 break;
@@ -315,21 +326,23 @@ public class Ship : Movable, IShip
         lock (actionLock)
         {
             ShipStateType nowShipState = shipState;
-            Debugger.Output(this, "SetShipState from " + nowShipState + " to " + value);
+            ShipLogging.logger.ConsoleLogDebug(
+                LoggingFunctional.ShipLogInfo(this)
+                + $" SetShipState from {nowShipState} to {value}");
             if (nowShipState == value) return -1;
             GameObj? lastObj = whatInteractingWith;
             switch (nowShipState)
             {
                 case ShipStateType.Attacking:
-                    if (value == ShipStateType.Null || value == ShipStateType.Stunned || value == ShipStateType.Swinging)
+                    if (value == ShipStateType.Null || value == ShipStateType.Deceased || value == ShipStateType.Stunned || value == ShipStateType.Swinging)
                         return ChangeShipState(running, value, gameObj);
                     else return -1;
                 case ShipStateType.Stunned:
-                    if (value == ShipStateType.Null)
+                    if (value == ShipStateType.Null || value == ShipStateType.Deceased)
                         return ChangeShipState(running, value, gameObj);
                     else return -1;
                 case ShipStateType.Swinging:
-                    if (value == ShipStateType.Null || value == ShipStateType.Stunned)
+                    if (value == ShipStateType.Null || value == ShipStateType.Deceased || value == ShipStateType.Stunned)
                         return ChangeShipState(running, value, gameObj);
                     else return -1;
                 case ShipStateType.Deceased:
@@ -357,14 +370,18 @@ public class Ship : Movable, IShip
         {
             if (state != stateNum)
             {
-                Debugger.Output(this, "ResetShipState failed");
+                ShipLogging.logger.ConsoleLogDebug(
+                    LoggingFunctional.ShipLogInfo(this)
+                    + " ResetShipState failed");
                 return false;
             }
             runningState = running;
             whatInteractingWith = (GameObj?)obj;
             shipState = value;
             ++stateNum;
-            Debugger.Output(this, "ResetShipState succeeded" + stateNum);
+            ShipLogging.logger.ConsoleLogDebug(
+                LoggingFunctional.ShipLogInfo(this)
+                + $" ResetShipState succeeded {stateNum}");
             return true;
         }
     }
@@ -385,12 +402,16 @@ public class Ship : Movable, IShip
         {
             if (StateNum == stateNum)
             {
-                Debugger.Output(this, "StartThread succeeded");
+                ShipLogging.logger.ConsoleLogDebug(
+                    LoggingFunctional.ShipLogInfo(this)
+                    + " StartThread succeeded");
                 this.runningState = runningState;
                 return true;
             }
         }
-        Debugger.Output(this, "StartThread failed");
+        ShipLogging.logger.ConsoleLogDebug(
+            LoggingFunctional.ShipLogInfo(this)
+            + " StartThread failed");
         return false;
     }
     public bool TryToRemoveFromGame(ShipStateType shipStateType)
@@ -413,23 +434,16 @@ public class Ship : Movable, IShip
                 && shipState != ShipStateType.Attacking);
         }
     }
-    public Ship(int initRadius, ShipType shipType, MoneyPool moneyPool) :
-        base(GameData.PosNotInGame, initRadius, GameObjType.Ship)
+    public void Init()
     {
-        CanMove.SetROri(false);
-        IsRemoved.SetROri(true);
-        Occupation = OccupationFactory.FindIOccupation(ShipType = shipType);
-        ViewRange = Occupation.ViewRange;
-        HP = new(Occupation.MaxHp);
-        Armor = new(Occupation.BaseArmor);
-        Shield = new(Occupation.BaseShield);
+        HP.SetMaxV(Occupation.MaxHp);
+        HP.SetVToMaxV();
+        Armor.SetMaxV(Occupation.BaseArmor);
+        Armor.SetVToMaxV();
+        Shield.SetMaxV(Occupation.BaseShield);
+        Shield.SetVToMaxV();
         MoveSpeed.SetROri(orgMoveSpeed = Occupation.MoveSpeed);
-        MoneyPool = moneyPool;
-
-        ProducerType producerType;
-        ConstructorType constructorType;
-        WeaponType weaponType;
-        (producerType, constructorType, weaponType) = ShipType switch
+        var (producerType, constructorType, weaponType) = ShipType switch
         {
             ShipType.CivilShip => (
                 ProducerType.Producer1,
@@ -453,6 +467,18 @@ public class Ship : Movable, IShip
         ArmorModule.SetROri(ModuleFactory.FindIArmor(ShipType, ArmorType.Null));
         ShieldModule.SetROri(ModuleFactory.FindIShield(ShipType, ShieldType.Null));
         WeaponModule.SetROri(ModuleFactory.FindIWeapon(ShipType, weaponType));
-        Debugger.Output(this, "Ship created");
+    }
+    public Ship(int initRadius, ShipType shipType, MoneyPool moneyPool) :
+        base(GameData.PosNotInGame, initRadius, GameObjType.Ship)
+    {
+        CanMove.SetROri(false);
+        IsRemoved.SetROri(true);
+        Occupation = OccupationFactory.FindIOccupation(ShipType = shipType);
+        ViewRange = Occupation.ViewRange;
+        HP = new(Occupation.MaxHp);
+        Armor = new(Occupation.BaseArmor);
+        Shield = new(Occupation.BaseShield);
+        MoneyPool = moneyPool;
+        Init();
     }
 }

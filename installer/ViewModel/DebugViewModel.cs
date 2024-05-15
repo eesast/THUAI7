@@ -35,19 +35,32 @@ namespace installer.ViewModel
                 mode = value;
                 if (mode == "Client")
                 {
+                    IPVisible = true;
                     ClientVisible = true;
                     ServerVisible = false;
                 }
                 else if (mode == "Server")
                 {
+                    IPVisible = false;
                     ClientVisible = false;
                     ServerVisible = true;
                 }
                 else
                 {
+                    IPVisible = true;
                     ClientVisible = false;
                     ServerVisible = false;
                 }
+            }
+        }
+        private bool ipVisible = false;
+        public bool IPVisible
+        {
+            get => ipVisible;
+            set
+            {
+                ipVisible = value;
+                OnPropertyChanged();
             }
         }
 
@@ -89,6 +102,27 @@ namespace installer.ViewModel
             set
             {
                 shipCount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool haveSpectator = false;
+        public bool HaveSpectator
+        {
+            get => haveSpectator;
+            set
+            {
+                haveSpectator = value;
+                OnPropertyChanged();
+            }
+        }
+        private string spectatorID = "2024";
+        public string SpectatorID
+        {
+            get => spectatorID;
+            set
+            {
+                spectatorID = value;
                 OnPropertyChanged();
             }
         }
@@ -170,7 +204,9 @@ namespace installer.ViewModel
         {
             Downloader.Data.Config.Commands.PlaybackFile = "";
 
-            bool haveSpectator = false;
+            bool haveManual = false;
+
+            // 启动Manual很慢，先启动API
             for (int i = 0; i < Players.Count(); i++)
             {
                 if (Players[i].PlayerMode == "API")
@@ -180,20 +216,36 @@ namespace installer.ViewModel
                     else if (PySelect)
                         LaunchPyAPI(Players[i].TeamID, Players[i].PlayerID);
                 }
+            }
+            for (int i = 0; i < Players.Count(); i++)
+            {
                 if (Players[i].PlayerMode == "Manual")
                 {
                     Downloader.Data.Config.Commands.TeamID = Players[i].TeamID;
                     Downloader.Data.Config.Commands.PlayerID = Players[i].PlayerID;
                     Downloader.Data.Config.Commands.ShipType = Players[i].ShipType;
-                    haveSpectator = true;
-                    LaunchClient();
+                    LaunchClient(Players[i].TeamID, Players[i].PlayerID, Players[i].ShipType);
+                    haveManual = true;
                 }
             }
-            if (!haveSpectator)
+            if (HaveSpectator && !haveManual)
             {
                 Downloader.Data.Config.Commands.TeamID = 0;
-                Downloader.Data.Config.Commands.PlayerID = 2024;
-                LaunchClient();
+                try
+                {
+                    var id = Convert.ToInt32(SpectatorID);
+                    if (id < 2024)
+                    {
+                        throw new Exception();
+                    }
+                    Downloader.Data.Config.Commands.PlayerID = id;
+                    LaunchClient(0, id, 0);
+                }
+                catch (Exception)
+                {
+                    DebugAlert = "观战ID输入错误";
+                    return;
+                }
             }
         }
 
@@ -221,12 +273,14 @@ namespace installer.ViewModel
         protected Process? server;
         public event EventHandler? OnServerLaunched;
         public event EventHandler? OnServerExited;
+
         public bool LaunchServer()
         {
             server = Process.Start(new ProcessStartInfo()
             {
-                FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Server", "Server.exe"),
-                Arguments = $"--ip {IP} --port {Port} --teamCount {TeamCount} --shipNum {ShipCount}",
+                FileName = Downloader.Data.Config.DevServerPath ?? Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Server", "Server.exe"),
+                Arguments = $"--ip 0.0.0.0 --port {Port} --teamCount {TeamCount} --shipNum {ShipCount}",
+                WorkingDirectory = Downloader.Data.Config.InstallPath
             });
             if (server is null)
             {
@@ -244,20 +298,37 @@ namespace installer.ViewModel
             return true;
         }
 
-
-        protected Process? client;
-        public bool LaunchClient()
+        public bool LaunchClient(int team, int player, int ship)
         {
-            client = Process.Start(new ProcessStartInfo()
+            Downloader.Data.Config.Commands.TeamID = team;
+            Downloader.Data.Config.Commands.PlayerID = player;
+            Downloader.Data.Config.Commands.ShipType = ship;
+            var p = Downloader.Data.Config.Commands.PlaybackFile;
+            Downloader.Data.Config.Commands.PlaybackFile = null;
+
+            if (File.Exists(Path.Combine(Downloader.Data.LogPath, $"lock.{team}.{player}.log")))
             {
-                FileName = Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
+                File.Delete(Path.Combine(Downloader.Data.LogPath, $"lock.{team}.{player}.log"));
+            }
+
+            var client = Process.Start(new ProcessStartInfo()
+            {
+                FileName = Downloader.Data.Config.DevClientPath ?? Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
+                WorkingDirectory = Downloader.Data.Config.InstallPath
             });
             if (client is null)
             {
                 Log.LogError("未能启动Client!");
                 return false;
             }
-            Log.LogInfo("Client成功启动。");
+            while (!File.Exists(Path.Combine(Downloader.Data.LogPath, $"lock.{team}.{player}.log")))
+            {
+                Thread.Sleep(500);
+            }
+            Thread.Sleep(500);
+            File.Delete(Path.Combine(Downloader.Data.LogPath, $"lock.{team}.{player}.log"));
+            Downloader.Data.Config.Commands.PlaybackFile = p;
+            Log.LogInfo($"Client({team}: {player})成功启动。");
             children.Add(client);
             return true;
         }
@@ -266,13 +337,14 @@ namespace installer.ViewModel
         protected bool ExplorerLaunched_PyAPI = false;
         public bool LaunchCppAPI(int team, int player)
         {
-            var exe = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "cpp", "x64", "Debug", "API.exe");
+            var exe = Downloader.Data.Config.DevCppPath ?? Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "cpp", "x64", "Debug", "API.exe");
             if (File.Exists(exe))
             {
                 var cpp = Process.Start(new ProcessStartInfo()
                 {
-                    FileName = exe,
-                    Arguments = $"-I {IP} -P {Port} -t {team} -p {player} -o"
+                    FileName = Downloader.Data.Config.DevCppPath ?? exe,
+                    Arguments = $"-I {IP} -P {Port} -t {team} -p {player} -o -d",
+                    WorkingDirectory = Downloader.Data.Config.InstallPath
                 });
                 if (cpp is null)
                 {
@@ -309,15 +381,16 @@ namespace installer.ViewModel
                 {
                     FileName = "cmd.exe",
                     Arguments = "/c python "
-                        + Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py")
-                        + $" -I {IP} -P {Port} -t {team} -p {player} -o"
+                        + (Downloader.Data.Config.DevPyPath ?? Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py"))
+                        + $" -I {IP} -P {Port} -t {team} -p {player} -o -d",
+                    WorkingDirectory = Downloader.Data.Config.InstallPath
                 });
                 if (py is null)
                 {
                     Log.LogError($"未能启动main.py, team:{team}, player: {player}!");
                     return false;
                 }
-                Log.LogError($"main.py启动成功, team:{team}, player: {player}!");
+                Log.LogInfo($"main.py启动成功, team:{team}, player: {player}!");
                 children.Add(py);
                 return true;
             }

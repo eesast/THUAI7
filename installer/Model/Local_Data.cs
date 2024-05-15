@@ -85,7 +85,7 @@ namespace installer.Model
                     File.Delete(log);
                 }
             }
-            Log = LoggerProvider.FromFile(Path.Combine(LogPath, "LocalData.log"));
+            Log = LoggerProvider.FromConsole();
             Log.PartnerInfo = "[LocalData]";
             LangEnabled = new Dictionary<LanguageOption, (bool, string)>();
             foreach (var a in typeof(LanguageOption).GetEnumValues())
@@ -216,6 +216,7 @@ namespace installer.Model
                     }));
                     sw.Flush();
                 }
+                // Log.LogInfo("MD5Data saved.");
             }
             catch (Exception e)
             {
@@ -288,8 +289,8 @@ namespace installer.Model
         public static bool IsUserFile(string filename)
         {
             filename = filename.Replace(Path.DirectorySeparatorChar, '/');
-            if (filename.Contains("/git/") || filename.Contains("bin/") || filename.Contains("/obj/") || filename.Contains("/x64/")
-                || filename.Contains("__pycache__"))
+            if (filename.Contains("/git/") || filename.Contains("/bin/") || filename.Contains("/obj/") || filename.Contains("/x64/")
+                || filename.Contains("__pycache__") || filename.Contains("/CAPI/cpp/lib/"))
                 return true;
             if (filename.Contains("/vs/") || filename.Contains("/.vs/") || filename.Contains("/.vscode/"))
                 return true;

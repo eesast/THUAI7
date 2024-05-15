@@ -1,11 +1,13 @@
 ﻿using Preparation.Utility;
+using Preparation.Utility.Value;
+using Preparation.Utility.Value.SafeValue;
 using System.Collections.Generic;
 
 namespace Preparation.Interface
 {
     public interface IMap
     {
-        ITimer Timer { get; }
+        IMyTimer Timer { get; }
 
         // the two dicts must have same keys
         Dictionary<GameObjType, LockedClassList<IGameObj>> GameObjDict { get; }

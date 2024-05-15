@@ -1,15 +1,9 @@
 ﻿//using installer.ViewModel;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace installer.Data
 {
@@ -135,13 +129,18 @@ namespace installer.Data
         public string UserName { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public bool Remembered { get; set; } = false;
-        public CommandFile Commands { get; set; } = new CommandFile();
-        public List<Player> Players { get; set; } = new List<Player>();
+        // 开发人员接口
+        public string? DevCppPath { get; set; } = null;
+        public string? DevPyPath { get; set; } = null;
+        public string? DevServerPath { get; set; } = null;
+        public string? DevClientPath { get; set; } = null;
+        public CommandFile Commands { get; set; } = new();
+        public List<Player> Players { get; set; } = [];
     }
 
     public class Command
     {
-        public Command(CommandFile? f = null) => file = f ?? new CommandFile();
+        public Command(CommandFile? f = null) => file = f ?? new();
         public event EventHandler? OnMemoryChanged;
         public CommandFile file;
         public bool Enabled
@@ -299,7 +298,7 @@ namespace installer.Data
             path = string.IsNullOrEmpty(p) ? Path.Combine(dataDir, "config.json") : p;
             file = new ConfigDataFile();
             com = new Command(file.Commands);
-            Players = new ObservableCollection<Player>();
+            Players = [];
             Players.CollectionChanged += (sender, args) =>
             {
                 if (args.NewItems is not null)
@@ -321,14 +320,12 @@ namespace installer.Data
         {
             try
             {
-                using (FileStream s = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
-                using (StreamReader r = new StreamReader(s))
-                {
-                    var f = JsonSerializer.Deserialize<ConfigDataFile>(r.ReadToEnd());
-                    if (f is null)
-                        throw new JsonException();
-                    else file = f;
-                }
+                using FileStream s = new(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+                using StreamReader r = new(s);
+                var f = JsonSerializer.Deserialize<ConfigDataFile>(r.ReadToEnd());
+                if (f is null)
+                    throw new JsonException();
+                else file = f;
             }
             catch (Exception)
             {
@@ -344,8 +341,8 @@ namespace installer.Data
         {
             file.Commands = com.file;
             file.Players = new List<Player>(Players);
-            using FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
-            using StreamWriter sw = new StreamWriter(fs);
+            using FileStream fs = new(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+            using StreamWriter sw = new(fs);
             fs.SetLength(0);
             sw.Write(JsonSerializer.Serialize(file));
             sw.Flush();
@@ -454,6 +451,14 @@ namespace installer.Data
                     OnMemoryChanged?.Invoke(this, new EventArgs());
             }
         }
+
+        public string? DevCppPath { get => file.DevCppPath; }
+
+        public string? DevPyPath { get => file.DevPyPath; }
+
+        public string? DevServerPath { get => file.DevServerPath; }
+
+        public string? DevClientPath { get => file.DevClientPath; }
 
         public Command Commands
         {
