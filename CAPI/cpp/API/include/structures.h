@@ -243,14 +243,16 @@ namespace THUAI7
         int32_t speed;        // 子弹速度
     };
 
-    struct Construction
+    struct ConstructionState
     {
         int32_t teamID;
         int32_t hp;
         ConstructionType constructionType;
-        static Construction newConstruction(std::pair<int32_t, int32_t> teamHP, ConstructionType type)
+        ConstructionState(std::pair<int32_t, int32_t> teamHP, ConstructionType type) :
+            teamID(teamHP.first),
+            hp(teamHP.second),
+            constructionType(type)
         {
-            return Construction{teamHP.first, teamHP.second, type};
         }
     };
 

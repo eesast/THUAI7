@@ -222,7 +222,7 @@ THUAI7::PlaceType ShipDebugAPI::GetPlaceType(int32_t cellX, int32_t cellY) const
     return logic.GetPlaceType(cellX, cellY);
 }
 
-std::optional<THUAI7::Construction> ShipDebugAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
+std::optional<THUAI7::ConstructionState> ShipDebugAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
 {
     return std::move(logic.GetConstructionState(cellX, cellY));
 }
@@ -416,7 +416,7 @@ THUAI7::PlaceType TeamDebugAPI::GetPlaceType(int32_t cellX, int32_t cellY) const
     return logic.GetPlaceType(cellX, cellY);
 }
 
-std::optional<THUAI7::Construction> TeamDebugAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
+std::optional<THUAI7::ConstructionState> TeamDebugAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
 {
     return std::move(logic.GetConstructionState(cellX, cellY));
 }
