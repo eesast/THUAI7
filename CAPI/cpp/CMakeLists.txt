@@ -7,6 +7,10 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -pthread")
 
+if(NOT MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
+endif()
+
 aux_source_directory(./API/src CPP_LIST)
 aux_source_directory(./proto PROTO_CPP_LIST)
 
@@ -21,8 +25,8 @@ add_executable(capi ${CPP_LIST} ${PROTO_CPP_LIST})
 target_include_directories(capi PUBLIC ${PROJECT_SOURCE_DIR}/proto ${PROJECT_SOURCE_DIR}/API/include ${PROJECT_SOURCE_DIR}/tclap/include ${PROJECT_SOURCE_DIR}/spdlog/include)
 
 target_link_libraries(capi
-protobuf::libprotobuf
-gRPC::grpc
-gRPC::grpc++_reflection
-gRPC::grpc++
+    protobuf::libprotobuf
+    gRPC::grpc
+    gRPC::grpc++_reflection
+    gRPC::grpc++
 )

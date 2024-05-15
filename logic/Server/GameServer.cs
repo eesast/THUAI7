@@ -1,4 +1,5 @@
 ﻿using GameClass.GameObj;
+using GameClass.GameObj.Map;
 using GameClass.MapGenerator;
 using Gaming;
 using Newtonsoft.Json;
@@ -7,16 +8,23 @@ using Preparation.Utility;
 using Protobuf;
 using System.Collections.Concurrent;
 using Timothy.FrameRateTask;
+using System.Net.Http.Json;
+using System.Collections;
 
 namespace Server
 {
+    public class ContestResult
+    {
+        public string status;
+        public double[] scores;
+    }
     partial class GameServer : ServerBase
     {
         private readonly ConcurrentDictionary<long, (SemaphoreSlim, SemaphoreSlim)> semaDict0 = new(); //for spectator and team0 player
         private readonly ConcurrentDictionary<long, (SemaphoreSlim, SemaphoreSlim)> semaDict1 = new();
         // private object semaDictLock = new();
         protected readonly ArgumentOptions options;
-        private readonly HttpSender? httpSender;
+        private readonly HttpSender httpSender;
         private readonly object gameLock = new();
         private MessageToClient currentGameInfo = new();
         private readonly MessageOfObj currentMapMsg = new();
@@ -43,7 +51,7 @@ namespace Server
                     if (id == GameObj.invalidID) return;//如果有未初始化的玩家，不开始游戏
                 }
             }
-            Console.WriteLine("Game starts!");
+            GameServerLogging.logger.ConsoleLog("Game starts!");
             CreateStartFile();
             game.StartGame((int)options.GameTimeInSecond * 1000);
             Thread.Sleep(1);
@@ -79,7 +87,7 @@ namespace Server
             if (options.StartLockFile != DefaultArgumentOptions.FileName)
             {
                 using var _ = File.Create(options.StartLockFile);
-                Console.WriteLine("Successfully Created StartLockFile!");
+                GameServerLogging.logger.ConsoleLog("Successfully Created StartLockFile!");
             }
         }
 
@@ -99,12 +107,104 @@ namespace Server
             using StreamWriter sw = new(path);
             using JsonTextWriter writer = new(sw);
             serializer.Serialize(writer, result);
+
         }
 
-        protected void SendGameResult(int[] scores, int mode)		// 天梯的 Server 给网站发消息记录比赛结果
+        protected void SendGameResult(int[] scores, bool crashed = false)		// 天梯的 Server 给网站发消息记录比赛结果
         {
-            httpSender?.SendHttpRequest(scores, mode).Wait();
+            string? url2 = Environment.GetEnvironmentVariable("FINISH_URL");
+            if (url2 == null)
+            {
+                GameServerLogging.logger.ConsoleLog("Null FINISH_URL!");
+                return;
+            }
+            else
+            {
+                httpSender.Url = url2;
+                httpSender.Token = options.Token;
+            }
+            string state = crashed ? "Crashed" : "Finished";
+            httpSender?.SendHttpRequest(scores, state).Wait();
         }
+
+        protected double[] PullScore(double[] scores)
+        {
+            string? url2 = Environment.GetEnvironmentVariable("SCORE_URL");
+            if (url2 != null)
+            {
+                httpSender.Url = url2;
+                httpSender.Token = options.Token;
+                double[] org = httpSender.GetLadderScore(scores).Result;
+                if (org.Length == 0)
+                {
+                    GameServerLogging.logger.ConsoleLog("Error: No data returned from the web!");
+                    return new double[0];
+                }
+                else
+                {
+                    double[] final = LadderCalculate(org, scores);
+                    return final;
+                }
+            }
+            else
+            {
+                GameServerLogging.logger.ConsoleLog("Null SCORE_URL Environment!");
+                return new double[0];
+            }
+        }
+
+        protected static double[] LadderCalculate(double[] oriScores, double[] competitionScores)
+        {
+            // 调整顺序，让第一项成为获胜者，便于计算
+            bool scoresReverse = false; // 顺序是否需要交换
+            if (competitionScores[0] < competitionScores[1])      // 第一项为落败者
+                scoresReverse = true;
+            else if (competitionScores[0] == competitionScores[1])// 平局
+            {
+                if (oriScores[0] == oriScores[1])
+                // 完全平局，不改变天梯分数
+                {
+                    double[] Score = [0, 0];
+                    return Score;
+                }
+                if (oriScores[0] > oriScores[1])
+                    // 本次游戏平局，但一方天梯分数高，另一方天梯分数低，
+                    // 需要将两者向中间略微靠拢，因此天梯分数低的定为获胜者
+                    scoresReverse = true;
+            }
+            if (scoresReverse)// 如果需要换，交换两者的顺序
+            {
+                (competitionScores[0], competitionScores[1]) = (competitionScores[1], competitionScores[0]);
+                (oriScores[0], oriScores[1]) = (oriScores[1], oriScores[0]);
+            }
+
+            const double normalDeltaThereshold = 100.0;                // 天梯分数差参数，天梯分差超过此阈值太多则增长缓慢
+            const double correctParam = normalDeltaThereshold * 1.2;    // 修正参数
+            const double winnerWeight = 4e-10;                           // 获胜者天梯得分权值
+            const double loserWeight = 1.5e-10;                            // 落败者天梯得分权值
+            const double scoreDeltaThereshold = 50000.0;                // 比赛得分参数，比赛得分超过此阈值太多则增长缓慢
+
+            double[] resScore = [0, 0];
+            double oriDelta = oriScores[0] - oriScores[1];                          // 天梯原分数差
+            double competitionDelta = competitionScores[0] - competitionScores[1];  // 本次比赛分数差
+            double normalOriDelta = oriDelta / normalDeltaThereshold;               // 标准化天梯原分数差
+            double correctRate = oriDelta / correctParam;                           // 修正率，修正方向为缩小分数差
+            double correct = 0.5 * (Math.Tanh((competitionDelta - scoreDeltaThereshold) / scoreDeltaThereshold
+                                              - correctRate)
+                                    + 1.0); // 分数修正
+            resScore[0] = Math.Min(300, Math.Round(Math.Pow(competitionScores[0], 2)
+                                                    * winnerWeight
+                                                    * (1 - Math.Tanh(normalOriDelta))
+                                                    * correct)); // 胜者所加天梯分)
+            resScore[1] = Math.Max(-120, -Math.Round(Math.Pow(competitionDelta, 2)
+                                                    * loserWeight
+                                                    * (1 - Math.Tanh(normalOriDelta))
+                                                    * correct)); // 败者所扣天梯分
+            if (scoresReverse)// 顺序换回
+                (resScore[0], resScore[1]) = (resScore[1], resScore[0]);
+            return resScore;
+        }
+
 
         private void OnGameEnd()
         {
@@ -115,7 +215,31 @@ namespace Server
                              ? options.ResultFileName
                              : options.ResultFileName + ".json");
             int[] scores = GetScore();
-            SendGameResult(scores, options.Mode);
+            double[] doubleArray = scores.Select(x => (double)x).ToArray();
+            if (options.Mode == 2)
+            {
+                bool crash = false;
+                doubleArray = PullScore(doubleArray);
+                if (doubleArray.Length == 0)
+                {
+                    crash = true;
+                    GameServerLogging.logger.ConsoleLog("Error: No data returned from the web!");
+                }
+                else
+                    scores = doubleArray.Select(x => (int)x).ToArray();
+                SendGameResult(scores, crash);
+            }
+            else if (options.Mode == 1)
+            {
+                int[] s = new int[2];
+                if (scores[1] > scores[0])
+                    s = [0, 2];
+                else if (scores[1] == scores[0])
+                    s = [1, 1];
+                else
+                    s = [2, 0];
+                SendGameResult(s);
+            }
             endGameSem.Release();
         }
         public void ReportGame(GameState gameState, bool requiredGaming = true)
@@ -155,7 +279,7 @@ namespace Server
                             currentNews.Clear();
                         }
                         currentGameInfo.GameState = gameState;
-                        currentGameInfo.AllMessage = GetMessageOfAll(game.GameMap.Timer.nowTime());
+                        currentGameInfo.AllMessage = GetMessageOfAll(game.GameMap.Timer.NowTime());
                         mwr?.WriteOne(currentGameInfo);
                         break;
                     default:
@@ -349,13 +473,24 @@ namespace Server
                 }
                 catch
                 {
-                    Console.WriteLine($"Error: Cannot create the playback file: {options.FileName}!");
+                    GameServerLogging.logger.ConsoleLog($"Error: Cannot create the playback file: {options.FileName}!");
                 }
             }
 
+            string? token2 = Environment.GetEnvironmentVariable("TOKEN");
+            if (token2 == null)
+            {
+                GameServerLogging.logger.ConsoleLog("Null TOKEN Environment!");
+            }
+            else
+                options.Token = token2;
             if (options.Url != DefaultArgumentOptions.Url && options.Token != DefaultArgumentOptions.Token)
             {
                 httpSender = new(options.Url, options.Token);
+            }
+            else
+            {
+                httpSender = new(DefaultArgumentOptions.Url, DefaultArgumentOptions.Token);
             }
         }
     }

@@ -1,11 +1,14 @@
 ﻿using Preparation.Utility;
+using Preparation.Utility.Value;
+using Preparation.Utility.Value.SafeValue.Atomic;
+using Preparation.Utility.Value.SafeValue.LockedValue;
 
 namespace GameClass.GameObj.Areas;
 
 public class Resource(XY initPos)
     : Immovable(initPos, GameData.NumOfPosGridPerCell / 2, GameObjType.Resource)
 {
-    public InVariableRange<long> HP { get; } = new InVariableRange<long>(GameData.ResourceHP);
+    public InVariableRange<long> HP { get; } = new(GameData.ResourceHP);
     public override bool IsRigid => true;
     public override ShapeType Shape => ShapeType.Square;
     public AtomicInt ProduceNum { get; } = new AtomicInt(0);

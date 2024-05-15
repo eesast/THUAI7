@@ -30,24 +30,29 @@
 
 **启动器的正常工作可能需要管理员权限**
 
-#### 一般调试流程
+#### 本地调试流程
 
-1. 输入 `IP` 和 `Port`，默认为 `127.0.0.1` 和 `8888`
+1. 输入 `Port`，默认为 `8888`
 2. 选择 `Server` 调整 `Team Count` 和 `Ship Count`，启动 *Server*
-3. 选择 `Client` 加入对应的数量的 *Player*，调整各个 *Player* 的参数和 `Language` 后启动 *Client*
+3. 选择 `Client`，输入 `127.0.0.1`，加入对应的数量的 *Player*，调整各个 *Player* 的参数和  `Language` 后启动 *Client*
    - *Player* 数量为 $\mathrm{TeamCount}*(\mathrm{ShipCount}+1)$， *Player* 全部加入后 *Server* 才会开始游戏
    - `Player ID` 为 `0` 表示 `Home`，其他为 `Ship`
-   - `Player Mode` 为 `API` 表示选手在 *CAPI* 中写的代码；为 `Manual` 表示一个手动操控的 *Player*。手动操控模式下，`Player ID` 不能为 `0`，`Ship Type` 不能为 `0`，同时一台电脑不建议有多个手动操控的 *Player*。
+   - `Player Mode` 为 `API` 表示执行选手在 *CAPI* 中写的代码的 *Player*；为 `Manual` 表示一个手动操控的 *Player*。手动操控模式下，`Player ID` 不能为 `0`，`Ship Type` 不能为 `0`，同时一台电脑不建议有多个手动操控的 *Player*。
 
 #### 联机调试流程
 
-1. 多台电脑输入相同的 `IP` 和 `Port`，`IP` 可以通过在 cmd 中输入 `ipconfig` 查看
-2. 其中一台电脑启动 *Server*
+1. 其中一台电脑启动 *Server*
+2. 多台电脑输入 *Server* 电脑的  `IP` 和 `Port`，`IP` 可以通过在 cmd 中输入 `ipconfig` 查看
 3. 所有电脑凑够对应数量的 *Player*，启动 *Client*
+
+#### Spectator
+
+- 如果一台电脑不存在 `Player Mode` 为 `Manual` 的 *Player*，需要启动 *Spectator*，来观看本局比赛。如果存在 `Player Mode` 为 `Manual` 的 *Player*，就不要启动 *Spectator*。
+- *Spectator* 的 `ID` 应大于等于 `2024`，观察同场比赛的多个 *Spectator* 需要有不同的 `ID`。
 
 ### Playback
 
-每次调试后会在 `%InstallPath%\logic\Server` 中生成 `114514.thuai7.pb`，在 `Playback File` 中输入 `114514.thuai7.pb`，点击 `保存` 和 `启动`。也可以对回放文件进行改名，输入对应文件名即可。
+每次调试后会在 `%InstallPath%\logic\Server` 中生成 `114514.thuaipb`，在 `Playback File` 中输入 `114514.thuaipb`，点击 `保存` 和 `启动`。也可以对回放文件进行改名，输入对应文件名即可。
 
 ## Login
 

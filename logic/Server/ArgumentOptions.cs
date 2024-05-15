@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using Preparation.Utility;
 
 namespace Server
 {
@@ -12,7 +13,7 @@ namespace Server
     public class ArgumentOptions
     {
         [Option("ip", Required = false, HelpText = "Server listening ip")]
-        public string ServerIP { get; set; } = "localhost";
+        public string ServerIP { get; set; } = "0.0.0.0";
 
         [Option('p', "port", Required = true, HelpText = "Server listening port")]
         public ushort ServerPort { get; set; } = 8888;
@@ -27,7 +28,7 @@ namespace Server
         public ushort HomeCount { get; set; } = 1;
 
         [Option('g', "gameTimeInSecond", Required = false, HelpText = "The time of the game in second, 10 minutes by default")]
-        public uint GameTimeInSecond { get; set; } = 10 * 60;
+        public uint GameTimeInSecond { get; set; } = GameData.GameDurationInSecond;
         [Option('f', "fileName", Required = false, HelpText = "The file to store playback file or to read file.")]
         public string FileName { get; set; } = "114514";
         [Option("notAllowSpectator", Required = false, HelpText = "Whether to allow a spectator to watch the game.")]
@@ -54,7 +55,7 @@ namespace Server
         public string ResultFileName { get; set; } = "114514";
         [Option("startLockFile", Required = false, HelpText = "Whether to create a file that identifies whether the game has started")]
         public string StartLockFile { get; set; } = "114514";
-        [Option("mode", Required = false, HelpText = "Whether to run final competition")]
+        [Option("mode", Required = false, HelpText = "Whether to run final competition. 0 本地玩,1 最终比赛,2 天梯")]
         public int Mode { get; set; } = 0;
     }
 }

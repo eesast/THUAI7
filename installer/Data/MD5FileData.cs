@@ -26,13 +26,13 @@ namespace installer.Data
     {
         // 代码库版本
         [JsonInclude]
-        public Version LibVersion = new Version(1, 0, 0, 1);
+        public Version LibVersion = new Version(1, 0, 2, 3);
         // 选手代码模板版本
         [JsonInclude]
-        public Version TemplateVersion = new Version(1, 0, 0, 2);
+        public Version TemplateVersion = new Version(1, 0, 0, 3);
         // 本体版本
         [JsonInclude]
-        public Version InstallerVersion = new Version(1, 0, 0, 2);
+        public Version InstallerVersion = new Version(1, 1, 0, 2);
         public static bool operator <(TVersion l, TVersion r)
         {
             return l.LibVersion < r.LibVersion || l.TemplateVersion < r.TemplateVersion || l.InstallerVersion < r.InstallerVersion;

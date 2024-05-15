@@ -36,7 +36,11 @@ namespace Playback
             if (Disposed) return;
             cos.WriteMessage(msg);
             WrittenNum++;
-            if (WrittenNum % FlushNum == 0) Flush();
+            if (WrittenNum % FlushNum == 0)
+            {
+                Flush();
+                WrittenNum = 0;
+            }
         }
 
         public void Flush()

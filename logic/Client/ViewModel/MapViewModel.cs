@@ -23,17 +23,17 @@ namespace Client.ViewModel
         /* initiate the Lists of Objects and CountList */
         private void InitiateObjects()
         {
-            listOfAll = new List<MessageOfAll>();
-            listOfShip = new List<MessageOfShip>(); ;
-            listOfBullet = new List<MessageOfBullet>();
-            listOfBombedBullet = new List<MessageOfBombedBullet>();
-            listOfFactory = new List<MessageOfFactory>();
-            listOfCommunity = new List<MessageOfCommunity>();
-            listOfFort = new List<MessageOfFort>();
-            listOfResource = new List<MessageOfResource>();
-            listOfHome = new List<MessageOfHome>();
-            listOfWormhole = new List<MessageOfWormhole>();
-            countMap = new Dictionary<int, int>();
+            listOfAll = [];
+            listOfShip = []; ;
+            listOfBullet = [];
+            listOfBombedBullet = [];
+            listOfFactory = [];
+            listOfCommunity = [];
+            listOfFort = [];
+            listOfResource = [];
+            listOfHome = [];
+            listOfWormhole = [];
+            countMap = [];
         }
         private (int x, int y)[] resourcePositionIndex;
         private (int x, int y)[] FactoryPositionIndex;
@@ -203,7 +203,7 @@ namespace Client.ViewModel
         //    }
         //}
 
-        private Dictionary<MapPatchType, Color> PatchColorDict = new Dictionary<MapPatchType, Color>
+        private readonly Dictionary<MapPatchType, Color> PatchColorDict = new()
         {
             {MapPatchType.RedHome, Color.FromRgb(237, 49, 47)},
             {MapPatchType.BlueHome, Colors.Blue},
@@ -212,8 +212,8 @@ namespace Client.ViewModel
             {MapPatchType.Asteroid, Color.FromRgb(164, 217, 235)},
             {MapPatchType.Resource, Color.FromRgb(160, 75, 166)},
             {MapPatchType.Factory, Color.FromRgb(231, 144, 74)},
-            {MapPatchType.Community, Color.FromRgb(231, 144, 74)},
-            {MapPatchType.Fort, Color.FromRgb(231, 144, 74)},
+            {MapPatchType.Community, Color.FromRgb(131, 144, 74)},
+            {MapPatchType.Fort, Color.FromRgb(131, 34, 74)},
             {MapPatchType.WormHole, Color.FromRgb(137, 17, 26)},
             {MapPatchType.Space, Color.FromRgb(255, 255, 255)},
             {MapPatchType.Null, Color.FromRgb(0,0,0)}
@@ -703,7 +703,7 @@ namespace Client.ViewModel
         {
             get
             {
-                return mapPatchesList ??= new ObservableCollection<MapPatch>();
+                return mapPatchesList ??= [];
             }
             set
             {
@@ -717,7 +717,7 @@ namespace Client.ViewModel
         {
             get
             {
-                return shipCircList ??= new ObservableCollection<DrawCircLabel>();
+                return shipCircList ??= [];
             }
             set
             {
@@ -731,7 +731,7 @@ namespace Client.ViewModel
         {
             get
             {
-                return bulletCircList ??= new ObservableCollection<DrawCircLabel>();
+                return bulletCircList ??= [];
             }
             set
             {

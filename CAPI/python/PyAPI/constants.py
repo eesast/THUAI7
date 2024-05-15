@@ -11,21 +11,26 @@ class Constants:
     recycleMultiplier = 0.5
     sizeOfShip = 800
 
+
 class Home:
     maxHp = 24000
     energySpeed = 100
+
 
 class Factory:
     maxHp = 8000
     energySpeed = 300
 
+
 class Community:
     maxHp = 6000
+
 
 class Fort:
     maxHp = 12000
     attackRange = 8000
     damage = 1200
+
 
 class CivilianShip:
     Speed = 3000
@@ -34,6 +39,7 @@ class CivilianShip:
     maxHp = 3000
     Cost = 4000
 
+
 class MilitaryShip:
     Speed = 2800
     basicArmor = 400
@@ -41,12 +47,14 @@ class MilitaryShip:
     maxHp = 4000
     Cost = 12000
 
+
 class FlagShip:
     Speed = 2700
     basicArmor = 800
     basicShield = 800
     maxHp = 12000
     Cost = 50000
+
 
 class Producer:
     energySpeed1 = 100
@@ -56,6 +64,7 @@ class Producer:
     Cost2 = 4000
     Cost3 = 8000
 
+
 class Constructor:
     constructSpeed1 = 300
     constructSpeed2 = 400
@@ -63,6 +72,7 @@ class Constructor:
     Cost1 = 0
     Cost2 = 4000
     Cost3 = 8000
+
 
 class Armor:
     armor1 = 2000
@@ -72,6 +82,7 @@ class Armor:
     Cost2 = 12000
     Cost3 = 18000
 
+
 class Shield:
     shield1 = 2000
     shield2 = 3000
@@ -80,12 +91,14 @@ class Shield:
     Cost2 = 12000
     Cost3 = 18000
 
+
 class Weapon:
     LaserCost = 0
     PlasmaCost = 12000
     ShellCost = 13000
     MissleCost = 18000
     ArcCost = 24000
+
 
 class Laser:
     Damage = 1200
@@ -96,6 +109,7 @@ class Laser:
     CastTime = 300
     BackSwing = 300
 
+
 class Plasma:
     Damage = 1300
     AttackRange = 4000
@@ -104,6 +118,7 @@ class Plasma:
     Speed = 10000
     CastTime = 400
     BackSwing = 400
+
 
 class Shell:
     Damage = 1800
@@ -114,6 +129,7 @@ class Shell:
     CastTime = 200
     BackSwing = 200
 
+
 class Missle:
     Damage = 1600
     AttackRange = 8000
@@ -123,6 +139,7 @@ class Missle:
     Speed = 6000
     CastTime = 600
     BackSwing = 600
+
 
 class Arc:
     Damage = 3200

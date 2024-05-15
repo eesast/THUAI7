@@ -1,4 +1,5 @@
 ﻿using GameClass.GameObj;
+using GameClass.GameObj.Map;
 using GameClass.GameObj.Areas;
 using GameEngine;
 using Preparation.Utility;
@@ -46,13 +47,13 @@ namespace Gaming
             {
                 if (moveTimeInMilliseconds < 5)
                 {
-                    Debugger.Output("Move time is too short.");
+                    ActionManagerLogging.logger.ConsoleLogDebug("Move time is too short");
                     return false;
                 }
                 long stateNum = shipToMove.SetShipState(RunningStateType.Waiting, ShipStateType.Moving);
                 if (stateNum == -1)
                 {
-                    Debugger.Output("Ship is not commandable.");
+                    ActionManagerLogging.logger.ConsoleLogDebug("Ship is not commandable");
                     return false;
                 }
                 new Thread
@@ -203,8 +204,8 @@ namespace Gaming
                                                                 gameMap.Timer.IsGaming && !construction.HP.IsBelowMaxTimes(0.5),
                                                             loopToDo: () =>
                                                             {
-                                                                var ships = gameMap.ShipInTheRange(
-                                                                    construction.Position, GameData.FortRange);
+                                                                var ships = gameMap.ShipInTheRangeNotTeamID(
+                                                                    construction.Position, GameData.FortRange, construction.TeamID);
                                                                 if (ships == null || ships.Count == 0)
                                                                 {
                                                                     return true;
@@ -300,7 +301,10 @@ namespace Gaming
                 (
                     () =>
                     {
-                        Thread.Sleep(GameData.CheckInterval);
+                        while (!gameMap.Timer.IsGaming)
+                        {
+                            Thread.Sleep(1);
+                        }
                         new FrameRateTaskExecutor<int>
                         (
                             loopCondition: () => gameMap.Timer.IsGaming,

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Preparation.Utility
+﻿namespace Preparation.Utility
 {
     public interface IDouble
     {

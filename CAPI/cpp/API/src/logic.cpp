@@ -91,26 +91,26 @@ THUAI7::PlaceType Logic::GetPlaceType(int32_t cellX, int32_t cellY) const
     return currentState->gameMap[cellX][cellY];
 }
 
-int32_t Logic::GetConstructionHp(int32_t cellX, int32_t cellY) const
+std::pair<int32_t, int32_t> Logic::GetConstructionState(int32_t cellX, int32_t cellY) const
 {
     std::unique_lock<std::mutex> lock(mtxState);
-    logger->debug("Called GetConstructionHp");
+    logger->debug("Called GetConstructionState");
     auto pos = std::make_pair(cellX, cellY);
     auto it = currentState->mapInfo->factoryState.find(pos);
     auto it2 = currentState->mapInfo->communityState.find(pos);
     auto it3 = currentState->mapInfo->fortState.find(pos);
     if (it != currentState->mapInfo->factoryState.end())
     {
-        return currentState->mapInfo->factoryState[pos].first;
+        return currentState->mapInfo->factoryState[pos];
     }
     else if (it2 != currentState->mapInfo->communityState.end())
-        return currentState->mapInfo->communityState[pos].first;
+        return currentState->mapInfo->communityState[pos];
     else if (it3 != currentState->mapInfo->fortState.end())
-        return currentState->mapInfo->fortState[pos].first;
+        return currentState->mapInfo->fortState[pos];
     else
     {
         logger->warn("Construction not found");
-        return -1;
+        return std::make_pair(-1, -1);
     }
 }
 
@@ -202,7 +202,7 @@ bool Logic::Move(int64_t time, double angle)
 bool Logic::Send(int32_t toID, std::string message, bool binary)
 {
     logger->debug("Called SendMessage");
-    return pComm->Send(playerID, teamID, toID, std::move(message), binary);
+    return pComm->Send(playerID, toID, teamID, std::move(message), binary);
 }
 
 bool Logic::HaveMessage()
@@ -281,7 +281,8 @@ bool Logic::EndAllAction()
 
 bool Logic::WaitThread()
 {
-    Update();
+    if (asynchronous)
+        Wait();
     return true;
 }
 
@@ -393,7 +394,7 @@ void Logic::LoadBufferSelf(const protobuf::MessageToClient& message)
                 bufferState->teamSelf = Proto2THUAI7::Protobuf2THUAI7Team(item.team_message());
                 logger->debug("Load Self Team!");
             }
-            else if (Proto2THUAI7::messageOfObjDict[item.message_of_obj_case()] == THUAI7::MessageOfObj::ShipMessage && item.team_message().team_id() == teamID)
+            else if (Proto2THUAI7::messageOfObjDict[item.message_of_obj_case()] == THUAI7::MessageOfObj::ShipMessage && item.ship_message().team_id() == teamID)
             {
                 std::shared_ptr<THUAI7::Ship> Ship = Proto2THUAI7::Protobuf2THUAI7Ship(item.ship_message());
                 bufferState->ships.push_back(Ship);
@@ -476,6 +477,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->factoryState[pos].first = item.factory_message().team_id();
                         bufferState->mapInfo->factoryState[pos].second = item.factory_message().hp();
                         logger->debug("Update Factory!");
                     }
@@ -490,6 +492,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->factoryState[pos].first = item.factory_message().team_id();
                         bufferState->mapInfo->factoryState[pos].second = item.factory_message().hp();
                         logger->debug("Update Factory!");
                     }
@@ -506,6 +509,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->communityState[pos].first = item.community_message().team_id();
                         bufferState->mapInfo->communityState[pos].second = item.community_message().hp();
                         logger->debug("Update Community!");
                     }
@@ -520,6 +524,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->communityState[pos].first = item.community_message().team_id();
                         bufferState->mapInfo->communityState[pos].second = item.community_message().hp();
                         logger->debug("Update Community!");
                     }
@@ -536,6 +541,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->fortState[pos].first = item.fort_message().team_id();
                         bufferState->mapInfo->fortState[pos].second = item.fort_message().hp();
                         logger->debug("Update Fort!");
                     }
@@ -550,6 +556,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->fortState[pos].first = item.fort_message().team_id();
                         bufferState->mapInfo->fortState[pos].second = item.fort_message().hp();
                         logger->debug("Update Fort!");
                     }
@@ -674,6 +681,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->factoryState[pos].first = item.factory_message().team_id();
                         bufferState->mapInfo->factoryState[pos].second = item.factory_message().hp();
                         logger->debug("Update Factory!");
                     }
@@ -688,6 +696,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->factoryState[pos].first = item.factory_message().team_id();
                         bufferState->mapInfo->factoryState[pos].second = item.factory_message().hp();
                         logger->debug("Update Factory!");
                     }
@@ -704,6 +713,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->communityState[pos].first = item.community_message().team_id();
                         bufferState->mapInfo->communityState[pos].second = item.community_message().hp();
                         logger->debug("Update Community!");
                     }
@@ -718,6 +728,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->communityState[pos].first = item.community_message().team_id();
                         bufferState->mapInfo->communityState[pos].second = item.community_message().hp();
                         logger->debug("Update Community!");
                     }
@@ -734,6 +745,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->fortState[pos].first = item.fort_message().team_id();
                         bufferState->mapInfo->fortState[pos].second = item.fort_message().hp();
                         logger->debug("Update Fort!");
                     }
@@ -748,6 +760,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                     }
                     else
                     {
+                        bufferState->mapInfo->fortState[pos].first = item.fort_message().team_id();
                         bufferState->mapInfo->fortState[pos].second = item.fort_message().hp();
                         logger->debug("Update Fort!");
                     }
@@ -821,11 +834,16 @@ void Logic::LoadBuffer(const protobuf::MessageToClient& message)
         bufferState->enemyShips.clear();
         bufferState->bullets.clear();
         bufferState->guids.clear();
+        bufferState->allGuids.clear();
         logger->info("Buffer cleared!");
         // 读取新的信息
         for (const auto& obj : message.obj_message())
             if (Proto2THUAI7::messageOfObjDict[obj.message_of_obj_case()] == THUAI7::MessageOfObj::ShipMessage)
-                bufferState->guids.push_back(obj.ship_message().guid());
+            {
+                bufferState->allGuids.push_back(obj.ship_message().guid());
+                if (obj.ship_message().team_id() == teamID)
+                    bufferState->guids.push_back(obj.ship_message().guid());
+            }
         bufferState->gameInfo = Proto2THUAI7::Protobuf2THUAI7GameInfo(message.all_message());
         LoadBufferSelf(message);
         // 确保这是一个活着的船，否则会使用空指针

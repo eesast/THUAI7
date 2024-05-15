@@ -86,12 +86,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="publish\**" />
+	  <Compile Remove="publish\**" />
+	  <EmbeddedResource Remove="publish\**" />
+	  <MauiCss Remove="publish\**" />
+	  <MauiXaml Remove="publish\**" />
+	  <None Remove="publish\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
-		<PackageReference Include="CommunityToolkit.Maui.Core" Version="7.0.1" />
+		<PackageReference Include="CommunityToolkit.Maui.Core" Version="9.0.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Tencent.QCloud.Cos.Sdk" Version="5.4.37" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.20" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.21" />
 	</ItemGroup>
 
 	<ItemGroup>

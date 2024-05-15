@@ -1,14 +1,13 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0.204-jammy-amd64 AS build
-MAINTAINER eesast
+LABEL maintainer="eesast"
 WORKDIR /usr/local
 COPY . .
 
 FROM eesast/thuai7_base:base
-MAINTAINER eesast
+LABEL maintainer="eesast"
 WORKDIR /usr/local
-COPY --from=build /usr/local/Server .
 RUN mkdir /usr/local/team1 && mkdir /usr/local/team2 && mkdir /usr/local/playback
-COPY ./dependency/shell/run_client.sh .
+COPY ./dependency/shell/run.sh .
 COPY ./CAPI/python /usr/local/PlayerCode/CAPI/python
 COPY ./dependency/proto /usr/local/PlayerCode/dependency/proto
 COPY ./dependency/shell /usr/local/PlayerCode/dependency/shell

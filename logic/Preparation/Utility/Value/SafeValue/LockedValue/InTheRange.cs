@@ -1,36 +1,126 @@
-﻿using Preparation.Utility;
+﻿using Preparation.Interface;
 using System;
 using System.Numerics;
 using System.Threading;
+using Preparation.Utility.Value.SafeValue.Atomic;
+using Preparation.Utility.Value.SafeValue.TimeBased;
 
-namespace Preparation.Utility
+namespace Preparation.Utility.Value.SafeValue.LockedValue
 {
     //其对应属性不应当有set访问器，避免不安全的=赋值
 
     /// <summary>
     /// 一个保证在[0,maxValue]的可变值，支持可变的maxValue（请确保大于0）
     /// </summary>
-    public class InVariableRange<T> : LockedValue, IIntAddable, IAddable<T>, IDouble
+    public class InVariableRange<T> : LockedValue, IIntAddable, IAddable<T>, IDouble, IDoubleAddable, IConvertible
         where T : IConvertible, IComparable<T>, INumber<T>
     {
         protected T v;
         protected T maxV;
+
+        #region 实现IConvertible接口
+        public TypeCode GetTypeCode()
+        {
+            return ReadNeed(() => v.GetTypeCode());
+        }
+
+        public bool ToBoolean(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToBoolean(provider));
+        }
+        public byte ToByte(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToByte(provider));
+        }
+
+        public char ToChar(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToChar(provider));
+        }
+
+        public DateTime ToDateTime(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToDateTime(provider));
+        }
+
+        public decimal ToDecimal(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToDecimal(provider));
+        }
+
+        public double ToDouble(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToDouble(provider));
+        }
+
+        public short ToInt16(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToInt16(provider));
+        }
+
+        public int ToInt32(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToInt32(provider));
+        }
+
+        public long ToInt64(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToInt64(provider));
+        }
+
+        public sbyte ToSByte(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToSByte(provider));
+        }
+
+        public float ToSingle(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToSingle(provider));
+        }
+
+        public string ToString(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToString(provider));
+        }
+
+        public object ToType(Type conversionType, IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToType(conversionType, provider));
+        }
+
+        public ushort ToUInt16(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToUInt16(provider));
+        }
+
+        public uint ToUInt32(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToUInt32(provider));
+        }
+
+        public ulong ToUInt64(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToUInt64(provider));
+        }
+        #endregion
 
         #region 构造与读取
         public InVariableRange(T value, T maxValue) : base()
         {
             if (value < T.Zero)
             {
-                Debugger.Output("Warning:Try to set IntInTheVariableRange to " + value.ToString() + ".");
+                LockedValueLogging.logger.ConsoleLogDebug(
+                    $"Warning: Try to set IntInTheVariableRange to {value}");
                 value = T.Zero;
             }
             if (maxValue < T.Zero)
             {
-                Debugger.Output("Warning:Try to set IntInTheVariableRange.maxValue to " + maxValue.ToString() + ".");
+                LockedValueLogging.logger.ConsoleLogDebug(
+                    $"Warning: Try to set IntInTheVariableRange.maxValue to {maxValue}");
                 maxValue = T.Zero;
             }
             v = value.CompareTo(maxValue) < 0 ? value : maxValue;
-            this.maxV = maxValue;
+            maxV = maxValue;
         }
         /// <summary>
         /// 默认使Value=maxValue
@@ -39,19 +129,29 @@ namespace Preparation.Utility
         {
             if (maxValue < T.Zero)
             {
-                Debugger.Output("Warning:Try to set IntInTheVariableRange.maxValue to " + maxValue.ToString() + ".");
+                LockedValueLogging.logger.ConsoleLogDebug(
+                    $"Warning: Try to set IntInTheVariableRange.maxValue to {maxValue}");
                 maxValue = T.Zero;
             }
-            v = this.maxV = maxValue;
+            v = maxV = maxValue;
         }
 
         public override string ToString()
         {
-            return ReadNeed(() => "value:" + v.ToString() + " , maxValue:" + maxV.ToString());
+            return ReadNeed(() => $"value: {v} , maxValue: {maxV}");
         }
         public T GetValue() { return ReadNeed(() => v); }
         public double ToDouble() => GetValue().ToDouble(null);
         public static implicit operator T(InVariableRange<T> aint) => aint.GetValue();
+        public override bool Equals(object? obj)
+        {
+            return obj != null && (obj is IConvertible k) && ToDouble(null) == k.ToDouble(null);
+        }
+        public override int GetHashCode()
+        {
+            return ReadNeed(() => v.GetHashCode() ^ maxV.GetHashCode());
+        }
+
         public T GetMaxV()
         {
             return ReadNeed(() => maxV);
@@ -60,10 +160,10 @@ namespace Preparation.Utility
         {
             return ReadNeed(() => (v, maxV));
         }
-        public T GetDifference() => ReadNeed(() => (maxV - v));
+        public T GetDifference() => ReadNeed(() => maxV - v);
         public double GetDivideValueByMaxV()
         {
-            return ReadNeed(() => (v.ToDouble(null) / maxV.ToDouble(null)));
+            return ReadNeed(() => v.ToDouble(null) / maxV.ToDouble(null));
         }
         #endregion
 
@@ -132,7 +232,7 @@ namespace Preparation.Utility
             }
             else
             {
-                return WriteNeed(() => v = (value > maxV) ? maxV : value);
+                return WriteNeed(() => v = value > maxV ? maxV : value);
             }
         }
 
@@ -143,7 +243,7 @@ namespace Preparation.Utility
                 WriteNeed(() => v = T.Zero);
             }
             T va = T.CreateChecked(value);
-            WriteNeed(() => v = (va > maxV) ? maxV : va);
+            WriteNeed(() => v = va > maxV ? maxV : va);
         }
 
         /// <summary>
@@ -151,7 +251,7 @@ namespace Preparation.Utility
         /// </summary>
         public T SetPositiveVRNow(T value)
         {
-            return WriteNeed(() => v = (value > maxV) ? maxV : value);
+            return WriteNeed(() => v = value > maxV ? maxV : value);
         }
         #endregion
 
@@ -231,6 +331,16 @@ namespace Preparation.Utility
             });
         }
 
+        public void Add(double addV)
+        {
+            WriteNeed(() =>
+            {
+                v += T.CreateChecked(addV);
+                if (v < T.Zero) v = T.Zero;
+                if (v > maxV) v = maxV;
+            });
+        }
+
         public T AddRNow(T addV)
         {
             return WriteNeed(() =>
@@ -263,7 +373,7 @@ namespace Preparation.Utility
         {
             WriteNeed(() =>
             {
-                addPositiveV = (addPositiveV < maxV - v) ? addPositiveV : maxV - v;
+                addPositiveV = addPositiveV < maxV - v ? addPositiveV : maxV - v;
                 v += addPositiveV;
             });
             return addPositiveV;
@@ -363,7 +473,7 @@ namespace Preparation.Utility
         {
             WriteNeed(() =>
             {
-                subPositiveV = (subPositiveV < v) ? subPositiveV : v;
+                subPositiveV = subPositiveV < v ? subPositiveV : v;
                 v -= subPositiveV;
             });
             return subPositiveV;
@@ -375,7 +485,7 @@ namespace Preparation.Utility
         {
             WriteNeed(() =>
             {
-                v = (subPositiveV < v) ? v - subPositiveV : T.Zero;
+                v = subPositiveV < v ? v - subPositiveV : T.Zero;
             });
         }
         #endregion
@@ -417,7 +527,8 @@ namespace Preparation.Utility
         #endregion
 
         #region 与InVariableRange类的运算，运算会影响该对象的值
-        public T AddRChange<TA>(InVariableRange<TA> a, double speed = 1.0) where TA : IConvertible, IComparable<TA>, INumber<TA>
+        public T AddRChange<TA>(InVariableRange<TA> a, double speed = 1.0)
+            where TA : IConvertible, IComparable<TA>, INumber<TA>
         {
             return EnterOtherLock<T>(a, () => WriteNeed(() =>
             {
@@ -428,7 +539,8 @@ namespace Preparation.Utility
                 return v - previousV;
             }))!;
         }
-        public T AddVUseOtherRChange<TA>(T value, InVariableRange<TA> other, double speed = 1.0) where TA : IConvertible, IComparable<TA>, INumber<TA>
+        public T AddVUseOtherRChange<TA>(T value, InVariableRange<TA> other, double speed = 1.0)
+            where TA : IConvertible, IComparable<TA>, INumber<TA>
         {
             return EnterOtherLock<T>(other, () => WriteNeed(() =>
             {
@@ -441,7 +553,8 @@ namespace Preparation.Utility
                 return v - previousV;
             }))!;
         }
-        public T SubVLimitedByAddingOtherRChange<TA>(T value, InVariableRange<TA> other, double speed = 1.0) where TA : IConvertible, IComparable<TA>, INumber<TA>
+        public T SubVLimitedByAddingOtherRChange<TA>(T value, InVariableRange<TA> other, double speed = 1.0)
+            where TA : IConvertible, IComparable<TA>, INumber<TA>
         {
             return EnterOtherLock<T>(other, () => WriteNeed(() =>
             {
@@ -455,7 +568,8 @@ namespace Preparation.Utility
                 return value;
             }))!;
         }
-        public T SubRChange<TA>(InVariableRange<TA> a) where TA : IConvertible, IComparable<TA>, IComparable<int>, INumber<TA>
+        public T SubRChange<TA>(InVariableRange<TA> a)
+            where TA : IConvertible, IComparable<TA>, IComparable<int>, INumber<TA>
         {
             return EnterOtherLock<T>(a, () => WriteNeed(() =>
             {
@@ -479,8 +593,10 @@ namespace Preparation.Utility
             return WriteNeed(() =>
             {
                 long addV = (long)(startTime.StopIfPassing((maxV - v).ToInt64(null)) * speed);
-                if (addV < 0) return (v, maxV, startTime.Get());
-                if (maxV - v < T.CreateChecked(addV)) return (v = maxV, maxV, startTime.Get());
+                if (addV < 0)
+                    return (v, maxV, startTime.Get());
+                if (maxV - v < T.CreateChecked(addV))
+                    return (v = maxV, maxV, startTime.Get());
                 return (v, maxV, startTime.Get());
             });
         }
@@ -533,7 +649,7 @@ namespace Preparation.Utility
     /// 可以设定IIntAddable类的Score，默认初始为0的AtomicInt
     /// 在发生正向的变化时，自动给Score加上正向变化的差乘以speed（取整）。
     /// </summary>
-    public class InVariableRangeOnlyAddScore<T>(T value, T maxValue, double speed = 1.0) : InVariableRange<T>(value, maxValue), IIntAddable, IAddable<T>
+    public class InVariableRangeOnlyAddScore<T>(T value, T maxValue, double speed = 1.0) : InVariableRange<T>(value, maxValue)
         where T : IConvertible, IComparable<T>, INumber<T>
     {
         private IIntAddable score = new AtomicInt(0);

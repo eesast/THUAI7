@@ -4,99 +4,84 @@
              xmlns:viewModels="clr-namespace:installer.ViewModel"
              x:Class="installer.Page.PlaybackPage"
              Title="Launcher">
+    <ScrollView
+        Margin="20">
 
-    <Grid
-        HorizontalOptions="Center"
-        WidthRequest="600"
-        RowDefinitions="*,*,*,*,*,*,*,*,*,*"
-        ColumnDefinitions="*">
-
-        <VerticalStackLayout
-            Grid.Row="0"
-            Grid.RowSpan="8"
+        <Grid
             HorizontalOptions="Center"
-            VerticalOptions="Center">
+            WidthRequest="600"
+            RowDefinitions="*,*,*,*,*,*,*,*,*,*"
+            ColumnDefinitions="*">
 
-            <VerticalStackLayout>
-                <HorizontalStackLayout>
-                    <Label
-                        WidthRequest="170"
-                        Text="Playback File"
-                        VerticalOptions="Center"
-                        FontSize="{Binding ConstFontSize}"/>
-                    <Entry
-                        WidthRequest="400"
-                        Placeholder=""
-                        Text="{Binding PlaybackFile}"
-                        FontSize="16"/>
-                </HorizontalStackLayout>
+            <VerticalStackLayout
+                Grid.Row="0"
+                Grid.RowSpan="8"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
 
-                <HorizontalStackLayout>
-                    <Label
-                        WidthRequest="170"
-                        Text="Playback Speed"
-                        VerticalOptions="Center"
-                        FontSize="{Binding ConstFontSize}"/>
-                    <Entry
-                        WidthRequest="400"
-                        Placeholder=""
-                        Text="{Binding PlaybackSpeed}"
-                        FontSize="16"/>
-                </HorizontalStackLayout>
+                <VerticalStackLayout>
+                    <HorizontalStackLayout>
+                        <Label
+                            WidthRequest="170"
+                            Text="Playback File"
+                            VerticalOptions="Center"
+                            FontSize="{Binding ConstFontSize}"/>
+                        <Entry
+                            WidthRequest="280"
+                            Placeholder=""
+                            Text="{Binding PlaybackFile}"
+                            FontSize="16"/>
+                        <Button
+                            WidthRequest="120"
+                            Text="选择文件"
+                            BorderWidth="2"
+                            Command="{Binding BrowseBtnClickedCommand}"
+                            IsEnabled="{Binding BrowseEnabled}"
+                            BackgroundColor="{Binding ConstBackgroundColor}"
+                            TextColor="{Binding ConstTextColor}"/>
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout>
+                        <Label
+                            WidthRequest="170"
+                            Text="Playback Speed"
+                            VerticalOptions="Center"
+                            FontSize="{Binding ConstFontSize}"/>
+                        <Entry
+                            WidthRequest="400"
+                            Placeholder=""
+                            Text="{Binding PlaybackSpeed}"
+                            FontSize="16"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+                <Label/>
+
+                <Label
+                    Text="{Binding DebugAlert}"/>
+
+                <Button
+                    WidthRequest="400"
+                    Text="保存"
+                    BorderWidth="2"
+                    Command="{Binding SaveBtnClickedCommand}"
+                    IsEnabled="{Binding SaveEnabled}"
+                    BackgroundColor="{Binding ConstBackgroundColor}"
+                    FontSize="{Binding ConstFontSize}"
+                    TextColor="{Binding ConstTextColor}"/>
+                <Button
+                    WidthRequest="400"
+                    Text="启动"
+                    BorderWidth="2"
+                    Command="{Binding PlaybackStartBtnClickedCommand}"
+                    IsEnabled="{Binding StartEnabled}"
+                    BackgroundColor="{Binding ConstBackgroundColor}"
+                    FontSize="{Binding ConstFontSize}"
+                    TextColor="{Binding ConstTextColor}"/>
+
             </VerticalStackLayout>
 
-            <Label/>
-
-            <Label
-                Text="{Binding DebugAlert}"/>
-
-            <Button
-                WidthRequest="400"
-                Text="保存"
-                BorderWidth="2"
-                Command="{Binding SaveBtnClickedCommand}"
-                IsEnabled="{Binding SaveEnabled}"
-                BackgroundColor="{Binding ConstBackgroundColor}"
-                FontSize="{Binding ConstFontSize}"
-                TextColor="{Binding ConstTextColor}"/>
-            <Button
-                WidthRequest="400"
-                Text="启动"
-                BorderWidth="2"
-                Command="{Binding PlaybackStartBtnClickedCommand}"
-                IsEnabled="{Binding StartEnabled}"
-                BackgroundColor="{Binding ConstBackgroundColor}"
-                FontSize="{Binding ConstFontSize}"
-                TextColor="{Binding ConstTextColor}"/>
-
-            <!--<Frame
-                BorderColor="Gray"
-                Padding="3"
-                Margin="5"
-                WidthRequest="600"
-                HeightRequest="200">
-
-                <CollectionView
-                    BackgroundColor="LightGray"
-                    ItemsSource="{Binding LogList}"
-                    ItemsUpdatingScrollMode="KeepLastItemInView"
-                    VerticalScrollBarVisibility="Always">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-
-                            <Label
-                                WidthRequest="570"
-                                Text="{Binding Message}"
-                                TextColor="{Binding Color}"/>
-
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-
-            </Frame>-->
-
-        </VerticalStackLayout>
-
-    </Grid>
-
+        </Grid>
+        
+    </ScrollView>
 </ContentPage>

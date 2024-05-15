@@ -87,10 +87,13 @@ namespace installer.ViewModel
                 .ContinueWith(t =>
                 {
                     ID = Downloader.Username;
-                    if (Remember)
-                        Downloader.RememberUser();
-                    else
-                        Downloader.ForgetUser();
+                    if (Downloader.Web.Status == Model.LoginStatus.logined)
+                    {
+                        if (Remember)
+                            Downloader.RememberUser();
+                        else
+                            Downloader.ForgetUser();
+                    }
                     LoginStatus = Downloader.Web.Status.ToString();
                     RemStatus = Remember.ToString();
                 });

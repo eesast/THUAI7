@@ -1,24 +1,112 @@
-﻿using System;
+﻿using Preparation.Interface;
+using Preparation.Utility.Value.SafeValue.TimeBased;
+using System;
 using System.Numerics;
-using System.Threading;
 
-namespace Preparation.Utility
+namespace Preparation.Utility.Value.SafeValue.LockedValue
 {
     /// <summary>
     /// 一个保证大于0的可变值
     /// 建议使用类似[0,int.MaxValue]的InVariableRange
     /// 其对应属性不应当有set访问器，避免不安全的=赋值
     /// </summa>
-    public class PositiveValue<T> : LockedValue, IIntAddable, IAddable<T>
+    public class PositiveValue<T> : LockedValue, IIntAddable, IAddable<T>, IConvertible
         where T : IConvertible, IComparable<T>, INumber<T>
     {
         protected T v;
+
+        #region 实现IConvertible接口
+        public TypeCode GetTypeCode()
+        {
+            return ReadNeed(() => v.GetTypeCode());
+        }
+
+        public bool ToBoolean(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToBoolean(provider));
+        }
+        public byte ToByte(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToByte(provider));
+        }
+
+        public char ToChar(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToChar(provider));
+        }
+
+        public DateTime ToDateTime(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToDateTime(provider));
+        }
+
+        public decimal ToDecimal(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToDecimal(provider));
+        }
+
+        public double ToDouble(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToDouble(provider));
+        }
+
+        public short ToInt16(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToInt16(provider));
+        }
+
+        public int ToInt32(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToInt32(provider));
+        }
+
+        public long ToInt64(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToInt64(provider));
+        }
+
+        public sbyte ToSByte(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToSByte(provider));
+        }
+
+        public float ToSingle(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToSingle(provider));
+        }
+
+        public string ToString(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToString(provider));
+        }
+
+        public object ToType(Type conversionType, IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToType(conversionType, provider));
+        }
+
+        public ushort ToUInt16(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToUInt16(provider));
+        }
+
+        public uint ToUInt32(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToUInt32(provider));
+        }
+
+        public ulong ToUInt64(IFormatProvider? provider)
+        {
+            return ReadNeed(() => v.ToUInt64(provider));
+        }
+        #endregion
+
         #region 构造与读取
         public PositiveValue(T value) : base()
         {
             if (value < T.Zero)
             {
-                Debugger.Output("Warning:Try to set PositiveValue to " + value.ToString() + ".");
+                LockedValueLogging.logger.ConsoleLogDebug($"Warning: Try to set PositiveValue to {value}");
                 value = T.Zero;
             }
             v = value;
@@ -34,6 +122,14 @@ namespace Preparation.Utility
         }
         public T Get() { return ReadNeed(() => v); }
         public static implicit operator T(PositiveValue<T> aint) => aint.Get();
+        public override bool Equals(object? obj)
+        {
+            return obj != null && (obj is IConvertible k) && ToDouble(null) == k.ToDouble(null);
+        }
+        public override int GetHashCode()
+        {
+            return ReadNeed(() => v.GetHashCode());
+        }
         public bool IsZero() { return ReadNeed(() => v == T.Zero); }
         #endregion
 
@@ -151,7 +247,7 @@ namespace Preparation.Utility
         {
             WriteNeed(() =>
             {
-                subV = (subV.CompareTo(v) > 0) ? v : subV;
+                subV = subV.CompareTo(v) > 0 ? v : subV;
                 v -= subV;
             });
             return subV;
