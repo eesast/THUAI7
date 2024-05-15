@@ -76,14 +76,15 @@ namespace Server
                     {
                         if (currentGameInfo != null)
                         {
-                            for (int i = currentGameInfo.ObjMessage.Count - 1; i >= 0; i--)
+                            var info = currentGameInfo.Clone();
+                            for (int i = info.ObjMessage.Count - 1; i >= 0; i--)
                             {
-                                if (currentGameInfo.ObjMessage[i].NewsMessage != null)
+                                if (info.ObjMessage[i].NewsMessage != null)
                                 {
-                                    currentGameInfo.ObjMessage.RemoveAt(i);
+                                    info.ObjMessage.RemoveAt(i);
                                 }
                             }
-                            await responseStream.WriteAsync(currentGameInfo);
+                            await responseStream.WriteAsync(info);
                             GameServerLogging.logger.ConsoleLog("Send!", false);
                         }
                     }
@@ -370,6 +371,38 @@ namespace Server
                 request.TeamId, request.PlayerId,
                 Transformation.ConstructionFromProto(request.ConstructionType));
             GameServerLogging.logger.ConsoleLogDebug("END Construct");
+            return Task.FromResult(boolRes);
+        }
+
+        public override Task<BoolRes> RepairHome(IDMsg request, ServerCallContext context)
+        {
+            GameServerLogging.logger.ConsoleLogDebug(
+                $"TRY RepairHome: Player {request.PlayerId} from Team {request.TeamId}");
+            BoolRes boolRes = new();
+            if (request.PlayerId >= spectatorMinPlayerID)
+            {
+                boolRes.ActSuccess = false;
+                return Task.FromResult(boolRes);
+            }
+            // var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            boolRes.ActSuccess = game.RepairHome(request.TeamId, request.PlayerId);
+            GameServerLogging.logger.ConsoleLogDebug("END RepairHome");
+            return Task.FromResult(boolRes);
+        }
+
+        public override Task<BoolRes> RepairWormhole(IDMsg request, ServerCallContext context)
+        {
+            GameServerLogging.logger.ConsoleLogDebug(
+                $"TRY RepairWormhole: Player {request.PlayerId} from Team {request.TeamId}");
+            BoolRes boolRes = new();
+            if (request.PlayerId >= spectatorMinPlayerID)
+            {
+                boolRes.ActSuccess = false;
+                return Task.FromResult(boolRes);
+            }
+            // var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            boolRes.ActSuccess = game.RepairWormhole(request.TeamId, request.PlayerId);
+            GameServerLogging.logger.ConsoleLogDebug("END RepairWormhole");
             return Task.FromResult(boolRes);
         }
 
