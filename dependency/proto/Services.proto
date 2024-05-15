@@ -21,8 +21,6 @@ service AvailableService
     rpc RepairWormhole(IDMsg) returns (BoolRes);    // 修理虫洞
     rpc Attack(AttackMsg) returns (BoolRes);        // 攻击
     rpc Send(SendMsg) returns (BoolRes);            // 传递信息
-    rpc RepairHome(IDMsg) returns (BoolRes);        // 修理大本营
-    rpc RepairWormhole(IDMsg) returns (BoolRes);    // 修理虫洞
 
     // 大本营
     rpc InstallModule(InstallMsg) returns (BoolRes);
