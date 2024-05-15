@@ -138,24 +138,27 @@ class Logic(ILogic):
         with self.__mtxState:
             return copy.deepcopy(self.__currentState.guids)
 
-    def GetConstructionState(self, cellX: int, cellY: int) -> tuple:
+    def GetConstructionState(self, cellX: int, cellY: int) -> THUAI7.Construction:
         with self.__mtxState:
             self.__logger.debug("Called GetConstructionState")
             if (cellX, cellY) in self.__currentState.mapInfo.factoryState:
-                return copy.deepcopy(
-                    self.__currentState.mapInfo.factoryState[(cellX, cellY)]
+                return THUAI7.Construction(
+                    self.__currentState.mapInfo.factoryState[(cellX, cellY)],
+                    THUAI7.ConstructionType.Factory,
                 )
             elif (cellX, cellY) in self.__currentState.mapInfo.communityState:
-                return copy.deepcopy(
-                    self.__currentState.mapInfo.communityState[(cellX, cellY)]
+                return THUAI7.Construction(
+                    self.__currentState.mapInfo.communityState[(cellX, cellY)],
+                    THUAI7.ConstructionType.Community,
                 )
             elif (cellX, cellY) in self.__currentState.mapInfo.fortState:
-                return copy.deepcopy(
-                    self.__currentState.mapInfo.fortState[(cellX, cellY)]
+                return THUAI7.Construction(
+                    self.__currentState.mapInfo.fortState[(cellX, cellY)],
+                    THUAI7.ConstructionType.Fort,
                 )
             else:
                 self.__logger.warning("GetConstructionState: Out of range")
-                return (-1, -1)
+                return None
 
     def GetWormholeHp(self, cellX: int, cellY: int) -> int:
         with self.__mtxState:

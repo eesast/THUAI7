@@ -227,6 +227,11 @@ class Home:
         self.teamID: int = 0
         self.guid: int = 0
 
+class Construction:
+    def __init__(self,teamID,HP,type:ConstructionType):
+        self.teamID=teamID
+        self.hp=HP
+        self.constructionType=type
 
 class Bullet:
     """

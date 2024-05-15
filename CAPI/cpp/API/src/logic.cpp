@@ -91,7 +91,7 @@ THUAI7::PlaceType Logic::GetPlaceType(int32_t cellX, int32_t cellY) const
     return currentState->gameMap[cellX][cellY];
 }
 
-std::pair<int32_t, int32_t> Logic::GetConstructionState(int32_t cellX, int32_t cellY) const
+std::optional<THUAI7::Construction> Logic::GetConstructionState(int32_t cellX, int32_t cellY) const
 {
     std::unique_lock<std::mutex> lock(mtxState);
     logger->debug("Called GetConstructionState");
@@ -101,16 +101,16 @@ std::pair<int32_t, int32_t> Logic::GetConstructionState(int32_t cellX, int32_t c
     auto it3 = currentState->mapInfo->fortState.find(pos);
     if (it != currentState->mapInfo->factoryState.end())
     {
-        return currentState->mapInfo->factoryState[pos];
+        return std::make_optional<THUAI7::Construction>(THUAI7::Construction::newConstruction(currentState->mapInfo->factoryState[pos], THUAI7::ConstructionType::Factory));
     }
     else if (it2 != currentState->mapInfo->communityState.end())
-        return currentState->mapInfo->communityState[pos];
+        return std::make_optional<THUAI7::Construction>(THUAI7::Construction::newConstruction(currentState->mapInfo->communityState[pos], THUAI7::ConstructionType::Community));
     else if (it3 != currentState->mapInfo->fortState.end())
-        return currentState->mapInfo->fortState[pos];
+        return std::make_optional<THUAI7::Construction>(THUAI7::Construction::newConstruction(currentState->mapInfo->fortState[pos], THUAI7::ConstructionType::Fort));
     else
     {
         logger->warn("Construction not found");
-        return std::make_pair(-1, -1);
+        return std::nullopt;
     }
 }
 

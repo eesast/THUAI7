@@ -1,4 +1,3 @@
-#include <optional>
 #include "AI.h"
 #include "API.h"
 
@@ -140,14 +139,14 @@ THUAI7::PlaceType TeamAPI::GetPlaceType(int32_t cellX, int32_t cellY) const
     return logic.GetPlaceType(cellX, cellY);
 }
 
-std::pair<int32_t, int32_t> ShipAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
+std::optional<THUAI7::Construction> ShipAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetConstructionState(cellX, cellY);
+    return std::move(logic.GetConstructionState(cellX, cellY));
 }
 
-std::pair<int32_t, int32_t> TeamAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
+std::optional<THUAI7::Construction> TeamAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
 {
-    return logic.GetConstructionState(cellX, cellY);
+    return std::move(logic.GetConstructionState(cellX, cellY));
 }
 
 int32_t ShipAPI::GetWormholeHp(int32_t cellX, int32_t cellY) const

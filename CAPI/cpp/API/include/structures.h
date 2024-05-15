@@ -243,6 +243,17 @@ namespace THUAI7
         int32_t speed;        // 子弹速度
     };
 
+    struct Construction
+    {
+        int32_t teamID;
+        int32_t hp;
+        ConstructionType constructionType;
+        static Construction newConstruction(std::pair<int32_t, int32_t> teamHP, ConstructionType type)
+        {
+            return Construction{teamHP.first, teamHP.second, type};
+        }
+    };
+
     // struct BombedBullet
     // {
     //     BulletType bulletType,

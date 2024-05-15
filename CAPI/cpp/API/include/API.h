@@ -45,7 +45,7 @@ public:
     [[nodiscard]] virtual std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const = 0;
     [[nodiscard]] virtual std::vector<int64_t> GetPlayerGUIDs() const = 0;
     [[nodiscard]] virtual THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const = 0;
-    [[nodiscard]] virtual std::pair<int32_t, int32_t> GetConstructionState(int32_t cellX, int32_t cellY) const = 0;
+    [[nodiscard]] virtual std::optional<THUAI7::Construction> GetConstructionState(int32_t cellX, int32_t cellY) const = 0;
     [[nodiscard]] virtual int32_t GetWormholeHp(int32_t cellX, int32_t cellY) const = 0;
     [[nodiscard]] virtual int32_t GetResourceState(int32_t cellX, int32_t cellY) const = 0;
     [[nodiscard]] virtual int32_t GetHomeHp() const = 0;
@@ -99,7 +99,7 @@ public:
     [[nodiscard]] virtual std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const = 0;
     [[nodiscard]] virtual std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const = 0;
     [[nodiscard]] virtual THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const = 0;
-    [[nodiscard]] virtual std::pair<int32_t, int32_t> GetConstructionState(int32_t cellX, int32_t cellY) const = 0;
+    [[nodiscard]] virtual std::optional<THUAI7::Construction> GetConstructionState(int32_t cellX, int32_t cellY) const = 0;
     [[nodiscard]] virtual int32_t GetWormholeHp(int32_t cellX, int32_t cellY) const = 0;
     [[nodiscard]] virtual int32_t GetResourceState(int32_t cellX, int32_t cellY) const = 0;
     [[nodiscard]] virtual int32_t GetHomeHp() const = 0;
@@ -209,7 +209,7 @@ public:
     [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Bullet>> GetBullets() const override;
     [[nodiscard]] std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const override;
     [[nodiscard]] THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const override;
-    [[nodiscard]] std::pair<int32_t, int32_t> GetConstructionState(int32_t cellX, int32_t cellY) const override;
+    [[nodiscard]] std::optional<THUAI7::Construction> GetConstructionState(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] int32_t GetWormholeHp(int32_t x, int32_t y) const override;
     [[nodiscard]] int32_t GetResourceState(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const override;
@@ -265,7 +265,7 @@ public:
     [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Bullet>> GetBullets() const override;
     [[nodiscard]] std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const override;
     [[nodiscard]] THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const override;
-    [[nodiscard]] std::pair<int32_t, int32_t> GetConstructionState(int32_t cellX, int32_t cellY) const override;
+    [[nodiscard]] std::optional<THUAI7::Construction> GetConstructionState(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] int32_t GetWormholeHp(int32_t x, int32_t y) const override;
     [[nodiscard]] int32_t GetResourceState(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] int32_t GetHomeHp() const override;
@@ -328,7 +328,7 @@ public:
     [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Bullet>> GetBullets() const override;
     [[nodiscard]] std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const override;
     [[nodiscard]] THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const override;
-    [[nodiscard]] std::pair<int32_t, int32_t> GetConstructionState(int32_t cellX, int32_t cellY) const override;
+    [[nodiscard]] std::optional<THUAI7::Construction> GetConstructionState(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] int32_t GetWormholeHp(int32_t x, int32_t y) const override;
     [[nodiscard]] int32_t GetResourceState(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] int32_t GetHomeHp() const override;
@@ -374,7 +374,7 @@ public:
     [[nodiscard]] std::vector<std::shared_ptr<const THUAI7::Bullet>> GetBullets() const override;
     [[nodiscard]] std::vector<std::vector<THUAI7::PlaceType>> GetFullMap() const override;
     [[nodiscard]] THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const override;
-    [[nodiscard]] std::pair<int32_t, int32_t> GetConstructionState(int32_t cellX, int32_t cellY) const override;
+    [[nodiscard]] std::optional<THUAI7::Construction> GetConstructionState(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] int32_t GetWormholeHp(int32_t x, int32_t y) const override;
     [[nodiscard]] int32_t GetResourceState(int32_t cellX, int32_t cellY) const override;
     [[nodiscard]] int32_t GetHomeHp() const override;

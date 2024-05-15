@@ -43,7 +43,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetConstructionState(self, cellX: int, cellY: int) -> tuple:
+    def GetConstructionState(self, cellX: int, cellY: int) -> THUAI7.Construction:
         pass
 
     @abstractmethod
@@ -247,12 +247,12 @@ class IAPI(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetConstructionState(self, cellX: int, cellY: int) -> Tuple[int, int]:
+    def GetConstructionState(self, cellX: int, cellY: int) -> THUAI7.Construction:
         """获取当前建筑状态
 
         :param cellX: X坐标, 单位Cell
         :param cellY: Y坐标, 单位Cell
-        :return: 该建筑当前的所属队伍编号与血量
+        :return: 该建筑信息
         """
         pass
 
