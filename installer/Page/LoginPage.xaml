@@ -4,59 +4,60 @@
              xmlns:viewModels="clr-namespace:installer.ViewModel"
              x:Class="installer.Page.LoginPage"
              Title="Login">
-    <ScrollView Margin="20">
+    <ScrollView
+        Margin="20">
 
         <Grid
-        HorizontalOptions="Center"
-        WidthRequest="500"
-        RowDefinitions="*,*,*,*,*,*,*,*,*,*">
+            HorizontalOptions="Center"
+            WidthRequest="500"
+            RowDefinitions="*,*,*,*,*,*,*,*,*,*">
 
             <VerticalStackLayout
-            Grid.Row="0"
-            Grid.RowSpan="8"
-            WidthRequest="500"
-            HorizontalOptions="Center"
-            VerticalOptions="Center">
+                Grid.Row="0"
+                Grid.RowSpan="8"
+                WidthRequest="500"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
 
                 <Editor
-                Placeholder="请输入EESAST账户名……"
-                Text="{Binding Username}"
-                FontSize="20"/>
+                    Placeholder="请输入EESAST账户名……"
+                    Text="{Binding Username}"
+                    FontSize="20"/>
                 <Entry
-                Placeholder="请输入EESAST账户密码……"
-                IsPassword="True"
-                Text="{Binding Password}"
-                ReturnCommand="{Binding LoginBtnClickedCommand}"
-                FontSize="20"/>
+                    Placeholder="请输入EESAST账户密码……"
+                    IsPassword="True"
+                    Text="{Binding Password}"
+                    ReturnCommand="{Binding LoginBtnClickedCommand}"
+                    FontSize="20"/>
 
                 <HorizontalStackLayout>
                     <CheckBox
-                    IsChecked="{Binding Remember}"
-                    VerticalOptions="Center"/>
+                        IsChecked="{Binding Remember}"
+                        VerticalOptions="Center"/>
                     <Label
-                    Text="记住我"
-                    FontSize="18"
-                    VerticalOptions="Center"/>
+                        Text="记住我"
+                        FontSize="18"
+                        VerticalOptions="Center"/>
                 </HorizontalStackLayout>
 
                 <Label
-                Text="{Binding ID}"
-                FontSize="{Binding ConstFontSize}"/>
+                    Text="{Binding ID}"
+                    FontSize="{Binding ConstFontSize}"/>
 
                 <Label
-                Text="{Binding LoginStatus}"
-                FontSize="{Binding ConstFontSize}"/>
+                    Text="{Binding LoginStatus}"
+                    FontSize="{Binding ConstFontSize}"/>
 
                 <Label
-                Text="{Binding RemStatus}"
-                FontSize="{Binding ConstFontSize}"/>
+                    Text="{Binding RemStatus}"
+                    FontSize="{Binding ConstFontSize}"/>
 
                 <Button
-                Text="登录"
-                Command="{Binding LoginBtnClickedCommand}"
-                BackgroundColor="{Binding ConstBackgroundColor}"
-                FontSize="{Binding ConstFontSize}"
-                TextColor="{Binding ConstTextColor}"/>
+                    Text="登录"
+                    Command="{Binding LoginBtnClickedCommand}"
+                    BackgroundColor="{Binding ConstBackgroundColor}"
+                    FontSize="{Binding ConstFontSize}"
+                    TextColor="{Binding ConstTextColor}"/>
 
             </VerticalStackLayout>
 
