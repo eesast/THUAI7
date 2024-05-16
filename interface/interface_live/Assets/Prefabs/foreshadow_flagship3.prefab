@@ -179,7 +179,6 @@ GameObject:
   - component: {fileID: 750574882568330089}
   - component: {fileID: 4697488312729372394}
   - component: {fileID: 3397589707071195213}
-  - component: {fileID: 7800904211505029374}
   m_Layer: 6
   m_Name: foreshadow_flagship3
   m_TagString: Ship
@@ -283,59 +282,3 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!60 &7800904211505029374
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8427987949455047532}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.6, y: 1.6}
-    newSize: {x: 1.6, y: 1.6}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.223483, y: 0.7550932}
-      - {x: -0.5892876, y: 0.53113854}
-      - {x: -0.7454866, y: 0.14892353}
-      - {x: -0.7455398, y: -0.16528817}
-      - {x: -0.32776636, y: -0.7462833}
-      - {x: 0.3340975, y: -0.7320269}
-      - {x: 0.7405982, y: -0.16136909}
-      - {x: 0.7467126, y: 0.1469028}
-      - {x: 0.57987946, y: 0.52651507}
-      - {x: 0.23184037, y: 0.75532526}
-      - {x: -0.0021837428, y: 0.7553253}
-  m_UseDelaunayMesh: 0

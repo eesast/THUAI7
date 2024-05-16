@@ -179,7 +179,6 @@ GameObject:
   - component: {fileID: 3612929307087270911}
   - component: {fileID: 6770427568174600179}
   - component: {fileID: -4359886877623418897}
-  - component: {fileID: 5830000981015486441}
   m_Layer: 6
   m_Name: afflict_civilship3
   m_TagString: Ship
@@ -283,56 +282,3 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!60 &5830000981015486441
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7171601645716739352}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.4222223, y: 1.4222223}
-    newSize: {x: 1.4222223, y: 1.4222223}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.65203804, y: -0.2703777}
-      - {x: -0.20493068, y: -0.688784}
-      - {x: 0.21247491, y: -0.6915976}
-      - {x: 0.6544107, y: -0.26316732}
-      - {x: 0.49007905, y: 0.24612868}
-      - {x: 0.10974354, y: 0.6245806}
-      - {x: -0.11176881, y: 0.6241703}
-      - {x: -0.4908295, y: 0.24613677}
-  m_UseDelaunayMesh: 0

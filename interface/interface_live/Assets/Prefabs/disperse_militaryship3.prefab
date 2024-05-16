@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6703198644651489217}
   - component: {fileID: 3937469415223448877}
   - component: {fileID: 1666208417870257314}
-  - component: {fileID: 5170778442484362911}
   m_Layer: 6
   m_Name: disperse_militaryship3
   m_TagString: Ship
@@ -115,61 +114,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!60 &5170778442484362911
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1718981553063819522}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.5058824, y: 1.5058824}
-    newSize: {x: 1.5058824, y: 1.5058824}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.006146442, y: -0.6972494}
-      - {x: 0.5091776, y: -0.5894133}
-      - {x: 0.640808, y: -0.39379779}
-      - {x: 0.6350861, y: 0.04032734}
-      - {x: 0.3777029, y: 0.58883476}
-      - {x: 0.0045966506, y: 0.7119452}
-      - {x: -0.3869319, y: 0.5855302}
-      - {x: -0.63092756, y: 0.027574211}
-      - {x: -0.6246743, y: -0.4011431}
-      - {x: -0.4897193, y: -0.59641504}
-  m_UseDelaunayMesh: 0
 --- !u!1 &6322145347568992764
 GameObject:
   m_ObjectHideFlags: 0
