@@ -10,7 +10,13 @@ import datetime
 
 class ShipDebugAPI(IShipAPI, IGameTimer):
     def __init__(
-        self, logic: ILogic, file: bool, screen: bool, warnOnly: bool, playerID: int, teamID: int
+        self,
+        logic: ILogic,
+        file: bool,
+        screen: bool,
+        warnOnly: bool,
+        playerID: int,
+        teamID: int,
     ) -> None:
         self.__logic = logic
         self.__pool = ThreadPoolExecutor(20)
@@ -106,6 +112,28 @@ class ShipDebugAPI(IShipAPI, IGameTimer):
 
         return self.__pool.submit(logProduce)
 
+    def RepairWormhole(self) -> Future[bool]:
+        self.__logger.info(f"RepairWormhole: called at {self.__GetTime()}ms")
+
+        def logRepairWormhole() -> bool:
+            result = self.__logic.RepairWormhole()
+            if not result:
+                self.__logger.warning(f"RepairWormhole failed at {self.__GetTime()}ms")
+            return result
+
+        return self.__pool.submit(logRepairWormhole)
+
+    def RepairHome(self) -> Future[bool]:
+        self.__logger.info(f"RepairHome: called at {self.__GetTime()}ms")
+
+        def logRepairHome() -> bool:
+            result = self.__logic.RepairHome()
+            if not result:
+                self.__logger.warning(f"RepairHome failed at {self.__GetTime()}ms")
+            return result
+
+        return self.__pool.submit(logRepairHome)
+
     def Rebuild(self, constructionType: THUAI7.ConstructionType) -> Future[bool]:
         self.__logger.info(
             f"Rebuild: called at {self.__GetTime()}ms construction type {constructionType}"
@@ -199,7 +227,7 @@ class ShipDebugAPI(IShipAPI, IGameTimer):
     def GetPlaceType(self, cellX: int, cellY: int) -> THUAI7.PlaceType:
         return self.__logic.GetPlaceType(cellX, cellY)
 
-    def GetConstructionState(self, cellX: int, cellY: int) -> Tuple[int, int]:
+    def GetConstructionState(self, cellX: int, cellY: int) -> THUAI7.ConstructionState | None:
         return self.__logic.GetConstructionState(cellX, cellY)
 
     def GetWormholeHp(self, cellX: int, cellY: int) -> int:
@@ -263,23 +291,14 @@ class ShipDebugAPI(IShipAPI, IGameTimer):
 
     def PrintSelfInfo(self) -> None:
         ship = self.__logic.GetSelfInfo()
-        self.__logger.info("******ship Info******")
+        self.__logger.info("******Self Info******")
         self.__logger.info(
-            f"teamID={ship.teamID} playerID={ship.playerID}, GUID={ship.guid} shipType:{ship.shipType}"
+            f"type={THUAI7.shipTypeDict[ship.shipType]}, playerID={ship.playerID}, GUID={ship.guid}, x={ship.x}, y={ship.y}"
         )
         self.__logger.info(
-            f"x={ship.x}, y={ship.y} hp={ship.hp} armor={ship.armor} shield={ship.shield} state:{ship.shipState}"
+            f"state={THUAI7.shipStateDict[ship.shipState]}, speed={ship.speed}, view range={ship.viewRange}, facing direction={ship.facingDirection}"
         )
-        self.__logger.info(
-            f"speed={ship.speed}, view range={ship.viewRange}, facingDirection={ship.facingDirection}"
-        )
-        self.__logger.info(
-            f"producerType:{ship.producerType} constructorType:{ship.constructorType}"
-        )
-        self.__logger.info(
-            f"armorType:{ship.armorType} shieldType:{ship.shieldType} weaponType:{ship.weaponType}"
-        )
-        self.__logger.info("************************\n")
+        self.__logger.info("*********************\n")
 
     def __GetTime(self) -> float:
         return (datetime.datetime.now() - self.__startPoint) / datetime.timedelta(
@@ -300,7 +319,13 @@ class ShipDebugAPI(IShipAPI, IGameTimer):
 
 class TeamDebugAPI(ITeamAPI, IGameTimer):
     def __init__(
-        self, logic: ILogic, file: bool, screen: bool, warnOnly: bool, playerID: int, teamID: int
+        self,
+        logic: ILogic,
+        file: bool,
+        screen: bool,
+        warnOnly: bool,
+        playerID: int,
+        teamID: int,
     ) -> None:
         self.__logic = logic
         self.__pool = ThreadPoolExecutor(20)
@@ -440,7 +465,7 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
     def GetPlaceType(self, cellX: int, cellY: int) -> THUAI7.PlaceType:
         return self.__logic.GetPlaceType(cellX, cellY)
 
-    def GetConstructionState(self, cellX: int, cellY: int) -> Tuple[int, int]:
+    def GetConstructionState(self, cellX: int, cellY: int) -> THUAI7.ConstructionState | None:
         return self.__logic.GetConstructionState(cellX, cellY)
 
     def GetWormholeHp(self, cellX: int, cellY: int) -> int:
@@ -496,8 +521,9 @@ class TeamDebugAPI(ITeamAPI, IGameTimer):
     def PrintSelfInfo(self) -> None:
         selfInfo = self.__logic.GetSelfInfo()
         self.__logger.info("******self team info******")
-        self.__logger.info(f"teamID:{selfInfo.teamID} playerID:{selfInfo.playerID}")
-        self.__logger.info(f"score:{selfInfo.score} energy:{selfInfo.energy}")
+        self.__logger.info(
+            f"teamID:{selfInfo.teamID} playerID:{selfInfo.playerID} score:{selfInfo.score} energy:{selfInfo.energy}"
+        )
         self.__logger.info("************************\n")
 
     def __GetTime(self) -> float:
