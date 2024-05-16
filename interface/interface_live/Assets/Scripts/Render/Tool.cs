@@ -9,6 +9,14 @@ public class Tool : Singleton<Tool>
     {
         return a.Next(min, max);
     }
+    public Vector2 CellToUxy(int cellx, int celly)
+    {
+        return new Vector2(celly, 50 - cellx);
+    }
+    public Vector2 GridToUxy(float gridx, float gridy)
+    {
+        return new Vector2(gridy / 1000 - 0.5f, 50.5f - gridx / 1000);
+    }
     public Vector2 GridToCell(Vector2 grid)
     {
         return new Vector2((int)(grid.x + 0.5f), (int)(grid.y + 0.5f));

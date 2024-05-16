@@ -342,6 +342,38 @@ namespace Server
             return Task.FromResult(boolRes);
         }
 
+        public override Task<BoolRes> RepairHome(IDMsg request, ServerCallContext context)
+        {
+            GameServerLogging.logger.ConsoleLogDebug(
+                $"TRY RepairHome: Player {request.PlayerId} from Team {request.TeamId}");
+            BoolRes boolRes = new();
+            if (request.PlayerId >= spectatorMinPlayerID)
+            {
+                boolRes.ActSuccess = false;
+                return Task.FromResult(boolRes);
+            }
+            // var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            boolRes.ActSuccess = game.RepairHome(request.TeamId, request.PlayerId);
+            GameServerLogging.logger.ConsoleLogDebug("END RepairHome");
+            return Task.FromResult(boolRes);
+        }
+
+        public override Task<BoolRes> RepairWormhole(IDMsg request, ServerCallContext context)
+        {
+            GameServerLogging.logger.ConsoleLogDebug(
+                $"TRY RepairWormhole: Player {request.PlayerId} from Team {request.TeamId}");
+            BoolRes boolRes = new();
+            if (request.PlayerId >= spectatorMinPlayerID)
+            {
+                boolRes.ActSuccess = false;
+                return Task.FromResult(boolRes);
+            }
+            // var gameID = communicationToGameID[request.TeamId][request.PlayerId];
+            boolRes.ActSuccess = game.RepairWormhole(request.TeamId, request.PlayerId);
+            GameServerLogging.logger.ConsoleLogDebug("END RepairWormhole");
+            return Task.FromResult(boolRes);
+        }
+
         public override Task<BoolRes> Attack(AttackMsg request, ServerCallContext context)
         {
             GameServerLogging.logger.ConsoleLogDebug(

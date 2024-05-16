@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <vector>
+#include <optional>
 #include <thread>
 #include <mutex>
 #include <condition_variable>
@@ -98,7 +99,7 @@ private:
     [[nodiscard]] std::shared_ptr<const THUAI7::GameInfo> GetGameInfo() const;
     [[nodiscard]] THUAI7::PlaceType GetPlaceType(int32_t cellX, int32_t cellY) const;
     [[nodiscard]] std::vector<int64_t> GetPlayerGUIDs() const;
-    [[nodiscard]] std::pair<int32_t, int32_t> GetConstructionState(int32_t cellX, int32_t cellY) const;
+    [[nodiscard]] std::optional<THUAI7::ConstructionState> GetConstructionState(int32_t cellX, int32_t cellY) const;
     [[nodiscard]] int32_t GetWormholeHp(int32_t cellX, int32_t cellY) const;
     [[nodiscard]] int32_t GetResourceState(int32_t cellX, int32_t cellY) const;
     [[nodiscard]] int32_t GetHomeHp() const;
@@ -117,6 +118,8 @@ private:
     bool Move(int64_t time, double angle);
     bool Recover(int64_t recover);
     bool Produce();
+    bool RepairWormhole();
+    bool RepairHome();
     bool Rebuild(THUAI7::ConstructionType constructionType);
     bool Construct(THUAI7::ConstructionType constructionType);
     bool Attack(double angle);

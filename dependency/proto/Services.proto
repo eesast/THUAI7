@@ -17,8 +17,11 @@ service AvailableService
     rpc Produce(IDMsg) returns (BoolRes);           // 开采
     rpc Rebuild(ConstructMsg) returns (BoolRes);    // 给建筑回血
     rpc Construct(ConstructMsg) returns (BoolRes);  // 修建建筑
+    rpc RepairHome(IDMsg) returns (BoolRes);        // 修理大本营
+    rpc RepairWormhole(IDMsg) returns (BoolRes);    // 修理虫洞
     rpc Attack(AttackMsg) returns (BoolRes);        // 攻击
     rpc Send(SendMsg) returns (BoolRes);            // 传递信息
+
     // 大本营
     rpc InstallModule(InstallMsg) returns (BoolRes);
     rpc Recycle(IDMsg) returns (BoolRes);
