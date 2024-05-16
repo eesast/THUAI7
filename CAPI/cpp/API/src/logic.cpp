@@ -101,12 +101,12 @@ std::optional<THUAI7::ConstructionState> Logic::GetConstructionState(int32_t cel
     auto it3 = currentState->mapInfo->fortState.find(pos);
     if (it != currentState->mapInfo->factoryState.end())
     {
-        return std::make_optional<THUAI7::ConstructionState>(THUAI7::ConstructionState(currentState->mapInfo->factoryState[pos], THUAI7::ConstructionType::Factory));
+        return std::make_optional<THUAI7::ConstructionState>(currentState->mapInfo->factoryState[pos], THUAI7::ConstructionType::Factory);
     }
     else if (it2 != currentState->mapInfo->communityState.end())
-        return std::make_optional<THUAI7::ConstructionState>(THUAI7::ConstructionState(currentState->mapInfo->communityState[pos], THUAI7::ConstructionType::Community));
+        return std::make_optional<THUAI7::ConstructionState>(currentState->mapInfo->communityState[pos], THUAI7::ConstructionType::Community);
     else if (it3 != currentState->mapInfo->fortState.end())
-        return std::make_optional<THUAI7::ConstructionState>(THUAI7::ConstructionState(currentState->mapInfo->fortState[pos], THUAI7::ConstructionType::Fort));
+        return std::make_optional<THUAI7::ConstructionState>(currentState->mapInfo->fortState[pos], THUAI7::ConstructionType::Fort);
     else
     {
         logger->warn("Construction not found");
