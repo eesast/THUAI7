@@ -52,6 +52,9 @@ namespace protobuf
     class BoolRes;
     struct BoolResDefaultTypeInternal;
     extern BoolResDefaultTypeInternal _BoolRes_default_instance_;
+    class BuildShipRes;
+    struct BuildShipResDefaultTypeInternal;
+    extern BuildShipResDefaultTypeInternal _BuildShipRes_default_instance_;
     class EcoRes;
     struct EcoResDefaultTypeInternal;
     extern EcoResDefaultTypeInternal _EcoRes_default_instance_;
@@ -113,6 +116,8 @@ namespace protobuf
 PROTOBUF_NAMESPACE_OPEN
 template<>
 ::protobuf::BoolRes* Arena::CreateMaybeMessage<::protobuf::BoolRes>(Arena*);
+template<>
+::protobuf::BuildShipRes* Arena::CreateMaybeMessage<::protobuf::BuildShipRes>(Arena*);
 template<>
 ::protobuf::EcoRes* Arena::CreateMaybeMessage<::protobuf::EcoRes>(Arena*);
 template<>
@@ -1938,6 +1943,7 @@ namespace protobuf
             kXFieldNumber = 1,
             kYFieldNumber = 2,
             kHpFieldNumber = 3,
+            kIdFieldNumber = 4,
         };
         // int32 x = 1;
         void clear_x();
@@ -1969,6 +1975,16 @@ namespace protobuf
         void _internal_set_hp(int32_t value);
 
     public:
+        // int32 id = 4;
+        void clear_id();
+        int32_t id() const;
+        void set_id(int32_t value);
+
+    private:
+        int32_t _internal_id() const;
+        void _internal_set_id(int32_t value);
+
+    public:
         // @@protoc_insertion_point(class_scope:protobuf.MessageOfWormhole)
 
     private:
@@ -1983,6 +1999,7 @@ namespace protobuf
             int32_t x_;
             int32_t y_;
             int32_t hp_;
+            int32_t id_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
         union
@@ -4343,6 +4360,210 @@ namespace protobuf
     };
     // -------------------------------------------------------------------
 
+    class BuildShipRes final :
+        public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protobuf.BuildShipRes) */
+    {
+    public:
+        inline BuildShipRes() :
+            BuildShipRes(nullptr)
+        {
+        }
+        ~BuildShipRes() override;
+        explicit PROTOBUF_CONSTEXPR BuildShipRes(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+        BuildShipRes(const BuildShipRes& from);
+        BuildShipRes(BuildShipRes&& from) noexcept
+            :
+            BuildShipRes()
+        {
+            *this = ::std::move(from);
+        }
+
+        inline BuildShipRes& operator=(const BuildShipRes& from)
+        {
+            CopyFrom(from);
+            return *this;
+        }
+        inline BuildShipRes& operator=(BuildShipRes&& from) noexcept
+        {
+            if (this == &from)
+                return *this;
+            if (GetOwningArena() == from.GetOwningArena()
+#ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+                && GetOwningArena() != nullptr
+#endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+            )
+            {
+                InternalSwap(&from);
+            }
+            else
+            {
+                CopyFrom(from);
+            }
+            return *this;
+        }
+
+        static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor()
+        {
+            return GetDescriptor();
+        }
+        static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor()
+        {
+            return default_instance().GetMetadata().descriptor;
+        }
+        static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection()
+        {
+            return default_instance().GetMetadata().reflection;
+        }
+        static const BuildShipRes& default_instance()
+        {
+            return *internal_default_instance();
+        }
+        static inline const BuildShipRes* internal_default_instance()
+        {
+            return reinterpret_cast<const BuildShipRes*>(
+                &_BuildShipRes_default_instance_
+            );
+        }
+        static constexpr int kIndexInFileMessages =
+            16;
+
+        friend void swap(BuildShipRes& a, BuildShipRes& b)
+        {
+            a.Swap(&b);
+        }
+        inline void Swap(BuildShipRes* other)
+        {
+            if (other == this)
+                return;
+#ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+            if (GetOwningArena() != nullptr &&
+                GetOwningArena() == other->GetOwningArena())
+            {
+#else   // PROTOBUF_FORCE_COPY_IN_SWAP
+            if (GetOwningArena() == other->GetOwningArena())
+            {
+#endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+                InternalSwap(other);
+            }
+            else
+            {
+                ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+            }
+        }
+        void UnsafeArenaSwap(BuildShipRes* other)
+        {
+            if (other == this)
+                return;
+            GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+            InternalSwap(other);
+        }
+
+        // implements Message ----------------------------------------------
+
+        BuildShipRes* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final
+        {
+            return CreateMaybeMessage<BuildShipRes>(arena);
+        }
+        using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+        void CopyFrom(const BuildShipRes& from);
+        using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+        void MergeFrom(const BuildShipRes& from)
+        {
+            BuildShipRes::MergeImpl(*this, from);
+        }
+
+    private:
+        static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+
+    public:
+        PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+        bool IsInitialized() const final;
+
+        size_t ByteSizeLong() const final;
+        const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+        uint8_t* _InternalSerialize(
+            uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream
+        ) const final;
+        int GetCachedSize() const final
+        {
+            return _impl_._cached_size_.Get();
+        }
+
+    private:
+        void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+        void SharedDtor();
+        void SetCachedSize(int size) const final;
+        void InternalSwap(BuildShipRes* other);
+
+    private:
+        friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+        static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName()
+        {
+            return "protobuf.BuildShipRes";
+        }
+
+    protected:
+        explicit BuildShipRes(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned = false);
+
+    public:
+        static const ClassData _class_data_;
+        const ::PROTOBUF_NAMESPACE_ID::Message::ClassData* GetClassData() const final;
+
+        ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+        // nested types ----------------------------------------------------
+
+        // accessors -------------------------------------------------------
+
+        enum : int
+        {
+            kPlayerIdFieldNumber = 2,
+            kActSuccessFieldNumber = 1,
+        };
+        // int64 player_id = 2;
+        void clear_player_id();
+        int64_t player_id() const;
+        void set_player_id(int64_t value);
+
+    private:
+        int64_t _internal_player_id() const;
+        void _internal_set_player_id(int64_t value);
+
+    public:
+        // bool act_success = 1;
+        void clear_act_success();
+        bool act_success() const;
+        void set_act_success(bool value);
+
+    private:
+        bool _internal_act_success() const;
+        void _internal_set_act_success(bool value);
+
+    public:
+        // @@protoc_insertion_point(class_scope:protobuf.BuildShipRes)
+
+    private:
+        class _Internal;
+
+        template<typename T>
+        friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+        typedef void InternalArenaConstructable_;
+        typedef void DestructorSkippable_;
+        struct Impl_
+        {
+            int64_t player_id_;
+            bool act_success_;
+            mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+        };
+        union
+        {
+            Impl_ _impl_;
+        };
+        friend struct ::TableStruct_Message2Clients_2eproto;
+    };
+    // -------------------------------------------------------------------
+
     class BoolRes final :
         public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:protobuf.BoolRes) */
     {
@@ -4409,7 +4630,7 @@ namespace protobuf
             );
         }
         static constexpr int kIndexInFileMessages =
-            16;
+            17;
 
         friend void swap(BoolRes& a, BoolRes& b)
         {
@@ -4601,7 +4822,7 @@ namespace protobuf
             );
         }
         static constexpr int kIndexInFileMessages =
-            17;
+            18;
 
         friend void swap(ShipInfoRes& a, ShipInfoRes& b)
         {
@@ -4805,7 +5026,7 @@ namespace protobuf
             );
         }
         static constexpr int kIndexInFileMessages =
-            18;
+            19;
 
         friend void swap(EcoRes& a, EcoRes& b)
         {
@@ -5004,7 +5225,7 @@ namespace protobuf
             );
         }
         static constexpr int kIndexInFileMessages =
-            19;
+            20;
 
         friend void swap(MessageOfNews& a, MessageOfNews& b)
         {
@@ -6398,6 +6619,30 @@ namespace protobuf
     {
         _internal_set_hp(value);
         // @@protoc_insertion_point(field_set:protobuf.MessageOfWormhole.hp)
+    }
+
+    // int32 id = 4;
+    inline void MessageOfWormhole::clear_id()
+    {
+        _impl_.id_ = 0;
+    }
+    inline int32_t MessageOfWormhole::_internal_id() const
+    {
+        return _impl_.id_;
+    }
+    inline int32_t MessageOfWormhole::id() const
+    {
+        // @@protoc_insertion_point(field_get:protobuf.MessageOfWormhole.id)
+        return _internal_id();
+    }
+    inline void MessageOfWormhole::_internal_set_id(int32_t value)
+    {
+        _impl_.id_ = value;
+    }
+    inline void MessageOfWormhole::set_id(int32_t value)
+    {
+        _internal_set_id(value);
+        // @@protoc_insertion_point(field_set:protobuf.MessageOfWormhole.id)
     }
 
     // -------------------------------------------------------------------
@@ -8419,6 +8664,58 @@ namespace protobuf
 
     // -------------------------------------------------------------------
 
+    // BuildShipRes
+
+    // bool act_success = 1;
+    inline void BuildShipRes::clear_act_success()
+    {
+        _impl_.act_success_ = false;
+    }
+    inline bool BuildShipRes::_internal_act_success() const
+    {
+        return _impl_.act_success_;
+    }
+    inline bool BuildShipRes::act_success() const
+    {
+        // @@protoc_insertion_point(field_get:protobuf.BuildShipRes.act_success)
+        return _internal_act_success();
+    }
+    inline void BuildShipRes::_internal_set_act_success(bool value)
+    {
+        _impl_.act_success_ = value;
+    }
+    inline void BuildShipRes::set_act_success(bool value)
+    {
+        _internal_set_act_success(value);
+        // @@protoc_insertion_point(field_set:protobuf.BuildShipRes.act_success)
+    }
+
+    // int64 player_id = 2;
+    inline void BuildShipRes::clear_player_id()
+    {
+        _impl_.player_id_ = int64_t{0};
+    }
+    inline int64_t BuildShipRes::_internal_player_id() const
+    {
+        return _impl_.player_id_;
+    }
+    inline int64_t BuildShipRes::player_id() const
+    {
+        // @@protoc_insertion_point(field_get:protobuf.BuildShipRes.player_id)
+        return _internal_player_id();
+    }
+    inline void BuildShipRes::_internal_set_player_id(int64_t value)
+    {
+        _impl_.player_id_ = value;
+    }
+    inline void BuildShipRes::set_player_id(int64_t value)
+    {
+        _internal_set_player_id(value);
+        // @@protoc_insertion_point(field_set:protobuf.BuildShipRes.player_id)
+    }
+
+    // -------------------------------------------------------------------
+
     // BoolRes
 
     // bool act_success = 1;
@@ -8816,6 +9113,8 @@ namespace protobuf
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif  // __GNUC__
+    // -------------------------------------------------------------------
+
     // -------------------------------------------------------------------
 
     // -------------------------------------------------------------------
