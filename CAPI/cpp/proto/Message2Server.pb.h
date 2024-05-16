@@ -2218,8 +2218,7 @@ namespace protobuf
         {
             kTeamIdFieldNumber = 2,
             kShipTypeFieldNumber = 1,
-            kBirthpointIndexFieldNumber = 4,
-            kPlayerIdFieldNumber = 3,
+            kBirthpointIndexFieldNumber = 3,
         };
         // int64 team_id = 2;
         void clear_team_id();
@@ -2241,7 +2240,7 @@ namespace protobuf
         void _internal_set_ship_type(::protobuf::ShipType value);
 
     public:
-        // int32 birthpoint_index = 4;
+        // int32 birthpoint_index = 3;
         void clear_birthpoint_index();
         int32_t birthpoint_index() const;
         void set_birthpoint_index(int32_t value);
@@ -2249,16 +2248,6 @@ namespace protobuf
     private:
         int32_t _internal_birthpoint_index() const;
         void _internal_set_birthpoint_index(int32_t value);
-
-    public:
-        // int64 player_id = 3;
-        void clear_player_id();
-        int64_t player_id() const;
-        void set_player_id(int64_t value);
-
-    private:
-        int64_t _internal_player_id() const;
-        void _internal_set_player_id(int64_t value);
 
     public:
         // @@protoc_insertion_point(class_scope:protobuf.BuildShipMsg)
@@ -2275,7 +2264,6 @@ namespace protobuf
             int64_t team_id_;
             int ship_type_;
             int32_t birthpoint_index_;
-            int64_t player_id_;
             mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
         };
         union
@@ -3164,31 +3152,7 @@ namespace protobuf
         // @@protoc_insertion_point(field_set:protobuf.BuildShipMsg.team_id)
     }
 
-    // int64 player_id = 3;
-    inline void BuildShipMsg::clear_player_id()
-    {
-        _impl_.player_id_ = int64_t{0};
-    }
-    inline int64_t BuildShipMsg::_internal_player_id() const
-    {
-        return _impl_.player_id_;
-    }
-    inline int64_t BuildShipMsg::player_id() const
-    {
-        // @@protoc_insertion_point(field_get:protobuf.BuildShipMsg.player_id)
-        return _internal_player_id();
-    }
-    inline void BuildShipMsg::_internal_set_player_id(int64_t value)
-    {
-        _impl_.player_id_ = value;
-    }
-    inline void BuildShipMsg::set_player_id(int64_t value)
-    {
-        _internal_set_player_id(value);
-        // @@protoc_insertion_point(field_set:protobuf.BuildShipMsg.player_id)
-    }
-
-    // int32 birthpoint_index = 4;
+    // int32 birthpoint_index = 3;
     inline void BuildShipMsg::clear_birthpoint_index()
     {
         _impl_.birthpoint_index_ = 0;
