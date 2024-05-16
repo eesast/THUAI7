@@ -222,7 +222,7 @@ namespace protobuf
         ::_pbi::ConstantInitialized
     ) :
         _impl_{
-            /*decltype(_impl_.team_id_)*/ int64_t{0}, /*decltype(_impl_.ship_type_)*/ 0, /*decltype(_impl_.birthpoint_index_)*/ 0, /*decltype(_impl_.player_id_)*/ int64_t{0}, /*decltype(_impl_._cached_size_)*/ {}}
+            /*decltype(_impl_.team_id_)*/ int64_t{0}, /*decltype(_impl_.ship_type_)*/ 0, /*decltype(_impl_.birthpoint_index_)*/ 0, /*decltype(_impl_._cached_size_)*/ {}}
     {
     }
     struct BuildShipMsgDefaultTypeInternal
@@ -335,7 +335,6 @@ const uint32_t TableStruct_Message2Server_2eproto::offsets[] PROTOBUF_SECTION_VA
     ~0u,  // no _inlined_string_donated_
     PROTOBUF_FIELD_OFFSET(::protobuf::BuildShipMsg, _impl_.ship_type_),
     PROTOBUF_FIELD_OFFSET(::protobuf::BuildShipMsg, _impl_.team_id_),
-    PROTOBUF_FIELD_OFFSET(::protobuf::BuildShipMsg, _impl_.player_id_),
     PROTOBUF_FIELD_OFFSET(::protobuf::BuildShipMsg, _impl_.birthpoint_index_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -383,10 +382,10 @@ const char descriptor_table_protodef_Message2Server_2eproto[] PROTOBUF_SECTION_V
     "overMsg\022\021\n\tplayer_id\030\001 \001(\003\022\017\n\007recover\030\002 "
     "\001(\003\022\017\n\007team_id\030\003 \001(\003\"[\n\nInstallMsg\022)\n\013mo"
     "dule_type\030\001 \001(\0162\024.protobuf.ModuleType\022\021\n"
-    "\tplayer_id\030\002 \001(\003\022\017\n\007team_id\030\003 \001(\003\"s\n\014Bui"
+    "\tplayer_id\030\002 \001(\003\022\017\n\007team_id\030\003 \001(\003\"`\n\014Bui"
     "ldShipMsg\022%\n\tship_type\030\001 \001(\0162\022.protobuf."
-    "ShipType\022\017\n\007team_id\030\002 \001(\003\022\021\n\tplayer_id\030\003"
-    " \001(\003\022\030\n\020birthpoint_index\030\004 \001(\005b\006proto3";
+    "ShipType\022\017\n\007team_id\030\002 \001(\003\022\030\n\020birthpoint_"
+    "index\030\003 \001(\005b\006proto3";
 static const ::_pbi::DescriptorTable* const descriptor_table_Message2Server_2eproto_deps[1] = {
     &::descriptor_table_MessageType_2eproto,
 };
@@ -394,7 +393,7 @@ static ::_pbi::once_flag descriptor_table_Message2Server_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Message2Server_2eproto = {
     false,
     false,
-    878,
+    859,
     descriptor_table_protodef_Message2Server_2eproto,
     "Message2Server.proto",
     &descriptor_table_Message2Server_2eproto_once,
@@ -2787,10 +2786,10 @@ namespace protobuf
         BuildShipMsg* const _this = this;
         (void)_this;
         new (&_impl_) Impl_{
-            decltype(_impl_.team_id_){}, decltype(_impl_.ship_type_){}, decltype(_impl_.birthpoint_index_){}, decltype(_impl_.player_id_){}, /*decltype(_impl_._cached_size_)*/ {}};
+            decltype(_impl_.team_id_){}, decltype(_impl_.ship_type_){}, decltype(_impl_.birthpoint_index_){}, /*decltype(_impl_._cached_size_)*/ {}};
 
         _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-        ::memcpy(&_impl_.team_id_, &from._impl_.team_id_, static_cast<size_t>(reinterpret_cast<char*>(&_impl_.player_id_) - reinterpret_cast<char*>(&_impl_.team_id_)) + sizeof(_impl_.player_id_));
+        ::memcpy(&_impl_.team_id_, &from._impl_.team_id_, static_cast<size_t>(reinterpret_cast<char*>(&_impl_.birthpoint_index_) - reinterpret_cast<char*>(&_impl_.team_id_)) + sizeof(_impl_.birthpoint_index_));
         // @@protoc_insertion_point(copy_constructor:protobuf.BuildShipMsg)
     }
 
@@ -2801,7 +2800,7 @@ namespace protobuf
         (void)arena;
         (void)is_message_owned;
         new (&_impl_) Impl_{
-            decltype(_impl_.team_id_){int64_t{0}}, decltype(_impl_.ship_type_){0}, decltype(_impl_.birthpoint_index_){0}, decltype(_impl_.player_id_){int64_t{0}}, /*decltype(_impl_._cached_size_)*/ {}};
+            decltype(_impl_.team_id_){int64_t{0}}, decltype(_impl_.ship_type_){0}, decltype(_impl_.birthpoint_index_){0}, /*decltype(_impl_._cached_size_)*/ {}};
     }
 
     BuildShipMsg::~BuildShipMsg()
@@ -2832,7 +2831,7 @@ namespace protobuf
         // Prevent compiler warnings about cached_has_bits being unused
         (void)cached_has_bits;
 
-        ::memset(&_impl_.team_id_, 0, static_cast<size_t>(reinterpret_cast<char*>(&_impl_.player_id_) - reinterpret_cast<char*>(&_impl_.team_id_)) + sizeof(_impl_.player_id_));
+        ::memset(&_impl_.team_id_, 0, static_cast<size_t>(reinterpret_cast<char*>(&_impl_.birthpoint_index_) - reinterpret_cast<char*>(&_impl_.team_id_)) + sizeof(_impl_.birthpoint_index_));
         _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
     }
 
@@ -2868,19 +2867,9 @@ namespace protobuf
                     else
                         goto handle_unusual;
                     continue;
-                // int64 player_id = 3;
+                // int32 birthpoint_index = 3;
                 case 3:
                     if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24))
-                    {
-                        _impl_.player_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
-                        CHK_(ptr);
-                    }
-                    else
-                        goto handle_unusual;
-                    continue;
-                // int32 birthpoint_index = 4;
-                case 4:
-                    if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32))
                     {
                         _impl_.birthpoint_index_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
                         CHK_(ptr);
@@ -2938,18 +2927,11 @@ namespace protobuf
             target = ::_pbi::WireFormatLite::WriteInt64ToArray(2, this->_internal_team_id(), target);
         }
 
-        // int64 player_id = 3;
-        if (this->_internal_player_id() != 0)
-        {
-            target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteInt64ToArray(3, this->_internal_player_id(), target);
-        }
-
-        // int32 birthpoint_index = 4;
+        // int32 birthpoint_index = 3;
         if (this->_internal_birthpoint_index() != 0)
         {
             target = stream->EnsureSpace(target);
-            target = ::_pbi::WireFormatLite::WriteInt32ToArray(4, this->_internal_birthpoint_index(), target);
+            target = ::_pbi::WireFormatLite::WriteInt32ToArray(3, this->_internal_birthpoint_index(), target);
         }
 
         if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields()))
@@ -2984,16 +2966,10 @@ namespace protobuf
                           ::_pbi::WireFormatLite::EnumSize(this->_internal_ship_type());
         }
 
-        // int32 birthpoint_index = 4;
+        // int32 birthpoint_index = 3;
         if (this->_internal_birthpoint_index() != 0)
         {
             total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_birthpoint_index());
-        }
-
-        // int64 player_id = 3;
-        if (this->_internal_player_id() != 0)
-        {
-            total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(this->_internal_player_id());
         }
 
         return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -3028,10 +3004,6 @@ namespace protobuf
         {
             _this->_internal_set_birthpoint_index(from._internal_birthpoint_index());
         }
-        if (from._internal_player_id() != 0)
-        {
-            _this->_internal_set_player_id(from._internal_player_id());
-        }
         _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
     }
 
@@ -3054,7 +3026,7 @@ namespace protobuf
         using std::swap;
         _internal_metadata_.InternalSwap(&other->_internal_metadata_);
         ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-            PROTOBUF_FIELD_OFFSET(BuildShipMsg, _impl_.player_id_) + sizeof(BuildShipMsg::_impl_.player_id_) - PROTOBUF_FIELD_OFFSET(BuildShipMsg, _impl_.team_id_)>(
+            PROTOBUF_FIELD_OFFSET(BuildShipMsg, _impl_.birthpoint_index_) + sizeof(BuildShipMsg::_impl_.birthpoint_index_) - PROTOBUF_FIELD_OFFSET(BuildShipMsg, _impl_.team_id_)>(
             reinterpret_cast<char*>(&_impl_.team_id_),
             reinterpret_cast<char*>(&other->_impl_.team_id_)
         );

@@ -415,7 +415,7 @@ class IShipAPI(IAPI, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def Rebuild(self, constructionType: THUAI7.ConstructionStateType) -> Future[bool]:
+    def Rebuild(self, constructionType: THUAI7.ConstructionState) -> Future[bool]:
         """发出重建指令
         - 需要接近待重建 `Construction`
 
