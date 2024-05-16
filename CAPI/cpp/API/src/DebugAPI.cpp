@@ -224,7 +224,7 @@ THUAI7::PlaceType ShipDebugAPI::GetPlaceType(int32_t cellX, int32_t cellY) const
 
 std::optional<THUAI7::ConstructionState> ShipDebugAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
 {
-    return std::move(logic.GetConstructionState(cellX, cellY));
+    return logic.GetConstructionState(cellX, cellY);
 }
 
 int32_t ShipDebugAPI::GetWormholeHp(int32_t cellX, int32_t cellY) const
@@ -418,7 +418,7 @@ THUAI7::PlaceType TeamDebugAPI::GetPlaceType(int32_t cellX, int32_t cellY) const
 
 std::optional<THUAI7::ConstructionState> TeamDebugAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
 {
-    return std::move(logic.GetConstructionState(cellX, cellY));
+    return logic.GetConstructionState(cellX, cellY);
 }
 
 int32_t TeamDebugAPI::GetWormholeHp(int32_t cellX, int32_t cellY) const
