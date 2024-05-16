@@ -43,7 +43,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetConstructionState(self, cellX: int, cellY: int) -> THUAI7.Construction:
+    def GetConstructionState(self, cellX: int, cellY: int) -> THUAI7.ConstructionState | None:
         pass
 
     @abstractmethod
@@ -247,7 +247,7 @@ class IAPI(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetConstructionState(self, cellX: int, cellY: int) -> THUAI7.Construction:
+    def GetConstructionState(self, cellX: int, cellY: int) -> THUAI7.ConstructionState | None:
         """获取当前建筑状态
 
         :param cellX: X坐标, 单位Cell
@@ -415,7 +415,7 @@ class IShipAPI(IAPI, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def Rebuild(self, constructionType: THUAI7.ConstructionType) -> Future[bool]:
+    def Rebuild(self, constructionType: THUAI7.ConstructionStateType) -> Future[bool]:
         """发出重建指令
         - 需要接近待重建 `Construction`
 

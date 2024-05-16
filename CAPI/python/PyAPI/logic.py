@@ -138,21 +138,21 @@ class Logic(ILogic):
         with self.__mtxState:
             return copy.deepcopy(self.__currentState.guids)
 
-    def GetConstructionState(self, cellX: int, cellY: int) -> THUAI7.Construction:
+    def GetConstructionState(self, cellX: int, cellY: int) -> THUAI7.ConstructionState | None:
         with self.__mtxState:
             self.__logger.debug("Called GetConstructionState")
             if (cellX, cellY) in self.__currentState.mapInfo.factoryState:
-                return THUAI7.Construction(
+                return THUAI7.ConstructionState(
                     self.__currentState.mapInfo.factoryState[(cellX, cellY)],
                     THUAI7.ConstructionType.Factory,
                 )
             elif (cellX, cellY) in self.__currentState.mapInfo.communityState:
-                return THUAI7.Construction(
+                return THUAI7.ConstructionState(
                     self.__currentState.mapInfo.communityState[(cellX, cellY)],
                     THUAI7.ConstructionType.Community,
                 )
             elif (cellX, cellY) in self.__currentState.mapInfo.fortState:
-                return THUAI7.Construction(
+                return THUAI7.ConstructionState(
                     self.__currentState.mapInfo.fortState[(cellX, cellY)],
                     THUAI7.ConstructionType.Fort,
                 )

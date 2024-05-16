@@ -82,7 +82,7 @@ class ShipAPI(IShipAPI, IGameTimer):
     def GetPlaceType(self, cellX: int, cellY: int) -> THUAI7.PlaceType:
         return self.__logic.GetPlaceType(cellX, cellY)
 
-    def GetConstructionState(self, cellX: int, cellY: int) -> THUAI7.Construction:
+    def GetConstructionState(self, cellX: int, cellY: int) -> THUAI7.ConstructionState | None:
         return self.__logic.GetConstructionState(cellX, cellY)
 
     def GetWormholeHp(self, cellX: int, cellY: int) -> int:
@@ -190,7 +190,7 @@ class TeamAPI(ITeamAPI, IGameTimer):
     def GetPlaceType(self, cellX: int, cellY: int) -> THUAI7.PlaceType:
         return self.__logic.GetPlaceType(cellX, cellY)
 
-    def GetConstructionState(self, cellX: int, cellY: int) -> THUAI7.Construction:
+    def GetConstructionState(self, cellX: int, cellY: int) -> THUAI7.ConstructionState | None:
         return self.__logic.GetConstructionState(cellX, cellY)
 
     def GetWormholeHp(self, cellX: int, cellY: int) -> int:
