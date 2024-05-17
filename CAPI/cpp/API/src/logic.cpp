@@ -322,7 +322,7 @@ void Logic::ProcessMessage()
                             if (Proto2THUAI7::messageOfObjDict[item.message_of_obj_case()] == THUAI7::MessageOfObj::MapMessage)
                             {
                                 auto map = std::vector<std::vector<THUAI7::PlaceType>>();
-                                auto mapResult = item.map_message();
+                                auto& mapResult = item.map_message();
                                 for (int32_t i = 0; i < item.map_message().rows_size(); i++)
                                 {
                                     std::vector<THUAI7::PlaceType> row;
@@ -608,7 +608,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                 break;
             case THUAI7::MessageOfObj::NewsMessage:
                 {
-                    auto news = item.news_message();
+                    auto& news = item.news_message();
                     if (news.to_id() == playerID && news.team_id() == teamID)
                     {
                         if (Proto2THUAI7::newsTypeDict[news.news_case()] == THUAI7::NewsType::TextMessage)
@@ -813,7 +813,7 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
             case THUAI7::MessageOfObj::NewsMessage:
                 if (item.news_message().team_id() == teamID && item.news_message().to_id() == playerID)
                 {
-                    auto news = item.news_message();
+                    auto& news = item.news_message();
                     if (Proto2THUAI7::newsTypeDict[news.news_case()] == THUAI7::NewsType::TextMessage)
                     {
                         messageQueue.emplace(std::make_pair(news.from_id(), news.text_message()));

@@ -52,8 +52,8 @@ private:
     protobuf::MessageToClient message2Client;
     std::mutex mtxMessage;
     std::mutex mtxLimit;
-    int32_t counter;
-    int32_t counterMove;
+    int32_t counter{};
+    int32_t counterMove{};
     static constexpr const int32_t limit = 50;
     static constexpr const int32_t moveLimit = 10;
     std::condition_variable cvMessage;

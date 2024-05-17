@@ -29,21 +29,21 @@ namespace AssistFunction
 
     [[nodiscard]] constexpr inline int32_t GridToCell(double grid) noexcept
     {
-        return int(grid) / numOfGridPerCell;
+        return int32_t(grid) / numOfGridPerCell;
     }
 
     inline bool HaveView(int32_t x, int32_t y, int32_t newX, int32_t newY, int32_t viewRange, std::vector<std::vector<THUAI7::PlaceType>>& map)
     {
-        int32_t deltaX = newX - x;
-        int32_t deltaY = newY - y;
-        double distance = double(deltaX * deltaX) + double(deltaY * deltaY);
+        double deltaX = newX - x;
+        double deltaY = newY - y;
+        double distance = std::pow(deltaX, 2) + std::pow(deltaY, 2);
         THUAI7::PlaceType myPlace = map[GridToCell(x)][GridToCell(y)];
         THUAI7::PlaceType newPlace = map[GridToCell(newX)][GridToCell(newY)];
         if (newPlace == THUAI7::PlaceType::Shadow && myPlace != THUAI7::PlaceType::Shadow)
             return false;
-        if (distance > viewRange * viewRange)
+        if (distance > std::pow(viewRange, 2))
             return false;
-        int32_t divide = std::max(std::abs(deltaX), std::abs(deltaY)) / 100;
+        int32_t divide = int32_t(std::max(std::abs(deltaX), std::abs(deltaY)) / 100);
         if (divide == 0)
             return true;
         double dx = deltaX / divide;
@@ -546,8 +546,8 @@ namespace Time
 {
     inline double TimeSinceStart(const std::chrono::system_clock::time_point& sp)
     {
-        std::chrono::system_clock::time_point tp = std::chrono::system_clock::now();
-        std::chrono::duration<double, std::milli> time_span = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(tp - sp);
+        auto tp = std::chrono::system_clock::now();
+        auto time_span = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(tp - sp);
         return time_span.count();
     }
 }  // namespace Time
