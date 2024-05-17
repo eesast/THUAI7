@@ -31,7 +31,7 @@ static constexpr ::_pb::Message* const* file_default_instances = nullptr;
 
 const char descriptor_table_protodef_Services_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
     "\n\016Services.proto\022\010protobuf\032\025Message2Clie"
-    "nts.proto\032\024Message2Server.proto2\363\005\n\020Avai"
+    "nts.proto\032\024Message2Server.proto2\233\007\n\020Avai"
     "lableService\0223\n\rTryConnection\022\017.protobuf"
     ".IDMsg\032\021.protobuf.BoolRes\022=\n\tAddPlayer\022\023"
     ".protobuf.PlayerMsg\032\031.protobuf.MessageTo"
@@ -43,14 +43,19 @@ const char descriptor_table_protodef_Services_2eproto[] PROTOBUF_SECTION_VARIABL
     "uf.BoolRes\0224\n\007Rebuild\022\026.protobuf.Constru"
     "ctMsg\032\021.protobuf.BoolRes\0226\n\tConstruct\022\026."
     "protobuf.ConstructMsg\032\021.protobuf.BoolRes"
-    "\0220\n\006Attack\022\023.protobuf.AttackMsg\032\021.protob"
-    "uf.BoolRes\022,\n\004Send\022\021.protobuf.SendMsg\032\021."
-    "protobuf.BoolRes\0228\n\rInstallModule\022\024.prot"
-    "obuf.InstallMsg\032\021.protobuf.BoolRes\022-\n\007Re"
-    "cycle\022\017.protobuf.IDMsg\032\021.protobuf.BoolRe"
-    "s\0226\n\tBuildShip\022\026.protobuf.BuildShipMsg\032\021"
-    ".protobuf.BoolRes\0222\n\014EndAllAction\022\017.prot"
-    "obuf.IDMsg\032\021.protobuf.BoolResb\006proto3";
+    "\0220\n\nRepairHome\022\017.protobuf.IDMsg\032\021.protob"
+    "uf.BoolRes\0224\n\016RepairWormhole\022\017.protobuf."
+    "IDMsg\032\021.protobuf.BoolRes\0220\n\006Attack\022\023.pro"
+    "tobuf.AttackMsg\032\021.protobuf.BoolRes\022,\n\004Se"
+    "nd\022\021.protobuf.SendMsg\032\021.protobuf.BoolRes"
+    "\0228\n\rInstallModule\022\024.protobuf.InstallMsg\032"
+    "\021.protobuf.BoolRes\022-\n\007Recycle\022\017.protobuf"
+    ".IDMsg\032\021.protobuf.BoolRes\0226\n\tBuildShip\022\026"
+    ".protobuf.BuildShipMsg\032\021.protobuf.BoolRe"
+    "s\022>\n\014BuildShipRID\022\026.protobuf.BuildShipMs"
+    "g\032\026.protobuf.BuildShipRes\0222\n\014EndAllActio"
+    "n\022\017.protobuf.IDMsg\032\021.protobuf.BoolResb\006p"
+    "roto3";
 static const ::_pbi::DescriptorTable* const descriptor_table_Services_2eproto_deps[2] = {
     &::descriptor_table_Message2Clients_2eproto,
     &::descriptor_table_Message2Server_2eproto,
@@ -59,7 +64,7 @@ static ::_pbi::once_flag descriptor_table_Services_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_Services_2eproto = {
     false,
     false,
-    837,
+    1005,
     descriptor_table_protodef_Services_2eproto,
     "Services.proto",
     &descriptor_table_Services_2eproto_once,

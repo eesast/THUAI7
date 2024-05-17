@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2343335082935178983}
   - component: {fileID: 2633087526931125268}
-  - component: {fileID: 185038739592644713}
-  - component: {fileID: 3858766104968319131}
   - component: {fileID: 791497468914672102}
   m_Layer: 6
   m_Name: Base
@@ -77,7 +75,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1026933429
-  m_SortingLayer: -1
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -452132711, guid: 8d794b099727c684aa35073dfebec3ae, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -90,57 +88,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &185038739592644713
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2487624789702488523}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33624e7926488114892585bc69105bab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactBase: {fileID: 0}
-  generatePos:
-  - {x: -2.003803e+15, y: 6.99e-43}
-  - {x: 0.000042965818, y: 0.00000016502315}
-  messageOfBase:
-    x: 0
-    y: 0
-    hp: 24000
-    economy: 0
-    playerTeam: 0
-    shipNum:
-      civilShipNum: 0
-      militaryShipNum: 0
-      flagShipNum: 0
-    shipTotalNum: 0
-  obj: {fileID: 0}
---- !u!114 &3858766104968319131
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2487624789702488523}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 515cf190256e2214ea5daad3164a90b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactType: 1
-  interactOption: 0
-  tobeSelected: 0
-  selected: 0
-  selectedSign: {fileID: 2362405429118444927, guid: d5b0673cd77cb7f43b9b1df36ceb2520, type: 3}
-  tobeSelectedSign: {fileID: 5230180300230231966, guid: c35172cad03b3784c93db13d884b4bbc, type: 3}
-  tobeseObj: {fileID: 0}
-  seObj: {fileID: 0}
-  moveOption: {x: 0, y: 0}
-  attackOption: {x: 0, y: 0}
-  enableMove: 0
 --- !u!61 &791497468914672102
 BoxCollider2D:
   m_ObjectHideFlags: 0

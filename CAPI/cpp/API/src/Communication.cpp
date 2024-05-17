@@ -114,6 +114,44 @@ bool Communication::Produce(int32_t playerID, int32_t teamID)
         return false;
 }
 
+bool Communication::RepairWormhole(int32_t playerID, int32_t teamID)
+{
+    {
+        std::lock_guard<std::mutex> lock(mtxLimit);
+        if (counter >= limit || counterMove >= moveLimit)
+            return false;
+        counter++;
+        counterMove++;
+    }
+    protobuf::BoolRes repairWormholeResult;
+    ClientContext context;
+    auto request = THUAI72Proto::THUAI72ProtobufIDMsg(playerID, teamID);
+    auto status = THUAI7Stub->RepairWormhole(&context, request, &repairWormholeResult);
+    if (status.ok())
+        return repairWormholeResult.act_success();
+    else
+        return false;
+}
+
+bool Communication::RepairHome(int32_t playerID, int32_t teamID)
+{
+    {
+        std::lock_guard<std::mutex> lock(mtxLimit);
+        if (counter >= limit || counterMove >= moveLimit)
+            return false;
+        counter++;
+        counterMove++;
+    }
+    protobuf::BoolRes repairHomeResult;
+    ClientContext context;
+    auto request = THUAI72Proto::THUAI72ProtobufIDMsg(playerID, teamID);
+    auto status = THUAI7Stub->RepairHome(&context, request, &repairHomeResult);
+    if (status.ok())
+        return repairHomeResult.act_success();
+    else
+        return false;
+}
+
 bool Communication::Rebuild(int32_t playerID, int32_t teamID, THUAI7::ConstructionType constructionType)
 {
     {

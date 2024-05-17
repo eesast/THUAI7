@@ -1,0 +1,336 @@
+{
+    "objMessageList": [
+        {
+            "resourceMessage": {
+                "x": 4500,
+                "y": 8500,
+                "progress": 16000
+            }
+        },
+        {
+            "resourceMessage": {
+                "x": 5500,
+                "y": 27500,
+                "progress": 16000
+            }
+        },
+        {
+            "resourceMessage": {
+                "x": 7500,
+                "y": 18500,
+                "progress": 16000
+            }
+        },
+        {
+            "resourceMessage": {
+                "x": 7500,
+                "y": 21500,
+                "progress": 16000
+            }
+        },
+        {
+            "resourceMessage": {
+                "x": 13500,
+                "y": 16500,
+                "progress": 16000
+            }
+        },
+        {
+            "resourceMessage": {
+                "x": 13500,
+                "y": 43500,
+                "progress": 16000
+            }
+        },
+        {
+            "resourceMessage": {
+                "x": 15500,
+                "y": 22500,
+                "progress": 16000
+            }
+        },
+        {
+            "resourceMessage": {
+                "x": 34500,
+                "y": 27500,
+                "progress": 16000
+            }
+        },
+        {
+            "resourceMessage": {
+                "x": 36500,
+                "y": 6500,
+                "progress": 16000
+            }
+        },
+        {
+            "resourceMessage": {
+                "x": 36500,
+                "y": 33500,
+                "progress": 16000
+            }
+        },
+        {
+            "resourceMessage": {
+                "x": 42500,
+                "y": 28500,
+                "progress": 16000
+            }
+        },
+        {
+            "resourceMessage": {
+                "x": 42500,
+                "y": 31500,
+                "progress": 16000
+            }
+        },
+        {
+            "resourceMessage": {
+                "x": 44500,
+                "y": 22500,
+                "progress": 16000
+            }
+        },
+        {
+            "resourceMessage": {
+                "x": 45500,
+                "y": 41500,
+                "progress": 16000
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 23500,
+                "y": 10500,
+                "hp": 0,
+                "id": 0
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 23500,
+                "y": 11500,
+                "hp": 0,
+                "id": 0
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 23500,
+                "y": 24500,
+                "hp": 18000,
+                "id": 1
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 23500,
+                "y": 25500,
+                "hp": 18000,
+                "id": 1
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 23500,
+                "y": 38500,
+                "hp": 0,
+                "id": 2
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 23500,
+                "y": 39500,
+                "hp": 0,
+                "id": 2
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 24500,
+                "y": 10500,
+                "hp": 0,
+                "id": 0
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 24500,
+                "y": 11500,
+                "hp": 0,
+                "id": 0
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 24500,
+                "y": 24500,
+                "hp": 18000,
+                "id": 1
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 24500,
+                "y": 25500,
+                "hp": 18000,
+                "id": 1
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 24500,
+                "y": 38500,
+                "hp": 0,
+                "id": 2
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 24500,
+                "y": 39500,
+                "hp": 0,
+                "id": 2
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 25500,
+                "y": 10500,
+                "hp": 0,
+                "id": 0
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 25500,
+                "y": 11500,
+                "hp": 0,
+                "id": 0
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 25500,
+                "y": 24500,
+                "hp": 18000,
+                "id": 1
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 25500,
+                "y": 25500,
+                "hp": 18000,
+                "id": 1
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 25500,
+                "y": 38500,
+                "hp": 0,
+                "id": 2
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 25500,
+                "y": 39500,
+                "hp": 0,
+                "id": 2
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 26500,
+                "y": 10500,
+                "hp": 0,
+                "id": 0
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 26500,
+                "y": 11500,
+                "hp": 0,
+                "id": 0
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 26500,
+                "y": 24500,
+                "hp": 18000,
+                "id": 1
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 26500,
+                "y": 25500,
+                "hp": 18000,
+                "id": 1
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 26500,
+                "y": 38500,
+                "hp": 0,
+                "id": 2
+            }
+        },
+        {
+            "wormholeMessage": {
+                "x": 26500,
+                "y": 39500,
+                "hp": 0,
+                "id": 2
+            }
+        },
+        {
+            "homeMessage": {
+                "x": 3500,
+                "y": 46500,
+                "hp": 24000,
+                "teamId": 0
+            }
+        },
+        {
+            "homeMessage": {
+                "x": 46500,
+                "y": 3500,
+                "hp": 24000,
+                "teamId": 1
+            }
+        },
+        {
+            "teamMessage": {
+                "teamId": 0,
+                "playerId": 0,
+                "score": 21258,
+                "energy": 21258
+            }
+        },
+        {
+            "teamMessage": {
+                "teamId": 1,
+                "playerId": 0,
+                "score": 21258,
+                "energy": 21258
+            }
+        }
+    ],
+    "gameState": 2,
+    "allMessage": {
+        "gameTime": 162610,
+        "redTeamScore": 21258,
+        "blueTeamScore": 21258,
+        "redTeamEnergy": 21258,
+        "blueTeamEnergy": 21258,
+        "redHomeHp": 24000,
+        "blueHomeHp": 24000
+    }
+}
