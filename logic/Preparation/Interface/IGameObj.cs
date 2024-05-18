@@ -9,7 +9,7 @@ namespace Preparation.Interface
         public GameObjType Type { get; }
         public long ID { get; }
         public XY Position { get; }  // if Square, Pos equals the center
-        public bool IsRigid { get; }
+        public bool IsRigid(bool args = false);
         public AtomicBool IsRemoved { get; }
         public ShapeType Shape { get; }
         public int Radius { get; }  // if Square, Radius equals half length of one side
