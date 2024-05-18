@@ -444,8 +444,8 @@ namespace installer.ViewModel
         protected virtual void ProgramErrorReceived(object sender, DataReceivedEventArgs e)
         {
             var program = sender as Process;
-            Log.LogError(string.Format("error occurs in {0}:\n {1}", 
-                program is null ? "(anonymous)" : 
+            Log.LogError(string.Format("error occurs in {0}:\n {1}",
+                program is null ? "(anonymous)" :
                     (program.StartInfo.FileName + ' ' + program.StartInfo.Arguments),
                 e.Data ?? "Unhandled error."));
         }
