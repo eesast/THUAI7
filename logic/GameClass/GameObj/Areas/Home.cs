@@ -11,7 +11,7 @@ public class Home(XY initPos, long id)
 {
     public long TeamID { get; } = id;
     public InVariableRange<long> HP { get; } = new(GameData.HomeHP);
-    public override bool IsRigid => true;
+    public override bool IsRigid(bool args = false) => true;
     public override ShapeType Shape => ShapeType.Square;
     public AtomicInt RepairNum { get; } = new AtomicInt(0);
     public bool Repair(int constructSpeed, Ship ship)

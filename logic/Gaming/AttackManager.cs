@@ -46,7 +46,8 @@ namespace Gaming
                             BulletBomb((Bullet)obj, null);
                         }
                         obj.CanMove.SetROri(false);
-                    }
+                    },
+                    collideWithWormhole: true
                 );
                 this.game = game;
             }

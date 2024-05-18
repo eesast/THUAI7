@@ -17,12 +17,12 @@ namespace Preparation.Interface
         public long StateNum { get; }
         public Semaphore ThreadNum { get; }
         public long MovingSetPos(XY moveVec, long stateNum);
-        public bool WillCollideWith(IGameObj? targetObj, XY nextPos)  // 检查下一位置是否会和目标物碰撞
+        public bool WillCollideWith(IGameObj? targetObj, XY nextPos, bool collideWithWormhole = false)  // 检查下一位置是否会和目标物碰撞
         {
             if (targetObj == null)
                 return false;
             // 会移动的只有子弹和人物，都是Circle
-            if (!targetObj.IsRigid || targetObj.ID == ID)
+            if (!targetObj.IsRigid(collideWithWormhole) || targetObj.ID == ID)
                 return false;
 
             if (IgnoreCollideExecutor(targetObj) || targetObj.IgnoreCollideExecutor(this))
