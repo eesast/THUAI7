@@ -1,4 +1,3 @@
-#include <optional>
 #include "AI.h"
 #include "API.h"
 
@@ -140,12 +139,12 @@ THUAI7::PlaceType TeamAPI::GetPlaceType(int32_t cellX, int32_t cellY) const
     return logic.GetPlaceType(cellX, cellY);
 }
 
-std::pair<int32_t, int32_t> ShipAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
+std::optional<THUAI7::ConstructionState> ShipAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
 {
     return logic.GetConstructionState(cellX, cellY);
 }
 
-std::pair<int32_t, int32_t> TeamAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
+std::optional<THUAI7::ConstructionState> TeamAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
 {
     return logic.GetConstructionState(cellX, cellY);
 }
@@ -273,6 +272,18 @@ std::future<bool> ShipAPI::Produce()
 {
     return std::async(std::launch::async, [=]()
                       { return logic.Produce(); });
+}
+
+std::future<bool> ShipAPI::RepairWormhole()
+{
+    return std::async(std::launch::async, [=]()
+                      { return logic.RepairWormhole(); });
+}
+
+std::future<bool> ShipAPI::RepairHome()
+{
+    return std::async(std::launch::async, [=]()
+                      { return logic.RepairHome(); });
 }
 
 std::future<bool> ShipAPI::Rebuild(THUAI7::ConstructionType constructionType)

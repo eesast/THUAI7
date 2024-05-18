@@ -16,12 +16,9 @@ public class LogQueue
 
     private readonly Queue<string> logInfoQueue = new();
 
-    public async Task Commit(string info)
+    public void Commit(string info)
     {
-        await Task.Run(() =>
-        {
-            lock (queueLock) logInfoQueue.Enqueue(info);
-        });
+        lock (queueLock) logInfoQueue.Enqueue(info);
     }
 
     public static bool IsClosed { get; private set; } = false;
@@ -79,7 +76,6 @@ public class LogQueue
                 ).Start();
         })
         { IsBackground = true }.Start();
-        var t = new Thread(() => { });
     }
 }
 
@@ -97,7 +93,7 @@ public class Logger(string module)
             if (!Background)
                 Console.WriteLine(info);
             if (Duplicate)
-                _ = LogQueue.Global.Commit(info);
+                LogQueue.Global.Commit(info);
         }
     }
     public void ConsoleLogDebug(string msg, bool Duplicate = true)
@@ -109,7 +105,7 @@ public class Logger(string module)
             if (!Background)
                 Console.WriteLine(info);
             if (Duplicate)
-                _ = LogQueue.Global.Commit(info);
+                LogQueue.Global.Commit(info);
         }
 #endif
     }
@@ -117,14 +113,14 @@ public class Logger(string module)
     {
         Console.WriteLine(msg);
         if (Duplicate)
-            _ = LogQueue.Global.Commit(msg);
+            LogQueue.Global.Commit(msg);
     }
     public static void RawConsoleLogDebug(string msg, bool Duplicate = true)
     {
 #if DEBUG
         Console.WriteLine(msg);
         if (Duplicate)
-            _ = LogQueue.Global.Commit(msg);
+            LogQueue.Global.Commit(msg);
 #endif
     }
 

@@ -43,7 +43,7 @@ class ILogic(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetConstructionState(self, cellX: int, cellY: int) -> tuple:
+    def GetConstructionState(self, cellX: int, cellY: int) -> THUAI7.ConstructionState | None:
         pass
 
     @abstractmethod
@@ -108,6 +108,14 @@ class ILogic(metaclass=ABCMeta):
 
     @abstractmethod
     def Construct(self, constructionType: THUAI7.ConstructionType) -> bool:
+        pass
+
+    @abstractmethod
+    def RepairHome(self) -> bool:
+        pass
+
+    @abstractmethod
+    def RepairWormhole(self) -> bool:
         pass
 
     @abstractmethod
@@ -239,12 +247,12 @@ class IAPI(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def GetConstructionState(self, cellX: int, cellY: int) -> Tuple[int, int]:
+    def GetConstructionState(self, cellX: int, cellY: int) -> THUAI7.ConstructionState | None:
         """获取当前建筑状态
 
         :param cellX: X坐标, 单位Cell
         :param cellY: Y坐标, 单位Cell
-        :return: 该建筑当前的所属队伍编号与血量
+        :return: 该建筑信息
         """
         pass
 
@@ -407,12 +415,30 @@ class IShipAPI(IAPI, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def Rebuild(self, constructionType: THUAI7.ConstructionType) -> Future[bool]:
+    def Rebuild(self, constructionType: THUAI7.ConstructionState) -> Future[bool]:
         """发出重建指令
         - 需要接近待重建 `Construction`
 
         :param constructionType: 建筑类型
         :return: 进入建造状态是否成功, 通过 `.result()` 方法等待获取 `bool`
+        """
+        pass
+
+    @abstractmethod
+    def RepairWormhole(self) -> Future[bool]:
+        """发出修复虫洞指令
+        - 需要接近待建造的 `Wormhole`
+
+        :return: 是否成功进入修复虫洞状态，通过`.result()`方法等待获取`bool`
+        """
+        pass
+
+    @abstractmethod
+    def RepairHome(self) -> Future[bool]:
+        """发出修复大本营指令
+        - 需要接近待建造的 `Home`
+
+        :return: 是否成功进入修复大本营状态，通过`.result()`方法等待获取`bool`
         """
         pass
 
@@ -455,7 +481,9 @@ class ITeamAPI(IAPI, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def InstallModule(self, playerID: int, moduleType: THUAI7.ModuleType) -> Future[bool]:
+    def InstallModule(
+        self, playerID: int, moduleType: THUAI7.ModuleType
+    ) -> Future[bool]:
         """安装模块
 
         :param playerID: 待安装模块的舰船编号

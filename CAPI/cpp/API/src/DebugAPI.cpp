@@ -156,6 +156,27 @@ std::future<bool> ShipDebugAPI::Produce()
                         logger->warn("Produce: failed at {}ms",Time::TimeSinceStart(startPoint));
                         return result; });
 }
+
+std::future<bool> ShipDebugAPI::RepairWormhole()
+{
+    logger->info("RepairWormhole: called at {}ms", Time::TimeSinceStart(startPoint));
+    return std::async(std::launch::async, [=]()
+                      { auto result= logic.RepairWormhole();
+                        if(!result)
+                        logger->warn("RepairWormhole: failed at {}ms",Time::TimeSinceStart(startPoint));
+                        return result; });
+}
+
+std::future<bool> ShipDebugAPI::RepairHome()
+{
+    logger->info("RepairHome: called at {}ms", Time::TimeSinceStart(startPoint));
+    return std::async(std::launch::async, [=]()
+                      { auto result= logic.RepairHome();
+                        if(!result)
+                        logger->warn("RepairHome: failed at {}ms",Time::TimeSinceStart(startPoint));
+                        return result; });
+}
+
 std::future<bool> ShipDebugAPI::Rebuild(THUAI7::ConstructionType constructionType)
 {
     logger->info("Rebuild: rebuilding {}, called at {}ms", THUAI7::constructionDict[constructionType], Time::TimeSinceStart(startPoint));
@@ -201,7 +222,7 @@ THUAI7::PlaceType ShipDebugAPI::GetPlaceType(int32_t cellX, int32_t cellY) const
     return logic.GetPlaceType(cellX, cellY);
 }
 
-std::pair<int32_t, int32_t> ShipDebugAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
+std::optional<THUAI7::ConstructionState> ShipDebugAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
 {
     return logic.GetConstructionState(cellX, cellY);
 }
@@ -395,7 +416,7 @@ THUAI7::PlaceType TeamDebugAPI::GetPlaceType(int32_t cellX, int32_t cellY) const
     return logic.GetPlaceType(cellX, cellY);
 }
 
-std::pair<int32_t, int32_t> TeamDebugAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
+std::optional<THUAI7::ConstructionState> TeamDebugAPI::GetConstructionState(int32_t cellX, int32_t cellY) const
 {
     return logic.GetConstructionState(cellX, cellY);
 }
@@ -446,7 +467,7 @@ std::future<bool> TeamDebugAPI::InstallModule(int32_t playerID, THUAI7::ModuleTy
     return std::async(std::launch::async, [=]()
                       { auto result= logic.InstallModule(playerID, moduleType);
         if(!result)
-            logger->info("InstallModule: failed at {}ms",Time::TimeSinceStart(startPoint));
+            logger->warn("InstallModule: failed at {}ms",Time::TimeSinceStart(startPoint));
         return result; });
 }
 
@@ -474,7 +495,7 @@ void TeamDebugAPI::PrintSelfInfo() const
 {
     auto Team = logic.TeamGetSelfInfo();
     logger->info("******Self Info******");
-    logger->info("playerID={}, teamID={}, score={}, energy={}", Team->playerID, Team->teamID, Team->score, Team->energy);
+    logger->info("teamID={}, playerID={}, score={}, energy={}", Team->teamID, Team->playerID, Team->score, Team->energy);
     logger->info("*********************\n");
 }
 

@@ -112,6 +112,34 @@ class Communication:
         else:
             return produceResult.act_success
 
+    def RepairWormhole(self, playerID: int, teamID: int) -> bool:
+        try:
+            with self.__mtxLimit:
+                if self.__counter >= self.__limit:
+                    return False
+                self.__counter += 1
+            produceResult: Message2Clients.BoolRes = self.__THUAI7Stub.RepairWormhole(
+                THUAI72Proto.THUAI72ProtobufIDMsg(playerID, teamID)
+            )
+        except grpc.RpcError:
+            return False
+        else:
+            return produceResult.act_success
+
+    def RepairHome(self, playerID: int, teamID: int) -> bool:
+        try:
+            with self.__mtxLimit:
+                if self.__counter >= self.__limit:
+                    return False
+                self.__counter += 1
+            produceResult: Message2Clients.BoolRes = self.__THUAI7Stub.RepairHome(
+                THUAI72Proto.THUAI72ProtobufIDMsg(playerID, teamID)
+            )
+        except grpc.RpcError:
+            return False
+        else:
+            return produceResult.act_success
+
     def Rebuild(
         self, constructionType: THUAI7.ConstructionType, playerID: int, teamID: int
     ) -> bool:

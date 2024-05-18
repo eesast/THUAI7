@@ -36,7 +36,7 @@ namespace AssistFunction
     {
         int32_t deltaX = newX - x;
         int32_t deltaY = newY - y;
-        double distance = deltaX * deltaX + deltaY * deltaY;
+        double distance = double(deltaX * deltaX) + double(deltaY * deltaY);
         THUAI7::PlaceType myPlace = map[GridToCell(x)][GridToCell(y)];
         THUAI7::PlaceType newPlace = map[GridToCell(newX)][GridToCell(newY)];
         if (newPlace == THUAI7::PlaceType::Shadow && myPlace != THUAI7::PlaceType::Shadow)
