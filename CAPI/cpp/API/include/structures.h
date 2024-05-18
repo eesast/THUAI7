@@ -14,7 +14,6 @@
 
 namespace THUAI7
 {
-
     // 游戏状态
     enum class GameState : unsigned char
     {
@@ -197,8 +196,8 @@ namespace THUAI7
         int32_t hp;        // 血量
         int32_t armor;     // 装甲
         int32_t shield;    // 护盾
-        int32_t playerID;  // 船的id
-        int32_t teamID;
+        int64_t playerID;  // 船的id
+        int64_t teamID;
         int64_t guid;         // 全局唯一ID
         ShipState shipState;  // 船所处状态
         ShipType shipType;
@@ -213,10 +212,10 @@ namespace THUAI7
 
     struct Team
     {
-        int32_t playerID;
-        int32_t teamID;
-        int32_t score;
-        int32_t energy;
+        int64_t playerID;
+        int64_t teamID;
+        int64_t score;
+        int64_t energy;
     };
 
     struct Home
@@ -224,7 +223,7 @@ namespace THUAI7
         int32_t x;
         int32_t y;
         int32_t hp;
-        int32_t teamID;
+        int64_t teamID;
         int64_t guid;
     };
 
@@ -234,21 +233,20 @@ namespace THUAI7
         int32_t y;               // y坐标
         double facingDirection;  // 朝向
         int64_t guid;            //
-        int32_t teamID;          // 子弹所属队伍
+        int64_t teamID;          // 子弹所属队伍
         BulletType bulletType;   // 子弹类型
         int32_t damage;          // 伤害值
         int32_t attackRange;
-        int32_t bombRange;
-        double explodeRange;  // 炸弹爆炸范围
-        int32_t speed;        // 子弹速度
+        double bombRange;  // 炸弹爆炸范围
+        int32_t speed;     // 子弹速度
     };
 
     struct ConstructionState
     {
-        int32_t teamID;
+        int64_t teamID;
         int32_t hp;
         ConstructionType constructionType;
-        ConstructionState(std::pair<int32_t, int32_t> teamHP, ConstructionType type) :
+        ConstructionState(std::pair<int64_t, int32_t> teamHP, ConstructionType type) :
             teamID(teamHP.first),
             hp(teamHP.second),
             constructionType(type)
@@ -266,15 +264,17 @@ namespace THUAI7
     //     double bombRange,
     // };
 
+    using cellxy_t = std::pair<int32_t, int32_t>;
+
     struct GameMap
     {
         // x,y,id,hp
-        std::map<std::pair<int32_t, int32_t>, std::pair<int32_t, int32_t>> factoryState;
-        std::map<std::pair<int32_t, int32_t>, std::pair<int32_t, int32_t>> communityState;
-        std::map<std::pair<int32_t, int32_t>, std::pair<int32_t, int32_t>> fortState;
-        std::map<std::pair<int32_t, int32_t>, std::pair<int32_t, int32_t>> homeState;
-        std::map<std::pair<int32_t, int32_t>, int32_t> wormholeState;
-        std::map<std::pair<int32_t, int32_t>, int32_t> resourceState;
+        std::map<cellxy_t, std::pair<int64_t, int32_t>> factoryState;
+        std::map<cellxy_t, std::pair<int64_t, int32_t>> communityState;
+        std::map<cellxy_t, std::pair<int64_t, int32_t>> fortState;
+        std::map<cellxy_t, std::pair<int64_t, int32_t>> homeState;
+        std::map<cellxy_t, int32_t> wormholeState;
+        std::map<cellxy_t, int32_t> resourceState;
     };
 
     struct GameInfo
@@ -368,7 +368,8 @@ namespace THUAI7
         {ModuleType::ModulePlasmaGun, "ModulePlasmaGun"},
         {ModuleType::ModuleShellGun, "ModuleShellGun"},
         {ModuleType::ModuleMissileGun, "ModuleMissileGun"},
-        {ModuleType::ModuleArcGun, "ModuleArcGun"}};
+        {ModuleType::ModuleArcGun, "ModuleArcGun"},
+    };
 
     inline std::map<MessageOfObj, std::string> messageOfObjDict{
         {MessageOfObj::NullMessageOfObj, "NullMessageOfObj"},

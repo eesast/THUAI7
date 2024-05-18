@@ -63,7 +63,7 @@ private:
     std::condition_variable cvAI;
 
     // 信息队列
-    ConcurrentQueue<std::pair<int32_t, std::string>> messageQueue;
+    ConcurrentQueue<std::pair<int64_t, std::string>> messageQueue;
 
     // 存储状态，分别是现在的状态和缓冲区的状态。
     State state[2];
