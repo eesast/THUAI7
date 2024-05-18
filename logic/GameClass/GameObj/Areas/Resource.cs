@@ -9,7 +9,7 @@ public class Resource(XY initPos)
     : Immovable(initPos, GameData.NumOfPosGridPerCell / 2, GameObjType.Resource)
 {
     public InVariableRange<long> HP { get; } = new(GameData.ResourceHP);
-    public override bool IsRigid => true;
+    public override bool IsRigid(bool args = false) => true;
     public override ShapeType Shape => ShapeType.Square;
     public AtomicInt ProduceNum { get; } = new AtomicInt(0);
     public bool Produce(int produceSpeed, Ship ship)

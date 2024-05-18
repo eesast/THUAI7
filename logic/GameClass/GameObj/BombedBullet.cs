@@ -8,7 +8,7 @@ namespace GameClass.GameObj
         : Immovable(bullet.Position, bullet.Radius, GameObjType.BombedBullet)
     {
         public override ShapeType Shape => ShapeType.Circle;
-        public override bool IsRigid => false;
+        public override bool IsRigid(bool args = false) => false;
         public long MappingID { get; } = bullet.ID;
         public readonly Bullet bulletHasBombed = bullet;
         public readonly XY facingDirection = bullet.FacingDirection;

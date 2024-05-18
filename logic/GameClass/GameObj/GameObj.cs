@@ -25,7 +25,7 @@ namespace GameClass.GameObj
 
         protected XY position = initPos;
         public abstract XY Position { get; }
-        public abstract bool IsRigid { get; }
+        public abstract bool IsRigid(bool args = false);
         public abstract ShapeType Shape { get; }
 
         private readonly AtomicBool isRemoved = new(false);

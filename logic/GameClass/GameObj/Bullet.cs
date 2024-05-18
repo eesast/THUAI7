@@ -15,7 +15,7 @@ public abstract class Bullet : ObjOfShip
     public abstract int SwingTime { get; }
     public abstract double ArmorModifier { get; }
     public abstract double ShieldModifier { get; }
-    public override bool IsRigid => true;                 // 默认为true
+    public override bool IsRigid(bool args = false) => true;                 // 默认为true
     public override ShapeType Shape => ShapeType.Circle;  // 默认为圆形
     public abstract BulletType TypeOfBullet { get; }
     public abstract bool CanAttack(GameObj target);
