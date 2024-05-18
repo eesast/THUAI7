@@ -95,7 +95,7 @@ std::optional<THUAI7::ConstructionState> Logic::GetConstructionState(int32_t cel
 {
     std::unique_lock<std::mutex> lock(mtxState);
     logger->debug("Called GetConstructionState");
-    auto pos = std::make_pair(cellX, cellY);
+    auto pos = THUAI7::cellxy_t(cellX, cellY);
     auto it = currentState->mapInfo->factoryState.find(pos);
     auto it2 = currentState->mapInfo->communityState.find(pos);
     auto it3 = currentState->mapInfo->fortState.find(pos);
@@ -118,7 +118,7 @@ int32_t Logic::GetWormholeHp(int32_t cellX, int32_t cellY) const
 {
     std::unique_lock<std::mutex> lock(mtxState);
     logger->debug("Called GetWormholeHp");
-    auto pos = std::make_pair(cellX, cellY);
+    auto pos = THUAI7::cellxy_t(cellX, cellY);
     auto it = currentState->mapInfo->wormholeState.find(pos);
     if (it != currentState->mapInfo->wormholeState.end())
     {
@@ -144,7 +144,7 @@ int32_t Logic::GetResourceState(int32_t cellX, int32_t cellY) const
 {
     std::unique_lock<std::mutex> lock(mtxState);
     logger->debug("Called GetResourceState");
-    auto pos = std::make_pair(cellX, cellY);
+    auto pos = THUAI7::cellxy_t(cellX, cellY);
     auto it = currentState->mapInfo->resourceState.find(pos);
     if (it != currentState->mapInfo->resourceState.end())
     {
@@ -220,7 +220,7 @@ std::pair<int32_t, std::string> Logic::GetMessage()
     else
     {
         logger->warn("No message");
-        return std::make_pair(-1, "");
+        return std::pair(-1, std::string(""));
     }
 }
 
@@ -322,7 +322,7 @@ void Logic::ProcessMessage()
                             if (Proto2THUAI7::messageOfObjDict[item.message_of_obj_case()] == THUAI7::MessageOfObj::MapMessage)
                             {
                                 auto map = std::vector<std::vector<THUAI7::PlaceType>>();
-                                auto mapResult = item.map_message();
+                                auto& mapResult = item.map_message();
                                 for (int32_t i = 0; i < item.map_message().rows_size(); i++)
                                 {
                                     std::vector<THUAI7::PlaceType> row;
@@ -451,10 +451,13 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
             case THUAI7::MessageOfObj::HomeMessage:
                 if (item.home_message().team_id() == teamID)
                 {
-                    auto pos = std::make_pair(AssistFunction::GridToCell(item.home_message().x()), AssistFunction::GridToCell(item.home_message().y()));
+                    auto pos = THUAI7::cellxy_t(
+                        AssistFunction::GridToCell(item.home_message().x()),
+                        AssistFunction::GridToCell(item.home_message().y())
+                    );
                     if (bufferState->mapInfo->homeState.count(pos) == 0)
                     {
-                        bufferState->mapInfo->homeState.emplace(pos, std::make_pair(item.home_message().team_id(), item.home_message().hp()));
+                        bufferState->mapInfo->homeState.emplace(pos, std::pair(item.home_message().team_id(), item.home_message().hp()));
                         logger->debug("Load Home!");
                     }
                     else
@@ -465,10 +468,13 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                 }
                 else if (AssistFunction::HaveView(x, y, item.home_message().x(), item.home_message().y(), viewRange, bufferState->gameMap))
                 {
-                    auto pos = std::make_pair(AssistFunction::GridToCell(item.home_message().x()), AssistFunction::GridToCell(item.home_message().y()));
+                    auto pos = THUAI7::cellxy_t(
+                        AssistFunction::GridToCell(item.home_message().x()),
+                        AssistFunction::GridToCell(item.home_message().y())
+                    );
                     if (bufferState->mapInfo->homeState.count(pos) == 0)
                     {
-                        bufferState->mapInfo->homeState.emplace(pos, std::make_pair(item.home_message().team_id(), item.home_message().hp()));
+                        bufferState->mapInfo->homeState.emplace(pos, std::pair(item.home_message().team_id(), item.home_message().hp()));
                         logger->debug("Load Home!");
                     }
                     else
@@ -481,10 +487,13 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
             case THUAI7::MessageOfObj::FactoryMessage:
                 if (item.factory_message().team_id() == teamID)
                 {
-                    auto pos = std::make_pair(AssistFunction::GridToCell(item.factory_message().x()), AssistFunction::GridToCell(item.factory_message().y()));
+                    auto pos = THUAI7::cellxy_t(
+                        AssistFunction::GridToCell(item.factory_message().x()),
+                        AssistFunction::GridToCell(item.factory_message().y())
+                    );
                     if (bufferState->mapInfo->factoryState.count(pos) == 0)
                     {
-                        bufferState->mapInfo->factoryState.emplace(pos, std::make_pair(item.factory_message().team_id(), item.factory_message().hp()));
+                        bufferState->mapInfo->factoryState.emplace(pos, std::pair(item.factory_message().team_id(), item.factory_message().hp()));
                         logger->debug("Load Factory!");
                     }
                     else
@@ -496,10 +505,13 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                 }
                 else if (AssistFunction::HaveView(x, y, item.factory_message().x(), item.factory_message().y(), viewRange, bufferState->gameMap))
                 {
-                    auto pos = std::make_pair(AssistFunction::GridToCell(item.factory_message().x()), AssistFunction::GridToCell(item.factory_message().y()));
+                    auto pos = THUAI7::cellxy_t(
+                        AssistFunction::GridToCell(item.factory_message().x()),
+                        AssistFunction::GridToCell(item.factory_message().y())
+                    );
                     if (bufferState->mapInfo->factoryState.count(pos) == 0)
                     {
-                        bufferState->mapInfo->factoryState.emplace(pos, std::make_pair(item.factory_message().team_id(), item.factory_message().hp()));
+                        bufferState->mapInfo->factoryState.emplace(pos, std::pair(item.factory_message().team_id(), item.factory_message().hp()));
                         logger->debug("Load Factory!");
                     }
                     else
@@ -513,10 +525,13 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
             case THUAI7::MessageOfObj::CommunityMessage:
                 if (item.community_message().team_id() == teamID)
                 {
-                    auto pos = std::make_pair(AssistFunction::GridToCell(item.community_message().x()), AssistFunction::GridToCell(item.community_message().y()));
+                    auto pos = THUAI7::cellxy_t(
+                        AssistFunction::GridToCell(item.community_message().x()),
+                        AssistFunction::GridToCell(item.community_message().y())
+                    );
                     if (bufferState->mapInfo->communityState.count(pos) == 0)
                     {
-                        bufferState->mapInfo->communityState.emplace(pos, std::make_pair(item.community_message().team_id(), item.community_message().hp()));
+                        bufferState->mapInfo->communityState.emplace(pos, std::pair(item.community_message().team_id(), item.community_message().hp()));
                         logger->debug("Load Community!");
                     }
                     else
@@ -528,10 +543,13 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                 }
                 else if (AssistFunction::HaveView(x, y, item.community_message().x(), item.community_message().y(), viewRange, bufferState->gameMap))
                 {
-                    auto pos = std::make_pair(AssistFunction::GridToCell(item.community_message().x()), AssistFunction::GridToCell(item.community_message().y()));
+                    auto pos = THUAI7::cellxy_t(
+                        AssistFunction::GridToCell(item.community_message().x()),
+                        AssistFunction::GridToCell(item.community_message().y())
+                    );
                     if (bufferState->mapInfo->communityState.count(pos) == 0)
                     {
-                        bufferState->mapInfo->communityState.emplace(pos, std::make_pair(item.community_message().team_id(), item.community_message().hp()));
+                        bufferState->mapInfo->communityState.emplace(pos, std::pair(item.community_message().team_id(), item.community_message().hp()));
                         logger->debug("Load Community!");
                     }
                     else
@@ -545,10 +563,13 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
             case THUAI7::MessageOfObj::FortMessage:
                 if (item.fort_message().team_id() == teamID)
                 {
-                    auto pos = std::make_pair(AssistFunction::GridToCell(item.fort_message().x()), AssistFunction::GridToCell(item.fort_message().y()));
+                    auto pos = THUAI7::cellxy_t(
+                        AssistFunction::GridToCell(item.fort_message().x()),
+                        AssistFunction::GridToCell(item.fort_message().y())
+                    );
                     if (bufferState->mapInfo->fortState.count(pos) == 0)
                     {
-                        bufferState->mapInfo->fortState.emplace(pos, std::make_pair(item.fort_message().team_id(), item.fort_message().hp()));
+                        bufferState->mapInfo->fortState.emplace(pos, std::pair(item.fort_message().team_id(), item.fort_message().hp()));
                         logger->debug("Load Fort!");
                     }
                     else
@@ -560,10 +581,13 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                 }
                 else if (AssistFunction::HaveView(x, y, item.fort_message().x(), item.fort_message().y(), viewRange, bufferState->gameMap))
                 {
-                    auto pos = std::make_pair(AssistFunction::GridToCell(item.fort_message().x()), AssistFunction::GridToCell(item.fort_message().y()));
+                    auto pos = THUAI7::cellxy_t(
+                        AssistFunction::GridToCell(item.fort_message().x()),
+                        AssistFunction::GridToCell(item.fort_message().y())
+                    );
                     if (bufferState->mapInfo->fortState.count(pos) == 0)
                     {
-                        bufferState->mapInfo->fortState.emplace(pos, std::make_pair(item.fort_message().team_id(), item.fort_message().hp()));
+                        bufferState->mapInfo->fortState.emplace(pos, std::pair(item.fort_message().team_id(), item.fort_message().hp()));
                         logger->debug("Load Fort!");
                     }
                     else
@@ -577,7 +601,10 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
             case THUAI7::MessageOfObj::WormholeMessage:
                 if (AssistFunction::HaveView(x, y, item.wormhole_message().x(), item.wormhole_message().y(), viewRange, bufferState->gameMap))
                 {
-                    auto pos = std::make_pair(AssistFunction::GridToCell(item.wormhole_message().x()), AssistFunction::GridToCell(item.wormhole_message().y()));
+                    auto pos = THUAI7::cellxy_t(
+                        AssistFunction::GridToCell(item.wormhole_message().x()),
+                        AssistFunction::GridToCell(item.wormhole_message().y())
+                    );
                     if (bufferState->mapInfo->wormholeState.count(pos) == 0)
                     {
                         bufferState->mapInfo->wormholeState.emplace(pos, item.wormhole_message().hp());
@@ -593,7 +620,10 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
             case THUAI7::MessageOfObj::ResourceMessage:
                 if (AssistFunction::HaveView(x, y, item.resource_message().x(), item.resource_message().y(), viewRange, bufferState->gameMap))
                 {
-                    auto pos = std::make_pair(AssistFunction::GridToCell(item.resource_message().x()), AssistFunction::GridToCell(item.resource_message().y()));
+                    auto pos = THUAI7::cellxy_t(
+                        AssistFunction::GridToCell(item.resource_message().x()),
+                        AssistFunction::GridToCell(item.resource_message().y())
+                    );
                     if (bufferState->mapInfo->resourceState.count(pos) == 0)
                     {
                         bufferState->mapInfo->resourceState.emplace(pos, item.resource_message().progress());
@@ -608,17 +638,17 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                 break;
             case THUAI7::MessageOfObj::NewsMessage:
                 {
-                    auto news = item.news_message();
+                    auto& news = item.news_message();
                     if (news.to_id() == playerID && news.team_id() == teamID)
                     {
                         if (Proto2THUAI7::newsTypeDict[news.news_case()] == THUAI7::NewsType::TextMessage)
                         {
-                            messageQueue.emplace(std::make_pair(news.from_id(), news.text_message()));
+                            messageQueue.emplace(std::pair(news.from_id(), news.text_message()));
                             logger->debug("Load Text News!");
                         }
                         else if (Proto2THUAI7::newsTypeDict[news.news_case()] == THUAI7::NewsType::BinaryMessage)
                         {
-                            messageQueue.emplace(std::make_pair(news.from_id(), news.binary_message()));
+                            messageQueue.emplace(std::pair(news.from_id(), news.binary_message()));
                             logger->debug("Load Binary News!");
                         }
                         else
@@ -655,10 +685,13 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
             case THUAI7::MessageOfObj::HomeMessage:
                 if (item.home_message().team_id() == teamID)
                 {
-                    auto pos = std::make_pair(AssistFunction::GridToCell(item.home_message().x()), AssistFunction::GridToCell(item.home_message().y()));
+                    auto pos = THUAI7::cellxy_t(
+                        AssistFunction::GridToCell(item.home_message().x()),
+                        AssistFunction::GridToCell(item.home_message().y())
+                    );
                     if (bufferState->mapInfo->homeState.count(pos) == 0)
                     {
-                        bufferState->mapInfo->homeState.emplace(pos, std::make_pair(item.home_message().team_id(), item.home_message().hp()));
+                        bufferState->mapInfo->homeState.emplace(pos, std::pair(item.home_message().team_id(), item.home_message().hp()));
                         logger->debug("Load Home!");
                     }
                     else
@@ -669,10 +702,13 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                 }
                 else if (HaveOverView(item.home_message().x(), item.home_message().y()))
                 {
-                    auto pos = std::make_pair(AssistFunction::GridToCell(item.home_message().x()), AssistFunction::GridToCell(item.home_message().y()));
+                    auto pos = THUAI7::cellxy_t(
+                        AssistFunction::GridToCell(item.home_message().x()),
+                        AssistFunction::GridToCell(item.home_message().y())
+                    );
                     if (bufferState->mapInfo->homeState.count(pos) == 0)
                     {
-                        bufferState->mapInfo->homeState.emplace(pos, std::make_pair(item.home_message().team_id(), item.home_message().hp()));
+                        bufferState->mapInfo->homeState.emplace(pos, std::pair(item.home_message().team_id(), item.home_message().hp()));
                         logger->debug("Load Home!");
                     }
                     else
@@ -685,10 +721,13 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
             case THUAI7::MessageOfObj::FactoryMessage:
                 if (item.factory_message().team_id() == teamID)
                 {
-                    auto pos = std::make_pair(AssistFunction::GridToCell(item.factory_message().x()), AssistFunction::GridToCell(item.factory_message().y()));
+                    auto pos = THUAI7::cellxy_t(
+                        AssistFunction::GridToCell(item.factory_message().x()),
+                        AssistFunction::GridToCell(item.factory_message().y())
+                    );
                     if (bufferState->mapInfo->factoryState.count(pos) == 0)
                     {
-                        bufferState->mapInfo->factoryState.emplace(pos, std::make_pair(item.factory_message().team_id(), item.factory_message().hp()));
+                        bufferState->mapInfo->factoryState.emplace(pos, std::pair(item.factory_message().team_id(), item.factory_message().hp()));
                         logger->debug("Load Factory!");
                     }
                     else
@@ -700,10 +739,13 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                 }
                 else if (HaveOverView(item.factory_message().x(), item.factory_message().y()))
                 {
-                    auto pos = std::make_pair(AssistFunction::GridToCell(item.factory_message().x()), AssistFunction::GridToCell(item.factory_message().y()));
+                    auto pos = THUAI7::cellxy_t(
+                        AssistFunction::GridToCell(item.factory_message().x()),
+                        AssistFunction::GridToCell(item.factory_message().y())
+                    );
                     if (bufferState->mapInfo->factoryState.count(pos) == 0)
                     {
-                        bufferState->mapInfo->factoryState.emplace(pos, std::make_pair(item.factory_message().team_id(), item.factory_message().hp()));
+                        bufferState->mapInfo->factoryState.emplace(pos, std::pair(item.factory_message().team_id(), item.factory_message().hp()));
                         logger->debug("Load Factory!");
                     }
                     else
@@ -717,10 +759,13 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
             case THUAI7::MessageOfObj::CommunityMessage:
                 if (item.community_message().team_id() == teamID)
                 {
-                    auto pos = std::make_pair(AssistFunction::GridToCell(item.community_message().x()), AssistFunction::GridToCell(item.community_message().y()));
+                    auto pos = THUAI7::cellxy_t(
+                        AssistFunction::GridToCell(item.community_message().x()),
+                        AssistFunction::GridToCell(item.community_message().y())
+                    );
                     if (bufferState->mapInfo->communityState.count(pos) == 0)
                     {
-                        bufferState->mapInfo->communityState.emplace(pos, std::make_pair(item.community_message().team_id(), item.community_message().hp()));
+                        bufferState->mapInfo->communityState.emplace(pos, std::pair(item.community_message().team_id(), item.community_message().hp()));
                         logger->debug("Load Community!");
                     }
                     else
@@ -732,10 +777,13 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                 }
                 else if (HaveOverView(item.community_message().x(), item.community_message().y()))
                 {
-                    auto pos = std::make_pair(AssistFunction::GridToCell(item.community_message().x()), AssistFunction::GridToCell(item.community_message().y()));
+                    auto pos = THUAI7::cellxy_t(
+                        AssistFunction::GridToCell(item.community_message().x()),
+                        AssistFunction::GridToCell(item.community_message().y())
+                    );
                     if (bufferState->mapInfo->communityState.count(pos) == 0)
                     {
-                        bufferState->mapInfo->communityState.emplace(pos, std::make_pair(item.community_message().team_id(), item.community_message().hp()));
+                        bufferState->mapInfo->communityState.emplace(pos, std::pair(item.community_message().team_id(), item.community_message().hp()));
                         logger->debug("Load Community!");
                     }
                     else
@@ -749,10 +797,13 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
             case THUAI7::MessageOfObj::FortMessage:
                 if (item.fort_message().team_id() == teamID)
                 {
-                    auto pos = std::make_pair(AssistFunction::GridToCell(item.fort_message().x()), AssistFunction::GridToCell(item.fort_message().y()));
+                    auto pos = THUAI7::cellxy_t(
+                        AssistFunction::GridToCell(item.fort_message().x()),
+                        AssistFunction::GridToCell(item.fort_message().y())
+                    );
                     if (bufferState->mapInfo->fortState.count(pos) == 0)
                     {
-                        bufferState->mapInfo->fortState.emplace(pos, std::make_pair(item.fort_message().team_id(), item.fort_message().hp()));
+                        bufferState->mapInfo->fortState.emplace(pos, std::pair(item.fort_message().team_id(), item.fort_message().hp()));
                         logger->debug("Load Fort!");
                     }
                     else
@@ -764,10 +815,13 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
                 }
                 else if (HaveOverView(item.fort_message().x(), item.fort_message().y()))
                 {
-                    auto pos = std::make_pair(AssistFunction::GridToCell(item.fort_message().x()), AssistFunction::GridToCell(item.fort_message().y()));
+                    auto pos = THUAI7::cellxy_t(
+                        AssistFunction::GridToCell(item.fort_message().x()),
+                        AssistFunction::GridToCell(item.fort_message().y())
+                    );
                     if (bufferState->mapInfo->fortState.count(pos) == 0)
                     {
-                        bufferState->mapInfo->fortState.emplace(pos, std::make_pair(item.fort_message().team_id(), item.fort_message().hp()));
+                        bufferState->mapInfo->fortState.emplace(pos, std::pair(item.fort_message().team_id(), item.fort_message().hp()));
                         logger->debug("Load Fort!");
                     }
                     else
@@ -781,7 +835,10 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
             case THUAI7::MessageOfObj::WormholeMessage:
                 if (HaveOverView(item.wormhole_message().x(), item.wormhole_message().y()))
                 {
-                    auto pos = std::make_pair(AssistFunction::GridToCell(item.wormhole_message().x()), AssistFunction::GridToCell(item.wormhole_message().y()));
+                    auto pos = THUAI7::cellxy_t(
+                        AssistFunction::GridToCell(item.wormhole_message().x()),
+                        AssistFunction::GridToCell(item.wormhole_message().y())
+                    );
                     if (bufferState->mapInfo->wormholeState.count(pos) == 0)
                     {
                         bufferState->mapInfo->wormholeState.emplace(pos, item.wormhole_message().hp());
@@ -797,7 +854,10 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
             case THUAI7::MessageOfObj::ResourceMessage:
                 if (HaveOverView(item.resource_message().x(), item.resource_message().y()))
                 {
-                    auto pos = std::make_pair(AssistFunction::GridToCell(item.resource_message().x()), AssistFunction::GridToCell(item.resource_message().y()));
+                    auto pos = THUAI7::cellxy_t(
+                        AssistFunction::GridToCell(item.resource_message().x()),
+                        AssistFunction::GridToCell(item.resource_message().y())
+                    );
                     if (bufferState->mapInfo->resourceState.count(pos) == 0)
                     {
                         bufferState->mapInfo->resourceState.emplace(pos, item.resource_message().progress());
@@ -813,15 +873,15 @@ void Logic::LoadBufferCase(const protobuf::MessageOfObj& item)
             case THUAI7::MessageOfObj::NewsMessage:
                 if (item.news_message().team_id() == teamID && item.news_message().to_id() == playerID)
                 {
-                    auto news = item.news_message();
+                    auto& news = item.news_message();
                     if (Proto2THUAI7::newsTypeDict[news.news_case()] == THUAI7::NewsType::TextMessage)
                     {
-                        messageQueue.emplace(std::make_pair(news.from_id(), news.text_message()));
+                        messageQueue.emplace(std::pair(news.from_id(), news.text_message()));
                         logger->debug("Load Text News!");
                     }
                     else if (Proto2THUAI7::newsTypeDict[news.news_case()] == THUAI7::NewsType::BinaryMessage)
                     {
-                        messageQueue.emplace(std::make_pair(news.from_id(), news.binary_message()));
+                        messageQueue.emplace(std::pair(news.from_id(), news.binary_message()));
                         logger->debug("Load Binary News!");
                     }
                     else
