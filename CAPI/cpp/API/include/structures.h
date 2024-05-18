@@ -229,16 +229,16 @@ namespace THUAI7
 
     struct Bullet
     {
-        int32_t x;              // x坐标
-        int32_t y;              // y坐标
-        double facingDirection; // 朝向
-        int64_t guid;           //
-        int64_t teamID;         // 子弹所属队伍
-        BulletType bulletType;  // 子弹类型
-        int32_t damage;         // 伤害值
+        int32_t x;               // x坐标
+        int32_t y;               // y坐标
+        double facingDirection;  // 朝向
+        int64_t guid;            //
+        int64_t teamID;          // 子弹所属队伍
+        BulletType bulletType;   // 子弹类型
+        int32_t damage;          // 伤害值
         int32_t attackRange;
-        double bombRange;       // 炸弹爆炸范围
-        int32_t speed;          // 子弹速度
+        double bombRange;  // 炸弹爆炸范围
+        int32_t speed;     // 子弹速度
     };
 
     struct ConstructionState
@@ -368,7 +368,8 @@ namespace THUAI7
         {ModuleType::ModulePlasmaGun, "ModulePlasmaGun"},
         {ModuleType::ModuleShellGun, "ModuleShellGun"},
         {ModuleType::ModuleMissileGun, "ModuleMissileGun"},
-        {ModuleType::ModuleArcGun, "ModuleArcGun"}};
+        {ModuleType::ModuleArcGun, "ModuleArcGun"}
+    };
 
     inline std::map<MessageOfObj, std::string> messageOfObjDict{
         {MessageOfObj::NullMessageOfObj, "NullMessageOfObj"},
