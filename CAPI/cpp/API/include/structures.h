@@ -368,7 +368,7 @@ namespace THUAI7
         {ModuleType::ModulePlasmaGun, "ModulePlasmaGun"},
         {ModuleType::ModuleShellGun, "ModuleShellGun"},
         {ModuleType::ModuleMissileGun, "ModuleMissileGun"},
-        {ModuleType::ModuleArcGun, "ModuleArcGun"}
+        {ModuleType::ModuleArcGun, "ModuleArcGun"},
     };
 
     inline std::map<MessageOfObj, std::string> messageOfObjDict{
