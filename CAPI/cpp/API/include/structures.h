@@ -14,7 +14,6 @@
 
 namespace THUAI7
 {
-
     // 游戏状态
     enum class GameState : unsigned char
     {
@@ -244,10 +243,10 @@ namespace THUAI7
 
     struct ConstructionState
     {
-        int32_t teamID;
+        int64_t teamID;
         int32_t hp;
         ConstructionType constructionType;
-        ConstructionState(std::pair<int32_t, int32_t> teamHP, ConstructionType type) :
+        ConstructionState(std::pair<int64_t, int32_t> teamHP, ConstructionType type) :
             teamID(teamHP.first),
             hp(teamHP.second),
             constructionType(type)
@@ -265,15 +264,17 @@ namespace THUAI7
     //     double bombRange,
     // };
 
+    using cellxy_t = std::pair<int32_t, int32_t>;
+
     struct GameMap
     {
         // x,y,id,hp
-        std::map<std::pair<int32_t, int32_t>, std::pair<int64_t, int32_t>> factoryState;
-        std::map<std::pair<int32_t, int32_t>, std::pair<int64_t, int32_t>> communityState;
-        std::map<std::pair<int32_t, int32_t>, std::pair<int64_t, int32_t>> fortState;
-        std::map<std::pair<int32_t, int32_t>, std::pair<int64_t, int32_t>> homeState;
-        std::map<std::pair<int32_t, int32_t>, int32_t> wormholeState;
-        std::map<std::pair<int32_t, int32_t>, int32_t> resourceState;
+        std::map<cellxy_t, std::pair<int64_t, int32_t>> factoryState;
+        std::map<cellxy_t, std::pair<int64_t, int32_t>> communityState;
+        std::map<cellxy_t, std::pair<int64_t, int32_t>> fortState;
+        std::map<cellxy_t, std::pair<int64_t, int32_t>> homeState;
+        std::map<cellxy_t, int32_t> wormholeState;
+        std::map<cellxy_t, int32_t> resourceState;
     };
 
     struct GameInfo

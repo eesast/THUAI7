@@ -17,9 +17,9 @@
 #undef SendMessage
 #undef PeekMessage
 
+// 用于将THUAI7的类转换为Protobuf的类
 namespace AssistFunction
 {
-
     constexpr int32_t numOfGridPerCell = 1000;
 
     [[nodiscard]] constexpr inline int32_t GridToCell(int32_t grid) noexcept
@@ -539,9 +539,8 @@ namespace THUAI72Proto
         playerMsg.set_ship_type(THUAI72Proto::shipTypeDict[ShipType]);
         return playerMsg;
     }
-
-    // 用于将THUAI7的类转换为Protobuf的类
 }  // namespace THUAI72Proto
+
 namespace Time
 {
     inline double TimeSinceStart(const std::chrono::system_clock::time_point& sp)

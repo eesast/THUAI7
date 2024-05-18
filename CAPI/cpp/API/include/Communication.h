@@ -24,9 +24,7 @@ class Communication
 {
 public:
     Communication(std::string sIP, std::string sPort);
-    ~Communication()
-    {
-    }
+    ~Communication() = default;
     bool TryConnection(int32_t playerID, int32_t teamID);
     protobuf::MessageToClient GetMessage2Client();
     void AddPlayer(int32_t playerID, int32_t teamID, THUAI7::ShipType ShipType);
