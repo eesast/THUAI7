@@ -74,41 +74,41 @@ namespace Preparation.Utility
 
         public const int BulletRadius = 200;            // 子弹半径
         public const int LaserRange = 4000;             // 激光射程
-        public const int LaserDamage = 1200;            // 激光伤害
+        public const int LaserDamage = 800;             // 激光伤害
         public const double LaserArmorModifier = 1.5;   // 激光装甲修正
         public const double LaserShieldModifier = 0.6;  // 激光护盾修正
         public const int LaserSpeed = 20000;            // 激光速度
-        public const int LaserCastTime = 300;           // 激光前摇时间
-        public const int LaserSwingTime = 300;          // 激光后摇时间
+        public const int LaserCastTime = 500;           // 激光前摇时间
+        public const int LaserSwingTime = 1000;         // 激光后摇时间
         public const int PlasmaRange = 4000;            // 等离子射程
-        public const int PlasmaDamage = 1300;           // 等离子伤害
+        public const int PlasmaDamage = 1000;           // 等离子伤害
         public const double PlasmaArmorModifier = 2.0;  // 等离子装甲修正
         public const double PlasmaShieldModifier = 0.4; // 等离子护盾修正
         public const int PlasmaSpeed = 10000;           // 等离子速度
-        public const int PlasmaCastTime = 400;          // 等离子前摇时间
-        public const int PlasmaSwingTime = 400;         // 等离子后摇时间
+        public const int PlasmaCastTime = 800;          // 等离子前摇时间
+        public const int PlasmaSwingTime = 1600;         // 等离子后摇时间
         public const int ShellRange = 4000;             // 炮弹射程
-        public const int ShellDamage = 1800;            // 炮弹伤害
+        public const int ShellDamage = 1200;            // 炮弹伤害
         public const double ShellArmorModifier = 0.4;   // 炮弹装甲修正
         public const double ShellShieldModifier = 1.5;  // 炮弹护盾修正
         public const int ShellSpeed = 8000;             // 炮弹速度
-        public const int ShellCastTime = 200;           // 炮弹前摇时间
-        public const int ShellSwingTime = 200;          // 炮弹后摇时间
-        public const int MissileRange = 8000;           // 导弹射程
+        public const int ShellCastTime = 500;           // 炮弹前摇时间
+        public const int ShellSwingTime = 1000;         // 炮弹后摇时间
+        public const int MissileRange = 6000;           // 导弹射程
         public const int MissileBombRange = 1600;       // 导弹爆炸范围
-        public const int MissileDamage = 1600;          // 导弹伤害
+        public const int MissileDamage = 1100;          // 导弹伤害
         public const double MissileArmorModifier = 1.0; // 导弹装甲修正
         public const int MissileSpeed = 6000;           // 导弹速度
-        public const int MissileCastTime = 600;         // 导弹前摇时间
-        public const int MissileSwingTime = 600;        // 导弹后摇时间
-        public const int ArcRange = 8000;               // 电弧射程
-        public const int ArcDamageMin = 100;            // 电弧伤害
-        public const int ArcDamageMax = 3200;           // 电弧伤害
+        public const int MissileCastTime = 1200;        // 导弹前摇时间
+        public const int MissileSwingTime = 1800;       // 导弹后摇时间
+        public const int ArcRange = 6000;               // 电弧射程
+        public const int ArcDamageMin = 800;            // 电弧伤害
+        public const int ArcDamageMax = 1600;           // 电弧伤害
         public const double ArcArmorModifier = 2.0;     // 电弧装甲修正
         public const double ArcShieldModifier = 2.0;    // 电弧护盾修正
         public const int ArcSpeed = 8000;               // 电弧速度
-        public const int ArcCastTime = 600;             // 电弧前摇时间
-        public const int ArcSwingTime = 600;            // 电弧后摇时间
+        public const int ArcCastTime = 1200;            // 电弧前摇时间
+        public const int ArcSwingTime = 1800;           // 电弧后摇时间
 
         public const int CivilShipCost = 4000;
         public const int CivilShipMaxHP = 3000;
@@ -165,7 +165,7 @@ namespace Preparation.Utility
         public const int FlagShipArcGunCost = 24000;
 
         public const int ScoreHomePerSecond = 100;
-        public const int ScoreFactoryPerSecond = 300;
+        public const int ScoreFactoryPerSecond = 200;
         public const int ScoreProducer1PerSecond = 100;
         public const int ScoreProducer2PerSecond = 200;
         public const int ScoreProducer3PerSecond = 300;
@@ -184,14 +184,14 @@ namespace Preparation.Utility
         public const int Shield2 = 3000;
         public const int Shield3 = 4000;
 
-        public const int ResourceHP = 16000;
-        public const int FactoryHP = 8000;
-        public const int CommunityHP = 6000;
-        public const int FortHP = 12000;
-        public const int WormholeHP = 18000;
-        public const int HomeHP = 24000;
+        public const int ResourceHP = 32000;
+        public const int FactoryHP = 12000;
+        public const int CommunityHP = 10000;
+        public const int FortHP = 16000;
+        public const int WormholeHP = 24000;
+        public const int HomeHP = 48000;
 
         public const int FortRange = 6000;
-        public const int FortDamage = 500;
+        public const int FortDamage = 300;
     }
 }
