@@ -10,6 +10,6 @@ namespace GameClass.GameObj.Areas;
 public class OutOfBoundBlock(XY initPos)
     : Immovable(initPos, int.MaxValue, GameObjType.OutOfBoundBlock), IOutOfBound
 {
-    public override bool IsRigid => true;
+    public override bool IsRigid(bool args = false) => true;
     public override ShapeType Shape => ShapeType.Square;
 }

@@ -10,7 +10,7 @@ public class Construction(XY initPos)
 {
     public AtomicLong TeamID { get; } = new(long.MaxValue);
     public InVariableRange<long> HP { get; } = new(0, GameData.CommunityHP);
-    public override bool IsRigid => true;
+    public override bool IsRigid(bool args = false) => true;
     public override ShapeType Shape => ShapeType.Square;
 
     private readonly object lockOfConstructionType = new();
@@ -72,6 +72,7 @@ public class Construction(XY initPos)
         {
             lock (lockOfConstructionType)
                 constructionType = ConstructionType.Null;
+            IsActivated.Set(false);
         }
         return HP.IsBelowMaxTimes(0.5);
     }

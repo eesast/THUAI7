@@ -350,8 +350,9 @@ namespace Gaming
                 { IsBackground = true }.Start();
                 return false;
             }
-            public bool AddMoneyNaturally(Base team)
+            public bool TeamTask(Base team)
             {
+                Home home = team.Home;
                 new Thread
                 (
                     () =>
@@ -366,6 +367,18 @@ namespace Gaming
                             loopToDo: () =>
                             {
                                 team.AddMoney(team.MoneyAddPerSecond / GameData.NumOfStepPerSecond);
+                                if (!home.HP.IsBelowMaxTimes(0.4))
+                                {
+                                    var ships = gameMap.ShipInTheRangeNotTeamID(
+                                                                    home.Position, GameData.FortRange, home.TeamID);
+                                    if (ships == null || ships.Count == 0)
+                                    {
+                                        return true;
+                                    }
+                                    var ship = ships[random.Next(ships.Count)];
+                                    shipManager.BeAttacked(ship,
+                                        GameData.FortDamage / GameData.NumOfStepPerSecond, home.TeamID);
+                                }
                                 return true;
                             },
                             timeInterval: GameData.CheckInterval,

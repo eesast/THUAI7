@@ -114,7 +114,7 @@ namespace Gaming
             // 开始游戏
             foreach (var team in TeamList)
             {
-                actionManager.AddMoneyNaturally(team);
+                actionManager.TeamTask(team);
                 ActivateShip(team.TeamID, ShipType.CivilShip);
             }
             gameMap.Timer.Start(() => { }, () => EndGame(), milliSeconds);

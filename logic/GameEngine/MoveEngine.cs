@@ -23,7 +23,8 @@ namespace GameEngine
     public class MoveEngine(
         IMap gameMap,
         Func<IMovable, IGameObj, XY, MoveEngine.AfterCollision> OnCollision,
-        Action<IMovable> EndMove
+        Action<IMovable> EndMove,
+        bool collideWithWormhole = false
         )
     {
         /// <summary>
@@ -46,6 +47,7 @@ namespace GameEngine
 
         private readonly CollisionChecker collisionChecker = new(gameMap);
         private readonly Func<IMovable, IGameObj, XY, AfterCollision> OnCollision = OnCollision;
+        private bool collideWithWormhole = collideWithWormhole;
 
         /// <summary>
         /// 在无碰撞的前提下行走最远的距离
@@ -102,7 +104,7 @@ namespace GameEngine
             do
             {
                 flag = false;
-                IGameObj? collisionObj = collisionChecker.CheckCollisionWhenMoving(obj, res);
+                IGameObj? collisionObj = collisionChecker.CheckCollisionWhenMoving(obj, res, collideWithWormhole);
                 if (collisionObj == null)
                     break;
 

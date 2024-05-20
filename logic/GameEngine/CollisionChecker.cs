@@ -8,12 +8,12 @@ namespace GameEngine
 {
     internal class CollisionChecker(IMap gameMap)
     {
-        public IGameObj? CheckCollision(IMovable obj, XY Pos)
+        public IGameObj? CheckCollision(IMovable obj, XY Pos, bool collideWithWormhole = false)
         {
             // 在列表中检查碰撞
             IGameObj? CheckCollisionInList(LockedClassList<IGameObj> lst)
             {
-                return lst.Find(listObj => obj.WillCollideWith(listObj, Pos));
+                return lst.Find(listObj => obj.WillCollideWith(listObj, Pos, collideWithWormhole));
             }
 
             IGameObj? collisionObj;
@@ -33,16 +33,16 @@ namespace GameEngine
         /// <param name="obj">移动的物体</param>
         /// <param name="moveVec">移动的位移向量</param>
         /// <returns>和它碰撞的物体</returns>
-        public IGameObj? CheckCollisionWhenMoving(IMovable obj, XY moveVec)
+        public IGameObj? CheckCollisionWhenMoving(IMovable obj, XY moveVec, bool collideWithWormhole = false)
         {
             XY nextPos = obj.Position + moveVec;
-            if (!obj.IsRigid)
+            if (!obj.IsRigid())
             {
                 if (gameMap.IsOutOfBound(obj))
                     return gameMap.GetOutOfBound(nextPos);
                 return null;
             }
-            return CheckCollision(obj, nextPos);
+            return CheckCollision(obj, nextPos, collideWithWormhole);
         }
         /// <summary>
         /// /// 可移动物体（圆）向矩形物体移动时，可移动且不会碰撞的最大距离。直接用double计算，防止误差

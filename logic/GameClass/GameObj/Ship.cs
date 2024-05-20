@@ -14,7 +14,7 @@ public class Ship : Movable, IShip
 {
     public AtomicLong TeamID { get; } = new(long.MaxValue);
     public AtomicLong PlayerID { get; } = new(long.MaxValue);
-    public override bool IsRigid => true;
+    public override bool IsRigid(bool args = false) => true;
     public override ShapeType Shape => ShapeType.Circle;
     public int ViewRange { get; }
     public override bool IgnoreCollideExecutor(IGameObj targetObj)
