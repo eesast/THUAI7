@@ -1,10 +1,10 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0.204-jammy-amd64 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0.300-jammy-amd64 AS build
 LABEL maintainer="eesast"
 WORKDIR /usr/local
 COPY . .
 RUN dotnet publish logic/Server/Server.csproj -c Release -o /usr/local/Server --self-contained true -r linux-x64
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0.204-jammy-amd64
+FROM mcr.microsoft.com/dotnet/sdk:8.0.300-jammy-amd64
 LABEL maintainer="eesast"
 WORKDIR /usr/local
 COPY --from=build /usr/local/Server .
