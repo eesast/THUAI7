@@ -106,8 +106,9 @@ namespace Gaming
                         }
                         break;
                     case GameObjType.Wormhole:
+                        var previousHP = ((WormholeCell)objBeingShot).Wormhole.HP;
                         ((WormholeCell)objBeingShot).Wormhole.BeAttacked(bullet);
-                        if (((WormholeCell)objBeingShot).Wormhole.HP < GameData.WormholeHP / 2)
+                        if (previousHP >= GameData.WormholeHP / 2 && ((WormholeCell)objBeingShot).Wormhole.HP < GameData.WormholeHP / 2)
                         {
                             var shipList = gameMap.ShipInTheList(((WormholeCell)objBeingShot).Wormhole.Cells);
                             if (shipList != null)
