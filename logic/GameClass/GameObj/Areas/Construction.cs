@@ -70,8 +70,6 @@ public class Construction(XY initPos)
         }
         if (HP == 0)
         {
-            lock (lockOfConstructionType)
-                constructionType = ConstructionType.Null;
             IsActivated.Set(false);
         }
         return HP.IsBelowMaxTimes(0.5);
