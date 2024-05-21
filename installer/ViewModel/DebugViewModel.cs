@@ -280,7 +280,8 @@ namespace installer.ViewModel
             {
                 FileName = Downloader.Data.Config.DevServerPath ?? Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Server", "Server.exe"),
                 Arguments = $"--ip 0.0.0.0 --port {Port} --teamCount {TeamCount} --shipNum {ShipCount}",
-                WorkingDirectory = Downloader.Data.Config.InstallPath
+                WorkingDirectory = Downloader.Data.Config.InstallPath,
+                RedirectStandardError = true,
             });
             if (server is null)
             {
@@ -293,6 +294,7 @@ namespace installer.ViewModel
                 OnServerExited?.Invoke(this, EventArgs.Empty);
                 Log.LogWarning("Server已退出。");
             };
+            server.ErrorDataReceived += ProgramErrorReceived;
             Log.LogWarning("Server成功启动，请保持网络稳定。");
             OnServerLaunched?.Invoke(this, EventArgs.Empty);
             return true;
@@ -314,7 +316,8 @@ namespace installer.ViewModel
             var client = Process.Start(new ProcessStartInfo()
             {
                 FileName = Downloader.Data.Config.DevClientPath ?? Path.Combine(Downloader.Data.Config.InstallPath, "logic", "Client", "Client.exe"),
-                WorkingDirectory = Downloader.Data.Config.InstallPath
+                WorkingDirectory = Downloader.Data.Config.InstallPath,
+                RedirectStandardError = true,
             });
             if (client is null)
             {
@@ -329,6 +332,14 @@ namespace installer.ViewModel
             File.Delete(Path.Combine(Downloader.Data.LogPath, $"lock.{team}.{player}.log"));
             Downloader.Data.Config.Commands.PlaybackFile = p;
             Log.LogInfo($"Client({team}: {player})成功启动。");
+            client.EnableRaisingEvents = true;
+            client.ErrorDataReceived += ProgramErrorReceived;
+            client.BeginErrorReadLine();
+            client.Exited += (_, _) =>
+            {
+                Log.LogWarning($"client({team}:{player})已退出({client.ExitCode})。");
+            };
+            client.ErrorDataReceived += ProgramErrorReceived;
             children.Add(client);
             return true;
         }
@@ -338,13 +349,17 @@ namespace installer.ViewModel
         public bool LaunchCppAPI(int team, int player)
         {
             var exe = Downloader.Data.Config.DevCppPath ?? Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "cpp", "x64", "Debug", "API.exe");
+            var logDir = Path.Combine(Downloader.Data.LogPath, $"Team{team}");
+            if (!Directory.Exists(logDir))
+                Directory.CreateDirectory(logDir);
             if (File.Exists(exe))
             {
                 var cpp = Process.Start(new ProcessStartInfo()
                 {
                     FileName = Downloader.Data.Config.DevCppPath ?? exe,
                     Arguments = $"-I {IP} -P {Port} -t {team} -p {player} -o -d",
-                    WorkingDirectory = Downloader.Data.Config.InstallPath
+                    WorkingDirectory = logDir,
+                    RedirectStandardError = true,
                 });
                 if (cpp is null)
                 {
@@ -352,6 +367,13 @@ namespace installer.ViewModel
                     return false;
                 }
                 Log.LogInfo($"API.exe启动成功, team:{team}, player: {player}!");
+                cpp.EnableRaisingEvents = true;
+                cpp.ErrorDataReceived += ProgramErrorReceived;
+                cpp.BeginErrorReadLine();
+                cpp.Exited += (_, _) =>
+                {
+                    Log.LogWarning($"API.exe({team}:{player})已退出({cpp.ExitCode})。");
+                };
                 children.Add(cpp);
                 return true;
             }
@@ -374,16 +396,18 @@ namespace installer.ViewModel
         public bool LaunchPyAPI(int team, int player)
         {
             var p = Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python");
+            var logDir = Path.Combine(Downloader.Data.LogPath, $"Team{team}");
+            if (!Directory.Exists(logDir))
+                Directory.CreateDirectory(logDir);
             if (Directory.Exists(Path.Combine(p, "proto")))
             {
-
                 var py = Process.Start(new ProcessStartInfo()
                 {
-                    FileName = "cmd.exe",
-                    Arguments = "/c python "
-                        + (Downloader.Data.Config.DevPyPath ?? Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py"))
+                    FileName = "python.exe",
+                    Arguments = (Downloader.Data.Config.DevPyPath ?? Path.Combine(Downloader.Data.Config.InstallPath, "CAPI", "python", "PyAPI", "main.py"))
                         + $" -I {IP} -P {Port} -t {team} -p {player} -o -d",
-                    WorkingDirectory = Downloader.Data.Config.InstallPath
+                    WorkingDirectory = logDir,
+                    RedirectStandardError = true,
                 });
                 if (py is null)
                 {
@@ -391,6 +415,13 @@ namespace installer.ViewModel
                     return false;
                 }
                 Log.LogInfo($"main.py启动成功, team:{team}, player: {player}!");
+                py.EnableRaisingEvents = true;
+                py.ErrorDataReceived += ProgramErrorReceived;
+                py.BeginErrorReadLine();
+                py.Exited += (_, _) =>
+                {
+                    Log.LogWarning($"main.py({team}:{player})已退出({py.ExitCode})。");
+                };
                 children.Add(py);
                 return true;
             }
@@ -408,6 +439,15 @@ namespace installer.ViewModel
                 }
                 return false;
             }
+        }
+
+        protected virtual void ProgramErrorReceived(object sender, DataReceivedEventArgs e)
+        {
+            var program = sender as Process;
+            Log.LogError(string.Format("error occurs in {0}:\n {1}",
+                program is null ? "(anonymous)" :
+                    (program.StartInfo.FileName + ' ' + program.StartInfo.Arguments),
+                e.Data ?? "Unhandled error."));
         }
         #endregion
     }
