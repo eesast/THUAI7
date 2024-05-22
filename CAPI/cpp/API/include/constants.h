@@ -17,7 +17,7 @@ namespace Constants
     SCCI int32_t numOfGridPerCell = 1000;  // 单位坐标数
     SCCI int32_t rows = 50;                // 地图行数
     SCCI int32_t cols = 50;                // 地图列数
-    SCCI int32_t maxResourceProgress = 200;
+    SCCI int32_t maxResourceProgress = 32000;
     SCCI int32_t maxWormholeHp = 18000;
     SCCI double robPercent = 0.2;  // 击杀获得经济比率
     SCCI int32_t DestroyBuildingBonus = 200;
@@ -25,23 +25,25 @@ namespace Constants
     SCCI double recycleMultiplier = 0.5;
     struct Home
     {
-        SCCI int32_t maxHp = 24000;
+        SCCI int32_t maxHp = 48000;
         SCCI int32_t energySpeed = 100;
+        SCCI int32_t attackRange = 8000;
+        SCCI int32_t damage = 300;
     };
     struct Factory
     {
-        SCCI int32_t maxHp = 8000;
-        SCCI int32_t energySpeed = 300;
+        SCCI int32_t maxHp = 12000;
+        SCCI int32_t energySpeed = 200;
     };
     struct Community
     {
-        SCCI int32_t maxHp = 6000;
+        SCCI int32_t maxHp = 10000;
     };
     struct Fort
     {
-        SCCI int32_t maxHp = 12000;
+        SCCI int32_t maxHp = 16000;
         SCCI int32_t attackRange = 8000;
-        SCCI int32_t damage = 1200;
+        SCCI int32_t damage = 300;
     };
 
     // 船
@@ -120,54 +122,55 @@ namespace Constants
     // 子弹
     struct Laser
     {
-        SCCI int32_t Damage = 1200;
+        SCCI int32_t Damage = 800;
         SCCI int32_t AttackRange = 4000;
         SCCI double ArmorDamageMultiplier = 1.5;
         SCCI double ShieldDamageMultiplier = 0.6;
         SCCI int32_t Speed = 20000;
-        SCCI int32_t CastTime = 300;  // ms
-        SCCI int32_t BackSwing = 300;
+        SCCI int32_t CastTime = 500;  // ms
+        SCCI int32_t BackSwing = 1000;
     };
     struct Plasma
     {
-        SCCI int32_t Damage = 1300;
+        SCCI int32_t Damage = 1000;
         SCCI int32_t AttackRange = 4000;
         SCCI double ArmorDamageMultiplier = 2.0;
         SCCI double ShieldDamageMultiplier = 0.4;
         SCCI int32_t Speed = 10000;
-        SCCI int32_t CastTime = 400;  // ms
-        SCCI int32_t BackSwing = 400;
+        SCCI int32_t CastTime = 800;  // ms
+        SCCI int32_t BackSwing = 1600;
     };
     struct Shell
     {
-        SCCI int32_t Damage = 1800;
+        SCCI int32_t Damage = 1200;
         SCCI int32_t AttackRange = 4000;
         SCCI double ArmorDamageMultiplier = 0.4;
         SCCI double ShieldDamageMultiplier = 1.5;
         SCCI int32_t Speed = 8000;
-        SCCI int32_t CastTime = 200;  // ms
-        SCCI int32_t BackSwing = 200;
+        SCCI int32_t CastTime = 500;  // ms
+        SCCI int32_t BackSwing = 1000;
     };
     struct Missile
     {
         SCCI int32_t Damage = 1600;
-        SCCI int32_t AttackRange = 8000;
-        SCCI int32_t ExplodeRange = 1600;
+        SCCI int32_t AttackRange = 6000;
+        SCCI int32_t ExplodeRange = 1100;
         SCCI double ArmorDamageMultiplier = 1.0;
         SCCI double ShieldDamageMultiplier = 0.4;
         SCCI int32_t Speed = 6000;
-        SCCI int32_t CastTime = 600;  // ms
-        SCCI int32_t BackSwing = 600;
+        SCCI int32_t CastTime = 1200;  // ms
+        SCCI int32_t BackSwing = 1800;
     };
     struct Arc
     {
-        SCCI int32_t Damage = 3200;  // 100-3200
-        SCCI int32_t AttackRange = 8000;
+        SCCI int32_t MinDamage = 800;
+        SCCI int32_t MaxDamage = 1600;
+        SCCI int32_t AttackRange = 6000;
         SCCI double ArmorDamageMultiplier = 2.0;
         SCCI double ShieldDamageMultiplier = 2.0;
         SCCI int32_t Speed = 8000;
-        SCCI int32_t CastTime = 600;  // ms
-        SCCI int32_t BackSwing = 600;
+        SCCI int32_t CastTime = 1200;  // ms
+        SCCI int32_t BackSwing = 1800;
     };
 }  // namespace Constants
 #endif
