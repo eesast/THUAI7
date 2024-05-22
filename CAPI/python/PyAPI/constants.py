@@ -3,7 +3,7 @@ class Constants:
     numofGridPerCell = 1000
     rows = 50
     cols = 50
-    maxResourceProgress = 200
+    maxResourceProgress = 32000
     maxWormholeHp = 18000
     robPercent = 0.2
     destroyBuildingBonus = 200
@@ -13,23 +13,25 @@ class Constants:
 
 
 class Home:
-    maxHp = 24000
+    maxHp = 48000
     energySpeed = 100
+    damage = 300
+    attackRange = 8000
 
 
 class Factory:
-    maxHp = 8000
-    energySpeed = 300
+    maxHp = 12000
+    energySpeed = 200
 
 
 class Community:
-    maxHp = 6000
+    maxHp = 10000
 
 
 class Fort:
-    maxHp = 12000
+    maxHp = 16000
     attackRange = 8000
-    damage = 1200
+    damage = 300
 
 
 class CivilianShip:
@@ -101,51 +103,52 @@ class Weapon:
 
 
 class Laser:
-    Damage = 1200
+    Damage = 800
     AttackRange = 4000
     ArmorDamageMultiplier = 1.5
     ShieldDamageMultiplier = 0.6
     Speed = 20000
-    CastTime = 300
-    BackSwing = 300
+    CastTime = 500
+    BackSwing = 1000
 
 
 class Plasma:
-    Damage = 1300
+    Damage = 1000
     AttackRange = 4000
     ArmorDamageMultiplier = 2.0
     ShieldDamageMultiplier = 0.4
     Speed = 10000
-    CastTime = 400
-    BackSwing = 400
+    CastTime = 800
+    BackSwing = 1600
 
 
 class Shell:
-    Damage = 1800
+    Damage = 1200
     AttackRange = 4000
     ArmorDamageMultiplier = 0.4
     ShieldDamageMultiplier = 1.5
     Speed = 8000
-    CastTime = 200
-    BackSwing = 200
+    CastTime = 500
+    BackSwing = 1000
 
 
 class Missle:
     Damage = 1600
-    AttackRange = 8000
-    ExplodeRange = 1600
+    AttackRange = 6000
+    ExplodeRange = 1100
     ArmorDamageMultiplier = 1.0
     ShieldDamageMultiplier = 0.4
     Speed = 6000
-    CastTime = 600
-    BackSwing = 600
+    CastTime = 1200
+    BackSwing = 1800
 
 
 class Arc:
-    Damage = 3200
-    AttackRange = 8000
+    MinDamage = 800
+    MaxDamage = 1600
+    AttackRange = 6000
     ArmorDamageMultiplier = 2.0
     ShieldDamageMultiplier = 2.0
     Speed = 8000
-    CastTime = 600
-    BackSwing = 600
+    CastTime = 1200
+    BackSwing = 1800
