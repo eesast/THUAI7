@@ -81,22 +81,9 @@ namespace GameClass.GameObj.Map
         {
             return (Ship?)GameObjDict[GameObjType.Ship].Find(gameObj => (teamID == ((Ship)gameObj).TeamID) && playerID == ((Ship)gameObj).PlayerID);
         }
-
-        public static bool WormholeInteract(Wormhole gameObj, XY Pos)
-        {
-            foreach (WormholeCell cell in gameObj.Cells)
-            {
-                if (GameData.ApproachToInteract(cell.Position, Pos))
-                    return true;
-            }
-            return false;
-        }
         public GameObj? OneForInteract(XY Pos, GameObjType gameObjType)
         {
-            return (GameObj?)GameObjDict[gameObjType].Find(gameObj =>
-                ((GameData.ApproachToInteract(gameObj.Position, Pos)) ||
-                (gameObjType == GameObjType.Wormhole && WormholeInteract((Wormhole)gameObj, Pos)))
-                );
+            return (GameObj?)GameObjDict[gameObjType].Find(gameObj => GameData.ApproachToInteract(gameObj.Position, Pos));
         }
         public GameObj? OneInTheSameCell(XY Pos, GameObjType gameObjType)
         {
