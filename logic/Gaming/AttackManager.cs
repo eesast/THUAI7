@@ -106,7 +106,7 @@ namespace Gaming
                         }
                         break;
                     case GameObjType.Wormhole:
-                        var previousHP = ((WormholeCell)objBeingShot).Wormhole.HP;
+                        var previousHP = ((WormholeCell)objBeingShot).Wormhole.HP.GetValue();
                         ((WormholeCell)objBeingShot).Wormhole.BeAttacked(bullet);
                         if (previousHP >= GameData.WormholeHP / 2 && ((WormholeCell)objBeingShot).Wormhole.HP < GameData.WormholeHP / 2)
                         {
