@@ -63,16 +63,17 @@ public class Construction(XY initPos)
     }
     public bool BeAttacked(Bullet bullet)
     {
+        var previousActivated = IsActivated.Get();
         if (bullet!.Parent!.TeamID != TeamID)
         {
             long subHP = bullet.AP;
             HP.SubPositiveV(subHP);
         }
-        if (HP == 0)
+        if (HP.IsBelowMaxTimes(0.5))
         {
             IsActivated.Set(false);
         }
-        return HP.IsBelowMaxTimes(0.5);
+        return HP.IsBelowMaxTimes(0.5) && previousActivated;
     }
     public void AddConstructNum(int add = 1)
     {
