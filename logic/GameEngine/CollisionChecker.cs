@@ -16,7 +16,7 @@ namespace GameEngine
                 return lst.Find(listObj => obj.WillCollideWith(listObj, Pos, collideWithWormhole));
             }
 
-            IGameObj? collisionObj;
+            IGameObj? collisionObj1;
             foreach (var list in lists)
             {
                 if ((collisionObj = CheckCollisionInList(list)) != null)
