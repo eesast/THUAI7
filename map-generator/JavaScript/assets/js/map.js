@@ -234,7 +234,9 @@ function generateConstruction(num = 5) {
 function generateShadow(prob = 0.015, crossBonus = 23) {
     for (var i = 0; i < 50; i++) {
         for (var j = 0; j < 50; j++) {
-            if (map[i][j] == 0 && Math.random() < prob * (haveSthCross(i, j, 1, placeType.Shadow) * crossBonus + 1)) {
+            const crossCount = haveSthCross(i, j, 1, placeType.Shadow);
+            console.log(`Cross count at (${i}, ${j}):`, crossCount);
+            if (map[i][j] == 0 && Math.random() < prob * (crossCount * crossBonus + 1)) {
                 map[i][j] = placeType.Shadow;
                 map[49 - i][49 - j] = placeType.Shadow;
             }

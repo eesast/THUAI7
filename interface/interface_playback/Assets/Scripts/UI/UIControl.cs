@@ -37,10 +37,10 @@ public class UIControl : SingletonMono<UIControl>
         if (CoreParam.currentFrame != null)
         {
             healthText1.text = "Health: " + CoreParam.currentFrame.AllMessage.RedHomeHp;
-            healthSlider1.value = CoreParam.currentFrame.AllMessage.RedHomeHp / 24000f;
+            healthSlider1.value = CoreParam.currentFrame.AllMessage.RedHomeHp / 48000f;
             ecoText1.text = "$" + CoreParam.currentFrame.AllMessage.RedTeamEnergy.ToString();
             healthText2.text = "Health: " + CoreParam.currentFrame.AllMessage.BlueHomeHp;
-            healthSlider2.value = CoreParam.currentFrame.AllMessage.BlueHomeHp / 24000f;
+            healthSlider2.value = CoreParam.currentFrame.AllMessage.BlueHomeHp / 48000f;
             ecoText2.text = "$" + CoreParam.currentFrame.AllMessage.BlueTeamEnergy.ToString();
         }
     }

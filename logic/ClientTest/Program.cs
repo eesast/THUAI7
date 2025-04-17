@@ -12,7 +12,7 @@ namespace ClientTest
             var client = new AvailableService.AvailableServiceClient(channel);
             PlayerMsg playerInfo = new()
             {
-                PlayerId = 0,
+                PlayerId = 1,
                 TeamId = 0,
                 ShipType = ShipType.CivilianShip
             };
@@ -33,10 +33,10 @@ namespace ClientTest
             while (true)
             {
                 Thread.Sleep(50);
-                MoveRes boolRes = client.Move(moveMsg);
+                //MoveRes boolRes = client.Move(moveMsg);
                 //if (boolRes.ActSuccess == false) break;
                 tot++;
-                if (tot % 10 == 0) moveMsg.Angle += 1;
+                //if (tot % 10 == 0) moveMsg.Angle += 1;
             }
             return Task.CompletedTask;
         }

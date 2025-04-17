@@ -30,7 +30,7 @@ public class InspectorControl : MonoBehaviour
                 {
                     case MessageOfObj.MessageOfObjOneofCase.HomeMessage:
                         showText.text = "类型：基地" + (interactBase.messageOfObject.HomeMessage.TeamId == 0 ? "(RED)" : "(BLUE)") + "\n"
-                        + "血量：" + interactBase.messageOfObject.HomeMessage.Hp + "/24000" + "\n";
+                        + "血量：" + interactBase.messageOfObject.HomeMessage.Hp + "/48000" + "\n";
                         break;
                     case MessageOfObj.MessageOfObjOneofCase.ShipMessage:
                         showText.text = "类型：" + ShipTypeToString(interactBase.messageOfObject.ShipMessage.ShipType)
@@ -45,19 +45,19 @@ public class InspectorControl : MonoBehaviour
                         break;
                     case MessageOfObj.MessageOfObjOneofCase.ResourceMessage:
                         showText.text = "类型：资源" + "\n"
-                        + "剩余资源：" + interactBase.messageOfObject.ResourceMessage.Progress + "/16000" + "\n";
+                        + "剩余资源：" + interactBase.messageOfObject.ResourceMessage.Progress + "/32000" + "\n";
                         break;
                     case MessageOfObj.MessageOfObjOneofCase.FactoryMessage:
                         showText.text = "类型：工厂" + (interactBase.messageOfObject.FactoryMessage.TeamId == 0 ? "(RED)" : "(BLUE)") + "\n"
-                        + "血量：" + interactBase.messageOfObject.FactoryMessage.Hp + "/8000" + "\n";
+                        + "血量：" + interactBase.messageOfObject.FactoryMessage.Hp + "/12000" + "\n";
                         break;
                     case MessageOfObj.MessageOfObjOneofCase.CommunityMessage:
                         showText.text = "类型：社区" + (interactBase.messageOfObject.CommunityMessage.TeamId == 0 ? "(RED)" : "(BLUE)") + "\n"
-                        + "血量：" + interactBase.messageOfObject.CommunityMessage.Hp + "/6000" + "\n";
+                        + "血量：" + interactBase.messageOfObject.CommunityMessage.Hp + "/10000" + "\n";
                         break;
                     case MessageOfObj.MessageOfObjOneofCase.FortMessage:
                         showText.text = "类型：堡垒" + (interactBase.messageOfObject.FortMessage.TeamId == 0 ? "(RED)" : "(BLUE)") + "\n"
-                        + "血量：" + interactBase.messageOfObject.FortMessage.Hp + "/12000" + "\n";
+                        + "血量：" + interactBase.messageOfObject.FortMessage.Hp + "/16000" + "\n";
                         break;
                     default: break;
                 }
