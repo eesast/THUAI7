@@ -25,8 +25,8 @@ namespace Gaming
         private readonly Map gameMap;
         public Map GameMap => gameMap;
         private readonly Random random = new();
-        public long AddPlayer(PlayerInitInfo playerInitInfo)
-        {
+        public long AddPlayer(PlayerInitInfo playerInitInfo) {
+            Console.WriteLine($"teamList.Count = {teamList.Count}");
             if (!gameMap.TeamExists(playerInitInfo.teamID))
             {
                 return GameObj.invalidID;

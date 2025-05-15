@@ -1,0 +1,201 @@
+// Message2Client
+syntax = "proto3";
+package protobuf;
+
+import "MessageType.proto";
+
+message MessageOfShip
+{
+    int32 x = 1;
+    int32 y = 2;
+    int32 speed = 3;
+    int32 hp = 4; 
+    int32 armor = 5; 
+    int32 shield = 6; 
+    int64 team_id = 7;
+    int64 player_id = 8;
+    int64 guid = 9;
+    ShipState ship_state = 10;
+    ShipType ship_type = 11;
+    int32 view_range = 12; 
+    ProducerType producer_type = 13;
+    ConstructorType constructor_type = 14;
+    ArmorType armor_type = 15;
+    ShieldType shield_type = 16;
+    WeaponType weapon_type = 17;
+    double facing_direction = 18;
+}
+
+
+message MessageOfBullet
+{
+    BulletType type = 1;
+    int32 x = 2;
+    int32 y = 3;
+    double facing_direction = 4;
+    int32 damage = 5;
+    int64 team_id = 6;
+    int64 guid = 7;
+    double bomb_range = 8;
+    int32 speed = 9;
+}
+
+message MessageOfBombedBullet  //for Unity，直接继承自THUAI5
+{
+    BulletType type = 1;
+    int32 x = 2;
+    int32 y = 3;
+    double facing_direction = 4;
+    int64 mapping_id = 5;
+    double bomb_range = 6; 
+}
+
+message MessageOfFactory
+{
+    int32 x = 1;
+    int32 y = 2;
+    int32 hp = 3; // 剩余的血量
+    int64 team_id = 4;
+}
+
+message MessageOfCommunity
+{
+    int32 x = 1;
+    int32 y = 2;
+    int32 hp = 3; // 剩余的血量
+    int64 team_id = 4;
+}
+
+message MessageOfFort
+{
+    int32 x = 1;
+    int32 y = 2;
+    int32 hp = 3; // 剩余的血量
+    int64 team_id = 4;
+}
+
+message MessageOfWormhole
+{
+    int32 x = 1;
+    int32 y = 2;
+    int32 hp = 3; // 剩余的血量
+    int32 id = 4;
+}
+
+message MessageOfResource
+{
+    int32 x = 1;
+    int32 y = 2;
+    int32 progress=3; // 采集进度
+}
+
+message MessageOfHome
+{
+    int32 x = 1;
+    int32 y = 2;
+    int32 hp = 3;
+    int64 team_id = 4;
+}
+
+message MessageOfMap
+{
+    uint32 height = 1;
+    uint32 width = 2;
+    message Row
+    {
+        repeated PlaceType cols = 1;
+    }
+    repeated Row rows = 3;
+}
+
+message MessageOfTeam
+{
+    int64 team_id = 1;
+    int64 player_id = 2;
+    int64 score = 3;
+    int64 energy = 4;
+//    int64 guid=5;
+}
+
+message MessageOfObj
+{
+    oneof message_of_obj
+    {
+        MessageOfShip ship_message = 1;
+        MessageOfBullet bullet_message = 2;
+        MessageOfFactory factory_message = 3;
+        MessageOfCommunity community_message = 4;
+        MessageOfFort fort_message = 5;
+        MessageOfWormhole wormhole_message = 6;
+        MessageOfHome home_message = 7;
+        MessageOfResource resource_message = 8;
+        MessageOfMap map_message = 9;
+        MessageOfNews news_message = 10;
+        MessageOfBombedBullet bombed_bullet_message = 11;
+        MessageOfTeam team_message = 12;
+    }
+}
+
+message MessageOfAll
+{
+    int32 game_time = 1;
+    int32 red_team_score=2;
+    int32 blue_team_score=3;
+    int32 red_team_energy=4;
+    int32 blue_team_energy=5;
+    int32 red_home_hp=6;
+    int32 blue_home_hp=7;
+}
+
+message MessageToClient
+{
+    repeated MessageOfObj obj_message = 1;
+    GameState game_state = 2;
+    MessageOfAll all_message = 3;
+}
+
+message MoveRes // 如果打算设计撞墙保留平行速度分量，且需要返回值则可用这个（大概没啥用）
+{
+    int64 actual_speed = 1;
+    double actual_angle = 2;
+    bool act_success = 3;
+}
+
+message BuildShipRes
+{
+    bool act_success = 1;
+    int64 player_id = 2;
+}
+
+message BoolRes
+{
+    bool act_success = 1;
+}
+
+message ShipInfoRes
+{
+    repeated MessageOfShip ship_info = 1;
+}
+
+message EcoRes
+{
+    int64 economy = 1;
+}
+
+message MessageOfNews
+{
+    oneof news // 一条新闻
+    {
+        string text_message = 1;
+        bytes binary_message = 2;
+    }
+    int64 from_id = 3;
+    int64 to_id = 4;
+    int64 team_id = 5;
+}
+// message MsgRes // 用于获取队友发来的消息
+// {
+//     bool have_message = 1; // 是否有待接收的消息
+//     int64 from_player_id = 2;
+//     string message_received = 3;
+// }

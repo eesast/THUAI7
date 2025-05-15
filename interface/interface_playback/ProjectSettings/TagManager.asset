@@ -3,12 +3,16 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Block
+  - Bullet
+  - Ship
+  - Base
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - InteractLayer
   - Water
   - UI
   - 
@@ -38,6 +42,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BackGround
+    uniqueID: 2587587425
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 912881339
     locked: 0
