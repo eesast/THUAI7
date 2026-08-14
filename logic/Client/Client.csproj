@@ -80,7 +80,7 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.40" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 		<PackageReference Include="SkiaSharp" Version="2.88.8" />
 
 		<PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
